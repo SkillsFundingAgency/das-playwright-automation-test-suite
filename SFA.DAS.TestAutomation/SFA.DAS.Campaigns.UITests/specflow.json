@@ -1,0 +1,16 @@
+{
+  "bindingCulture": {
+    "feature": "en-GB"
+  },
+  "language": {
+    "feature": "en-GB"
+  },
+  "stepAssemblies": [
+    { "assembly": "SFA.DAS.ConfigurationBuilder" },
+    { "assembly": "SFA.DAS.Framework" }
+  ],
+  "generator": {
+    "allowRowTests": false,
+    "addNonParallelizableMarkerForTags": [ "donotexecuteinparallel" ]
+  }
+}
