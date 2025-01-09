@@ -4,7 +4,7 @@ using TechTalk.SpecFlow;
 namespace SFA.DAS.Framework;
 
 [Binding]
-public class DriverSetup(ScenarioContext context)
+public class PlaywrightHooks(ScenarioContext context)
 {
     private static Driver driver;
 
@@ -22,5 +22,11 @@ public class DriverSetup(ScenarioContext context)
         var Page = await driver.BrowserContext.NewPageAsync();
 
         context.Set(Page);
+    }
+
+    [AfterTestRun]
+    public static void AfterAll()
+    {
+        driver.Dispose();
     }
 }

@@ -3,9 +3,9 @@
 namespace SFA.DAS.ConfigurationBuilder
 {
     [Binding]
-    public class ConfigurationSetup(ScenarioContext context)
+    public class ConfigurationHooks(ScenarioContext context)
     {
-        [BeforeScenario(Order = 0)]
+        [BeforeScenario(Order = 1)]
         public void SetUpConfiguration()
         {
             var configSection = new ConfigSection(Configurator.GetConfig());

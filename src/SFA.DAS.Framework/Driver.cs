@@ -6,7 +6,7 @@ namespace SFA.DAS.Framework;
 
 public class Driver : IDisposable
 {
-    private Task<IBrowserContext> _browsercontext;
+    private readonly Task<IBrowserContext> _browsercontext;
 
     public IBrowserContext BrowserContext => _browsercontext.Result;
 

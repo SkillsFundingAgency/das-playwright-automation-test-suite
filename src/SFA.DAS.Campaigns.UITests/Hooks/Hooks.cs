@@ -1,6 +1,5 @@
 ﻿using Microsoft.Playwright;
 using SFA.DAS.Framework;
-using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Campaigns.UITests.Hooks
@@ -13,11 +12,7 @@ namespace SFA.DAS.Campaigns.UITests.Hooks
         [BeforeScenario(Order = 30)]
         public async void SetUpHelpers()
         {
-            string url = UrlConfig.CA_BaseUrl;
-
-            //if (_context.ScenarioInfo.Tags.Contains("openemp")) url = UrlConfig.Live_Employer_BaseUrl;
-
-            await _context.Get<IPage>().GotoAsync(url);
+           await _context.Get<IPage>().GotoAsync(UrlConfig.CA_BaseUrl);
         }
     }
 }
