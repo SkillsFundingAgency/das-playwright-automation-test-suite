@@ -6,18 +6,16 @@ namespace SFA.DAS.Framework;
 
 public class Driver : IDisposable
 {
-    private readonly Task<IPage> _page;
+    private Task<IBrowserContext> _browsercontext;
 
-    private IBrowserContext _context;
-
-    public IPage Page => _page.Result;
+    public IBrowserContext BrowserContext => _browsercontext.Result;
 
     public Driver()
     {
-        _page = Task.Run(InitializePlaywright);
+        _browsercontext = Task.Run(InitializePlaywright);
     }
 
-    public async Task<IPage> InitializePlaywright()
+    public static async Task<IBrowserContext> InitializePlaywright()
     {
         var factory = new DriverFactory(GetBrowserTypeFromEnv());
 
@@ -28,12 +26,10 @@ public class Driver : IDisposable
             Headless = false,
         });
 
-        _context = await browser.NewContextAsync(new BrowserNewContextOptions
+        return await browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = ViewportSize.NoViewport
         });
-
-        return await _context.NewPageAsync();
     }
 
     public static BrowserType GetBrowserTypeFromEnv()
@@ -50,6 +46,6 @@ public class Driver : IDisposable
 
     public void Dispose()
     {
-        _context?.CloseAsync();
+        BrowserContext?.CloseAsync();
     }
 }

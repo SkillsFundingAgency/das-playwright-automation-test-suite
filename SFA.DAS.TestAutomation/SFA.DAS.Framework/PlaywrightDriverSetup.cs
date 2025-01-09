@@ -17,8 +17,10 @@ public class DriverSetup(ScenarioContext context)
     }
 
     [BeforeScenario(Order = 4)]
-    public void SetupPlaywrightDriver()
+    public async Task SetupPlaywrightDriver()
     {
-        context.Set(driver.Page);
+        var Page = await driver.BrowserContext.NewPageAsync();
+
+        context.Set(Page);
     }
 }
