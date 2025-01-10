@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Playwright;
+using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Framework;
@@ -19,7 +20,12 @@ public class PlaywrightHooks(ScenarioContext context)
     [BeforeScenario(Order = 4)]
     public async Task SetupPlaywrightDriver()
     {
-        var Page = await driver.BrowserContext.NewPageAsync();
+        var browserContext = await driver.Browser.NewContextAsync(new BrowserNewContextOptions
+        {
+            ViewportSize = ViewportSize.NoViewport
+        });
+
+        var Page = await browserContext.NewPageAsync();
 
         context.Set(Page);
     }

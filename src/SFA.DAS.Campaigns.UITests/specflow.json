@@ -7,7 +7,8 @@
   },
   "stepAssemblies": [
     { "assembly": "SFA.DAS.ConfigurationBuilder" },
-    { "assembly": "SFA.DAS.Framework" }
+    { "assembly": "SFA.DAS.Framework" },
+    { "assembly": "SFA.DAS.TestDataExport" }
   ],
   "generator": {
     "allowRowTests": false,
