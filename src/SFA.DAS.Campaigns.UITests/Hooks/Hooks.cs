@@ -1,63 +1,37 @@
 ﻿using Microsoft.Playwright;
 using SFA.DAS.Framework;
-using SFA.DAS.FrameworkHelpers;
+using System.Threading.Tasks;
 using TechTalk.SpecFlow;
-using SFA.DAS.ConfigurationBuilder;
 
 namespace SFA.DAS.Campaigns.UITests.Hooks
 {
     [Binding]
     public class Hooks(ScenarioContext context)
     {
-        private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
-
         [BeforeScenario(Order = 30)]
-        public async void SetUpHelpers()
+        public async Task SetUpHelpers()
         {
-            var page = context.Get<IPage>();
+            var driver = context.Get<Driver>();
 
-            page.Request += (_, request) => _objectContext.SetDebugInformation("Request sent: " + request.Url);
+            await driver.GotoAsync(UrlConfig.EmployerApprenticeshipService_BaseUrl);
 
-            void listener(object sender, IRequest request)
-            {
-                _objectContext.SetDebugInformation("Request finished: " + request.Url);
-            };
+            await driver.ClickAsync((p) => p.GetByRole(AriaRole.Button, new() { Name = "Create account" }).ClickAsync(), "Eas Landing");
 
-            page.RequestFinished += listener;
+            await driver.FillAsync((p) => p.GetByLabel("ID"), "582d8508-f17d-4bef-aec1-6a9751fccea5");
 
+            await driver.FillAsync((p) => p.GetByLabel("Email"), "Viewer@l38cxwya.mailosaur.net");
 
-            await page.GotoAsync(UrlConfig.EmployerApprenticeshipService_BaseUrl);
+            await driver.SubmitAsync((p) => p.GetByRole(AriaRole.Button, new() { Name = "Sign in" }).ClickAsync(), "Eas Sign in");
 
-            _objectContext.SetDebugInformation("******");
+            await driver.GotoAsync(UrlConfig.CA_BaseUrl);
+        }
 
-            await context.Get<IPage>().ScreenshotAsync(new()
-            {
-                Path = context.Get<ObjectContext>().GetDirectory() + "/1.png",
-                FullPage = true,
-            });
+        [AfterScenario(Order = 30)]
+        public async Task Screenshot()
+        {
+            var driver = context.Get<Driver>();
 
-            await page.GetByRole(AriaRole.Button, new() { Name = "Create account" }).ClickAsync();
-
-            _objectContext.SetDebugInformation("******");
-
-            await page.GetByLabel("ID").FillAsync("das");
-
-            _objectContext.SetDebugInformation("******");
-
-            await page.GetByLabel("Email").FillAsync("as");
-
-            await context.Get<IPage>().ScreenshotAsync(new()
-            {
-                Path = context.Get<ObjectContext>().GetDirectory() + "/2.png",
-                FullPage = true,
-            });
-
-            // click login 
-
-            _objectContext.SetDebugInformation("******");
-
-            await page.GotoAsync(UrlConfig.CA_BaseUrl);
-
+            await driver.ScreenshotAsync(true);
         }
     }
 }

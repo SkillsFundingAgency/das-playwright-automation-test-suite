@@ -1,46 +1,45 @@
 ﻿using Microsoft.Playwright;
+using SFA.DAS.FrameworkHelpers;
 using System;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.Framework;
 
-public class Driver : IDisposable
+public class Driver(IPage page, ObjectContext objectContext)
 {
-    private readonly Task<IBrowser> _browser;
+    public IPage Page => page;
 
-    public IBrowser Browser => _browser.Result;
+    private readonly ScreenShotHelper screenShotHelper = new(page, objectContext);
 
-    public Driver()
+    public async Task GotoAsync(string url)
     {
-        _browser = Task.Run(InitializePlaywright);
+        objectContext.SetDebugInformation($"Navigated to {url}");
+
+        await page.GotoAsync(url);
     }
 
-    public static async Task<IBrowser> InitializePlaywright()
+    public async Task ScreenshotAsync(bool isTestComplete) => await screenShotHelper.ScreenshotAsync(isTestComplete);
+
+    public async Task SubmitAsync(Func<IPage, Task> func, string name)
     {
-        var factory = new DriverFactory(GetBrowserTypeFromEnv());
+        objectContext.SetDebugInformation($"Submitted '{name}' page");
 
-        var driver = await factory.CreateDriver();
+        await ScreenshotAsync(false);
 
-        return await driver.LaunchAsync(new BrowserTypeLaunchOptions
-        {
-            Headless = false,
-        });
+        await func(page);
     }
 
-    public static BrowserType GetBrowserTypeFromEnv()
+    public async Task ClickAsync(Func<IPage, Task> func, string name)
     {
-        string envBrowserType = Environment.GetEnvironmentVariable("BROWSER_TYPE");
+        objectContext.SetDebugInformation($"Clicked '{name}'");
 
-        string browserType = string.IsNullOrEmpty(envBrowserType) ? "Chrome" : envBrowserType;
-
-        if (!Enum.TryParse(browserType, true, out BrowserType type))
-            throw new ArgumentException($"Invalid browser type: {browserType}");
-
-        return type;
+        await func(page);
     }
 
-    public void Dispose()
+    public async Task FillAsync(Func<IPage, ILocator> locator, string value)
     {
-        Browser?.CloseAsync();
+        objectContext.SetDebugInformation($"Entered '{value}'");
+
+        await locator(page).FillAsync(value);
     }
 }

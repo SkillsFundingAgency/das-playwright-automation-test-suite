@@ -1,4 +1,5 @@
 ﻿using Microsoft.Playwright;
+using SFA.DAS.FrameworkHelpers;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
@@ -7,12 +8,12 @@ namespace SFA.DAS.Framework;
 [Binding]
 public class PlaywrightHooks(ScenarioContext context)
 {
-    private static Driver driver;
+    private static InitializeDriver driver;
 
     [BeforeTestRun]
     public static Task BeforeAll()
     {
-        driver = new Driver();
+        driver = new InitializeDriver();
 
         return Task.CompletedTask;
     }
@@ -25,9 +26,9 @@ public class PlaywrightHooks(ScenarioContext context)
             ViewportSize = ViewportSize.NoViewport
         });
 
-        var Page = await browserContext.NewPageAsync();
+        var page = await browserContext.NewPageAsync();
 
-        context.Set(Page);
+        context.Set(new Driver(page, context.Get<ObjectContext>()));
     }
 
     [AfterTestRun]
