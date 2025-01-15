@@ -24,6 +24,7 @@ public class InitializeDriver : IDisposable
         return await driver.LaunchAsync(new BrowserTypeLaunchOptions
         {
             Headless = false,
+            Args = ["--start-maximized"] 
         });
     }
 

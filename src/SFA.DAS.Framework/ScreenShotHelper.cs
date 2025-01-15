@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.Framework;
 
-internal class ScreenShotHelper(IPage page, ObjectContext objectContext)
+public class ScreenShotHelper(IPage page, ObjectContext objectContext)
 {
     private readonly ScreenShotTitleGenerator screenShotTitleGenerator = new();
 
