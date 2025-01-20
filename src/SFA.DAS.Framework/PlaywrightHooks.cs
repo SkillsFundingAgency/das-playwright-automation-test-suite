@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SFA.DAS.ConfigurationBuilder;
 using SFA.DAS.FrameworkHelpers;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
@@ -31,21 +32,26 @@ public class PlaywrightHooks(ScenarioContext context)
             ViewportSize = ViewportSize.NoViewport
         });
 
-        await browserContext.Tracing.StartAsync(new()
+        if (context.ScenarioInfo.Tags.Contains("donottracelogin") == false)
         {
-            Screenshots = true,
-            Snapshots = false
-        });
+            await browserContext.Tracing.StartAsync(new()
+            {
+                Title = context.ScenarioInfo.Title,
+                Screenshots = true,
+                Snapshots = true
+            });
+        }
 
         var page = await browserContext.NewPageAsync();
 
-        context.Set(new Driver(page, context.Get<ObjectContext>()));
+        context.Set(new Driver(browserContext, page, context.Get<ObjectContext>()));
     }
 
-
-    [AfterScenario(Order = 4)]
+    [AfterScenario(Order = 98)]
     public async Task StopTracing()
     {
+        if (context.ScenarioInfo.Tags.Contains("donottracelogin")) return;
+
         var tracefileName = $"TRACEDATA_{DateTime.Now:HH-mm-ss-fffff}.zip";
 
         var tracefilePath = $"{context.Get<ObjectContext>().GetDirectory()}/{tracefileName}";

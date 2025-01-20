@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Playwright;
+using SFA.DAS.FrameworkHelpers;
+using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Framework
@@ -7,17 +9,26 @@ namespace SFA.DAS.Framework
     {
         protected readonly ScenarioContext context;
 
+        protected readonly ObjectContext objectContext;
+
         protected readonly Driver driver;
 
-        protected abstract Task VerifyPage();
+        protected readonly IPage page;
+
+        /// <summary>
+        /// The result of the asynchronous verification of this instance.
+        /// </summary>
+        public abstract Task VerifyPage();
 
         protected BasePage(ScenarioContext context)
         {
             this.context = context;
 
+            objectContext = context.Get<ObjectContext>();
+
             driver = context.Get<Driver>();
 
-            Task.Run(VerifyPage).Wait();
+            page = driver.Page;
         }
     }
 }

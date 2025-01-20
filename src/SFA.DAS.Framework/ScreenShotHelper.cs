@@ -22,14 +22,11 @@ public class ScreenShotHelper(IPage page, ObjectContext objectContext)
 
     public async Task ScreenshotAsync(bool isTestComplete = false)
     {
-        if (TestPlatformFinder.IsAdoExecution || isTestComplete)
-        {
-            string scenarioTitle = isTestComplete ? "TestCompletedOnThisPage" : $"{screenShotTitleGenerator.GetPrefix()}";
+       string scenarioTitle = isTestComplete ? "TestCompletedOnThisPage" : $"{screenShotTitleGenerator.GetPrefix()}";
 
-            (string screenshotPath, string imageName) = new WindowsFileHelper().GetFileDetails(objectContext.GetDirectory(), $"{DateTime.Now:HH-mm-ss}_{scenarioTitle}.png".RemoveSpace());
+       (string screenshotPath, string imageName) = new WindowsFileHelper().GetFileDetails(objectContext.GetDirectory(), $"{DateTime.Now:HH-mm-ss}_{scenarioTitle}.png".RemoveSpace());
 
-            await ScreenshotAsync(screenshotPath, imageName);
-        }
+       await ScreenshotAsync(screenshotPath, imageName);
     }
 
     private async Task ScreenshotAsync(string screenshotPath, string imageName)

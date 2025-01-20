@@ -15,7 +15,7 @@ namespace SFA.DAS.Campaigns.UITests.Hooks
 
             context.Set(new CampaignsDataHelper());
 
-            await driver.GotoAsync(UrlConfig.CA_BaseUrl);
+            await driver.Page.GotoAsync(UrlConfig.CA_BaseUrl);
         }
 
         [AfterScenario(Order = 30)]

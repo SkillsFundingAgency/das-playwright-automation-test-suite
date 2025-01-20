@@ -6,6 +6,6 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages
 {
     public class ApprenticeHomePage(ScenarioContext context) : CampaingnsBasePage(context)
     {
-        protected override async Task VerifyPage() => await Assertions.Expect(driver.Page.Locator("h1")).ToContainTextAsync("Become an apprentice");
+        public override async Task VerifyPage() => await Assertions.Expect(driver.Page.Locator("h1")).ToContainTextAsync("Become an apprentice");
     }
 }
