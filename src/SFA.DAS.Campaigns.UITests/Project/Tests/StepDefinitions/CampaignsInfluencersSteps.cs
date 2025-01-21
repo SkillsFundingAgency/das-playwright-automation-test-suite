@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
+﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Influencers;
 
 namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
 {
