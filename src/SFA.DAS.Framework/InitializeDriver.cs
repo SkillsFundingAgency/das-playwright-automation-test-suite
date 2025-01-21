@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.Framework;
 
-public class InitializeDriver : IDisposable
+public class InitializeDriver
 {
     private readonly Task<IBrowser> _browser;
 
@@ -40,8 +40,8 @@ public class InitializeDriver : IDisposable
         return type;
     }
 
-    public void Dispose()
+    public async Task Dispose()
     {
-        Browser?.CloseAsync();
+        await Browser?.CloseAsync();
     }
 }

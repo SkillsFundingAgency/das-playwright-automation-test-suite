@@ -65,8 +65,8 @@ public class PlaywrightHooks(ScenarioContext context)
     }
 
     [AfterTestRun]
-    public static void AfterAll()
+    public static async Task AfterAll()
     {
-        driver.Dispose();
+        await driver.Dispose();
     }
 }

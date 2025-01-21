@@ -203,27 +203,32 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages
 
     public abstract class ApprenticeBasePage(ScenarioContext context) : HubBasePage(context)
     {
+
+        private ILocator ApprenticeTab => page.GetByLabel("Apprentices");
+
         public async Task<ApprenticeAreTheyRightForYouPage> NavigateToAreApprenticeShipRightForMe()
         {
-            await page.GetByLabel("Apprentices").GetByRole(AriaRole.Link, new() { Name = "Are they right for you?" }).ClickAsync();
+            await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "Are they right for you?" }).ClickAsync();
             return new ApprenticeAreTheyRightForYouPage(context);
         }
 
         public async Task<ApprenticeHowDoTheyWorkPage> NavigateToHowDoTheyWorkPage()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "How do they work?" }).ClickAsync();
+            await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "How do they work?" }).ClickAsync();
+
             return new ApprenticeHowDoTheyWorkPage(context);
         }
 
         public async Task<GettingStartedPage> NavigateToGettingStarted()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Get started" }).ClickAsync();
+            await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "Get started" }).ClickAsync();
+
             return new GettingStartedPage(context);
         }
 
         public async Task<BrowseApprenticeshipPage> NavigateToBrowseApprenticeshipPage()
         {
-            await page.GetByLabel("Apprentices").GetByRole(AriaRole.Link, new() { Name = "Browse apprenticeships" }).ClickAsync();
+            await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "Browse apprenticeships" }).ClickAsync();
 
             return new BrowseApprenticeshipPage(context);
 
