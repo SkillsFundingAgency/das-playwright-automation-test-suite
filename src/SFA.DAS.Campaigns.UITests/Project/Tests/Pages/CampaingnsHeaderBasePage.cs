@@ -6,9 +6,9 @@ public abstract class CampaingnsHeaderBasePage(ScenarioContext context) : Campai
 {
     protected ILocator Apprentice => page.GetByLabel("Main navigation").GetByRole(AriaRole.Link, new() { Name = "Apprentices" });
 
-    protected ILocator Employer => page.GetByRole(AriaRole.Link, new() { Name = "Employers" });
+    protected ILocator Employer => page.GetByLabel("Main navigation").GetByRole(AriaRole.Link, new() { Name = "Employers" });
 
-    protected ILocator Influencers => page.GetByRole(AriaRole.Link, new() { Name = "Influencers" });
+    protected ILocator Influencers => page.GetByLabel("Main navigation").GetByRole(AriaRole.Link, new() { Name = "Influencers" });
 
     protected ILocator SiteMap => page.GetByRole(AriaRole.Link, new() { Name = "Sitemap" });
 
@@ -19,11 +19,12 @@ public abstract class CampaingnsHeaderBasePage(ScenarioContext context) : Campai
         return await VerifyPageAsync(() => new ApprenticeHubPage(context));
     }
 
-    //public EmployerHubPage NavigateToEmployerHubPage()
-    //{
-    //    await Employer.ClickAsync();
-    //    return new(context);
-    //}
+    public async Task<EmployerHubPage> NavigateToEmployerHubPage()
+    {
+        await Employer.ClickAsync();
+
+        return await VerifyPageAsync(() => new EmployerHubPage(context));
+    }
 
     //public InfluencersHubPage NavigateToInfluencersHubPage()
     //{

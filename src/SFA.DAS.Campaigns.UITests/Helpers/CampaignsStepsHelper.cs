@@ -1,7 +1,5 @@
 ﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages;
 using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Campaigns.UITests.Helpers
 {
@@ -16,7 +14,12 @@ namespace SFA.DAS.Campaigns.UITests.Helpers
             return await page.NavigateToApprenticeshipHubPage();
         }
 
-        //public EmployerHubPage GoToEmployerHubPage() => GoToCampaingnsHomePage().NavigateToEmployerHubPage();
+        public async Task<EmployerHubPage> GoToEmployerHubPage()
+        {
+            var page = await GoToCampaingnsHomePage();
+            
+            return await page.NavigateToEmployerHubPage();
+        }
 
         //public InfluencersHubPage GoToInfluencersHubPage() => GoToCampaingnsHomePage().NavigateToInfluencersHubPage();
     }
