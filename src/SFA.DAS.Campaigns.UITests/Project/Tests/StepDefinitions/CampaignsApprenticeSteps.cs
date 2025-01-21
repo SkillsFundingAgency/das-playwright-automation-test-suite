@@ -1,7 +1,4 @@
-﻿using SFA.DAS.Campaigns.UITests.Helpers;
-using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
+﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
 
 namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
 {

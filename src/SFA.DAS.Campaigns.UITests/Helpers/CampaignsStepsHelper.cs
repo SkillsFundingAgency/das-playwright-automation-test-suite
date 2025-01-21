@@ -17,10 +17,15 @@ namespace SFA.DAS.Campaigns.UITests.Helpers
         public async Task<EmployerHubPage> GoToEmployerHubPage()
         {
             var page = await GoToCampaingnsHomePage();
-            
+
             return await page.NavigateToEmployerHubPage();
         }
 
-        //public InfluencersHubPage GoToInfluencersHubPage() => GoToCampaingnsHomePage().NavigateToInfluencersHubPage();
+        public async Task<InfluencersHubPage> GoToInfluencersHubPage()
+        {
+            var page = await GoToCampaingnsHomePage();
+            
+            return await page.NavigateToInfluencersHubPage();
+        }
     }
 }

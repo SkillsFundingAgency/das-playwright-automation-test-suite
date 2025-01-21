@@ -1,73 +1,38 @@
-﻿using Microsoft.Playwright;
-using NUnit.Framework;
-using SFA.DAS.Campaigns.UITests.Project.Tests.Pages;
-using SFA.DAS.Framework;
-using SFA.DAS.FrameworkHelpers;
-using System;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
-using SFA.DAS.ConfigurationBuilder;
+﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
 
 namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
 {
     [Binding]
     public class SignUpSteps(ScenarioContext context)
     {
-        [Given("the trace is started")]
-        public async Task GivenTheTraceIsStarted()
-        {
-            var driver = context.Get<Driver>();
+        private readonly CampaignsStepsHelper _stepsHelper = new(context);
 
-            await driver.BrowserContext.Tracing.StartAsync(new()
-            {
-                Title = context.ScenarioInfo.Title,
-                Screenshots = true,
-                Snapshots = true
-            });
-        }
-
-
-        [Given("the trace is stopped")]
-        public async Task GivenTheTraceIsStopped()
-        {
-            var driver = context.Get<Driver>();
-
-            var tracefileName = $"TRACEDATA_{DateTime.Now:HH-mm-ss-fffff}.zip";
-
-            var tracefilePath = $"{context.Get<ObjectContext>().GetDirectory()}/{tracefileName}";
-
-            await driver.BrowserContext.Tracing.StopAsync(new()
-            {
-                Path = tracefilePath
-            });
-
-            TestContext.AddTestAttachment(tracefilePath, tracefileName);
-        }
+        private SignUpPage _signUpPage;
 
         [Given(@"the employer navigates to Sign Up Page")]
         public async Task GivenTheEmployerNavigatesToSignUpPage()
         {
-            var page = new CampaingnsHomePage(context);
+            var page = await _stepsHelper.GoToEmployerHubPage();
 
-            await page.AcceptCookieAndAlert();
-
-            await page.GoToApprenticePage();
-
-            var driver = context.Get<Driver>();
-
-            await driver.Page.GotoAsync($"{UrlConfig.CA_BaseUrl}/employers/understanding-apprenticeship-benefits-and-funding");
-
-            await driver.Page.GetByLabel("What training course do you").FillAsync("soft");
-
-            await driver.Page.GetByRole(AriaRole.Option, new() { Name = "Software developer (Level 4)" }).ClickAsync();
-
-            await driver.Page.GetByLabel("Under £3 million").CheckAsync();
-
-            await driver.Page.GetByLabel("How many roles do you have").FillAsync("2");
-
-            await driver.Page.GetByRole(AriaRole.Button, new() { Name = "Calculate funding" }).ClickAsync();
-
-            await Assertions.Expect(driver.Page.Locator("#funding")).ToContainTextAsync("Your estimated funding");
+            _signUpPage = await page.NavigateToSignUpPage();
         }
+
+        [When(@"the employer fill Your details section")]
+        public async Task WhenTheEmployerFillYourDetailsSection() => await _signUpPage.YourDetails();
+
+        [When(@"Your Company by selecting radiobutton Less than Ten employees")]
+        public async Task WhenYourCompanyBySelectingRadiobuttonLessThanTenEmployees() => await _signUpPage.SelectCompanySizeOption1();
+
+        [When(@"Your Company by selecting radiobutton Between Ten and FourtyNine employees")]
+        public async Task WhenYourCompanyBySelectingRadiobuttonBetweenTenAndFourtyNineEmployees() => await _signUpPage.SelectCompanySizeOption2();
+
+        [When(@"Your Company by selecting radiobutton Between Fifty and TwoFourtyNine employees")]
+        public async Task WhenYourCompanyBySelectingRadiobuttonBetweenFiftyAndTwoFourtyNineEmployees() => await _signUpPage.SelectCompanySizeOption3();
+
+        [When(@"Your Company by selecting radiobutton Over TwoHundredandFifty employees")]
+        public async Task WhenYourCompanyBySelectingRadiobuttonOverTwoHundredandFiftyEmployees() => await _signUpPage.SelectCompanySizeOption4();
+
+        [Then(@"an employer registers interest")]
+        public async Task ThenAnEmployerRegistersInterest() => await _signUpPage.RegisterInterest();
     }
 }

@@ -2,7 +2,6 @@
 
 public abstract class ApprenticeBasePage(ScenarioContext context) : HubBasePage(context)
 {
-
     private ILocator ApprenticeTab => page.GetByLabel("Apprentices");
 
     public async Task<ApprenticeAreTheyRightForYouPage> NavigateToAreApprenticeShipRightForMe()

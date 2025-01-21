@@ -26,11 +26,12 @@ public abstract class CampaingnsHeaderBasePage(ScenarioContext context) : Campai
         return await VerifyPageAsync(() => new EmployerHubPage(context));
     }
 
-    //public InfluencersHubPage NavigateToInfluencersHubPage()
-    //{
-    //    await Influencers.ClickAsync();
-    //    return new(context);
-    //}
+    public async Task<InfluencersHubPage> NavigateToInfluencersHubPage()
+    {
+        await Influencers.ClickAsync();
+
+        return await VerifyPageAsync(() => new InfluencersHubPage(context));
+    }
 
     public async Task<SiteMapPage> NavigateToSiteMapPage()
     {

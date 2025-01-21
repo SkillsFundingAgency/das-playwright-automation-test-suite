@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Campaigns.UITests
+﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
 {
     [Binding]
     public class CampaignsFundingSteps(ScenarioContext context)
@@ -11,7 +11,7 @@
             var page = await _stepsHelper.GoToEmployerHubPage();
 
             var page1 = await page.NavigateToUnderstandingApprenticeshipBenefitsAndFunding();
-            
+
             await page1.SelectUnder3Million();
         }
 
