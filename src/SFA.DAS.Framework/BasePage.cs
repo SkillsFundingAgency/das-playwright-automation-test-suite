@@ -1,5 +1,6 @@
 ﻿using Microsoft.Playwright;
 using SFA.DAS.FrameworkHelpers;
+using System;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
@@ -29,6 +30,15 @@ namespace SFA.DAS.Framework
             driver = context.Get<Driver>();
 
             page = driver.Page;
+        }
+
+        protected static async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
+        {
+            var nextPage = func.Invoke();
+
+            await nextPage.VerifyPage();
+
+            return nextPage;
         }
     }
 }

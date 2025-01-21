@@ -1,6 +1,5 @@
 ﻿using Microsoft.Playwright;
 using SFA.DAS.FrameworkHelpers;
-using System;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.Framework;

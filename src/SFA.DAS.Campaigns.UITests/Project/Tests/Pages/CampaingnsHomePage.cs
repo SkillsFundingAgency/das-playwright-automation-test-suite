@@ -1,4 +1,5 @@
-﻿using Microsoft.Playwright;
+﻿using Gherkin;
+using Microsoft.Playwright;
 using SFA.DAS.Framework;
 using SFA.DAS.FrameworkHelpers;
 using System;
@@ -20,14 +21,14 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages
 
             await page.Locator("#fiu-cb-close-accept").ClickAsync();
 
-            return new CampaingnsHomePage(context);
+            return await VerifyPageAsync(() => new CampaingnsHomePage(context));
         }
 
         public async Task<ApprenticeHomePage> GoToApprenticePage()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Learn more becoming an" }).ClickAsync();
 
-            return new(context);
+            return await VerifyPageAsync(() => new ApprenticeHomePage(context));
         }
     }
 
@@ -44,7 +45,8 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages
         public async Task<ApprenticeHubPage> NavigateToApprenticeshipHubPage()
         {
             await Apprentice.ClickAsync();
-            return new(context);
+
+            return await VerifyPageAsync(() => new ApprenticeHubPage(context));
         }
 
         //public EmployerHubPage NavigateToEmployerHubPage()
@@ -62,7 +64,8 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages
         public async Task<SiteMapPage> NavigateToSiteMapPage()
         {
             await SiteMap.ClickAsync();
-            return new(context);
+
+            return await VerifyPageAsync(() => new SiteMapPage(context));
         }
     }
 
@@ -119,7 +122,9 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages
                 {
                     await page.GetByRole(AriaRole.Link, new() { Name = fiuCardHeading }).ClickAsync();
 
-                    var campaingnsDynamicFiuPage = new CampaingnsDynamicFiuPage(context, fiuCardHeading);
+                    var nextPageheading = fiuCardHeading.Contains("Career starter apprenticeships") ? "Career starter apprenticeships" : fiuCardHeading;
+
+                    var campaingnsDynamicFiuPage = new CampaingnsDynamicFiuPage(context, nextPageheading);
 
                     await campaingnsDynamicFiuPage.VerifyPageAsync();
                 }
@@ -162,7 +167,7 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages
 
     public class ApprenticeAreTheyRightForYouPage(ScenarioContext context) : ApprenticeBasePage(context)
     {
-        public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Become an apprentice");
+        public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Are they right for you?");
 
         public async Task<ApprenticeAreTheyRightForYouPage> VerifyApprenticeAreTheyRightForYouPageSubHeadings() => await VerifyFiuCards(() => NavigateToAreApprenticeShipRightForMe());
     }
@@ -191,7 +196,7 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages
 
             await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
-            return new ResultsPage(context);
+            return await VerifyPageAsync(() => new ResultsPage(context));
         }
     }
 
@@ -209,49 +214,35 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages
         public async Task<ApprenticeAreTheyRightForYouPage> NavigateToAreApprenticeShipRightForMe()
         {
             await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "Are they right for you?" }).ClickAsync();
-            return new ApprenticeAreTheyRightForYouPage(context);
+
+            return await VerifyPageAsync(() => new ApprenticeAreTheyRightForYouPage(context));
         }
 
         public async Task<ApprenticeHowDoTheyWorkPage> NavigateToHowDoTheyWorkPage()
         {
             await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "How do they work?" }).ClickAsync();
 
-            return new ApprenticeHowDoTheyWorkPage(context);
+            return await VerifyPageAsync(() => new ApprenticeHowDoTheyWorkPage(context));
         }
 
         public async Task<GettingStartedPage> NavigateToGettingStarted()
         {
             await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "Get started" }).ClickAsync();
 
-            return new GettingStartedPage(context);
+            return await VerifyPageAsync(() => new GettingStartedPage(context));
         }
 
         public async Task<BrowseApprenticeshipPage> NavigateToBrowseApprenticeshipPage()
         {
             await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "Browse apprenticeships" }).ClickAsync();
 
-            return new BrowseApprenticeshipPage(context);
-
-            //var nextPage = new BrowseApprenticeshipPage(context);
-
-            //await nextPage.VerifyPage();
-
-            //return await VerifyPageAsync<BrowseApprenticeshipPage>(() => new BrowseApprenticeshipPage(context));
-        }
-
-        protected async Task<T> VerifyPageAsync<T>(Func<Task<T>> func) where T : BasePage
-        {
-            var nextPage = await func.Invoke();
-
-            await nextPage.VerifyPage();
-
-            return nextPage;
+            return await VerifyPageAsync(() => new BrowseApprenticeshipPage(context));
         }
     }
 
     public class ApprenticeHubPage(ScenarioContext context) : ApprenticeBasePage(context)
     {
-        public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Become an apprenticeasdasd");
+        public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Become an apprentice");
 
         protected ILocator SetUpService => page.GetByRole(AriaRole.Link, new() { Name = "Create an account", Exact = true });
 
@@ -260,7 +251,8 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages
         public async Task<SetUpServicePage> NavigateToSetUpServiceAccountPage()
         {
             await SetUpService.ClickAsync();
-            return new SetUpServicePage(context);
+
+            return await VerifyPageAsync(() => new SetUpServicePage(context));
         }
 
         public async Task<CampaingnsDynamicFiuPage> NavigateToApprenticeStories()
