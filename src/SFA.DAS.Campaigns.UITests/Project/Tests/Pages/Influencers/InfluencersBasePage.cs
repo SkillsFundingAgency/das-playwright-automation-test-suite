@@ -2,9 +2,11 @@
 
 public abstract class InfluencersBasePage(ScenarioContext context) : HubBasePage(context)
 {
+    private ILocator InfluencersTab => page.GetByLabel("Influencers");
+
     public async Task<InfluencersHowTheyWorkPage> NavigateToHowDoTheyWorkPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "How they work" }).ClickAsync();
+        await InfluencersTab.GetByRole(AriaRole.Link, new() { Name = "How they work" }).ClickAsync();
 
         return await VerifyPageAsync(() => new InfluencersHowTheyWorkPage(context));
     }
@@ -12,14 +14,14 @@ public abstract class InfluencersBasePage(ScenarioContext context) : HubBasePage
     public async Task<InfluencersRequestSupportPage> NavigateToRequestSupportPage()
     {
 
-        await page.GetByRole(AriaRole.Link, new() { Name = "Request support" }).ClickAsync();
+        await InfluencersTab.GetByRole(AriaRole.Link, new() { Name = "Request support" }).ClickAsync();
 
         return await VerifyPageAsync(() => new InfluencersRequestSupportPage(context));
     }
 
     public async Task<InfluencersResourceHubPage> NavigateToResourceHubPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Resource hub" }).ClickAsync();
+        await InfluencersTab.GetByRole(AriaRole.Link, new() { Name = "Resource hub" }).ClickAsync();
 
         return await VerifyPageAsync(() => new InfluencersResourceHubPage(context));
 
@@ -27,7 +29,7 @@ public abstract class InfluencersBasePage(ScenarioContext context) : HubBasePage
 
     public async Task<InfluencersApprenticeAmbassadorNetworkPage> NavigateToApprenticeAmbassadorNetworkPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Apprenticeship ambassador" }).ClickAsync();
+        await InfluencersTab.GetByRole(AriaRole.Link, new() { Name = "Apprenticeship ambassador" }).ClickAsync();
 
         return await VerifyPageAsync(() => new InfluencersApprenticeAmbassadorNetworkPage(context));
 
