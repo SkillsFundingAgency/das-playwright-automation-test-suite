@@ -16,11 +16,15 @@ public abstract class HubBasePage(ScenarioContext context) : CampaingnsHeaderBas
             {
                 await page.GetByRole(AriaRole.Link, new() { Name = fiuCardHeading }).ClickAsync();
 
+                objectContext.SetDebugInformation($"Clicked fiu card - '{fiuCardHeading}'");
+
                 var nextPageheading = fiuCardHeading.Contains("Career starter apprenticeships") ? "Career starter apprenticeships" : fiuCardHeading;
 
                 var campaingnsDynamicFiuPage = new CampaingnsDynamicFiuPage(context, nextPageheading);
 
                 await campaingnsDynamicFiuPage.VerifyPageAsync();
+
+                objectContext.SetDebugInformation($"Should be loaded - '{nextPageheading}' ");
             }
             catch (Exception ex)
             {

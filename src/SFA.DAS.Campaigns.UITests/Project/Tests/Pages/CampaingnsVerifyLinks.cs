@@ -27,7 +27,7 @@ public class CampaingnsVerifyLinks(ScenarioContext context) : CampaingnsBasePage
             if (string.IsNullOrEmpty(attributeValue) && !string.IsNullOrEmpty(text))
                 throw new Exception($"{msg} is broken");
 
-            objectContext.SetDebugInformation(msg);
+            //objectContext.SetDebugInformation(msg);
         }
     }
 }
