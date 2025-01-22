@@ -10,6 +10,6 @@ namespace SFA.DAS.ConfigurationBuilder
 
         public static string GetDirectory(this ObjectContext objectContext) => objectContext.Get(DirectoryKey);
 
-        internal static void SetDirectory(this ObjectContext objectContext, string value) => objectContext.Set(DirectoryKey, value);
+        public static void SetDirectory(this ObjectContext objectContext, string value) => objectContext.Set(DirectoryKey, value);
     }
 }

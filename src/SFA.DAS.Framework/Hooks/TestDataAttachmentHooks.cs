@@ -1,4 +1,8 @@
-﻿namespace SFA.DAS.TestDataExport;
+﻿using SFA.DAS.ConfigurationBuilder;
+using SFA.DAS.FrameworkHelpers;
+using TechTalk.SpecFlow;
+
+namespace SFA.DAS.Framework.Hooks;
 
 [Binding]
 public class TestDataAttachmentHooks(ScenarioContext context)

@@ -1,7 +1,7 @@
 ﻿using SFA.DAS.FrameworkHelpers;
 using TechTalk.SpecFlow;
 
-namespace SFA.DAS.ConfigurationBuilder
+namespace SFA.DAS.Framework.Hooks
 {
     [Binding]
     public class ObjectContextHooks(ScenarioContext context)

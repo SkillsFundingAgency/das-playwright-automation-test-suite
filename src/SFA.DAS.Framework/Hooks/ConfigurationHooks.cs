@@ -1,6 +1,7 @@
-﻿using TechTalk.SpecFlow;
+﻿using SFA.DAS.ConfigurationBuilder;
+using TechTalk.SpecFlow;
 
-namespace SFA.DAS.ConfigurationBuilder
+namespace SFA.DAS.Framework.Hooks
 {
     [Binding]
     public class ConfigurationHooks(ScenarioContext context)

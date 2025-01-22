@@ -3,11 +3,10 @@ using NUnit.Framework;
 using SFA.DAS.ConfigurationBuilder;
 using SFA.DAS.FrameworkHelpers;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
-namespace SFA.DAS.Framework;
+namespace SFA.DAS.Framework.Hooks;
 
 [Binding]
 public class PlaywrightHooks(ScenarioContext context)
@@ -24,7 +23,7 @@ public class PlaywrightHooks(ScenarioContext context)
         return Task.CompletedTask;
     }
 
-    [BeforeScenario(Order = 4)]
+    [BeforeScenario(Order = 8)]
     public async Task SetupPlaywrightDriver()
     {
         browserContext = await driver.Browser.NewContextAsync(new BrowserNewContextOptions
@@ -32,17 +31,19 @@ public class PlaywrightHooks(ScenarioContext context)
             ViewportSize = ViewportSize.NoViewport
         });
 
-        if (context.ScenarioInfo.Tags.Contains("donottracelogin") == false)
+        //if (context.ScenarioInfo.Tags.Contains("donottracelogin") == false)
+        //{
+        await browserContext.Tracing.StartAsync(new()
         {
-            await browserContext.Tracing.StartAsync(new()
-            {
-                Title = context.ScenarioInfo.Title,
-                Screenshots = true,
-                Snapshots = true
-            });
-        }
+            Title = context.ScenarioInfo.Title,
+            Screenshots = true,
+            Snapshots = true
+        });
+        //}
 
         var page = await browserContext.NewPageAsync();
+
+        Assertions.SetDefaultExpectTimeout(10000);
 
         context.Set(new Driver(browserContext, page, context.Get<ObjectContext>()));
     }
@@ -50,23 +51,24 @@ public class PlaywrightHooks(ScenarioContext context)
     [AfterScenario(Order = 98)]
     public async Task StopTracing()
     {
-        if (context.ScenarioInfo.Tags.Contains("donottracelogin")) return;
+        //if (context.ScenarioInfo.Tags.Contains("donottracelogin")) return;
 
-        var tracefileName = $"TRACEDATA_{DateTime.Now:HH-mm-ss-fffff}.zip";
+        var tracefileName = $"PLAYWRIGHTDATA_{DateTime.Now:HH-mm-ss-fffff}.zip";
 
         var tracefilePath = $"{context.Get<ObjectContext>().GetDirectory()}/{tracefileName}";
 
-        await browserContext.Tracing.StopAsync(new()
-        {
-            Path = tracefilePath
-        });
+        await context.Get<TryCatchExceptionHelper>().AfterScenarioException(() => context.Get<Driver>().ScreenshotAsync(true));
 
-        TestContext.AddTestAttachment(tracefilePath, tracefileName);
-    }
+        await context.Get<TryCatchExceptionHelper>().AfterScenarioException(
+            async () =>
+            {
+                await browserContext.Tracing.StopAsync(new()
+                {
+                    Path = tracefilePath
+                });
 
-    [AfterTestRun]
-    public static async Task AfterAll()
-    {
-        await driver.Dispose();
+                TestContext.AddTestAttachment(tracefilePath, tracefileName);
+            }
+            );
     }
 }

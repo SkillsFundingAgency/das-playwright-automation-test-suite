@@ -1,6 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
-namespace SFA.DAS.TestDataExport;
+namespace SFA.DAS.FrameworkHelpers;
 
 public class TryCatchExceptionHelper(ObjectContext objectContext)
 {
@@ -16,11 +17,11 @@ public class TryCatchExceptionHelper(ObjectContext objectContext)
         }
     }
 
-    public async void AfterScenarioException(Task task)
+    public async Task AfterScenarioException(Func<Task> func)
     {
         try
         {
-            await task;
+            await func.Invoke();
         }
         catch (Exception ex)
         {

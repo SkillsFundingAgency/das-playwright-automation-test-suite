@@ -32,7 +32,7 @@ namespace SFA.DAS.ConfigurationBuilder
             _config = InitializeConfig();
         }
 
-        internal static IConfigurationRoot GetConfig() => _config;
+        public static IConfigurationRoot GetConfig() => _config;
 
         private static IConfigurationRoot InitializeConfig()
         {

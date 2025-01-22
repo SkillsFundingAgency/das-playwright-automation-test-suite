@@ -1,4 +1,7 @@
-﻿namespace SFA.DAS.TestDataExport;
+﻿using SFA.DAS.FrameworkHelpers;
+using TechTalk.SpecFlow;
+
+namespace SFA.DAS.Framework.Hooks;
 
 [Binding]
 public class FrameworkHelpersHooks
@@ -8,7 +11,7 @@ public class FrameworkHelpersHooks
 
     public FrameworkHelpersHooks(ScenarioContext context) { _context = context; _tags = _context.ScenarioInfo.Tags; }
 
-    [BeforeScenario(Order = 1)]
+    [BeforeScenario(Order = 2)]
     public void SetUpFrameworkHelpers()
     {
         var objectContext = _context.Get<ObjectContext>();

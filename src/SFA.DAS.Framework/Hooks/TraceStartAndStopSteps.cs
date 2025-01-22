@@ -1,6 +1,13 @@
-﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions;
+﻿using NUnit.Framework;
+using SFA.DAS.FrameworkHelpers;
+using System;
+using System.Threading.Tasks;
+using TechTalk.SpecFlow;
+using SFA.DAS.ConfigurationBuilder;
 
-[Binding]
+namespace SFA.DAS.Framework.Hooks;
+
+[Binding, Scope(Tag = "@donottracelogin")]
 public class TraceStartAndStopSteps(ScenarioContext context)
 {
     [Given("the trace is started")]

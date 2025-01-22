@@ -39,9 +39,4 @@ public class InitializeDriver
 
         return type;
     }
-
-    public async Task Dispose()
-    {
-        await Browser?.CloseAsync();
-    }
 }

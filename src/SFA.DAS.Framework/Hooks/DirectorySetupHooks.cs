@@ -1,16 +1,17 @@
-﻿using SFA.DAS.FrameworkHelpers;
+﻿using SFA.DAS.ConfigurationBuilder;
+using SFA.DAS.FrameworkHelpers;
 using System;
 using System.IO;
 using TechTalk.SpecFlow;
 
-namespace SFA.DAS.ConfigurationBuilder
+namespace SFA.DAS.Framework.Hooks
 {
     [Binding]
     public class DirectorySetupHooks(ScenarioContext context, FeatureContext featureContext)
     {
         private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
 
-        [BeforeScenario(Order = 4)]
+        [BeforeScenario(Order = 3)]
         public void SetUpDirectory()
         {
             string directory = GetDirectoryPath();
