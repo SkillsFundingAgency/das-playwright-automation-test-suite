@@ -120,9 +120,9 @@ public class PlaywrightHooks(ScenarioContext context)
 
     private string CreateCloudDriver()
     {
-        string varbrowserstackusername = Environment.GetEnvironmentVariable("BROWSERSTACK_USERNAME");
+        string varbrowserstackusername = Environment.GetEnvironmentVariable("BROWSERSTACKUSER");
 
-        string varbrowserstackaccessKey = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY");
+        string varbrowserstackaccessKey = Environment.GetEnvironmentVariable("BROWSERSTACKKEY");
 
         var buildDateTime = Date.ToString("ddMMMyyyy_HH:mm:ss").ToUpper();
 
