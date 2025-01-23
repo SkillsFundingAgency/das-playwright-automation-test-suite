@@ -6,26 +6,28 @@ namespace SFA.DAS.Framework;
 
 public class InitializeDriver
 {
-    private readonly Task<IBrowser> _browser;
+    private readonly Task<IBrowserType> _iBrowserType;
 
-    public IBrowser Browser => _browser.Result;
+    public IBrowserType IBrowserType => _iBrowserType.Result;
+
+    public static BrowserType BrowserType;
+
+    public static bool isCloud;
 
     public InitializeDriver()
     {
-        _browser = Task.Run(Initialize);
+        _iBrowserType = Task.Run(Initialize);
     }
 
-    public static async Task<IBrowser> Initialize()
+    public static async Task<IBrowserType> Initialize()
     {
-        var factory = new DriverFactory(GetBrowserTypeFromEnv());
+        BrowserType = GetBrowserTypeFromEnv();
 
-        var driver = await factory.CreateDriver();
+        isCloud = BrowserType == BrowserType.Cloud;
 
-        return await driver.LaunchAsync(new BrowserTypeLaunchOptions
-        {
-            Headless = false,
-            Args = ["--start-maximized"] 
-        });
+        var factory = new DriverFactory(isCloud ? BrowserType.Chrome : BrowserType);
+
+        return await factory.CreateDriver();
     }
 
     public static BrowserType GetBrowserTypeFromEnv()
@@ -35,7 +37,7 @@ public class InitializeDriver
         string browserType = string.IsNullOrEmpty(envBrowserType) ? "Chrome" : envBrowserType;
 
         if (!Enum.TryParse(browserType, true, out BrowserType type))
-            throw new ArgumentException($"Invalid browser type: {browserType}");
+            type = BrowserType.Chrome;
 
         return type;
     }

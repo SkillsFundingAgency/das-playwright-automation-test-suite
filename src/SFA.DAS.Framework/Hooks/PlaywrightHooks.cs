@@ -1,8 +1,12 @@
-﻿using Microsoft.Playwright;
+﻿using Azure;
+using Microsoft.Playwright;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.ConfigurationBuilder;
 using SFA.DAS.FrameworkHelpers;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
@@ -15,6 +19,17 @@ public class PlaywrightHooks(ScenarioContext context)
 
     private IBrowserContext browserContext;
 
+    private IBrowser Browser;
+
+    private bool isCloud;
+
+    private static DateTime Date;
+
+    static PlaywrightHooks()
+    {
+        Date = DateTime.Now;
+    }
+
     [BeforeTestRun]
     public static Task BeforeAll()
     {
@@ -26,20 +41,32 @@ public class PlaywrightHooks(ScenarioContext context)
     [BeforeScenario(Order = 8)]
     public async Task SetupPlaywrightDriver()
     {
-        browserContext = await driver.Browser.NewContextAsync(new BrowserNewContextOptions
+        isCloud = InitializeDriver.isCloud;
+
+        if (isCloud)
+            Browser =  await driver.IBrowserType.ConnectAsync(CreateCloudDriver());
+
+        else
+            Browser =  await driver.IBrowserType.LaunchAsync(new BrowserTypeLaunchOptions
+            {
+                Headless = false,
+                Args = ["--start-maximized"],
+            });
+
+        browserContext = await Browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = ViewportSize.NoViewport
         });
 
-        //if (context.ScenarioInfo.Tags.Contains("donottracelogin") == false)
-        //{
-        await browserContext.Tracing.StartAsync(new()
+        if (ShouldTrace())
         {
-            Title = context.ScenarioInfo.Title,
-            Screenshots = true,
-            Snapshots = true
-        });
-        //}
+            await browserContext.Tracing.StartAsync(new()
+            {
+                Title = context.ScenarioInfo.Title,
+                Screenshots = true,
+                Snapshots = true
+            });
+        }
 
         var page = await browserContext.NewPageAsync();
 
@@ -51,24 +78,80 @@ public class PlaywrightHooks(ScenarioContext context)
     [AfterScenario(Order = 98)]
     public async Task StopTracing()
     {
-        //if (context.ScenarioInfo.Tags.Contains("donottracelogin")) return;
+        var pDriver = context.Get<Driver>();
 
-        var tracefileName = $"PLAYWRIGHTDATA_{DateTime.Now:HH-mm-ss-fffff}.zip";
+        await context.Get<TryCatchExceptionHelper>().AfterScenarioException(() => pDriver.ScreenshotAsync(true));
 
-        var tracefilePath = $"{context.Get<ObjectContext>().GetDirectory()}/{tracefileName}";
+        if (ShouldTrace())
+        {
+            var tracefileName = $"PLAYWRIGHTDATA_{DateTime.Now:HH-mm-ss-fffff}.zip";
 
-        await context.Get<TryCatchExceptionHelper>().AfterScenarioException(() => context.Get<Driver>().ScreenshotAsync(true));
+            var tracefilePath = $"{context.Get<ObjectContext>().GetDirectory()}/{tracefileName}";
 
-        await context.Get<TryCatchExceptionHelper>().AfterScenarioException(
-            async () =>
-            {
-                await browserContext.Tracing.StopAsync(new()
+            await context.Get<TryCatchExceptionHelper>().AfterScenarioException(
+                async () =>
                 {
-                    Path = tracefilePath
-                });
+                    await browserContext.Tracing.StopAsync(new()
+                    {
+                        Path = tracefilePath
+                    });
 
-                TestContext.AddTestAttachment(tracefilePath, tracefileName);
-            }
-            );
+                    TestContext.AddTestAttachment(tracefilePath, tracefileName);
+                }
+                );
+        }
+        
+        if (isCloud)
+        {
+            if (context.TestError == null)
+                await MarkTestStatus("passed", string.Empty, pDriver.Page);
+            else
+                await MarkTestStatus("failed", context.TestError.Message, pDriver.Page);
+        }
+
+        await Browser.CloseAsync();
+    }
+
+    public static async Task MarkTestStatus(string status, string reason, IPage page)
+    {
+        await page.EvaluateAsync("_ => {}", "browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"" + status + "\", \"reason\": \"" + reason + "\"}}");
+    }
+
+    private bool ShouldTrace() => (context.ScenarioInfo.Tags.Contains("donottracelogin") == false || isCloud == false);
+
+    private string CreateCloudDriver()
+    {
+        string varbrowserstackusername = Environment.GetEnvironmentVariable("BROWSERSTACK_USERNAME");
+
+        string varbrowserstackaccessKey = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY");
+
+        var buildDateTime = Date.ToString("ddMMMyyyy_HH:mm:ss").ToUpper();
+
+        Dictionary<string, string> browserstackOptions = new()
+        {
+            { "os", "Windows" },
+            { "os_version", "11" },
+            { "browser", "chrome" },  // allowed browsers are `chrome`, `edge`, `playwright-chromium`, `playwright-firefox` and `playwright-webkit`
+            { "browser_version", "latest" },
+            { "browserstack.username", varbrowserstackusername },
+            { "browserstack.accessKey", varbrowserstackaccessKey },
+            { "geoLocation", "FR" },
+            { "project", "Playwright Campaingns project" },
+            { "build", buildDateTime },
+            { "name", context.ScenarioInfo.Title },
+            { "buildTag", "playwright" },
+            { "resolution", "1280x1024" },
+            { "browserstack.local", "false" },
+            { "browserstack.localIdentifier", "local_connection_name" },
+            { "browserstack.playwrightVersion", "1.latest" },
+            { "client.playwrightVersion", "1.latest" },
+            { "browserstack.debug", "true" },
+            { "browserstack.interactiveDebugging", "true" },
+            { "browserstack.console", "info" },
+            { "browserstack.networkLogs", "true" }
+        };
+        string capsJson = JsonConvert.SerializeObject(browserstackOptions);
+
+        return "wss://cdp.browserstack.com/playwright?caps=" + Uri.EscapeDataString(capsJson);
     }
 }

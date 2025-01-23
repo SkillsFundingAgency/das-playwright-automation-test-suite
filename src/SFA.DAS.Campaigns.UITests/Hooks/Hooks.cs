@@ -10,7 +10,11 @@
 
             context.Set(new CampaignsDataHelper());
 
-            await driver.Page.GotoAsync(UrlConfig.CA_BaseUrl);
+            var url = UrlConfig.CA_BaseUrl;
+
+            context.Get<ObjectContext>().SetDebugInformation(url);
+
+            await driver.Page.GotoAsync(url);
         }
     }
 }
