@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.Playwright;
+﻿using Microsoft.Playwright;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.ConfigurationBuilder;
@@ -23,7 +22,7 @@ public class PlaywrightHooks(ScenarioContext context)
 
     private bool isCloud;
 
-    private static DateTime Date;
+    private static readonly DateTime Date;
 
     static PlaywrightHooks()
     {
@@ -44,10 +43,10 @@ public class PlaywrightHooks(ScenarioContext context)
         isCloud = InitializeDriver.isCloud;
 
         if (isCloud)
-            Browser =  await driver.IBrowserType.ConnectAsync(CreateCloudDriver());
+            Browser = await driver.IBrowserType.ConnectAsync(CreateCloudDriver());
 
         else
-            Browser =  await driver.IBrowserType.LaunchAsync(new BrowserTypeLaunchOptions
+            Browser = await driver.IBrowserType.LaunchAsync(new BrowserTypeLaunchOptions
             {
                 Headless = false,
                 Args = ["--start-maximized"],
@@ -100,7 +99,7 @@ public class PlaywrightHooks(ScenarioContext context)
                 }
                 );
         }
-        
+
         if (isCloud)
         {
             if (context.TestError == null)
