@@ -43,6 +43,7 @@ namespace SFA.DAS.ConfigurationBuilder
                 ])
                 .AddProjectJsonFiles(
                 [
+                    "Config",
                     "Project"
                 ]);
 

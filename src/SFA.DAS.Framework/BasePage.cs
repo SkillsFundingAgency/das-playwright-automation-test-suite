@@ -32,7 +32,7 @@ namespace SFA.DAS.Framework
             page = driver.Page;
         }
 
-        protected static async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
+        public static async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
         {
             var nextPage = func.Invoke();
 
