@@ -1,6 +1,4 @@
-﻿using SFA.DAS.SupportConsole.UITests.Project.Helpers;
-
-namespace SFA.DAS.SupportConsole.UITests.Project.Tests.Steps;
+﻿namespace SFA.DAS.SupportConsole.UITests.Project.Tests.Steps;
 
 [Binding]
 public class CommonSteps(ScenarioContext context)
