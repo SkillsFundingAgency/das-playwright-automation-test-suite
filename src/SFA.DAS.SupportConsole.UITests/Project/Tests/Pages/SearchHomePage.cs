@@ -54,9 +54,9 @@ public class AccountOverviewPage(ScenarioContext context) : SupportConsoleBasePa
 
         await RefreshAccountOverviewPage();
 
-        await Assertions.Expect(page.Locator(".heading-large")).ToContainTextAsync($"{config.AccountName}", new() { IgnoreCase = true });
+        await Assertions.Expect(page.Locator("#content")).ToContainTextAsync($"{config.AccountName}", new() { IgnoreCase = true });
 
-        await Assertions.Expect(page.Locator(".heading-secondary")).ToContainTextAsync($"{config.AccountDetails}", new() { IgnoreCase = true });
+        await Assertions.Expect(page.Locator("#content")).ToContainTextAsync($"{config.AccountDetails}", new() { IgnoreCase = true });
     }
 
     //public TeamMembersPage ClickTeamMembersLink()

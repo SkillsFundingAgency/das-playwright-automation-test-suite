@@ -8,7 +8,7 @@ namespace SFA.DAS.SupportConsole.UITests.Project;
 public class SupportConsoleConfigurationSetup(ScenarioContext context)
 {
     [BeforeScenario(Order = 2)]
-    public async Task SetUpSupportConsoleProjectConfiguration()
+    public void SetUpSupportConsoleProjectConfiguration()
     {
         var configSection = context.Get<ConfigSection>();
 
@@ -21,7 +21,5 @@ public class SupportConsoleConfigurationSetup(ScenarioContext context)
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportConsoleTier1User()),
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportConsoleTier2User())
         });
-
-        await Task.CompletedTask;
     }
 }

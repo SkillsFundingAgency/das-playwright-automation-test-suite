@@ -18,7 +18,7 @@ public class Hooks(ScenarioContext context)
     }
 
     [BeforeScenario(Order = 23)]
-    public async Task SetUpHelpers()
+    public void SetUpHelpers()
     {
         var config = context.GetSupportConsoleConfig<SupportConsoleConfig>();
 
@@ -39,7 +39,5 @@ public class Hooks(ScenarioContext context)
         context.Set(accsqlHelper);
 
         context.Set(comtsqlHelper);
-
-        await Task.CompletedTask;
     }
 }
