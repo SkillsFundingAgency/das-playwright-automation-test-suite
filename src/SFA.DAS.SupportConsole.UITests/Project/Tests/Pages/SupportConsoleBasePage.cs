@@ -11,7 +11,7 @@ public abstract class SupportConsoleBasePage(ScenarioContext context) : BasePage
     //protected static By FinanceLink => By.LinkText("Finance");
     //protected static By TeamMembersLink => By.LinkText("Team members");
 
-    //public void ClickFinanceMenuLink() => formCompletionHelper.Click(FinanceLink);
+    public async Task ClickFinanceMenuLink() => await page.GetByRole(AriaRole.Link, new() { Name = "Finance" }).ClickAsync();
 
     public async Task<SearchHomePage> GoToSearchHomePage()
     {

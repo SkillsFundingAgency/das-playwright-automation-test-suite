@@ -6,9 +6,9 @@ public class SearchHomePage(ScenarioContext context) : SupportConsoleBasePage(co
 
     private ILocator NextPage => page.Locator(".page-navigation .next");
 
-    //public UserInformationOverviewPage SearchByNameAndView() => SearchAndViewUserInformation(config.Name);
+    public async Task<UserInformationOverviewPage> SearchByNameAndView() => await SearchAndViewUserInformation(config.Name);
 
-    //public UserInformationOverviewPage SearchByEmailAddressAndView() => SearchAndViewUserInformation(config.EmailAddress);
+    public async Task<UserInformationOverviewPage> SearchByEmailAddressAndView() => await SearchAndViewUserInformation(config.EmailAddress);
 
     public async Task<AccountOverviewPage> SearchByPublicAccountIdAndViewAccount() => await SearchAndViewAccount(config.PublicAccountId);
 
@@ -32,45 +32,16 @@ public class SearchHomePage(ScenarioContext context) : SupportConsoleBasePage(co
         return await VerifyPageAsync(() => new AccountOverviewPage(context));
     }
 
-    //private async Task<UserInformationOverviewPage> SearchAndViewUserInformation(string criteria)
-    //{
-    //    await page.GetByRole(AriaRole.Radio, new() { Name = "Users" }).CheckAsync();
-
-    //    await page.GetByRole(AriaRole.Searchbox, new() { Name = "Enter name or email address" }).FillAsync(criteria);
-
-    //    await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
-
-    //    await driver.SelectRowFromTable("view", config.EmailAddress, NextPage);
-
-    //    return await VerifyPageAsync(() => new UserInformationOverviewPage(context));
-    //}
-}
-
-public class AccountOverviewPage(ScenarioContext context) : SupportConsoleBasePage(context)
-{
-    public override async Task VerifyPage()
+    private async Task<UserInformationOverviewPage> SearchAndViewUserInformation(string criteria)
     {
-        //Doing this to refresh the page as the Header dissappears at times - known issue
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Users" }).CheckAsync();
 
-        await RefreshAccountOverviewPage();
+        await page.GetByRole(AriaRole.Searchbox, new() { Name = "Enter name or email address" }).FillAsync(criteria);
 
-        await Assertions.Expect(page.Locator("#content")).ToContainTextAsync($"{config.AccountName}", new() { IgnoreCase = true });
+        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
-        await Assertions.Expect(page.Locator("#content")).ToContainTextAsync($"{config.AccountDetails}", new() { IgnoreCase = true });
+        await driver.SelectRowFromTable("view", config.EmailAddress, NextPage);
+
+        return await VerifyPageAsync(() => new UserInformationOverviewPage(context));
     }
-
-    //public TeamMembersPage ClickTeamMembersLink()
-    //{
-    //    formCompletionHelper.Click(TeamMembersLink);
-    //    return new(context);
-    //}
-
-    public async Task<CommitmentsSearchPage> ClickCommitmentsMenuLink()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Commitments" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new CommitmentsSearchPage(context));
-    }
-
-    private async Task RefreshAccountOverviewPage() => await page.GetByRole(AriaRole.Link, new() { Name = "Organisations" }).ClickAsync();
 }
