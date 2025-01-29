@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Framework", "SFA.DAS.Framework\SFA.DAS.Framework.csproj", "{0F2B7F19-3C8F-4E71-99EA-F8485D42D2BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.FATe.UI.Tests", "SFA.DAS.FATe.UI.Tests\SFA.DAS.FATe.UI.Tests.csproj", "{EA23768C-C2EF-44AB-AC8C-4FAB9E6ACCC7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.FATe.UITests", "SFA.DAS.FATe.UITests\SFA.DAS.FATe.UITests.csproj", "{EA23768C-C2EF-44AB-AC8C-4FAB9E6ACCC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
