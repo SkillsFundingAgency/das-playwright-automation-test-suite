@@ -15,7 +15,15 @@ public class MultiConfigurationSetupHelper(ScenarioContext context)
 
         if (Configurator.IsAdoExecution)
         {
+            context.Get<ObjectContext>().SetDebugInformation(key);
+
+            NUnit.Framework.TestContext.Progress.WriteLine(key);
+
             var azureList = configSection.GetConfigSection<string>(key);
+
+            context.Get<ObjectContext>().SetDebugInformation(azureList);
+
+            NUnit.Framework.TestContext.Progress.WriteLine(azureList);
 
             list = JsonConvert.DeserializeObject<List<T>>(azureList);
         }
