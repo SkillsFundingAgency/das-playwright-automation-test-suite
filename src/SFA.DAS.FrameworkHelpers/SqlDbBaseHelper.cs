@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using static SFA.DAS.FrameworkHelpers.WaitConfigurationHelper;
 
@@ -17,13 +18,13 @@ public class SqlDbBaseHelper(ObjectContext objectContext, string connectionStrin
 
     #region ExecuteSqlCommand
 
-    public int ExecuteSqlCommand(string queryToExecute) => ExecuteSqlCommand(queryToExecute, connectionString);
+    public async Task<int> ExecuteSqlCommand(string queryToExecute) => await ExecuteSqlCommand(queryToExecute, connectionString);
 
-    public int ExecuteSqlCommand(string queryToExecute, string connectionString) => ExecuteSqlCommand(queryToExecute, connectionString, null);
+    public async Task<int> ExecuteSqlCommand(string queryToExecute, string connectionString) => await ExecuteSqlCommand(queryToExecute, connectionString, null);
 
-    public int ExecuteSqlCommand(string queryToExecute, Dictionary<string, string> parameters) => ExecuteSqlCommand(queryToExecute, connectionString, parameters);
+    public async Task<int> ExecuteSqlCommand(string queryToExecute, Dictionary<string, string> parameters) => await ExecuteSqlCommand(queryToExecute, connectionString, parameters);
 
-    public int ExecuteSqlCommand(string queryToExecute, string connectionString, Dictionary<string, string> parameters)
+    public async Task<int> ExecuteSqlCommand(string queryToExecute, string connectionString, Dictionary<string, string> parameters)
     {
         string dbName = SqlDbConfigHelper.GetDbName(connectionString);
 
@@ -31,7 +32,8 @@ public class SqlDbBaseHelper(ObjectContext objectContext, string connectionStrin
 
         try
         {
-            using SqlConnection databaseConnection = GetSqlConnection(connectionString);
+            using SqlConnection databaseConnection = await GetSqlConnection(connectionString);
+
             databaseConnection.Open();
 
             using SqlCommand command = new(queryToExecute, databaseConnection);
@@ -43,7 +45,7 @@ public class SqlDbBaseHelper(ObjectContext objectContext, string connectionStrin
                 }
             }
 
-            int noOfrowsaffected = command.ExecuteNonQuery();
+            int noOfrowsaffected = await command.ExecuteNonQueryAsync();
 
             SetDebugInformation($"{noOfrowsaffected} rows affected in {dbName}");
 
@@ -57,21 +59,32 @@ public class SqlDbBaseHelper(ObjectContext objectContext, string connectionStrin
 
     #endregion
 
-    protected List<object[]> GetListOfData(string queryToExecute) => GetListOfData(queryToExecute, connectionString, null).data;
+    protected async Task<List<object[]>> GetListOfData(string queryToExecute)
+    {
+        var (data, _) = await GetListOfData(queryToExecute, connectionString, null); 
 
-    protected (List<object[]> data, int noOfColumns) GetListOfData(string queryToExecute, string connectionString, Dictionary<string, string> parameters) =>
-        GetMultipleListOfData([queryToExecute], connectionString, parameters).FirstOrDefault();
+        return  data;
+    }
 
-    protected List<(List<object[]> data, int noOfColumns)> GetMultipleListOfData(List<string> queryToExecute) =>
-        GetMultipleListOfData(queryToExecute, connectionString, null);
+    protected async Task<(List<object[]> data, int noOfColumns)> GetListOfData(string queryToExecute, string connectionString, Dictionary<string, string> parameters)
+    {
+        var result = await GetMultipleListOfData([queryToExecute], connectionString, parameters);
 
-    private List<(List<object[]> data, int noOfColumns)> GetMultipleListOfData(List<string> queryToExecute, string connectionString, Dictionary<string, string> parameters)
+        return result.FirstOrDefault();
+    }
+
+
+    protected async Task<List<(List<object[]> data, int noOfColumns)>> GetMultipleListOfData(List<string> queryToExecute) =>
+        await GetMultipleListOfData(queryToExecute, connectionString, null);
+
+    private async Task<List<(List<object[]> data, int noOfColumns)>> GetMultipleListOfData(List<string> queryToExecute, string connectionString, Dictionary<string, string> parameters)
     {
         SetDebugInformation($"ReadDataFromDataBase : {SqlDbConfigHelper.GetDbName(connectionString)}{Environment.NewLine}{string.Join(Environment.NewLine, queryToExecute)}");
 
         try
         {
-            using SqlConnection dbConnection = GetSqlConnection(connectionString);
+            using SqlConnection dbConnection = await GetSqlConnection(connectionString);
+
             using SqlCommand command = new(string.Join(string.Empty, queryToExecute), dbConnection);
             command.CommandType = CommandType.Text;
 
@@ -83,15 +96,15 @@ public class SqlDbBaseHelper(ObjectContext objectContext, string connectionStrin
                 }
             }
 
-            var result = RetriveData(queryToExecute, dbConnection, command);
+            var result = await RetriveData(queryToExecute, dbConnection, command);
 
             if (waitForResults)
             {
-                WaitHelper.WaitForIt(() =>
+                WaitHelper.WaitForIt(async () =>
                 {
                     if (result.Any(x => x.data.Any(y => !string.IsNullOrEmpty(y?.ToString())))) return true;
 
-                    result = RetriveData(queryToExecute, dbConnection, command);
+                    result = await RetriveData(queryToExecute, dbConnection, command);
 
                     return false;
                 }, $"{queryToExecute.FirstOrDefault()}{Environment.NewLine}{SqlDbConfigHelper.WriteDebugMessage(connectionString)}").Wait();
@@ -106,13 +119,13 @@ public class SqlDbBaseHelper(ObjectContext objectContext, string connectionStrin
         }
     }
 
-    private static List<(List<object[]> data, int noOfColumns)> RetriveData(List<string> queryToExecute, SqlConnection dbConnection, SqlCommand command)
+    private static async Task<List<(List<object[]> data, int noOfColumns)>> RetriveData(List<string> queryToExecute, SqlConnection dbConnection, SqlCommand command)
     {
         List<(List<object[]>, int)> multiresult = [];
 
         dbConnection.Open();
 
-        SqlDataReader dataReader = command.ExecuteReader();
+        SqlDataReader dataReader = await command.ExecuteReaderAsync();
 
         foreach (var _ in queryToExecute)
         {
@@ -134,7 +147,7 @@ public class SqlDbBaseHelper(ObjectContext objectContext, string connectionStrin
         return multiresult;
     }
 
-    private static SqlConnection GetSqlConnection(string connectionString) => GetSqlConnectionHelper.GetSqlConnection(connectionString);
+    private static async Task<SqlConnection> GetSqlConnection(string connectionString) => await GetSqlConnectionHelper.GetSqlConnection(connectionString);
 
     private void SetDebugInformation(string x) => objectContext.SetDebugInformation(x);
 }

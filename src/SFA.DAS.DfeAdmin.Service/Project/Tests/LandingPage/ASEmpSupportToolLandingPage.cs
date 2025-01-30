@@ -2,5 +2,9 @@
 
 public class ASEmpSupportToolLandingPage(ScenarioContext context) : ASLandingBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprenticeship service bulk stop utility");
+    protected override string PageTitle => "Apprenticeship service bulk stop utility";
+
+    public override async Task VerifyPage() => await Assertions.Expect(PageLocator).ToContainTextAsync(PageTitle);
+
+    public override async Task ClickStartNowButton() => await page.GetByRole(AriaRole.Button, new() { Name = "Start now" }).ClickAsync();
 }

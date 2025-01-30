@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.Framework;
 using SFA.DAS.Login.Service.Project.Helpers;
+using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Login.Service.Project
@@ -13,9 +14,9 @@ namespace SFA.DAS.Login.Service.Project
             foreach (T item in value) SetUser(context, item);
         }
 
-        public static void SetFAAPortaluser(this ScenarioContext context, List<FAAPortalUser> users)
+        public static async Task SetFAAPortaluser(this ScenarioContext context, List<FAAPortalUser> users)
         {
-            var signInIds = new CandidateAccountStubLoginSqlDataHelper(context.Get<ObjectContext>(), context.Get<DbConfig>()).GetSignInIds(users.Select(x => x.Username).ToList());
+            var signInIds = await new CandidateAccountStubLoginSqlDataHelper(context.Get<ObjectContext>(), context.Get<DbConfig>()).GetSignInIds(users.Select(x => x.Username).ToList());
 
             for (int i = 0; i < users.Count; i++)
             {
@@ -31,9 +32,9 @@ namespace SFA.DAS.Login.Service.Project
             }
         }
 
-        public static void SetEPAOAssessorPortalUser(this ScenarioContext context, List<EPAOAssessorPortalUser> users)
+        public static async Task SetEPAOAssessorPortalUser(this ScenarioContext context, List<EPAOAssessorPortalUser> users)
         {
-            var signInIds = new AssessorStubLoginSqlDataHelper(context.Get<ObjectContext>(), context.Get<DbConfig>()).GetSignInIds(users.Select(x => x.Username).ToList());
+            var signInIds = await new AssessorStubLoginSqlDataHelper(context.Get<ObjectContext>(), context.Get<DbConfig>()).GetSignInIds(users.Select(x => x.Username).ToList());
 
             for (int i = 0; i < users.Count; i++)
             {
@@ -45,9 +46,9 @@ namespace SFA.DAS.Login.Service.Project
             }
         }
 
-        public static void SetApprenticeAccountsPortalUser(this ScenarioContext context, List<ApprenticeUser> users)
+        public static async Task SetApprenticeAccountsPortalUser(this ScenarioContext context, List<ApprenticeUser> users)
         {
-            var signInIds = new ApprenticeAccountsStubLoginSqlDataHelper(context.Get<ObjectContext>(), context.Get<DbConfig>()).GetSignInIds(users.Select(x => x.Username).ToList());
+            var signInIds = await new ApprenticeAccountsStubLoginSqlDataHelper(context.Get<ObjectContext>(), context.Get<DbConfig>()).GetSignInIds(users.Select(x => x.Username).ToList());
 
             for (int i = 0; i < users.Count; i++)
             {
@@ -63,13 +64,13 @@ namespace SFA.DAS.Login.Service.Project
             }
         }
 
-        public static void SetEasLoginUser(this ScenarioContext context, List<EasAccountUser> users)
+        public static async Task SetEasLoginUser(this ScenarioContext context, List<EasAccountUser> users)
         {
             var notNullUsers = users.Where(x => x != null).ToList();
 
             if (notNullUsers.Count == 0) return;
 
-            var legalentities = context.GetAccountLegalEntities(notNullUsers.Select(x => x.Username).ToList());
+            var legalentities = await context.GetAccountLegalEntities(notNullUsers.Select(x => x.Username).ToList());
 
             for (int i = 0; i < notNullUsers.Count; i++)
             {
@@ -83,9 +84,9 @@ namespace SFA.DAS.Login.Service.Project
 
         public static T GetUser<T>(this ScenarioContext context) => context.Get<T>(Key<T>());
 
-        public static List<(List<string> listoflegalEntities, string idOrUserRef)> GetAccountLegalEntities(this ScenarioContext context, List<string> username)
+        public static async Task<List<(List<string> listoflegalEntities, string idOrUserRef)>> GetAccountLegalEntities(this ScenarioContext context, List<string> username)
         {
-            var accountDetails = new EasAccountsSqlDataHelper(context.Get<ObjectContext>(), context.Get<DbConfig>()).GetAccountDetails(username);
+            var accountDetails = await new EasAccountsSqlDataHelper(context.Get<ObjectContext>(), context.Get<DbConfig>()).GetAccountDetails(username);
 
             return accountDetails.Select(x => (x.listoflegalEntities.Select(y => RegexHelper.ReplaceMultipleSpace(y)).ToList(), x.idOrUserRef)).ToList();
         }

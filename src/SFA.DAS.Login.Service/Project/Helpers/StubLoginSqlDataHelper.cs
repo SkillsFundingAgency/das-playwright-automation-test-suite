@@ -1,16 +1,20 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace SFA.DAS.Login.Service.Project.Helpers;
 
 
 public class ApprenticeAccountsStubLoginSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.ApprenticeCommitmentAccountsDbConnectionString)
 {
-    internal List<(string signInId, string firstName, string lastName, string id)> GetSignInIds(List<string> emails)
+    internal async Task<List<(string signInId, string firstName, string lastName, string id)>> GetSignInIds(List<string> emails)
     {
         var query = emails.Select(GetSqlQuery).ToList();
 
         var accountdetails = new List<(string, string, string, string)>();
 
-        foreach (var data in GetListOfMultipleData(query)) accountdetails.Add((Func(data.ListOfArrayToList(0)), Func(data.ListOfArrayToList(1)), Func(data.ListOfArrayToList(2)), Func(data.ListOfArrayToList(3))));
+        var results = await GetListOfMultipleData(query);
+
+        foreach (var data in results) accountdetails.Add((Func(data.ListOfArrayToList(0)), Func(data.ListOfArrayToList(1)), Func(data.ListOfArrayToList(2)), Func(data.ListOfArrayToList(3))));
 
         return accountdetails;
     }
@@ -20,13 +24,15 @@ public class ApprenticeAccountsStubLoginSqlDataHelper(ObjectContext objectContex
 
 public class AssessorStubLoginSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AssessorDbConnectionString)
 {
-    internal List<(string signInId, string displayName)> GetSignInIds(List<string> emails)
+    internal async Task<List<(string signInId, string displayName)>> GetSignInIds(List<string> emails)
     {
         var query = emails.Select(GetSqlQuery).ToList();
 
         var accountdetails = new List<(string, string)>();
 
-        foreach (var data in GetListOfMultipleData(query)) accountdetails.Add((Func(data.ListOfArrayToList(0)), Func(data.ListOfArrayToList(1))));
+        var results = await GetListOfMultipleData(query);
+
+        foreach (var data in results) accountdetails.Add((Func(data.ListOfArrayToList(0)), Func(data.ListOfArrayToList(1))));
 
         return accountdetails;
     }
@@ -36,13 +42,15 @@ public class AssessorStubLoginSqlDataHelper(ObjectContext objectContext, DbConfi
 
 public class CandidateAccountStubLoginSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.CanAccDbConnectionString)
 {
-    internal List<(string signInId, string firstName, string lastName, string mobilePhone)> GetSignInIds(List<string> emails)
+    internal async Task<List<(string signInId, string firstName, string lastName, string mobilePhone)>> GetSignInIds(List<string> emails)
     {
         var query = emails.Select(GetSqlQuery).ToList();
 
         var accountdetails = new List<(string, string, string, string)>();
 
-        foreach (var data in GetListOfMultipleData(query)) accountdetails.Add((Func(data.ListOfArrayToList(0)), Func(data.ListOfArrayToList(1)), Func(data.ListOfArrayToList(2)), Func(data.ListOfArrayToList(3))));
+        var results = await GetListOfMultipleData(query);
+
+        foreach (var data in results) accountdetails.Add((Func(data.ListOfArrayToList(0)), Func(data.ListOfArrayToList(1)), Func(data.ListOfArrayToList(2)), Func(data.ListOfArrayToList(3))));
 
         return accountdetails;
     }

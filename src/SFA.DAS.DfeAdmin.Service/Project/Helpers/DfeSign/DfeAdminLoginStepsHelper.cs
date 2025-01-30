@@ -38,11 +38,11 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context)
 
     #region CheckAndLogin
 
-    //public void CheckAndLoginToAsAdmin() => CheckAndLoginToAsAdmin(GetAsAdminUser());
+    public async Task CheckAndLoginToAsAdmin() => await CheckAndLoginToAsAdmin(GetAsAdminUser());
 
-   // public void CheckAndLoginToAsAdmin(DfeAdminUser dfeAdminUser) => CheckAndLoginTo(new CheckASAdminLandingPage(context), () => new ASAdminLandingPage(context), dfeAdminUser);
+    public async Task CheckAndLoginToAsAdmin(DfeAdminUser dfeAdminUser) => await CheckAndLoginTo(new ASAdminLandingPage(context), dfeAdminUser);
 
-  //  public void CheckAndLoginToSupportTool(DfeAdminUser dfeAdminUser) => CheckAndLoginTo(new CheckASEmpSupportToolLandingPage(context), () => new ASEmpSupportToolLandingPage(context), dfeAdminUser);
+    public async Task CheckAndLoginToSupportTool(DfeAdminUser dfeAdminUser) => await CheckAndLoginTo(new ASEmpSupportToolLandingPage(context), dfeAdminUser);
 
     #endregion
 
@@ -57,12 +57,12 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context)
 
     #endregion
 
-    //private void CheckAndLoginTo(CheckPageTitleShorterTimeOut checkPage, Func<ASLandingBasePage> landingPage, DfeAdminUser dfeAdminUser)
-    //{
-    //    if (checkPage.IsPageDisplayed()) landingPage().ClickStartNowButton();
+    private async Task CheckAndLoginTo(ASLandingBasePage landingPage, DfeAdminUser dfeAdminUser)
+    {
+        if (await landingPage.IsPageDisplayed()) await landingPage.ClickStartNowButton();
 
-    //    if (new CheckDfeSignInPage(context).IsPageDisplayed()) SubmitValidLoginDetails(dfeAdminUser);
-    //}
+        if (await new CheckDfeSignInPage(context).IsPageDisplayed()) await SubmitValidLoginDetails(dfeAdminUser);
+    }
 
     private async Task SubmitValidLoginDetails(ASLandingBasePage landingPage, DfeAdminUser dfeAdminUser)
     {

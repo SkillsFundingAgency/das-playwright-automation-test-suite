@@ -10,7 +10,7 @@ public static class WaitConfigurationHelper
     {
         private static WaitConfiguration Config => new();
 
-        public static async Task WaitForIt(Func<bool> lookForIt, string textMessage)
+        public static async Task WaitForIt(Func<Task<bool>> lookForIt, string textMessage)
         {
             var endTime = DateTime.Now.Add(Config.TimeToWait);
 
@@ -18,7 +18,7 @@ public static class WaitConfigurationHelper
 
             while (DateTime.Now <= endTime)
             {
-                if (lookForIt()) return;
+                if (await lookForIt()) return;
 
                 TestContext.Progress.WriteLine($"Retry {retryCount++} - Waiting for the sql query to return valid data - '{textMessage}'");
 

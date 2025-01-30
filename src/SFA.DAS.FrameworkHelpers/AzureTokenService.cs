@@ -6,9 +6,9 @@ namespace SFA.DAS.FrameworkHelpers
 {
     public static class AzureTokenService
     {
-        public static string GetDatabaseAuthToken() => GetAzureToken("https://database.windows.net/").Result;
+        public static async Task<string> GetDatabaseAuthToken() => await GetAzureToken("https://database.windows.net/");
 
-        public static string GetAppServiceAuthToken(string resource) => GetAzureToken(resource).Result;
+        public static async Task<string> GetAppServiceAuthToken(string resource) => await GetAzureToken(resource);
 
         private static async Task<string> GetAzureToken(string resource)
         {

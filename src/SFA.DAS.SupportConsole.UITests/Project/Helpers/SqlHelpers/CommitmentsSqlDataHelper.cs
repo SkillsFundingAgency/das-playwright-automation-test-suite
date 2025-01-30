@@ -2,14 +2,14 @@
 
 public class CommitmentsSqlDataHelper(ObjectContext objectContext, DbConfig dBConfig) : SqlDbHelper(objectContext, dBConfig.CommitmentsDbConnectionString)
 {
-    public Dictionary<int, (string uln, string fname, string lname, string cohortRef)> GetCommtDetails(string publicHashedId)
+    public async Task<Dictionary<int, (string uln, string fname, string lname, string cohortRef)>> GetCommtDetails(string publicHashedId)
     {
         var query = $"Select ULN, FirstName, LastName, Reference, indentifier from ({GetCohortDetails(publicHashedId)}) temp UNION " +
             $"Select ULN, FirstName, LastName, Reference, indentifier from ({GetCohortNotAssociatedToAccount(publicHashedId)}) temp UNION " +
             $"Select ULN, FirstName, LastName, Reference, indentifier from ({GetCohortDetailsWithPendingChanges(publicHashedId)}) temp UNION " +
             $"Select ULN, FirstName, LastName, Reference, indentifier from ({GetCohortDetailsWithTrainingProviderHistory(publicHashedId)}) temp";
 
-        var result = GetMultipleData(query);
+        var result = await GetMultipleData(query);
 
         Dictionary<int, (string, string, string, string)> resultList = [];
 

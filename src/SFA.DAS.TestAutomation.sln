@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.DfeAdmin.Service", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Login.Service", "SFA.DAS.Login.Service\SFA.DAS.Login.Service.csproj", "{CB45F82F-8D17-444F-BB96-AF4114C07113}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.SupportTools.UITests", "SFA.DAS.SupportTools.UITests\SFA.DAS.SupportTools.UITests.csproj", "{BF3B3022-7E8D-45CD-AA45-ABA20FFA846D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{CB45F82F-8D17-444F-BB96-AF4114C07113}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB45F82F-8D17-444F-BB96-AF4114C07113}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB45F82F-8D17-444F-BB96-AF4114C07113}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF3B3022-7E8D-45CD-AA45-ABA20FFA846D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF3B3022-7E8D-45CD-AA45-ABA20FFA846D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF3B3022-7E8D-45CD-AA45-ABA20FFA846D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF3B3022-7E8D-45CD-AA45-ABA20FFA846D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,19 +1,18 @@
-﻿using SFA.DAS.ConfigurationBuilder;
-using SFA.DAS.FrameworkHelpers;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Threading.Tasks;
 
 namespace SFA.DAS.Login.Service.Project.Helpers;
 
 internal class EasAccountsSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AccountsDbConnectionString)
 {
-    internal List<(List<string> listoflegalEntities, string idOrUserRef)> GetAccountDetails(List<string> emails)
+    internal async Task<List<(List<string> listoflegalEntities, string idOrUserRef)>> GetAccountDetails(List<string> emails)
     {
         var query = emails.Select(GetSqlQuery).ToList();
 
         var accountdetails = new List<(List<string>, string)>();
 
-        foreach (var legalEntities in GetListOfMultipleData(query))
+        var results = await GetListOfMultipleData(query);
+
+        foreach (var legalEntities in results)
         {
             var legalEntitieslist = legalEntities.ListOfArrayToList(0);
 
