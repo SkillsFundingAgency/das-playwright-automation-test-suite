@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
+﻿using Azure;
+
+namespace SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
 
 public class SearchForApprenticeshipPage(ScenarioContext context) : ToolSupportBasePage(context)
 {
@@ -42,10 +44,7 @@ public class SearchForApprenticeshipPage(ScenarioContext context) : ToolSupportB
         await page.GetByLabel("Apprenticeship status").SelectOptionAsync([status]);
     }
 
-    public async Task SelectAllRecords()
-    {
-        await ClickSelectAllCheckBox();
-    }
+    public async Task SelectAllRecords() => await ClickSelectAllCheckBox();
 
 
     public async Task ClickSubmitButton()
@@ -74,9 +73,11 @@ public class SearchForApprenticeshipPage(ScenarioContext context) : ToolSupportB
         return await VerifyPageAsync(() => new StopApprenticeshipsPage(context));
     }
 
+    public async Task<string> GetNoRecordsFound() => await page.GetByRole(AriaRole.Cell, new() { Name = "No matching records found" }).TextContentAsync();
+
     public async Task<int> GetNumberOfRecordsFound()
     {
-        await page.GetByText("Showing 1 to").WaitForAsync(new LocatorWaitForOptions {State = WaitForSelectorState.Visible });
+        await page.GetByText("Showing 1 to").WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
 
         var paginationInfo = await page.GetByText("Showing 1 to").TextContentAsync();
 
@@ -105,7 +106,7 @@ public class PauseApprenticeshipsPage(ScenarioContext context) : ToolSupportBase
         await page.GetByRole(AriaRole.Button, new() { Name = "Pause apprenticeship(s)" }).ClickAsync();
     }
 
-    public async Task<IReadOnlyList<string>> GetStatusColumn() => await page.Locator("#apprenticeshipResultsTable tr td:nth-child(11)").AllTextContentsAsync();
+    public async Task<IReadOnlyList<string>> GetStatusColumn() => await GetStatusColumn(page.Locator("#apprenticeshipsTable tr td:nth-child(11)"));
 }
 
 public class ResumeApprenticeshipsPage(ScenarioContext context) : ToolSupportBasePage(context)
@@ -117,7 +118,7 @@ public class ResumeApprenticeshipsPage(ScenarioContext context) : ToolSupportBas
         await page.GetByRole(AriaRole.Button, new() { Name = "Resume apprenticeship(s)" }).ClickAsync();
     }
 
-    public async Task<IReadOnlyList<string>> GetStatusColumn() => await page.Locator("#apprenticeshipResultsTable tr td:nth-child(11)").AllTextContentsAsync();
+    public async Task<IReadOnlyList<string>> GetStatusColumn() => await GetStatusColumn(page.Locator("#apprenticeshipsTable tr td:nth-child(11)"));
 }
 
 public class StopApprenticeshipsPage(ScenarioContext context) : ToolSupportBasePage(context)
@@ -134,11 +135,11 @@ public class StopApprenticeshipsPage(ScenarioContext context) : ToolSupportBaseP
         await Assertions.Expect(page.GetByRole(AriaRole.Listitem)).ToContainTextAsync("Not all Apprenticeship rows have been supplied with a stop date.");
     }
 
-    public async Task<IReadOnlyList<string>> GetStatusColumn() => await page.Locator("#apprenticeshipResultsTable tr td:nth-child(12)").AllTextContentsAsync();
+    public async Task<IReadOnlyList<string>> GetStatusColumn() => await GetStatusColumn(page.Locator("#apprenticeshipsTable tr td:nth-child(12)"));
 
     public async Task EnterStopDateAndClickSetbutton()
     {
-        string stopDate = "01/" + DateTime.Now.Month.ToString("00") + "/" + DateTime.Now.Year.ToString("0000");
+        string stopDate = DateTime.Now.Year.ToString("0000") + "-" + DateTime.Now.Month.ToString("00") + "-01";
 
         await page.Locator("#bulkDate").FillAsync(stopDate);
 
@@ -147,11 +148,12 @@ public class StopApprenticeshipsPage(ScenarioContext context) : ToolSupportBaseP
 
     public async Task ValidateStopDateApplied()
     {
-        var actualDate = await page.Locator("#date_0").TextContentAsync();
+        var actualDate = await page.Locator("#date_0").InputValueAsync();
 
         string expectedDate1 = DateTime.Now.Year + "-" + DateTime.Now.Month.ToString("00") + "-01";
-        string expectedDate2 = DateTime.Now.Year + "-01-" + DateTime.Now.Month.ToString("00");
-        Assert.IsTrue(expectedDate1 == actualDate || expectedDate2 == actualDate, "Validate correct stop date has been set in the table");
 
+        string expectedDate2 = DateTime.Now.Year + "-01-" + DateTime.Now.Month.ToString("00");
+
+        Assert.IsTrue(expectedDate1 == actualDate || expectedDate2 == actualDate, $"Validate correct stop date has been set in the table - {actualDate}, {expectedDate1}, {expectedDate2}");
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.SupportTools.UITests.Project.Helpers;
 using SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
+using SFA.DAS.Framework;
 using System.Linq;
 using TechTalk.SpecFlow.Assist;
 
@@ -49,9 +50,11 @@ public class SupportToolsSteps(ScenarioContext context)
 
             await page.ClickSubmitButton();
 
-            var actualRecord = await new SearchForApprenticeshipPage(context).GetNumberOfRecordsFound();
+            var page1 = new SearchForApprenticeshipPage(context);
 
-            Assert.GreaterOrEqual(actualRecord, item.TotalRecords, $"Validate number of expected records on row: {row}{item}");
+            if (item.TotalRecords == 0) await page1.GetNoRecordsFound();
+
+            else Assert.GreaterOrEqual(await page1.GetNumberOfRecordsFound(), item.TotalRecords, $"Validate number of expected records on row: {row}{item}");
 
             row++;
         }
@@ -102,7 +105,7 @@ public class SupportToolsSteps(ScenarioContext context)
 
         var ststusList = await page.GetStatusColumn();
 
-        ValidateStopSuccessful([.. ststusList]);
+        ValidateStopSuccessful(ststusList);
     }
 
     [Then(@"User should be able to pause all the live records")]
@@ -116,7 +119,7 @@ public class SupportToolsSteps(ScenarioContext context)
 
         var ststusList = await page.GetStatusColumn();
 
-        ValidatePausedSuccessful([.. ststusList]);
+        ValidatePausedSuccessful(ststusList);
     }
 
     [Then(@"User should be able to resume all the paused records")]
@@ -130,7 +133,7 @@ public class SupportToolsSteps(ScenarioContext context)
 
         var ststusList = await page.GetStatusColumn();
 
-        ValidateResumeSuccessful([.. ststusList]);
+        ValidateResumeSuccessful(ststusList);
     }
 
     [Given(@"User should NOT be able to see Pause, Resume, Suspend and Reinstate utilities")]
@@ -207,7 +210,7 @@ public class SupportToolsSteps(ScenarioContext context)
         await _commitmentsSqlDataHelper.UpdateApprenticeshipStatus(query);
     }
 
-    private static void ValidatePausedSuccessful(List<string> StatusList)
+    private static void ValidatePausedSuccessful(IReadOnlyList<string> StatusList)
     {
         Assert.IsTrue(StatusList.Count == 10, "Validate total number of records");
         string todaysDate = DateTime.Now.ToString("dd/MM/yyyy");
@@ -217,20 +220,20 @@ public class SupportToolsSteps(ScenarioContext context)
             foreach (var status in StatusList)
             {
                 if (i >= 0 && i < 4)
-                    Assert.That(status == $"Submitted successfully {todaysDate}", $"failed at index [{i}]");
+                    StringAssert.AreEqualIgnoringCase($"Submitted successfully {todaysDate}", status, $"failed at index [{i}]");
                 else if (i == 4 || i == 5 || i == 6)
-                    Assert.That(status == $"Paused {todaysDate} - Only Active record can be paused", $"failed at index [{i}]");
+                    StringAssert.AreEqualIgnoringCase($"Paused {todaysDate} - Only Active record can be paused", status, $"failed at index [{i}]");
                 else if (i == 7 || i == 8)
-                    Assert.That(status == $"Stopped {todaysDate} - Only Active record can be paused", $"failed at index [{i}]");
+                    StringAssert.AreEqualIgnoringCase($"Stopped {todaysDate} - Only Active record can be paused", status, $"failed at index [{i}]");
                 else
-                    Assert.That(status == $"Completed - Only Active record can be paused", $"failed at index [{i}]");
+                    StringAssert.AreEqualIgnoringCase($"Completed - Only Active record can be paused", status, $"failed at index [{i}]");
 
                 i++;
             }
         });
     }
 
-    private static void ValidateResumeSuccessful(List<string> StatusList)
+    private static void ValidateResumeSuccessful(IReadOnlyList<string> StatusList)
     {
         Assert.IsTrue(StatusList.Count == 10, "Validate total number of records");
         string todaysDate = DateTime.Now.ToString("dd/MM/yyyy");
@@ -253,7 +256,7 @@ public class SupportToolsSteps(ScenarioContext context)
         });
     }
 
-    private static void ValidateStopSuccessful(List<string> StatusList)
+    private static void ValidateStopSuccessful(IReadOnlyList<string> StatusList)
     {
 
         Assert.IsTrue(StatusList.Count == 10, $"Validate total number of records. Expected: 10 | Actual {StatusList.Count}");
