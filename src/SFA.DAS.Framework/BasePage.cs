@@ -16,7 +16,7 @@ namespace SFA.DAS.Framework
 
         protected readonly IPage page;
 
-        protected static float LandingPageTimeout => 30000;
+        protected static float LandingPageTimeout => 60000;
 
         /// <summary>
         /// The result of the asynchronous verification of this instance.

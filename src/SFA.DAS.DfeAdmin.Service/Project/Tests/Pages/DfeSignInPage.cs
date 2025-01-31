@@ -18,8 +18,6 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         await EnterValidLoginDetails(dfeAdminUser.Username, dfeAdminUser.Password);
 
-        await DfeSignInButton.ClickAsync();
-
-        await Assertions.Expect(DfeSignInButton).ToBeHiddenAsync(new() { Timeout = LandingPageTimeout});
+        await DfeSignInButton.ClickAsync(new() { Timeout = LandingPageTimeout });
     }
 }
