@@ -20,6 +20,6 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         await DfeSignInButton.ClickAsync();
 
-        await Assertions.Expect(DfeSignInButton).ToBeHiddenAsync();
+        await Assertions.Expect(DfeSignInButton).ToBeHiddenAsync(new() { Timeout = LandingPageTimeout});
     }
 }
