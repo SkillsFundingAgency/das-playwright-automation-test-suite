@@ -7,6 +7,6 @@ public class DfeAdminsConfigurationSetup(ScenarioContext context)
 {
     private const string DfeAdminsConfig = "DfeAdminsConfig";
 
-    [BeforeScenario(Order = 1)]
+    [BeforeScenario(Order = 10)]
     public void SetUpDfeAdminsConfiguration() => new MultiConfigurationSetupHelper(context).SetMultiConfiguration<DfeAdminUsers>(DfeAdminsConfig);
 }
