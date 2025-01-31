@@ -7,7 +7,7 @@ namespace SFA.DAS.SupportConsole.UITests.Project;
 [Binding]
 public class SupportConsoleConfigurationSetup(ScenarioContext context)
 {
-    [BeforeScenario(Order = 2)]
+    [BeforeScenario(Order = 12)]
     public void SetUpSupportConsoleProjectConfiguration()
     {
         var configSection = context.Get<ConfigSection>();

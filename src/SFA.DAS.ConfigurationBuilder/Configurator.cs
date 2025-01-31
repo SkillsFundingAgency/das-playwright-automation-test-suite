@@ -39,12 +39,10 @@ namespace SFA.DAS.ConfigurationBuilder
             var builder = ConfigurationBuilder()
                 .AddMandatoryJsonFiles(
                 [
-                    
+                    "Config"
                 ])
                 .AddProjectJsonFiles(
                 [
-                    "Config",
-                    "AdminConfig",
                     "Project"
                 ]);
 

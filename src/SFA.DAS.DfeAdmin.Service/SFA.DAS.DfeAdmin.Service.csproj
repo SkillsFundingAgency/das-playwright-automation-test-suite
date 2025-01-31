@@ -8,14 +8,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.Login.Service\SFA.DAS.Login.Service.csproj" />
-		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
-		<ProjectReference Include="..\SFA.DAS.FrameworkHelpers\SFA.DAS.FrameworkHelpers.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="appsettings.AdminConfig.json">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 
 </Project>

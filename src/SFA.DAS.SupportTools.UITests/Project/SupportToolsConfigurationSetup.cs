@@ -7,7 +7,7 @@ namespace SFA.DAS.SupportTools.UITests.Project;
 [Binding]
 public class SupportToolsConfigurationSetup(ScenarioContext context)
 {
-    [BeforeScenario(Order = 2)]
+    [BeforeScenario(Order = 12)]
     public void SetUpSupportConsoleProjectConfiguration()
     {
         var dfeAdminUsers = context.Get<FrameworkList<DfeAdminUsers>>();
