@@ -30,6 +30,4 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
         var backLink = page.Locator("a.govuk-back-link");
         await backLink.ClickAsync();
     }
-
-
 }

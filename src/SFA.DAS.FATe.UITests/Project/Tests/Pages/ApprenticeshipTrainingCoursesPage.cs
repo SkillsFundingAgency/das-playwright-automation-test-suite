@@ -52,9 +52,4 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         }
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
-
-
-
-
-
 }

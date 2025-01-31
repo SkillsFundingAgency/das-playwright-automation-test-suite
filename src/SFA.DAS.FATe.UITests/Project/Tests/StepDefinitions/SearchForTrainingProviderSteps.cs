@@ -52,6 +52,5 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         {
             await _searchForTrainingProviderPage.SearchWithAnInvalidUkprn();
         }
-
     }
 }
