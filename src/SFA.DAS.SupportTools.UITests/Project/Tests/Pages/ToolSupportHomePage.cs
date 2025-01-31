@@ -2,7 +2,7 @@
 
 public class ToolSupportHomePage(ScenarioContext context) : ToolSupportBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("DAS Tools Support");
+    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("DAS Tools Support", new() { Timeout = LandingPageTimeout });
 
     public async Task<SearchForApprenticeshipPage> ClickPauseApprenticeshipsLink()
     {

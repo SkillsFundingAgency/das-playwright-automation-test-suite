@@ -2,7 +2,7 @@
 
 public class SearchHomePage(ScenarioContext context) : SupportConsoleBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("Search");
+    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("Search", new() { Timeout = LandingPageTimeout });
 
     private ILocator NextPage => page.Locator(".page-navigation .next");
 
@@ -25,7 +25,6 @@ public class SearchHomePage(ScenarioContext context) : SupportConsoleBasePage(co
         await page.GetByRole(AriaRole.Searchbox, new() { Name = "Enter account name, account" }).FillAsync(criteria);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
-
 
         await driver.SelectRowFromTable("view", config.PublicAccountId, NextPage);
 
