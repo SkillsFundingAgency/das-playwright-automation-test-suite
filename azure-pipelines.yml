@@ -59,7 +59,6 @@ steps:
   inputs:
     Contents: |     
      src/**/*.sql
-     src/**/html2canvas.js
      src/**/appsettings.Config.json
      src/**/appsettings.AdminConfig.json
      src/**/appsettings.ProviderConfig.json
