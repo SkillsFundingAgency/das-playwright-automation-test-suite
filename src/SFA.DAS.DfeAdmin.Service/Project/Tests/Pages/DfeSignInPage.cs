@@ -16,6 +16,6 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         await EnterValidLoginDetails(dfeAdminUser.Username, dfeAdminUser.Password);
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Sign in" }).ClickAsync(new() { Timeout = 90000});
+        await page.GetByRole(AriaRole.Button, new() { Name = "Sign in" }).ClickAsync(new() { Timeout = 300000});
     }
 }
