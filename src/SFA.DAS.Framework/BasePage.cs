@@ -16,6 +16,8 @@ namespace SFA.DAS.Framework
 
         protected readonly IPage page;
 
+        protected static float LandingPageTimeout => 60000;
+
         /// <summary>
         /// The result of the asynchronous verification of this instance.
         /// </summary>
@@ -32,7 +34,7 @@ namespace SFA.DAS.Framework
             page = driver.Page;
         }
 
-        protected static async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
+        public static async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
         {
             var nextPage = func.Invoke();
 
