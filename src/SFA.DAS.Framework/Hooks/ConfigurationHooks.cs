@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.ConfigurationBuilder;
+using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Framework.Hooks
@@ -12,6 +13,12 @@ namespace SFA.DAS.Framework.Hooks
             var configSection = new ConfigSection(Configurator.GetConfig());
 
             context.Set(configSection);
+
+            var dbConfig = configSection.GetConfigSection<DbConfig>();
+
+            if (!Configurator.IsAdoExecution) dbConfig = new LocalHostDbConfig(configSection.GetConfigSection<DbDevConfig>(), context.ScenarioInfo.Tags.Contains("usesqllogin")).GetLocalHostDbConfig();
+
+            context.Set(dbConfig);
         }
     }
 }

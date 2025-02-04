@@ -1,0 +1,13 @@
+﻿global using Microsoft.Playwright;
+global using NUnit.Framework;
+global using SFA.DAS.ConfigurationBuilder;
+global using SFA.DAS.Framework;
+global using SFA.DAS.FrameworkHelpers;
+global using SFA.DAS.Login.Service.Project.Helpers;
+global using SFA.DAS.SupportConsole.UITests.Project.Helpers;
+global using SFA.DAS.SupportConsole.UITests.Project.Helpers.SqlHelpers;
+global using SFA.DAS.SupportConsole.UITests.Project.Tests.Pages;
+global using System;
+global using System.Collections.Generic;
+global using System.Threading.Tasks;
+global using TechTalk.SpecFlow;

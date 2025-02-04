@@ -39,7 +39,7 @@ namespace SFA.DAS.ConfigurationBuilder
             var builder = ConfigurationBuilder()
                 .AddMandatoryJsonFiles(
                 [
-                    
+                    "Config"
                 ])
                 .AddProjectJsonFiles(
                 [
