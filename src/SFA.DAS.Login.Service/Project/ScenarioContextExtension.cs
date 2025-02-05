@@ -1,7 +1,4 @@
-﻿using SFA.DAS.Framework;
-using SFA.DAS.Login.Service.Project.Helpers;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
+﻿using SFA.DAS.Login.Service.Project.Helpers;
 
 namespace SFA.DAS.Login.Service.Project
 {

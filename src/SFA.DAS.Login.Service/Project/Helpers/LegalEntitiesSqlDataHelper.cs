@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SFA.DAS.Login.Service.Project.Helpers;
+﻿namespace SFA.DAS.Login.Service.Project.Helpers;
 
 internal class EasAccountsSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AccountsDbConnectionString)
 {
