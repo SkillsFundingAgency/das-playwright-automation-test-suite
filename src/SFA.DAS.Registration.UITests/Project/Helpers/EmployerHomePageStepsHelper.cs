@@ -26,16 +26,16 @@ public class EmployerHomePageStepsHelper
             return await _loginHelper.ReLogin();
 
         if (await _loginHelper.IsYourAccountPageDisplayed())
-            return await new YourAccountsPage(_context).GoToHomePage(_objectContext.GetOrganisationName());
+            return await new YourAccountsPage(_context).ClickAccountLink(_objectContext.GetOrganisationName());
 
         return new HomePage(_context, !openInNewTab);
     }
 
     public async Task<AccountUnavailablePage> ValidateUnsuccessfulLogon()
     {
-        GoToEmployerLoginPage(true);
+        await GoToEmployerLoginPage(true);
 
-        if (_loginHelper.IsSignInPageDisplayed()) return _loginHelper.FailedLogin1();
+        if (await _loginHelper.IsSignInPageDisplayed()) return await _loginHelper.FailedLogin1();
 
         return new AccountUnavailablePage(_context);
     }
@@ -57,8 +57,6 @@ public class EmployerHomePageStepsHelper
 
         if (await _loginHelper.IsLandingPageDisplayed()) await new CreateAnAccountToManageApprenticeshipsPage(_context).GoToStubSignInPage();
     }
-
-    private static string EmployerApprenticeshipService_BaseUrl => UrlConfig.EmployerApprenticeshipService_BaseUrl;
 
     public async Task NavigateToEmployerApprenticeshipService()
     {

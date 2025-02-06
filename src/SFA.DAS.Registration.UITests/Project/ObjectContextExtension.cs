@@ -18,7 +18,7 @@ public static class ObjectContextExtension
     internal static void SetLoginCredentials(this ObjectContext objectContext, string loginusername, string idOrUserRef, string organisationName)
     {
         objectContext.SetRegisteredEmail(loginusername);
-        objectContext.UpdateOrganisationName(organisationName);
+        objectContext.SetOrganisationName(organisationName);
         objectContext.Replace(LoggedInUserObject, new LoggedInAccountUser { Username = loginusername, IdOrUserRef = idOrUserRef, OrganisationName = organisationName });
     }
 
@@ -32,12 +32,11 @@ public static class ObjectContextExtension
         }
     }
 
-    public static void SetOrganisationName(this ObjectContext objectContext, string organisationName) => objectContext.Set(OrganisationNameKey, organisationName);
+    public static void SetOrganisationName(this ObjectContext objectContext, string organisationName) => objectContext.Replace(OrganisationNameKey, organisationName);
     public static void ReplaceTransferSenderOrganisationName(this ObjectContext objectContext, string organisationName) => objectContext.Replace(TransferSenderOrganisationNameKey, organisationName);
     public static void ReplaceTransferReceiverOrganisationName(this ObjectContext objectContext, string organisationName) => objectContext.Replace(TransferReceiverOrganisationNameKey, organisationName);
 
     public static void SetRecentlyAddedOrganisationName(this ObjectContext objectContext, string organisationName) => objectContext.Replace(RecentlyAddedOrganisationName, organisationName);
-    public static void UpdateOrganisationName(this ObjectContext objectContext, string organisationName) => objectContext.Update(OrganisationNameKey, organisationName);
     public static void SetAdditionalOrganisationName(this ObjectContext objectContext, string secondAccountOrganisationName, int index) => objectContext.Set(AdditionalOrganisation(index), secondAccountOrganisationName);
     internal static void SetRegisteredEmail(this ObjectContext objectContext, string value) => objectContext.Replace(RegisteredEmailAddress, value);
 
@@ -63,7 +62,7 @@ public static class ObjectContextExtension
     internal static LoggedInAccountUser GetLoginCredentials(this ObjectContext objectContext) => objectContext.Get<LoggedInAccountUser>(LoggedInUserObject);
 
     private static void SetUserCreds(this ObjectContext objectContext, string emailaddress, string password, int index) =>
-        objectContext.Replace(UserCredsKey(index), new UserCreds(emailaddress, password, index));
+        objectContext.Replace(UserCredsKey(index), new UserCreds(emailaddress, password));
 
     private static List<UserCreds> GetAllUserCreds(this ObjectContext objectContext) => objectContext.GetAll<UserCreds>().ToList();
 

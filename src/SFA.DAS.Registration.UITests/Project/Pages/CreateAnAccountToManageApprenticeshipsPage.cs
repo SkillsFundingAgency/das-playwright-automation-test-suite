@@ -1,13 +1,17 @@
-﻿using SFA.DAS.Registration.UITests.Project.Tests.Pages.StubPages;
+﻿using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 using System;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 
 public class CreateAnAccountToManageApprenticeshipsPage(ScenarioContext context) : RegistrationBasePage(context)
 {
+    public static string PageTitle => "Create an account to manage apprenticeships";
+
+    public ILocator PageIdentifier => page.Locator("h1");
+
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Create an account to manage apprenticeships");
+        await Assertions.Expect(PageIdentifier).ToContainTextAsync(PageTitle);
 
         if (await page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" }).IsVisibleAsync())
         {
@@ -23,6 +27,22 @@ public class CreateAnAccountToManageApprenticeshipsPage(ScenarioContext context)
     {
         await action();
 
-        return new StubSignInEmployerPage(context);
+        return await VerifyPageAsync(() => new StubSignInEmployerPage(context));
     }
+}
+
+public class CheckIndexPage(ScenarioContext context) : CheckPage(context)
+{
+    protected override string PageTitle => CreateAnAccountToManageApprenticeshipsPage.PageTitle;
+
+    protected override ILocator PageLocator => new CreateAnAccountToManageApprenticeshipsPage(context).PageIdentifier;
+}
+
+public class AccountUnavailablePage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public static string PageTitle => "This account is unavailable";
+
+    public ILocator PageIdentifier => page.Locator("#main-content");
+
+    public override async Task VerifyPage() => await Assertions.Expect(PageIdentifier).ToContainTextAsync(PageTitle);
 }

@@ -14,16 +14,17 @@ public class StubYouHaveSignedInEmployerPage(ScenarioContext context, string use
         }
     }
 
-    public async Task<MyAccountTransferFundingPage> ContinueToMyAccountTransferFundingPage()
-    {
-        await Continue();
-        return new MyAccountTransferFundingPage(context);
-    }
+    //public async Task<MyAccountTransferFundingPage> ContinueToMyAccountTransferFundingPage()
+    //{
+    //    await Continue();
+    //    return new MyAccountTransferFundingPage(context);
+    //}
 
     public async Task<YourAccountsPage> ContinueToYourAccountsPage()
     {
         await Continue();
-        return new YourAccountsPage(context);
+
+        return await VerifyPageAsync(() => new YourAccountsPage(context));
     }
 
     public async Task<HomePage> ContinueToHomePage()
@@ -36,14 +37,15 @@ public class StubYouHaveSignedInEmployerPage(ScenarioContext context, string use
     public async Task<AccountUnavailablePage> GoToAccountUnavailablePage()
     {
         await Continue();
-        return new AccountUnavailablePage(context);
+
+        return await VerifyPageAsync(() => new AccountUnavailablePage(context));
     }
 
-    public async Task<StubAddYourUserDetailsPage> ContinueToStubAddYourUserDetailsPage()
-    {
-        await Continue();
-        return new StubAddYourUserDetailsPage(context);
-    }
+    //public async Task<StubAddYourUserDetailsPage> ContinueToStubAddYourUserDetailsPage()
+    //{
+    //    await Continue();
+    //    return new StubAddYourUserDetailsPage(context);
+    //}
 
     public async Task Continue() => await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
 

@@ -1,7 +1,4 @@
-﻿
-using Microsoft.Playwright;
-
-namespace SFA.DAS.Login.Service.Project.Helpers;
+﻿namespace SFA.DAS.Login.Service.Project.Helpers;
 
 public abstract class StubSignInBasePage(ScenarioContext context) : BasePage(context)
 {

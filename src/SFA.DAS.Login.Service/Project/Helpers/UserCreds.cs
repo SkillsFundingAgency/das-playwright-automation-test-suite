@@ -1,12 +1,10 @@
 ﻿namespace SFA.DAS.Login.Service.Project.Helpers;
 
-public class UserCreds(string emailaddress, string password, int userIndex)
+public class UserCreds(string emailaddress, string password)
 {
     public string EmailAddress { get; private set; } = emailaddress;
 
     public string IdOrUserRef { get; private set; } = password;
-
-    internal int UserIndex { get; private set; } = userIndex;
 
     public List<AccountDetails> AccountDetails { get; private set; } = [];
 

@@ -71,9 +71,11 @@ namespace SFA.DAS.Login.Service.Project
 
             for (int i = 0; i < notNullUsers.Count; i++)
             {
-                notNullUsers[i].IdOrUserRef = legalentities[i].idOrUserRef;
+                notNullUsers[i].UserCreds = legalentities[i];
 
-                notNullUsers[i].LegalEntities = legalentities[i].listoflegalEntities;
+                notNullUsers[i].IdOrUserRef = legalentities[i].IdOrUserRef;
+
+                notNullUsers[i].AccountDetails = legalentities[i].AccountDetails;
 
                 SetUser(context, notNullUsers[i]);
             }
@@ -81,11 +83,11 @@ namespace SFA.DAS.Login.Service.Project
 
         public static T GetUser<T>(this ScenarioContext context) => context.Get<T>(Key<T>());
 
-        public static async Task<List<(List<string> listoflegalEntities, string idOrUserRef)>> GetAccountLegalEntities(this ScenarioContext context, List<string> username)
+        public static async Task<List<UserCreds>> GetAccountLegalEntities(this ScenarioContext context, List<string> username)
         {
             var accountDetails = await new EasAccountsSqlDataHelper(context.Get<ObjectContext>(), context.Get<DbConfig>()).GetAccountDetails(username);
 
-            return accountDetails.Select(x => (x.listoflegalEntities.Select(y => RegexHelper.ReplaceMultipleSpace(y)).ToList(), x.idOrUserRef)).ToList();
+            return accountDetails;
         }
 
         private static void SetUser<T>(ScenarioContext context, T data) => context.Set(data, data == null ? Key<T>() : Key(data.GetType()));

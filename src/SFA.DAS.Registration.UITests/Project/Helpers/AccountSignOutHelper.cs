@@ -4,9 +4,16 @@ namespace SFA.DAS.Registration.UITests.Project.Helpers;
 
 public class AccountSignOutHelper(ScenarioContext context)
 {
-    public CreateAnAccountToManageApprenticeshipsPage SignOut() => new HomePage(context, true).SignOut().CickContinueInYouveLoggedOutPage().GoManageApprenticeLandingPage();
+    public async Task<CreateAnAccountToManageApprenticeshipsPage> SignOut()
+    {
+        var page = await new HomePage(context, true).SignOut();
 
-    public static YouveLoggedOutPage SignOut(HomePage page) => page.SignOut();
+        var page1 = await page.CickSignInInYouveLoggedOutPage();
+        
+        return await page1.GoManageApprenticeLandingPage();
+    }
 
-    public static YouveLoggedOutPage SignOut(AccountUnavailablePage page) => page.SignOut();
+    public static async Task<YouveLoggedOutPage> SignOut(HomePage page) => await page.SignOut();
+
+    public static async Task<YouveLoggedOutPage> SignOut(AccountUnavailablePage page) => await page.SignOut();
 }

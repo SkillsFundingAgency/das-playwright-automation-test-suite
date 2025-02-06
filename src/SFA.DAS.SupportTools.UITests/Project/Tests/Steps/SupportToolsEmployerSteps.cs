@@ -30,7 +30,7 @@ namespace SFA.DAS.SupportTools.UITests.Project.Tests.Steps
 
             var homePage = await _employerPortalLoginHelper.Login(user, true);
 
-            AccountSignOutHelper.SignOut(homePage);
+            await AccountSignOutHelper.SignOut(homePage);
         }
 
         [Then(@"the employer user can login to EAS")]
@@ -41,7 +41,7 @@ namespace SFA.DAS.SupportTools.UITests.Project.Tests.Steps
         {
             var accountUnavailablePage = await _employerHomePageStepsHelper.ValidateUnsuccessfulLogon();
 
-            AccountSignOutHelper.SignOut(accountUnavailablePage);
+            await AccountSignOutHelper.SignOut(accountUnavailablePage);
         }
     }
 }

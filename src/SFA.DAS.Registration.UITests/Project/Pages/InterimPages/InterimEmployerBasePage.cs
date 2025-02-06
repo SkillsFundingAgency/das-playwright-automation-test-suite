@@ -7,19 +7,17 @@ public abstract class NavigateBase : BasePage
 {
     protected NavigateBase(ScenarioContext context, string url) : base(context)
     {
-        if (!(string.IsNullOrEmpty(url))) tabHelper.GoToUrl(url);
+       // if (!(string.IsNullOrEmpty(url))) tabHelper.GoToUrl(url);
     }
 }
 
 public abstract class Navigate : NavigateBase
 {
-    protected static By GlobalNavLink => By.CssSelector("#global-nav-links li a, #navigation li a, .das-navigation__link");
+    //protected static By GlobalNavLink => By.CssSelector("#global-nav-links li a, #navigation li a, .das-navigation__link");
 
-    private static By MoreLink => By.LinkText("More");
+    //private static By MoreLink => By.LinkText("More");
 
-    private static By SignOutLink => By.LinkText("Sign out");
-
-    protected abstract string Linktext { get; }
+    //protected abstract string Linktext { get; }
 
     protected Navigate(ScenarioContext context, bool navigate) : this(context, navigate, string.Empty) { }
 
@@ -27,36 +25,34 @@ public abstract class Navigate : NavigateBase
 
     protected Navigate(ScenarioContext context, Action navigate, string url) : base(context, url) => NavigateTo(navigate);
 
-    public void SignsOut() => formCompletionHelper.ClickElement(SignOutLink);
+    //protected void RetryClickOnException(By parentElement, Func<IWebElement> childElement)
+    //{
+    //    formCompletionHelper.RetryClickOnException(() =>
+    //    {
+    //        if (pageInteractionHelper.IsElementDisplayedAfterPageLoad(parentElement))
+    //            formCompletionHelper.ClickElement(parentElement);
 
-    protected void RetryClickOnException(By parentElement, Func<IWebElement> childElement)
-    {
-        formCompletionHelper.RetryClickOnException(() =>
-        {
-            if (pageInteractionHelper.IsElementDisplayedAfterPageLoad(parentElement))
-                formCompletionHelper.ClickElement(parentElement);
-
-            return childElement();
-        });
-    }
+    //        return childElement();
+    //    });
+    //}
 
     private static void NavigateTo(Action navigate) => navigate.Invoke();
 
     private void NavigateTo(bool navigate)
     {
-        if (navigate) RetryClickOnException(MoreLink, () => pageInteractionHelper.GetLink(GlobalNavLink, Linktext));
+       // if (navigate) RetryClickOnException(MoreLink, () => pageInteractionHelper.GetLink(GlobalNavLink, Linktext));
     }
 }
 
 public abstract class InterimEmployerBasePage : Navigate
 {
-    #region Locators
-    private static By SettingsLink => By.LinkText("Settings");
-    private static By YourAccountsLink => By.LinkText("Your accounts");
-    private static By HelpLink => By.LinkText("Help");
-    private static By RenameAccountLink => By.LinkText("Rename account");
-    private static By NotificationSettingsLink => By.PartialLinkText("Notification");
-    #endregion
+    //#region Locators
+    //private static By SettingsLink => By.LinkText("Settings");
+    //private static By YourAccountsLink => By.LinkText("Your accounts");
+    //private static By HelpLink => By.LinkText("Help");
+    //private static By RenameAccountLink => By.LinkText("Rename account");
+    //private static By NotificationSettingsLink => By.PartialLinkText("Notification");
+    //#endregion
 
     protected InterimEmployerBasePage(ScenarioContext context, bool navigate) : this(context, navigate, false) { }
 
@@ -73,41 +69,42 @@ public abstract class InterimEmployerBasePage : Navigate
 
     public HomePage GoToHomePage() => new(context, true);
 
-    public YourOrganisationsAndAgreementsPage GoToYourOrganisationsAndAgreementsPage() => new(context, true);
+    //public YourOrganisationsAndAgreementsPage GoToYourOrganisationsAndAgreementsPage() => new(context, true);
 
-    public YourAccountsPage GoToYourAccountsPage()
+    //public YourAccountsPage GoToYourAccountsPage()
+    //{
+    //    NavigateToSettings(YourAccountsLink);
+    //    return new YourAccountsPage(context);
+    //}
+
+    //public EmployerHelpPage GoToHelpPage()
+    //{
+    //    tabHelper.OpenInNewTab(() => formCompletionHelper.ClickElement(HelpLink));
+    //    return new EmployerHelpPage(context);
+    //}
+
+    //public RenameAccountPage GoToRenameAccountPage()
+    //{
+    //    NavigateToSettings(RenameAccountLink);
+    //    return new RenameAccountPage(context);
+    //}
+
+    //public NotificationSettingsPage GoToNotificationSettingsPage()
+    //{
+    //    NavigateToSettings(NotificationSettingsLink);
+    //    return new NotificationSettingsPage(context);
+    //}
+
+    public async Task<YouveLoggedOutPage> SignOut()
     {
-        NavigateToSettings(YourAccountsLink);
-        return new YourAccountsPage(context);
+        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Sign out" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YouveLoggedOutPage(context));
     }
 
-    public EmployerHelpPage GoToHelpPage()
-    {
-        tabHelper.OpenInNewTab(() => formCompletionHelper.ClickElement(HelpLink));
-        return new EmployerHelpPage(context);
-    }
+    //public YourTeamPage GotoYourTeamPage() => new(context, true);
 
-    public RenameAccountPage GoToRenameAccountPage()
-    {
-        NavigateToSettings(RenameAccountLink);
-        return new RenameAccountPage(context);
-    }
+    //public PAYESchemesPage GotoPAYESchemesPage() => new(context, true);
 
-    public NotificationSettingsPage GoToNotificationSettingsPage()
-    {
-        NavigateToSettings(NotificationSettingsLink);
-        return new NotificationSettingsPage(context);
-    }
-
-    public YouveLoggedOutPage SignOut()
-    {
-        SignsOut();
-        return new YouveLoggedOutPage(context);
-    }
-
-    public YourTeamPage GotoYourTeamPage() => new(context, true);
-
-    public PAYESchemesPage GotoPAYESchemesPage() => new(context, true);
-
-    private void NavigateToSettings(By by) => RetryClickOnException(SettingsLink, () => pageInteractionHelper.FindElement(by));
+    //private void NavigateToSettings(By by) => RetryClickOnException(SettingsLink, () => pageInteractionHelper.FindElement(by));
 }

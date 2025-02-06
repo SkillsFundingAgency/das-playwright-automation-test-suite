@@ -21,20 +21,23 @@ public class ToolSupportHomePage(ScenarioContext context) : ToolSupportBasePage(
     public async Task<SearchForApprenticeshipPage> ClickStopApprenticeshipsLink()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Stop apprenticeship" }).ClickAsync();
+
         return await VerifyPageAsync(() => new SearchForApprenticeshipPage(context));
     }
 
-    //public async Task<SearchForAnEmployerPage> ClickSuspendUserAccountsLink()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Suspend user account" }).ClickAsync();
-    //    return await VerifyPageAsync(() => new SearchForAnEmployerPage(context));
-    //}
+    public async Task<SearchForAnEmployerPage> ClickSuspendUserAccountsLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Suspend user account" }).ClickAsync();
 
-    //public async Task<SearchForAnEmployerPage> ClickReinstateUserAccountsLink()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Reinstate user account" }).ClickAsync();
-    //    return await VerifyPageAsync(() => new SearchForAnEmployerPage(context));
-    //}
+        return await VerifyPageAsync(() => new SearchForAnEmployerPage(context));
+    }
+
+    public async Task<SearchForAnEmployerPage> ClickReinstateUserAccountsLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Reinstate user account" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SearchForAnEmployerPage(context));
+    }
 
     public async Task<bool> IsPauseApprenticeshipLinkVisible() => await page.GetByRole(AriaRole.Link, new() { Name = "Pause apprenticeship" }).IsVisibleAsync();
 

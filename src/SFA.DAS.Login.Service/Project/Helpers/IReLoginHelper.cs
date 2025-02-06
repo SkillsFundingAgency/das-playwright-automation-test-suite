@@ -2,8 +2,8 @@
 {
     public interface IReLoginHelper
     {
-        bool IsSignInPageDisplayed();
+        Task<bool> IsSignInPageDisplayed();
 
-        bool IsLandingPageDisplayed();
+        Task<bool> IsLandingPageDisplayed();
     }
 }

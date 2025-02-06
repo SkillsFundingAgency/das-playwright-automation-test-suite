@@ -1,14 +1,14 @@
-﻿
-
-using SFA.DAS.Registration.UITests.Project.Pages;
+﻿using SFA.DAS.Registration.UITests.Project.Pages;
+using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Helpers;
 
 public class EmployerPortalLoginHelper(ScenarioContext context) : IReLoginHelper
 {
     protected readonly ScenarioContext context = context;
-    private readonly RegistrationSqlDataHelper _registrationSqlDataHelper = context.Get<RegistrationSqlDataHelper>();
+
     protected readonly ObjectContext objectContext = context.Get<ObjectContext>();
+
     protected readonly LoginCredentialsHelper loginCredentialsHelper = context.Get<LoginCredentialsHelper>();
 
     public async Task<bool> IsSignInPageDisplayed() => await new CheckStubSignInPage(context).IsPageDisplayed();
@@ -17,9 +17,19 @@ public class EmployerPortalLoginHelper(ScenarioContext context) : IReLoginHelper
 
     public async Task<bool> IsYourAccountPageDisplayed() => await new CheckYourAccountPage(context).IsPageDisplayed();
 
-    public async Task<HomePage> ReLogin() => await new StubSignInEmployerPage(context).Login(GetLoginCredentials()).ContinueToHomePage();
+    public async Task<HomePage> ReLogin()
+    {
+        var page = await new StubSignInEmployerPage(context).Login(GetLoginCredentials());
 
-    public async Task<AccountUnavailablePage> FailedLogin1() => await new StubSignInEmployerPage(context).Login(GetLoginCredentials()).GoToAccountUnavailablePage();
+        return await page.ContinueToHomePage();
+    }
+
+    public async Task<AccountUnavailablePage> FailedLogin1()
+    {
+        var page = await new StubSignInEmployerPage(context).Login(GetLoginCredentials());
+        
+        return await page.GoToAccountUnavailablePage();
+    }
 
     protected virtual async Task<HomePage> Login(EasAccountUser loginUser)
     {
@@ -35,20 +45,11 @@ public class EmployerPortalLoginHelper(ScenarioContext context) : IReLoginHelper
 
     public async Task<HomePage> Login(EasAccountUser loginUser, bool isLevy)
     {
-        await SetCredentials(loginUser, isLevy);
+        SetLoginCredentials(loginUser, isLevy);
 
         var homePage = await Login(loginUser);
 
         return homePage;
-    }
-
-    protected async Task SetCredentials(EasAccountUser loginUser, bool isLevy)
-    {
-        SetLoginCredentials(loginUser, isLevy);
-
-        var data = await _registrationSqlDataHelper.CollectAccountDetails(loginUser.Username);
-
-        loginUser.UserCreds = objectContext.SetOrUpdateUserCreds(loginUser.Username, loginUser.IdOrUserRef, data);
     }
 
     public async Task<HomePage> Login(LevyUser nonLevyUser) => await Login(nonLevyUser, true);

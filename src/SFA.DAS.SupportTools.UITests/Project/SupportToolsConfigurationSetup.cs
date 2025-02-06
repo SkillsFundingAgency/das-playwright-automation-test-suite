@@ -7,8 +7,10 @@ namespace SFA.DAS.SupportTools.UITests.Project;
 [Binding]
 public class SupportToolsConfigurationSetup(ScenarioContext context)
 {
+    private readonly ConfigSection _configSection = context.Get<ConfigSection>();
+
     [BeforeScenario(Order = 12)]
-    public void SetUpSupportConsoleProjectConfiguration()
+    public async Task SetUpSupportConsoleProjectConfiguration()
     {
         var dfeAdminUsers = context.Get<FrameworkList<DfeAdminUsers>>();
 
@@ -17,5 +19,10 @@ public class SupportToolsConfigurationSetup(ScenarioContext context)
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportToolScsUser()),
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportToolScpUser())
         });
+
+        await context.SetEasLoginUser(
+        [
+            _configSection.GetConfigSection<LevyUser>()
+        ]);
     }
 }

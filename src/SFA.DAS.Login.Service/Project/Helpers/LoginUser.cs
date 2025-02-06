@@ -25,11 +25,11 @@ public abstract class NonEasAccountUser : LoginUser
 
 public abstract class EasAccountUser : GovSignUser
 {
-    public string OrganisationName => LegalEntities?.FirstOrDefault();
+    public string OrganisationName => AccountDetails?.FirstOrDefault().Alename;
 
-    public List<string> LegalEntities { get; set; }
+    public UserCreds UserCreds { get; set; }
 
-    public List<UserCreds> UserCreds { get; set; }
+    public List<AccountDetails> AccountDetails { get; set; }
 }
 
 #region SingleAccountEasUser
@@ -95,7 +95,7 @@ public class DeleteCohortLevyUser : EasAccountUser
 #region MultipleAccountEasUser
 public abstract class MultipleEasAccountUser : EasAccountUser
 {
-    public string SecondOrganisationName => LegalEntities?.ElementAtOrDefault(1);
+    public string SecondOrganisationName => AccountDetails?.ElementAtOrDefault(1).Alename;
 }
 
 public class AanEmployerOnBoardedUser : MultipleEasAccountUser { }
@@ -108,7 +108,7 @@ public class TransferMatchingUser : MultipleEasAccountUser { }
 
 public class EmployerWithMultipleAccountsUser : MultipleEasAccountUser
 {
-    public string ThirdOrganisationName => LegalEntities?.ElementAtOrDefault(2);
+    public string ThirdOrganisationName => AccountDetails?.ElementAtOrDefault(2).Alename;
 }
 
 #endregion

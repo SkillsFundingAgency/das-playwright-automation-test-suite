@@ -1,6 +1,6 @@
-﻿using SFA.DAS.SupportTools.UITests.Project.Helpers;
+﻿using SFA.DAS.Registration.UITests.Project;
+using SFA.DAS.SupportTools.UITests.Project.Helpers;
 using SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
-using SFA.DAS.Framework;
 using System.Linq;
 using TechTalk.SpecFlow.Assist;
 
@@ -149,41 +149,51 @@ public class SupportToolsSteps(ScenarioContext context)
     }
 
 
-    //[When(@"that account is suspended using bulk utility")]
-    //public async Task WhenThatAccountIsSuspendedUsingBulkUtility()
-    //{
-    //    var status = _stepsHelper.ValidUserLogsinToSupportSCPTools(true)
-    //                        .ClickSuspendUserAccountsLink()
-    //                        .EnterHashedAccountId(GetHashedAccountId())
-    //                        .ClickSubmitButton()
-    //                        .SelectAllRecords()
-    //                        .ClickSuspendUserButton()
-    //                        .ClicSuspendUsersbtn()
-    //                        .GetStatusColumn();
+    [When(@"that account is suspended using bulk utility")]
+    public async Task WhenThatAccountIsSuspendedUsingBulkUtility()
+    {
+        var page = await _stepsHelper.ValidUserLogsinToSupportSCPTools(true);
 
-    //    _ = status.Where(x => x.Text == "Submitted successfully").FirstOrDefault();
-    //}
+        var page1 = await page.ClickSuspendUserAccountsLink();
 
-    //[When(@"that account is reinstated using bulk utility")]
-    //public async Task WhenThatAccountIsReinstatedUsingBulkUtility()
-    //{
-    //    string expectedStatusBefore = "Suspended " + DateTime.Now.ToString("dd/MM/yyyy");
-    //    string expectedStatusAfter = "Submitted successfully";
+        await page1.EnterHashedAccountId(GetHashedAccountId());
 
-    //    var actualStatusBefore = _stepsHelper.ValidUserLogsinToSupportSCPTools(true)
-    //                        .ClickReinstateUserAccountsLink()
-    //                        .EnterHashedAccountId(GetHashedAccountId())
-    //                        .ClickSubmitButton()
-    //                        .SelectAllRecords()
-    //                        .ClickReinstateUserButton()
-    //                        .GetStatusColumn();
+        await page1.ClickSubmitButton();
 
-    //    _ = actualStatusBefore.Where(x => x.Text == expectedStatusBefore).FirstOrDefault();
+        await page1.SelectAllRecords();
 
-    //    var actualStatusAfter = new ReinstateUsersPage(context).ClickReinstateUsersbtn().GetStatusColumn();
+        var page2 = await page1.ClickSuspendUserButton();
 
-    //    _ = actualStatusAfter.Where(x => x.Text == expectedStatusAfter).FirstOrDefault();
-    //}
+        await page2.ClicSuspendUsersbtn();
+
+        await page2.VerifyStatusColumn("Submitted successfully");
+    }
+
+    [When(@"that account is reinstated using bulk utility")]
+    public async Task WhenThatAccountIsReinstatedUsingBulkUtility()
+    {
+        string expectedStatusBefore = "Suspended " + DateTime.Now.ToString("dd/MM/yyyy");
+
+        string expectedStatusAfter = "Submitted successfully";
+
+        var page = await _stepsHelper.ValidUserLogsinToSupportSCPTools(true);
+
+        var page1 = await page.ClickReinstateUserAccountsLink();
+
+        await page1.EnterHashedAccountId(GetHashedAccountId());
+
+        await page1.ClickSubmitButton();
+
+        await page1.SelectAllRecords();
+
+        var page2 = await page1.ClickReinstateUserButton();
+
+        await page2.VerifyStatusColumn(expectedStatusBefore);
+
+        await page2.ClickReinstateUsersbtn();
+
+        await page2.VerifyStatusColumn(expectedStatusAfter);
+    }
 
     private async Task UpdateStatusInDb(List<string> UlnList)
     {
@@ -281,5 +291,5 @@ public class SupportToolsSteps(ScenarioContext context)
 
     private static void MultipleAssert(Action action) => Assert.Multiple(() => { action(); });
 
-    //private string GetHashedAccountId() => _objectContext.GetHashedAccountId();
+    private string GetHashedAccountId() => _objectContext.GetHashedAccountId();
 }

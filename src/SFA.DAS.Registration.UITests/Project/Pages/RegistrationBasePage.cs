@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Framework;
+using SFA.DAS.Registration.UITests.Project.Helpers;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 
@@ -8,23 +9,19 @@ public abstract class RegistrationBasePage(ScenarioContext context) : BasePage(c
     protected readonly RegistrationDataHelper registrationDataHelper = context.GetValue<RegistrationDataHelper>();
     #endregion
 
-    #region Locators
-
-    private static By SignOutLink => By.LinkText("Sign out");
-
-    #endregion
-
     public HomePage GoToHomePage() => new(context, true);
 
-    public HomePage ClickBackLink()
-    {
-        NavigateBack();
-        return new HomePage(context);
-    }
+    //public HomePage ClickBackLink()
+    //{
+    //    NavigateBack();
+    //    return new HomePage(context);
+    //}
 
-    public YouveLoggedOutPage SignOut()
+
+    public async Task<YouveLoggedOutPage> SignOut()
     {
-        formCompletionHelper.Click(SignOutLink);
-        return new YouveLoggedOutPage(context);
+        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Sign out" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YouveLoggedOutPage(context));
     }
 }

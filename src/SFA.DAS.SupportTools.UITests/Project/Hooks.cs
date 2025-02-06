@@ -1,8 +1,14 @@
-﻿namespace SFA.DAS.SupportConsole.UITests.Project;
+﻿using SFA.DAS.Registration.UITests.Project.Helpers;
+
+namespace SFA.DAS.SupportTools.UITests.Project;
 
 [Binding]
 public class Hooks(ScenarioContext context)
 {
+    private readonly DbConfig _dbConfig = context.Get<DbConfig>();
+
+    private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
+
     [BeforeScenario(Order = 22)]
     public async Task Navigate()
     {
@@ -13,5 +19,13 @@ public class Hooks(ScenarioContext context)
         context.Get<ObjectContext>().SetDebugInformation(url);
 
         await driver.Page.GotoAsync(url);
+    }
+
+    [BeforeScenario(Order = 23)]
+    public void SetUpDataHelpers()
+    {
+        context.Set(new LoginCredentialsHelper(_objectContext));
+
+        context.Set(new RegistrationSqlDataHelper(_objectContext, _dbConfig));
     }
 }
