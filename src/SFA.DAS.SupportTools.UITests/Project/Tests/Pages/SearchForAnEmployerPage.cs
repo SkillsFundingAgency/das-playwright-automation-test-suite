@@ -40,8 +40,10 @@ public class SearchForAnEmployerPage(ScenarioContext context) : ToolSupportBaseP
     {
         public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("Suspend users");
 
-        public async Task ClicSuspendUsersbtn()
+        public async Task ClickSuspendUsersbtn()
         {
+            await Assertions.Expect(page.Locator("#usersForm")).ToContainTextAsync("Showing");
+
             await page.GetByRole(AriaRole.Button, new() { Name = "Suspend user(s)" }).ClickAsync();
         }
 

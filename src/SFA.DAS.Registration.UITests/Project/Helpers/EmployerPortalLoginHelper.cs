@@ -45,11 +45,18 @@ public class EmployerPortalLoginHelper(ScenarioContext context) : IReLoginHelper
 
     public async Task<HomePage> Login(EasAccountUser loginUser, bool isLevy)
     {
-        SetLoginCredentials(loginUser, isLevy);
+        SetCredentials(loginUser, isLevy);
 
         var homePage = await Login(loginUser);
 
         return homePage;
+    }
+
+    protected void SetCredentials(EasAccountUser loginUser, bool isLevy)
+    {
+        SetLoginCredentials(loginUser, isLevy);
+
+        objectContext.SetOrUpdateUserCreds(loginUser.Username, loginUser.IdOrUserRef, loginUser.AccountDetails);
     }
 
     public async Task<HomePage> Login(LevyUser nonLevyUser) => await Login(nonLevyUser, true);

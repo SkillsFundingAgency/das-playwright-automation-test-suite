@@ -10,13 +10,20 @@ public abstract class CheckPage(ScenarioContext context) : BasePage(context)
     {
         objectContext.SetDebugInformation($"Check page using Page title : '{PageTitle}'");
 
-        if (await PageLocator.IsVisibleAsync())
+        try
         {
-            var t = await PageLocator.TextContentAsync();
+            await VerifyPage();
 
-            return t.Contains(PageTitle);
+            objectContext.SetDebugInformation($"'{await PageLocator.TextContentAsync()}' page is displayed");
+
+            return true;
         }
-        return false;
+        catch (Exception ex)
+        {
+            objectContext.SetDebugInformation($"CheckPage for {PageTitle} resulted in {ex.Message}");
+
+            return false;
+        }
     }
 
     public override async Task VerifyPage() => await Assertions.Expect(PageLocator).ToContainTextAsync(PageTitle);

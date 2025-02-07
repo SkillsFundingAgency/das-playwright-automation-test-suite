@@ -29,7 +29,7 @@ public abstract class EasAccountUser : GovSignUser
 
     public UserCreds UserCreds { get; set; }
 
-    public List<AccountDetails> AccountDetails { get; set; }
+    public List<AccountDetails> AccountDetails => UserCreds?.AccountDetails;
 }
 
 #region SingleAccountEasUser

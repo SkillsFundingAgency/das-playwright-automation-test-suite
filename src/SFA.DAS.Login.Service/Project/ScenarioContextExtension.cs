@@ -75,8 +75,6 @@ namespace SFA.DAS.Login.Service.Project
 
                 notNullUsers[i].IdOrUserRef = legalentities[i].IdOrUserRef;
 
-                notNullUsers[i].AccountDetails = legalentities[i].AccountDetails;
-
                 SetUser(context, notNullUsers[i]);
             }
         }

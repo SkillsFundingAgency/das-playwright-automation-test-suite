@@ -148,7 +148,6 @@ public class SupportToolsSteps(ScenarioContext context)
         Assert.IsTrue(await toolSupportHomePage.IsStopApprenticeshipLinkVisible());
     }
 
-
     [When(@"that account is suspended using bulk utility")]
     public async Task WhenThatAccountIsSuspendedUsingBulkUtility()
     {
@@ -164,7 +163,7 @@ public class SupportToolsSteps(ScenarioContext context)
 
         var page2 = await page1.ClickSuspendUserButton();
 
-        await page2.ClicSuspendUsersbtn();
+        await page2.ClickSuspendUsersbtn();
 
         await page2.VerifyStatusColumn("Submitted successfully");
     }
