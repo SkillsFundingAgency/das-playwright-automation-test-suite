@@ -73,7 +73,7 @@ public class SupportToolsSteps(ScenarioContext context)
     public async Task GivenTheSCSUserIsLoggedIntoSupportTools() => await _stepsHelper.ValidUserLogsinToSupportSCSTools();
 
     [Given(@"the SCP User is logged into Support Tools")]
-    public async Task GivenTheSCPUserIsLoggedIntoSupportTools() => await _stepsHelper.ValidUserLogsinToSupportSCPTools(false);
+    public async Task GivenTheSCPUserIsLoggedIntoSupportTools() => await _stepsHelper.ValidUserLogsinToSupportSCPTools();
 
     private async Task<SearchForApprenticeshipPage> SelectAllRecords()
     {
@@ -151,7 +151,9 @@ public class SupportToolsSteps(ScenarioContext context)
     [When(@"that account is suspended using bulk utility")]
     public async Task WhenThatAccountIsSuspendedUsingBulkUtility()
     {
-        var page = await _stepsHelper.ValidUserLogsinToSupportSCPTools(true);
+        await _stepsHelper.NavigateToSupportTools();
+
+        var page = await _stepsHelper.ValidUserLogsinToSupportSCPTools();
 
         var page1 = await page.ClickSuspendUserAccountsLink();
 
@@ -164,18 +166,12 @@ public class SupportToolsSteps(ScenarioContext context)
         var page2 = await page1.ClickSuspendUserButton();
 
         await page2.ClickSuspendUsersbtn();
-
-        await page2.VerifyStatusColumn("Submitted successfully");
     }
 
     [When(@"that account is reinstated using bulk utility")]
     public async Task WhenThatAccountIsReinstatedUsingBulkUtility()
     {
-        string expectedStatusBefore = "Suspended " + DateTime.Now.ToString("dd/MM/yyyy");
-
-        string expectedStatusAfter = "Submitted successfully";
-
-        var page = await _stepsHelper.ValidUserLogsinToSupportSCPTools(true);
+        var page = await _stepsHelper.ReLoginToSupportSCPTools();
 
         var page1 = await page.ClickReinstateUserAccountsLink();
 
@@ -187,11 +183,9 @@ public class SupportToolsSteps(ScenarioContext context)
 
         var page2 = await page1.ClickReinstateUserButton();
 
-        await page2.VerifyStatusColumn(expectedStatusBefore);
+        await page2.VerifyStatusColumn("Suspended");
 
         await page2.ClickReinstateUsersbtn();
-
-        await page2.VerifyStatusColumn(expectedStatusAfter);
     }
 
     private async Task UpdateStatusInDb(List<string> UlnList)

@@ -32,7 +32,7 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context)
 
     public async Task LoginToSupportTool(DfeAdminUser dfeAdminUser) => await SubmitValidLoginDetails(new ASEmpSupportToolLandingPage(context), dfeAdminUser);
 
-    public async Task SubmitValidAsLoginDetails(ASLandingBasePage landingPage) => await SubmitValidLoginDetails(landingPage, GetAsAdminUser());
+    public async Task SubmitValidAsLoginDetails(ASLandingCheckBasePage landingPage) => await SubmitValidLoginDetails(landingPage, GetAsAdminUser());
 
     #endregion
 
@@ -57,14 +57,14 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context)
 
     #endregion
 
-    private async Task CheckAndLoginTo(ASLandingBasePage landingPage, DfeAdminUser dfeAdminUser)
+    private async Task CheckAndLoginTo(ASLandingCheckBasePage landingPage, DfeAdminUser dfeAdminUser)
     {
         if (await landingPage.IsPageDisplayed()) await landingPage.ClickStartNowButton();
 
         if (await new CheckDfeSignInPage(context).IsPageDisplayed()) await SubmitValidLoginDetails(dfeAdminUser);
     }
 
-    private async Task SubmitValidLoginDetails(ASLandingBasePage landingPage, DfeAdminUser dfeAdminUser)
+    private async Task SubmitValidLoginDetails(ASLandingCheckBasePage landingPage, DfeAdminUser dfeAdminUser)
     {
         await landingPage.VerifyPage();
 

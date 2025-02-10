@@ -4,6 +4,22 @@ public class ToolSupportHomePage(ScenarioContext context) : ToolSupportBasePage(
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("DAS Tools Support", new() { Timeout = LandingPageTimeout });
 
+    private static string PageTitle => "DAS Tools Support";
+
+    private ILocator PageIdentifier => page.GetByRole(AriaRole.Heading);
+
+    public async Task<bool> IsPageDisplayed()
+    {
+        if (await PageIdentifier.IsVisibleAsync())
+        {
+            var text = await PageIdentifier.TextContentAsync();
+
+            return text.ContainsCompareCaseInsensitive(PageTitle);
+        }
+
+        return false;
+    }
+
     public async Task<SearchForApprenticeshipPage> ClickPauseApprenticeshipsLink()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Pause apprenticeship" }).ClickAsync();

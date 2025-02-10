@@ -10,7 +10,7 @@ public class CheckDfeSignInPage(ScenarioContext context) : CheckPage(context)
     protected override ILocator PageLocator => new DfeSignInPage(context).DfePageIdentifier;
 }
 
-public abstract class ASLandingBasePage(ScenarioContext context) : CheckPage(context)
+public abstract class ASLandingCheckBasePage(ScenarioContext context) : CheckPage(context)
 {
     protected override ILocator PageLocator => page.Locator("h1");
 
