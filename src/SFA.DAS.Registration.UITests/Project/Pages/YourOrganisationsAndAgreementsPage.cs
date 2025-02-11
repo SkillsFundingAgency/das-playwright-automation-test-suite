@@ -144,7 +144,7 @@ public class SelectYourOrganisationPage(ScenarioContext context) : RegistrationB
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Search for your organisation");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select your organisation");
     }
 
     public async Task<CheckYourDetailsPage> SelectYourOrganisation(OrgType orgType = OrgType.Default)
@@ -180,9 +180,11 @@ public class SelectYourOrganisationPage(ScenarioContext context) : RegistrationB
 
     private async Task SelectOrg(string orgType, string orgName)
     {
-        await page.GetByText(orgType).ClickAsync();
+        objectContext.SetRecentlyAddedOrganisationName(orgName);
 
-        await page.GetByRole(AriaRole.Button, new() { Name = orgName }).ClickAsync();
+        await page.GetByRole(AriaRole.Radio, new() { Name = orgType }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = orgName, Exact = true }).ClickAsync();
     }
 }
 

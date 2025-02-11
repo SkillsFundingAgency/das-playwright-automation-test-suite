@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Login.Service.Project;
+﻿using Azure;
+using SFA.DAS.Framework;
+using SFA.DAS.Login.Service.Project;
 using SFA.DAS.Registration.UITests.Project.Helpers;
 using SFA.DAS.Registration.UITests.Project.Pages;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
@@ -106,25 +108,25 @@ public class ExistingAccountSteps
         _homePage = await GoBackToTheServiceHomePage(page1);
     }
 
-    //[Then(@"the user can not accept agreement")]
-    //public async Task ThenTheUserCanNotAcceptAgreement()
-    //{
-    //    var page = await _homePage.ClickAcceptYourAgreementLinkInHomePagePanel();
+    [Then(@"the user can not accept agreement")]
+    public async Task ThenTheUserCanNotAcceptAgreement()
+    {
+        var page = await _homePage.ClickAcceptYourAgreementLinkInHomePagePanel();
 
+        var page1 = await page.ClickContinueToYourAgreementButtonToDoYouAcceptTheEmployerAgreementPage();
 
+        var page2 = await page1.ClickYesAndContinueDoYouAcceptTheEmployerAgreementOnBehalfOfPage();
 
-    //    _homePage = GoBackToTheServiceHomePage(_homePage.ClickAcceptYourAgreementLinkInHomePagePanel()
-    //        .ClickContinueToYourAgreementButtonToDoYouAcceptTheEmployerAgreementPage()
-    //        .ClickYesAndContinueDoYouAcceptTheEmployerAgreementOnBehalfOfPage());
-    //}
+        _homePage = await GoBackToTheServiceHomePage(page2);
+    }
 
-    //[Then(@"the user can not add an apprentices")]
-    //public async Task ThenTheUserCanNotAddAnApprentices()
-    //{
-    //    InterimApprenticesAccessDeniedPage _interimApprenticesAccessDeniedPage = new(_context);
-    //    _interimApprenticesAccessDeniedPage.GoBackToTheEASServiceHomePage();
-    //    _homePage = new HomePage(_context, true);
-    //}
+    [Then(@"the user can not add an apprentices")]
+    public async Task ThenTheUserCanNotAddAnApprentices()
+    {
+        await _context.Get<Driver>().Page.GetByRole(AriaRole.Link, new() { Name = "Apprentices", Exact = true }).ClickAsync();
+
+        await BasePage.VerifyPageAsync(() => new AccessDeniedPage(_context));
+    }
 
     private async Task<HomePage> GoBackToTheServiceHomePage(AccessDeniedPage accessDeniedPage) => await accessDeniedPage.GoBackToTheServiceHomePage(_employerPortalLoginHelper.GetLoginCredentials().OrganisationName);
 }

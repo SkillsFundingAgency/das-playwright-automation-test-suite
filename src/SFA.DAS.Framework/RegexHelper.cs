@@ -6,7 +6,7 @@ namespace SFA.DAS.Framework;
 
 public partial class RegexHelper
 {
-    public static string ReplaceMultipleSpace(string value) => MyRegex1().Replace(value, " ");
+    public static string ReplaceMultipleSpace(string value) => string.IsNullOrEmpty(value) ? value : MyRegex1().Replace(value, " ");
 
     public static int GetAmount(string value) => int.Parse(Replace(value, ["£", ","]));
 
