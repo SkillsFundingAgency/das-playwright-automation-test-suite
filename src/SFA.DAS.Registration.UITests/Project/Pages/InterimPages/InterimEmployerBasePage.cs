@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.Framework;
 using System;
+using static SFA.DAS.Registration.UITests.Project.Pages.YouveLoggedOutPage;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 
@@ -7,7 +8,7 @@ public abstract class NavigateBase : BasePage
 {
     protected NavigateBase(ScenarioContext context, string url) : base(context)
     {
-       // if (!(string.IsNullOrEmpty(url))) tabHelper.GoToUrl(url);
+        // if (!(string.IsNullOrEmpty(url))) tabHelper.GoToUrl(url);
     }
 }
 
@@ -40,7 +41,7 @@ public abstract class Navigate : NavigateBase
 
     private void NavigateTo(bool navigate)
     {
-       // if (navigate) RetryClickOnException(MoreLink, () => pageInteractionHelper.GetLink(GlobalNavLink, Linktext));
+        // if (navigate) RetryClickOnException(MoreLink, () => pageInteractionHelper.GetLink(GlobalNavLink, Linktext));
     }
 }
 
@@ -67,33 +68,50 @@ public abstract class InterimEmployerBasePage : Navigate
 
     private static string GoToUrl(bool gotourl) => gotourl ? UrlConfig.EmployerApprenticeshipService_BaseUrl : string.Empty;
 
-    public HomePage GoToHomePage() => new(context, true);
+    public async Task<HomePage> GoToHomePage()
+    {
+        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Home" }).ClickAsync();
 
-    //public YourOrganisationsAndAgreementsPage GoToYourOrganisationsAndAgreementsPage() => new(context, true);
+        return await VerifyPageAsync(() => new HomePage(context));
+    }
 
-    //public YourAccountsPage GoToYourAccountsPage()
-    //{
-    //    NavigateToSettings(YourAccountsLink);
-    //    return new YourAccountsPage(context);
-    //}
+    public async Task<YourOrganisationsAndAgreementsPage> GoToYourOrganisationsAndAgreementsPage()
+    {
+        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Your organisations and" }).ClickAsync();
 
-    //public EmployerHelpPage GoToHelpPage()
-    //{
-    //    tabHelper.OpenInNewTab(() => formCompletionHelper.ClickElement(HelpLink));
-    //    return new EmployerHelpPage(context);
-    //}
+        return await VerifyPageAsync(() => new YourOrganisationsAndAgreementsPage(context));
+    }
 
-    //public RenameAccountPage GoToRenameAccountPage()
-    //{
-    //    NavigateToSettings(RenameAccountLink);
-    //    return new RenameAccountPage(context);
-    //}
+    public async Task<YourAccountsPage> GoToYourAccountsPage()
+    {
+        await NavigateToSettings("Your accounts");
 
-    //public NotificationSettingsPage GoToNotificationSettingsPage()
-    //{
-    //    NavigateToSettings(NotificationSettingsLink);
-    //    return new NotificationSettingsPage(context);
-    //}
+        return await VerifyPageAsync(() => new YourAccountsPage(context));
+    }
+
+    public async Task GoToHelpPage()
+    {
+        var page1 = await page.RunAndWaitForPopupAsync(async () =>
+        {
+            await page.GetByRole(AriaRole.Menuitem, new() { Name = "Help" }).ClickAsync();
+        });
+
+        await Assertions.Expect(page1.GetByRole(AriaRole.Main)).ToContainTextAsync("Useful Links");
+    }
+
+    public async Task<RenameAccountPage> GoToRenameAccountPage()
+    {
+        await NavigateToSettings("Rename account");
+
+        return await VerifyPageAsync(() => new RenameAccountPage(context));
+    }
+
+    public async Task<NotificationSettingsPage> GoToNotificationSettingsPage()
+    {
+        await NavigateToSettings("Notifications settings");
+
+        return await VerifyPageAsync(() => new NotificationSettingsPage(context));
+    }
 
     public async Task<YouveLoggedOutPage> SignOut()
     {
@@ -102,9 +120,83 @@ public abstract class InterimEmployerBasePage : Navigate
         return await VerifyPageAsync(() => new YouveLoggedOutPage(context));
     }
 
-    //public YourTeamPage GotoYourTeamPage() => new(context, true);
+    public async Task<YourTeamPage> GotoYourTeamPage()
+    {
+        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Your team" }).ClickAsync();
 
-    //public PAYESchemesPage GotoPAYESchemesPage() => new(context, true);
+        return await VerifyPageAsync(() => new YourTeamPage(context));
+    }
 
-    //private void NavigateToSettings(By by) => RetryClickOnException(SettingsLink, () => pageInteractionHelper.FindElement(by));
+    public async Task<PAYESchemesPage> GotoPAYESchemesPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "More" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Menuitem, new() { Name = "PAYE schemes" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new PAYESchemesPage(context));
+    }
+
+    private async Task NavigateToSettings(string name)
+    {
+        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Settings" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Menuitem, new() { Name = name }).ClickAsync();
+    }
+}
+
+public class YourTeamPage(ScenarioContext context, bool navigate = false) : InterimEmployerBasePage(context, navigate)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your team");
+    }
+
+    public async Task<AccessDeniedPage> ClickInviteANewMemberButtonAndRedirectedToAccessDeniedPage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Invite a new member" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new AccessDeniedPage(context));
+    }
+}
+
+public class PAYESchemesPage(ScenarioContext context, bool navigate = false) : InterimEmployerBasePage(context, navigate)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("PAYE schemes");
+    }
+
+    #region Locators
+    //private static By AddNewSchemeButton => By.Id("addNewPaye");
+    //private By PayeDetailsLink => By.XPath($"//td[contains(text(),'{SecondPaye}')]/following-sibling::td//a");
+    //private static By PAYERemovedHeaderInfo => By.CssSelector("h3.das-notification__heading");
+    //private string SecondPaye => objectContext.GetGatewayPaye(1);
+
+    #endregion
+
+    //public UsingYourGovtGatewayDetailsPage ClickAddNewSchemeButton()
+    //{
+    //    await page.GetByRole(AriaRole.Link, new() { Name = "Add new scheme" }).ClickAsync();
+
+    //    return new UsingYourGovtGatewayDetailsPage(context);
+    //}
+
+    public async Task<AccessDeniedPage> ClickAddNewSchemeButtonAndRedirectedToAccessDeniedPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Add new scheme" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new AccessDeniedPage(context));
+    }
+
+    //public PAYESchemeDetailsPage ClickNewlyAddedPayeDetailsLink()
+    //{
+    //    formCompletionHelper.Click(PayeDetailsLink);
+    //    return new PAYESchemeDetailsPage(context);
+    //}
+
+    //public PAYESchemesPage VerifyPayeSchemeRemovedInfoMessage()
+    //{
+    //    VerifyElement(PAYERemovedHeaderInfo, $"You've removed {SecondPaye}");
+    //    return this;
+    //}
 }

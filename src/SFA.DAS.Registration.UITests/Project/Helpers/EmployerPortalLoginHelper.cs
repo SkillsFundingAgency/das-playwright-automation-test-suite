@@ -3,6 +3,20 @@ using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Helpers;
 
+public class CreateAccountEmployerPortalLoginHelper(ScenarioContext context) : EmployerPortalLoginHelper(context)
+{
+    private readonly ScenarioContext _context = context;
+
+    protected override async Task<HomePage> Login(EasAccountUser loginUser)
+    {
+        var page = await new CreateAnAccountToManageApprenticeshipsPage(_context).ClickOnCreateAccountLink();
+
+        var page1 = await page.Login(loginUser);
+
+        return await page1.ContinueToHomePage();
+    }
+}
+
 public class EmployerPortalLoginHelper(ScenarioContext context) : IReLoginHelper
 {
     protected readonly ScenarioContext context = context;

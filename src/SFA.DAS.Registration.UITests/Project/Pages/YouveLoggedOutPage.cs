@@ -105,4 +105,30 @@ public class YouveLoggedOutPage(ScenarioContext context) : RegistrationBasePage(
         }
     }
 
+    public class RenameAccountPage(ScenarioContext context) : RegistrationBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Rename account");
+        }
+
+        public async Task<HomePage> EnterNewNameAndContinue(string newOrgName)
+        {
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "New account name" }).FillAsync(newOrgName);
+
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "New account name" }).ClickAsync();
+
+            objectContext.SetOrganisationName(newOrgName);
+
+            return await VerifyPageAsync(() => new HomePage(context));
+        }
+    }
+
+    public class NotificationSettingsPage(ScenarioContext context) : RegistrationBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Notification settings");
+        }
+    }
 }

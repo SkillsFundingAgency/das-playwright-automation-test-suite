@@ -9,13 +9,19 @@ public abstract class RegistrationBasePage(ScenarioContext context) : BasePage(c
     protected readonly RegistrationDataHelper registrationDataHelper = context.GetValue<RegistrationDataHelper>();
     #endregion
 
-    public HomePage GoToHomePage() => new(context, true);
+    public async Task<HomePage> GoToHomePage()
+    {
+        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Home" }).ClickAsync();
 
-    //public HomePage ClickBackLink()
-    //{
-    //    NavigateBack();
-    //    return new HomePage(context);
-    //}
+        return await VerifyPageAsync(() => new HomePage(context));
+    }
+
+    public async Task<HomePage> ClickBackLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+
+        return await VerifyPageAsync(() => new HomePage(context));
+    }
 
 
     public async Task<YouveLoggedOutPage> SignOut()
