@@ -1,32 +1,42 @@
-﻿using System.Threading.Tasks;
-
-namespace SFA.DAS.Login.Service.Project.Helpers;
+﻿namespace SFA.DAS.Login.Service.Project.Helpers;
 
 internal class EasAccountsSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AccountsDbConnectionString)
 {
-    internal async Task<List<(List<string> listoflegalEntities, string idOrUserRef)>> GetAccountDetails(List<string> emails)
+    internal async Task<List<UserCreds>> GetAccountDetails(List<string> emails)
     {
-        var query = emails.Select(GetSqlQuery).ToList();
+        var query = emails.Select(GetSqlQuery1).ToList();
 
-        var accountdetails = new List<(List<string>, string)>();
+        var usercredslist = new List<UserCreds>();
 
         var results = await GetListOfMultipleData(query);
 
-        foreach (var legalEntities in results)
+        foreach (var usercreds in results)
         {
-            var legalEntitieslist = legalEntities.ListOfArrayToList(0);
+            var list = TransformAccountDetails(usercreds);
 
-            var userref = legalEntities.ListOfArrayToList(1);
+            var usercreditem = new UserCreds(list.FirstOrDefault().email, list.FirstOrDefault().userref);
 
-            var x = legalEntitieslist.IsNoDataFound() ? [] : legalEntitieslist;
+            foreach (var (index, email, userref, accountId, hashedId, orgName, publicHashedId, alename, aleid, aleAccountid, aleAgreementid) in list)
+            {
+                usercreditem.AccountDetails.Add(new AccountDetails(index, accountId, hashedId, orgName, publicHashedId, alename, aleid, aleAccountid, aleAgreementid));
+            }
 
-            var y = userref.IsNoDataFound() ? string.Empty : userref.FirstOrDefault();
-
-            accountdetails.Add((x, y));
+            usercredslist.Add(usercreditem);
         }
 
-        return accountdetails;
+        return usercredslist;
     }
 
-    private static string GetSqlQuery(string email) => $"SELECT ale.[name], u.Userref FROM employer_account.AccountLegalEntity ale JOIN employer_account.Membership m ON ale.AccountId = m.AccountId JOIN employer_account.[User] u ON m.UserId = u.id WHERE ale.deleted is null AND u.Email = '{email}' ORDER BY ale.Created ASC;";
+    public static List<(int index, string email, string userref, string accountId, string hashedId, string orgName, string publicHashedId, string alename, string aleid, string aleAccountid, string aleAgreementid)> TransformAccountDetails(List<string[]> id)
+    {
+        var list = new List<(int index, string email, string userref, string accountId, string hashedId, string orgName, string publicHashedId, string alename, string aleid, string aleAccountid, string aleAgreementid)>();
+
+        for (int i = 0; i < id.Count; i++) list.Add((i, id[i][0], id[i][1], id[i][2], id[i][3], id[i][4], id[i][5], RegexHelper.ReplaceMultipleSpace(id[i][6]), id[i][7], id[i][8], id[i][9]));
+
+        return list;
+    }
+
+    private static string GetSqlQuery1(string email) => $@"select u.Email, u.Userref, a.id, a.HashedId, a.[Name], a.PublicHashedId, ale.[name], ale.id as aleid, ale.AccountId, ale.PublicHashedId as agreementid from employer_account.[User] u
+        join employer_account.Membership m on u.id = m.UserId join employer_account.Account a on a.id = m.AccountId join employer_account.AccountLegalEntity ale on ale.AccountId = a.Id
+        where u.Email = '{email}' and ale.deleted is null order by a.CreatedDate";
 }

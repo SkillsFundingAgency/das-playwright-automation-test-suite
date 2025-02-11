@@ -1,6 +1,4 @@
-﻿using Azure;
-
-namespace SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
 
 public class SearchForApprenticeshipPage(ScenarioContext context) : ToolSupportBasePage(context)
 {
@@ -44,7 +42,7 @@ public class SearchForApprenticeshipPage(ScenarioContext context) : ToolSupportB
         await page.GetByLabel("Apprenticeship status").SelectOptionAsync([status]);
     }
 
-    public async Task SelectAllRecords() => await ClickSelectAllCheckBox();
+    public async Task SelectAllRecords() => await page.GetByRole(AriaRole.Row, new() { Name = "Id Uln Cohort Ref First Name" }).GetByLabel("").CheckAsync();
 
 
     public async Task ClickSubmitButton()
