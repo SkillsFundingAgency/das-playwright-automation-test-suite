@@ -12,9 +12,7 @@ public class UnderstandingApprenticeshipBenefitsFundingPage(ScenarioContext cont
     {
         await driver.Page.GetByLabel(IsOver3Million ? "Over £3 million" : "Under £3 million").CheckAsync();
 
-        await driver.Page.GetByLabel("What training course do you").FillAsync("soft");
-
-        await driver.Page.GetByRole(AriaRole.Option, new() { Name = "Software developer (Level 4)" }).ClickAsync();
+        await page.GetByLabel("What training course do you").SelectOptionAsync(new SelectOptionValue() { Label = "Software developer (Level 4)" });
 
         await driver.Page.GetByLabel("How many roles do you have").FillAsync("2");
 
