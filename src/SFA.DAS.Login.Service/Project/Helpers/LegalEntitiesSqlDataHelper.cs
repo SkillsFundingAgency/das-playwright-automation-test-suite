@@ -4,7 +4,7 @@ internal class EasAccountsSqlDataHelper(ObjectContext objectContext, DbConfig db
 {
     internal async Task<List<UserCreds>> GetAccountDetails(List<string> emails)
     {
-        var query = emails.Select(GetSqlQuery1).ToList();
+        var query = emails.Select(GetSqlQuery).ToList();
 
         var usercredslist = new List<UserCreds>();
 
@@ -36,7 +36,8 @@ internal class EasAccountsSqlDataHelper(ObjectContext objectContext, DbConfig db
         return list;
     }
 
-    private static string GetSqlQuery1(string email) => $@"select u.Email, u.Userref, a.id, a.HashedId, a.[Name], a.PublicHashedId, ale.[name], ale.id as aleid, ale.AccountId, ale.PublicHashedId as agreementid from employer_account.[User] u
-        join employer_account.Membership m on u.id = m.UserId join employer_account.Account a on a.id = m.AccountId join employer_account.AccountLegalEntity ale on ale.AccountId = a.Id
-        where u.Email = '{email}' and ale.deleted is null order by a.CreatedDate";
+    private static string GetSqlQuery(string email) => $"select u.Email, u.Userref, a.id, a.HashedId, a.[Name], a.PublicHashedId, ale.[name], ale.id as aleid, ale.AccountId, ale.PublicHashedId as agreementid from employer_account.[User] u " +
+        $"full outer join employer_account.Membership m on u.id = m.UserId " +
+        $"full outer join employer_account.Account a on a.id = m.AccountId " +
+        $"full outer join employer_account.AccountLegalEntity ale on ale.AccountId = a.Id where u.Email = '{email}' and ale.deleted is null order by a.CreatedDate;";
 }

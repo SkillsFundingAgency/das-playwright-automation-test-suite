@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Framework;
+using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 
@@ -62,13 +63,11 @@ public class YourAccountsPage(ScenarioContext context) : RegistrationBasePage(co
 
     public async Task<HomePage> OpenAccount()
     {
-        await page.GetByRole(AriaRole.Row).First.GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = $"Open  {objectContext.GetOrganisationName()}" }).ClickAsync();
 
         return await VerifyPageAsync(() => new HomePage(context));
     }
 }
-
-
 
 public class YouveLoggedOutPage(ScenarioContext context) : RegistrationBasePage(context)
 {
@@ -85,24 +84,106 @@ public class YouveLoggedOutPage(ScenarioContext context) : RegistrationBasePage(
 
         return await VerifyPageAsync(() => new SignInToYourApprenticeshipServiceAccountPage(context));
     }
+}
 
-    public class SignInToYourApprenticeshipServiceAccountPage(ScenarioContext context) : RegistrationBasePage(context)
+public class SignInToYourApprenticeshipServiceAccountPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
     {
-        public override async Task VerifyPage()
-        {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Sign in to your apprenticeship service account");
-        }
-
-        public async Task<CreateAnAccountToManageApprenticeshipsPage> GoManageApprenticeLandingPage()
-        {
-            var url = UrlConfig.EmployerApprenticeshipService_BaseUrl;
-
-            objectContext.SetDebugInformation(url);
-
-            await driver.Page.GotoAsync(url);
-
-            return await VerifyPageAsync(() => new CreateAnAccountToManageApprenticeshipsPage(context));
-        }
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Sign in to your apprenticeship service account");
     }
 
+    public async Task<CreateAnAccountToManageApprenticeshipsPage> GoManageApprenticeLandingPage()
+    {
+        var url = UrlConfig.EmployerApprenticeshipService_BaseUrl;
+
+        objectContext.SetDebugInformation(url);
+
+        await driver.Page.GotoAsync(url);
+
+        return await VerifyPageAsync(() => new CreateAnAccountToManageApprenticeshipsPage(context));
+    }
+}
+
+public class RenameAccountPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Rename account");
+    }
+
+    public async Task<HomePage> EnterNewNameAndContinue(string newOrgName)
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "New account name" }).FillAsync(newOrgName);
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "New account name" }).ClickAsync();
+
+        objectContext.SetOrganisationName(newOrgName);
+
+        return await VerifyPageAsync(() => new HomePage(context));
+    }
+}
+
+public class NotificationSettingsPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Notification settings");
+    }
+}
+
+public class AboutYourAgreementPage(ScenarioContext context) : InterimEmployerBasePage(context, false)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("About your agreement");
+    }
+
+    public async Task<SignAgreementPage> ClickContinueToYourAgreementButtonInAboutYourAgreementPage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SignAgreementPage(context));
+    }
+
+    public async Task<SignAgreementPage> ClickContinueToYourAgreementButtonToDoYouAcceptTheEmployerAgreementPage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SignAgreementPage(context));
+
+    }
+
+    //public async Task<CreateYourEmployerAccountPage> GoBackToCreateYourEmployerAccountPage()
+    //{
+    //    await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+
+    //    return await VerifyPageAsync(() => new CreateYourEmployerAccountPage(context));
+    //}
+}
+
+public class SignAgreementPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"Do you accept the employer agreement");
+    }
+
+    public async Task<AccessDeniedPage> ClickYesAndContinueDoYouAcceptTheEmployerAgreementOnBehalfOfPage()
+    {
+        await page.GetByText("Yes, I accept the agreement").ClickAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new AccessDeniedPage(context));
+    }
+
+    //public YouHaveAcceptedTheEmployerAgreementPage SignAgreement()
+    //{
+    //    formCompletionHelper.ClickElement(WantToSignRadioButton);
+
+    //    formCompletionHelper.ClickElement(ContinueButton);
+
+    //    return new YouHaveAcceptedTheEmployerAgreementPage(context);
+    //}
 }

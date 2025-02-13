@@ -10,22 +10,22 @@ public abstract class InterimHomeBasePage(ScenarioContext context, bool navigate
 
 public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBasePage(context, navigate)
 {
-//    #region Locators
+    //    #region Locators
 
-//    protected static By FindApprenticeshipLink => By.LinkText("Find apprenticeship training and manage requests");
-//    protected static By StartNowButton => By.LinkText("Start now");
-//    protected static By YourFundingReservationsLink => By.LinkText("Your funding reservations");
-//    protected static By YourTransfersLink => By.LinkText("Your transfers");
-//    private static By SucessSummary => By.CssSelector(".das-notification");
-//    private static By AcceptYourAgreementLink => By.LinkText("Accept your agreement");
-//    private static By ContinueTo => By.LinkText("Continue");
-//    private static By SetUpAnApprenticeshipSectionHeader => By.Id("set-up-an-apprenticeship");
-//    protected static By FinancesSectionHeading => By.XPath("//h2[text()='Finances']");
-//    protected static By YourFinancesLink => By.LinkText("Your finances");
-//    protected static By AANLink => By.LinkText("Join the Apprentice Ambassador Network");
-//    private static By TransferRequestViewDetailsLink => By.XPath("//li[contains(span, 'Transfer request received')]/span/a[text()='View details']");
-//    private static By TransferConnectionRequestViewDetailsLink => By.XPath("//li[contains(span, 'connection requests to review')]/span/a[text()='View details']");
-//    #endregion
+    //    protected static By FindApprenticeshipLink => By.LinkText("Find apprenticeship training and manage requests");
+    //    protected static By StartNowButton => By.LinkText("Start now");
+    //    protected static By YourFundingReservationsLink => By.LinkText("Your funding reservations");
+    //    protected static By YourTransfersLink => By.LinkText("Your transfers");
+    //    private static By SucessSummary => By.CssSelector(".das-notification");
+    //    private static By AcceptYourAgreementLink => By.LinkText("Accept your agreement");
+    //    private static By ContinueTo => By.LinkText("Continue");
+    //    private static By SetUpAnApprenticeshipSectionHeader => By.Id("set-up-an-apprenticeship");
+    //    protected static By FinancesSectionHeading => By.XPath("//h2[text()='Finances']");
+    //    protected static By YourFinancesLink => By.LinkText("Your finances");
+    //    protected static By AANLink => By.LinkText("Join the Apprentice Ambassador Network");
+    //    private static By TransferRequestViewDetailsLink => By.XPath("//li[contains(span, 'Transfer request received')]/span/a[text()='View details']");
+    //    private static By TransferConnectionRequestViewDetailsLink => By.XPath("//li[contains(span, 'connection requests to review')]/span/a[text()='View details']");
+    //    #endregion
 
     public override async Task VerifyPage()
     {
@@ -48,11 +48,12 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     //    return this;
     //}
 
-    //public AboutYourAgreementPage ClickAcceptYourAgreementLinkInHomePagePanel()
-    //{
-    //    formCompletionHelper.Click(AcceptYourAgreementLink);
-    //    return new AboutYourAgreementPage(context);
-    //}
+    public async Task<AboutYourAgreementPage> ClickAcceptYourAgreementLinkInHomePagePanel()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Accept your agreement" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new AboutYourAgreementPage(context));
+    }
 
     //public void ContinueToCreateAdvert() => formCompletionHelper.ClickElement(ContinueTo);
 
