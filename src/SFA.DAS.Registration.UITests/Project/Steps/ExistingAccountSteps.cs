@@ -1,5 +1,4 @@
-﻿using Azure;
-using SFA.DAS.Framework;
+﻿using SFA.DAS.Framework;
 using SFA.DAS.Login.Service.Project;
 using SFA.DAS.Registration.UITests.Project.Helpers;
 using SFA.DAS.Registration.UITests.Project.Pages;
@@ -125,7 +124,9 @@ public class ExistingAccountSteps
     {
         await _context.Get<Driver>().Page.GetByRole(AriaRole.Link, new() { Name = "Apprentices", Exact = true }).ClickAsync();
 
-        await BasePage.VerifyPageAsync(() => new AccessDeniedPage(_context));
+        var page = await BasePage.VerifyPageAsync(() => new AccessDeniedPage(_context));
+
+        _homePage = await GoBackToTheServiceHomePage(page);
     }
 
     private async Task<HomePage> GoBackToTheServiceHomePage(AccessDeniedPage accessDeniedPage) => await accessDeniedPage.GoBackToTheServiceHomePage(_employerPortalLoginHelper.GetLoginCredentials().OrganisationName);

@@ -1,15 +1,17 @@
-﻿using SFA.DAS.Registration.UITests.Project.Pages;
+﻿using Polly;
+using SFA.DAS.Framework;
+using SFA.DAS.Registration.UITests.Project.Pages;
 using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Helpers;
 
 public class CreateAccountEmployerPortalLoginHelper(ScenarioContext context) : EmployerPortalLoginHelper(context)
 {
-    private readonly ScenarioContext _context = context;
-
     protected override async Task<HomePage> Login(EasAccountUser loginUser)
     {
-        var page = await new CreateAnAccountToManageApprenticeshipsPage(_context).ClickOnCreateAccountLink();
+        var landingPage = await GetLandingPage();
+
+        var page = await landingPage.ClickOnCreateAccountLink();
 
         var page1 = await page.Login(loginUser);
 
@@ -45,9 +47,16 @@ public class EmployerPortalLoginHelper(ScenarioContext context) : IReLoginHelper
         return await page.GoToAccountUnavailablePage();
     }
 
+    protected async Task<CreateAnAccountToManageApprenticeshipsPage> GetLandingPage()
+    {
+        return await BasePage.VerifyPageAsync(() => new CreateAnAccountToManageApprenticeshipsPage(context));
+    }
+
     protected virtual async Task<HomePage> Login(EasAccountUser loginUser)
     {
-        var page = await new CreateAnAccountToManageApprenticeshipsPage(context).GoToStubSignInPage();
+        var landingPage = await GetLandingPage();
+
+        var page = await landingPage.GoToStubSignInPage();
 
         var page1 = await page.Login(loginUser);
 
