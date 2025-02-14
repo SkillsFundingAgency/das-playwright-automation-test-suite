@@ -1,7 +1,23 @@
 ﻿using SFA.DAS.Framework;
 using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
+
+public class UsingYourGovtGatewayDetailsPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a PAYE scheme using your Government Gateway details");
+    }
+
+    public async Task<GgSignInPage> ContinueToGGSignIn()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
+
+        return new GgSignInPage(context);
+    }
+}
 
 public class AddAPAYESchemePage(ScenarioContext context) : RegistrationBasePage(context)
 {
@@ -10,14 +26,14 @@ public class AddAPAYESchemePage(ScenarioContext context) : RegistrationBasePage(
         await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Add a PAYE Scheme");
     }
 
-    //public async Task<UsingYourGovtGatewayDetailsPage> AddPaye()
-    //{
-    //    await page.GetByRole(AriaRole.Radio, new() { Name = "Use Government Gateway log in" }).CheckAsync();
+    public async Task<UsingYourGovtGatewayDetailsPage> AddPaye()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Use Government Gateway log in" }).CheckAsync();
 
-    //    await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new UsingYourGovtGatewayDetailsPage(context));
-    //}
+        return await VerifyPageAsync(() => new UsingYourGovtGatewayDetailsPage(context));
+    }
 
     //public async Task<EnterYourPAYESchemeDetailsPage> AddAORN()
     //{
@@ -116,7 +132,7 @@ public class RenameAccountPage(ScenarioContext context) : RegistrationBasePage(c
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "New account name" }).FillAsync(newOrgName);
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "New account name" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
         objectContext.SetOrganisationName(newOrgName);
 
@@ -178,12 +194,65 @@ public class SignAgreementPage(ScenarioContext context) : RegistrationBasePage(c
         return await VerifyPageAsync(() => new AccessDeniedPage(context));
     }
 
-    //public YouHaveAcceptedTheEmployerAgreementPage SignAgreement()
+    public async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAgreement()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I accept the agreement" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return new YouHaveAcceptedTheEmployerAgreementPage(context);
+    }
+
+    public async Task<CreateYourEmployerAccountPage> DoNotSignAgreement()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Not yet" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return new CreateYourEmployerAccountPage(context);
+    }
+}
+public class YouHaveAcceptedTheEmployerAgreementPage : RegistrationBasePage
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You've accepted your employer agreement");
+
+        await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync("Employer agreement accepted");
+    }
+
+    //#region Locators
+    //protected override By ContinueButton => By.LinkText("View your account");
+    //private static By DownloadYourAcceptedAgreementLink => By.LinkText("Download your accepted agreement");
+    //private static By ReviewAndAcceptYourOtherAgreementsLink => By.LinkText("review and accept your other agreements");
+    //#endregion
+
+    public YouHaveAcceptedTheEmployerAgreementPage(ScenarioContext context) : base(context)
+    {
+        //MultipleVerifyPage(
+        //[
+        //    () => VerifyPage(),
+        //    () => VerifyPage(DownloadYourAcceptedAgreementLink)
+        //]);
+    }
+
+    public async Task<CreateYourEmployerAccountPage> SelectContinueToCreateYourEmployerAccount()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return new CreateYourEmployerAccountPage(context);
+    }
+
+    public async Task<HomePage> ClickOnViewYourAccountButton()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return new HomePage(context);
+    }
+
+    //public YourOrganisationsAndAgreementsPage ClickOnReviewAndAcceptYourOtherAgreementsLink()
     //{
-    //    formCompletionHelper.ClickElement(WantToSignRadioButton);
-
-    //    formCompletionHelper.ClickElement(ContinueButton);
-
-    //    return new YouHaveAcceptedTheEmployerAgreementPage(context);
+    //    formCompletionHelper.Click(ReviewAndAcceptYourOtherAgreementsLink);
+    //    return new YourOrganisationsAndAgreementsPage(context);
     //}
 }

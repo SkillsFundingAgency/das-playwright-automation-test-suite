@@ -1,5 +1,6 @@
-﻿using SFA.DAS.Registration.UITests.Project.Helpers;
+﻿using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
 using static SFA.DAS.Registration.UITests.Project.Pages.YouveLoggedOutPage;
 
@@ -201,7 +202,32 @@ public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePag
 
         return await VerifyPageAsync(() => new AccessDeniedPage(context));
     }
+
+    public async Task<YouHaveAddedYourOrgAndPAYEScheme> ClickYesThisIsMyOrg()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, this is my organisation", Exact = true }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return new YouHaveAddedYourOrgAndPAYEScheme(context);
+    }
 }
+
+public class YouHaveAddedYourOrgAndPAYEScheme(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You've added your organisation and PAYE scheme");
+    }
+
+    public async Task<CreateYourEmployerAccountPage> ContinueToConfirmationPage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return new CreateYourEmployerAccountPage(context);
+    }
+}
+
 
 public class AccessDeniedPage(ScenarioContext context) : RegistrationBasePage(context)
 {

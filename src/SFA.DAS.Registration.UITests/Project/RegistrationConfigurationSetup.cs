@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Login.Service.Project;
+using SFA.DAS.MongoDb.DataGenerator;
 
 namespace SFA.DAS.Registration.UITests.Project;
 
@@ -21,16 +22,16 @@ public class RegistrationConfigurationSetup(ScenarioContext context)
             _configSection.GetConfigSection<ViewOnlyUser>(),
         ]);
 
-        //SetMongoDbConfig();
+        SetMongoDbConfig();
     }
 
-    //[BeforeScenario(Order = 2), Scope(Tag = "@addmultiplelevyfunds")]
-    //public async Task SetUpRegistrationConfigConfigurationForAddMultipleLevyFunds()
-    //{
-    //    await context.SetEasLoginUser([_configSection.GetConfigSection<AddMultiplePayeLevyUser>()]);
+    [BeforeScenario(Order = 2), Scope(Tag = "@addmultiplelevyfunds")]
+    public async Task SetUpRegistrationConfigConfigurationForAddMultipleLevyFunds()
+    {
+        await context.SetEasLoginUser([_configSection.GetConfigSection<AddMultiplePayeLevyUser>()]);
 
-    //    SetMongoDbConfig();
-    //}
+        SetMongoDbConfig();
+    }
 
-    //public void SetMongoDbConfig() => context.SetMongoDbConfig(_configSection.GetConfigSection<MongoDbConfig>());
+    public void SetMongoDbConfig() => context.SetMongoDbConfig(_configSection.GetConfigSection<MongoDbConfig>());
 }

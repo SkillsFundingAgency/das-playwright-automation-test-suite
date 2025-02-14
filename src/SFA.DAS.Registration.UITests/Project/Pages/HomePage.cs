@@ -36,17 +36,14 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
 
     //public void GoToAanHomePage() => formCompletionHelper.Click(AANLink);
 
-    //public HomePage VerifySucessSummary(string message)
-    //{
-    //    pageInteractionHelper.VerifyText(SucessSummary, message);
-    //    return this;
-    //}
+    public async Task VerifyAccountName(string name)
+    {
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Account renamed");
 
-    //public HomePage VerifyAccountName(string name)
-    //{
-    //    pageInteractionHelper.VerifyText(PageHeader, name);
-    //    return this;
-    //}
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("You successfully updated the account name");
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(name);
+    }
 
     public async Task<AboutYourAgreementPage> ClickAcceptYourAgreementLinkInHomePagePanel()
     {
