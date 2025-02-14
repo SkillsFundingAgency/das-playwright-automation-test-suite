@@ -27,7 +27,7 @@ public class CreateAccountSteps
     private SelectYourOrganisationPage _selectYourOrganisationPage;
     private CheckYourDetailsPage _checkYourDetailsPage;
     //private TheseDetailsAreAlreadyInUsePage _theseDetailsAreAlreadyInUsePage;
-    //private EnterYourPAYESchemeDetailsPage _enterYourPAYESchemeDetailsPage;
+    private EnterYourPAYESchemeDetailsPage _enterYourPAYESchemeDetailsPage;
     private UsingYourGovtGatewayDetailsPage _usingYourGovtGatewayDetailsPage;
     private CreateAnAccountToManageApprenticeshipsPage _indexPage;
     private AddPayeSchemeUsingGGDetailsPage _addPayeSchemeUsingGGDetailsPage;
@@ -60,22 +60,22 @@ public class CreateAccountSteps
     [When(@"the User adds PAYE details attached to a (SingleOrg|MultiOrg) through AORN route")]
     public async Task WhenTheUserAddsPAYEDetailsAttachedToASingleOrgThroughAORNRoute(string org)
     {
-        //if (org.Equals("SingleOrg"))
-        //{
-        //    _tprSqlDataHelper.CreateSingleOrgAornData();
+        if (org.Equals("SingleOrg"))
+        {
+            _tprSqlDataHelper.CreateSingleOrgAornData();
 
-        //    _checkYourDetailsPage = AccountCreationStepsHelper.AddPayeDetailsForSingleOrgAornRoute(_addAPAYESchemePage);
-        //}
-        //else
-        //{
-        //    _tprSqlDataHelper.CreateMultiOrgAORNData();
+            _checkYourDetailsPage = await AccountCreationStepsHelper.AddPayeDetailsForSingleOrgAornRoute(_addAPAYESchemePage);
+        }
+        else
+        {
+            _tprSqlDataHelper.CreateMultiOrgAORNData();
 
-        //    var page = await _addAPAYESchemePage.AddAORN();
+            var page = await _addAPAYESchemePage.AddAORN();
 
-        //    var page1 = await page.EnterAornAndPayeDetailsForMultiOrgScenarioAndContinue();
+            var page1 = await page.EnterAornAndPayeDetailsForMultiOrgScenarioAndContinue();
 
-        //    _checkYourDetailsPage = await page1.SelectFirstOrganisationAndContinue();
-        //}
+            _checkYourDetailsPage = await page1.SelectFirstOrganisationAndContinue();
+        }
 
         _doYouAcceptTheEmployerAgreementOnBehalfOfPage = await AccountCreationStepsHelper.GoToSignAgreementPage(_checkYourDetailsPage);
     }
@@ -263,8 +263,8 @@ public class CreateAccountSteps
     //public async Task ThenChoosingToChangeTheOrganisationSelectedDisplaysSearchForYourOrganisationPage() =>
     //    _checkYourDetailsPage.ClickOrganisationChangeLink();
 
-    //[When(@"the User is on the 'Add a PAYE Scheme' page")]
-    //public async Task WhenTheUserIsOnThePage() => _enterYourPAYESchemeDetailsPage = _addAPAYESchemePage.AddAORN();
+    [When(@"the User is on the 'Add a PAYE Scheme' page")]
+    public async Task WhenTheUserIsOnThePage() => _enterYourPAYESchemeDetailsPage = await _addAPAYESchemePage.AddAORN();
 
     //[Then(@"choosing to Continue with (BlankAornAndBlankPaye|BlankAornValidPaye|BlankPayeValidAorn|InvalidAornAndInvalidPaye) displays relevant Error text")]
     //public async Task ThenChoosingToContinueWithBlankAornValidPayeDisplaysRelevantErrorText(string errorCase)

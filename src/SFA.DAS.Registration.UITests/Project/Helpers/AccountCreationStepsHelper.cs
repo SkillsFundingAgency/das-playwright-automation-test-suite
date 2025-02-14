@@ -77,12 +77,12 @@ public class AccountCreationStepsHelper(ScenarioContext context)
     }
 
 
-    //internal static async Task<CheckYourDetailsPage> AddPayeDetailsForSingleOrgAornRoute(AddAPAYESchemePage addAPAYESchemePage)
-    //{
-    //    var page = await addAPAYESchemePage.AddAORN();
+    internal static async Task<CheckYourDetailsPage> AddPayeDetailsForSingleOrgAornRoute(AddAPAYESchemePage addAPAYESchemePage)
+    {
+        var page = await addAPAYESchemePage.AddAORN();
 
-    //    return await page.EnterAornAndPayeDetailsForSingleOrgScenarioAndContinue();
-    //}
+        return await page.EnterAornAndPayeDetailsForSingleOrgScenarioAndContinue();
+    }
 
 
     //internal static async Task<TheseDetailsAreAlreadyInUsePage> ReEnterAornDetails(AddAPAYESchemePage addAPAYESchemePage) 
