@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderPortal.UITe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.TestDataCleanup", "SFA.DAS.TestDataCleanup\SFA.DAS.TestDataCleanup.csproj", "{65FD48DA-BE01-4E42-968E-16E70FE839FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.AODP.UITests", "SFA.DAS.AODP.UITests\SFA.DAS.AODP.UITests.csproj", "{38A456AF-988A-46F7-875F-D8D530470D2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
