@@ -190,6 +190,17 @@ public class SelectYourOrganisationPage(ScenarioContext context) : RegistrationB
     }
 }
 
+public class OrganisationHasBeenAddedPage(ScenarioContext context) : InterimHomeBasePage(context, false)
+{
+    public override async Task VerifyPage()
+    {
+        var list = await page.Locator(".das-notification__heading").AllTextContentsAsync();
+
+        CollectionAssert.Contains(list, $"{objectContext.GetRecentlyAddedOrganisationName()} has been added");
+    }
+}
+
+
 public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePage(context)
 {
     public override async Task VerifyPage()
@@ -197,6 +208,13 @@ public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePag
         var list = await page.Locator("h1").AllTextContentsAsync();
 
         CollectionAssert.Contains(list, "Check your details");
+    }
+
+    public async Task<OrganisationHasBeenAddedPage> ClickYesContinueButton()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Yes, continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new OrganisationHasBeenAddedPage(context));
     }
 
     public async Task<AccessDeniedPage> ClickYesContinueButtonAndRedirectedToAccessDeniedPage()
@@ -235,6 +253,14 @@ public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePag
 
         return await VerifyPageAsync(() => new AddAPAYESchemePage(context));
     }
+
+    public async Task VerifyOrganisationName(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message);
+
+    public async Task VerifyDetails(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message, new LocatorAssertionsToContainTextOptions{IgnoreCase = true});
+
+    public async Task VerifyInvalidAornAndPayeErrorMessage(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message);
+
+    public async Task VerifyPayeScheme(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message);
 
 
 }
