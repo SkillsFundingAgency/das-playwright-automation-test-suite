@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
+﻿using NUnit.Framework;
+using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
@@ -193,7 +194,9 @@ public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePag
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Check your details");
+        var list = await page.Locator("h1").AllTextContentsAsync();
+
+        CollectionAssert.Contains(list, "Check your details");
     }
 
     public async Task<AccessDeniedPage> ClickYesContinueButtonAndRedirectedToAccessDeniedPage()

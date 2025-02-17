@@ -63,13 +63,13 @@ public class CreateAccountSteps
     {
         if (org.Equals("SingleOrg"))
         {
-            _tprSqlDataHelper.CreateSingleOrgAornData();
+            await _tprSqlDataHelper.CreateSingleOrgAornData();
 
             _checkYourDetailsPage = await AccountCreationStepsHelper.AddPayeDetailsForSingleOrgAornRoute(_addAPAYESchemePage);
         }
         else
         {
-            _tprSqlDataHelper.CreateMultiOrgAORNData();
+            await _tprSqlDataHelper.CreateMultiOrgAORNData();
 
             var page = await _addAPAYESchemePage.AddAORN();
 
@@ -252,7 +252,7 @@ public class CreateAccountSteps
     [When(@"the User is on the 'Check your details' page after adding PAYE details through AORN route")]
     public async Task WhenTheUserIsOnTheCheckYourDetailsPageAfterAddingPAYEDetailsThroughAORNRoute()
     {
-        _tprSqlDataHelper.CreateSingleOrgAornData();
+        await _tprSqlDataHelper.CreateSingleOrgAornData();
 
         _checkYourDetailsPage = await AccountCreationStepsHelper.AddPayeDetailsForSingleOrgAornRoute(_addAPAYESchemePage);
     }
@@ -310,7 +310,8 @@ public class CreateAccountSteps
 
                 break;
             case "BlankPayeValidAorn":
-                _tprSqlDataHelper.CreateSingleOrgAornData();
+                await _tprSqlDataHelper.CreateSingleOrgAornData();
+                
                 await _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue(_registrationDataHelper.AornNumber, "");
 
                 await _enterYourPAYESchemeDetailsPage.VerifyErrorMessageAbovePayeTextBox(blankPayeFieldErrorMessage);

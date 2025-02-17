@@ -2,29 +2,36 @@
 using SFA.DAS.FrameworkHelpers;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.Framework;
 
 public class InsertTprDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.TPRDbConnectionString)
 {
-    private static readonly Lock _object = new();
+    private static readonly SemaphoreSlim semaphoreSlim = new(1, 1);
 
-    public string InsertSingleOrgTprData(string aornValue, string payescheme)
-        => InsertTprData(aornValue, payescheme, "SingleOrg");
+    public async Task<string> InsertSingleOrgTprData(string aornValue, string payescheme)
+        => await InsertTprData(aornValue, payescheme, "SingleOrg");
 
-    public string InsertTprData(string aornValue, string payescheme, string orgType)
+    public async Task<string> InsertTprData(string aornValue, string payescheme, string orgType)
     {
         var queryToExecute = $"DECLARE @tprUniqueId bigint, @vartprid varchar(256), @organisationName varchar(256), @orgSK bigint; {InsertQuery(orgType, aornValue, payescheme)}";
 
         if (orgType == "MultiOrg") queryToExecute += InsertQuery(orgType, aornValue, payescheme);
 
-        lock (_object)
+        await semaphoreSlim.WaitAsync();
+
+        try
         {
-            var result = GetListOfData(queryToExecute).Result;
+            var result = await GetListOfData(queryToExecute);
 
             var x = result[0][0];
 
             return Convert.ToString(x);
+        }
+        finally 
+        {
+            semaphoreSlim.Release();
         }
     }
 
