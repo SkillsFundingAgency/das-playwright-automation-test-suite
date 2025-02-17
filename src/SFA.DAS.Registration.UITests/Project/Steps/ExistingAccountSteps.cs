@@ -52,7 +52,7 @@ public class ExistingAccountSteps
 
         var page3 = await _homePage.GoToNotificationSettingsPage();
 
-        _homePage = await page3.ClickBackLink();
+        _homePage = await page3.GoBackToHomePage();
     }
 
     [Then(@"Employer is able to navigate to Help Page")]

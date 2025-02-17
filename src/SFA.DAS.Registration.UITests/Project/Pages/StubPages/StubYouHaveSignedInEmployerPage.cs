@@ -280,11 +280,12 @@ public class AddPayeSchemeUsingGGDetailsPage(ScenarioContext context) : Registra
         return await VerifyPageAsync(() => new GgSignInPage(context));
     }
 
-    //public async Task<TheseDetailsAreAlreadyInUsePage> ClickBackButton()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
-    //    return new TheseDetailsAreAlreadyInUsePage(context);
-    //}
+    public async Task<TheseDetailsAreAlreadyInUsePage> ClickBackButton()
+    {
+        await ClickBackLink();
+
+        return new TheseDetailsAreAlreadyInUsePage(context);
+    }
 
 }
 

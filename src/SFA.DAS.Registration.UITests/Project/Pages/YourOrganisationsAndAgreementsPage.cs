@@ -209,8 +209,31 @@ public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePag
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        return new YouHaveAddedYourOrgAndPAYEScheme(context);
+        return await VerifyPageAsync(() => new YouHaveAddedYourOrgAndPAYEScheme(context));
     }
+
+    public async Task<SearchForYourOrganisationPage> ClickOrganisationChangeLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Change   organisation" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SearchForYourOrganisationPage(context));
+    }
+
+    public async Task<EnterYourPAYESchemeDetailsPage> ClickAornChangeLink()
+    {
+        await page.GetByRole(AriaRole.Row, new() { Name = "Account office reference" }).GetByRole(AriaRole.Link).ClickAsync();
+
+        return await VerifyPageAsync(() => new EnterYourPAYESchemeDetailsPage(context));
+    }
+
+    public async Task<AddAPAYESchemePage> ClickPayeSchemeChangeLink()
+    {
+        await page.GetByRole(AriaRole.Row, new() { Name = "Employer PAYE reference" }).GetByRole(AriaRole.Link).ClickAsync();
+
+        return await VerifyPageAsync(() => new AddAPAYESchemePage(context));
+    }
+
+
 }
 
 public class YouHaveAddedYourOrgAndPAYEScheme(ScenarioContext context) : RegistrationBasePage(context)

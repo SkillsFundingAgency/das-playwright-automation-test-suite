@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Framework;
+﻿using Azure;
+using SFA.DAS.Framework;
 using SFA.DAS.MongoDb.DataGenerator;
 using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
@@ -70,11 +71,12 @@ public class EnterYourPAYESchemeDetailsPage(ScenarioContext context) : Registrat
         return await VerifyPageAsync(() => new CheckYourDetailsPage(context));
     }
 
-    //public TheseDetailsAreAlreadyInUsePage ReEnterTheSameAornDetailsAndContinue()
-    //{
-    //    await EnterAornAndPayeAndContinue();
-    //    return new TheseDetailsAreAlreadyInUsePage(context);
-    //}
+    public async Task<TheseDetailsAreAlreadyInUsePage> ReEnterTheSameAornDetailsAndContinue()
+    {
+        await EnterAornAndPayeAndContinue();
+
+        return await VerifyPageAsync(() => new TheseDetailsAreAlreadyInUsePage(context));
+    }
 
     public async Task<ChooseAnOrganisationPage> EnterAornAndPayeDetailsForMultiOrgScenarioAndContinue()
     {
@@ -99,11 +101,11 @@ public class EnterYourPAYESchemeDetailsPage(ScenarioContext context) : Registrat
         await Continue();
     }
 
-    //public string GetErrorMessageAboveAornTextBox() => pageInteractionHelper.GetText(ErrorMessgeAboveAornTextBox);
+    public async Task VerifyErrorMessageAboveAornTextBox(string message) => await Assertions.Expect(page.Locator("#error-message-aorn")).ToContainTextAsync(message);
 
-    //public string GetErrorMessageAbovePayeTextBox() => pageInteractionHelper.GetText(ErrorMessgeAbovePayeTextBox);
+    public async Task VerifyErrorMessageAbovePayeTextBox(string message) => await Assertions.Expect(page.Locator("#error-message-payeRef")).ToContainTextAsync(message);
 
-    //public string GetInvalidAornAndPayeErrorMessage() => pageInteractionHelper.GetText(InvalidAornAndPayeErrorMessage);
+    public async Task VerifyInvalidAornAndPayeErrorMessage(string message) => await Assertions.Expect(page.GetByLabel("There is a problem")).ToContainTextAsync(message);
 }
 
 
@@ -282,7 +284,7 @@ public class SignAgreementPage(ScenarioContext context) : RegistrationBasePage(c
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        return new YouHaveAcceptedTheEmployerAgreementPage(context);
+        return await VerifyPageAsync(() => new YouHaveAcceptedTheEmployerAgreementPage(context));
     }
 
     public async Task<CreateYourEmployerAccountPage> DoNotSignAgreement()
@@ -291,7 +293,7 @@ public class SignAgreementPage(ScenarioContext context) : RegistrationBasePage(c
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        return new CreateYourEmployerAccountPage(context);
+        return await VerifyPageAsync(() => new CreateYourEmployerAccountPage(context));
     }
 }
 public class YouHaveAcceptedTheEmployerAgreementPage : RegistrationBasePage
@@ -322,14 +324,14 @@ public class YouHaveAcceptedTheEmployerAgreementPage : RegistrationBasePage
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        return new CreateYourEmployerAccountPage(context);
+        return await VerifyPageAsync(() => new CreateYourEmployerAccountPage(context));
     }
 
     public async Task<HomePage> ClickOnViewYourAccountButton()
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        return new HomePage(context);
+        return await VerifyPageAsync(() => new HomePage(context));
     }
 
     //public YourOrganisationsAndAgreementsPage ClickOnReviewAndAcceptYourOtherAgreementsLink()
@@ -337,4 +339,43 @@ public class YouHaveAcceptedTheEmployerAgreementPage : RegistrationBasePage
     //    formCompletionHelper.Click(ReviewAndAcceptYourOtherAgreementsLink);
     //    return new YourOrganisationsAndAgreementsPage(context);
     //}
+}
+
+public class TheseDetailsAreAlreadyInUsePage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("These details are already in use");
+    }
+
+    public async Task<AddPayeSchemeUsingGGDetailsPage> CickUseDifferentDetailsButtonInTheseDetailsAreAlreadyInUsePage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Use different details" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new AddPayeSchemeUsingGGDetailsPage(context));
+    }
+
+    public async Task<EnterYourPAYESchemeDetailsPage> CickBackLinkInTheseDetailsAreAlreadyInUsePage()
+    {
+        await ClickBackLink();
+
+        return await VerifyPageAsync(() => new EnterYourPAYESchemeDetailsPage(context));
+    }
+}
+
+public class WeCouldNotVerifyYourDetailsPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("We could not verify your details");
+
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("You have attempted to sign in to HMRC with the wrong details too many times.");
+    }
+
+    public async Task<UsingYourGovtGatewayDetailsPage> ClickAddViaGGLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Try adding your PAYE scheme" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new UsingYourGovtGatewayDetailsPage(context));
+    }
 }

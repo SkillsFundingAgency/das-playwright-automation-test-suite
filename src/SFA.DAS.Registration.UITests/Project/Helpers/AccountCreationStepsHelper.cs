@@ -85,12 +85,12 @@ public class AccountCreationStepsHelper(ScenarioContext context)
     }
 
 
-    //internal static async Task<TheseDetailsAreAlreadyInUsePage> ReEnterAornDetails(AddAPAYESchemePage addAPAYESchemePage) 
-    //{
-    //    var page = await addAPAYESchemePage.AddAORN();
+    internal static async Task<TheseDetailsAreAlreadyInUsePage> ReEnterAornDetails(AddAPAYESchemePage addAPAYESchemePage)
+    {
+        var page = await addAPAYESchemePage.AddAORN();
 
-    //    return await page.ReEnterTheSameAornDetailsAndContinue();
-    //}
+        return await page.ReEnterTheSameAornDetailsAndContinue();
+    }
 
 
     internal async Task<CreateAnAccountToManageApprenticeshipsPage> SignOut() => await _accountSignOutHelper.SignOut();

@@ -16,9 +16,9 @@ public abstract class RegistrationBasePage(ScenarioContext context) : BasePage(c
         return await VerifyPageAsync(() => new HomePage(context));
     }
 
-    public async Task<HomePage> ClickBackLink()
+    public async Task<HomePage> GoBackToHomePage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+        await ClickBackLink();
 
         return await VerifyPageAsync(() => new HomePage(context));
     }
@@ -29,5 +29,10 @@ public abstract class RegistrationBasePage(ScenarioContext context) : BasePage(c
         await page.GetByRole(AriaRole.Menuitem, new() { Name = "Sign out" }).ClickAsync();
 
         return await VerifyPageAsync(() => new YouveLoggedOutPage(context));
+    }
+
+    protected async Task ClickBackLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
     }
 }

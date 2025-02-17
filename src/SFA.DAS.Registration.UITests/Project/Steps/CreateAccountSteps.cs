@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.Framework;
+using SFA.DAS.MongoDb.DataGenerator;
 using SFA.DAS.Registration.UITests.Project;
 using SFA.DAS.Registration.UITests.Project.Helpers;
 using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
@@ -26,7 +27,7 @@ public class CreateAccountSteps
     private SearchForYourOrganisationPage _searchForYourOrganisationPage;
     private SelectYourOrganisationPage _selectYourOrganisationPage;
     private CheckYourDetailsPage _checkYourDetailsPage;
-    //private TheseDetailsAreAlreadyInUsePage _theseDetailsAreAlreadyInUsePage;
+    private TheseDetailsAreAlreadyInUsePage _theseDetailsAreAlreadyInUsePage;
     private EnterYourPAYESchemeDetailsPage _enterYourPAYESchemeDetailsPage;
     private UsingYourGovtGatewayDetailsPage _usingYourGovtGatewayDetailsPage;
     private CreateAnAccountToManageApprenticeshipsPage _indexPage;
@@ -218,100 +219,132 @@ public class CreateAccountSteps
     //[Then(@"'Start adding apprentices now' task link is displayed under Tasks pane")]
     //public async Task ThenTaskLinkIsDisplayedUnderTasksPane() => new TasksHomePage(_context).VerifyStartAddingApprenticesNowTaskLink();
 
-    //[Then(@"'These details are already in use' page is displayed when Another Employer tries to register the account with the same Aorn and Paye details")]
-    //public async Task ThenPageIsDisplayedWhenAnotherEmployerTriesToRegisterTheAccountWithTheSameAornAndPayeDetails()
-    //{
-    //    await _accountCreationStepsHelper.SignOut();
+    [Then(@"'These details are already in use' page is displayed when Another Employer tries to register the account with the same Aorn and Paye details")]
+    public async Task ThenPageIsDisplayedWhenAnotherEmployerTriesToRegisterTheAccountWithTheSameAornAndPayeDetails()
+    {
+        await _accountCreationStepsHelper.SignOut();
 
-    //    _objectContext.SetRegisteredEmail(_registrationDataHelper.AnotherRandomEmail);
+        _objectContext.SetRegisteredEmail(_registrationDataHelper.AnotherRandomEmail);
 
-    //    _addAPAYESchemePage = await _accountCreationStepsHelper.RegisterUserAccount();
+        _addAPAYESchemePage = await _accountCreationStepsHelper.RegisterUserAccount();
 
-    //    _theseDetailsAreAlreadyInUsePage = AccountCreationStepsHelper.ReEnterAornDetails(_addAPAYESchemePage);
-    //}
+        _theseDetailsAreAlreadyInUsePage = await AccountCreationStepsHelper.ReEnterAornDetails(_addAPAYESchemePage);
+    }
 
-    //[Then(@"'Add a PAYE Scheme' page is displayed when Employer clicks on 'Use different details' button")]
-    //[Then(@"'AddPayeSchemeUsingGGDetails' page is displayed when Employer clicks on 'Use different details' button")]
-    //public async Task ThenAddAPAYESchemePageIsDisplayedWhenEmployerClicksOnUseDifferentDetailsButton() =>
-    //    _addPayeSchemeUsingGGDetailsPage = _theseDetailsAreAlreadyInUsePage.CickUseDifferentDetailsButtonInTheseDetailsAreAlreadyInUsePage();
+    [Then(@"'Add a PAYE Scheme' page is displayed when Employer clicks on 'Use different details' button")]
+    [Then(@"'AddPayeSchemeUsingGGDetails' page is displayed when Employer clicks on 'Use different details' button")]
+    public async Task ThenAddAPAYESchemePageIsDisplayedWhenEmployerClicksOnUseDifferentDetailsButton() =>
+        _addPayeSchemeUsingGGDetailsPage = await _theseDetailsAreAlreadyInUsePage.CickUseDifferentDetailsButtonInTheseDetailsAreAlreadyInUsePage();
 
-    //[Then(@"'Add a PAYE Scheme' page is displayed when Employer clicks on Back link on the 'PAYE scheme already in use' page")]
-    //public async Task ThenAddAPAYESchemePageIsDisplayedWhenEmployerClicksOnBackLinkOnThePage()
-    //{
-    //    var page = await _addPayeSchemeUsingGGDetailsPage.ClickBackButton();
+    [Then(@"'Add a PAYE Scheme' page is displayed when Employer clicks on Back link on the 'PAYE scheme already in use' page")]
+    public async Task ThenAddAPAYESchemePageIsDisplayedWhenEmployerClicksOnBackLinkOnThePage()
+    {
+        var page = await _addPayeSchemeUsingGGDetailsPage.ClickBackButton();
 
-    //    _enterYourPAYESchemeDetailsPage = _addPayeSchemeUsingGGDetailsPage.ClickBackButton().CickBackLinkInTheseDetailsAreAlreadyInUsePage().ReEnterTheSameAornDetailsAndContinue().CickBackLinkInTheseDetailsAreAlreadyInUsePage();
-    //}
-    
+        var page1 = await page.CickBackLinkInTheseDetailsAreAlreadyInUsePage();
 
-    //[When(@"the User is on the 'Check your details' page after adding PAYE details through AORN route")]
-    //public async Task WhenTheUserIsOnTheCheckYourDetailsPageAfterAddingPAYEDetailsThroughAORNRoute()
-    //{
-    //    _tprSqlDataHelper.CreateSingleOrgAornData();
-    //    _checkYourDetailsPage = AccountCreationStepsHelper.AddPayeDetailsForSingleOrgAornRoute(_addAPAYESchemePage);
-    //}
+        var page2 = await page1.ReEnterTheSameAornDetailsAndContinue();
 
-    //[Then(@"choosing to change the AORN number displays 'Enter your PAYE scheme details' page")]
-    //public async Task ThenChoosingToChangeTheAORNNumberDisplaysPage() =>
-    //    _checkYourDetailsPage = _checkYourDetailsPage.ClickAornChangeLink().EnterAornAndPayeDetailsForSingleOrgScenarioAndContinue();
+        _enterYourPAYESchemeDetailsPage = await page2.CickBackLinkInTheseDetailsAreAlreadyInUsePage();
+    }
 
-    //[Then(@"choosing to change the PAYE scheme displays 'Enter your PAYE scheme details' page")]
-    //public async Task ThenChoosingToChangeThePAYESchemeDisplaysEnterYourPAYESchemeDetailsPage() =>
-    //    _checkYourDetailsPage = _checkYourDetailsPage.ClickPayeSchemeChangeLink().AddAORN().EnterAornAndPayeDetailsForSingleOrgScenarioAndContinue();
 
-    //[Then(@"choosing to change the Organisation selected displays 'Search for your Organisation' page")]
-    //public async Task ThenChoosingToChangeTheOrganisationSelectedDisplaysSearchForYourOrganisationPage() =>
-    //    _checkYourDetailsPage.ClickOrganisationChangeLink();
+    [When(@"the User is on the 'Check your details' page after adding PAYE details through AORN route")]
+    public async Task WhenTheUserIsOnTheCheckYourDetailsPageAfterAddingPAYEDetailsThroughAORNRoute()
+    {
+        _tprSqlDataHelper.CreateSingleOrgAornData();
+
+        _checkYourDetailsPage = await AccountCreationStepsHelper.AddPayeDetailsForSingleOrgAornRoute(_addAPAYESchemePage);
+    }
+
+    [Then(@"choosing to change the AORN number displays 'Enter your PAYE scheme details' page")]
+    public async Task ThenChoosingToChangeTheAORNNumberDisplaysPage()
+    {
+        var page = await _checkYourDetailsPage.ClickAornChangeLink();
+
+        _checkYourDetailsPage = await page.EnterAornAndPayeDetailsForSingleOrgScenarioAndContinue();
+    }
+        
+
+    [Then(@"choosing to change the PAYE scheme displays 'Enter your PAYE scheme details' page")]
+    public async Task ThenChoosingToChangeThePAYESchemeDisplaysEnterYourPAYESchemeDetailsPage() 
+    {
+        var page = await _checkYourDetailsPage.ClickPayeSchemeChangeLink();
+
+        var page1 = await page.AddAORN();
+
+        _checkYourDetailsPage = await page1.EnterAornAndPayeDetailsForSingleOrgScenarioAndContinue();
+    }
+
+    [Then(@"choosing to change the Organisation selected displays 'Search for your Organisation' page")]
+    public async Task ThenChoosingToChangeTheOrganisationSelectedDisplaysSearchForYourOrganisationPage()
+    {
+        await _checkYourDetailsPage.ClickOrganisationChangeLink();
+    }
 
     [When(@"the User is on the 'Add a PAYE Scheme' page")]
     public async Task WhenTheUserIsOnThePage() => _enterYourPAYESchemeDetailsPage = await _addAPAYESchemePage.AddAORN();
 
-    //[Then(@"choosing to Continue with (BlankAornAndBlankPaye|BlankAornValidPaye|BlankPayeValidAorn|InvalidAornAndInvalidPaye) displays relevant Error text")]
-    //public async Task ThenChoosingToContinueWithBlankAornValidPayeDisplaysRelevantErrorText(string errorCase)
-    //{
-    //    string blankAornFieldErrorMessage = EnterYourPAYESchemeDetailsPage.BlankAornFieldErrorMessage;
-    //    string blankPayeFieldErrorMessage = EnterYourPAYESchemeDetailsPage.BlankPayeFieldErrorMessage;
-    //    string aornInvalidFormatErrorMessage = EnterYourPAYESchemeDetailsPage.AornInvalidFormatErrorMessage;
-    //    string payeInvalidFormatErrorMessage = EnterYourPAYESchemeDetailsPage.PayeInvalidFormatErrorMessage;
+    [Then(@"choosing to Continue with (BlankAornAndBlankPaye|BlankAornValidPaye|BlankPayeValidAorn|InvalidAornAndInvalidPaye) displays relevant Error text")]
+    public async Task ThenChoosingToContinueWithBlankAornValidPayeDisplaysRelevantErrorText(string errorCase)
+    {
+        string blankAornFieldErrorMessage = EnterYourPAYESchemeDetailsPage.BlankAornFieldErrorMessage;
+        string blankPayeFieldErrorMessage = EnterYourPAYESchemeDetailsPage.BlankPayeFieldErrorMessage;
+        string aornInvalidFormatErrorMessage = EnterYourPAYESchemeDetailsPage.AornInvalidFormatErrorMessage;
+        string payeInvalidFormatErrorMessage = EnterYourPAYESchemeDetailsPage.PayeInvalidFormatErrorMessage;
 
-    //    switch (errorCase)
-    //    {
-    //        case "BlankAornAndBlankPaye":
-    //            _enterYourPAYESchemeDetailsPage.Continue();
-    //            Assert.AreEqual(blankAornFieldErrorMessage, _enterYourPAYESchemeDetailsPage.GetErrorMessageAboveAornTextBox());
-    //            Assert.AreEqual(blankPayeFieldErrorMessage, _enterYourPAYESchemeDetailsPage.GetErrorMessageAbovePayeTextBox());
-    //            break;
-    //        case "BlankAornValidPaye":
-    //            _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue("", _objectContext.GetGatewayPaye(0));
-    //            Assert.AreEqual(blankAornFieldErrorMessage, _enterYourPAYESchemeDetailsPage.GetErrorMessageAboveAornTextBox());
-    //            break;
-    //        case "BlankPayeValidAorn":
-    //            _tprSqlDataHelper.CreateSingleOrgAornData();
-    //            _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue(_registrationDataHelper.AornNumber, "");
-    //            Assert.AreEqual(blankPayeFieldErrorMessage, _enterYourPAYESchemeDetailsPage.GetErrorMessageAbovePayeTextBox());
-    //            break;
-    //        case "InvalidAornAndInvalidPaye":
-    //            _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue("InvalidAorn", "InvalidPaye");
-    //            Assert.AreEqual(aornInvalidFormatErrorMessage, _enterYourPAYESchemeDetailsPage.GetErrorMessageAboveAornTextBox());
-    //            Assert.AreEqual(payeInvalidFormatErrorMessage, _enterYourPAYESchemeDetailsPage.GetErrorMessageAbovePayeTextBox());
-    //            break;
-    //    }
-    //}
+        switch (errorCase)
+        {
+            case "BlankAornAndBlankPaye":
+                await _enterYourPAYESchemeDetailsPage.Continue();
 
-    //[Then(@"choosing to enter AORN and PAYE details in the right format but non existing ones for 3 times displays 'Sorry Account disabled' Page")]
-    //public async Task ThenChoosingToEnterAORNAndPAYEDetailsInTheRightFormatButNonExistingOnesForTimesDisplaysPage()
-    //{
-    //    string InvalidErrorMessage1stAttempt = EnterYourPAYESchemeDetailsPage.InvalidAornAndPayeErrorMessage1stAttempt;
-    //    string InvalidErrorMessage2ndAttempt = EnterYourPAYESchemeDetailsPage.InvalidAornAndPayeErrorMessage2ndAttempt;
+                await _enterYourPAYESchemeDetailsPage.VerifyErrorMessageAboveAornTextBox(blankAornFieldErrorMessage);
 
-    //    EnterInvalidAornAndPaye();
-    //    Assert.AreEqual(InvalidErrorMessage1stAttempt, _enterYourPAYESchemeDetailsPage.GetInvalidAornAndPayeErrorMessage());
-    //    EnterInvalidAornAndPaye();
-    //    Assert.AreEqual(InvalidErrorMessage2ndAttempt, _enterYourPAYESchemeDetailsPage.GetInvalidAornAndPayeErrorMessage());
-    //    EnterInvalidAornAndPaye();
+                await _enterYourPAYESchemeDetailsPage.VerifyErrorMessageAbovePayeTextBox(blankPayeFieldErrorMessage);
 
-    //    _usingYourGovtGatewayDetailsPage = new WeCouldNotVerifyYourDetailsPage(_context).ClickAddViaGGLink();
-    //}
+                break;
+            case "BlankAornValidPaye":
+                await _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue("", _objectContext.GetGatewayPaye(0));
+
+                await _enterYourPAYESchemeDetailsPage.VerifyErrorMessageAboveAornTextBox(blankAornFieldErrorMessage);
+
+                break;
+            case "BlankPayeValidAorn":
+                _tprSqlDataHelper.CreateSingleOrgAornData();
+                await _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue(_registrationDataHelper.AornNumber, "");
+
+                await _enterYourPAYESchemeDetailsPage.VerifyErrorMessageAbovePayeTextBox(blankPayeFieldErrorMessage);
+
+                break;
+            case "InvalidAornAndInvalidPaye":
+                await _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue("InvalidAorn", "InvalidPaye");
+
+                await _enterYourPAYESchemeDetailsPage.VerifyErrorMessageAboveAornTextBox(aornInvalidFormatErrorMessage);
+
+                await _enterYourPAYESchemeDetailsPage.VerifyErrorMessageAbovePayeTextBox(payeInvalidFormatErrorMessage);
+
+                break;
+        }
+    }
+
+    [Then(@"choosing to enter AORN and PAYE details in the right format but non existing ones for 3 times displays 'Sorry Account disabled' Page")]
+    public async Task ThenChoosingToEnterAORNAndPAYEDetailsInTheRightFormatButNonExistingOnesForTimesDisplaysPage()
+    {
+        string InvalidErrorMessage1stAttempt = EnterYourPAYESchemeDetailsPage.InvalidAornAndPayeErrorMessage1stAttempt;
+        string InvalidErrorMessage2ndAttempt = EnterYourPAYESchemeDetailsPage.InvalidAornAndPayeErrorMessage2ndAttempt;
+
+        await EnterInvalidAornAndPaye();
+
+        await _enterYourPAYESchemeDetailsPage.VerifyInvalidAornAndPayeErrorMessage(InvalidErrorMessage1stAttempt);
+
+        await EnterInvalidAornAndPaye();
+
+        await _enterYourPAYESchemeDetailsPage.VerifyInvalidAornAndPayeErrorMessage(InvalidErrorMessage2ndAttempt);
+
+        await EnterInvalidAornAndPaye();
+
+        _usingYourGovtGatewayDetailsPage = await new WeCouldNotVerifyYourDetailsPage(_context).ClickAddViaGGLink();
+    }
 
     [Then(@"Employer is able to complete registration through GG route")]
     public async Task ThenEmployerIsAbleToCompleteRegistrationThroughGGRoute()
@@ -403,8 +436,8 @@ public class CreateAccountSteps
         await AddOrganisationTypeDetails(orgType);
     }
 
-    //private async Task EnterInvalidAornAndPaye() =>
-    //    _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue(AornDataHelper.InvalidAornNumber, RegistrationDataHelper.InvalidPaye);
+    private async Task EnterInvalidAornAndPaye() => 
+        await _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue(AornDataHelper.InvalidAornNumber, RegistrationDataHelper.InvalidPaye);
 
     private async Task<SearchForYourOrganisationPage> CreateAnUserAcountAndAddPaye()
     {
