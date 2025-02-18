@@ -197,8 +197,8 @@ public class CreateAccountSteps
     public async Task WhenTheEmployerInitiatesAddingSameOrgTypeAgain(OrgType orgType) =>
         _selectYourOrganisationPage = await AccountCreationStepsHelper.SearchForAnotherOrg(_homePage, orgType);
 
-    //[Then(@"'Already added' message is shown to the User")]
-    //public async Task ThenAlreadyAddedMessageIsShownToTheUser() => await _selectYourOrganisationPage.VerifyOrgAlreadyAddedMessage();
+    [Then(@"'Already added' message is shown to the User")]
+    public async Task ThenAlreadyAddedMessageIsShownToTheUser() => await _selectYourOrganisationPage.VerifyOrgAlreadyAddedMessage();
 
     [Then(@"ApprenticeshipEmployerType in Account table is marked as (.*)")]
     public async Task ThenApprenticeshipEmployerTypeInAccountTableIsMarkedAs(string expectedApprenticeshipEmployerType)

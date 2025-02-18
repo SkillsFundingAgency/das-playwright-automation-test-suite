@@ -178,7 +178,8 @@ public class SelectYourOrganisationPage(ScenarioContext context) : RegistrationB
 
     //public string GetSearchResultsText() => pageInteractionHelper.GetText(SearchResultsText);
 
-    //public bool VerifyOrgAlreadyAddedMessage() => pageInteractionHelper.VerifyText(pageInteractionHelper.GetText(TextBelowOrgNameInResults(objectContext.GetOrganisationName())), "Already added");
+    public async Task VerifyOrgAlreadyAddedMessage() => await Assertions.Expect(page.Locator("ol")).ToContainTextAsync("Already added - view my organisations");
+    //pageInteractionHelper.VerifyText(pageInteractionHelper.GetText(TextBelowOrgNameInResults(objectContext.GetOrganisationName())), "Already added");
 
     private async Task SelectOrg(string orgType, string orgName)
     {
