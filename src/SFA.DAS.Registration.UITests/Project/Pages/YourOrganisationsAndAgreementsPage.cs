@@ -187,7 +187,7 @@ public class SelectYourOrganisationPage(ScenarioContext context) : RegistrationB
 
         await page.GetByRole(AriaRole.Radio, new() { Name = orgType }).CheckAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = orgName, Exact = true }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = orgName, Exact = true }).First.ClickAsync();
     }
 }
 
@@ -260,14 +260,14 @@ public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePag
     public async Task VerifyInvalidAornAndPayeErrorMessage(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message);
 
     public async Task VerifyPayeScheme(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message);
-
-
 }
 
 public class YouHaveAddedYourOrgAndPAYEScheme(ScenarioContext context) : RegistrationBasePage(context)
 {
     public override async Task VerifyPage()
     {
+        await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync("Organisation and PAYE scheme added");
+
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You've added your organisation and PAYE scheme");
     }
 
