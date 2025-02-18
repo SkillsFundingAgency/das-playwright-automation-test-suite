@@ -1,6 +1,8 @@
 ﻿using Microsoft.Playwright;
 using SFA.DAS.FrameworkHelpers;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
@@ -41,6 +43,18 @@ namespace SFA.DAS.Framework
             await nextPage.VerifyPage();
 
             return nextPage;
+        }
+
+        protected void VerifyPage(IReadOnlyList<string> actual, string expected)
+        {
+            if (actual.Any(x => x.ContainsCompareCaseInsensitive(expected)))
+            {
+                objectContext.SetDebugInformation(MessageHelper.OutputMessage("Verified page", [expected], actual));
+
+                return;
+            }
+
+            throw new Exception(MessageHelper.GetExceptionMessage("Page", expected, actual));
         }
     }
 }

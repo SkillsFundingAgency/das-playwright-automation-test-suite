@@ -207,7 +207,7 @@ public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePag
     {
         var list = await page.Locator("h1").AllTextContentsAsync();
 
-        CollectionAssert.Contains(list, "Check your details");
+        VerifyPage(list, "Check your details");
     }
 
     public async Task<OrganisationHasBeenAddedPage> ClickYesContinueButton()
@@ -253,8 +253,6 @@ public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePag
 
         return await VerifyPageAsync(() => new AddAPAYESchemePage(context));
     }
-
-    public async Task VerifyOrganisationName(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message);
 
     public async Task VerifyDetails(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message, new LocatorAssertionsToContainTextOptions{IgnoreCase = true});
 
