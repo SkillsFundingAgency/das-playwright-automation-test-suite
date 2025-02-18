@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run AODP UI Tests",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build Solution",
+            "postDebugTask": "Run Tests",
+            "program": "${workspaceFolder}/src/SFA.DAS.AODP.UITests/bin/Debug/net9.0/SFA.DAS.AODP.UITests.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "env": {
+                "IS_DEBUG": "true"
+            },
+            "justMyCode": false
+        }
+    ]
+}

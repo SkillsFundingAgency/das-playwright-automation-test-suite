@@ -1,0 +1,7 @@
+{
+    "cucumberautocomplete.steps": [
+        "src/SFA.DAS.AODP.UITests/Project/**/*.cs"
+    ],
+    "cucumberautocomplete.strictGherkinCompletion": false,
+    "editor.formatOnSave": true
+}

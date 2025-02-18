@@ -8,12 +8,25 @@ namespace SFA.DAS.AODP.UITests.Hooks
     [Binding]
     public class Hooks(ScenarioContext context)
     {
-        [BeforeScenario(Order = 22)]
-        public async Task Navigate()
+        [BeforeScenario(Order = 22), Scope(Tag = "@dfe_aodp")]
+        public async Task DfeNavigate()
         {
             var driver = context.Get<Driver>();
 
-            var url = UrlConfig.Aodp_DfeAdmin_BaseUrl;
+            var url = UrlConfig.Aodp_Dfe_BaseUrl;
+
+            context.Get<ObjectContext>().SetDebugInformation(url);
+
+            await driver.Page.GotoAsync(url);
+        }
+
+
+        [BeforeScenario(Order = 22), Scope(Tag = "@ao_aodp")]
+        public async Task AoNavigate()
+        {
+            var driver = context.Get<Driver>();
+
+            var url = UrlConfig.Aodp_AO_BaseUrl;
 
             context.Get<ObjectContext>().SetDebugInformation(url);
 
