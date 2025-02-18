@@ -1,0 +1,42 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Clean Solution",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/src" // Set the working directory to the 'src' folder
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Solution",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/src/" // Set the working directory to the 'src' folder
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run AODP Tests",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "--logger:trx"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/src/SFA.DAS.AODP.UITests" // Set the working directory to the 'src' folder
+            },
+            "problemMatcher": []
+        }
+    ]
+}
