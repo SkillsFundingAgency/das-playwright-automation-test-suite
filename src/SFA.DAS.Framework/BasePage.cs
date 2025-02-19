@@ -16,6 +16,8 @@ namespace SFA.DAS.Framework
 
         protected readonly Driver driver;
 
+        protected readonly RetryHelper retryHelper;
+
         protected readonly IPage page;
 
         protected static float LandingPageTimeout => 60000;
@@ -32,6 +34,8 @@ namespace SFA.DAS.Framework
             objectContext = context.Get<ObjectContext>();
 
             driver = context.Get<Driver>();
+
+            retryHelper = context.Get<RetryHelper>();
 
             page = driver.Page;
         }

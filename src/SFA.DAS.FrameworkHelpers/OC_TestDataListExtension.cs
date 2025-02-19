@@ -10,6 +10,7 @@ namespace SFA.DAS.FrameworkHelpers
         private const string AfterStepInformations = "afterstepinformations";
         private const string AfterScenarioExceptions = "afterscenarioexceptions";
         private const string DebugInformations = "testdebuginformations";
+        private const string RetryInformations = "testretryinformations";
 
         #endregion
 
@@ -18,6 +19,7 @@ namespace SFA.DAS.FrameworkHelpers
             objectContext.SetDebugInformations(tags);
             objectContext.SetAfterStepInformations();
             objectContext.SetAfterScenarioExceptions();
+            objectContext.SetRetryInformations();
         }
 
         #region AfterStepInformations
@@ -36,6 +38,15 @@ namespace SFA.DAS.FrameworkHelpers
         public static void SetAfterScenarioException(this ObjectContext objectContext, Exception value) => objectContext.GetAfterScenarioExceptions().Add(value);
 
         public static FrameworkList<Exception> GetAfterScenarioExceptions(this ObjectContext objectContext) => objectContext.Get<FrameworkList<Exception>>(AfterScenarioExceptions);
+        #endregion
+
+        #region RetryInformations
+
+        private static void SetRetryInformations(this ObjectContext objectContext) => objectContext.Set(RetryInformations, new FrameworkList<string>() { $"{string.Empty}" });
+
+        public static void SetRetryInformation(this ObjectContext objectContext, string value) => objectContext.GetRetryInformations().Add($"{value}");
+
+        private static FrameworkList<string> GetRetryInformations(this ObjectContext objectContext) => objectContext.Get<FrameworkList<string>>(RetryInformations);
         #endregion
 
         #region DebugInformations
