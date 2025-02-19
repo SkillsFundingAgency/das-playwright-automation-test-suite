@@ -9,12 +9,12 @@ namespace SFA.DAS.FrameworkHelpers
     {
         private readonly string _title = scenarioInfo.Title;
 
-        public async Task RetryOnEmpHomePage<T>(Func<Task> func, Func<Task<T>> retryfunc) => await RetryOnTimeoutException(func, RetryTimeOut.GetTimeSpan([5, 8, 13]), retryfunc);
+        public async Task RetryOnEmpHomePage<T>(Func<Task> func, Func<Task<T>> retryfunc) => await RetryOnException(func, RetryTimeOut.GetTimeSpan([5, 8, 13]), retryfunc);
 
-        private async Task RetryOnTimeoutException<T>(Func<Task> func, TimeSpan[] timespan, Func<Task<T>> retryfunc)
+        private async Task RetryOnException<T>(Func<Task> func, TimeSpan[] timespan, Func<Task<T>> retryfunc)
         {
             await Policy
-                    .Handle<TimeoutException>()
+                    .Handle<Exception>()
                     .WaitAndRetryAsync(timespan, async (exception, timeSpan, retryCount, context) =>
                     {
                         new RetryLogging(objectContext, "RetryOnNUnitException").Report(retryCount, timeSpan, exception, _title);

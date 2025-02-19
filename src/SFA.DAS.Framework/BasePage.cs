@@ -52,6 +52,13 @@ namespace SFA.DAS.Framework
             return nextPage;
         }
 
+        protected async Task<IResponse> ReloadPageAsync()
+        {
+            objectContext.SetDebugInformation($"Reload page with Title: '{ await page.TitleAsync()}'");
+
+            return await page.ReloadAsync();
+        }
+
         protected void VerifyPage(IReadOnlyList<string> actual, string expected)
         {
             if (actual.Any(x => x.ContainsCompareCaseInsensitive(expected)))
