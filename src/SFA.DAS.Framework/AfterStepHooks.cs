@@ -25,13 +25,13 @@ public class AfterStepHooks(ScenarioContext context)
         await Task.CompletedTask;
     }
 
-    [AfterStep(Order = 11)]
-    public async Task Screenshot()
-    {
-        if (context.StepContext.StepInfo.Text.StartsWith("the trace is")) return;
+    //[AfterStep(Order = 11)]
+    //public async Task Screenshot()
+    //{
+    //    if (context.StepContext.StepInfo.Text.StartsWith("the trace is")) return;
 
-        var driver = context.Get<Driver>();
+    //    var driver = context.Get<Driver>();
 
-        await driver.ScreenshotAsync(false);
-    }
+    //    await driver.ScreenshotAsync(false);
+    //}
 }
