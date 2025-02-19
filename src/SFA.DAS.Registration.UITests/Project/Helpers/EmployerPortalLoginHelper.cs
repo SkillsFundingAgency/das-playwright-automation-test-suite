@@ -49,7 +49,7 @@ public class EmployerPortalLoginHelper(ScenarioContext context) : IReLoginHelper
 
     protected async Task<CreateAnAccountToManageApprenticeshipsPage> GetLandingPage()
     {
-        return await BasePage.VerifyPageAsync(() => new CreateAnAccountToManageApprenticeshipsPage(context));
+        return await VerifyPageHelper.VerifyPageAsync(() => new CreateAnAccountToManageApprenticeshipsPage(context));
     }
 
     protected virtual async Task<HomePage> Login(EasAccountUser loginUser)

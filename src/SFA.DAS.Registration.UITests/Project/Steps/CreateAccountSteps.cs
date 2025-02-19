@@ -115,7 +115,7 @@ public class CreateAccountSteps
     {
         _selectYourOrganisationPage = await _searchForYourOrganisationPage.SearchForAnOrganisation(_registrationDataHelper.InvalidCompanyNumber);
 
-        return await BasePage.VerifyPageAsync(() => new SelectYourOrganisationPage(_context));
+        return await VerifyPageHelper.VerifyPageAsync(() => new SelectYourOrganisationPage(_context));
     }
 
     //[Then(@"the '(.*)' message is shown")]

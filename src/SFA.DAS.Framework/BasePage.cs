@@ -9,6 +9,18 @@ using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Framework
 {
+    public static class VerifyPageHelper
+    {
+        public static async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
+        {
+            var nextPage = func.Invoke();
+
+            await nextPage.VerifyPage();
+
+            return nextPage;
+        }
+    }
+
     public abstract class BasePage
     {
         protected readonly ScenarioContext context;
@@ -39,15 +51,15 @@ namespace SFA.DAS.Framework
             retryHelper = context.Get<RetryHelper>();
 
             page = driver.Page;
-
-            objectContext.SetDebugInformation($"Navigated to page with Title: '{page.TitleAsync().Result}'");
         }
 
-        public static async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
+        public async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
         {
             var nextPage = func.Invoke();
 
             await nextPage.VerifyPage();
+
+            objectContext.SetDebugInformation($"Navigated to page with Title: '{await page.TitleAsync()}'");
 
             return nextPage;
         }
