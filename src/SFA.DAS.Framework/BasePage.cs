@@ -1,4 +1,5 @@
-﻿using Microsoft.Playwright;
+﻿using Azure;
+using Microsoft.Playwright;
 using SFA.DAS.FrameworkHelpers;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,8 @@ namespace SFA.DAS.Framework
             retryHelper = context.Get<RetryHelper>();
 
             page = driver.Page;
+
+            objectContext.SetDebugInformation($"Navigated to page with Title: '{page.TitleAsync().Result}'");
         }
 
         public static async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
