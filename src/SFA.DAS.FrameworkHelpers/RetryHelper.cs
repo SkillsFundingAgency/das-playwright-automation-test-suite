@@ -13,11 +13,13 @@ namespace SFA.DAS.FrameworkHelpers
 
         private async Task RetryOnException<T>(Func<Task> func, TimeSpan[] timespan, Func<Task<T>> retryfunc)
         {
+            var logging = GetRetryLogging();
+
             await Policy
                     .Handle<Exception>()
                     .WaitAndRetryAsync(timespan, async (exception, timeSpan, retryCount, context) =>
                     {
-                        new RetryLogging(objectContext, "RetryOnNUnitException").Report(retryCount, timeSpan, exception, _title);
+                        logging.Report(retryCount, timeSpan, exception, _title);
 
                         await retryfunc.Invoke();
                     })
@@ -28,11 +30,13 @@ namespace SFA.DAS.FrameworkHelpers
                         await func.Invoke();
                     });
         }
+
+        private RetryLogging GetRetryLogging() => new(objectContext, RandomDataGenerator.GenerateRandomWholeNumber(4));
     }
 
     public class RetryLogging(ObjectContext objectContext, string uniqueIdentifier)
     {
-        public void Report(int retryCount, TimeSpan timeSpan, Exception exception, string scenarioTitle, Action retryAction = null)
+        public void Report(int retryCount, TimeSpan timeSpan, Exception exception, string scenarioTitle)
         {
             objectContext.SetDebugInformation($"RETRY Count : {retryCount}, UniqueIdentifier : {uniqueIdentifier}");
 
