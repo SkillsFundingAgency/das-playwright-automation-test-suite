@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.MongoDb.DataGenerat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.MailosaurAPI.Service", "SFA.DAS.MailosaurAPI.Service\SFA.DAS.MailosaurAPI.Service.csproj", "{CDBBFFC1-80CA-4597-8B53-612C064C0A98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.AODP.UITests", "SFA.DAS.AODP.UITests\SFA.DAS.AODP.UITests.csproj", "{A77D5F02-0F76-4E62-AB46-93F1DC43BC93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{CDBBFFC1-80CA-4597-8B53-612C064C0A98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDBBFFC1-80CA-4597-8B53-612C064C0A98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDBBFFC1-80CA-4597-8B53-612C064C0A98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A77D5F02-0F76-4E62-AB46-93F1DC43BC93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A77D5F02-0F76-4E62-AB46-93F1DC43BC93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A77D5F02-0F76-4E62-AB46-93F1DC43BC93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A77D5F02-0F76-4E62-AB46-93F1DC43BC93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
