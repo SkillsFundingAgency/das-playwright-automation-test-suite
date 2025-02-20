@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Registration.UITests.Project.Helpers;
+using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
 
 namespace SFA.DAS.SupportTools.UITests.Project;
 

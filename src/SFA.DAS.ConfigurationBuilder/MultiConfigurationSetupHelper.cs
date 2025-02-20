@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using NUnit.Framework;
 using SFA.DAS.FrameworkHelpers;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
@@ -16,19 +15,7 @@ public class MultiConfigurationSetupHelper(ScenarioContext context)
 
         if (Configurator.IsAdoExecution)
         {
-            context.Get<ObjectContext>().SetDebugInformation(key);
-
-            TestContext.Progress.WriteLine(key);
-
-            TestContext.Out.WriteLine(key);
-
             var azureList = configSection.GetConfigSection<string>(key);
-
-            context.Get<ObjectContext>().SetDebugInformation(azureList);
-
-            TestContext.Progress.WriteLine(azureList);
-
-            TestContext.Out.WriteLine(azureList);
 
             list = JsonConvert.DeserializeObject<List<T>>(azureList);
         }

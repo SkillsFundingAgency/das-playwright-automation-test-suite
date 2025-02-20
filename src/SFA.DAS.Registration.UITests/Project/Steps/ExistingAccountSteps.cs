@@ -52,7 +52,7 @@ public class ExistingAccountSteps
 
         var page3 = await _homePage.GoToNotificationSettingsPage();
 
-        _homePage = await page3.ClickBackLink();
+        _homePage = await page3.GoBackToHomePage();
     }
 
     [Then(@"Employer is able to navigate to Help Page")]
@@ -124,7 +124,7 @@ public class ExistingAccountSteps
     {
         await _context.Get<Driver>().Page.GetByRole(AriaRole.Link, new() { Name = "Apprentices", Exact = true }).ClickAsync();
 
-        var page = await BasePage.VerifyPageAsync(() => new AccessDeniedPage(_context));
+        var page = await VerifyPageHelper.VerifyPageAsync(() => new AccessDeniedPage(_context));
 
         _homePage = await GoBackToTheServiceHomePage(page);
     }

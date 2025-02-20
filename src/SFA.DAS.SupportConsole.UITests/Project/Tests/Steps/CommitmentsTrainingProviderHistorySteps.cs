@@ -30,5 +30,5 @@ public class CommitmentsTrainingProviderHistorySteps : CommitmentsCohortDetailsB
         await page.TrainingProviderHistoryIsDisplayed();
     }
 
-    private async Task<UlnDetailsPageWithTrainingProviderHistory> GetUlnDetailsPage() => await BasePage.VerifyPageAsync(() => new UlnDetailsPageWithTrainingProviderHistory(_context, cohortDetails)); 
+    private async Task<UlnDetailsPageWithTrainingProviderHistory> GetUlnDetailsPage() => await VerifyPageHelper.VerifyPageAsync(() => new UlnDetailsPageWithTrainingProviderHistory(_context, cohortDetails)); 
 }

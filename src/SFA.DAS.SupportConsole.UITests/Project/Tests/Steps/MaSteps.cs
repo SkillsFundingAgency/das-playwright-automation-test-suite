@@ -45,7 +45,7 @@ public class MaSteps(ScenarioContext context)
     public async Task WhenTheUserNavigatesToFinancePage() => await new AccountOverviewPage(context).ClickFinanceMenuLink();
 
     [Then(@"the user is redirected to a challenge page")]
-    public async Task ThenTheUserIsRedirectedToAChallengePage() => _challengePage = await BasePage.VerifyPageAsync(() => new ChallengePage(context));
+    public async Task ThenTheUserIsRedirectedToAChallengePage() => _challengePage = await VerifyPageHelper.VerifyPageAsync(() => new ChallengePage(context));
 
     [When(@"the user enters invalid payscheme")]
     public async Task WhenTheUserEntersInvalidPayscheme() => await _challengePage.EnterIncorrectPaye();
@@ -68,7 +68,7 @@ public class MaSteps(ScenarioContext context)
     }
 
     [Then(@"the user is redirected to finance page")]
-    public async Task ThenTheUserIsRedirectedToFinancePage() => _financePage = await BasePage.VerifyPageAsync(() => new FinancePage(context));
+    public async Task ThenTheUserIsRedirectedToFinancePage() => _financePage = await VerifyPageHelper.VerifyPageAsync(() => new FinancePage(context));
 
     [Then(@"the user can view levy declarations")]
     public async Task ThenTheUserCanViewLevyDeclarations() => await _financePage.ViewLevyDeclarations();
