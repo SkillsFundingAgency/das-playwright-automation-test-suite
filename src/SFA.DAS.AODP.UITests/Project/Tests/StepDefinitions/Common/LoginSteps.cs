@@ -1,22 +1,16 @@
 ﻿
 
-namespace SFA.DAS.AODP.UITests.Project.Tests.StepDefinitions.DfE
+using SFA.DAS.AODP.UITests.Project.Tests.Pages.Common;
+
+namespace SFA.DAS.AODP.UITests.Project.Tests.StepDefinitions.Common
 {
     [Binding]
     public class LoginSteps(ScenarioContext context)
     {
-        public ScenarioContext Context { get; } = context;
-
         [Given(@"a user with (.*) role should able to login")]
         public async Task LoginToApplicationAsUser(string role) => await LoginUserRole(role);
 
 
-
-        private async Task LoginUserRole(string role)
-        {
-            // Call Login function with user role
-            await Task.CompletedTask;
-        }
-
+        private async Task LoginUserRole(string role) => await new AodpHomePage(context).NavigateToLoginPage();
     }
 }

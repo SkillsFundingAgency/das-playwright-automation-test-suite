@@ -1,6 +1,7 @@
 ﻿
 
 using SFA.DAS.AODP.UITests.Project.Tests.Pages.DfE;
+using SFA.DAS.AODP.UITests.Project.Tests.StepDefinitions.Common;
 
 namespace SFA.DAS.AODP.UITests.Project.Tests.StepDefinitions.DfE
 {
@@ -15,10 +16,10 @@ namespace SFA.DAS.AODP.UITests.Project.Tests.StepDefinitions.DfE
         public async Task LoginToApplicationAsDfe(string role) => await _login.LoginToApplicationAsUser(role);
 
         [Then(@"access the dfe Dashboard as (.*)")]
-        public async Task VerifyTheDashBoardVisibility(string role) => await new AodpDfeLoginPage().VerifyPageVisibility();
+        public async Task VerifyTheDashBoardVisibility(string role) => await new AodpDfeLoginPage(context).LoginAsReviewer();
 
 
         [Then(@"Navigate to AODP DFE start page and verify the content")]
-        public async Task VerifyTheStartPageVisibility() => await new AodpDfeLoginPage().VerifyPageVisibility();
+        public async Task VerifyTheStartPageVisibility() => await new AodpDfeHomePage(context).VerifyPage();
     }
 }
