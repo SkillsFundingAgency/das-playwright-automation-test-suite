@@ -85,7 +85,7 @@ public class SupportToolsSteps(ScenarioContext context)
 
         await page.SelectAllRecords();
 
-        return await BasePage.VerifyPageAsync(() => new SearchForApprenticeshipPage(context));
+        return await VerifyPageHelper.VerifyPageAsync(() => new SearchForApprenticeshipPage(context));
     }
 
     [Then(@"User should be able to stop all the records")]

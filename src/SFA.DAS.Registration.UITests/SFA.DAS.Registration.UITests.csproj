@@ -40,6 +40,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
 		<ProjectReference Include="..\SFA.DAS.Login.Service\SFA.DAS.Login.Service.csproj" />
+		<ProjectReference Include="..\SFA.DAS.MongoDb.DataGenerator\SFA.DAS.MongoDb.DataGenerator.csproj" />
+		<ProjectReference Include="..\SFA.DAS.MailosaurAPI.Service\SFA.DAS.MailosaurAPI.Service.csproj" />
 	</ItemGroup>
 
 </Project>

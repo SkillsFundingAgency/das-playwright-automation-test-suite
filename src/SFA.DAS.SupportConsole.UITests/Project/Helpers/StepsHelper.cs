@@ -63,6 +63,6 @@ public class StepsHelper(ScenarioContext context)
     {
         await new DfeAdminLoginStepsHelper(context).LoginToSupportConsole(loginUser);
 
-        return await BasePage.VerifyPageAsync(() => new SearchHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(() => new SearchHomePage(context));
     }
 }

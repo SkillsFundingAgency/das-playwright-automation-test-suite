@@ -27,7 +27,7 @@ public class StepsHelper(ScenarioContext context)
             await new DfeAdminLoginStepsHelper(context).CheckAndLoginToSupportTool(context.GetUser<SupportToolScpUser>());
         }
 
-        return await BasePage.VerifyPageAsync(() => new ToolSupportHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(() => new ToolSupportHomePage(context));
     }
 
     public async Task<ToolSupportHomePage> ValidUserLogsinToSupportSCPTools() => await LoginToSupportTools(context.GetUser<SupportToolScpUser>());
@@ -38,6 +38,6 @@ public class StepsHelper(ScenarioContext context)
     {
         await new DfeAdminLoginStepsHelper(context).LoginToSupportTool(loginUser);
 
-        return await BasePage.VerifyPageAsync(() => new ToolSupportHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(() => new ToolSupportHomePage(context));
     }
 }

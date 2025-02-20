@@ -1,4 +1,5 @@
-﻿using SFA.DAS.FrameworkHelpers;
+﻿using Polly;
+using SFA.DAS.FrameworkHelpers;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Framework.Hooks;
@@ -19,5 +20,7 @@ public class FrameworkHelpersHooks
         _context.Set(new TryCatchExceptionHelper(objectContext));
 
         objectContext.SetTestDataList(_tags);
+
+        _context.Set(new RetryHelper(_context.ScenarioInfo, objectContext));
     }
 }
