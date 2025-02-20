@@ -7,5 +7,5 @@
           Then access the ao Dashboard as <role>
 
           Examples:
-               | role |
-               | User |
+               | role    |
+               | ao_user |

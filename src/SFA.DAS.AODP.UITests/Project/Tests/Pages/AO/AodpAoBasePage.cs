@@ -1,8 +1,8 @@
-﻿namespace SFA.DAS.AODP.UITests.Project.Tests.Pages.AO
+﻿
+namespace SFA.DAS.AODP.UITests.Project.Tests.Pages.AO
 {
-    public class AodpAoBasePage
+    public class AodpAoBasePage(ScenarioContext context) : BasePage(context)
     {
-        // Add Locators and Write the Actions on Bage basis
-
+        public override async Task VerifyPage() => await Task.CompletedTask;
     }
 }

@@ -7,9 +7,5 @@
           Then access the dfe Dashboard as as an <role>
 
           Examples:
-               | role          |
-               | Approver      |
-               | Data Importer |
-               | FormEditor    |
-               | Reviewer      |
-
+               | role     |
+               | dfe_user |
