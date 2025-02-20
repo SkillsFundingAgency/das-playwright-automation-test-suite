@@ -25,9 +25,4 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
         var autocompleteOption = page.Locator($"text={optionText}");
         await autocompleteOption.ClickAsync();
     }
-    public async Task GoBack()
-    {
-        var backLink = page.Locator("a.govuk-back-link");
-        await backLink.ClickAsync();
-    }
 }
