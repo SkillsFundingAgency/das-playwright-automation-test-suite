@@ -1,5 +1,7 @@
-﻿using SFA.DAS.Registration.UITests.Project.Helpers;
+﻿using NUnit.Framework;
+using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
 using static SFA.DAS.Registration.UITests.Project.Pages.YouveLoggedOutPage;
 
@@ -176,7 +178,8 @@ public class SelectYourOrganisationPage(ScenarioContext context) : RegistrationB
 
     //public string GetSearchResultsText() => pageInteractionHelper.GetText(SearchResultsText);
 
-    //public bool VerifyOrgAlreadyAddedMessage() => pageInteractionHelper.VerifyText(pageInteractionHelper.GetText(TextBelowOrgNameInResults(objectContext.GetOrganisationName())), "Already added");
+    public async Task VerifyOrgAlreadyAddedMessage() => await Assertions.Expect(page.Locator("ol")).ToContainTextAsync("Already added - view my organisations");
+    //pageInteractionHelper.VerifyText(pageInteractionHelper.GetText(TextBelowOrgNameInResults(objectContext.GetOrganisationName())), "Already added");
 
     private async Task SelectOrg(string orgType, string orgName)
     {
@@ -184,15 +187,35 @@ public class SelectYourOrganisationPage(ScenarioContext context) : RegistrationB
 
         await page.GetByRole(AriaRole.Radio, new() { Name = orgType }).CheckAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = orgName, Exact = true }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = orgName, Exact = true }).First.ClickAsync();
     }
 }
+
+public class OrganisationHasBeenAddedPage(ScenarioContext context) : InterimHomeBasePage(context, false)
+{
+    public override async Task VerifyPage()
+    {
+        var list = await page.Locator(".das-notification__heading").AllTextContentsAsync();
+
+        CollectionAssert.Contains(list, $"{objectContext.GetRecentlyAddedOrganisationName()} has been added");
+    }
+}
+
 
 public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Check your details");
+        var list = await page.Locator("h1").AllTextContentsAsync();
+
+        VerifyPage(list, "Check your details");
+    }
+
+    public async Task<OrganisationHasBeenAddedPage> ClickYesContinueButton()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Yes, continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new OrganisationHasBeenAddedPage(context));
     }
 
     public async Task<AccessDeniedPage> ClickYesContinueButtonAndRedirectedToAccessDeniedPage()
@@ -201,7 +224,61 @@ public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePag
 
         return await VerifyPageAsync(() => new AccessDeniedPage(context));
     }
+
+    public async Task<YouHaveAddedYourOrgAndPAYEScheme> ClickYesThisIsMyOrg()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, this is my organisation", Exact = true }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YouHaveAddedYourOrgAndPAYEScheme(context));
+    }
+
+    public async Task<SearchForYourOrganisationPage> ClickOrganisationChangeLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Change   organisation" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SearchForYourOrganisationPage(context));
+    }
+
+    public async Task<EnterYourPAYESchemeDetailsPage> ClickAornChangeLink()
+    {
+        await page.GetByRole(AriaRole.Row, new() { Name = "Account office reference" }).GetByRole(AriaRole.Link).ClickAsync();
+
+        return await VerifyPageAsync(() => new EnterYourPAYESchemeDetailsPage(context));
+    }
+
+    public async Task<AddAPAYESchemePage> ClickPayeSchemeChangeLink()
+    {
+        await page.GetByRole(AriaRole.Row, new() { Name = "Employer PAYE reference" }).GetByRole(AriaRole.Link).ClickAsync();
+
+        return await VerifyPageAsync(() => new AddAPAYESchemePage(context));
+    }
+
+    public async Task VerifyDetails(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message, new LocatorAssertionsToContainTextOptions{IgnoreCase = true});
+
+    public async Task VerifyInvalidAornAndPayeErrorMessage(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message);
+
+    public async Task VerifyPayeScheme(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message);
 }
+
+public class YouHaveAddedYourOrgAndPAYEScheme(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync("Organisation and PAYE scheme added");
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You've added your organisation and PAYE scheme");
+    }
+
+    public async Task<CreateYourEmployerAccountPage> ContinueToConfirmationPage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return new CreateYourEmployerAccountPage(context);
+    }
+}
+
 
 public class AccessDeniedPage(ScenarioContext context) : RegistrationBasePage(context)
 {

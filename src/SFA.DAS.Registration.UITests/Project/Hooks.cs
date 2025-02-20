@@ -1,5 +1,8 @@
 ﻿using SFA.DAS.Framework;
+using SFA.DAS.MongoDb.DataGenerator;
+using SFA.DAS.MongoDb.DataGenerator.Helpers;
 using SFA.DAS.Registration.UITests.Project.Helpers;
+using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.UI.FrameworkHelpers;
 
 namespace SFA.DAS.Registration.UITests.Project;
@@ -28,21 +31,19 @@ public class Hooks(ScenarioContext context)
     {
         var tags = context.ScenarioInfo.Tags;
 
-        //var dataHelper = new EmployerUserNameDataHelper(tags);
+        var dataHelper = new EmployerUserNameDataHelper(tags);
 
-        //_objectContext.SetDataHelper(dataHelper);
+        _objectContext.SetDataHelper(dataHelper);
 
-        //var mailosaurUser = context.Get<MailosaurUser>();
+        var mailosaurUser = context.Get<MailosaurUser>();
 
-        //var mailosaurEmaildomain = mailosaurUser.DomainName;
+        var mailosaurEmaildomain = mailosaurUser.DomainName;
 
-        //var emaildomain = tags.Any(x => x.ContainsCompareCaseInsensitive("perftest")) ? "asperfautomation.com" : mailosaurEmaildomain;
+        var emaildomain = tags.Any(x => x.ContainsCompareCaseInsensitive("perftest")) ? "asperfautomation.com" : mailosaurEmaildomain;
 
         var aornDataHelper = new AornDataHelper();
 
-        //var registrationDatahelpers = new RegistrationDataHelper(tags, $"{dataHelper.GatewayUsername}@{emaildomain}", aornDataHelper);
-
-        var registrationDatahelpers = new RegistrationDataHelper(tags, $"example@email.com", aornDataHelper);
+        var registrationDatahelpers = new RegistrationDataHelper(tags, $"{dataHelper.GatewayUsername}@{emaildomain}", aornDataHelper);
 
         context.Set(registrationDatahelpers);
 
@@ -52,18 +53,18 @@ public class Hooks(ScenarioContext context)
 
         context.Set(new RegistrationSqlDataHelper(_objectContext, _dbConfig));
 
-        //context.Set(new TprSqlDataHelper(_dbConfig, _objectContext, aornDataHelper));
+        context.Set(new TprSqlDataHelper(_dbConfig, _objectContext, aornDataHelper));
 
-        //context.Set(new CommitmentsSqlHelper(_objectContext, _dbConfig));
+        context.Set(new CommitmentsSqlHelper(_objectContext, _dbConfig));
 
-        //context.Set(new EmployerFinanceSqlHelper(_objectContext, _dbConfig));
+        context.Set(new EmployerFinanceSqlHelper(_objectContext, _dbConfig));
 
-        //context.Set(new TransferMatchingSqlDataHelper(_objectContext, _dbConfig));
+        context.Set(new TransferMatchingSqlDataHelper(_objectContext, _dbConfig));
 
         var randomEmail = registrationDatahelpers.RandomEmail;
 
         _objectContext.SetRegisteredEmail(randomEmail);
 
-        //if (randomEmail.Contains(mailosaurEmaildomain)) mailosaurUser.AddToEmailList(randomEmail);
+        if (randomEmail.Contains(mailosaurEmaildomain)) mailosaurUser.AddToEmailList(randomEmail);
     }
 }

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+﻿using SFA.DAS.FrameworkHelpers;
+using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 
@@ -29,6 +30,9 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
 
     public override async Task VerifyPage()
     {
+        await retryHelper.RetryOnEmpHomePage(
+            async () => await Assertions.Expect(page.GetByRole(AriaRole.Menuitem, new() { Name = "Your organisations and" })).ToBeVisibleAsync(), ReloadPageAsync);
+
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(objectContext.GetOrganisationName());
     }
 
@@ -36,17 +40,14 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
 
     //public void GoToAanHomePage() => formCompletionHelper.Click(AANLink);
 
-    //public HomePage VerifySucessSummary(string message)
-    //{
-    //    pageInteractionHelper.VerifyText(SucessSummary, message);
-    //    return this;
-    //}
+    public async Task VerifyAccountName(string name)
+    {
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Account renamed");
 
-    //public HomePage VerifyAccountName(string name)
-    //{
-    //    pageInteractionHelper.VerifyText(PageHeader, name);
-    //    return this;
-    //}
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("You successfully updated the account name");
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(name);
+    }
 
     public async Task<AboutYourAgreementPage> ClickAcceptYourAgreementLinkInHomePagePanel()
     {
