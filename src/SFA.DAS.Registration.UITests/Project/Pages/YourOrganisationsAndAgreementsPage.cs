@@ -73,7 +73,10 @@ public class YourAgreementsWithTheEducationAndSkillsFundingAgencyPage(ScenarioCo
 
     private async Task ShowSection()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Show all sections" }).ClickAsync();
+        if (await page.GetByRole(AriaRole.Button, new() { Name = "Show all sections" }).IsVisibleAsync())
+        {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Show all sections" }).ClickAsync();
+        }
     }
 }
 
