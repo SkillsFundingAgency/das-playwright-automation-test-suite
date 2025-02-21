@@ -115,19 +115,13 @@ public class InvitationsPage(ScenarioContext context) : RegistrationBasePage(con
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Invitations");
 
-    //#region Locators
-    //private static By AcceptInviteLink => By.Id("invitationId");
-
-    //#endregion
-
     public async Task<HomePage> ClickAcceptInviteLink()
     {
-        //formCompletionHelper.Click(AcceptInviteLink);
+        await page.GetByRole(AriaRole.Link, new() { Name = "Accept Invite" }).ClickAsync();
 
         return await VerifyPageAsync(() => new HomePage(context));
     }
 }
-
 
 public class CreateYourEmployerAccountPage(ScenarioContext context) : RegistrationBasePage(context)
 {
@@ -284,7 +278,7 @@ public class AddPayeSchemeUsingGGDetailsPage(ScenarioContext context) : Registra
     {
         await ClickBackLink();
 
-        return new TheseDetailsAreAlreadyInUsePage(context);
+        return await VerifyPageAsync(() => new TheseDetailsAreAlreadyInUsePage(context));
     }
 
 }
@@ -305,7 +299,7 @@ public class GgSignInPage(ScenarioContext context) : RegistrationBasePage(contex
     {
         var gatewaydetails = await EnterGateWayCredentialsAndSignIn(index);
 
-        return new ConfirmPAYESchemePage(context, gatewaydetails.Paye);
+        return await VerifyPageAsync(() => new ConfirmPAYESchemePage(context,gatewaydetails.Paye));
     }
 
     public async Task SignInWithInvalidDetails()
@@ -442,7 +436,12 @@ public class AddATrainingProviderPage(ScenarioContext context) : RegistrationBas
 
 public class EmployerAccountCreatedPage(ScenarioContext context) : EmpAccountCreationBase(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Employer account created");
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Employer account created");
+
+        await SetEasNewUser();
+    }
 
     public async Task<HomePage> SelectGoToYourEmployerAccountHomepage()
     {
@@ -473,7 +472,7 @@ public class PAYESchemeAddedPage(ScenarioContext context, string paye) : Registr
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        return new UsingYourGovtGatewayDetailsPage(context);
+        return await VerifyPageAsync(() => new UsingYourGovtGatewayDetailsPage(context));
     }
 
     public async Task<HomePage> SelectContinueAccountSetupInPAYESchemeAddedPage()
@@ -482,6 +481,6 @@ public class PAYESchemeAddedPage(ScenarioContext context, string paye) : Registr
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        return new HomePage(context);
+        return await VerifyPageAsync(() => new HomePage(context));
     }
 }

@@ -188,7 +188,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
         return await page5.ClickContinueToYourAgreementButtonToDoYouAcceptTheEmployerAgreementPage();
     }
 
-    internal static async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAgreementFromHomePage(HomePage homePage) 
+    internal static async Task<YouHaveAcceptedYourEmployerAgreementPage> SignAgreementFromHomePage(HomePage homePage) 
     {
         var page = await homePage.ClickAcceptYourAgreementLinkInHomePagePanel();
 
@@ -196,7 +196,16 @@ public class AccountCreationStepsHelper(ScenarioContext context)
         
         return await page1.SignAgreement();
     }
-        
+
+    internal static async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAdditionalAgreementFromHomePage(HomePage homePage)
+    {
+        var page = await homePage.ClickAcceptYourAgreementLinkInHomePagePanel();
+
+        var page1 = await page.ClickContinueToYourAgreementButtonInAboutYourAgreementPage();
+
+        return await page1.SignAdditionalAgreement();
+    }
+
 
     internal void UpdateOrganisationName(OrgType orgType) => _objectContext.SetOrganisationName(GetOrgName(orgType));
 

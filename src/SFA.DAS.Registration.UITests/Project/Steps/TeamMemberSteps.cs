@@ -2,7 +2,7 @@
 using SFA.DAS.Registration.UITests.Project.Pages;
 using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 
-namespace SFA.DAS.Registration.UITests.Project.Tests.StepDefinitions;
+namespace SFA.DAS.Registration.UITests.Project.Steps;
 
 [Binding]
 public class TeamMemberSteps
@@ -69,7 +69,7 @@ public class TeamMemberSteps
 
         var page1 = await page.ClickCancelInvitationLink();
 
-        var page2 = await page1.ClickYesCancelInvitationButton();
+        _yourTeamPage = await page1.ClickYesCancelInvitationButton();
 
         await _yourTeamPage.VerifyInvitationCancelledHeaderInfoMessage();
     }
@@ -99,7 +99,7 @@ public class TeamMemberSteps
 
         var page6 = await page5.ClickRemoveTeamMemberButton();
 
-        var page7 = await page6.ClickYesRemoveNowButton();
+        _yourTeamPage = await page6.ClickYesRemoveNowButton();
 
         await _yourTeamPage.VerifyTeamMemberRemovedHeaderInfoMessage();
     }

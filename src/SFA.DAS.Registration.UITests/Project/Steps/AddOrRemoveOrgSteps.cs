@@ -75,7 +75,6 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         await page.ClickOnViewYourAccountButton();
     }
 
-
     [When(@"the Employer adds two additional Orgs to the Account")]
     public async Task WhenTheEmployerAddsTwoAdditionalOrgsToTheAccount()
     {
@@ -108,5 +107,5 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         _homePage = await page.GoToHomePage();
     }
 
-    private async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAgreementFromHomePage() => await AccountCreationStepsHelper.SignAgreementFromHomePage(_homePage);
+    private async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAgreementFromHomePage() => await AccountCreationStepsHelper.SignAdditionalAgreementFromHomePage(_homePage);
 }

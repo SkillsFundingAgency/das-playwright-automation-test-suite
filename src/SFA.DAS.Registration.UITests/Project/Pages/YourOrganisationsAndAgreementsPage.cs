@@ -2,15 +2,86 @@
 using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
+using System.Reflection.PortableExecutable;
+using System;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
 using static SFA.DAS.Registration.UITests.Project.Pages.YouveLoggedOutPage;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 
+public class ReviewYourDetailsPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Review your details");
+    }
+
+    public async Task VerifyInfoTextInReviewYourDetailsPage(string expectedText)
+    {
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(expectedText, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
+    }
+
+    public async Task<DetailsUpdatedPage> SelectUpdateMyDetailsRadioOptionAndContinueInReviewYourDetailsPage()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, update my details using" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new DetailsUpdatedPage(context));
+    }
+}
+
+public class DetailsUpdatedPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Details updated");
+    }
+
+    public async Task<HomePage> SelectGoToHomePageOptionAndContinueInDetailsUpdatedPage()
+    {
+        await page.GetByRole(AriaRole.Radio).Nth(1).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new HomePage(context));
+
+    }
+}
+
+
+public class YourAgreementsWithTheEducationAndSkillsFundingAgencyPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your agreements with the Department for Education (DfE)");
+    }
+
+    public async Task<ReviewYourDetailsPage> ClickUpdateTheseDetailsLinkInReviewYourDetailsPage()
+    {
+        await ShowSection();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Update these details" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ReviewYourDetailsPage(context));
+    }
+
+    public async Task VerifyIfUpdateTheseDetailsLinkIsHidden()
+    {
+        await ShowSection();
+
+        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Update these details" })).ToBeHiddenAsync();
+    }
+
+    private async Task ShowSection()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Show all sections" }).ClickAsync();
+    }
+}
+
+
 public class YourOrganisationsAndAgreementsPage(ScenarioContext context, bool navigate = false) : InterimEmployerBasePage(context, navigate)
 {
-    private readonly RegistrationSqlDataHelper _registrationSqlDataHelper = context.GetValue<RegistrationSqlDataHelper>();
-
     #region Locators
     //private static By TransferStatus => By.CssSelector("p.govuk-body");
     //private static By AddNewOrganisationButton => By.CssSelector(".govuk-button");
@@ -41,29 +112,12 @@ public class YourOrganisationsAndAgreementsPage(ScenarioContext context, bool na
         await Assertions.Expect(page.Locator("tbody")).ToContainTextAsync(objectContext.GetOrganisationName());
     }
 
-    //public YourAgreementsWithTheEducationAndSkillsFundingAgencyPage ClickViewAgreementLink() =>
-    //    ClickViewAgreementLink(() => formCompletionHelper.ClickElement(() => pageInteractionHelper.FindElement(ViewAgreementLink())));
+    public async Task<YourAgreementsWithTheEducationAndSkillsFundingAgencyPage> ClickViewAgreementLink() 
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "View all agreements" }).ClickAsync();
 
-    //public YourAgreementsWithTheEducationAndSkillsFundingAgencyPage ClickViewAgreementLink(string orgName)
-    //{
-    //    var accountLegalEntityPublicHashedId = _registrationSqlDataHelper.GetAccountLegalEntityPublicHashedId(objectContext.GetDBAccountId(), orgName);
-
-    //    void action() => formCompletionHelper.ClickElement(() =>
-    //    {
-    //        var elements = pageInteractionHelper.FindElements(ViewAgreementLink(accountLegalEntityPublicHashedId));
-
-    //        return elements.FirstOrDefault(x => x.Text == "View all agreements");
-    //    });
-
-    //    return ClickViewAgreementLink(action);
-    //}
-
-    //private YourAgreementsWithTheEducationAndSkillsFundingAgencyPage ClickViewAgreementLink(Action action)
-    //{
-    //    action.Invoke();
-
-    //    return new YourAgreementsWithTheEducationAndSkillsFundingAgencyPage(context, action);
-    //}
+        return await VerifyPageAsync(() => new YourAgreementsWithTheEducationAndSkillsFundingAgencyPage(context));
+    }
 
     //public AreYouSureYouWantToRemovePage ClickOnRemoveAnOrgFromYourAccountLink()
     //{
