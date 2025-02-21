@@ -310,7 +310,7 @@ public class YouHaveAcceptedTheEmployerAgreementPage(ScenarioContext context) : 
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync("You've accepted the employer agreement");
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("You've accepted the employer agreement");
 
         await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download your accepted agreement" })).ToBeVisibleAsync();
     }

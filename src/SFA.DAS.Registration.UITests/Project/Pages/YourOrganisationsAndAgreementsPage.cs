@@ -68,7 +68,10 @@ public class YourAgreementsWithTheEducationAndSkillsFundingAgencyPage(ScenarioCo
 
     public async Task VerifyIfUpdateTheseDetailsLinkIsHidden()
     {
-        await ShowSection();
+        if (await page.GetByRole(AriaRole.Button, new() { Name = "Show all sections" }).IsVisibleAsync())
+        {
+            await ShowSection();
+        }
 
         await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Update these details" })).ToBeHiddenAsync();
     }
