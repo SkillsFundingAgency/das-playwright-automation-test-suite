@@ -25,11 +25,11 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         {
             await _search_TrainingCourses_ApprenticeworkLocationPage.AccessSearchForTrainingProvider();
             await _fATeHomePage.ViewShortlist();
-            await _fATeHomePage.GoBack();
+            await _fATeHomePage.ReturnToSearch_TrainingCourses_ApprenticeworkLocationPage();
             await _fATeHomePage.ReturnToStartPage();
             await _fATeHomePage.ClickStartNow();
             await _search_TrainingCourses_ApprenticeworkLocationPage.ViewShortlist();
-            await _fATeHomePage.GoBack();
+            await _fATeHomePage.ReturnToSearch_TrainingCourses_ApprenticeworkLocationPage();
             await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
             await _fATeHomePage.ReturnToSearch_TrainingCourses_ApprenticeworkLocationPage();
 
