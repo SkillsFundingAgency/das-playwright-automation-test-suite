@@ -117,7 +117,7 @@ public class InvitationsPage(ScenarioContext context) : RegistrationBasePage(con
 
     public async Task<HomePage> ClickAcceptInviteLink()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Accept invite" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Accept invite" }).ClickAsync();
 
         return await VerifyPageAsync(() => new HomePage(context));
     }

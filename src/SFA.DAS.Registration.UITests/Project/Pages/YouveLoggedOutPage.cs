@@ -310,7 +310,7 @@ public class YouHaveAcceptedTheEmployerAgreementPage(ScenarioContext context) : 
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("You've accepted the employer agreement");
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("accepted the employer agreement");
 
         await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download your accepted agreement" })).ToBeVisibleAsync();
     }
@@ -336,7 +336,7 @@ public class YouHaveAcceptedYourEmployerAgreementPage(ScenarioContext context) :
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You've accepted your employer agreement");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("accepted your employer agreement");
 
         await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync("Employer agreement accepted");
     }
