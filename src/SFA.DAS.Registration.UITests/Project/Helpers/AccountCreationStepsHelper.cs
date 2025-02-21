@@ -116,26 +116,34 @@ public class AccountCreationStepsHelper(ScenarioContext context)
     internal async Task<AddAPAYESchemePage> CreateUserAccount(CreateAnAccountToManageApprenticeshipsPage indexPage, string email) =>
         await RegisterUserAccount(indexPage, email);
 
-    //internal static async Task<HomePage> AddAnotherPayeSchemeToTheAccount(HomePage homePage)
-    //{
-    //    var page = await homePage.GotoPAYESchemesPage();
+    internal static async Task<HomePage> AddAnotherPayeSchemeToTheAccount(HomePage homePage)
+    {
+        var page = await homePage.GotoPAYESchemesPage();
 
-    //    var page1 = await page.ClickAddNewSchemeButton();
+        var page1 = await page.ClickAddNewSchemeButton();
 
-    //    .ContinueToGGSignIn()
-    //    .EnterPayeDetailsAndContinue(1)
-    //    .ClickContinueInConfirmPAYESchemePage()
-    //    .SelectContinueAccountSetupInPAYESchemeAddedPage();
+        var page2 = await page1.ContinueToGGSignIn();
 
-    //}
+        var page3 = await page2.EnterPayeDetailsAndContinue(1);
 
-    //internal static async Task<PAYESchemesPage> RemovePayeSchemeFromTheAccount(HomePage homePage) =>
-    //    homePage
-    //    .GotoPAYESchemesPage()
-    //    .ClickNewlyAddedPayeDetailsLink()
-    //    .ClickRemovePAYESchemeButton()
-    //    .SelectYesRadioButtonAndContinue()
-    //    .VerifyPayeSchemeRemovedInfoMessage();
+        var page4 = await page3.ClickContinueInConfirmPAYESchemePage();
+
+        return await page4.SelectContinueAccountSetupInPAYESchemeAddedPage();
+    }
+
+    internal static async Task RemovePayeSchemeFromTheAccount(HomePage homePage) 
+    {
+        var page = await homePage.GotoPAYESchemesPage();
+
+        var page1 = await page.ClickNewlyAddedPayeDetailsLink();
+
+        var page2 = await page1.ClickRemovePAYESchemeButton();
+
+        var page3 = await page2.SelectYesRadioButtonAndContinue();
+
+        await page3.VerifyPayeSchemeRemovedInfoMessage();
+    }
+        
 
     internal static async Task<HomePage> AddNewAccount(AddAPAYESchemePage addAPAYESchemePage, int index, OrgType orgType = OrgType.Default)
     {

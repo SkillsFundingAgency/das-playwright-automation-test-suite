@@ -77,7 +77,7 @@ public class ConfirmYourUserDetailsPage(ScenarioContext context) : RegistrationB
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new YouVeSuccessfullyAddedUserDetailsPage(context));
+        return await VerifyPageAsync(() => new YouVeSuccessfullyAddedUserDetailsPage(context, updated));
     }
 
     public async Task<StubAddYourUserDetailsPage> ClickChange()
@@ -88,7 +88,7 @@ public class ConfirmYourUserDetailsPage(ScenarioContext context) : RegistrationB
     }
 }
 
-public class YouVeSuccessfullyAddedUserDetailsPage(ScenarioContext context, bool updated = false) : RegistrationBasePage(context)
+public class YouVeSuccessfullyAddedUserDetailsPage(ScenarioContext context, bool updated) : RegistrationBasePage(context)
 {
     private readonly string PageTitle = updated ? "You have successfully changed user details" : "You have successfully added user details";
 
@@ -301,19 +301,19 @@ public class GgSignInPage(ScenarioContext context) : RegistrationBasePage(contex
         return await VerifyPageAsync(() => new SearchForYourOrganisationPage(context));
     }
 
-    //public async Task<ConfirmPAYESchemePage> EnterPayeDetailsAndContinue(int index)
-    //{
-    //    var gatewaydetails = await EnterGateWayCredentialsAndSignIn(index);
+    public async Task<ConfirmPAYESchemePage> EnterPayeDetailsAndContinue(int index)
+    {
+        var gatewaydetails = await EnterGateWayCredentialsAndSignIn(index);
 
-    //    return new ConfirmPAYESchemePage(context, gatewaydetails.Paye);
-    //}
+        return new ConfirmPAYESchemePage(context, gatewaydetails.Paye);
+    }
 
     public async Task SignInWithInvalidDetails()
     {
         await SignInTo(registrationDataHelper.InvalidGGId, registrationDataHelper.InvalidGGPassword);
     }
 
-    //public string GetErrorMessage() => pageInteractionHelper.GetText(ErrorMessageText);
+    public async Task VerifyErrorMessage(string error) => await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync(error, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
 
     private async Task<GatewayCreds> EnterGateWayCredentialsAndSignIn(int index)
     {
@@ -449,5 +449,39 @@ public class EmployerAccountCreatedPage(ScenarioContext context) : EmpAccountCre
         await page.GetByRole(AriaRole.Button, new() { Name = "Go to your employer account" }).ClickAsync();
 
         return await VerifyPageAsync(() => new HomePage(context));
+    }
+}
+public class ConfirmPAYESchemePage(ScenarioContext context, string paye) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Confirm PAYE scheme");
+
+    public async Task<PAYESchemeAddedPage> ClickContinueInConfirmPAYESchemePage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Yes, continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new PAYESchemeAddedPage(context, paye));
+    }
+}
+
+public class PAYESchemeAddedPage(ScenarioContext context, string paye) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"{paye} has been added");
+
+    public async Task<UsingYourGovtGatewayDetailsPage> SelectAddAnotherPAYEScheme()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Add another PAYE scheme" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return new UsingYourGovtGatewayDetailsPage(context);
+    }
+
+    public async Task<HomePage> SelectContinueAccountSetupInPAYESchemeAddedPage()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Return to homepage" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return new HomePage(context);
     }
 }

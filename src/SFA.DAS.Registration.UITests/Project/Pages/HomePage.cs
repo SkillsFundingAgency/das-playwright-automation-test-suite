@@ -1,5 +1,4 @@
-﻿using SFA.DAS.FrameworkHelpers;
-using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+﻿using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 

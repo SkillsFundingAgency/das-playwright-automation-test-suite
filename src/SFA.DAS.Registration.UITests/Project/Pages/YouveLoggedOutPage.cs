@@ -334,11 +334,12 @@ public class YouHaveAcceptedTheEmployerAgreementPage : RegistrationBasePage
         return await VerifyPageAsync(() => new HomePage(context));
     }
 
-    //public YourOrganisationsAndAgreementsPage ClickOnReviewAndAcceptYourOtherAgreementsLink()
-    //{
-    //    formCompletionHelper.Click(ReviewAndAcceptYourOtherAgreementsLink);
-    //    return new YourOrganisationsAndAgreementsPage(context);
-    //}
+    public async Task<YourOrganisationsAndAgreementsPage> ClickOnReviewAndAcceptYourOtherAgreementsLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "review and accept your other agreements" }).ClickAsync();
+
+        return new YourOrganisationsAndAgreementsPage(context);
+    }
 }
 
 public class TheseDetailsAreAlreadyInUsePage(ScenarioContext context) : RegistrationBasePage(context)

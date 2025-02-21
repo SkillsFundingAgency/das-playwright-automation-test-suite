@@ -176,7 +176,7 @@ public class SelectYourOrganisationPage(ScenarioContext context) : RegistrationB
         return await VerifyPageAsync(() => new CheckYourDetailsPage(context));
     }
 
-    //public string GetSearchResultsText() => pageInteractionHelper.GetText(SearchResultsText);
+    public async Task GetSearchResultsText(string resultMessage) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(resultMessage, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
 
     public async Task VerifyOrgAlreadyAddedMessage() => await Assertions.Expect(page.Locator("ol")).ToContainTextAsync("Already added - view my organisations");
     //pageInteractionHelper.VerifyText(pageInteractionHelper.GetText(TextBelowOrgNameInResults(objectContext.GetOrganisationName())), "Already added");
