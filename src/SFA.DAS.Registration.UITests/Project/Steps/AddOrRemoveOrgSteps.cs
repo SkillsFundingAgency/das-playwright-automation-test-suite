@@ -72,7 +72,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
     {
         var page = await SignAgreementFromHomePage();
 
-        await page.ClickOnViewYourAccountButton();
+        await page.ClickOnViewYourAccount();
     }
 
     [When(@"the Employer adds two additional Orgs to the Account")]

@@ -315,9 +315,9 @@ public class YouHaveAcceptedTheEmployerAgreementPage(ScenarioContext context) : 
         await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download your accepted agreement" })).ToBeVisibleAsync();
     }
 
-    public async Task<HomePage> ClickOnViewYourAccountButton()
+    public async Task<HomePage> ClickOnViewYourAccount()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "View your account" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "View your account" }).ClickAsync();
 
         return await VerifyPageAsync(() => new HomePage(context));
     }
