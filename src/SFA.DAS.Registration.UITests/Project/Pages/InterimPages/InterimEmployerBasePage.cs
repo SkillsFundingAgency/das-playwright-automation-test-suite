@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Framework;
+﻿using Azure;
+using SFA.DAS.Framework;
+using SFA.DAS.MongoDb.DataGenerator;
 using System;
 using static SFA.DAS.Registration.UITests.Project.Pages.YouveLoggedOutPage;
 
@@ -157,6 +159,146 @@ public class YourTeamPage(ScenarioContext context, bool navigate = false) : Inte
 
         return await VerifyPageAsync(() => new AccessDeniedPage(context));
     }
+
+    public async Task<CreateInvitationPage> ClickInviteANewMemberButton()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Invite a new member" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new CreateInvitationPage(context));
+    }
+
+    public async Task<ViewTeamMemberPage> ClickViewMemberLink(string email)
+    {
+        await page.GetByRole(AriaRole.Row, new() { Name = email }).GetByLabel("View details").ClickAsync();
+
+        return await VerifyPageAsync(() => new ViewTeamMemberPage(context));
+    }
+
+    public async Task VerifyInvitationResentHeaderInfoMessage()
+    {
+        await VerifyInvitationActionHeader("Invitation resent");
+    }
+
+    public async Task VerifyInvitationCancelledHeaderInfoMessage()
+    {
+        await VerifyInvitationActionHeader("Invitation cancelled");
+    }
+
+    public async Task VerifyTeamMemberRemovedHeaderInfoMessage()
+    {
+        await VerifyInvitationActionHeader("Team member removed");
+
+    }
+    private async Task VerifyInvitationActionHeader(string message) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(message);
+
+}
+
+public class ViewTeamMemberPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(registrationDataHelper.FullName);
+    }
+
+    public async Task<YourTeamPage> ClickResendInvitationButton()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Resend invitation" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourTeamPage(context));
+    }
+
+    public async Task<CancelInvitationPage> ClickCancelInvitationLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Cancel invitation" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new CancelInvitationPage(context));
+    }
+
+    public async Task<RemoveTeamMemberPage> ClickRemoveTeamMemberButton()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Remove team member" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new RemoveTeamMemberPage(context));
+    }
+}
+
+public class RemoveTeamMemberPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Remove team member");
+    }
+
+    public async Task<YourTeamPage> ClickYesRemoveNowButton()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Yes, remove now" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourTeamPage(context));
+    }
+}
+
+public class CancelInvitationPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Cancel invitation");
+    }
+
+    public async Task<YourTeamPage> ClickYesCancelInvitationButton()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Yes, cancel invitation" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourTeamPage(context));
+    }
+
+    public async Task<YourTeamPage> ClickNoDontCancelInvitationLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "No, don't cancel invitation" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourTeamPage(context));
+    }
+}
+
+
+public class CreateInvitationPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Create invitation");
+    }
+
+    public async Task EnterEmailAndFullName(string email)
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).FillAsync(email);
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Full name" }).FillAsync(registrationDataHelper.FullName);
+    }
+
+    public async Task<InvitationSentPage> SelectViewerAccessRadioButtonAndSendInvitation()
+    {
+        await page.Locator("#radio1").Nth(1).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Send invitation" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new InvitationSentPage(context));
+    }
+}
+
+public class InvitationSentPage(ScenarioContext context) : InterimHomeBasePage(context, false)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Invitation sent");
+    }
+
+    public async Task<YourTeamPage> ViewAllTeamMembers()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "View all team members" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourTeamPage(context));
+    }
 }
 
 public class PAYESchemesPage(ScenarioContext context, bool navigate = false) : InterimEmployerBasePage(context, navigate)
@@ -165,21 +307,15 @@ public class PAYESchemesPage(ScenarioContext context, bool navigate = false) : I
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("PAYE schemes");
     }
+    
+    private string SecondPaye => objectContext.GetGatewayPaye(1);
 
-    #region Locators
-    //private static By AddNewSchemeButton => By.Id("addNewPaye");
-    //private By PayeDetailsLink => By.XPath($"//td[contains(text(),'{SecondPaye}')]/following-sibling::td//a");
-    //private static By PAYERemovedHeaderInfo => By.CssSelector("h3.das-notification__heading");
-    //private string SecondPaye => objectContext.GetGatewayPaye(1);
+    public async Task<UsingYourGovtGatewayDetailsPage> ClickAddNewSchemeButton()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Add new scheme" }).ClickAsync();
 
-    #endregion
-
-    //public UsingYourGovtGatewayDetailsPage ClickAddNewSchemeButton()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Add new scheme" }).ClickAsync();
-
-    //    return new UsingYourGovtGatewayDetailsPage(context);
-    //}
+        return await VerifyPageAsync(() => new UsingYourGovtGatewayDetailsPage(context));
+    }
 
     public async Task<AccessDeniedPage> ClickAddNewSchemeButtonAndRedirectedToAccessDeniedPage()
     {
@@ -188,15 +324,47 @@ public class PAYESchemesPage(ScenarioContext context, bool navigate = false) : I
         return await VerifyPageAsync(() => new AccessDeniedPage(context));
     }
 
-    //public PAYESchemeDetailsPage ClickNewlyAddedPayeDetailsLink()
-    //{
-    //    formCompletionHelper.Click(PayeDetailsLink);
-    //    return new PAYESchemeDetailsPage(context);
-    //}
+    public async Task<PAYESchemeDetailsPage> ClickNewlyAddedPayeDetailsLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = $"Details for PAYE scheme {SecondPaye}" }).ClickAsync();
 
-    //public PAYESchemesPage VerifyPayeSchemeRemovedInfoMessage()
-    //{
-    //    VerifyElement(PAYERemovedHeaderInfo, $"You've removed {SecondPaye}");
-    //    return this;
-    //}
+        return await VerifyPageAsync(() => new PAYESchemeDetailsPage(context));
+    }
+
+    public async Task VerifyPayeSchemeRemovedInfoMessage()
+    {
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"You've removed {SecondPaye}");
+    }
+}
+
+public class PAYESchemeDetailsPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("PAYE scheme");
+    }
+
+    public async Task<RemoveThisSchemePage> ClickRemovePAYESchemeButton()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Remove PAYE scheme" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new RemoveThisSchemePage(context));
+    }
+}
+
+public class RemoveThisSchemePage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Remove this scheme?");
+    }
+
+    public async Task<PAYESchemesPage> SelectYesRadioButtonAndContinue()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, remove scheme" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new PAYESchemesPage(context));
+    }
 }

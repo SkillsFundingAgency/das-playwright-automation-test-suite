@@ -278,7 +278,16 @@ public class SignAgreementPage(ScenarioContext context) : RegistrationBasePage(c
         return await VerifyPageAsync(() => new AccessDeniedPage(context));
     }
 
-    public async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAgreement()
+    public async Task<YouHaveAcceptedYourEmployerAgreementPage> SignAgreement()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I accept the agreement" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YouHaveAcceptedYourEmployerAgreementPage(context));
+    }
+
+    public async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAdditionalAgreement()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I accept the agreement" }).CheckAsync();
 
@@ -296,28 +305,40 @@ public class SignAgreementPage(ScenarioContext context) : RegistrationBasePage(c
         return await VerifyPageAsync(() => new CreateYourEmployerAccountPage(context));
     }
 }
-public class YouHaveAcceptedTheEmployerAgreementPage : RegistrationBasePage
+
+public class YouHaveAcceptedTheEmployerAgreementPage(ScenarioContext context) : RegistrationBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You've accepted your employer agreement");
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("accepted the employer agreement");
 
-        await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync("Employer agreement accepted");
+        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download your accepted agreement" })).ToBeVisibleAsync();
     }
 
-    //#region Locators
-    //protected override By ContinueButton => By.LinkText("View your account");
-    //private static By DownloadYourAcceptedAgreementLink => By.LinkText("Download your accepted agreement");
-    //private static By ReviewAndAcceptYourOtherAgreementsLink => By.LinkText("review and accept your other agreements");
-    //#endregion
-
-    public YouHaveAcceptedTheEmployerAgreementPage(ScenarioContext context) : base(context)
+    public async Task<HomePage> ClickOnViewYourAccount()
     {
-        //MultipleVerifyPage(
-        //[
-        //    () => VerifyPage(),
-        //    () => VerifyPage(DownloadYourAcceptedAgreementLink)
-        //]);
+        await page.GetByRole(AriaRole.Link, new() { Name = "View your account" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new HomePage(context));
+    }
+
+    public async Task<YourOrganisationsAndAgreementsPage> ClickOnReviewAndAcceptYourOtherAgreementsLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "review and accept your other agreements" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourOrganisationsAndAgreementsPage(context));
+    }
+}
+
+
+
+public class YouHaveAcceptedYourEmployerAgreementPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("accepted your employer agreement");
+
+        await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync("Employer agreement accepted");
     }
 
     public async Task<CreateYourEmployerAccountPage> SelectContinueToCreateYourEmployerAccount()
@@ -333,12 +354,6 @@ public class YouHaveAcceptedTheEmployerAgreementPage : RegistrationBasePage
 
         return await VerifyPageAsync(() => new HomePage(context));
     }
-
-    //public YourOrganisationsAndAgreementsPage ClickOnReviewAndAcceptYourOtherAgreementsLink()
-    //{
-    //    formCompletionHelper.Click(ReviewAndAcceptYourOtherAgreementsLink);
-    //    return new YourOrganisationsAndAgreementsPage(context);
-    //}
 }
 
 public class TheseDetailsAreAlreadyInUsePage(ScenarioContext context) : RegistrationBasePage(context)

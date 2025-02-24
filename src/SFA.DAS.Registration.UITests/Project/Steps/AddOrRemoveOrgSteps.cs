@@ -1,10 +1,8 @@
-﻿
-using NUnit.Framework;
-using SFA.DAS.Registration.UITests.Project.Helpers;
+﻿using SFA.DAS.Registration.UITests.Project.Helpers;
 using SFA.DAS.Registration.UITests.Project.Pages;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
 
-namespace SFA.DAS.Registration.UITests.Project.Tests.StepDefinitions;
+namespace SFA.DAS.Registration.UITests.Project.Steps;
 
 [Binding]
 public class AddOrRemoveOrgSteps(ScenarioContext context)
@@ -30,14 +28,14 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
     }
 
     [Then(@"the new Org added is shown in the Account Organisations list")]
-    public async Task ThenTheNewOrgAddedIsShownInTheAccountOrganisationsList() 
+    public async Task ThenTheNewOrgAddedIsShownInTheAccountOrganisationsList()
     {
         var page = await _checkYourDetailsPage.ClickYesContinueButton();
 
         _yourOrganisationsAndAgreementsPage = await page.GoToYourOrganisationsAndAgreementsPage();
 
         await _yourOrganisationsAndAgreementsPage.VerifyNewlyAddedOrgIsPresent();
-    } 
+    }
 
     [Then(@"the Employer is able check the details of the Charity Org added are displayed in the 'Check your details' page and Continue")]
     public async Task ThenTheEmployerIsAbleToCheckTheDetailsOfTheCharityOrgAddedAreDisplayedInThePageAndContinue()
@@ -61,10 +59,10 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
     //    var page = await _yourOrganisationsAndAgreementsPage.ClickOnRemoveAnOrgFromYourAccountLink();
 
     //    var page1 = await page.SelectYesRadioOptionAndClickContinueInRemoveOrganisationPage();
-        
+
     //    await page1.VerifyOrgRemovedMessageInHeader();
     //}
-        
+
 
     [When(@"the Employer adds another Org to the Account")]
     public async Task WhenTheEmployerAddsAnotherOrgToTheAccount() => await AddOrgToTheAccount(OrgType.Company);
@@ -73,10 +71,9 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
     public async Task ThenTheSignAgreementJourneyFromTheAccountHomePageShowsAcceptedAgreementPage()
     {
         var page = await SignAgreementFromHomePage();
-        
-        await page.ClickOnViewYourAccountButton();
+
+        await page.ClickOnViewYourAccount();
     }
-        
 
     [When(@"the Employer adds two additional Orgs to the Account")]
     public async Task WhenTheEmployerAddsTwoAdditionalOrgsToTheAccount()
@@ -86,13 +83,13 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         await AddOrgToTheAccount(OrgType.Charity);
     }
 
-    //[Then(@"the Sign Agreement journey from the Account home page shows Accepted Agreement page with link to review other pending agreements")]
-    //public async Task ThenTheSignAgreementJourneyFromTheAccountHomePageShowsAcceptedAgreementPageWithLinkToReviewOtherPendingAgreements()
-    //{
-    //    var page = await SignAgreementFromHomePage();
+    [Then(@"the Sign Agreement journey from the Account home page shows Accepted Agreement page with link to review other pending agreements")]
+    public async Task ThenTheSignAgreementJourneyFromTheAccountHomePageShowsAcceptedAgreementPageWithLinkToReviewOtherPendingAgreements()
+    {
+        var page = await SignAgreementFromHomePage();
 
-    //    await page.ClickOnReviewAndAcceptYourOtherAgreementsLink();
-    //}
+        await page.ClickOnReviewAndAcceptYourOtherAgreementsLink();
+    }
 
     private async Task VerifyOrgDetails(string orgNumber, string OrgName)
     {
@@ -110,5 +107,5 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         _homePage = await page.GoToHomePage();
     }
 
-    private async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAgreementFromHomePage() => await AccountCreationStepsHelper.SignAgreementFromHomePage(_homePage);
+    private async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAgreementFromHomePage() => await AccountCreationStepsHelper.SignAdditionalAgreementFromHomePage(_homePage);
 }

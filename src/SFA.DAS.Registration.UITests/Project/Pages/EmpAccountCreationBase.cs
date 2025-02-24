@@ -1,18 +1,15 @@
-﻿using SFA.DAS.Registration.UITests.Project;
-using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
+﻿using SFA.DAS.Login.Service.Project;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 
 public abstract class EmpAccountCreationBase : RegistrationBasePage
 {
-    protected EmpAccountCreationBase(ScenarioContext context) : base(context)
+    private readonly LoggedInAccountUser loggedInAccountUser;
+
+    protected EmpAccountCreationBase(ScenarioContext context) : base(context) => loggedInAccountUser = objectContext.GetLoginCredentials();
+
+    protected async Task SetEasNewUser()
     {
-        VerifyPage();
-
-        var _registrationSqlDataHelper = context.Get<RegistrationSqlDataHelper>();
-
-        var loggedInAccountUser = objectContext.GetLoginCredentials();
-
-        //objectContext.SetOrUpdateUserCreds(loggedInAccountUser.Username, loggedInAccountUser.IdOrUserRef, _registrationSqlDataHelper.CollectAccountDetails(loggedInAccountUser.Username));
+        await context.SetEasLoginUser([new NewUser { Username = loggedInAccountUser.Username, IdOrUserRef = loggedInAccountUser.IdOrUserRef }]);
     }
 }
