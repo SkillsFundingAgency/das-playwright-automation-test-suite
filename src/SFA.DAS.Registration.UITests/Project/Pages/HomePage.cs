@@ -1,4 +1,6 @@
 ﻿using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+using System;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 
@@ -63,95 +65,122 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     //    VerifyElement(StartNowButton);
     //}
 
-    //public void VerifyLevyDeclarationDueTaskMessageShown()
-    //{
-    //    var messageText = $"Levy declaration due by 19 {DateTime.Now:MMMM}";
-    //    var xpath = $"//span[contains(text(), '{messageText}')]";
-    //    var levyDeclarationDue = By.XPath(xpath);
+    public async Task VerifyLevyDeclarationDueTaskMessageShown()
+    {
+        var messageText = $"Levy declaration due by 19 {DateTime.Now:MMMM}";
 
-    //    VerifyElement(levyDeclarationDue);
-    //}
+        await VerifyTaskList(messageText);
+    }
 
-    //public void VerifyApprenticeChangeToReviewMessageShown(int numberOfChanges)
-    //{
-    //    var messageText = numberOfChanges == 1 ? "1 apprentice change to review" : $"{numberOfChanges} apprentice changes to review";
-    //    var xpath = $"//span[contains(text(), '{messageText}')]";
-    //    var apprenticeChangeToReviewMessage = By.XPath(xpath);
+    public async Task VerifyApprenticeChangeToReviewMessageShown(int numberOfChanges)
+    {
+        var messageText = numberOfChanges == 1 ? "1 apprentice change to review" : $"{numberOfChanges} apprentice changes to review";
 
-    //    VerifyElement(apprenticeChangeToReviewMessage);
-    //}
+        await VerifyTaskList(messageText);
+    }
 
-    //public void VerifyCohortsReadyToReviewMessageShown(int numberOfChanges)
-    //{
-    //    var messageText = numberOfChanges == 1 ? "1 cohort ready for approval" : $"{numberOfChanges} cohorts ready for approval";
-    //    var xpath = $"//span[contains(text(), '{messageText}')]";
-    //    var cohortsToReviewMessage = By.XPath(xpath);
+    public async Task VerifyCohortsReadyToReviewMessageShown(int numberOfChanges)
+    {
+        var messageText = numberOfChanges == 1 ? "1 apprentice request ready for review" : $"{numberOfChanges} apprentice requests ready for review";
 
-    //    VerifyElement(cohortsToReviewMessage);
-    //}
+        await VerifyTaskList(messageText);
+    }
 
-    //public void VerifyTransferPledgeApplicationsToReviewMessageShown(int numberOfChanges)
-    //{
-    //    var messageText = numberOfChanges == 1 ? "1 transfer pledge application awaiting your approval" : $"{numberOfChanges} transfer pledge applications awaiting your approval";
-    //    var xpath = $"//span[contains(text(), '{messageText}')]";
-    //    var transferApplicationsToReviewMessage = By.XPath(xpath);
+    public async Task VerifyTransferPledgeApplicationsToReviewMessageShown(int numberOfChanges)
+    {
+        var messageText = numberOfChanges == 1 ? "1 transfer pledge application awaiting your approval" : $"{numberOfChanges} transfer pledge applications awaiting your approval";
 
-    //    VerifyElement(transferApplicationsToReviewMessage);
-    //}
+        await VerifyTaskList(messageText);
+    }
 
-    //public void VerifyTransferRequestReceivedMessageShown()
-    //{
-    //    var xpath = "//span[contains(text(), 'Transfer request received')]";
-    //    var transferRequestMessage = By.XPath(xpath);
+    public async Task VerifyTransferRequestReceivedMessageShown()
+    {
+        await VerifyTaskList("Transfer request received");
+    }
 
-    //    VerifyElement(transferRequestMessage);
-    //}
+    public async Task VerifyTransferConnectionRequestsMessageShown(int numberOfChanges)
+    {
+        var messageText = numberOfChanges == 1 ? "1 connection request to review" : $"{numberOfChanges} connection requests to review";
 
-    //public void VerifyTransferConnectionRequestsMessageShown(int numberOfChanges)
-    //{
-    //    var messageText = numberOfChanges == 1 ? "1 connection request to review" : $"{numberOfChanges} connection requests to review";
-    //    var xpath = $"//span[contains(text(), '{messageText}')]";
-    //    var cohortsToReviewMessage = By.XPath(xpath);
+        await VerifyTaskList(messageText);
+    }
 
-    //    VerifyElement(cohortsToReviewMessage);
-    //}
+    private async Task VerifyTaskList(string messageText)
+    {
+        await Assertions.Expect(page.GetByLabel("Tasks").GetByRole(AriaRole.List)).ToContainTextAsync(messageText);
+    }
 
-    //public ManageYourApprenticesPage ClickViewChangesForApprenticeChangesToReview(int numberOfChanges)
-    //{
-    //    var linkText = numberOfChanges == 1 ? "change" : "changes";
-    //    var apprenticeChangeToReviewLink = By.XPath($"//a[contains(., 'View') and contains(., 'apprentice') and contains(., '{linkText}')]");
+    public async Task<ManageYourApprenticesPage> ClickViewChangesForApprenticeChangesToReview(int numberOfChanges)
+    {
+        var linkText = numberOfChanges == 1 ? "change" : "changes";
 
-    //    formCompletionHelper.Click(apprenticeChangeToReviewLink);
-    //    return new ManageYourApprenticesPage(context);
-    //}
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = $"apprentice {linkText} to review" }).GetByRole(AriaRole.Link).ClickAsync();
 
-    //public ApprenticeRequestsPage ClickViewCohortsForCohortsReadyToReview(int numberOfChanges)
-    //{
-    //    var linkText = numberOfChanges == 1 ? "View cohort" : "View cohorts";
-    //    var cohortsToApproveLink = By.LinkText(linkText);
+        return await VerifyPageAsync(() => new ManageYourApprenticesPage(context));
+    }
 
-    //    formCompletionHelper.Click(cohortsToApproveLink);
-    //    return new ApprenticeRequestsPage(context);
-    //}
+    public async Task<ApprenticeRequestsPage> ClickViewCohortsForCohortsReadyToReview(int numberOfChanges)
+    {
+        //var linkText = numberOfChanges == 1 ? "View cohort" : "View cohorts";
 
-    //public TransfersPage ClickViewDetailsForTransferRequests()
-    //{
-    //    formCompletionHelper.Click(TransferRequestViewDetailsLink);
-    //    return new TransfersPage(context);
-    //}
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "ready for review" }).GetByRole(AriaRole.Link).ClickAsync();
 
-    //public TransfersPage ClickViewDetailsForTransferConnectionRequests()
-    //{
-    //    formCompletionHelper.Click(TransferConnectionRequestViewDetailsLink);
-    //    return new TransfersPage(context);
-    //}
+        return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
+    }
 
-    //public MyTransferPledgesPage ClickViewTransferPledgeApplications(int numberOfChanges)
-    //{
-    //    var linkText = numberOfChanges == 1 ? "application" : "applications";
-    //    var transferPledgeApplicationsLink = By.XPath($"//a[contains(., 'View') and contains(., 'transfer pledge') and contains(., '{linkText}')]");
+    public async Task<TransfersPage> ClickViewDetailsForTransferRequests()
+    {
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "Transfer request received" }).GetByRole(AriaRole.Link).ClickAsync();
 
-    //    formCompletionHelper.Click(transferPledgeApplicationsLink);
-    //    return new MyTransferPledgesPage(context);
-    //}
+        return await VerifyPageAsync(() => new TransfersPage(context));
+    }
+
+    public async Task<TransfersPage> ClickViewDetailsForTransferConnectionRequests()
+    {
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "connection requests to review" }).GetByRole(AriaRole.Link).ClickAsync();
+
+        return await VerifyPageAsync(() => new TransfersPage(context));
+    }
+
+    public async Task<MyTransferPledgesPage> ClickViewTransferPledgeApplications(int numberOfChanges)
+    {
+        var linkText = numberOfChanges == 1 ? "application" : "applications";
+
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfer pledge" }).GetByRole(AriaRole.Link).ClickAsync();
+
+        return await VerifyPageAsync(() => new MyTransferPledgesPage(context));
+    }
+}
+
+public class ManageYourApprenticesPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprentices");
+    }
+}
+
+
+public class ApprenticeRequestsPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
+    }
+}
+
+public class TransfersPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Transfers");
+    }
+}
+
+public class MyTransferPledgesPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("My transfer pledges");
+    }
 }
