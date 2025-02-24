@@ -545,12 +545,12 @@ public abstract class PermissionBasePageForTrainingProviderPage(ScenarioContext 
             await page.GetByRole(AriaRole.Radio, new() { Name = "Yes", Exact = true }).CheckAsync();
         }
 
-        if (permission == RecruitApprenticePermissions.YesRecruitApprentices)
+        if (permission == RecruitApprenticePermissions.YesRecruitApprenticesButEmployerWillReview)
         {
             await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, but I want to review" }).CheckAsync();
         }
 
-        if (permission == RecruitApprenticePermissions.YesRecruitApprentices)
+        if (permission == RecruitApprenticePermissions.NoToRecruitApprentices)
         {
             await page.GetByRole(AriaRole.Group, new() { Name = "Recruit apprentices" }).GetByLabel("No").CheckAsync();
         }
