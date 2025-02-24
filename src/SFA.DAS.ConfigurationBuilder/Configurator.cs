@@ -37,9 +37,10 @@ namespace SFA.DAS.ConfigurationBuilder
         private static IConfigurationRoot InitializeConfig()
         {
             var builder = ConfigurationBuilder()
-                .AddMandatoryJsonFiles(
+                .AddSingleJsonFiles(
                 [
-                    "Config"
+                    ("Config", true),
+                    ("ProviderConfig", false)
                 ])
                 .AddProjectJsonFiles(
                 [
@@ -60,17 +61,19 @@ namespace SFA.DAS.ConfigurationBuilder
             return builder.Build();
         }
 
-        private static IConfigurationBuilder AddMandatoryJsonFiles(this IConfigurationBuilder builder, List<string> files)
+        private static IConfigurationBuilder AddSingleJsonFiles(this IConfigurationBuilder builder, List<(string file, bool optional)> files)
         {
-            foreach (var file in files)
+            foreach ((string file, bool optional) in files)
             {
                 var path = FileHelper.GetSingleConfigJson(file);
 
-                builder.AddJsonFile(path, true);
+                builder.AddJsonFile(path, optional);
             }
 
             return builder;
         }
+
+
 
         private static IConfigurationBuilder AddProjectJsonFiles(this IConfigurationBuilder builder, List<string> files)
         {
