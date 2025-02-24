@@ -46,6 +46,8 @@ public class ProviderPermissionLevyUser : EasAccountUser { }
 
 public class AgreementNotSignedTransfersUser : EasAccountUser { }
 
+public class NewUser : EasAccountUser { }
+
 public class LevyUser : EasAccountUser { }
 
 public class NonLevyUser : EasAccountUser { }

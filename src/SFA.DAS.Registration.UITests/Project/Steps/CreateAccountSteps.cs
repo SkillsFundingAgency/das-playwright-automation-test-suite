@@ -91,8 +91,8 @@ public class CreateAccountSteps
         await _gGSignInPage.SignInWithInvalidDetails();
     }
 
-    //[Then(@"the '(.*)' error message is shown")]
-    //public async Task ThenTheErrorMessageIsShown(string error) => Assert.AreEqual(error, _gGSignInPage.GetErrorMessage());
+    [Then(@"the '(.*)' error message is shown")]
+    public async Task ThenTheErrorMessageIsShown(string error) => await _gGSignInPage.VerifyErrorMessage(error);
 
     [When(@"the User adds valid PAYE details on Gateway Sign In Page")]
     public async Task WhenTheUserAddsValidPAYEDetailsOnGatewaySignInPage() => _searchForYourOrganisationPage = await _gGSignInPage.SignInTo(0);
@@ -115,11 +115,11 @@ public class CreateAccountSteps
     {
         _selectYourOrganisationPage = await _searchForYourOrganisationPage.SearchForAnOrganisation(_registrationDataHelper.InvalidCompanyNumber);
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new SelectYourOrganisationPage(_context));
+        return _selectYourOrganisationPage = await VerifyPageHelper.VerifyPageAsync(() => new SelectYourOrganisationPage(_context));
     }
 
-    //[Then(@"the '(.*)' message is shown")]
-    //public async Task ThenTheMessageIsShown(string resultMessage) => Assert.AreEqual(resultMessage, await _selectYourOrganisationPage.GetSearchResultsText());
+    [Then(@"the '(.*)' message is shown")]
+    public async Task ThenTheMessageIsShown(string resultMessage) => await _selectYourOrganisationPage.GetSearchResultsText(resultMessage);
 
     [Then(@"the Employer is able to Sign the Agreement and view the Home page")]
     [When(@"the Employer is able to Sign the Agreement")]
@@ -380,22 +380,27 @@ public class CreateAccountSteps
         _checkYourDetailsPage = await AccountCreationStepsHelper.SearchAndSelectOrg(_searchForYourOrganisationPage, OrgType.Company);
     }
 
-    //[Then(@"the User is able to choose a different Company by clicking on Change Organisation")]
-    //public async Task ThenTheUserIsAbleToChooseADifferentCompanyByClickingOnChangeOrganisation()
-    //{
-    //    _searchForYourOrganisationPage = _checkYourDetailsPage.ClickOrganisationChangeLink();
-    //    _checkYourDetailsPage = AccountCreationStepsHelper.SearchAndSelectOrg(_searchForYourOrganisationPage, OrgType.Company2);
-    //    Assert.AreEqual(_objectContext.GetOrganisationName(), _checkYourDetailsPage.GetOrganisationName());
-    //}
+    [Then(@"the User is able to choose a different Company by clicking on Change Organisation")]
+    public async Task ThenTheUserIsAbleToChooseADifferentCompanyByClickingOnChangeOrganisation()
+    {
+        _searchForYourOrganisationPage = await _checkYourDetailsPage.ClickOrganisationChangeLink();
 
-    //[Then(@"the User is able to choose a different PAYE scheme by clicking on Change PAYE scheme and complete registation journey")]
-    //public async Task ThenTheUserIsAbleToChooseADifferentPAYESchemeByClickingOnChangePAYESchemeAndCompleteRegistationJourney()
-    //{
-    //    _addAPAYESchemePage = _checkYourDetailsPage.ClickPayeSchemeChangeLink();
-    //    _searchForYourOrganisationPage = AccountCreationStepsHelper.AddADifferentPaye(_addAPAYESchemePage);
-    //    _checkYourDetailsPage = AccountCreationStepsHelper.SearchAndSelectOrg(_searchForYourOrganisationPage, OrgType.Company2);
-    //    Assert.AreEqual(_objectContext.GetGatewayPaye(1), await _checkYourDetailsPage.GetPayeScheme());
-    //}
+        _checkYourDetailsPage = await AccountCreationStepsHelper.SearchAndSelectOrg(_searchForYourOrganisationPage, OrgType.Company2);
+
+        await _checkYourDetailsPage.VerifyDetails(_objectContext.GetOrganisationName());
+    }
+
+    [Then(@"the User is able to choose a different PAYE scheme by clicking on Change PAYE scheme and complete registation journey")]
+    public async Task ThenTheUserIsAbleToChooseADifferentPAYESchemeByClickingOnChangePAYESchemeAndCompleteRegistationJourney()
+    {
+        _addAPAYESchemePage = await _checkYourDetailsPage.ClickPayeSchemeChangeLink();
+
+        _searchForYourOrganisationPage = await AccountCreationStepsHelper.AddADifferentPaye(_addAPAYESchemePage);
+
+        _checkYourDetailsPage = await AccountCreationStepsHelper.SearchAndSelectOrg(_searchForYourOrganisationPage, OrgType.Company2);
+
+        await _checkYourDetailsPage.VerifyDetails(_objectContext.GetGatewayPaye(1));
+    }
 
     [When(@"the Employer logsout of the Account")]
     public async Task WhenTheEmployerLogsoutOfTheAccount() => _indexPage = await _accountCreationStepsHelper.SignOut();
@@ -410,14 +415,14 @@ public class CreateAccountSteps
         await AddOrganisationTypeDetails(OrgType.PublicSector);
     }
 
-    //[Then(@"the Employer is able to Add Another NonLevy PAYE scheme to the Account")]
-    //[Then(@"the Employer is able to Add Another Levy PAYE scheme to the Account")]
-    //public async Task ThenTheEmployerIsAbleToAddAnotherPAYESchemeToTheAccount() =>
-    //    _homePage = AccountCreationStepsHelper.AddAnotherPayeSchemeToTheAccount(_homePage);
+    [Then(@"the Employer is able to Add Another NonLevy PAYE scheme to the Account")]
+    [Then(@"the Employer is able to Add Another Levy PAYE scheme to the Account")]
+    public async Task ThenTheEmployerIsAbleToAddAnotherPAYESchemeToTheAccount() =>
+        _homePage = await AccountCreationStepsHelper.AddAnotherPayeSchemeToTheAccount(_homePage);
 
-    //[Then(@"the Employer is able to Remove the second PAYE scheme added from the Account")]
-    //public async Task ThenTheEmployerIsAbleToRemoveTheSecondPAYESchemeAddedFromTheAccount() =>
-    //    AccountCreationStepsHelper.RemovePayeSchemeFromTheAccount(_homePage);
+    [Then(@"the Employer is able to Remove the second PAYE scheme added from the Account")]
+    public async Task ThenTheEmployerIsAbleToRemoveTheSecondPAYESchemeAddedFromTheAccount() => await 
+        AccountCreationStepsHelper.RemovePayeSchemeFromTheAccount(_homePage);
 
     [Then(@"the Employer is able to add another Account with (Company|PublicSector|Charity) Type Org to the same user login")]
     public async Task ThenTheEmployerIsAbleToAddAnotherAccountToTheSameUserLogin(OrgType orgType) =>
