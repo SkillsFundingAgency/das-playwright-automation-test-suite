@@ -456,7 +456,9 @@ public class EnterYourTrainingProviderNameReferenceNumberUKPRNPage(ScenarioConte
 
     private async Task EnterATrainingProvider(ProviderConfig providerConfig)
     {
-        await page.Locator("#SearchTerm").FillAsync(providerConfig.Ukprn);
+        await page.Locator("#SearchTerm").PressSequentiallyAsync(providerConfig.Ukprn, new() { Delay = 1000 });
+
+        await Task.Delay(1000);
 
         await page.GetByRole(AriaRole.Option, new() { Name = providerConfig.Ukprn }).ClickAsync();
 
