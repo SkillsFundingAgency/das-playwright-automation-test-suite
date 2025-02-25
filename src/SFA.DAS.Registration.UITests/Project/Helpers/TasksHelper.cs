@@ -49,9 +49,9 @@ public class TasksHelper(ScenarioContext context)
         return await page.GoToHomePage();
     }
 
-    public static async Task<HomePage> ClickViewCohortsToReviewLink(HomePage homePage, int numberOfChanges)
+    public static async Task<HomePage> ClickViewCohortsToReviewLink(HomePage homePage)
     {
-        var page = await homePage.ClickViewCohortsForCohortsReadyToReview(numberOfChanges);
+        var page = await homePage.ClickViewCohortsForCohortsReadyToReview();
 
         return await page.GoToHomePage();
     }
@@ -70,9 +70,9 @@ public class TasksHelper(ScenarioContext context)
         return await page.GoToHomePage();
     }
 
-    public static async Task<HomePage> ClickTransferPledgeApplicationsLink(HomePage homePage, int numberOfChanges)
+    public static async Task<HomePage> ClickTransferPledgeApplicationsLink(HomePage homePage)
     {
-        var page = await homePage.ClickViewTransferPledgeApplications(numberOfChanges);
+        var page = await homePage.ClickViewTransferPledgeApplications();
 
         return await page.GoToHomePage();
     }

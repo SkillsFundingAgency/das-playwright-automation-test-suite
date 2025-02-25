@@ -109,9 +109,7 @@ public class TasksSteps
     [Then("'View cohorts' link should navigate user to 'Apprentice Requests' page")]
     public async Task ThenViewCohortsReadyToReviewNavigatesToApprenticeRequestsPage()
     {
-        var tasks = GetTaskQueryResult();
-
-        _homePage = await TasksHelper.ClickViewCohortsToReviewLink(_homePage, tasks.NumberOfCohortsReadyToReview);
+        _homePage = await TasksHelper.ClickViewCohortsToReviewLink(_homePage);
     }
 
     [When("there is pending Transfer request ready for approval")]
@@ -174,15 +172,14 @@ public class TasksSteps
     public async Task ThenDisplayNumberTransferPledgeApplicationsToReview()
     {
         var tasks = GetTaskQueryResult();
+
         await _homePage.VerifyTransferPledgeApplicationsToReviewMessageShown(tasks.NumberTransferPledgeApplicationsToReview);
     }
 
     [Then("'View applications' link should navigate user to 'My Transfer Pledges' page")]
     public async Task ThenViewTransferPledgeApplicationsNavigatesToMyTransfersPage()
     {
-        var tasks = GetTaskQueryResult();
-
-        _homePage = await TasksHelper.ClickTransferPledgeApplicationsLink(_homePage, tasks.NumberOfCohortsReadyToReview);
+        _homePage = await TasksHelper.ClickTransferPledgeApplicationsLink(_homePage);
     }
 
 }

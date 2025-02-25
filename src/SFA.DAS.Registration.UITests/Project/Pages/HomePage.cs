@@ -112,10 +112,8 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         return await VerifyPageAsync(() => new ManageYourApprenticesPage(context));
     }
 
-    public async Task<ApprenticeRequestsPage> ClickViewCohortsForCohortsReadyToReview(int numberOfChanges)
+    public async Task<ApprenticeRequestsPage> ClickViewCohortsForCohortsReadyToReview()
     {
-        //var linkText = numberOfChanges == 1 ? "View cohort" : "View cohorts";
-
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "ready for review" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
@@ -135,10 +133,8 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         return await VerifyPageAsync(() => new TransfersPage(context));
     }
 
-    public async Task<MyTransferPledgesPage> ClickViewTransferPledgeApplications(int numberOfChanges)
+    public async Task<MyTransferPledgesPage> ClickViewTransferPledgeApplications()
     {
-        var linkText = numberOfChanges == 1 ? "application" : "applications";
-
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfer pledge" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new MyTransferPledgesPage(context));
