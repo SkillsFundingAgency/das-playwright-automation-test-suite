@@ -1,12 +1,8 @@
-﻿using NUnit.Framework;
-using SFA.DAS.Framework;
-using SFA.DAS.MongoDb.DataGenerator;
-using SFA.DAS.Registration.UITests.Project;
+﻿
 using SFA.DAS.Registration.UITests.Project.Helpers;
 using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.Registration.UITests.Project.Pages;
 using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
-using SFA.DAS.UI.FrameworkHelpers;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
 
 namespace SFA.DAS.Registration.UITests.Project.Steps;
@@ -212,7 +208,7 @@ public class CreateAccountSteps
     public async Task WhenSignsTheAgreementFromAccountHomePagePanel()
     {
         var page = await AccountCreationStepsHelper.SignAgreementFromHomePage(_homePage);
-        
+
         await page.ClickOnViewYourAccountButton();
     }
 
@@ -220,7 +216,7 @@ public class CreateAccountSteps
     public async Task ThenTaskLinkIsDisplayedUnderTasksPane()
     {
         var page = await VerifyPageHelper.VerifyPageAsync(() => new TasksHomePage(_context));
-        
+
         await page.VerifyStartAddingApprenticesNowTaskLink();
     }
 
@@ -269,10 +265,10 @@ public class CreateAccountSteps
 
         _checkYourDetailsPage = await page.EnterAornAndPayeDetailsForSingleOrgScenarioAndContinue();
     }
-        
+
 
     [Then(@"choosing to change the PAYE scheme displays 'Enter your PAYE scheme details' page")]
-    public async Task ThenChoosingToChangeThePAYESchemeDisplaysEnterYourPAYESchemeDetailsPage() 
+    public async Task ThenChoosingToChangeThePAYESchemeDisplaysEnterYourPAYESchemeDetailsPage()
     {
         var page = await _checkYourDetailsPage.ClickPayeSchemeChangeLink();
 
@@ -316,7 +312,7 @@ public class CreateAccountSteps
                 break;
             case "BlankPayeValidAorn":
                 await _tprSqlDataHelper.CreateSingleOrgAornData();
-                
+
                 await _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue(_registrationDataHelper.AornNumber, "");
 
                 await _enterYourPAYESchemeDetailsPage.VerifyErrorMessageAbovePayeTextBox(blankPayeFieldErrorMessage);
@@ -426,7 +422,7 @@ public class CreateAccountSteps
         _homePage = await AccountCreationStepsHelper.AddAnotherPayeSchemeToTheAccount(_homePage);
 
     [Then(@"the Employer is able to Remove the second PAYE scheme added from the Account")]
-    public async Task ThenTheEmployerIsAbleToRemoveTheSecondPAYESchemeAddedFromTheAccount() => await 
+    public async Task ThenTheEmployerIsAbleToRemoveTheSecondPAYESchemeAddedFromTheAccount() => await
         AccountCreationStepsHelper.RemovePayeSchemeFromTheAccount(_homePage);
 
     [Then(@"the Employer is able to add another Account with (Company|PublicSector|Charity) Type Org to the same user login")]
@@ -447,7 +443,7 @@ public class CreateAccountSteps
         await AddOrganisationTypeDetails(orgType);
     }
 
-    private async Task EnterInvalidAornAndPaye() => 
+    private async Task EnterInvalidAornAndPaye() =>
         await _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue(AornDataHelper.InvalidAornNumber, RegistrationDataHelper.InvalidPaye);
 
     private async Task<SearchForYourOrganisationPage> CreateAnUserAcountAndAddPaye()
@@ -465,7 +461,7 @@ public class CreateAccountSteps
 
         return _searchForYourOrganisationPage = await page1.SignInTo(payeIndex);
     }
-        
+
 
     private async Task<HomePage> OpenAccount(string orgName)
     {

@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Login.Service.Project;
-
-namespace SFA.DAS.Registration.UITests.Project.Pages;
+﻿namespace SFA.DAS.Registration.UITests.Project.Pages;
 
 public abstract class EmpAccountCreationBase : RegistrationBasePage
 {

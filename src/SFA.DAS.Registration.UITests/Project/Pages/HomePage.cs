@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 using System;
-using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 

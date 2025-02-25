@@ -1,12 +1,6 @@
-﻿using NUnit.Framework;
-using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
-using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+﻿using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
-using System.Reflection.PortableExecutable;
-using System;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
-using static SFA.DAS.Registration.UITests.Project.Pages.YouveLoggedOutPage;
-using Azure;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 
@@ -19,7 +13,7 @@ public class ReviewYourDetailsPage(ScenarioContext context) : RegistrationBasePa
 
     public async Task VerifyInfoTextInReviewYourDetailsPage(string expectedText)
     {
-        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(expectedText, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(expectedText, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
     }
 
     public async Task<DetailsUpdatedPage> SelectUpdateMyDetailsRadioOptionAndContinueInReviewYourDetailsPage()
@@ -49,7 +43,6 @@ public class DetailsUpdatedPage(ScenarioContext context) : RegistrationBasePage(
 
     }
 }
-
 
 public class YourAgreementsWithTheEducationAndSkillsFundingAgencyPage(ScenarioContext context) : RegistrationBasePage(context)
 {
@@ -106,7 +99,7 @@ public class YourOrganisationsAndAgreementsPage(ScenarioContext context, bool na
         await Assertions.Expect(page.Locator("tbody")).ToContainTextAsync(objectContext.GetOrganisationName());
     }
 
-    public async Task<YourAgreementsWithTheEducationAndSkillsFundingAgencyPage> ClickViewAgreementLink() 
+    public async Task<YourAgreementsWithTheEducationAndSkillsFundingAgencyPage> ClickViewAgreementLink()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "View all agreements" }).ClickAsync();
 
@@ -127,7 +120,7 @@ public class YourOrganisationsAndAgreementsPage(ScenarioContext context, bool na
         return await VerifyPageAsync(() => new AccessDeniedPage(context));
     }
 
-    public async Task VerifyRemoveLinkHidden() 
+    public async Task VerifyRemoveLinkHidden()
     {
         await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Remove organisation" })).ToBeHiddenAsync();
     }
@@ -246,7 +239,7 @@ public class SelectYourOrganisationPage(ScenarioContext context) : RegistrationB
         return await VerifyPageAsync(() => new CheckYourDetailsPage(context));
     }
 
-    public async Task GetSearchResultsText(string resultMessage) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(resultMessage, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
+    public async Task GetSearchResultsText(string resultMessage) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(resultMessage, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
 
     public async Task VerifyOrgAlreadyAddedMessage() => await Assertions.Expect(page.Locator("ol")).ToContainTextAsync("Already added - view my organisations");
     //pageInteractionHelper.VerifyText(pageInteractionHelper.GetText(TextBelowOrgNameInResults(objectContext.GetOrganisationName())), "Already added");
@@ -325,7 +318,7 @@ public class CheckYourDetailsPage(ScenarioContext context) : RegistrationBasePag
         return await VerifyPageAsync(() => new AddAPAYESchemePage(context));
     }
 
-    public async Task VerifyDetails(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message, new LocatorAssertionsToContainTextOptions{IgnoreCase = true});
+    public async Task VerifyDetails(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
 
     public async Task VerifyInvalidAornAndPayeErrorMessage(string message) => await Assertions.Expect(page.GetByRole(AriaRole.Rowgroup)).ToContainTextAsync(message);
 

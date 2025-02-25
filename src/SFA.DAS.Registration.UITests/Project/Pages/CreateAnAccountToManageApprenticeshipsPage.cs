@@ -15,7 +15,7 @@ public class CreateAnAccountToManageApprenticeshipsPage(ScenarioContext context)
 
         var cookieLocator = page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" });
 
-        if (await cookieLocator.CountAsync() > 0 && await cookieLocator.IsVisibleAsync()) 
+        if (await cookieLocator.CountAsync() > 0 && await cookieLocator.IsVisibleAsync())
         {
             await page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" }).ClickAsync();
         }

@@ -1,8 +1,4 @@
-﻿using Azure;
-using SFA.DAS.Framework;
-using SFA.DAS.MongoDb.DataGenerator;
-using System;
-using static SFA.DAS.Registration.UITests.Project.Pages.YouveLoggedOutPage;
+﻿using System;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 
@@ -307,7 +303,7 @@ public class PAYESchemesPage(ScenarioContext context, bool navigate = false) : I
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("PAYE schemes");
     }
-    
+
     private string SecondPaye => objectContext.GetGatewayPaye(1);
 
     public async Task<UsingYourGovtGatewayDetailsPage> ClickAddNewSchemeButton()

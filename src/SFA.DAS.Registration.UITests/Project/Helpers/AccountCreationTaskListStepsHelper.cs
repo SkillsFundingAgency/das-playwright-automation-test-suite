@@ -1,5 +1,4 @@
-﻿using SFA.DAS.ProviderLogin.Service.Project;
-using SFA.DAS.Registration.UITests.Project.Pages;
+﻿using SFA.DAS.Registration.UITests.Project.Pages;
 using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Helpers;

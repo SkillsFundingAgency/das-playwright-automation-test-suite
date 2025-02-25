@@ -1,8 +1,4 @@
-﻿using Azure;
-using NUnit.Framework;
-using Polly;
-
-using SFA.DAS.Registration.UITests.Project.Helpers;
+﻿using SFA.DAS.Registration.UITests.Project.Helpers;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 
@@ -299,7 +295,7 @@ public class GgSignInPage(ScenarioContext context) : RegistrationBasePage(contex
     {
         var gatewaydetails = await EnterGateWayCredentialsAndSignIn(index);
 
-        return await VerifyPageAsync(() => new ConfirmPAYESchemePage(context,gatewaydetails.Paye));
+        return await VerifyPageAsync(() => new ConfirmPAYESchemePage(context, gatewaydetails.Paye));
     }
 
     public async Task SignInWithInvalidDetails()
@@ -307,7 +303,7 @@ public class GgSignInPage(ScenarioContext context) : RegistrationBasePage(contex
         await SignInTo(registrationDataHelper.InvalidGGId, registrationDataHelper.InvalidGGPassword);
     }
 
-    public async Task VerifyErrorMessage(string error) => await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync(error, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
+    public async Task VerifyErrorMessage(string error) => await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync(error, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
 
     private async Task<GatewayCreds> EnterGateWayCredentialsAndSignIn(int index)
     {

@@ -1,7 +1,4 @@
-﻿using Azure;
-using SFA.DAS.Framework;
-using SFA.DAS.MongoDb.DataGenerator;
-using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+﻿using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
@@ -115,7 +112,7 @@ public class ChooseAnOrganisationPage(ScenarioContext context) : RegistrationBas
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Choose your organisation");
     }
-    
+
     public async Task<CheckYourDetailsPage> SelectFirstOrganisationAndContinue()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = objectContext.GetOrganisationName() }).CheckAsync();
