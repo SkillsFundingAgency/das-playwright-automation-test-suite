@@ -12,9 +12,13 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
     private CheckYourDetailsPage _checkYourDetailsPage;
     private YourOrganisationsAndAgreementsPage _yourOrganisationsAndAgreementsPage;
 
-    //[Then(@"the Employer is Not allowed to Remove the first Org added")]
-    //public async Task ThenTheEmployerIsNotAllowedToRemoveTheFirstOrgAdded() =>
-    //    Assert.AreEqual(new HomePage(context).GoToYourOrganisationsAndAgreementsPage().IsRemoveLinkBesideNewlyAddedOrg(), false);
+    [Then(@"the Employer is Not allowed to Remove the first Org added")]
+    public async Task ThenTheEmployerIsNotAllowedToRemoveTheFirstOrgAdded()
+    {
+        var page = await new HomePage(context).GoToYourOrganisationsAndAgreementsPage();
+
+        await page.VerifyRemoveLinkHidden();
+    }
 
     [Given(@"the Employer initiates adding another Org of (Company|PublicSector|Charity|Charity2) Type")]
     [When(@"the Employer initiates adding another Org of (Company|PublicSector|Charity|Charity2) Type")]
@@ -53,16 +57,15 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         await ThenTheNewOrgAddedIsShownInTheAccountOrganisationsList();
     }
 
-    //[Then(@"Employer is Allowed to remove the second Org added from the account")]
-    //public async Task ThenEmployerIsAllowedToRemoveTheSecondOrgAddedFromTheAccount()
-    //{
-    //    var page = await _yourOrganisationsAndAgreementsPage.ClickOnRemoveAnOrgFromYourAccountLink();
+    [Then(@"Employer is Allowed to remove the second Org added from the account")]
+    public async Task ThenEmployerIsAllowedToRemoveTheSecondOrgAddedFromTheAccount()
+    {
+        var page = await _yourOrganisationsAndAgreementsPage.ClickOnRemoveAnOrgFromYourAccountLink();
 
-    //    var page1 = await page.SelectYesRadioOptionAndClickContinueInRemoveOrganisationPage();
+        var page1 = await page.SelectYesRadioOptionAndClickContinueInRemoveOrganisationPage();
 
-    //    await page1.VerifyOrgRemovedMessageInHeader();
-    //}
-
+        await page1.VerifyOrgRemovedMessageInHeader();
+    }
 
     [When(@"the Employer adds another Org to the Account")]
     public async Task WhenTheEmployerAddsAnotherOrgToTheAccount() => await AddOrgToTheAccount(OrgType.Company);

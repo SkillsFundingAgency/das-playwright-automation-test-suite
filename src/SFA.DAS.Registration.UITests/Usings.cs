@@ -6,3 +6,7 @@ global using System.Collections.Generic;
 global using System.Linq;
 global using SFA.DAS.ConfigurationBuilder;
 global using Microsoft.Playwright;
+global using SFA.DAS.Framework;
+global using SFA.DAS.Login.Service.Project;
+global using SFA.DAS.MongoDb.DataGenerator;
+global using SFA.DAS.ProviderLogin.Service.Project;

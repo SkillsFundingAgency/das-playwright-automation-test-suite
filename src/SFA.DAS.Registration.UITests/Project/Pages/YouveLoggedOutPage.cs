@@ -254,12 +254,12 @@ public class AboutYourAgreementPage(ScenarioContext context) : InterimEmployerBa
 
     }
 
-    //public async Task<CreateYourEmployerAccountPage> GoBackToCreateYourEmployerAccountPage()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+    public async Task<CreateYourEmployerAccountPage> GoBackToCreateYourEmployerAccountPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new CreateYourEmployerAccountPage(context));
-    //}
+        return await VerifyPageAsync(() => new CreateYourEmployerAccountPage(context));
+    }
 }
 
 public class SignAgreementPage(ScenarioContext context) : RegistrationBasePage(context)

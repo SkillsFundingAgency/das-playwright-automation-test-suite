@@ -7,7 +7,8 @@
   },
   "stepAssemblies": [
     { "assembly": "SFA.DAS.Framework" },
-    { "assembly": "SFA.DAS.MailosaurAPI.Service" }
+    { "assembly": "SFA.DAS.MailosaurAPI.Service" },
+    { "assembly": "SFA.DAS.ProviderLogin.Service" }
   ],
   "generator": {
     "allowRowTests": false,

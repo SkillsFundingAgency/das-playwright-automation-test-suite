@@ -216,8 +216,13 @@ public class CreateAccountSteps
         await page.ClickOnViewYourAccountButton();
     }
 
-    //[Then(@"'Start adding apprentices now' task link is displayed under Tasks pane")]
-    //public async Task ThenTaskLinkIsDisplayedUnderTasksPane() => new TasksHomePage(_context).VerifyStartAddingApprenticesNowTaskLink();
+    [Then(@"'Start adding apprentices now' task link is displayed under Tasks pane")]
+    public async Task ThenTaskLinkIsDisplayedUnderTasksPane()
+    {
+        var page = await VerifyPageHelper.VerifyPageAsync(() => new TasksHomePage(_context));
+        
+        await page.VerifyStartAddingApprenticesNowTaskLink();
+    }
 
     [Then(@"'These details are already in use' page is displayed when Another Employer tries to register the account with the same Aorn and Paye details")]
     public async Task ThenPageIsDisplayedWhenAnotherEmployerTriesToRegisterTheAccountWithTheSameAornAndPayeDetails()

@@ -1,9 +1,7 @@
 ﻿using Azure;
 using NUnit.Framework;
 using Polly;
-using SFA.DAS.Framework;
-using SFA.DAS.Login.Service.Project;
-using SFA.DAS.MongoDb.DataGenerator;
+
 using SFA.DAS.Registration.UITests.Project.Helpers;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages.StubPages;
@@ -178,6 +176,21 @@ public class CreateYourEmployerAccountPage(ScenarioContext context) : Registrati
         return await VerifyPageAsync(() => new AddATrainingProviderPage(context));
     }
 
+    public async Task VerifySetYourAccountNameStepCannotBeStartedYet()
+    {
+        await Assertions.Expect(page.Locator("#status-set-account-name")).ToContainTextAsync("Cannot start yet");
+    }
+
+    public async Task VerifyYourEmployerAgreementStepCannotBeStartedYet()
+    {
+        await Assertions.Expect(page.Locator("#status-sign-agreement")).ToContainTextAsync("Cannot start yet");
+    }
+
+    public async Task VerifyAddTrainingProviderStepCannotBeStartedYet()
+    {
+        await Assertions.Expect(page.Locator("#status-add-training-provider")).ToContainTextAsync("Cannot start yet");
+    }
+
     //public async Task VerifyStepCannotBeStartedYet(string listItemText)
     //{
     //    By stepSelector = By.XPath($"//span[contains(text(), '{listItemText}')]");
@@ -186,19 +199,6 @@ public class CreateYourEmployerAccountPage(ScenarioContext context) : Registrati
     //    string tagName = element.TagName.ToLower();
 
     //    Assert.AreNotEqual("a", tagName, "The text has an anchor tag");
-    //}
-
-    //public bool CheckIsPageCurrent()
-    //{
-    //    return pageInteractionHelper.Verify(() =>
-    //    {
-    //        var result = IsPageCurrent;
-
-    //        return !result.Item1 ? throw new Exception(
-    //            MessageHelper.GetExceptionMessage("IsPageCurrent", PageTitle, result.Item2))
-    //        : true;
-
-    //    }, null);
     //}
 }
 
@@ -407,15 +407,14 @@ public class AddATrainingProviderPage(ScenarioContext context) : RegistrationBas
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a training provider");
 
-    //public async Task<EnterYourTrainingProviderNameReferenceNumberUKPRNPage> AddTrainingProviderNow()
-    //{
-    //    await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I'll add a training" }).CheckAsync();
+    public async Task<EnterYourTrainingProviderNameReferenceNumberUKPRNPage> AddTrainingProviderNow()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I'll add a training" }).CheckAsync();
 
-    //    Continue();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new HomePage(context));
-    //    return new Relationships.EnterYourTrainingProviderNameReferenceNumberUKPRNPage(context);
-    //}
+        return await VerifyPageAsync(() => new EnterYourTrainingProviderNameReferenceNumberUKPRNPage(context));
+    }
 
     public async Task<EmployerAccountCreatedPage> AddTrainingProviderLater()
     {
@@ -431,6 +430,134 @@ public class AddATrainingProviderPage(ScenarioContext context) : RegistrationBas
         await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
 
         return await VerifyPageAsync(() => new CreateYourEmployerAccountPage(context));
+    }
+}
+
+public class EnterYourTrainingProviderNameReferenceNumberUKPRNPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("name or reference number (UKPRN)");
+    }
+
+    public async Task<AddPermissionsForTrainingProviderPage> SearchForATrainingProvider(ProviderConfig providerConfig)
+    {
+        await EnterATrainingProvider(providerConfig);
+
+        return await VerifyPageAsync(() => new AddPermissionsForTrainingProviderPage(context, providerConfig));
+    }
+
+    //public async Task<AlreadyLinkedToTrainingProviderPage> SearchForAnExistingTrainingProvider(ProviderConfig providerConfig)
+    //{
+    //    await EnterATrainingProvider(providerConfig);
+
+    //    return await VerifyPageAsync(() => new AlreadyLinkedToTrainingProviderPage(context));
+    //}
+
+    private async Task EnterATrainingProvider(ProviderConfig providerConfig)
+    {
+        await page.Locator("#SearchTerm").PressSequentiallyAsync(providerConfig.Ukprn, new() { Delay = 1000 });
+
+        await Task.Delay(1000);
+
+        await page.GetByRole(AriaRole.Option, new() { Name = providerConfig.Ukprn }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        //new TrainingProviderAutoCompleteHelper(context).SelectFromAutoCompleteList(providerConfig.Ukprn);
+
+    }
+}
+
+
+public class AddPermissionsForTrainingProviderPage(ScenarioContext context, ProviderConfig providerConfig) : PermissionBasePageForTrainingProviderPage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync($"Add {providerConfig.Name.ToUpperInvariant()} and set permissions");
+    }
+
+    public async Task VerifyDoNotAllowPermissions()
+    {
+        await SetAddApprentice(AddApprenticePermissions.NoToAddApprenticeRecords);
+
+        await SetRecruitApprentice(RecruitApprenticePermissions.NoToRecruitApprentices);
+
+        await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync("Error: You must select yes for at least one permission for add apprentice records or recruit apprentices");
+    }
+}
+
+public enum AddApprenticePermissions
+{
+    //[ToString("Yes, employer will review records")]
+    YesAddApprenticeRecords,
+    //[ToString("No")]
+    NoToAddApprenticeRecords
+}
+
+public enum RecruitApprenticePermissions
+{
+    //[ToString("Yes")]
+    YesRecruitApprentices,
+    //[ToString("Yes, employer will review adverts")]
+    YesRecruitApprenticesButEmployerWillReview,
+    //[ToString("No")]
+    NoToRecruitApprentices
+}
+
+
+public abstract class PermissionBasePageForTrainingProviderPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+
+    //public async Task<ManageTrainingProvidersPage> AddOrSetPermissions((AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permisssion)
+    //{
+    //    await SetAddApprentice(permisssion.cohortpermission);
+
+    //    await SetRecruitApprentice(permisssion.recruitpermission);
+
+    //    return await VerifyPageAsync(() => new ManageTrainingProvidersPage(context));
+    //}
+
+    public async Task<EmployerAccountCreatedPage> AddOrSetPermissionsAndCreateAccount((AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permisssion)
+    {
+        await SetAddApprentice(permisssion.cohortpermission);
+
+        await SetRecruitApprentice(permisssion.recruitpermission);
+
+        return await VerifyPageAsync(() => new EmployerAccountCreatedPage(context));
+    }
+
+    protected async Task SetAddApprentice(AddApprenticePermissions permission)
+    {
+        if (permission == AddApprenticePermissions.YesAddApprenticeRecords)
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, but I want final review" }).CheckAsync();
+        }
+
+        if (permission == AddApprenticePermissions.NoToAddApprenticeRecords)
+        {
+            await page.GetByRole(AriaRole.Group, new() { Name = "Add apprentice records" }).GetByLabel("No").CheckAsync();
+        }
+    }
+
+    protected async Task SetRecruitApprentice(RecruitApprenticePermissions permission)
+    {
+        if (permission == RecruitApprenticePermissions.YesRecruitApprentices)
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "Yes", Exact = true }).CheckAsync();
+        }
+
+        if (permission == RecruitApprenticePermissions.YesRecruitApprenticesButEmployerWillReview)
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, but I want to review" }).CheckAsync();
+        }
+
+        if (permission == RecruitApprenticePermissions.NoToRecruitApprentices)
+        {
+            await page.GetByRole(AriaRole.Group, new() { Name = "Recruit apprentices" }).GetByLabel("No").CheckAsync();
+        }
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
     }
 }
 

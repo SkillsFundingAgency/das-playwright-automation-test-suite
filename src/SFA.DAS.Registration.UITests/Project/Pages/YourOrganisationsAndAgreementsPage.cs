@@ -6,6 +6,7 @@ using System.Reflection.PortableExecutable;
 using System;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
 using static SFA.DAS.Registration.UITests.Project.Pages.YouveLoggedOutPage;
+using Azure;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 
@@ -83,16 +84,8 @@ public class YourAgreementsWithTheEducationAndSkillsFundingAgencyPage(ScenarioCo
 
 public class YourOrganisationsAndAgreementsPage(ScenarioContext context, bool navigate = false) : InterimEmployerBasePage(context, navigate)
 {
-    #region Locators
-    //private static By TransferStatus => By.CssSelector("p.govuk-body");
-    //private static By AddNewOrganisationButton => By.CssSelector(".govuk-button");
-    //private static By TableCells => By.XPath("//td");
-    //private static By ViewAgreementLink() => By.PartialLinkText("View all agreements");
-    //private static By ViewAgreementLink(string accountLegalEntityPublicHashedId) => By.CssSelector($"[href*='{accountLegalEntityPublicHashedId}/agreements']");
-    //private static By OrgRemovedMessageInHeader => By.XPath("//h3");
-    //private static By RemoveLinkBesideNewlyAddedOrg => By.LinkText($"Remove organisation");
 
-    #endregion
+    //private static By TransferStatus => By.CssSelector("p.govuk-body");
 
     public override async Task VerifyPage()
     {
@@ -120,11 +113,12 @@ public class YourOrganisationsAndAgreementsPage(ScenarioContext context, bool na
         return await VerifyPageAsync(() => new YourAgreementsWithTheEducationAndSkillsFundingAgencyPage(context));
     }
 
-    //public AreYouSureYouWantToRemovePage ClickOnRemoveAnOrgFromYourAccountLink()
-    //{
-    //    tableRowHelper.SelectRowFromTable("Remove organisation", $"{objectContext.GetOrganisationName()}");
-    //    return new AreYouSureYouWantToRemovePage(context);
-    //}
+    public async Task<AreYouSureYouWantToRemovePage> ClickOnRemoveAnOrgFromYourAccountLink()
+    {
+        await page.GetByRole(AriaRole.Row, new() { Name = objectContext.GetOrganisationName() }).GetByRole(AriaRole.Link, new() { Name = "Remove organisation" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new AreYouSureYouWantToRemovePage(context));
+    }
 
     public async Task<AccessDeniedPage> ClickToRemoveAnOrg()
     {
@@ -133,10 +127,31 @@ public class YourOrganisationsAndAgreementsPage(ScenarioContext context, bool na
         return await VerifyPageAsync(() => new AccessDeniedPage(context));
     }
 
-    //public bool IsRemoveLinkBesideNewlyAddedOrg() => pageInteractionHelper.IsElementDisplayed(RemoveLinkBesideNewlyAddedOrg);
+    public async Task VerifyRemoveLinkHidden() 
+    {
+        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Remove organisation" })).ToBeHiddenAsync();
+    }
 
-    //public bool VerifyOrgRemovedMessageInHeader() => pageInteractionHelper.VerifyText(OrgRemovedMessageInHeader, $"You have removed {objectContext.GetOrganisationName()}");
+    public async Task VerifyOrgRemovedMessageInHeader() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("You have removed");
 }
+
+public class AreYouSureYouWantToRemovePage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Are you sure you want to remove");
+    }
+
+    public async Task<YourOrganisationsAndAgreementsPage> SelectYesRadioOptionAndClickContinueInRemoveOrganisationPage()
+    {
+        await page.Locator("#remove-yes").CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourOrganisationsAndAgreementsPage(context));
+    }
+}
+
 
 public class SearchForYourOrganisationPage(ScenarioContext context) : RegistrationBasePage(context)
 {
