@@ -73,7 +73,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
     [Then(@"the Sign Agreement journey from the Account home page shows Accepted Agreement page")]
     public async Task ThenTheSignAgreementJourneyFromTheAccountHomePageShowsAcceptedAgreementPage()
     {
-        var page = await SignAgreementFromHomePage();
+        var page = await SignAdditionalAgreementFromHomePage();
 
         await page.ClickOnViewYourAccount();
     }
@@ -89,7 +89,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
     [Then(@"the Sign Agreement journey from the Account home page shows Accepted Agreement page with link to review other pending agreements")]
     public async Task ThenTheSignAgreementJourneyFromTheAccountHomePageShowsAcceptedAgreementPageWithLinkToReviewOtherPendingAgreements()
     {
-        var page = await SignAgreementFromHomePage();
+        var page = await SignAdditionalAgreementFromHomePage();
 
         await page.ClickOnReviewAndAcceptYourOtherAgreementsLink();
     }
@@ -110,5 +110,5 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         _homePage = await page.GoToHomePage();
     }
 
-    private async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAgreementFromHomePage() => await AccountCreationStepsHelper.SignAdditionalAgreementFromHomePage(_homePage);
+    private async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAdditionalAgreementFromHomePage() => await AccountCreationStepsHelper.SignAgreementFromHomePage(_homePage);
 }

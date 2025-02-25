@@ -125,7 +125,7 @@ public class CreateAccountSteps
     public async Task SignTheAgreementAndAddProviderLater()
     {
         var page = await _doYouAcceptTheEmployerAgreementOnBehalfOfPage
-            .SignAgreement();
+            .SignAgreementFromCreateAccountTasks();
 
         var page1 = await page.SelectContinueToCreateYourEmployerAccount();
 
@@ -209,7 +209,7 @@ public class CreateAccountSteps
     {
         var page = await AccountCreationStepsHelper.SignAgreementFromHomePage(_homePage);
 
-        await page.ClickOnViewYourAccountButton();
+        _homePage = await page.ClickOnViewYourAccount();
     }
 
     [Then(@"'Start adding apprentices now' task link is displayed under Tasks pane")]

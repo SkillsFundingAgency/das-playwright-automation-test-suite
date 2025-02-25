@@ -18,7 +18,7 @@ public class SignAgreementPage(ScenarioContext context) : RegistrationBasePage(c
         return await VerifyPageAsync(() => new AccessDeniedPage(context));
     }
 
-    public async Task<YouHaveAcceptedYourEmployerAgreementPage> SignAgreement()
+    public async Task<YouHaveAcceptedYourEmployerAgreementPage> SignAgreementFromCreateAccountTasks()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I accept the agreement" }).CheckAsync();
 
@@ -27,7 +27,7 @@ public class SignAgreementPage(ScenarioContext context) : RegistrationBasePage(c
         return await VerifyPageAsync(() => new YouHaveAcceptedYourEmployerAgreementPage(context));
     }
 
-    public async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAdditionalAgreement()
+    public async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAgreementFromHomePage()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I accept the agreement" }).CheckAsync();
 

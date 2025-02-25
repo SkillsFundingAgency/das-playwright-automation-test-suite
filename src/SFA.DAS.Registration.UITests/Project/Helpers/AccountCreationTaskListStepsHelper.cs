@@ -124,7 +124,7 @@ public class AccountCreationTaskListStepsHelper(ScenarioContext context)
 
         var page1 = await page.ClickContinueToYourAgreementButtonToDoYouAcceptTheEmployerAgreementPage();
 
-        var page2 = await page1.SignAgreement();
+        var page2 = await page1.SignAgreementFromCreateAccountTasks();
 
         return await page2.SelectContinueToCreateYourEmployerAccount();
     }

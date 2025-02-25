@@ -158,7 +158,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
 
         var page5 = await GoToSignAgreementPage(page4);
 
-        var page6 = await page5.SignAgreement();
+        var page6 = await page5.SignAgreementFromCreateAccountTasks();
 
         var page7 = await page6.SelectContinueToCreateYourEmployerAccount();
 
@@ -168,7 +168,6 @@ public class AccountCreationStepsHelper(ScenarioContext context)
 
         return await page9.SelectGoToYourEmployerAccountHomepage();
     }
-
 
     internal static async Task<SignAgreementPage> GoToSignAgreementPage(CheckYourDetailsPage checkYourDetailsPage)
     {
@@ -187,22 +186,13 @@ public class AccountCreationStepsHelper(ScenarioContext context)
         return await page5.ClickContinueToYourAgreementButtonToDoYouAcceptTheEmployerAgreementPage();
     }
 
-    internal static async Task<YouHaveAcceptedYourEmployerAgreementPage> SignAgreementFromHomePage(HomePage homePage)
+    internal static async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAgreementFromHomePage(HomePage homePage)
     {
         var page = await homePage.ClickAcceptYourAgreementLinkInHomePagePanel();
 
         var page1 = await page.ClickContinueToYourAgreementButtonInAboutYourAgreementPage();
 
-        return await page1.SignAgreement();
-    }
-
-    internal static async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAdditionalAgreementFromHomePage(HomePage homePage)
-    {
-        var page = await homePage.ClickAcceptYourAgreementLinkInHomePagePanel();
-
-        var page1 = await page.ClickContinueToYourAgreementButtonInAboutYourAgreementPage();
-
-        return await page1.SignAdditionalAgreement();
+        return await page1.SignAgreementFromHomePage();
     }
 
 

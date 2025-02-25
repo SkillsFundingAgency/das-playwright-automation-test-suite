@@ -17,11 +17,4 @@ public class YouHaveAcceptedYourEmployerAgreementPage(ScenarioContext context) :
 
         return await VerifyPageAsync(() => new CreateYourEmployerAccountPage(context));
     }
-
-    public async Task<HomePage> ClickOnViewYourAccountButton()
-    {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new HomePage(context));
-    }
 }
