@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.Registration.UITests.Project.Helpers;
 using SFA.DAS.Registration.UITests.Project.Pages;
+using SFA.DAS.Registration.UITests.Project.Pages.CreateAccount;
 using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Steps;

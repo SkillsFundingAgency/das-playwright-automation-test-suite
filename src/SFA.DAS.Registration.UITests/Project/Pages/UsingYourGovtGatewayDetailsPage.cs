@@ -1,0 +1,18 @@
+﻿using SFA.DAS.Registration.UITests.Project.Pages.CreateAccount;
+
+namespace SFA.DAS.Registration.UITests.Project.Pages;
+
+public class UsingYourGovtGatewayDetailsPage(ScenarioContext context) : RegistrationBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a PAYE scheme using your Government Gateway details");
+    }
+
+    public async Task<GgSignInPage> ContinueToGGSignIn()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
+
+        return new GgSignInPage(context);
+    }
+}

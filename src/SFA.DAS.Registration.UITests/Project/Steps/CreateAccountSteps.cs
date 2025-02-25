@@ -2,7 +2,7 @@
 using SFA.DAS.Registration.UITests.Project.Helpers;
 using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.Registration.UITests.Project.Pages;
-using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
+using SFA.DAS.Registration.UITests.Project.Pages.CreateAccount;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
 
 namespace SFA.DAS.Registration.UITests.Project.Steps;
