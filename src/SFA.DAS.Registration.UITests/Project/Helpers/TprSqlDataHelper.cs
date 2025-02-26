@@ -1,10 +1,4 @@
-﻿
-
-using SFA.DAS.Framework;
-using SFA.DAS.MongoDb.DataGenerator;
-using SFA.DAS.UI.FrameworkHelpers;
-
-namespace SFA.DAS.Registration.UITests.Project.Helpers;
+﻿namespace SFA.DAS.Registration.UITests.Project.Helpers;
 
 public class TprSqlDataHelper(DbConfig dbConfig, ObjectContext objectContext, AornDataHelper aornDataHelper)
 {

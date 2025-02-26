@@ -1,9 +1,5 @@
-﻿using SFA.DAS.Framework;
-using SFA.DAS.MongoDb.DataGenerator;
-using SFA.DAS.MongoDb.DataGenerator.Helpers;
-using SFA.DAS.Registration.UITests.Project.Helpers;
+﻿using SFA.DAS.Registration.UITests.Project.Helpers;
 using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
-using SFA.DAS.UI.FrameworkHelpers;
 
 namespace SFA.DAS.Registration.UITests.Project;
 

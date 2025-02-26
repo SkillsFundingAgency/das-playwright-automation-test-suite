@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.Registration.UITests.Project.Pages;
-using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
 
@@ -27,7 +26,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
     internal async Task<AddAPAYESchemePage> RegisterUserAccount() =>
         await RegisterUserAccount(new CreateAnAccountToManageApprenticeshipsPage(context), null);
 
-    internal async Task<AddAPAYESchemePage> RegisterUserAccount(CreateAnAccountToManageApprenticeshipsPage indexPage, string email) 
+    internal async Task<AddAPAYESchemePage> RegisterUserAccount(CreateAnAccountToManageApprenticeshipsPage indexPage, string email)
     {
         var page = await RegisterStubUserAccount(indexPage, email);
 
@@ -38,12 +37,12 @@ public class AccountCreationStepsHelper(ScenarioContext context)
         var page3 = await page2.ClickContinueButtonToAcknowledge();
 
         var page4 = await page3.GoToAddPayeLink();
-        
+
         return await page4.SelectOptionLessThan3Million();
     }
-    
 
-    internal async Task<HomePage> AcceptUserInvite(CreateAnAccountToManageApprenticeshipsPage indexPage, string email) 
+
+    internal async Task<HomePage> AcceptUserInvite(CreateAnAccountToManageApprenticeshipsPage indexPage, string email)
     {
         var page = await RegisterStubUserAccount(indexPage, email);
 
@@ -55,7 +54,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
 
         return await page3.ClickAcceptInviteLink();
     }
-        
+
 
     internal static async Task<StubAddYourUserDetailsPage> RegisterUserAccount(StubSignInEmployerPage stubSignInPage, string email)
     {
@@ -67,12 +66,12 @@ public class AccountCreationStepsHelper(ScenarioContext context)
     internal async Task<StubAddYourUserDetailsPage> UserLogsIntoStub() => await RegisterStubUserAccount(new CreateAnAccountToManageApprenticeshipsPage(context), null);
 
 
-    internal static async Task<SelectYourOrganisationPage> SearchForAnotherOrg(HomePage homepage, OrgType orgType) 
+    internal static async Task<SelectYourOrganisationPage> SearchForAnotherOrg(HomePage homepage, OrgType orgType)
     {
         var page = await homepage.GoToYourOrganisationsAndAgreementsPage();
 
         var page1 = await page.ClickAddNewOrganisationButton();
-        
+
         return await page1.SearchForAnOrganisation(orgType);
     }
 
@@ -131,7 +130,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
         return await page4.SelectContinueAccountSetupInPAYESchemeAddedPage();
     }
 
-    internal static async Task RemovePayeSchemeFromTheAccount(HomePage homePage) 
+    internal static async Task RemovePayeSchemeFromTheAccount(HomePage homePage)
     {
         var page = await homePage.GotoPAYESchemesPage();
 
@@ -143,7 +142,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
 
         await page3.VerifyPayeSchemeRemovedInfoMessage();
     }
-        
+
 
     internal static async Task<HomePage> AddNewAccount(AddAPAYESchemePage addAPAYESchemePage, int index, OrgType orgType = OrgType.Default)
     {
@@ -159,7 +158,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
 
         var page5 = await GoToSignAgreementPage(page4);
 
-        var page6 = await page5.SignAgreement();
+        var page6 = await page5.SignAgreementFromCreateAccountTasks();
 
         var page7 = await page6.SelectContinueToCreateYourEmployerAccount();
 
@@ -169,7 +168,6 @@ public class AccountCreationStepsHelper(ScenarioContext context)
 
         return await page9.SelectGoToYourEmployerAccountHomepage();
     }
-        
 
     internal static async Task<SignAgreementPage> GoToSignAgreementPage(CheckYourDetailsPage checkYourDetailsPage)
     {
@@ -188,22 +186,13 @@ public class AccountCreationStepsHelper(ScenarioContext context)
         return await page5.ClickContinueToYourAgreementButtonToDoYouAcceptTheEmployerAgreementPage();
     }
 
-    internal static async Task<YouHaveAcceptedYourEmployerAgreementPage> SignAgreementFromHomePage(HomePage homePage) 
-    {
-        var page = await homePage.ClickAcceptYourAgreementLinkInHomePagePanel();
-
-        var page1 = await page.ClickContinueToYourAgreementButtonInAboutYourAgreementPage();
-        
-        return await page1.SignAgreement();
-    }
-
-    internal static async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAdditionalAgreementFromHomePage(HomePage homePage)
+    internal static async Task<YouHaveAcceptedTheEmployerAgreementPage> SignAgreementFromHomePage(HomePage homePage)
     {
         var page = await homePage.ClickAcceptYourAgreementLinkInHomePagePanel();
 
         var page1 = await page.ClickContinueToYourAgreementButtonInAboutYourAgreementPage();
 
-        return await page1.SignAdditionalAgreement();
+        return await page1.SignAgreementFromHomePage();
     }
 
 

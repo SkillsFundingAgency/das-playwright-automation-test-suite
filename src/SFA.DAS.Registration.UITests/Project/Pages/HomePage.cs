@@ -1,14 +1,7 @@
 ﻿using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 using System;
-using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
-
-public abstract class InterimHomeBasePage(ScenarioContext context, bool navigate) : InterimEmployerBasePage(context, navigate)
-{
-    //protected override string Linktext => "Home";
-    //protected override By AcceptCookieButton => By.CssSelector(".das-cookie-banner__button-accept");
-}
 
 public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBasePage(context, navigate)
 {
@@ -119,10 +112,8 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         return await VerifyPageAsync(() => new ManageYourApprenticesPage(context));
     }
 
-    public async Task<ApprenticeRequestsPage> ClickViewCohortsForCohortsReadyToReview(int numberOfChanges)
+    public async Task<ApprenticeRequestsPage> ClickViewCohortsForCohortsReadyToReview()
     {
-        //var linkText = numberOfChanges == 1 ? "View cohort" : "View cohorts";
-
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "ready for review" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
@@ -142,10 +133,8 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         return await VerifyPageAsync(() => new TransfersPage(context));
     }
 
-    public async Task<MyTransferPledgesPage> ClickViewTransferPledgeApplications(int numberOfChanges)
+    public async Task<MyTransferPledgesPage> ClickViewTransferPledgeApplications()
     {
-        var linkText = numberOfChanges == 1 ? "application" : "applications";
-
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfer pledge" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new MyTransferPledgesPage(context));

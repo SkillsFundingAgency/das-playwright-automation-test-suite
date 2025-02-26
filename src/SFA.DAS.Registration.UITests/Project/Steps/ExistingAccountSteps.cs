@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Framework;
-using SFA.DAS.Login.Service.Project;
-using SFA.DAS.Registration.UITests.Project.Helpers;
+﻿using SFA.DAS.Registration.UITests.Project.Helpers;
 using SFA.DAS.Registration.UITests.Project.Pages;
 using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
 

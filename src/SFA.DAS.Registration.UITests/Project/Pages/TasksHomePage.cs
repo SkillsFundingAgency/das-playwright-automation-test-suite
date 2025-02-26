@@ -1,6 +1,4 @@
-﻿using Azure;
-
-namespace SFA.DAS.Registration.UITests.Project.Pages;
+﻿namespace SFA.DAS.Registration.UITests.Project.Pages;
 
 public partial class TasksHomePage(ScenarioContext context) : HomePage(context)
 {
@@ -8,7 +6,7 @@ public partial class TasksHomePage(ScenarioContext context) : HomePage(context)
     {
         await Assertions.Expect(page.GetByRole(AriaRole.Tab, new() { Name = "Tasks" })).ToBeVisibleAsync();
     }
-    
+
     public const string ApprenticeChangeToReview = "ApprenticeChangeToReview";
     public const string CohortReadyForApproval = "CohortReadyForApproval";
     public const string ReviewConnectionRequest = "ReviewConnectionRequest";

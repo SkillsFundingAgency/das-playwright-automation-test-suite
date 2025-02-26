@@ -1,6 +1,4 @@
-﻿using Polly;
-using SFA.DAS.Framework;
-using SFA.DAS.Registration.UITests.Project.Pages;
+﻿using SFA.DAS.Registration.UITests.Project.Pages;
 using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Helpers;
@@ -43,7 +41,7 @@ public class EmployerPortalLoginHelper(ScenarioContext context) : IReLoginHelper
     public async Task<AccountUnavailablePage> FailedLogin1()
     {
         var page = await new StubSignInEmployerPage(context).Login(GetLoginCredentials());
-        
+
         return await page.GoToAccountUnavailablePage();
     }
 

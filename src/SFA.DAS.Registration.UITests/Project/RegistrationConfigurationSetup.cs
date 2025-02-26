@@ -1,7 +1,4 @@
-﻿using SFA.DAS.Login.Service.Project;
-using SFA.DAS.MongoDb.DataGenerator;
-
-namespace SFA.DAS.Registration.UITests.Project;
+﻿namespace SFA.DAS.Registration.UITests.Project;
 
 [Binding]
 public class RegistrationConfigurationSetup(ScenarioContext context)

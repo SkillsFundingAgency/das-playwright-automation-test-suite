@@ -1,5 +1,4 @@
-﻿using SFA.DAS.UI.FrameworkHelpers;
-using System;
+﻿using System;
 
 namespace SFA.DAS.Registration.UITests.Project.Helpers;
 
