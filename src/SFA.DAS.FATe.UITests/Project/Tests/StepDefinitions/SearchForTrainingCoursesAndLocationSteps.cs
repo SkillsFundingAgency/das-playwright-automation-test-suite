@@ -64,7 +64,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         public async Task ThenAllTheCoursesAreDisplayedWithoutFiltersSet()
         {
             await _apprenticeshipTrainingCoursesPage.VerifyNoFiltersAreApplied();
-            await _apprenticeshipTrainingCoursesPage.VerifyUrlContainsOrderByNone();
+            await _apprenticeshipTrainingCoursesPage.VerifyUrlContainsWordCourses();
         }
     }
 }

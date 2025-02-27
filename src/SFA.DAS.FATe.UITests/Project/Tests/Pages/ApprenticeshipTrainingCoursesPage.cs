@@ -43,12 +43,12 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
             Console.WriteLine($"{count} filters are applied.");
         }
     }
-    public async Task<ApprenticeshipTrainingCoursesPage> VerifyUrlContainsOrderByNone()
+    public async Task<ApprenticeshipTrainingCoursesPage> VerifyUrlContainsWordCourses()
     {
         var currentUrl = page.Url;
-        if (!currentUrl.Contains("OrderBy=None"))
+        if (!currentUrl.Contains("courses"))
         {
-            throw new Exception("The URL does not contain the required OrderBy=None parameter.");
+            throw new Exception("The URL does not contain the required courses parameter.");
         }
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
