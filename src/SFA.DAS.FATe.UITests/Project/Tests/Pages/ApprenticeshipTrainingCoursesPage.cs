@@ -8,14 +8,14 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).
         ToContainTextAsync("Apprenticeship training courses");
 
-    public async Task VerifyWorkerFilterIsSet()
+    public async Task VerifyFilterIsSet(string filterText)
     {
-        var workerFilter = page.Locator("a.das-filter__tag.das-breakable:has-text('worker')");
-        await workerFilter.WaitForAsync();
-        await Assertions.Expect(workerFilter).ToBeVisibleAsync();
+        var filterLocator = page.Locator($"a.das-filter__tag.das-breakable:has-text('{filterText}')");
+        await filterLocator.WaitForAsync();
+        await Assertions.Expect(filterLocator).ToBeVisibleAsync();
     }
 
-    public async Task VerifyResultsContainWordWorker()
+    public async Task VerifyResultsContainWordWorker(string resultsword)
     {
         var resultsLinks = page.Locator("li.das-search-results__list-item");
 
@@ -25,8 +25,17 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         for (int i = 0; i < limit; i++)
         {
             var resultLocator = resultsLinks.Nth(i);
-            await Assertions.Expect(resultLocator).ToContainTextAsync("worker");
+            await Assertions.Expect(resultLocator).ToContainTextAsync(resultsword);
         }
+    }
+
+    public async Task VerifyNoResultsMessage()
+    {
+        var noResultsText = page.Locator("p.govuk-body:has-text('No results')");
+        var noCoursesText = page.Locator("p.govuk-body:has-text('There are no courses that match your search.')");
+
+        await Assertions.Expect(noResultsText).ToBeVisibleAsync();
+        await Assertions.Expect(noCoursesText).ToBeVisibleAsync();
     }
 
     public async Task VerifyNoFiltersAreApplied()

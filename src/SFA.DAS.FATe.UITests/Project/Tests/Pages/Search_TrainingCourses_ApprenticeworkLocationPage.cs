@@ -15,6 +15,14 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
 
+    public async Task<ApprenticeshipTrainingCoursesPage> SearchWithCourseNoResults()
+    {
+        await page.Locator("#CourseTerm").ClickAsync();
+        await page.Locator("#CourseTerm").FillAsync(fateDataHelper.NoResultsCourseName);
+        await ClickContinue();
+        return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
+    }
+
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithCourseAndApprenticeWorkLocation()
     {
         await page.Locator("#CourseTerm").ClickAsync();
