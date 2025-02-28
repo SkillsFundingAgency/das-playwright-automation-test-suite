@@ -29,8 +29,8 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _fATeHomePage.ClickStartNow();
         }
 
-        [When("the user searches for a course with an apprenticeship location")]
-        public async Task WhenTheUserSearchesForACourseWithAnApprenticeshipLocation()
+        [When("the user searches for a course with an apprenticeship location only")]
+        public async Task WhenTheUserSearchesForACourseWithAnApprenticeshipLocationOnly()
         {
             await _search_TrainingCourses_ApprenticeworkLocationPage.SearchWithApprenticeWorkLocation();
         }
@@ -38,7 +38,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         [Then("the relevant training courses are displayed")]
         public async Task ThenTheRelevantTrainingCoursesAreDisplayed()
         {
-            await _apprenticeshipTrainingCoursesPage.VerifyPage(); // The reuslt page is yet to be developed
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Coventry, West Midlands (within 10 miles)");
         }
 
         [When("the user searches for a course without location")]
@@ -50,8 +50,8 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         [Then("the relevant training courses are displayed with filters set")]
         public async Task ThenTheRelevantTrainingCoursesAreDisplayedWithFiltersSet()
         {
-            await _apprenticeshipTrainingCoursesPage.VerifyWorkerFilterIsSet();
-            await _apprenticeshipTrainingCoursesPage.VerifyResultsContainWordWorker();
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("worker");
+            await _apprenticeshipTrainingCoursesPage.VerifyResultsContainWordWorker("worker");
         }
 
         [When(@"the user searches for a course without location and course name")]
@@ -60,11 +60,25 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _search_TrainingCourses_ApprenticeworkLocationPage.SearchWithoutCourseAndApprenticeWorkLocation();
         }
 
+        [When("the user searches for a course with no results")]
+        public async Task WhenTheUserSearchesForACourseWithNoResults()
+        {
+            await _search_TrainingCourses_ApprenticeworkLocationPage.SearchWithCourseNoResults();
+        }
+
         [Then(@"all the courses are displayed without filters set")]
         public async Task ThenAllTheCoursesAreDisplayedWithoutFiltersSet()
         {
             await _apprenticeshipTrainingCoursesPage.VerifyNoFiltersAreApplied();
-            await _apprenticeshipTrainingCoursesPage.VerifyUrlContainsOrderByNone();
+            await _apprenticeshipTrainingCoursesPage.VerifyUrlContainsWordCourses();
         }
+
+        [Then("no courses that match your search is displayed with filters set")]
+        public async Task ThenNoCoursesThatMatchYourSearchIsDisplayedWithFiltersSet()
+        {
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Selected");
+            await _apprenticeshipTrainingCoursesPage.VerifyNoResultsMessage();
+        }
+    
     }
 }

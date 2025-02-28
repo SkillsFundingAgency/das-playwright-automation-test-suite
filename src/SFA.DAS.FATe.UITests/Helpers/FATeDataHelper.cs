@@ -13,6 +13,7 @@ namespace SFA.DAS.FATe.UITests.Helpers
             Positions = RandomDataGenerator.GenerateRandomNumber(1);
             Course = $"Abattoir worker (Level 2)";
             PartialCourseName = $"Worker";
+            NoResultsCourseName = $"Selected";
             Location = $"Coventry";
             UKPRN = $"10000528";
             ProviderDetails = $"BARKING AND DAGENHAM COLLEGE UKPRN: 10000528";
@@ -43,5 +44,6 @@ namespace SFA.DAS.FATe.UITests.Helpers
         public string LocationDetails { get; }
 
         public string PartialCourseName { get; }
+        public string NoResultsCourseName { get; }
     }
 }
