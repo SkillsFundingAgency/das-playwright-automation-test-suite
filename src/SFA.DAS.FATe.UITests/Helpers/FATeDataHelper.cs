@@ -15,6 +15,8 @@ namespace SFA.DAS.FATe.UITests.Helpers
             PartialCourseName = $"Worker";
             NoResultsCourseName = $"Selected";
             Location = $"Coventry";
+            PostCodeDetails = $"TW14 Hounslow";
+            PartialPostCode = $"TW14";
             UKPRN = $"10000528";
             ProviderDetails = $"BARKING AND DAGENHAM COLLEGE UKPRN: 10000528";
             LocationDetails = $"Coventry, West Midlands";
@@ -45,5 +47,7 @@ namespace SFA.DAS.FATe.UITests.Helpers
 
         public string PartialCourseName { get; }
         public string NoResultsCourseName { get; }
+        public string PartialPostCode { get; }
+        public string PostCodeDetails {  get; }
     }
 }

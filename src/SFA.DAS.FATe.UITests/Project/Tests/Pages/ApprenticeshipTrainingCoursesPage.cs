@@ -61,4 +61,53 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         }
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
+    public async Task VerifyDistanceFilterSelection(string expectedDistance)
+    {
+        var selectedOption = await page.Locator("select#distance-filter option[selected]").InnerTextAsync();
+
+        if (selectedOption != expectedDistance)
+        {
+            throw new Exception($"Expected distance filter to be '{expectedDistance}', but found '{selectedOption}'.");
+        }
+
+        Console.WriteLine($"Verified: '{expectedDistance}' is selected in the distance filter.");
+    }
+    public async Task EnterCourseJobOrStandard(string text)
+    {
+        var inputField = page.Locator("input#keyword-input");
+        await inputField.FillAsync(text);
+        Console.WriteLine($"Entered text: '{text}' in the course/job/standard input field.");
+    }
+    public async Task ApplyFilters()
+    {
+        var applyFiltersButton = page.Locator("button#filters-submit");
+        await applyFiltersButton.ClickAsync();
+        Console.WriteLine("Clicked on 'Apply filters' button.");
+    }
+    public async Task ClearSpecificFilter(string filterName)
+    {
+        var filterLocator = page.Locator($"a.das-filter__tag.das-breakable:has-text('{filterName}')");
+
+        if (await filterLocator.CountAsync() > 0) 
+        {
+            await filterLocator.ClickAsync();
+            Console.WriteLine($"Cleared the filter: {filterName}");
+        }
+        else
+        {
+            Console.WriteLine($"Filter '{filterName}' not found.");
+        }
+    }
+    public async Task EnterApprenticeWorkLocation(string textEntered, string dropDownoption)
+    {
+        await page.Locator("#search-location").ClickAsync(); 
+        await page.Locator("#search-location").FillAsync(textEntered);
+        await SelectAutocompleteOption(dropDownoption);
+    }
+    public async Task SelectApprenticeTravelDistance(string distance)
+    {
+        var distanceDropdown = page.Locator("#distance-filter");
+        await distanceDropdown.SelectOptionAsync(distance);
+    }
+
 }
