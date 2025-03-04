@@ -109,5 +109,21 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         var distanceDropdown = page.Locator("#distance-filter");
         await distanceDropdown.SelectOptionAsync(distance);
     }
+    public async Task SelectJobCategory(string categoryName)
+    {
+        var checkboxLocator = page.Locator($"input.govuk-checkboxes__input[name='Categories'][value='{categoryName}']");
+        var jobCategoriesShowButton = page.Locator("button[aria-label='Job categories , Show this section']");
+
+        if (!await checkboxLocator.IsVisibleAsync())
+        {
+            await jobCategoriesShowButton.ClickAsync();
+            await checkboxLocator.WaitForAsync(new() { State = WaitForSelectorState.Visible });
+        }
+        await checkboxLocator.ScrollIntoViewIfNeededAsync();
+        if (!await checkboxLocator.IsCheckedAsync())
+        {
+            await checkboxLocator.ClickAsync();
+        }
+    }
 
 }

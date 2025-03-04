@@ -45,6 +45,22 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
             await _apprenticeshipTrainingCoursesPage.ClearSpecificFilter("TW14 Hounslow  (within 10 miles)");
             await _apprenticeshipTrainingCoursesPage.VerifyNoFiltersAreApplied();
+            await _apprenticeshipTrainingCoursesPage.EnterApprenticeWorkLocation(_fATeDataHelper.PartialPostCode, _fATeDataHelper.PostCodeDetails);
+            await _apprenticeshipTrainingCoursesPage.ApplyFilters();
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("TW14 Hounslow (Across England)");
+            await _apprenticeshipTrainingCoursesPage.SelectApprenticeTravelDistance("10 miles");
+            await _apprenticeshipTrainingCoursesPage.ApplyFilters();
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
+            await _apprenticeshipTrainingCoursesPage.SelectApprenticeTravelDistance("100 miles");
+            await _apprenticeshipTrainingCoursesPage.ApplyFilters();
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("TW14 Hounslow (within 100 miles)");
+            await _apprenticeshipTrainingCoursesPage.ClearSpecificFilter("TW14 Hounslow  (within 100 miles)");
+            await _apprenticeshipTrainingCoursesPage.VerifyNoFiltersAreApplied();
+            await _apprenticeshipTrainingCoursesPage.SelectJobCategory("Agriculture, environmental and animal care");
+            await _apprenticeshipTrainingCoursesPage.ApplyFilters();
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Agriculture, environmental and animal care");
+            await _apprenticeshipTrainingCoursesPage.ClearSpecificFilter("Agriculture, environmental and animal care");
+            await _apprenticeshipTrainingCoursesPage.VerifyNoFiltersAreApplied();
         }
 
         [When("verifies that all expected links are present and functional")]
