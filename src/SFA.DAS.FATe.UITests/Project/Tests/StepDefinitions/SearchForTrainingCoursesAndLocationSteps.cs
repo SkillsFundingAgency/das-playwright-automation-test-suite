@@ -51,7 +51,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         public async Task ThenTheRelevantTrainingCoursesAreDisplayedWithFiltersSet()
         {
             await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("worker");
-            await _apprenticeshipTrainingCoursesPage.VerifyResultsContainWordWorker("worker");
+            await _apprenticeshipTrainingCoursesPage.VerifyCourseSearchResults("worker");
         }
 
         [When(@"the user searches for a course without location and course name")]

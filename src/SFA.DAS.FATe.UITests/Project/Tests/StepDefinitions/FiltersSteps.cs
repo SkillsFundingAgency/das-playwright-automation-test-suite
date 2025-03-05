@@ -24,58 +24,31 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _searchForTrainingProviderPage = new SearchForTrainingProviderPage(context);
             _apprenticeshipTrainingCoursesPage = new ApprenticeshipTrainingCoursesPage(context);
         }
-
-        [Then("the user verifies filters functionality")]
-        public async Task ThenTheUserVerifiesFiltersFunctionality()
+        [Then("the user is able to select single clear single filters")]
+        public async Task ThenTheUserIsAbleToSelectSingleClearSingleFilters()
         {
-            await _apprenticeshipTrainingCoursesPage.VerifyNoFiltersAreApplied();
-            await _apprenticeshipTrainingCoursesPage.VerifyDistanceFilterSelection("Across England");
-            await _apprenticeshipTrainingCoursesPage.EnterCourseJobOrStandard("Professional");
-            await _apprenticeshipTrainingCoursesPage.ApplyFilters();
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Professional");
-            await _apprenticeshipTrainingCoursesPage.ClearSpecificFilter("Professional");
-            await _apprenticeshipTrainingCoursesPage.EnterApprenticeWorkLocation(_fATeDataHelper.PartialPostCode, _fATeDataHelper.PostCodeDetails);
-            await _apprenticeshipTrainingCoursesPage.ApplyFilters();
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("TW14 Hounslow (Across England)");
-            await _apprenticeshipTrainingCoursesPage.ClearSpecificFilter("TW14 Hounslow (Across England)");
-            await _apprenticeshipTrainingCoursesPage.VerifyNoFiltersAreApplied();
-            await _apprenticeshipTrainingCoursesPage.SelectApprenticeTravelDistance("10 miles");
-            await _apprenticeshipTrainingCoursesPage.EnterApprenticeWorkLocation(_fATeDataHelper.PartialPostCode, _fATeDataHelper.PostCodeDetails);
-            await _apprenticeshipTrainingCoursesPage.ApplyFilters();
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
-            await _apprenticeshipTrainingCoursesPage.ClearSpecificFilter("TW14 Hounslow  (within 10 miles)");
-            await _apprenticeshipTrainingCoursesPage.VerifyNoFiltersAreApplied();
-            await _apprenticeshipTrainingCoursesPage.EnterApprenticeWorkLocation(_fATeDataHelper.PartialPostCode, _fATeDataHelper.PostCodeDetails);
-            await _apprenticeshipTrainingCoursesPage.ApplyFilters();
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("TW14 Hounslow (Across England)");
-            await _apprenticeshipTrainingCoursesPage.SelectApprenticeTravelDistance("10 miles");
-            await _apprenticeshipTrainingCoursesPage.ApplyFilters();
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
-            await _apprenticeshipTrainingCoursesPage.SelectApprenticeTravelDistance("100 miles");
-            await _apprenticeshipTrainingCoursesPage.ApplyFilters();
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("TW14 Hounslow (within 100 miles)");
-            await _apprenticeshipTrainingCoursesPage.ClearSpecificFilter("TW14 Hounslow  (within 100 miles)");
-            await _apprenticeshipTrainingCoursesPage.VerifyNoFiltersAreApplied();
-            await _apprenticeshipTrainingCoursesPage.SelectJobCategory("Agriculture, environmental and animal care");
-            await _apprenticeshipTrainingCoursesPage.ApplyFilters();
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Agriculture, environmental and animal care");
-            await _apprenticeshipTrainingCoursesPage.ClearSpecificFilter("Agriculture, environmental and animal care");
-            await _apprenticeshipTrainingCoursesPage.VerifyNoFiltersAreApplied();
+            await _apprenticeshipTrainingCoursesPage.VerifyAndApplySingleFilters();
         }
 
-        [When("verifies that all expected links are present and functional")]
-        public async Task GivenVerifiesThatAllExpectedLinksArePresentAndFunctional()
+        [Then("the user is able to add multiple filters and clear all")]
+        public async Task ThenTheUserIsAbleToAddMultipleFiltersAndClearAll()
         {
-            await _search_TrainingCourses_ApprenticeworkLocationPage.AccessSearchForTrainingProvider();
-            await _fATeHomePage.ViewShortlist();
-            await _fATeHomePage.ReturnToSearch_TrainingCourses_ApprenticeworkLocationPage();
-            await _fATeHomePage.ReturnToStartPage();
-            await _fATeHomePage.ClickStartNow();
-            await _search_TrainingCourses_ApprenticeworkLocationPage.ViewShortlist();
-            await _fATeHomePage.ReturnToSearch_TrainingCourses_ApprenticeworkLocationPage();
-            await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
-            await _fATeHomePage.ReturnToSearch_TrainingCourses_ApprenticeworkLocationPage();
-
+            await _apprenticeshipTrainingCoursesPage.ApplyMultipleFilters_ClearAtOnce();
         }
+
+        [Then("the user is able to apply filters and verify results")]
+        public async Task ThenTheUserIsAbleToApplyFiltersAndVerifyResults()
+        {
+            await _apprenticeshipTrainingCoursesPage.ApplyCourseFilterAndVerifyResultsForProfessional();
+            await _apprenticeshipTrainingCoursesPage.ApplyLocationFilterAndVerifyResultsForTW14_50miles();
+        }
+        [Then("the user is able to verify results as per the filters set")]
+        public async Task ThenTheUserIsAbleToVerifyResultsAsPerTheFiltersSet()
+        {
+            await _apprenticeshipTrainingCoursesPage.ApplyCourseFilterAndVerifyResultsForProfessional();
+            await _apprenticeshipTrainingCoursesPage.ApplyLocationFilterAndVerifyResultsForTW14_50miles();
+            await _apprenticeshipTrainingCoursesPage.ApplyJobcategoriesFilterAndVerifyResults_ProtectiveServices();
+        }
+
     }
 }
