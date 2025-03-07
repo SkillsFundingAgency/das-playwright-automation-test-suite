@@ -56,7 +56,7 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     {
         await Assertions.Expect(page.Locator("#set-up-an-apprenticeship")).ToContainTextAsync("Set up an apprenticeship");
 
-        await Assertions.Expect(page.GetByRole(AriaRole.Button)).ToContainTextAsync("Start now");
+        await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Start now" })).ToBeVisibleAsync();
 
     }
 

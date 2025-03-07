@@ -1,6 +1,7 @@
 ﻿using Microsoft.Playwright;
 using SFA.DAS.Framework;
 using System;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.UITests.Project.Tests.Pages;
@@ -192,11 +193,23 @@ public class AddApprenticeshipsToEstimateCostPage(ScenarioContext context) : Emp
         await page.GetByRole(AriaRole.Combobox, new() { Name = "Choose apprenticeship" }).FillAsync("Retail manager");
         await page.GetByRole(AriaRole.Option, new() { Name = "Retail manager, Level: 4 (" }).ClickAsync();
 
-        await page.GetByRole(AriaRole.Spinbutton, new() { Name = "Number of apprentices" }).FillAsync("1");
+        var locator = page.GetByRole(AriaRole.Spinbutton, new() { Name = "Number of apprentices" });
 
-        await page.GetByRole(AriaRole.Spinbutton, new() { Name = "Month", Exact = true }).FillAsync(date.Month.ToString());
-        
-        await page.GetByRole(AriaRole.Spinbutton, new() { Name = "Year" }).FillAsync(date.Year.ToString());
+        await locator.PressSequentiallyAsync("1");
+
+        await locator.PressAsync("Tab");
+
+        locator = page.GetByRole(AriaRole.Spinbutton, new() { Name = "Month", Exact = true });
+
+        await locator.PressSequentiallyAsync(date.Month.ToString());
+
+        await locator.PressAsync("Tab");
+
+        locator = page.GetByRole(AriaRole.Spinbutton, new() { Name = "Year" });
+
+        await locator.PressSequentiallyAsync(date.Year.ToString());
+
+        await locator.PressAsync("Tab");
 
         await Assertions.Expect(page.GetByRole(AriaRole.Spinbutton, new() { Name = "Number of months" })).ToHaveValueAsync("12");
 
@@ -232,7 +245,7 @@ public class EstimatedCostsPage(ScenarioContext context) : EmployerFinanceBasePa
 
     public async Task<EditApprenticeshipsPage>  EditApprenticeships()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Edit" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Edit" }).First.ClickAsync();
 
         return await VerifyPageAsync(() => new EditApprenticeshipsPage(context));
 
