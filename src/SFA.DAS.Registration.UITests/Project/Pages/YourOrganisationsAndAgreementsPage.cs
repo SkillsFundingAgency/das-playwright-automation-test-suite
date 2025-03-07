@@ -1,17 +1,16 @@
-﻿using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
-
-namespace SFA.DAS.Registration.UITests.Project.Pages;
+﻿namespace SFA.DAS.Registration.UITests.Project.Pages;
 
 
-public class YourOrganisationsAndAgreementsPage(ScenarioContext context, bool navigate = false) : InterimEmployerBasePage(context, navigate)
+public class YourOrganisationsAndAgreementsPage(ScenarioContext context, bool navigate = false) : InterimYourOrganisationsAndAgreementsPage(context, navigate)
 {
-
-    //private static By TransferStatus => By.CssSelector("p.govuk-body");
 
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your organisations and agreements");
     }
+
+    //private static By TransferStatus => By.CssSelector("p.govuk-body");
+
 
     //public bool VerifyTransfersStatus(string expected) => VerifyElement(() => pageInteractionHelper.FindElements(TransferStatus), $"Transfers status:  {expected}");
 

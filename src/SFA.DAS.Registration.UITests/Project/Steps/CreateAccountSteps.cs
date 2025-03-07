@@ -155,9 +155,9 @@ public class CreateAccountSteps
     public async Task EmployerCreatesANonLevyAccountAndSignsTheAgreement() =>
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType.Company);
 
-    //[When(@"an Employer creates a Non Levy Account and not Signs the Agreement during registration")]
-    //public async Task WhenAnEmployerCreatesANonLevyAccountAndNotSignsTheAgreementDuringRegistration() =>
-    //    await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsNotSigned(OrgType.Company);
+    [When(@"an Employer creates a Non Levy Account and not Signs the Agreement during registration")]
+    public async Task WhenAnEmployerCreatesANonLevyAccountAndNotSignsTheAgreementDuringRegistration() =>
+        await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsNotSigned(OrgType.Company);
 
     [Given(@"an Employer Account with (Company|PublicSector|Charity) Type Org is created and agreement is Signed")]
     [When(@"an Employer Account with (Company|PublicSector|Charity) Type Org is created and agreement is Signed")]
@@ -185,9 +185,9 @@ public class CreateAccountSteps
     public async Task EmployerCreatesALevyAccountAndSignsTheAgreement() =>
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType.Company);
 
-    //[When(@"an Employer creates a Levy Account and not Signs the Agreement during registration")]
-    //public async Task WhenAnEmployerCreatesALevyAccountAndNotSignsTheAgreementDuringRegistration() =>
-    //    await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsNotSigned(OrgType.Company);
+    [When(@"an Employer creates a Levy Account and not Signs the Agreement during registration")]
+    public async Task WhenAnEmployerCreatesALevyAccountAndNotSignsTheAgreementDuringRegistration() =>
+        await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsNotSigned(OrgType.Company);
 
     [When(@"the Employer initiates adding same Org of (Company|PublicSector|Charity) Type again")]
     public async Task WhenTheEmployerInitiatesAddingSameOrgTypeAgain(OrgType orgType) =>

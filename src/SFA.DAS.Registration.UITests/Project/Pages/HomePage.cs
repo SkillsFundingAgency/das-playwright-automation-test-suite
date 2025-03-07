@@ -52,11 +52,13 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
 
     //public void ContinueToCreateAdvert() => formCompletionHelper.ClickElement(ContinueTo);
 
-    //public void VerifySetupAnApprenticeshipSection()
-    //{
-    //    VerifyElement(SetUpAnApprenticeshipSectionHeader);
-    //    VerifyElement(StartNowButton);
-    //}
+    public async Task VerifySetupAnApprenticeshipSection()
+    {
+        await Assertions.Expect(page.Locator("#set-up-an-apprenticeship")).ToContainTextAsync("Set up an apprenticeship");
+
+        await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Start now" })).ToBeVisibleAsync();
+
+    }
 
     public async Task VerifyLevyDeclarationDueTaskMessageShown()
     {

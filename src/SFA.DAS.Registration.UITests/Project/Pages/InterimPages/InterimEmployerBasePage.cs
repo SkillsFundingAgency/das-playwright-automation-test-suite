@@ -16,7 +16,7 @@ public abstract class Navigate : NavigateBase
 
     //private static By MoreLink => By.LinkText("More");
 
-    //protected abstract string Linktext { get; }
+    protected abstract string Linktext { get; }
 
     protected Navigate(ScenarioContext context, bool navigate) : this(context, navigate, string.Empty) { }
 
@@ -37,11 +37,67 @@ public abstract class Navigate : NavigateBase
 
     private static void NavigateTo(Action navigate) => navigate.Invoke();
 
-    private void NavigateTo(bool navigate)
+    private async void NavigateTo(bool navigate)
     {
-        // if (navigate) RetryClickOnException(MoreLink, () => pageInteractionHelper.GetLink(GlobalNavLink, Linktext));
+        if (navigate)
+        {
+            objectContext.SetDebugInformation($"Clicked menu item - {Linktext}");
+
+            await NavigateToMenuItem(Linktext);
+        }
+    }
+
+    protected async Task NavigateToMenuItem(string name)
+    {
+        await page.GetByRole(AriaRole.Menuitem, new() { Name = name }).ClickAsync();
     }
 }
+
+
+public class InterimCreateAnAdvertHomePage(ScenarioContext context) : InterimYourApprenticeshipAdvertsHomePage(context, true)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Create an advert");
+    }
+}
+
+public class InterimYourApprenticeshipAdvertsHomePage(ScenarioContext context, bool navigate, bool gotourl) : InterimEmployerBasePage(context, navigate, gotourl)
+{
+    protected override string Linktext => "Adverts";
+
+    public InterimYourApprenticeshipAdvertsHomePage(ScenarioContext context, bool navigate) : this(context, navigate, false) { }
+
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your apprenticeship adverts");
+    }
+}
+
+public class InterimApprenticesHomePage(ScenarioContext context, bool gotourl) : InterimEmployerBasePage(context, true, gotourl)
+{
+    protected override string Linktext => "Apprentices";
+
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentices");
+    }
+}
+
+
+public class InterimFinanceHomePage(ScenarioContext context, bool navigate, bool gotourl) : InterimEmployerBasePage(context, navigate, gotourl)
+{
+    protected override string Linktext => "Finance";
+
+    public InterimFinanceHomePage(ScenarioContext context, bool navigate) : this(context, navigate, false) { }
+
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Finance");
+    }
+}
+
+
 
 public abstract class InterimEmployerBasePage : Navigate
 {
@@ -68,14 +124,14 @@ public abstract class InterimEmployerBasePage : Navigate
 
     public async Task<HomePage> GoToHomePage()
     {
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Home" }).ClickAsync();
+        await NavigateToMenuItem("Home");
 
         return await VerifyPageAsync(() => new HomePage(context));
     }
 
     public async Task<YourOrganisationsAndAgreementsPage> GoToYourOrganisationsAndAgreementsPage()
     {
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Your organisations and" }).ClickAsync();
+        await NavigateToMenuItem("Your organisations and");
 
         return await VerifyPageAsync(() => new YourOrganisationsAndAgreementsPage(context));
     }
@@ -120,7 +176,7 @@ public abstract class InterimEmployerBasePage : Navigate
 
     public async Task<YourTeamPage> GotoYourTeamPage()
     {
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Your team" }).ClickAsync();
+        await NavigateToMenuItem("Your team");
 
         return await VerifyPageAsync(() => new YourTeamPage(context));
     }
@@ -129,7 +185,7 @@ public abstract class InterimEmployerBasePage : Navigate
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "More" }).ClickAsync();
 
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = "PAYE schemes" }).ClickAsync();
+        await NavigateToMenuItem("PAYE schemes");
 
         return await VerifyPageAsync(() => new PAYESchemesPage(context));
     }
@@ -142,12 +198,19 @@ public abstract class InterimEmployerBasePage : Navigate
     }
 }
 
-public class YourTeamPage(ScenarioContext context, bool navigate = false) : InterimEmployerBasePage(context, navigate)
+public abstract class InterimYourTeamPage(ScenarioContext context, bool navigate) : InterimEmployerBasePage(context, navigate)
 {
+    protected override string Linktext => "Your team";
+
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your team");
     }
+}
+
+public class YourTeamPage(ScenarioContext context, bool navigate = false) : InterimYourTeamPage(context, navigate)
+{
+
 
     public async Task<AccessDeniedPage> ClickInviteANewMemberButtonAndRedirectedToAccessDeniedPage()
     {
@@ -297,13 +360,18 @@ public class InvitationSentPage(ScenarioContext context) : InterimHomeBasePage(c
     }
 }
 
-public class PAYESchemesPage(ScenarioContext context, bool navigate = false) : InterimEmployerBasePage(context, navigate)
+public class InterimPAYESchemesPage(ScenarioContext context, bool navigate) : InterimEmployerBasePage(context, navigate)
 {
+    protected override string Linktext => "PAYE schemes";
+
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("PAYE schemes");
     }
+}
 
+public class PAYESchemesPage(ScenarioContext context, bool navigate = false) : InterimPAYESchemesPage(context, navigate)
+{
     private string SecondPaye => objectContext.GetGatewayPaye(1);
 
     public async Task<UsingYourGovtGatewayDetailsPage> ClickAddNewSchemeButton()

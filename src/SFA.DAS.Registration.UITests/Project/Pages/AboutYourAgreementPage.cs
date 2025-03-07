@@ -3,12 +3,19 @@ using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
 
 namespace SFA.DAS.Registration.UITests.Project.Pages;
 
-public class AboutYourAgreementPage(ScenarioContext context) : InterimEmployerBasePage(context, false)
+
+public class InterimYourOrganisationsAndAgreementsPage(ScenarioContext context, bool navigate) : InterimEmployerBasePage(context, navigate)
 {
+    protected override string Linktext => "Your organisations and agreements";
+
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("About your agreement");
     }
+}
+
+public class AboutYourAgreementPage(ScenarioContext context) : InterimYourOrganisationsAndAgreementsPage(context, false)
+{
 
     public async Task<SignAgreementPage> ClickContinueToYourAgreementButtonInAboutYourAgreementPage()
     {
