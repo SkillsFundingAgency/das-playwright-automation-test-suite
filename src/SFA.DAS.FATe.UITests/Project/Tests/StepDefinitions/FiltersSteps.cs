@@ -20,11 +20,12 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _searchForTrainingProviderPage = new SearchForTrainingProviderPage(context);
             _apprenticeshipTrainingCoursesPage = new ApprenticeshipTrainingCoursesPage(context);
         }
-        [Then("the user is able to select single clear single filters")]
-        public async Task ThenTheUserIsAbleToSelectSingleClearSingleFilters()
+        [Then("the user is able to select and clear single filters")]
+        public async Task ThenTheUserIsAbleToSelectAndClearSingleFilters()
         {
             await _apprenticeshipTrainingCoursesPage.VerifyAndApplySingleFilters();
         }
+
 
         [Then("the user is able to add multiple filters and clear all")]
         public async Task ThenTheUserIsAbleToAddMultipleFiltersAndClearAll()
@@ -32,14 +33,8 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCoursesPage.ApplyMultipleFilters_ClearAtOnce();
         }
 
-        [Then("the user is able to apply filters and verify results")]
-        public async Task ThenTheUserIsAbleToApplyFiltersAndVerifyResults()
-        {
-            await _apprenticeshipTrainingCoursesPage.ApplyCourseFilterAndVerifyResultsForProfessional();
-            await _apprenticeshipTrainingCoursesPage.ApplyLocationFilterAndVerifyResultsForTW14_50miles();
-        }
-        [Then("the user is able to verify results as per the filters set")]
-        public async Task ThenTheUserIsAbleToVerifyResultsAsPerTheFiltersSet()
+        [Then("the user is able to verify results for the filters set")]
+        public async Task ThenTheUserIsAbleToVerifyResultsForTheFiltersSet()
         {
             await _apprenticeshipTrainingCoursesPage.ApplyCourseFilterAndVerifyResultsForProfessional();
             await _apprenticeshipTrainingCoursesPage.ApplyLocationFilterAndVerifyResultsForTW14_50miles();
