@@ -14,7 +14,6 @@ public class FATeHomePage(ScenarioContext context) : FATeBasePage(context)
 
         return await VerifyPageAsync(() => new FATeHomePage(context));
     }
-
     public async Task<Search_TrainingCourses_ApprenticeworkLocationPage> ClickStartNow()
     {
         await page.Locator("a.govuk-button--start").ClickAsync();

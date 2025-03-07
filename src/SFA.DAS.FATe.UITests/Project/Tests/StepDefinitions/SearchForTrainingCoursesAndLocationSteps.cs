@@ -1,8 +1,4 @@
 ﻿using SFA.DAS.FATe.UITests.Project.Tests.Pages;
-using TechTalk.SpecFlow;
-using System;
-using SpecFlow;
-using Azure;
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 {
@@ -51,7 +47,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         public async Task ThenTheRelevantTrainingCoursesAreDisplayedWithFiltersSet()
         {
             await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("worker");
-            await _apprenticeshipTrainingCoursesPage.VerifyResultsContainWordWorker("worker");
+            await _apprenticeshipTrainingCoursesPage.VerifyCourseSearchResults("worker");
         }
 
         [When(@"the user searches for a course without location and course name")]
@@ -79,6 +75,5 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Selected");
             await _apprenticeshipTrainingCoursesPage.VerifyNoResultsMessage();
         }
-    
     }
 }

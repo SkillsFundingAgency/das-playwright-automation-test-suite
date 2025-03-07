@@ -14,7 +14,6 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
         await ClickContinue();
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
-
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithCourseNoResults()
     {
         await page.Locator("#CourseTerm").ClickAsync();
@@ -22,7 +21,6 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
         await ClickContinue();
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
-
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithCourseAndApprenticeWorkLocation()
     {
         await page.Locator("#CourseTerm").ClickAsync();
@@ -32,7 +30,6 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
         await ClickContinue();
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
-
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithApprenticeWorkLocation()
     {
         await page.Locator("#search-location").ClickAsync();
