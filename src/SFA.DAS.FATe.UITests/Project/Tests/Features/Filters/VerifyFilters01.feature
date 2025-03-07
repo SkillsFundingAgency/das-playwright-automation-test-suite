@@ -1,6 +1,5 @@
 Feature: VerifyFilters01
 
-
 @fate
 @regression
 Scenario: Verify functionality of the filters 

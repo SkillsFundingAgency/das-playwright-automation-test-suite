@@ -1,8 +1,4 @@
 ﻿using SFA.DAS.FATe.UITests.Project.Tests.Pages;
-using TechTalk.SpecFlow;
-using System;
-using SpecFlow;
-using Azure;
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 {
@@ -79,6 +75,5 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Selected");
             await _apprenticeshipTrainingCoursesPage.VerifyNoResultsMessage();
         }
-    
     }
 }

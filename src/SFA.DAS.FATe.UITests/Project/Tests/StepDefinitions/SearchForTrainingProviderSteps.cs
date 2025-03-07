@@ -1,7 +1,5 @@
 ﻿using SFA.DAS.FATe.UITests.Project.Tests.Pages;
-using TechTalk.SpecFlow;
-using System;
-using SpecFlow;
+
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 {

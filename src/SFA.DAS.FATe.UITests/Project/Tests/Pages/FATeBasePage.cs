@@ -1,4 +1,7 @@
-﻿namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
 
 public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
 {
@@ -138,37 +141,20 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyTrainingProviderWithinDistance(int miles)
     {
-        // Locator for all provider links
-        var providerLinks = page.Locator("a.das-search-results__link");
+        var providerLinks = page.GetByRole(AriaRole.Link, new() { NameRegex = new Regex($"View \\d+ training providers within {miles} miles") });
 
-        // Wait for at least one link to be visible
-        await Assertions.Expect(providerLinks).ToBeVisibleAsync();
-
-        // Iterate over all provider links and check if any of them contain the desired distance text
-        var providerCount = await providerLinks.CountAsync();
-        for (int i = 0; i < providerCount; i++)
+        int count = await providerLinks.CountAsync();
+        if (count == 0)
         {
-            var providerLink = providerLinks.Nth(i);
-
-            // Check if the link contains the specific miles distance in its text
-            var linkText = await providerLink.TextContentAsync();
-            if (linkText.Contains($"{miles} miles"))
-            {
-                // If the distance is found, verify the link is visible and contains the correct distance text
-                await Assertions.Expect(providerLink).ToBeVisibleAsync();
-                await Assertions.Expect(providerLink).ToContainTextAsync($"{miles} miles");
-                return; // Exit once we find the correct link
-            }
+            throw new Exception($"No provider links found containing text: 'View X training providers within {miles} miles'.");
         }
-
-        // If no provider links were found with the specified miles, throw an exception
-        throw new Exception($"No training provider link found with '{miles} miles'.");
+        await Assertions.Expect(providerLinks).ToHaveCountAsync(count);
     }
-
     public async Task VerifyJobCategoryResults(string jobCategory)
     {
-        var jobCategoryLocator = page.Locator($"dd.das-definition-list__definition:has-text('{jobCategory}')");
-        await Assertions.Expect(jobCategoryLocator).ToBeVisibleAsync();
-        await Assertions.Expect(jobCategoryLocator).ToContainTextAsync(jobCategory);
+        var jobCategoryLocator = page.Locator($"dt.das-definition-list__title:has-text('Job Category') + dd.das-definition-list__definition");
+        await Assertions.Expect(jobCategoryLocator.First).ToBeVisibleAsync();
+        await Assertions.Expect(jobCategoryLocator.First).ToContainTextAsync(jobCategory);
     }
+
 }

@@ -96,6 +96,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     {
         await SelectApprenticeTravelDistance("50 miles");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
+        await SelectApprenticeTravelDistance("50 miles");
         await ApplyFilters();
         await VerifyFilterIsSet("TW14 Hounslow (within 50 miles)");
         await VerifyTrainingProviderWithinDistance(50);
