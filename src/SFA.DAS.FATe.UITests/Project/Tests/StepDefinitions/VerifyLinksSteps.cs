@@ -30,5 +30,12 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
             await _fATeHomePage.ReturnToSearch_TrainingCourses_ApprenticeworkLocationPage();
         }
+        [When("the user verifies pagination links are working as expected")]
+        public async Task WhenTheUserVerifiesPaginationLinksAreWorkingAsExpected()
+        {
+            await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
+            await _fATeHomePage.VerifyPaginationLinks(new List<int> { 2, 4, 5 });
+        }
+
     }
 }

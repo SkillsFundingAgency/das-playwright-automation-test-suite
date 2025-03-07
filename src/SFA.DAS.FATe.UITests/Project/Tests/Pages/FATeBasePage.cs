@@ -156,5 +156,30 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
         await Assertions.Expect(jobCategoryLocator.First).ToBeVisibleAsync();
         await Assertions.Expect(jobCategoryLocator.First).ToContainTextAsync(jobCategory);
     }
-
+    public async Task VerifyPaginationLinks(List<int> pageNumbers)
+    {
+        foreach (var pageNumber in pageNumbers)
+        {
+            var pageLink = page.Locator($".das-flex-space-around.app-pagination-nav.das-pagination-links a:has-text('{pageNumber}')");
+            await pageLink.ClickAsync();
+            await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+            var currentUrl = page.Url;
+            if (!currentUrl.Contains($"PageNumber={pageNumber}"))
+            {
+                throw new Exception($"URL does not contain expected PageNumber={pageNumber}");
+            }
+        }
+        var nextLink = page.Locator(".das-flex-space-around.app-pagination-nav.das-pagination-links a:has-text('Next »')");
+        if (await nextLink.IsVisibleAsync())
+        {
+            await nextLink.ClickAsync();
+            await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        }
+        var previousLink = page.Locator(".das-flex-space-around.app-pagination-nav.das-pagination-links a:has-text('« Previous')");
+        if (await previousLink.IsVisibleAsync())
+        {
+            await previousLink.ClickAsync();
+            await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        }
+    }
 }
