@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Login.Service", "SF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.SupportTools.UITests", "SFA.DAS.SupportTools.UITests\SFA.DAS.SupportTools.UITests.csproj", "{BF3B3022-7E8D-45CD-AA45-ABA20FFA846D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerPortal.UITests", "SFA.DAS.Registration.UITests\SFA.DAS.EmployerPortal.UITests.csproj", "{B740E44E-D579-40CB-B67D-E2858E92854F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerPortal.UITests", "SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.csproj", "{B740E44E-D579-40CB-B67D-E2858E92854F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataGenerator", "DataGenerator", "{16EAD795-CF80-4B73-BC87-06411669C43D}"
 EndProject
