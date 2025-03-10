@@ -1,5 +1,5 @@
 ﻿using SFA.DAS.Login.Service.Project;
-using SFA.DAS.Registration.UITests.Project.Helpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
 namespace SFA.DAS.SupportTools.UITests.Project.Tests.Steps
 {

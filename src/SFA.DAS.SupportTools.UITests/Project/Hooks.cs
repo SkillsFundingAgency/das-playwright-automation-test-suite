@@ -1,5 +1,5 @@
-﻿using SFA.DAS.Registration.UITests.Project.Helpers;
-using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
 
 namespace SFA.DAS.SupportTools.UITests.Project;
 
@@ -27,6 +27,6 @@ public class Hooks(ScenarioContext context)
     {
         context.Set(new LoginCredentialsHelper(_objectContext));
 
-        context.Set(new RegistrationSqlDataHelper(_objectContext, _dbConfig));
+        context.Set(new EmployerPortalSqlDataHelper(_objectContext, _dbConfig));
     }
 }

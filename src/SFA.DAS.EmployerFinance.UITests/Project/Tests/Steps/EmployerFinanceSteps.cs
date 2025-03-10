@@ -1,6 +1,6 @@
 ﻿
 using SFA.DAS.EmployerFinance.UITests.Project.Tests.Pages;
-using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.UITests.Project.Tests.Steps;

@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Registration.UITests.Project;
+﻿using SFA.DAS.EmployerPortal.UITests.Project;
 using SFA.DAS.SupportTools.UITests.Project.Helpers;
 using SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
 using System.Linq;
