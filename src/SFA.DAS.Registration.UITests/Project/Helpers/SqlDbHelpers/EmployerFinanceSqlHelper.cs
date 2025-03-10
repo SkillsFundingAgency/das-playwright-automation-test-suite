@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
 
 public class EmployerFinanceSqlHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.FinanceDbConnectionString)
 {

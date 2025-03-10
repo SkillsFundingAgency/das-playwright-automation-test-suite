@@ -1,7 +1,7 @@
-﻿using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
 using System;
 
-namespace SFA.DAS.Registration.UITests.Project.Pages;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public class CreateAnAccountToManageApprenticeshipsPage(ScenarioContext context) : RegistrationBasePage(context)
 {

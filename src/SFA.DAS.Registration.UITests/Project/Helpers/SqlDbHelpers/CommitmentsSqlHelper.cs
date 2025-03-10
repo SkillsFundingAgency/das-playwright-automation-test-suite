@@ -1,5 +1,5 @@
 ﻿
-namespace SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
 
 public class CommitmentsSqlHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.CommitmentsDbConnectionString)
 {

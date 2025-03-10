@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 
 public abstract class InterimHomeBasePage(ScenarioContext context, bool navigate) : InterimEmployerBasePage(context, navigate)
 {

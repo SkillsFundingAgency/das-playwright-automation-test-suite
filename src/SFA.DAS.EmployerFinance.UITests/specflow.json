@@ -7,7 +7,7 @@
   },
   "stepAssemblies": [
     { "assembly": "SFA.DAS.Framework" },
-    { "assembly": "SFA.DAS.Registration.UITests" }
+    { "assembly": "SFA.DAS.EmployerPortal.UITests" }
   ],
   "generator": {
     "allowRowTests": false,

@@ -1,6 +1,6 @@
-﻿using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
+﻿using static SFA.DAS.EmployerPortal.UITests.Project.Helpers.EnumHelper;
 
-namespace SFA.DAS.Registration.UITests.Project.Pages;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public class SearchForYourOrganisationPage(ScenarioContext context) : RegistrationBasePage(context)
 {

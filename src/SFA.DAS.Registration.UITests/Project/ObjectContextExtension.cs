@@ -1,5 +1,5 @@
 ﻿
-namespace SFA.DAS.Registration.UITests.Project;
+namespace SFA.DAS.EmployerPortal.UITests.Project;
 
 public static class ObjectContextExtension
 {

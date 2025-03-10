@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Registration.UITests.Project.Pages;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public abstract class EmpAccountCreationBase : RegistrationBasePage
 {

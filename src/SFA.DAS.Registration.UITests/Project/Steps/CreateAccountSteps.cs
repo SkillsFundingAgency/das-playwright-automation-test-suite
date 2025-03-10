@@ -1,11 +1,11 @@
 ﻿
-using SFA.DAS.Registration.UITests.Project.Helpers;
-using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
-using SFA.DAS.Registration.UITests.Project.Pages;
-using SFA.DAS.Registration.UITests.Project.Pages.CreateAccount;
-using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
+using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
+using static SFA.DAS.EmployerPortal.UITests.Project.Helpers.EnumHelper;
 
-namespace SFA.DAS.Registration.UITests.Project.Steps;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Steps;
 
 [Binding]
 public class CreateAccountSteps

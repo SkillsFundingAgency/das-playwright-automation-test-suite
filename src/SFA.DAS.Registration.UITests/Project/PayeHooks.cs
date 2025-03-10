@@ -1,6 +1,6 @@
-﻿using SFA.DAS.Registration.UITests.Project.Helpers;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
-namespace SFA.DAS.Registration.UITests.Project;
+namespace SFA.DAS.EmployerPortal.UITests.Project;
 
 [Binding]
 public class PayeHooks(ScenarioContext context)

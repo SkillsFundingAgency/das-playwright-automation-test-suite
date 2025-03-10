@@ -1,6 +1,6 @@
-﻿using SFA.DAS.Registration.UITests.Project.Pages.CreateAccount;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
-namespace SFA.DAS.Registration.UITests.Project.Pages;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public class YouHaveAcceptedYourEmployerAgreementPage(ScenarioContext context) : RegistrationBasePage(context)
 {

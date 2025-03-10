@@ -1,5 +1,5 @@
-﻿using SFA.DAS.Registration.UITests.Project.Helpers;
-using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
 
 namespace SFA.DAS.SupportTools.UITests.Project;
 

@@ -1,7 +1,7 @@
-﻿using SFA.DAS.Registration.UITests.Project.Helpers;
-using SFA.DAS.Registration.UITests.Project.Pages.CreateAccount;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
-namespace SFA.DAS.Registration.UITests.Project.Pages.StubPages;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
 
 public class StubYouHaveSignedInEmployerPage(ScenarioContext context, string username, string idOrUserRef, bool newUser) : StubYouHaveSignedInBasePage(context, username, idOrUserRef, newUser)
 {

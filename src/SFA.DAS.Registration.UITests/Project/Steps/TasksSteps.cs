@@ -1,8 +1,8 @@
-﻿using SFA.DAS.Registration.UITests.Project.Helpers;
-using SFA.DAS.Registration.UITests.Project.Pages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using System;
 
-namespace SFA.DAS.Registration.UITests.Project.Steps;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Steps;
 
 [Binding]
 public class TasksSteps

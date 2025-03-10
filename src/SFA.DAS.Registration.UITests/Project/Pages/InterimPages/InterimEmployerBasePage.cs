@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 
 public abstract class NavigateBase : BasePage
 {

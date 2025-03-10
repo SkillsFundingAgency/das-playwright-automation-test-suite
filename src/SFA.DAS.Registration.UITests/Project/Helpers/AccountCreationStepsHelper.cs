@@ -1,8 +1,8 @@
-﻿using SFA.DAS.Registration.UITests.Project.Pages;
-using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
-using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
+using static SFA.DAS.EmployerPortal.UITests.Project.Helpers.EnumHelper;
 
-namespace SFA.DAS.Registration.UITests.Project.Helpers;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
 public class AccountCreationStepsHelper(ScenarioContext context)
 {

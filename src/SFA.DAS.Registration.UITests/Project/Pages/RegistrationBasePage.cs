@@ -1,6 +1,6 @@
-﻿using SFA.DAS.Registration.UITests.Project.Helpers;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
-namespace SFA.DAS.Registration.UITests.Project.Pages;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public abstract class RegistrationBasePage(ScenarioContext context) : BasePage(context)
 {

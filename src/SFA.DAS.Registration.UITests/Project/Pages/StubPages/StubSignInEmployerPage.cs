@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Registration.UITests.Project.Pages.StubPages;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
 
 public class CheckStubSignInPage(ScenarioContext context) : CheckPage(context)
 {

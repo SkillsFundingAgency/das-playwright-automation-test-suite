@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Registration.UITests.Project.Pages.CreateAccount;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
 public class ConfirmPAYESchemePage(ScenarioContext context, string paye) : RegistrationBasePage(context)
 {

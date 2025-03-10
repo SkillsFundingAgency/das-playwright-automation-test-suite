@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Registration.UITests.Project;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project;
 
 [Binding]
 public class RegistrationConfigurationSetup(ScenarioContext context)

@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Registration.UITests.Project.Pages;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public class CheckYourAccountPage(ScenarioContext context) : CheckPage(context)
 {

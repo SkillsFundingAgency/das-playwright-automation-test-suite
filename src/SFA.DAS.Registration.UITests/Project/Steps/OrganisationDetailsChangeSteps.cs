@@ -1,7 +1,7 @@
-﻿using SFA.DAS.Registration.UITests.Project.Helpers.SqlDbHelpers;
-using SFA.DAS.Registration.UITests.Project.Pages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-namespace SFA.DAS.Registration.UITests.Project.Steps;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Steps;
 
 [Binding]
 class OrganisationDetailsChangeSteps

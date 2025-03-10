@@ -1,6 +1,6 @@
-﻿using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 
-namespace SFA.DAS.Registration.UITests.Project.Pages;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public class OrganisationHasBeenAddedPage(ScenarioContext context) : InterimHomeBasePage(context, false)
 {

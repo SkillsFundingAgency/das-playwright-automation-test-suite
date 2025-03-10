@@ -1,7 +1,7 @@
-﻿using SFA.DAS.Registration.UITests.Project.Pages;
-using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
 
-namespace SFA.DAS.Registration.UITests.Project.Helpers;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
 public class CreateAccountEmployerPortalLoginHelper(ScenarioContext context) : EmployerPortalLoginHelper(context)
 {

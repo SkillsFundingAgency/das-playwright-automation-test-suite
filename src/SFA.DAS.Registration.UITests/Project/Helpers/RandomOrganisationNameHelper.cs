@@ -1,7 +1,7 @@
 ﻿
-using static SFA.DAS.Registration.UITests.Project.Helpers.EnumHelper;
+using static SFA.DAS.EmployerPortal.UITests.Project.Helpers.EnumHelper;
 
-namespace SFA.DAS.Registration.UITests.Project.Helpers;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
 
 public class CharityTypeOrg { public string Number; public string Name; public string Address; }

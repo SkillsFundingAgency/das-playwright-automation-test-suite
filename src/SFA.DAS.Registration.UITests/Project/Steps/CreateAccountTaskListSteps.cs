@@ -1,9 +1,9 @@
-﻿using SFA.DAS.Registration.UITests.Project.Helpers;
-using SFA.DAS.Registration.UITests.Project.Pages;
-using SFA.DAS.Registration.UITests.Project.Pages.CreateAccount;
-using SFA.DAS.Registration.UITests.Project.Pages.StubPages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
 
-namespace SFA.DAS.Registration.UITests.Project.Steps;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Steps;
 
 [Binding]
 public class CreateAccountTaskListSteps

@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Registration.UITests.Project.Helpers;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
 public class LoginCredentialsHelper(ObjectContext objectContext)
 {

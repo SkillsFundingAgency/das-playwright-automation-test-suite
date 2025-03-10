@@ -1,7 +1,7 @@
-﻿using SFA.DAS.Registration.UITests.Project.Pages.InterimPages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System;
 
-namespace SFA.DAS.Registration.UITests.Project.Pages;
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBasePage(context, navigate)
 {
