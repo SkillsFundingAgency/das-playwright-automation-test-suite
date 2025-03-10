@@ -9,7 +9,7 @@ public class TeamMemberSteps
 {
     private readonly ScenarioContext _context;
     private readonly ObjectContext _objectContext;
-    private readonly RegistrationDataHelper _registrationDataHelper;
+    private readonly EmployerPortalDataHelper _employerPortalDataHelper;
     private YourTeamPage _yourTeamPage;
     private readonly AccountSignOutHelper _accountSignOutHelper;
     private readonly AccountCreationStepsHelper _accountCreationStepsHelper;
@@ -19,7 +19,7 @@ public class TeamMemberSteps
     {
         _context = context;
         _objectContext = _context.Get<ObjectContext>();
-        _registrationDataHelper = context.Get<RegistrationDataHelper>();
+        _employerPortalDataHelper = context.Get<EmployerPortalDataHelper>();
         _accountSignOutHelper = new AccountSignOutHelper(context);
         _accountCreationStepsHelper = new AccountCreationStepsHelper(context);
     }
@@ -27,7 +27,7 @@ public class TeamMemberSteps
     [Then(@"Employer is able to invite a team member with Viewer access")]
     public async Task ThenEmployerIsAbleToInviteATeamMemberWithViewerAccess()
     {
-        _invitedMemberEmailId = _registrationDataHelper.AnotherRandomEmail;
+        _invitedMemberEmailId = _employerPortalDataHelper.AnotherRandomEmail;
 
         var page = await new HomePage(_context, true).GoToHomePage();
 

@@ -39,15 +39,15 @@ public class Hooks(ScenarioContext context)
 
         var aornDataHelper = new AornDataHelper();
 
-        var registrationDatahelpers = new RegistrationDataHelper(tags, $"{dataHelper.GatewayUsername}@{emaildomain}", aornDataHelper);
+        var employerPortalDatahelpers = new EmployerPortalDataHelper(tags, $"{dataHelper.GatewayUsername}@{emaildomain}", aornDataHelper);
 
-        context.Set(registrationDatahelpers);
+        context.Set(employerPortalDatahelpers);
 
         context.Set(new LoginCredentialsHelper(_objectContext));
 
-        _objectContext.SetOrganisationName(registrationDatahelpers.CompanyTypeOrg);
+        _objectContext.SetOrganisationName(employerPortalDatahelpers.CompanyTypeOrg);
 
-        context.Set(new RegistrationSqlDataHelper(_objectContext, _dbConfig));
+        context.Set(new EmployerPortalSqlDataHelper(_objectContext, _dbConfig));
 
         context.Set(new TprSqlDataHelper(_dbConfig, _objectContext, aornDataHelper));
 
@@ -57,7 +57,7 @@ public class Hooks(ScenarioContext context)
 
         context.Set(new TransferMatchingSqlDataHelper(_objectContext, _dbConfig));
 
-        var randomEmail = registrationDatahelpers.RandomEmail;
+        var randomEmail = employerPortalDatahelpers.RandomEmail;
 
         _objectContext.SetRegisteredEmail(randomEmail);
 

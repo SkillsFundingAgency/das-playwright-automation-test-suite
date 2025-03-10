@@ -1,7 +1,7 @@
 ﻿Feature: RE_CEACMPT_01
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 Scenario: RE_CEACMPT_01_Create an Employer Account with CompanyType Organisation and Add another Org of PublicSector Type
 	When an Employer Account with Company Type Org is created and agreement is Signed

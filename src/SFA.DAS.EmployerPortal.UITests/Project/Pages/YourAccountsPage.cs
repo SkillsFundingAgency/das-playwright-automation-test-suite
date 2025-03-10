@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-public class YourAccountsPage(ScenarioContext context) : RegistrationBasePage(context)
+public class YourAccountsPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public static string PageTitle => "Your accounts";
 

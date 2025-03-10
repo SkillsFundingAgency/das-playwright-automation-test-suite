@@ -4,7 +4,7 @@ Feature: RE_TL_02
 A short summary of the feature
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 Scenario: RE_TL_02_Add PAYE Details on task list
 	Given user logs into stub

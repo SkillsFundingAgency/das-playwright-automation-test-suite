@@ -1,7 +1,7 @@
 ﻿Feature: RE_CLEA_02
 
 @regression
-@registration
+@employerportal
 @addlevyfunds
 @adddynamicfunds
 Scenario: RE_CLEA_02_Create a Levy Employer Account and Sign the Agreement

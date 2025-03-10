@@ -8,7 +8,7 @@ class OrganisationDetailsChangeSteps
 {
     private readonly ScenarioContext _context;
     private readonly ObjectContext _objectContext;
-    private readonly RegistrationSqlDataHelper _registrationSqlDataHelper;
+    private readonly EmployerPortalSqlDataHelper _employerPortalSqlDataHelper;
     private YourAgreementsWithTheEducationAndSkillsFundingAgencyPage _yourAgreementsWithTheEducationAndSkillsFundingAgencyPage;
     private ReviewYourDetailsPage _reviewYourDetailsPage;
 
@@ -16,7 +16,7 @@ class OrganisationDetailsChangeSteps
     {
         _context = context;
         _objectContext = _context.Get<ObjectContext>();
-        _registrationSqlDataHelper = context.Get<RegistrationSqlDataHelper>();
+        _employerPortalSqlDataHelper = context.Get<EmployerPortalSqlDataHelper>();
     }
 
     [When(@"the Employer reviews Agreement page")]
@@ -35,7 +35,7 @@ class OrganisationDetailsChangeSteps
     {
         var loginUser = _objectContext.GetLoginCredentials();
 
-        await _registrationSqlDataHelper.UpdateLegalEntityName(loginUser.Username);
+        await _employerPortalSqlDataHelper.UpdateLegalEntityName(loginUser.Username);
 
         _yourAgreementsWithTheEducationAndSkillsFundingAgencyPage = await ClickViewAgreementLinkInYourOrganisationsAndAgreementsPage();
     }

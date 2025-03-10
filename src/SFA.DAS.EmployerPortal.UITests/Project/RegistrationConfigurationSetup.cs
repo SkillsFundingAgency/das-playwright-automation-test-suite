@@ -1,12 +1,12 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project;
 
 [Binding]
-public class RegistrationConfigurationSetup(ScenarioContext context)
+public class EmployerPortalConfigurationSetup(ScenarioContext context)
 {
     private readonly ConfigSection _configSection = context.Get<ConfigSection>();
 
     [BeforeScenario(Order = 12)]
-    public async Task SetUpRegistrationConfigConfiguration()
+    public async Task SetUpEmployerPortalConfigConfiguration()
     {
         //if (new TestDataSetUpConfigurationHelper(context).NoNeedToSetUpConfiguration()) return;
 
@@ -23,7 +23,7 @@ public class RegistrationConfigurationSetup(ScenarioContext context)
     }
 
     [BeforeScenario(Order = 2), Scope(Tag = "@addmultiplelevyfunds")]
-    public async Task SetUpRegistrationConfigConfigurationForAddMultipleLevyFunds()
+    public async Task SetUpEmployerPortalConfigConfigurationForAddMultipleLevyFunds()
     {
         await context.SetEasLoginUser([_configSection.GetConfigSection<AddMultiplePayeLevyUser>()]);
 

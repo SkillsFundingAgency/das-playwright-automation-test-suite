@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
-public class GgSignInPage(ScenarioContext context) : RegistrationBasePage(context)
+public class GgSignInPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("Sign in");
 
@@ -20,7 +20,7 @@ public class GgSignInPage(ScenarioContext context) : RegistrationBasePage(contex
 
     public async Task SignInWithInvalidDetails()
     {
-        await SignInTo(registrationDataHelper.InvalidGGId, registrationDataHelper.InvalidGGPassword);
+        await SignInTo(employerPortalDataHelper.InvalidGGId, employerPortalDataHelper.InvalidGGPassword);
     }
 
     public async Task VerifyErrorMessage(string error) => await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync(error, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });

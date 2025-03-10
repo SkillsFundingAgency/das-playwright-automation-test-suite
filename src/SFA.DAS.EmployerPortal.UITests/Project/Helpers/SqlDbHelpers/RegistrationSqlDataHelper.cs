@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
 
-public class RegistrationSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AccountsDbConnectionString)
+public class EmployerPortalSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AccountsDbConnectionString)
 {
     public async Task<string> GetAccountApprenticeshipEmployerType(string email) => await GetDataAsString($"SELECT ApprenticeshipEmployerType FROM [employer_account].[Account] WHERE Id IN {GetAccountIdQuery(email)} ORDER BY CreatedDate");
 

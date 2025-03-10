@@ -1,7 +1,7 @@
 ﻿Feature: RE_ODC_01
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 @donotuserandomorgname
 @reodc01

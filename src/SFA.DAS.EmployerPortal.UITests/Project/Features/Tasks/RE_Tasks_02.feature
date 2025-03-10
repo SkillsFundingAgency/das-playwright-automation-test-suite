@@ -1,7 +1,7 @@
 ﻿Feature: RE_Tasks_02
 
 @regression
-@registration
+@employerportal
 Scenario: RE_Tasks_02_Verify tasks menu on employer home page
 	Given the Employer logins using existing Levy Account
 	When the current date is in range 16 - 19

@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
-public class EnterYourTrainingProviderNameReferenceNumberUKPRNPage(ScenarioContext context) : RegistrationBasePage(context)
+public class EnterYourTrainingProviderNameReferenceNumberUKPRNPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {

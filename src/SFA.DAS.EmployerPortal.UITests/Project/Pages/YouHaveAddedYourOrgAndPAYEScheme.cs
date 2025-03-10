@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-public class YouHaveAddedYourOrgAndPAYEScheme(ScenarioContext context) : RegistrationBasePage(context)
+public class YouHaveAddedYourOrgAndPAYEScheme(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {

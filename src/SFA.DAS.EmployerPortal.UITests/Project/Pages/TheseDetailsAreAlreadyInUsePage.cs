@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-public class TheseDetailsAreAlreadyInUsePage(ScenarioContext context) : RegistrationBasePage(context)
+public class TheseDetailsAreAlreadyInUsePage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {

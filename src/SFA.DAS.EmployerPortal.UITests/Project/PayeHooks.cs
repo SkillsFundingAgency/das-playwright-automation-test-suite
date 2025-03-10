@@ -53,11 +53,11 @@ public class PayeHooks(ScenarioContext context)
 
         await mongoDbDataGenerator.AddGatewayUsers(0);
 
-        var registrationDatahelpers = context.Get<RegistrationDataHelper>();
+        var employerPortalDatahelpers = context.Get<EmployerPortalDataHelper>();
 
         _loginCredentialsHelper = context.Get<LoginCredentialsHelper>();
 
-        _loginCredentialsHelper.SetLoginCredentials(registrationDatahelpers.RandomEmail, string.Empty, registrationDatahelpers.CompanyTypeOrg);
+        _loginCredentialsHelper.SetLoginCredentials(employerPortalDatahelpers.RandomEmail, string.Empty, employerPortalDatahelpers.CompanyTypeOrg);
 
         await AddFunds(mongoDbDataGenerator, fundType);
     }

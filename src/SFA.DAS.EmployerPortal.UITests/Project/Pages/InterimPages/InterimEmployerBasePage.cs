@@ -252,11 +252,11 @@ public class YourTeamPage(ScenarioContext context, bool navigate = false) : Inte
 
 }
 
-public class ViewTeamMemberPage(ScenarioContext context) : RegistrationBasePage(context)
+public class ViewTeamMemberPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(registrationDataHelper.FullName);
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(employerPortalDataHelper.FullName);
     }
 
     public async Task<YourTeamPage> ClickResendInvitationButton()
@@ -281,7 +281,7 @@ public class ViewTeamMemberPage(ScenarioContext context) : RegistrationBasePage(
     }
 }
 
-public class RemoveTeamMemberPage(ScenarioContext context) : RegistrationBasePage(context)
+public class RemoveTeamMemberPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {
@@ -296,7 +296,7 @@ public class RemoveTeamMemberPage(ScenarioContext context) : RegistrationBasePag
     }
 }
 
-public class CancelInvitationPage(ScenarioContext context) : RegistrationBasePage(context)
+public class CancelInvitationPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {
@@ -319,7 +319,7 @@ public class CancelInvitationPage(ScenarioContext context) : RegistrationBasePag
 }
 
 
-public class CreateInvitationPage(ScenarioContext context) : RegistrationBasePage(context)
+public class CreateInvitationPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {
@@ -330,7 +330,7 @@ public class CreateInvitationPage(ScenarioContext context) : RegistrationBasePag
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).FillAsync(email);
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Full name" }).FillAsync(registrationDataHelper.FullName);
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Full name" }).FillAsync(employerPortalDataHelper.FullName);
     }
 
     public async Task<InvitationSentPage> SelectViewerAccessRadioButtonAndSendInvitation()
@@ -401,7 +401,7 @@ public class PAYESchemesPage(ScenarioContext context, bool navigate = false) : I
     }
 }
 
-public class PAYESchemeDetailsPage(ScenarioContext context) : RegistrationBasePage(context)
+public class PAYESchemeDetailsPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {
@@ -416,7 +416,7 @@ public class PAYESchemeDetailsPage(ScenarioContext context) : RegistrationBasePa
     }
 }
 
-public class RemoveThisSchemePage(ScenarioContext context) : RegistrationBasePage(context)
+public class RemoveThisSchemePage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {

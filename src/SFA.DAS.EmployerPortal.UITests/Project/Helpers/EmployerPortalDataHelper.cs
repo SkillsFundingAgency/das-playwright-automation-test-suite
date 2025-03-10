@@ -2,9 +2,9 @@
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
-public class RegistrationDataHelper
+public class EmployerPortalDataHelper
 {
-    public RegistrationDataHelper(string[] tags, string emailaddress, AornDataHelper aornDataHelper)
+    public EmployerPortalDataHelper(string[] tags, string emailaddress, AornDataHelper aornDataHelper)
     {
         var randomOrganisationNameHelper = new RandomOrganisationNameHelper(tags);
         var randomPersonNameHelper = new RandomPersonNameHelper();

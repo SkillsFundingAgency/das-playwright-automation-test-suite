@@ -1,7 +1,7 @@
 ﻿Feature: RE_CEACHT_01
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 Scenario: RE_CEACHT_01_Create an Employer Account with Charity Type Org
 	When a User Account is created

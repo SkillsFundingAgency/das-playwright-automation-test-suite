@@ -1,7 +1,7 @@
 ﻿Feature: RE_MTM_01
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 Scenario: RE_MTM_01_Verify adding a Team member as viewer
 	When an Employer Account with Company Type Org is created and agreement is Signed

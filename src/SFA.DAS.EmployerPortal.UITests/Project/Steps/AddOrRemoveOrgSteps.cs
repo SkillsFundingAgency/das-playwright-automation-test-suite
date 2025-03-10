@@ -7,7 +7,7 @@ namespace SFA.DAS.EmployerPortal.UITests.Project.Steps;
 [Binding]
 public class AddOrRemoveOrgSteps(ScenarioContext context)
 {
-    private readonly RegistrationDataHelper _registrationDataHelper = context.Get<RegistrationDataHelper>();
+    private readonly EmployerPortalDataHelper _employerPortalDataHelper = context.Get<EmployerPortalDataHelper>();
     private HomePage _homePage;
     private CheckYourDetailsPage _checkYourDetailsPage;
     private YourOrganisationsAndAgreementsPage _yourOrganisationsAndAgreementsPage;
@@ -24,7 +24,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
     [When(@"the Employer initiates adding another Org of (Company|PublicSector|Charity|Charity2) Type")]
     public async Task WhenTheEmployerInitiatesAddingAnotherOrgType(OrgType orgType)
     {
-        _registrationDataHelper.SetAccountNameAsOrgName = false;
+        _employerPortalDataHelper.SetAccountNameAsOrgName = false;
 
         var page = await AccountCreationStepsHelper.SearchForAnotherOrg(new HomePage(context, true), orgType);
 
@@ -44,7 +44,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
     [Then(@"the Employer is able check the details of the Charity Org added are displayed in the 'Check your details' page and Continue")]
     public async Task ThenTheEmployerIsAbleToCheckTheDetailsOfTheCharityOrgAddedAreDisplayedInThePageAndContinue()
     {
-        await VerifyOrgDetails(_registrationDataHelper.CharityTypeOrg1Number, _registrationDataHelper.CharityTypeOrg1Name);
+        await VerifyOrgDetails(_employerPortalDataHelper.CharityTypeOrg1Number, _employerPortalDataHelper.CharityTypeOrg1Name);
 
         await ThenTheNewOrgAddedIsShownInTheAccountOrganisationsList();
     }
@@ -52,7 +52,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
     [Then(@"the Employer is able check the details of the 2nd Charity Org added are displayed in the 'Check your details' page and Continue")]
     public async Task ThenTheEmployerIsAbleToCheckTheDetailsOfThe2ndCharityOrgAddedAreDisplayedInThePageAndContinue()
     {
-        await VerifyOrgDetails(_registrationDataHelper.CharityTypeOrg2Number, _registrationDataHelper.CharityTypeOrg2Name);
+        await VerifyOrgDetails(_employerPortalDataHelper.CharityTypeOrg2Number, _employerPortalDataHelper.CharityTypeOrg2Name);
 
         await ThenTheNewOrgAddedIsShownInTheAccountOrganisationsList();
     }

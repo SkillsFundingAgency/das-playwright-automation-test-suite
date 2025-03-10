@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-public class SearchForYourOrganisationPage(ScenarioContext context) : RegistrationBasePage(context)
+public class SearchForYourOrganisationPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {
@@ -16,19 +16,19 @@ public class SearchForYourOrganisationPage(ScenarioContext context) : Registrati
         switch (orgType)
         {
             case OrgType.Company:
-                orgName = (registrationDataHelper.CompanyTypeOrg);
+                orgName = (employerPortalDataHelper.CompanyTypeOrg);
                 break;
             case OrgType.Company2:
-                orgName = (registrationDataHelper.CompanyTypeOrg2);
+                orgName = (employerPortalDataHelper.CompanyTypeOrg2);
                 break;
             case OrgType.PublicSector:
-                orgName = (registrationDataHelper.PublicSectorTypeOrg);
+                orgName = (employerPortalDataHelper.PublicSectorTypeOrg);
                 break;
             case OrgType.Charity:
-                orgName = (registrationDataHelper.CharityTypeOrg1Name);
+                orgName = (employerPortalDataHelper.CharityTypeOrg1Name);
                 break;
             case OrgType.Charity2:
-                orgName = (registrationDataHelper.CharityTypeOrg2Name);
+                orgName = (employerPortalDataHelper.CharityTypeOrg2Name);
                 break;
             case OrgType.Default:
                 orgName = (objectContext.GetOrganisationName());
@@ -57,6 +57,6 @@ public class SearchForYourOrganisationPage(ScenarioContext context) : Registrati
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Search for your organisation" }).FillAsync(orgName);
 
-        if (registrationDataHelper.SetAccountNameAsOrgName) objectContext.SetOrganisationName(orgName);
+        if (employerPortalDataHelper.SetAccountNameAsOrgName) objectContext.SetOrganisationName(orgName);
     }
 }

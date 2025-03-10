@@ -1,7 +1,7 @@
 ﻿Feature: RE_CEACHT_04
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 Scenario: RE_CEACHT_04_Create an Employer Account with Charity Type Org and verify Adding the same Org again
 	When an Employer Account with Charity Type Org is created and agreement is Signed

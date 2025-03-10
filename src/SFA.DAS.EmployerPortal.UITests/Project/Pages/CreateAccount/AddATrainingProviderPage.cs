@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
-public class AddATrainingProviderPage(ScenarioContext context) : RegistrationBasePage(context)
+public class AddATrainingProviderPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a training provider");
 

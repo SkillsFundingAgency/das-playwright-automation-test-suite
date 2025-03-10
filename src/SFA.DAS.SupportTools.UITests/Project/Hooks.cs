@@ -27,6 +27,6 @@ public class Hooks(ScenarioContext context)
     {
         context.Set(new LoginCredentialsHelper(_objectContext));
 
-        context.Set(new RegistrationSqlDataHelper(_objectContext, _dbConfig));
+        context.Set(new EmployerPortalSqlDataHelper(_objectContext, _dbConfig));
     }
 }

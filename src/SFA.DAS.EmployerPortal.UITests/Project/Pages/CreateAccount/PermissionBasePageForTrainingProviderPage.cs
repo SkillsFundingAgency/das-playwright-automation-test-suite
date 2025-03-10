@@ -20,7 +20,7 @@ public enum RecruitApprenticePermissions
 }
 
 
-public abstract class PermissionBasePageForTrainingProviderPage(ScenarioContext context) : RegistrationBasePage(context)
+public abstract class PermissionBasePageForTrainingProviderPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
 
     //public async Task<ManageTrainingProvidersPage> AddOrSetPermissions((AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permisssion)

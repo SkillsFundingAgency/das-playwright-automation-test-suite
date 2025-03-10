@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
 public class AccountCreationStepsHelper(ScenarioContext context)
 {
-    private readonly RegistrationDataHelper _registrationDataHelper = context.Get<RegistrationDataHelper>();
+    private readonly EmployerPortalDataHelper _employerPortalDataHelper = context.Get<EmployerPortalDataHelper>();
     private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
     private readonly AccountSignOutHelper _accountSignOutHelper = new(context);
 
@@ -30,7 +30,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
     {
         var page = await RegisterStubUserAccount(indexPage, email);
 
-        var page1 = await page.EnterNameAndContinue(_registrationDataHelper);
+        var page1 = await page.EnterNameAndContinue(_employerPortalDataHelper);
 
         var page2 = await page1.ConfirmNameAndContinue();
 
@@ -46,7 +46,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
     {
         var page = await RegisterStubUserAccount(indexPage, email);
 
-        var page1 = await page.EnterNameAndContinue(_registrationDataHelper);
+        var page1 = await page.EnterNameAndContinue(_employerPortalDataHelper);
 
         var page2 = await page1.ConfirmNameAndContinue();
 
@@ -110,7 +110,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
         return await page1.SignInTo(1);
     }
 
-    internal async Task<AddAPAYESchemePage> CreateAnotherUserAccount(CreateAnAccountToManageApprenticeshipsPage indexPage) => await CreateUserAccount(indexPage, _registrationDataHelper.AnotherRandomEmail);
+    internal async Task<AddAPAYESchemePage> CreateAnotherUserAccount(CreateAnAccountToManageApprenticeshipsPage indexPage) => await CreateUserAccount(indexPage, _employerPortalDataHelper.AnotherRandomEmail);
 
     internal async Task<AddAPAYESchemePage> CreateUserAccount(CreateAnAccountToManageApprenticeshipsPage indexPage, string email) =>
         await RegisterUserAccount(indexPage, email);
@@ -202,9 +202,9 @@ public class AccountCreationStepsHelper(ScenarioContext context)
     {
         return orgType switch
         {
-            OrgType.Company => _registrationDataHelper.CompanyTypeOrg,
-            OrgType.PublicSector => _registrationDataHelper.PublicSectorTypeOrg,
-            _ => _registrationDataHelper.CharityTypeOrg1Name,
+            OrgType.Company => _employerPortalDataHelper.CompanyTypeOrg,
+            OrgType.PublicSector => _employerPortalDataHelper.PublicSectorTypeOrg,
+            _ => _employerPortalDataHelper.CharityTypeOrg1Name,
         };
     }
 

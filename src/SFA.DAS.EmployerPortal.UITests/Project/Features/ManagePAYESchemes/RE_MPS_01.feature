@@ -1,7 +1,7 @@
 ﻿Feature: RE_MPS_01
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 @addanothernonlevypayedetails
 Scenario: RE_MPS_01_Create an Employer Account and Add Another NonLevy PAYE Scheme and Remove it

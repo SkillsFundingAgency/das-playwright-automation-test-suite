@@ -1,7 +1,7 @@
 ﻿Feature: RE_S_RA_01
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 Scenario: RE_S_RA_01_Create and Rename Employer Account
 	When an Employer Account with Company Type Org is created and agreement is Signed

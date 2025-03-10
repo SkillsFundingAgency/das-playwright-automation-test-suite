@@ -1,7 +1,7 @@
 ﻿Feature: RE_MPS_02
 
 @regression
-@registration
+@employerportal
 @addlevyfunds
 @addsecondlevyfunds
 Scenario: RE_MPS_02_Create an Employer Account and Add Another Levy PAYE Scheme and Remove it

@@ -1,7 +1,7 @@
 ﻿Feature: RE_CNLEA_02
 
 @regression
-@registration
+@employerportal
 @addlevyfunds
 @adddynamicfunds
 Scenario: RE_CNLEA_02_Create an Employer Account with levy declarations as 0

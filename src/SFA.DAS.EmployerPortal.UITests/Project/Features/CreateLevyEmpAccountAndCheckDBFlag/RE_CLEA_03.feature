@@ -1,7 +1,7 @@
 ﻿Feature: RE_CLEA_03
 
 @regression
-@registration
+@employerportal
 @addlevyfunds
 @adddynamicfunds
 Scenario: RE_CLEA_03_Create a Levy Account for a specific period

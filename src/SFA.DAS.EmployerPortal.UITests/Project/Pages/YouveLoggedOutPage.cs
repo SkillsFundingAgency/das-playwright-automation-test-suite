@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-public class YouveLoggedOutPage(ScenarioContext context) : RegistrationBasePage(context)
+public class YouveLoggedOutPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {

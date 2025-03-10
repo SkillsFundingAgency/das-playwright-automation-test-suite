@@ -1,7 +1,7 @@
 ﻿Feature: RE_RAO_01
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 Scenario: RE_RAO_01_Verify Employer is Not allowed to Remove an Org when there is only one in the Account and Allowed to Remove a second Org added
 	When an Employer Account with PublicSector Type Org is created and agreement is Signed

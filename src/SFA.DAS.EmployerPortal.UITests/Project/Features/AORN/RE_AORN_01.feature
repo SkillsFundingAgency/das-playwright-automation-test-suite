@@ -1,5 +1,5 @@
 ﻿@regression
-@registration
+@employerportal
 @addnonlevyfunds
 Feature: RE_AORN_01
 

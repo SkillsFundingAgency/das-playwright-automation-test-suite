@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
-public class YouVeSuccessfullyAddedUserDetailsPage(ScenarioContext context, bool updated) : RegistrationBasePage(context)
+public class YouVeSuccessfullyAddedUserDetailsPage(ScenarioContext context, bool updated) : EmployerPortalBasePage(context)
 {
     private readonly string PageTitle = updated ? "You have successfully changed user details" : "You have successfully added user details";
 

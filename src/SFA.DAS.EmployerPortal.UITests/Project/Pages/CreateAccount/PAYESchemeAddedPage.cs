@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
-public class PAYESchemeAddedPage(ScenarioContext context, string paye) : RegistrationBasePage(context)
+public class PAYESchemeAddedPage(ScenarioContext context, string paye) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"{paye} has been added");
 

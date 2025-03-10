@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
-public class SetYourEmployerAccountNamePage(ScenarioContext context) : RegistrationBasePage(context)
+public class SetYourEmployerAccountNamePage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Set your account name");
 

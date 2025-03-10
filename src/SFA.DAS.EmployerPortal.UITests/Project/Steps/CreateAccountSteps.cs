@@ -12,8 +12,8 @@ public class CreateAccountSteps
 {
     private readonly ScenarioContext _context;
     private readonly ObjectContext _objectContext;
-    private readonly RegistrationDataHelper _registrationDataHelper;
-    private readonly RegistrationSqlDataHelper _registrationSqlDataHelper;
+    private readonly EmployerPortalDataHelper _employerPortalDataHelper;
+    private readonly EmployerPortalSqlDataHelper _employerPortalSqlDataHelper;
     private readonly TprSqlDataHelper _tprSqlDataHelper;
     private readonly AccountCreationStepsHelper _accountCreationStepsHelper;
 
@@ -35,8 +35,8 @@ public class CreateAccountSteps
     {
         _context = context;
         _objectContext = _context.Get<ObjectContext>();
-        _registrationDataHelper = context.Get<RegistrationDataHelper>();
-        _registrationSqlDataHelper = context.Get<RegistrationSqlDataHelper>();
+        _employerPortalDataHelper = context.Get<EmployerPortalDataHelper>();
+        _employerPortalSqlDataHelper = context.Get<EmployerPortalSqlDataHelper>();
         _tprSqlDataHelper = context.Get<TprSqlDataHelper>();
         _accountCreationStepsHelper = new AccountCreationStepsHelper(context);
     }
@@ -109,7 +109,7 @@ public class CreateAccountSteps
     [When(@"enters an Invalid Company number for Org search")]
     public async Task<SelectYourOrganisationPage> WhenAnEmployerEntersAnInvalidCompanyNumberForOrgSearchInOrganisationSearchPage()
     {
-        _selectYourOrganisationPage = await _searchForYourOrganisationPage.SearchForAnOrganisation(_registrationDataHelper.InvalidCompanyNumber);
+        _selectYourOrganisationPage = await _searchForYourOrganisationPage.SearchForAnOrganisation(_employerPortalDataHelper.InvalidCompanyNumber);
 
         return _selectYourOrganisationPage = await VerifyPageHelper.VerifyPageAsync(() => new SelectYourOrganisationPage(_context));
     }
@@ -199,7 +199,7 @@ public class CreateAccountSteps
     [Then(@"ApprenticeshipEmployerType in Account table is marked as (.*)")]
     public async Task ThenApprenticeshipEmployerTypeInAccountTableIsMarkedAs(string expectedApprenticeshipEmployerType)
     {
-        var actualApprenticeshipEmployerType = await _registrationSqlDataHelper.GetAccountApprenticeshipEmployerType(_registrationDataHelper.RandomEmail);
+        var actualApprenticeshipEmployerType = await _employerPortalSqlDataHelper.GetAccountApprenticeshipEmployerType(_employerPortalDataHelper.RandomEmail);
 
         Assert.AreEqual(expectedApprenticeshipEmployerType, actualApprenticeshipEmployerType);
     }
@@ -225,7 +225,7 @@ public class CreateAccountSteps
     {
         await _accountCreationStepsHelper.SignOut();
 
-        _objectContext.SetRegisteredEmail(_registrationDataHelper.AnotherRandomEmail);
+        _objectContext.SetRegisteredEmail(_employerPortalDataHelper.AnotherRandomEmail);
 
         _addAPAYESchemePage = await _accountCreationStepsHelper.RegisterUserAccount();
 
@@ -313,7 +313,7 @@ public class CreateAccountSteps
             case "BlankPayeValidAorn":
                 await _tprSqlDataHelper.CreateSingleOrgAornData();
 
-                await _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue(_registrationDataHelper.AornNumber, "");
+                await _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue(_employerPortalDataHelper.AornNumber, "");
 
                 await _enterYourPAYESchemeDetailsPage.VerifyErrorMessageAbovePayeTextBox(blankPayeFieldErrorMessage);
 
@@ -444,7 +444,7 @@ public class CreateAccountSteps
     }
 
     private async Task EnterInvalidAornAndPaye() =>
-        await _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue(AornDataHelper.InvalidAornNumber, RegistrationDataHelper.InvalidPaye);
+        await _enterYourPAYESchemeDetailsPage.EnterAornAndPayeAndContinue(AornDataHelper.InvalidAornNumber, EmployerPortalDataHelper.InvalidPaye);
 
     private async Task<SearchForYourOrganisationPage> CreateAnUserAcountAndAddPaye()
     {

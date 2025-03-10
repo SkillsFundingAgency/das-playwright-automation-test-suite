@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-public abstract class EmpAccountCreationBase : RegistrationBasePage
+public abstract class EmpAccountCreationBase : EmployerPortalBasePage
 {
     private readonly LoggedInAccountUser loggedInAccountUser;
 

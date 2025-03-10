@@ -5,7 +5,7 @@ Feature: RE_TL_01
 Create Account by completing one task at a time
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 Scenario: RE_TL_01_Create Account by completing one task at a time
 	Given user logs into stub

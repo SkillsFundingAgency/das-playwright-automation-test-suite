@@ -57,7 +57,7 @@ public class StubYouHaveSignedInEmployerPage(ScenarioContext context, string use
 
 public class StubAddYourUserDetailsPage(ScenarioContext context) : StubAddYourUserDetailsBasePage(context)
 {
-    public async Task<ConfirmYourUserDetailsPage> EnterNameAndContinue(RegistrationDataHelper dataHelper)
+    public async Task<ConfirmYourUserDetailsPage> EnterNameAndContinue(EmployerPortalDataHelper dataHelper)
     {
         await EnterNameAndContinue(dataHelper.FirstName, dataHelper.LastName);
 

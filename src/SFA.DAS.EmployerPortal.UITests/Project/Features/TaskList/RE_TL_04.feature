@@ -3,7 +3,7 @@
 A short summary of the feature
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 Scenario: RE_TL_04_Employer Agreement on task list
 	Given user logs into stub

@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-public class EnterYourPAYESchemeDetailsPage(ScenarioContext context) : RegistrationBasePage(context)
+public class EnterYourPAYESchemeDetailsPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {
@@ -43,7 +43,7 @@ public class EnterYourPAYESchemeDetailsPage(ScenarioContext context) : Registrat
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
     }
 
-    private async Task EnterAornAndPayeAndContinue() => await EnterAornAndPayeAndContinue(registrationDataHelper.AornNumber, objectContext.GetGatewayPaye(0));
+    private async Task EnterAornAndPayeAndContinue() => await EnterAornAndPayeAndContinue(employerPortalDataHelper.AornNumber, objectContext.GetGatewayPaye(0));
 
     public async Task EnterAornAndPayeAndContinue(string aornNumber, string Paye)
     {

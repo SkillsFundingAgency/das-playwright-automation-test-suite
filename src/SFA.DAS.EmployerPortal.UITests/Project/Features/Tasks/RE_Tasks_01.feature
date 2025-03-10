@@ -1,7 +1,7 @@
 ﻿Feature: RE_Tasks_01
 
 @regression
-@registration
+@employerportal
 @addlevyfunds
 @adddynamicfunds
 Scenario: RE_Tasks_01_Create an Employer Account with Public Sector Type Org and verify Tasks link

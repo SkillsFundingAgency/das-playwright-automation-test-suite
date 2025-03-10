@@ -3,7 +3,7 @@ using System;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-public class CreateAnAccountToManageApprenticeshipsPage(ScenarioContext context) : RegistrationBasePage(context)
+public class CreateAnAccountToManageApprenticeshipsPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public static string PageTitle => "Create an account to manage apprenticeships";
 
@@ -40,7 +40,7 @@ public class CheckIndexPage(ScenarioContext context) : CheckPage(context)
     protected override ILocator PageLocator => new CreateAnAccountToManageApprenticeshipsPage(context).PageIdentifier;
 }
 
-public class AccountUnavailablePage(ScenarioContext context) : RegistrationBasePage(context)
+public class AccountUnavailablePage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public static string PageTitle => "This account is unavailable";
 

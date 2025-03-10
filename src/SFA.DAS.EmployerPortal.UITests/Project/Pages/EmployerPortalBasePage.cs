@@ -2,10 +2,10 @@
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-public abstract class RegistrationBasePage(ScenarioContext context) : BasePage(context)
+public abstract class EmployerPortalBasePage(ScenarioContext context) : BasePage(context)
 {
     #region Helpers and Context
-    protected readonly RegistrationDataHelper registrationDataHelper = context.GetValue<RegistrationDataHelper>();
+    protected readonly EmployerPortalDataHelper employerPortalDataHelper = context.GetValue<EmployerPortalDataHelper>();
     #endregion
 
     public async Task<HomePage> GoToHomePage()

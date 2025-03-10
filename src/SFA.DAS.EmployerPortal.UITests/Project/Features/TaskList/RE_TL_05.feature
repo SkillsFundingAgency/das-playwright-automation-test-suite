@@ -2,7 +2,7 @@
 
 A short summary of the feature
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 
 Scenario: RE_TL_05_Add training provider permissions on task list

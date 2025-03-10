@@ -1,7 +1,7 @@
 ﻿Feature: RE_CLEA_01
 
 @regression
-@registration
+@employerportal
 @addlevyfunds
 @adddynamicfunds
 @govukstub

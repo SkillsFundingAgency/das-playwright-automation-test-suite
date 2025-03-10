@@ -1,7 +1,7 @@
 ﻿Feature: RE_AORN_02
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 Scenario: RE_AORN_02_Create an Employer Account through AORN route with paye details attached to a Multiple Organisations
 	Given a User Account is created

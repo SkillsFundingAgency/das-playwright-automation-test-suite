@@ -1,7 +1,7 @@
 ﻿Feature: RE_CEAPST_02
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 @addanothernonlevypayedetails
 Scenario: RE_CEAPST_02_Create an Employer Account with Public Sector Type Org and create another Employer Account with the Same Org

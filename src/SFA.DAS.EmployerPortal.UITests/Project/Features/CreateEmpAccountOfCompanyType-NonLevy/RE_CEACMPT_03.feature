@@ -1,7 +1,7 @@
 ﻿Feature: RE_CEACMPT_03
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 @addanothernonlevypayedetails
 Scenario: RE_CEACMPT_03_Validate changing Organisation and PAYE features from Check details page

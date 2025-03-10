@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-public class ChooseAnOrganisationPage(ScenarioContext context) : RegistrationBasePage(context)
+public class ChooseAnOrganisationPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {

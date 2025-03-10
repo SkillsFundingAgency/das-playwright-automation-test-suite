@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
-public class YouAccountNameHasBeenChangeToPage(ScenarioContext context, string newAccountName) : RegistrationBasePage(context)
+public class YouAccountNameHasBeenChangeToPage(ScenarioContext context, string newAccountName) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync($"Your account name has been changed to {newAccountName}");
 

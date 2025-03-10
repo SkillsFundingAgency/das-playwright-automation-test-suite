@@ -143,7 +143,7 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     }
 }
 
-public class ManageYourApprenticesPage(ScenarioContext context) : RegistrationBasePage(context)
+public class ManageYourApprenticesPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {
@@ -152,7 +152,7 @@ public class ManageYourApprenticesPage(ScenarioContext context) : RegistrationBa
 }
 
 
-public class ApprenticeRequestsPage(ScenarioContext context) : RegistrationBasePage(context)
+public class ApprenticeRequestsPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {
@@ -160,7 +160,7 @@ public class ApprenticeRequestsPage(ScenarioContext context) : RegistrationBaseP
     }
 }
 
-public class TransfersPage(ScenarioContext context) : RegistrationBasePage(context)
+public class TransfersPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {
@@ -168,7 +168,7 @@ public class TransfersPage(ScenarioContext context) : RegistrationBasePage(conte
     }
 }
 
-public class MyTransferPledgesPage(ScenarioContext context) : RegistrationBasePage(context)
+public class MyTransferPledgesPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {

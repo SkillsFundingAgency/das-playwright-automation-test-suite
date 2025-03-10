@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
-public class SelectYourOrganisationPage(ScenarioContext context) : RegistrationBasePage(context)
+public class SelectYourOrganisationPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
     public override async Task VerifyPage()
     {
@@ -14,19 +14,19 @@ public class SelectYourOrganisationPage(ScenarioContext context) : RegistrationB
         switch (orgType)
         {
             case OrgType.Company:
-                await SelectOrg("Company", registrationDataHelper.CompanyTypeOrg);
+                await SelectOrg("Company", employerPortalDataHelper.CompanyTypeOrg);
                 break;
             case OrgType.Company2:
-                await SelectOrg("Company", registrationDataHelper.CompanyTypeOrg2);
+                await SelectOrg("Company", employerPortalDataHelper.CompanyTypeOrg2);
                 break;
             case OrgType.PublicSector:
-                await SelectOrg("Public sector", registrationDataHelper.PublicSectorTypeOrg);
+                await SelectOrg("Public sector", employerPortalDataHelper.PublicSectorTypeOrg);
                 break;
             case OrgType.Charity:
-                await SelectOrg("Charity", registrationDataHelper.CharityTypeOrg1Name);
+                await SelectOrg("Charity", employerPortalDataHelper.CharityTypeOrg1Name);
                 break;
             case OrgType.Charity2:
-                await SelectOrg("Charity", registrationDataHelper.CharityTypeOrg2Name);
+                await SelectOrg("Charity", employerPortalDataHelper.CharityTypeOrg2Name);
                 break;
             case OrgType.Default:
                 await SelectOrg("Show all", objectContext.GetOrganisationName());

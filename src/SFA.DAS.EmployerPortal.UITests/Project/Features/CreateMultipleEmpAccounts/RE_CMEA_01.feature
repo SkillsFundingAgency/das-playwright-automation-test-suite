@@ -1,7 +1,7 @@
 ﻿Feature: RE_CMEA_01
 
 @regression
-@registration
+@employerportal
 @addnonlevyfunds
 @addanothernonlevypayedetails
 Scenario: RE_CMEA_01_Create an Employer Account and Add another Account for the same login

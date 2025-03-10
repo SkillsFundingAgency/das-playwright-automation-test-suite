@@ -6,15 +6,15 @@ namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
 public class AccountCreationTaskListStepsHelper(ScenarioContext context)
 {
-    private readonly RegistrationDataHelper _registrationDataHelper = context.Get<RegistrationDataHelper>();
+    private readonly EmployerPortalDataHelper _employerPortalDataHelper = context.Get<EmployerPortalDataHelper>();
 
-    internal async Task<ConfirmYourUserDetailsPage> UserEntersNameAndContinue(StubAddYourUserDetailsPage stubUserDetailsPage) => await stubUserDetailsPage.EnterNameAndContinue(_registrationDataHelper);
+    internal async Task<ConfirmYourUserDetailsPage> UserEntersNameAndContinue(StubAddYourUserDetailsPage stubUserDetailsPage) => await stubUserDetailsPage.EnterNameAndContinue(_employerPortalDataHelper);
 
     internal async Task<ConfirmYourUserDetailsPage> UserChangesUserDetails(ConfirmYourUserDetailsPage confirmDetailsPage)
     {
         var page = await confirmDetailsPage.ClickChange();
 
-        return await page.EnterNameAndContinue(_registrationDataHelper);
+        return await page.EnterNameAndContinue(_employerPortalDataHelper);
     }
 
     internal static async Task<CreateYourEmployerAccountPage> UserClicksContinueButtonToAcknowledge(ConfirmYourUserDetailsPage confirmDetailsPage)
@@ -111,9 +111,9 @@ public class AccountCreationTaskListStepsHelper(ScenarioContext context)
     {
         var page = await createEmployerAccountPage.GoToSetYourAccountNameLink();
 
-        var page1 = await page.SelectoptionToChangeAccountName(_registrationDataHelper.CompanyTypeOrg2);
+        var page1 = await page.SelectoptionToChangeAccountName(_employerPortalDataHelper.CompanyTypeOrg2);
 
-        var page2 = await page1.ContinueToAcknowledge(_registrationDataHelper.CompanyTypeOrg2);
+        var page2 = await page1.ContinueToAcknowledge(_employerPortalDataHelper.CompanyTypeOrg2);
 
         return await page2.ContinueToCreateYourEmployerAccountPage();
     }
