@@ -74,3 +74,13 @@ public abstract class PermissionBasePageForTrainingProviderPage(ScenarioContext 
         await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
     }
 }
+
+public class ManageTrainingProvidersLinkHomePage(ScenarioContext context) : HomePage(context)
+{
+    public async Task<ManageTrainingProvidersPage> OpenRelationshipPermissions()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Manage training providers" }).ClickAsync();
+
+        return new ManageTrainingProvidersPage(context);
+    }
+}

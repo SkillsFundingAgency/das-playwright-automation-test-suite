@@ -1,6 +1,4 @@
-﻿using SFA.DAS.FATe.UITests.Project.Tests.Pages;
-
-namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
 
 public class FATeHomePage(ScenarioContext context) : FATeBasePage(context)
 {
@@ -8,7 +6,7 @@ public class FATeHomePage(ScenarioContext context) : FATeBasePage(context)
 
     public async Task<FATeHomePage> AcceptCookieAndAlert()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" }).ClickAsync();
+        await AcceptAllCookies();
 
         await page.Locator(".das-cookie-banner__hide-button").ClickAsync();
 

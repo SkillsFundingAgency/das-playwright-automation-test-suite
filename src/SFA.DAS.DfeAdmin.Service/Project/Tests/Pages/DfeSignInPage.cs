@@ -8,13 +8,20 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
     public ILocator DfePageIdentifier => page.Locator("h1");
 
+    public static string DfePageIdentifierCss => ".govuk-heading-xl";
+
     public override async Task VerifyPage() => await Assertions.Expect(DfePageIdentifier).ToContainTextAsync(DfePageTitle);
 
     public async Task SubmitValidLoginDetails(DfeAdminUser dfeAdminUser)
     {
+        await SubmitValidLoginDetails(dfeAdminUser.Username, dfeAdminUser.Password);
+    }
+
+    protected async Task SubmitValidLoginDetails(string username, string password)
+    {
         await VerifyPage();
 
-        await EnterValidLoginDetails(dfeAdminUser.Username, dfeAdminUser.Password);
+        await EnterValidLoginDetails(username, password);
 
         try
         {
@@ -25,5 +32,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
             //do nothing 
             objectContext.SetDebugInformation($"{DfePageTitle} resulted in {ex.Message}");
         }
+
+        await Assertions.Expect(DfePageIdentifier).Not.ToContainTextAsync(DfePageTitle);
     }
 }

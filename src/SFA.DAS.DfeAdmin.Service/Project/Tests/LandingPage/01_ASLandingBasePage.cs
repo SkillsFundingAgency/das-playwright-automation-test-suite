@@ -16,3 +16,4 @@ public abstract class ASLandingCheckBasePage(ScenarioContext context) : CheckPag
 
     public abstract Task ClickStartNowButton();
 }
+

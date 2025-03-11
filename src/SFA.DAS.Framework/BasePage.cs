@@ -64,6 +64,16 @@ namespace SFA.DAS.Framework
             return nextPage;
         }
 
+        protected async Task AcceptAllCookies()
+        {
+            var cookieLocator = page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" });
+
+            if (await cookieLocator.CountAsync() > 0 && await cookieLocator.IsVisibleAsync())
+            {
+                await page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" }).ClickAsync();
+            }
+        }
+
         protected async Task<IResponse> ReloadPageAsync()
         {
             objectContext.SetDebugInformation($"Reload page with Title: '{ await page.TitleAsync()}'");
