@@ -12,7 +12,7 @@ public class EmployerPermissionsStepsHelper(ScenarioContext context)
 
     private async Task<HomePage> SetProviderPermissions(ProviderConfig providerConfig, (AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permissions)
     {
-        var page = OpenProviderPermissions();
+        var page = await OpenProviderPermissions();
 
         var page1 = await page.SelectAddATrainingProvider();
 
@@ -20,18 +20,16 @@ public class EmployerPermissionsStepsHelper(ScenarioContext context)
 
         var page3 = await page2.AddOrSetPermissions(permissions);
 
-        var page4 = await page3.VerifyYouHaveAddedNotification(providerConfig.Name);
+        await page3.VerifyYouHaveAddedNotification(providerConfig.Name);
 
-        return await page4.GoToHomePage();
+        return await page3.GoToHomePage();
     }
 
     public async Task<HomePage> AcceptOrDeclineProviderRequest(RequestType requestType, ProviderConfig providerConfig, string requestId, bool accept)
     {
-        var page = OpenProviderPermissions();
+        var page = await OpenProviderPermissions();
 
         AddOrReviewRequestFromProvider page1 = requestType == RequestType.Permission ? await page.ReviewProviderRequests(providerConfig, requestId) : await page.ViewProviderRequests(providerConfig, requestId);
-
-        EmployerPortalBasePage registrationBasePage;
 
         if (requestType == RequestType.Permission)
         {
@@ -39,13 +37,17 @@ public class EmployerPermissionsStepsHelper(ScenarioContext context)
             {
                 var page2 = await page1.AcceptProviderRequest();
 
-                registrationBasePage = await page2.VerifyYouHaveSetPermissionNotification(providerConfig.Name);
+                await page2.VerifyYouHaveSetPermissionNotification(providerConfig.Name);
+
+                return await page2.GoToHomePage();
             }
             else
             {
                 var page2 = await page1.DeclinePermissionRequest();
 
-                registrationBasePage = await page2.VerifyYouHaveDeclinedNotification(providerConfig.Name);
+                await page2.VerifyYouHaveDeclinedNotification(providerConfig.Name);
+
+                return await page2.GoToHomePage();
             }
         }
 
@@ -55,17 +57,19 @@ public class EmployerPermissionsStepsHelper(ScenarioContext context)
             {
                 var page2 = await page1.AcceptProviderRequest();
 
-                registrationBasePage = await page2.VerifyYouHaveAddedNotification(providerConfig.Name);
+                await page2.VerifyYouHaveAddedNotification(providerConfig.Name);
+
+                return await page2.GoToHomePage();
             }
             else
             {
                 var page2 = await page1.DeclineAddRequest();
 
-                registrationBasePage = await page2.ConfirmDeclineRequest();
+                var page3 = await page2.ConfirmDeclineRequest();
+
+                return await page3.GoToHomePage();
             }
         }
-
-        return await registrationBasePage.GoToHomePage();
     }
 
     internal async Task<HomePage> UpdateProviderPermission(ProviderConfig providerConfig, (AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permissions)
@@ -76,9 +80,9 @@ public class EmployerPermissionsStepsHelper(ScenarioContext context)
 
         var page2 = await page1.AddOrSetPermissions(permissions);
 
-        var page3 = await page2.VerifyYouHaveSetPermissionNotification();
+        await page2.VerifyYouHaveSetPermissionNotification();
 
-        return await page3.GoToHomePage();
+        return await page2.GoToHomePage();
     }
 
     internal async Task<ManageTrainingProvidersPage> OpenProviderPermissions() => await new ManageTrainingProvidersLinkHomePage(context).OpenRelationshipPermissions();

@@ -73,7 +73,7 @@ public class ProviderLandingPage(ScenarioContext context) : BasePage(context)
 {
     public static string ProviderLandingPageTitle => "Apprenticeship service for training providers: sign in or register for an account";
 
-    public ILocator ProviderLandingPageIdentifier => page.Locator("h1");
+    public ILocator ProviderLandingPageIdentifier => page.Locator(".govuk-heading-xl");
 
     public override async Task VerifyPage()
     {

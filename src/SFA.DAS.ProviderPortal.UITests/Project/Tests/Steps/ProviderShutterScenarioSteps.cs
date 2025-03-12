@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
+﻿using SFA.DAS.ProviderPortal.UITests.Project.Pages;
+
+namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
 
 [Binding]
 public class ProviderShutterScenarioSteps(ScenarioContext context) : ProviderPortalBaseSteps(context)
@@ -59,9 +61,10 @@ public class ProviderShutterScenarioSteps(ScenarioContext context) : ProviderPor
         var user = context.GetUser<EPRMultiOrgUser>();
 
         await EnterEmployerEmailAndGoToShutterPage(user.Username);
+
     }
 
-    private async Task EnterEmployerEmailAndGoToShutterPage(string username)
+    private async Task<ContactEmployerShutterPage> EnterEmployerEmailAndGoToShutterPage(string username)
     {
         eprDataHelper.EmployerEmail = username;
 

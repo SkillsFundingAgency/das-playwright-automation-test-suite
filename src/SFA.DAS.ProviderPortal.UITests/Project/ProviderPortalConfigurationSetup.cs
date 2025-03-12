@@ -4,7 +4,7 @@ namespace SFA.DAS.ProviderPortal.UITests.Project;
 [Binding]
 public class ProviderPortalConfigurationSetup(ScenarioContext context)
 {
-    [BeforeScenario(Order = 2)]
+    [BeforeScenario(Order = 12)]
     public async Task SetUpProviderPortalConfiguration()
     {
         var configSection = context.Get<ConfigSection>();

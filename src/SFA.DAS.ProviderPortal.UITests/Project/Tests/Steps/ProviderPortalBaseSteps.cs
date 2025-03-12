@@ -1,8 +1,8 @@
 ﻿
-
 using SFA.DAS.EmployerPortal.UITests.Project;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
+using SFA.DAS.ProviderPortal.UITests.Project.Pages;
 
 namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
 
@@ -33,14 +33,14 @@ public abstract class ProviderPortalBaseSteps(ScenarioContext context)
     protected async Task<SearchEmployerEmailPage> GoToSearchEmployerEmailPage()
     {
         var page = await new ViewEmpAndManagePermissionsPage(context).ClickAddAnEmployer();
-        
+
         return await page.StartNowToAddAnEmployer();
     }
 
     protected async Task<EmailAccountFoundPage> GoToEmailAccountFoundPage()
     {
         var page = await GoToSearchEmployerEmailPage();
-        
+
         return await page.EnterEmployerEmail();
     }
 
@@ -79,7 +79,6 @@ public abstract class ProviderPortalBaseSteps(ScenarioContext context)
         await page3.VerifyPendingRequest();
 
     }
-
 
     protected async Task EmployerUpdatePermission((AddApprenticePermissions AddApprentice, RecruitApprenticePermissions RecruitApprentice) permissions)
     {

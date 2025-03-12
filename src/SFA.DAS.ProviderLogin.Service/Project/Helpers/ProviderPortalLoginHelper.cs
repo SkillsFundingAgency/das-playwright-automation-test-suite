@@ -27,7 +27,11 @@ internal class ProviderPortalLoginHelper : IReLoginHelper
 
         if (await new CheckSelectYourOrgOrProviderHomePage(_context, providerLoginUser.Ukprn).IsSelectYourOrganisationDisplayed())
         {
-            await new SelectYourOrganisationPage(_context).SelectOrganisation(providerLoginUser.Ukprn);
+            var page = new SelectYourOrganisationPage(_context);
+
+            await page.VerifyPage();
+
+            await page.SelectOrganisation(providerLoginUser.Ukprn);
         }
 
         return new ProviderHomePage(_context);

@@ -46,7 +46,7 @@ public abstract class CheckMultipleHomePage(ScenarioContext context) : BasePage(
     {
         var list = await ActualDisplayedPage();
 
-        return list.Count > 0 && list.Contains(page);
+        return list.Count > 0 && list.Any(x => x.Contains(page));
     }
 
     private async Task<IReadOnlyList<string>> ActualDisplayedPage()

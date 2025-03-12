@@ -14,12 +14,12 @@ public class EnterYourTrainingProviderNameReferenceNumberUKPRNPage(ScenarioConte
         return await VerifyPageAsync(() => new AddPermissionsForTrainingProviderPage(context, providerConfig));
     }
 
-    //public async Task<AlreadyLinkedToTrainingProviderPage> SearchForAnExistingTrainingProvider(ProviderConfig providerConfig)
-    //{
-    //    await EnterATrainingProvider(providerConfig);
+    public async Task<AlreadyLinkedToTrainingProviderPage> SearchForAnExistingTrainingProvider(ProviderConfig providerConfig)
+    {
+        await EnterATrainingProvider(providerConfig);
 
-    //    return await VerifyPageAsync(() => new AlreadyLinkedToTrainingProviderPage(context));
-    //}
+        return await VerifyPageAsync(() => new AlreadyLinkedToTrainingProviderPage(context));
+    }
 
     private async Task EnterATrainingProvider(ProviderConfig providerConfig)
     {
@@ -33,5 +33,18 @@ public class EnterYourTrainingProviderNameReferenceNumberUKPRNPage(ScenarioConte
 
         //new TrainingProviderAutoCompleteHelper(context).SelectFromAutoCompleteList(providerConfig.Ukprn);
 
+    }
+}
+
+public class AlreadyLinkedToTrainingProviderPage(ScenarioContext context) : PermissionBasePageForTrainingProviderPage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You're already linked to this training provider");
+    }
+
+    public async Task CannotAddExistingTrainingProvider()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Return to your training" }).ClickAsync();
     }
 }
