@@ -251,7 +251,7 @@ public class EmployerAccountDetailsPage(ScenarioContext context) : ProviderPorta
 
     public async Task<ViewEmpAndManagePermissionsPage> ViewEmployersAndManagePermissionsPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "View current employers and" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "View employers and manage permissions" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ViewEmpAndManagePermissionsPage(context));
     }
