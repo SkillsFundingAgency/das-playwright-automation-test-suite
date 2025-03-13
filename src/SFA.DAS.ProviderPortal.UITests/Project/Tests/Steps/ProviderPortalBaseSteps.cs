@@ -50,7 +50,7 @@ public abstract class ProviderPortalBaseSteps(ScenarioContext context)
 
     protected async Task OpenEmpInviteFromProvider()
     {
-        _assertHelper.RetryOnNUnitException(async () =>
+        await _assertHelper.RetryOnEmpInviteFromProvider(async () =>
         {
             await SetRequestId(RequestType.CreateAccount);
 
@@ -59,7 +59,7 @@ public abstract class ProviderPortalBaseSteps(ScenarioContext context)
             var actual = eprDataHelper.RequestStatus;
 
             Assert.AreEqual(expected, actual, $"Waiting for Invite status to be '{expected}' for requestid - '{eprDataHelper.LatestRequestId}', email - {eprDataHelper.EmployerEmail}");
-        }, RetryTimeOut.GetTimeSpan([60, 60, 60, 45, 45, 45, 45, 45, 45]));
+        });
 
         await context.Get<Driver>().Page.GotoAsync(UrlConfig.Relations_Employer_Invite(eprDataHelper.LatestRequestId));
     }
