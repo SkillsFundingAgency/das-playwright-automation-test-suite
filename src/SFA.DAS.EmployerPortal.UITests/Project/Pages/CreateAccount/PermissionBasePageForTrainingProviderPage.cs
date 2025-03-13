@@ -81,7 +81,7 @@ public class ManageTrainingProvidersLinkHomePage(ScenarioContext context) : Home
 {
     public async Task<ManageTrainingProvidersPage> OpenRelationshipPermissions()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Manage training providers" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage training providers" }).ClickAsync();
 
         return new ManageTrainingProvidersPage(context);
     }
