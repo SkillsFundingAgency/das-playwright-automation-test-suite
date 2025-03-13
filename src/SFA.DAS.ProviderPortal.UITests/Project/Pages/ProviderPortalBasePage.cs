@@ -1,6 +1,7 @@
 ﻿using Polly;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.ProviderPortal.UITests.Project.Pages;
 
@@ -351,6 +352,39 @@ public class AddEmployerAndRequestPermissionsPage(ScenarioContext context) : Per
         await SetRecruitApprentice(permisssion.recruitpermission);
 
         return await VerifyPageAsync(() => new RequestSentToEmployerPage(context));
+    }
+
+    protected new async Task SetAddApprentice(AddApprenticePermissions permission)
+    {
+        if (permission == AddApprenticePermissions.YesAddApprenticeRecords)
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, employer will have final" }).CheckAsync();
+        }
+
+        if (permission == AddApprenticePermissions.NoToAddApprenticeRecords)
+        {
+            await page.Locator("#addRecords-2").CheckAsync();
+        }
+    }
+
+    protected new async Task SetRecruitApprentice(RecruitApprenticePermissions permission)
+    {
+        if (permission == RecruitApprenticePermissions.YesRecruitApprentices)
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "Yes", Exact = true }).CheckAsync();
+        }
+
+        if (permission == RecruitApprenticePermissions.YesRecruitApprenticesButEmployerWillReview)
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, employer will review" }).CheckAsync();
+        }
+
+        if (permission == RecruitApprenticePermissions.NoToRecruitApprentices)
+        {
+            await page.Locator("#recruitApprentices-3").CheckAsync();
+        }
+
+        await page.GetByRole(AriaRole.Button, new() { Name= "Confirm" }).ClickAsync();
     }
 }
 
