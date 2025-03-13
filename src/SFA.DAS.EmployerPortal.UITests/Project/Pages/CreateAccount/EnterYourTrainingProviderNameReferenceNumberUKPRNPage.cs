@@ -36,7 +36,7 @@ public class EnterYourTrainingProviderNameReferenceNumberUKPRNPage(ScenarioConte
     }
 }
 
-public class AlreadyLinkedToTrainingProviderPage(ScenarioContext context) : PermissionBasePageForTrainingProviderPage(context)
+public class AlreadyLinkedToTrainingProviderPage(ScenarioContext context) : PermissionBasePageForEmployerPortalPage(context)
 {
     public override async Task VerifyPage()
     {

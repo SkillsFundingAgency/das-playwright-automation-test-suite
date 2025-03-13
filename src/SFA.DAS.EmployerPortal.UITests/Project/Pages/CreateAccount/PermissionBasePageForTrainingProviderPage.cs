@@ -22,7 +22,7 @@ public enum RecruitApprenticePermissions
 }
 
 
-public abstract class PermissionBasePageForTrainingProviderPage(ScenarioContext context) : EmployerPortalBasePage(context)
+public abstract class PermissionBasePageForEmployerPortalPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
 
     public async Task<ManageTrainingProvidersPage> AddOrSetPermissions((AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permisssion)
@@ -158,7 +158,7 @@ public class ManageTrainingProvidersPage(ScenarioContext context) : EmployerPort
     }
 }
 
-public class SetPermissionsForTrainingProviderPage(ScenarioContext context) : PermissionBasePageForTrainingProviderPage(context)
+public class SetPermissionsForTrainingProviderPage(ScenarioContext context) : PermissionBasePageForEmployerPortalPage(context)
 {
 
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync($" Set permissions");
@@ -178,7 +178,7 @@ public class ReviewPermissionsFromProviderPage(ScenarioContext context, Provider
 
 }
 
-public abstract class AddOrReviewRequestFromProvider(ScenarioContext context) : PermissionBasePageForTrainingProviderPage(context)
+public abstract class AddOrReviewRequestFromProvider(ScenarioContext context) : PermissionBasePageForEmployerPortalPage(context)
 {
     public async Task<ManageTrainingProvidersPage> AcceptProviderRequest()
     {
@@ -220,7 +220,7 @@ public class AreYouSureYouDoNotWantToAddPage(ScenarioContext context) : Employer
     }
 }
 
-public class TrainingProvidertNotAddedPage(ScenarioContext context) : PermissionBasePageForTrainingProviderPage(context)
+public class TrainingProvidertNotAddedPage(ScenarioContext context) : PermissionBasePageForEmployerPortalPage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("This training provider has not been added to your account");
 

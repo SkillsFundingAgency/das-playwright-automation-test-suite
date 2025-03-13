@@ -258,7 +258,7 @@ public class EmployerAccountDetailsPage(ScenarioContext context) : ProviderPorta
     }
 }
 
-public class RequestPermissionsPage(ScenarioContext context) : PermissionBasePageForTrainingProviderPage(context)
+public class RequestPermissionsPage(ScenarioContext context) : PermissionBasePageForProviderPortalPage(context)
 {
     public override async Task VerifyPage()
     {
@@ -275,7 +275,7 @@ public class RequestPermissionsPage(ScenarioContext context) : PermissionBasePag
     }
 }
 
-public class AccAccountRequestPermissionsPage(ScenarioContext context) : PermissionBasePageForTrainingProviderPage(context)
+public class AccAccountRequestPermissionsPage(ScenarioContext context) : PermissionBasePageForEmployerPortalPage(context)
 {
     public override async Task VerifyPage()
     {
@@ -338,22 +338,8 @@ public class EmailAccountFoundPage(ScenarioContext context, string email) : Prov
     }
 }
 
-public class AddEmployerAndRequestPermissionsPage(ScenarioContext context) : PermissionBasePageForTrainingProviderPage(context)
+public abstract class PermissionBasePageForProviderPortalPage(ScenarioContext context) : PermissionBasePageForEmployerPortalPage(context)
 {
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add employer and request permissions");
-    }
-
-    public async Task<RequestSentToEmployerPage> ProviderRequestPermissions((AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permisssion)
-    {
-        await SetAddApprentice(permisssion.cohortpermission);
-
-        await SetRecruitApprentice(permisssion.recruitpermission);
-
-        return await VerifyPageAsync(() => new RequestSentToEmployerPage(context));
-    }
-
     protected new async Task SetAddApprentice(AddApprenticePermissions permission)
     {
         if (permission == AddApprenticePermissions.YesAddApprenticeRecords)
@@ -384,7 +370,24 @@ public class AddEmployerAndRequestPermissionsPage(ScenarioContext context) : Per
             await page.Locator("#recruitApprentices-3").CheckAsync();
         }
 
-        await page.GetByRole(AriaRole.Button, new() { Name= "Confirm" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { NameRegex = new Regex("Confirm|Send request") }).ClickAsync();
+    }
+}
+
+public class AddEmployerAndRequestPermissionsPage(ScenarioContext context) : PermissionBasePageForProviderPortalPage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add employer and request permissions");
+    }
+
+    public async Task<RequestSentToEmployerPage> ProviderRequestPermissions((AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permisssion)
+    {
+        await SetAddApprentice(permisssion.cohortpermission);
+
+        await SetRecruitApprentice(permisssion.recruitpermission);
+
+        return await VerifyPageAsync(() => new RequestSentToEmployerPage(context));
     }
 }
 
