@@ -275,7 +275,7 @@ public class RequestPermissionsPage(ScenarioContext context) : PermissionBasePag
     }
 }
 
-public class AccAccountRequestPermissionsPage(ScenarioContext context) : PermissionBasePageForEmployerPortalPage(context)
+public class AccAccountRequestPermissionsPage(ScenarioContext context) : PermissionBasePageForProviderPortalPage(context)
 {
     public override async Task VerifyPage()
     {
