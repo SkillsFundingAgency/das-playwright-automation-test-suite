@@ -1,5 +1,6 @@
 ﻿
 using SFA.DAS.EmployerPortal.UITests.Project;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
 using SFA.DAS.ProviderPortal.UITests.Project.Pages;
@@ -87,7 +88,7 @@ public abstract class ProviderPortalBaseSteps(ScenarioContext context)
         await _employerPermissionsStepsHelper.UpdateProviderPermission(providerConfig, permissions);
     }
 
-    protected async Task EPRLevyUserLogin() => await EPRLogin(context.GetUser<EPRLevyUser>());
+    protected async Task<HomePage> EPRLevyUserLogin() => await EPRLogin(context.GetUser<EPRLevyUser>());
 
     protected async Task EPRReLogin(RequestType requestType)
     {
@@ -98,11 +99,13 @@ public abstract class ProviderPortalBaseSteps(ScenarioContext context)
         eprDataHelper.AgreementId = objectContext.GetAleAgreementId();
     }
 
-    protected async Task EPRLogin(EPRBaseUser user)
+    protected async Task<HomePage> EPRLogin(EPRBaseUser user)
     {
-        await _employerLoginHelper.Login(user, true);
+        var homePage = await _employerLoginHelper.Login(user, true);
 
         await new DeleteProviderRelationinDbHelper(context).DeleteProviderRelation();
+
+        return homePage;
     }
 
     protected async Task SetRequestId(RequestType requestType)

@@ -97,11 +97,13 @@ public class EmployerRelationSteps(ScenarioContext context) : ProviderPortalBase
         await EPRReLoginAcceptOrDeclineProviderPermissionsRequest(RequestType.Permission, true);
     }
 
-    private async Task<HomePage> EPRReLoginAcceptOrDeclineProviderPermissionsRequest(RequestType requestType, bool doesAllow)
+    private async Task EPRReLoginAcceptOrDeclineProviderPermissionsRequest(RequestType requestType, bool doesAllow)
     {
         await EPRReLogin(requestType);
 
-        return await _employerPermissionsStepsHelper.AcceptOrDeclineProviderRequest(requestType, providerConfig, eprDataHelper.LatestRequestId, doesAllow);
+        var homePage = await _employerPermissionsStepsHelper.AcceptOrDeclineProviderRequest(requestType, providerConfig, eprDataHelper.LatestRequestId, doesAllow);
+
+        var page = await homePage.SignOut();
     }
 
 }

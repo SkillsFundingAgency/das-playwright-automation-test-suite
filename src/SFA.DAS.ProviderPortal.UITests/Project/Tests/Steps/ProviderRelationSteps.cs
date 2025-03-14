@@ -10,7 +10,9 @@ public class ProviderRelationSteps(ScenarioContext context) : ProviderPortalBase
 
         context.Set(employerUser);
 
-        await EPRLogin(employerUser);
+        var homePage = await EPRLogin(employerUser);
+
+        await homePage.SignOut();
 
         permissions = (AddApprenticePermissions.YesAddApprenticeRecords, RecruitApprenticePermissions.YesRecruitApprentices);
 

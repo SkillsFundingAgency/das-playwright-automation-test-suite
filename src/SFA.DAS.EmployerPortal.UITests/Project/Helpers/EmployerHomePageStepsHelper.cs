@@ -43,6 +43,8 @@ public class EmployerHomePageStepsHelper
     {
         if (openInNewTab) await OpenInNewTab();
 
+        await NavigateToEmployerApprenticeshipService();
+
         if (await _loginHelper.IsLandingPageDisplayed()) await new CreateAnAccountToManageApprenticeshipsPage(_context).GoToStubSignInPage();
     }
 
@@ -64,7 +66,5 @@ public class EmployerHomePageStepsHelper
         var page = await driver.BrowserContext.NewPageAsync();
 
         driver.Page = page;
-
-        await NavigateToEmployerApprenticeshipService();
     }
 }
