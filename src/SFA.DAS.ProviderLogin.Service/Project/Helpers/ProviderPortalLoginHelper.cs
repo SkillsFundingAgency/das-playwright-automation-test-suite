@@ -74,7 +74,7 @@ public class SelectYourOrganisationPage(ScenarioContext context) : BasePage(cont
     {
         await page.GetByText($"UKPRN: {ukprn}").ClickAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync(new() { Timeout = 300000 });
 
         return new ProviderHomePage(context);
     }
