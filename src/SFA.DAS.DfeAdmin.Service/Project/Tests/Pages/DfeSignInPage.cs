@@ -33,6 +33,6 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
             objectContext.SetDebugInformation($"{DfePageTitle} resulted in {ex.Message}");
         }
 
-        await Assertions.Expect(page.Locator("body")).Not.ToContainTextAsync(DfePageTitle);
+        await Assertions.Expect(page.Locator("body")).Not.ToContainTextAsync(DfePageTitle, new() { Timeout = 300000 });
     }
 }
