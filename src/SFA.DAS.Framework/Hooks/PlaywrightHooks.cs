@@ -69,10 +69,6 @@ public class PlaywrightHooks(ScenarioContext context)
 
         var page = await browserContext.NewPageAsync();
 
-        browserContext.SetDefaultTimeout(60000);
-
-        Assertions.SetDefaultExpectTimeout(60000);
-
         context.Set(new Driver(browserContext, page, context.Get<ObjectContext>()));
     }
 

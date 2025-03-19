@@ -39,20 +39,11 @@ public class EmployerHomePageStepsHelper
         return new AccountUnavailablePage(_context);
     }
 
-    private async Task OpenInNewTab()
-    {
-        var driver = _context.Get<Driver>();
-
-        var page = await driver.BrowserContext.NewPageAsync();
-
-        driver.Page = page;
-
-        await NavigateToEmployerApprenticeshipService();
-    }
-
     private async Task GoToEmployerLoginPage(bool openInNewTab)
     {
         if (openInNewTab) await OpenInNewTab();
+
+        await NavigateToEmployerApprenticeshipService();
 
         if (await _loginHelper.IsLandingPageDisplayed()) await new CreateAnAccountToManageApprenticeshipsPage(_context).GoToStubSignInPage();
     }
@@ -66,5 +57,14 @@ public class EmployerHomePageStepsHelper
         _objectContext.SetDebugInformation(url);
 
         await driver.Page.GotoAsync(url);
+    }
+
+    private async Task OpenInNewTab()
+    {
+        var driver = _context.Get<Driver>();
+
+        var page = await driver.BrowserContext.NewPageAsync();
+
+        driver.Page = page;
     }
 }

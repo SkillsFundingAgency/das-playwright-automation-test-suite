@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderLogin.Servi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.UITests", "SFA.DAS.EmployerFinance.UITests\SFA.DAS.EmployerFinance.UITests.csproj", "{66BAC8F4-B93B-4FB3-B749-0AF73C6FC317}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderPortal.UITests", "SFA.DAS.ProviderPortal.UITests\SFA.DAS.ProviderPortal.UITests.csproj", "{0B8C4747-A01A-4098-81A2-F9F472D5CA81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{66BAC8F4-B93B-4FB3-B749-0AF73C6FC317}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66BAC8F4-B93B-4FB3-B749-0AF73C6FC317}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66BAC8F4-B93B-4FB3-B749-0AF73C6FC317}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B8C4747-A01A-4098-81A2-F9F472D5CA81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B8C4747-A01A-4098-81A2-F9F472D5CA81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B8C4747-A01A-4098-81A2-F9F472D5CA81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B8C4747-A01A-4098-81A2-F9F472D5CA81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
