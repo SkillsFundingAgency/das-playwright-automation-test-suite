@@ -2,6 +2,7 @@
 Feature: EPR_02_ProviderAddAccountAndAcceptDeclineNewPermissionRequests
 
 @employerproviderrelationships
+@provider
 @deletepermission
 @acceptrequest
 @deletepermission

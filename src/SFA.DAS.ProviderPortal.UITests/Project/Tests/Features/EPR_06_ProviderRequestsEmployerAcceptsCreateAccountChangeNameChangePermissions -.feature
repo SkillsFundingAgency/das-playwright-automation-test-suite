@@ -6,6 +6,7 @@
 @regression
 @providerleadregistration
 @employerproviderrelationships
+@provider
 @deleterequest
 Scenario: EPR_06_ProviderAddAccountChangesNameEmployerAcceptsandChangesName
 	Given a provider requests employer to create account with updated name and requests only RecruitApprenticeButWithEmployerReview

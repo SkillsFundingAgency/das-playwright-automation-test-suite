@@ -6,6 +6,7 @@
 @regression
 @providerleadregistration
 @employerproviderrelationships
+@provider
 @deleterequest
 Scenario: EPR_05_ProviderRequestsEmployerAcceptCreateAccount
 	Given a provider requests employer to create account with all permission

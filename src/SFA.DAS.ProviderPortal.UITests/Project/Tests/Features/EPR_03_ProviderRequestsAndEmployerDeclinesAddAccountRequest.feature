@@ -2,6 +2,7 @@
 Feature: EPR_03_ProviderRequestsAndEmployerDeclinesAddAccountRequest
 
 @employerproviderrelationships
+@provider
 @deletepermission
 Scenario: EPR_03_ProviderRequestsAndEmployerDeclinesAddAccountRequest
 	Given a provider requests all permission from an employer
