@@ -1,5 +1,4 @@
-﻿
-namespace SFA.DAS.ProviderPortal.UITests.Project;
+﻿namespace SFA.DAS.ProviderPortal.UITests.Project;
 
 [Binding]
 public class ProviderPortalConfigurationSetup(ScenarioContext context)
@@ -18,5 +17,11 @@ public class ProviderPortalConfigurationSetup(ScenarioContext context)
             configSection.GetConfigSection<EPRMultiAccountUser>(),
             configSection.GetConfigSection<EPRMultiOrgUser>()
         ]);
+
+        context.SetNonEasLoginUser(configSection.GetConfigSection<ProviderViewOnlyUser>());
+
+        context.SetNonEasLoginUser(configSection.GetConfigSection<ProviderContributorUser>());
+
+        context.SetNonEasLoginUser(configSection.GetConfigSection<ProviderContributorWithApprovalUser>());
     }
 }
