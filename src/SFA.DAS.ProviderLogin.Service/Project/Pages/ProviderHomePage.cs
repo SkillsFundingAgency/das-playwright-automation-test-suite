@@ -40,6 +40,8 @@ public partial class ProviderHomePage(ScenarioContext context) : InterimProvider
 
     public async Task ClickAddAnEmployerLink() => await page.GetByRole(AriaRole.Link, new() { Name = "Add an employer" }).ClickAsync();
 
+    public async Task ClickFundingLink() => await page.GetByRole(AriaRole.Link, new() { Name = "Get funding for non-levy" }).ClickAsync();
+
     public async Task ClickViewEmployersAndManagePermissionsLink() => await page.GetByRole(AriaRole.Link, new() { Name = "View employers and manage" }).ClickAsync();
 
 }

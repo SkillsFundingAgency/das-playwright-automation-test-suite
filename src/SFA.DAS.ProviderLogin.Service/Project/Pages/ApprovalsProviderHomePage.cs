@@ -66,89 +66,319 @@ public partial class ProviderHomePage : InterimProviderBasePage
 
         return await VerifyPageAsync(() => new ProviderTermsOfUsePage(context));
     }
+
+    public async Task<ProviderAddApprenticeDetailsEntryMothod> GotoSelectJourneyPage()
+    {
+        await AddNewApprentices();
+
+        return await VerifyPageAsync(() => new ProviderAddApprenticeDetailsEntryMothod(context));
+    }
+
+    public async Task<ProviderAddEmployerStartPage> GotoAddNewEmployerStartPage()
+    {
+        await ClickAddAnEmployerLink();
+
+        return await VerifyPageAsync(() => new ProviderAddEmployerStartPage(context));
+    }
+
+    public async Task<ProviderReserveFundingForNonLevyEmployersPage> GoToProviderGetFunding()
+    {
+        await ClickFundingLink();
+
+        return await VerifyPageAsync(() => new ProviderReserveFundingForNonLevyEmployersPage(context));
+    }
+
+    public async Task<ProviderApprenticeRequestsPage> GoToApprenticeRequestsPage()
+    {
+        await page.Locator("#navigation").GetByRole(AriaRole.Link, new() { Name = "Apprentice requests" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ProviderApprenticeRequestsPage(context));
+    }
+
+    public async Task<ProviderFundingForNonLevyEmployersPage> GoToManageYourFunding()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your funding reserved" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ProviderFundingForNonLevyEmployersPage(context));
+    }
+
+    public async Task<ProviderManageYourApprenticesPage>  GoToProviderManageYourApprenticePage()
+    {
+        await page.GetByRole(AriaRole.Heading, new() { Name = "Manage your apprentices" }).GetByRole(AriaRole.Link).ClickAsync();
+
+        return await VerifyPageAsync(() => new ProviderManageYourApprenticesPage(context));
+    }
+
+    public async Task<ProviderRecruitApprenticesHomePage> GoToProviderRecruitApprenticesHomePage()
+    {
+        await page.GetByRole(AriaRole.Heading, new() { Name = "Recruit apprentices" }).GetByRole(AriaRole.Link).ClickAsync();
+
+        return await VerifyPageAsync(() => new ProviderRecruitApprenticesHomePage(context));
+    }
+
+    public async Task<ProviderYourStandardsAndTrainingVenuesPage> NavigateToYourStandardsAndTrainingVenuesPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Your standards and training" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ProviderYourStandardsAndTrainingVenuesPage(context));
+    }
+
+    public async Task<ProviderAPIListPage>  NavigateToDeveloperAPIsPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Developer APIs" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ProviderAPIListPage(context));
+    }
+
+    public async Task<ProviderYourFeebackPage>  NavigateToYourFeedback()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Your feedback" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ProviderYourFeebackPage(context));
+    }
+
+    public async Task<ProviderViewEmployerRequestsForTrainingPage> NavigateToViewEmployerRequestsForTrainingPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "View employer requests for" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ProviderViewEmployerRequestsForTrainingPage(context));
+    }
+
+    public async Task<ApimAccessDeniedPage>  NavigateToDeveloperAPIsPageGoesToApimAccessDenied()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Developer APIs" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ApimAccessDeniedPage(context));
+    }
+
+    public async Task<ProviderAccessDeniedPage> GotoSelectJourneyPageGoesToAccessDenied()
+    {
+        await AddNewApprentices();
+
+        return await VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+    }
+
+    public async Task<ProviderAccessDeniedPage> GotoAddNewEmployerStartPageGoesToAccessDenied()
+    {
+        await ClickAddAnEmployerLink();
+
+        return await VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+    }
+
+    public async Task<ProviderAccessDeniedPage> GoToProviderGetFundingGoesToAccessDenied()
+    {
+        await ClickFundingLink();
+
+        return await VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+    }
+
+    private async Task AddNewApprentices() => await page.GetByRole(AriaRole.Link, new() { Name = "Add new apprentices" }).ClickAsync();
 }
 
-public class ProviderTermsOfUsePage(ScenarioContext context) : BasePage(context)
+public class ProviderYourFeebackPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("#your-feedback")).ToContainTextAsync("Your feedback");
+    }
+}
+
+public class ProviderViewEmployerRequestsForTrainingPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Employer requests for apprenticeship training");
+    }
+}
+
+public class ProviderAPIListPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("API list");
+    }
+}
+
+public class ProviderRecruitApprenticesHomePage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Recruitment");
+    }
+}
+
+public class ProviderYourStandardsAndTrainingVenuesPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your standards and training venues");
+    }
+}
+
+
+public class ProviderManageYourApprenticesPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprentices");
+    }
+}
+
+public class ProviderApprenticeRequestsPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
+    }
+}
+
+public class ProviderFundingForNonLevyEmployersPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Funding for non-levy employers");
+    }
+}
+
+public class ProviderReserveFundingForNonLevyEmployersPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Reserve funding for non-levy employers");
+    }
+
+    //private static By ReserveFundingButton => By.LinkText("Reserve funding");
+
+    //protected override By AcceptCookieButton => By.CssSelector(".govuk-button");
+
+    //internal ProviderChooseAnEmployerNonLevyPage StartReservedFunding()
+    //{
+    //    AcceptCookies();
+    //    formCompletionHelper.ClickElement(ReserveFundingButton);
+    //    return new ProviderChooseAnEmployerNonLevyPage(context);
+    //}
+    //public ProviderFundingForNonLevyEmployersPage NavigateBrowserBackToProviderFundingForNonLevyEmployersPage()
+    //{
+    //    tabHelper.NavigateBrowserBack();
+    //    return new ProviderFundingForNonLevyEmployersPage(context);
+    //}
+}
+
+public class ProviderAddEmployerStartPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add an employer");
+    }
+}
+
+public class ApimAccessDeniedPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("To continue, you'll need to get your role for this service changed.");
+
+    }
+    public async Task<ProviderHomePage> GoBackToTheServiceHomePage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "homepage of this service." }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ProviderHomePage(context));
+    }
+}
+
+
+public class ProviderAccessDeniedPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You need a different service role to view this page");
+    }
+
+    public async Task<ProviderHomePage> GoBackToTheServiceHomePage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "homepage of this service." }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ProviderHomePage(context));
+    }
+
+    //public async Task<ProviderFundingForNonLevyEmployersPage>  NavigateBrowserBackToProviderFundingForNonLevyEmployersPage()
+    //{
+    //    await NavigateBrowserBack();
+
+    //    return await VerifyPageAsync(() => new ProviderFundingForNonLevyEmployersPage(context));
+    //}
+}
+
+public class ProviderAddApprenticeDetailsEntryMothod(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
+    }
+
+    //internal async Task<ProviderAddApprenticeDetailsViaSelectJourneyPage>  SelectAddManually()
+    //{
+    //    await page.GetByRole(AriaRole.Radio, new() { Name = "Upload a CSV file" }).CheckAsync();
+
+    //    await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+    //    return await VerifyPageAsync(() => new ProviderAddApprenticeDetailsViaSelectJourneyPage(context));
+    //}
+
+    //internal async Task<ProviderBeforeYouStartBulkUploadPage> SelectBulkUpload()
+    //{
+    //    await page.GetByRole(AriaRole.Radio, new() { Name = "Manually" }).CheckAsync();
+
+    //    await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+    //    return await VerifyPageAsync(() => new ProviderBeforeYouStartBulkUploadPage(context));
+    //}
+}
+
+public class ProviderTermsOfUsePage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Terms of use");
     }
-
-    public async Task<ProviderHomePage> GoToProviderHomePage()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new ProviderHomePage(context));
-    }
 }
 
-
-public class ProviderCookiesPage(ScenarioContext context) : BasePage(context)
+public class ProviderCookiesPage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Cookies");
     }
-
-
-    public async Task<ProviderHomePage> GoToProviderHomePage()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new ProviderHomePage(context));
-    }
 }
 
 
-public class ProviderPrivacyPage(ScenarioContext context) : BasePage(context)
+public class ProviderPrivacyPage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Privacy");
     }
-
-
-    public async Task<ProviderHomePage> GoToProviderHomePage()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new ProviderHomePage(context));
-    }
 }
 
-public class ManageApprenticeshipsServiceHelpPage(ScenarioContext context) : BasePage(context)
+public class ManageApprenticeshipsServiceHelpPage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage apprenticeships service help");
     }
-
-    public async Task<ProviderHomePage> GoToProviderHomePage()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new ProviderHomePage(context));
-    }
 }
 
-public class ProviderEmployersAndPermissionsPage(ScenarioContext context) : BasePage(context)
+public class ProviderEmployersAndPermissionsPage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("View employers and manage permissions");
     }
 
-    public async Task<ProviderHomePage> GoToProviderHomePage()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new ProviderHomePage(context));
-    }
 }
 
-
-public class ProviderNotificationSettingsPage(ScenarioContext context) : BasePage(context)
+public class ProviderNotificationSettingsPage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Notification settings");
 

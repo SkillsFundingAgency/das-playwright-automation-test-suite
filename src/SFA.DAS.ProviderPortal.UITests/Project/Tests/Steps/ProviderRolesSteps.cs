@@ -1,4 +1,6 @@
-﻿using SFA.DAS.ProviderLogin.Service.Project.Pages;
+﻿using Azure;
+using SFA.DAS.ProviderLogin.Service.Project.Pages;
+using SFA.DAS.ProviderPortal.UITests.Project.Pages;
 namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
 
 [Binding]
@@ -74,92 +76,143 @@ public class ProviderRolesSteps(ScenarioContext context)
     [Then(@"user can view Add New Apprentices page as defined in the table below (.*)")]
     public async Task UserCanOrCannotViewAddNewApprenticesPageAsDefinedInTable(bool canAccess)
     {
-        //if (canAccess)
-        //    _providerStepsHelper.NavigateToProviderHomePage().GotoSelectJourneyPage();
-        //else
-        //    _providerStepsHelper.NavigateToProviderHomePage()
-        //        .GotoSelectJourneyPageGoesToAccessDenied()
-        //        .GoBackToTheServiceHomePage();
+        var page = new ProviderHomePage(context);
+
+        if (canAccess)
+        {
+            await page.GotoSelectJourneyPage();
+
+            providerHomePage = await page.GoToProviderHomePage();
+        }
+        else
+        {
+            var page1 = await page.GotoSelectJourneyPageGoesToAccessDenied();
+
+            providerHomePage = await page1.GoBackToTheServiceHomePage();
+        }      
     }
 
     [Then(@"user can view Add An Employer page as defined in the table below (.*)")]
     public async Task UserCanOrCannotViewAddAnEmployerPageAsDefinedInTable(bool canAccess)
     {
-        //if (canAccess)
-        //    _providerStepsHelper.NavigateToProviderHomePage().GotoAddNewEmployerStartPage();
-        //else
-        //    _providerStepsHelper.NavigateToProviderHomePage()
-        //        .GotoAddNewEmployerStartPageGoesToAccessDenied()
-        //        .NavigateBrowserBack();
+        if (canAccess)
+        {
+            await providerHomePage.GotoAddNewEmployerStartPage();
+        }
+        else
+        {
+            var page1 = await providerHomePage.GotoAddNewEmployerStartPageGoesToAccessDenied();
+
+            await page1.NavigateBrowserBack();
+
+            providerHomePage = new ProviderHomePage(context);
+
+            await providerHomePage.VerifyPage();
+        }
     }
 
     [Then(@"user can view Get Funding For NonLevy Employers page as defined in the table below (.*)")]
     public async Task UserCanOrCannotViewGetFundingNonLevyEmployersPageAsDefinedInTable(bool canAccess)
     {
-        //if (canAccess)
-        //    _providerStepsHelper.NavigateToProviderHomePage().GoToProviderGetFunding();
-        //else
-        //    _providerStepsHelper.NavigateToProviderHomePage()
-        //        .GoToProviderGetFundingGoesToAccessDenied()
-        //        .NavigateBrowserBack();
+        if (canAccess)
+        {
+            await providerHomePage.GoToProviderGetFunding();
+        }
+        else
+        {
+            var page1 = await providerHomePage.GoToProviderGetFundingGoesToAccessDenied();
+
+            await page1.NavigateBrowserBack();
+
+            providerHomePage = new ProviderHomePage(context);
+
+            await providerHomePage.VerifyPage();
+        }
     }
 
     [Then(@"user can view View Employers And Manage Permissions page")]
     public async Task UserCanViewEmployersAndManagePermissionsPage()
     {
-        //_providerStepsHelper.NavigateToProviderHomePage().GotoViewEmpAndManagePermissionsPage();
+        await providerHomePage.ClickViewEmployersAndManagePermissionsLink();
+
+        var page = new ViewEmpAndManagePermissionsPage(context);
+
+        await page.VerifyPage();
+
+        providerHomePage = new ProviderHomePage(context);
+
+        await providerHomePage.GoToProviderHomePage();
     }
 
     [Then(@"user can view Apprentice Requests page")]
     public async Task UserCanViewApprenticeRequestsPage()
     {
-        //_providerStepsHelper.NavigateToProviderHomePage().GoToApprenticeRequestsPage();
+        var page = await providerHomePage.GoToApprenticeRequestsPage();
+
+        providerHomePage = await page.GoToProviderHomePage();
     }
 
     [Then(@"user can view Manage Your Funding Reserved For NonLevy Employers page")]
     public async Task UserCanViewManageYourFundingReservedForNonLevyEmployersPage()
     {
-        //_providerStepsHelper.NavigateToProviderHomePage().GoToManageYourFunding();
+        var page = await providerHomePage.GoToManageYourFunding();
+
+        providerHomePage = await page.GoToProviderHomePage();
     }
 
     [Then(@"user can view Manage Your Apprentices page")]
     public async Task UserCanViewManageYourApprenticesPage()
     {
-        //_providerStepsHelper.NavigateToProviderHomePage().GoToProviderManageYourApprenticePage();
+        var page = await providerHomePage.GoToProviderManageYourApprenticePage();
+
+        providerHomePage = await page.GoToProviderHomePage();
     }
 
     [Then(@"user can view Recruit Apprentices page")]
     public async Task UserCanViewRecruitApprenticesPage()
     {
-        //_providerStepsHelper.NavigateToProviderHomePage().GoToProviderRecruitApprenticesHomePage();
+        var page = await providerHomePage.GoToProviderRecruitApprenticesHomePage();
+
+        providerHomePage = await page.GoToProviderHomePage();
     }
 
     [Then(@"user can view Your Standards And Training Venues page")]
     public async Task UserCanViewYourStandardsAndTrainingVenuesPage()
     {
-        //_providerStepsHelper.NavigateToProviderHomePage().NavigateToYourStandardsAndTrainingVenuesPage();
+        var page = await providerHomePage.NavigateToYourStandardsAndTrainingVenuesPage();
+
+        providerHomePage = await page.GoToProviderHomePage();
     }
 
     [Then(@"user can view Developer APIs page as defined in the table below (.*)")]
     public async Task UserCanViewDeveloperAPIsPage(bool canAccess)
     {
-        //if (canAccess) 
-        //_providerStepsHelper.NavigateToProviderHomePage().NavigateToDeveloperAPIsPage();
-        //else
-        //    _providerStepsHelper.NavigateToProviderHomePage()
-        //        .NavigateToDeveloperAPIsPageGoesToApimAccessDenied()
-        //        .GoBackToTheServiceHomePage();
+
+        if (canAccess)
+        {
+            await providerHomePage.NavigateToDeveloperAPIsPage();
+        }
+        else
+        {
+            var page1 = await providerHomePage.NavigateToDeveloperAPIsPageGoesToApimAccessDenied();
+
+            providerHomePage = await page1.GoBackToTheServiceHomePage();
+        }
     }
 
     [Then(@"user can view Your Feedback page")]
     public async Task UserCanViewYourFeedbackPage()
     {
-        //_providerStepsHelper.NavigateToProviderHomePage().NavigateToYourFeedback();
+        var page = await providerHomePage.NavigateToYourFeedback();
+
+        providerHomePage = await page.GoToProviderHomePage();
     }
 
     [Then(@"user can view View Employer Requests For Training page")]
     public async Task UserCanViewEmployerRequestsForTrainingPage()
     {
-        //_providerStepsHelper.NavigateToProviderHomePage().NavigateToViewEmployerRequestsForTrainingPage();
+        var page = await providerHomePage.NavigateToViewEmployerRequestsForTrainingPage();
+
+        providerHomePage = await page.GoToProviderHomePage();
     }
 }
