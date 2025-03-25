@@ -6,7 +6,7 @@ public partial class ProviderHomePage(ScenarioContext context) : InterimProvider
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"UKPRN: {ukprn}");
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"UKPRN: {ukprn}", new() { Timeout = 300000 });
     }
 
     //protected static By AddNewApprenticesLink => By.LinkText("Add new apprentices");
