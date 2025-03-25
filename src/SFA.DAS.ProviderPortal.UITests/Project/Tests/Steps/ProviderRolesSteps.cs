@@ -80,9 +80,9 @@ public class ProviderRolesSteps(ScenarioContext context)
 
         if (canAccess)
         {
-            await page.GotoSelectJourneyPage();
+            var page1 = await page.GotoSelectJourneyPage();
 
-            providerHomePage = await page.GoToProviderHomePage();
+            providerHomePage = await page1.GoToProviderHomePage();
         }
         else
         {
@@ -97,7 +97,9 @@ public class ProviderRolesSteps(ScenarioContext context)
     {
         if (canAccess)
         {
-            await providerHomePage.GotoAddNewEmployerStartPage();
+            var page1 = await providerHomePage.GotoAddNewEmployerStartPage();
+
+            providerHomePage = await page1.GoToProviderHomePage();
         }
         else
         {
@@ -116,7 +118,9 @@ public class ProviderRolesSteps(ScenarioContext context)
     {
         if (canAccess)
         {
-            await providerHomePage.GoToProviderGetFunding();
+            var page1 = await providerHomePage.GoToProviderGetFunding();
+
+            providerHomePage = await page1.GoToProviderHomePage();
         }
         else
         {
@@ -190,7 +194,9 @@ public class ProviderRolesSteps(ScenarioContext context)
 
         if (canAccess)
         {
-            await providerHomePage.NavigateToDeveloperAPIsPage();
+            var page1 = await providerHomePage.NavigateToDeveloperAPIsPage();
+
+            providerHomePage = await page1.GoToProviderHomePage();
         }
         else
         {
