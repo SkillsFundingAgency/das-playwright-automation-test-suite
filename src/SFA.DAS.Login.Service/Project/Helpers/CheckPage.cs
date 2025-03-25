@@ -46,6 +46,8 @@ public abstract class CheckMultipleHomePage(ScenarioContext context) : BasePage(
     {
         var list = await ActualDisplayedPage();
 
+        objectContext.SetDebugInformation($"{string.Join(" and ", list.Select(x => $"'{x}'"))} is/are displayed");
+
         return list.Count > 0 && list.Any(x => x.Contains(page));
     }
 

@@ -1,5 +1,4 @@
-﻿using Polly;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
 using System.Text.RegularExpressions;
 

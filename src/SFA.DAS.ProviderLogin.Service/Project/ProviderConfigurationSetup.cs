@@ -1,23 +1,29 @@
 ﻿namespace SFA.DAS.ProviderLogin.Service.Project;
 
-[Binding]
-public class ProviderConfigurationSetup
+public abstract class ProviderConfigurationBaseSetup
 {
-    private readonly ScenarioContext _context;
-    private readonly ConfigSection _configSection;
-    private readonly string[] _tags;
+    protected readonly ScenarioContext _context;
+    protected readonly ConfigSection _configSection;
+    protected readonly string[] _tags;
 
-    private FrameworkList<DfeProviderUsers> dfeframeworkList;
+    protected FrameworkList<DfeProviderUsers> dfeframeworkList;
 
-    private List<ProviderDetails> dfeProviderDetailsList;
+    protected List<ProviderDetails> dfeProviderDetailsList;
 
-    public ProviderConfigurationSetup(ScenarioContext context)
+    protected ProviderConfigurationBaseSetup(ScenarioContext context)
     {
         _context = context;
         _tags = context.ScenarioInfo.Tags;
         _configSection = _context.Get<ConfigSection>();
     }
 
+    protected T SetProviderCreds<T>() where T : ProviderConfig => SetProviderCredsHelper.SetProviderCreds(dfeframeworkList, dfeProviderDetailsList, _configSection.GetConfigSection<T>());
+}
+
+
+[Binding]
+public class ProviderConfigurationSetup(ScenarioContext context) : ProviderConfigurationBaseSetup(context)
+{
     [BeforeScenario(Order = 2)]
     public async Task SetUpProviderConfiguration()
     {
@@ -36,15 +42,7 @@ public class ProviderConfigurationSetup
         _context.SetPerfTestProviderPermissionsConfig(_configSection.GetConfigSection<PerfTestProviderPermissionsConfig>());
 
         _context.SetNonEasLoginUser(SetProviderCreds<ProviderAccountOwnerUser>());
-
-        _context.SetNonEasLoginUser(_configSection.GetConfigSection<ProviderViewOnlyUser>());
-
-        _context.SetNonEasLoginUser(_configSection.GetConfigSection<ProviderContributorUser>());
-
-        _context.SetNonEasLoginUser(_configSection.GetConfigSection<ProviderContributorWithApprovalUser>());
     }
-
-    private T SetProviderCreds<T>() where T : ProviderConfig => SetProviderCredsHelper.SetProviderCreds(dfeframeworkList, dfeProviderDetailsList, _configSection.GetConfigSection<T>());
 
     private void SetProviderConfig()
     {

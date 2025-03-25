@@ -1,7 +1,7 @@
-﻿using Microsoft.Playwright;
-using SFA.DAS.DfeAdmin.Service.Project.Tests.LandingPage;
+﻿using SFA.DAS.DfeAdmin.Service.Project.Tests.LandingPage;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
 using SFA.DAS.Login.Service.Project.Helpers;
+using SFA.DAS.ProviderLogin.Service.Project.Pages;
 
 namespace SFA.DAS.ProviderLogin.Service.Project.Helpers;
 
@@ -34,7 +34,11 @@ internal class ProviderPortalLoginHelper : IReLoginHelper
             await page.SelectOrganisation(providerLoginUser.Ukprn);
         }
 
-        return new ProviderHomePage(_context);
+        var providerHomePage = new ProviderHomePage(_context);
+
+        await providerHomePage.VerifyPage();
+
+        return providerHomePage;
     }
 }
 
