@@ -1,5 +1,4 @@
-﻿using Polly;
-using SFA.DAS.FrameworkHelpers;
+﻿using SFA.DAS.FrameworkHelpers;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Framework.Hooks;

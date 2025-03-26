@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace SFA.DAS.FrameworkHelpers
+﻿namespace SFA.DAS.FrameworkHelpers
 {
     public static class OC_TestDataListExtension
     {
@@ -20,6 +16,7 @@ namespace SFA.DAS.FrameworkHelpers
             objectContext.SetAfterStepInformations();
             objectContext.SetAfterScenarioExceptions();
             objectContext.SetRetryInformations();
+            objectContext.SetAfterScenarioTestDataTearDown();
         }
 
         #region AfterStepInformations
