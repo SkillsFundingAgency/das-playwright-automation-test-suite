@@ -8,17 +8,21 @@ public class TestDataCleanUpEasAccDbSqlDataHelper(ObjectContext objectContext, D
 
     internal async Task<List<string[]>> GetUserEmailList(List<string> userEmail)
     {
-        var userEmailList = await GetMultipleData($"select top 100 Email from employer_account.[User] where " +
+        var past5months = GetPastfiveMonthsDate();
+
+        var query = $"select top 100 Email from employer_account.[User] where " +
             $"Email like {GetUserEmailListQuery(userEmail)} " +
             $"and Email like '___Test__________________________@%' " +
             $"and Email not like '%perftest.com' " +
             $"and Email not like '%PerfTest%' " +
-            $"and Email not like '%Jan2022%' " +
-            $"and Email not like '%Feb2022%' " +
-            $"and Email not like '%Mar2022%' " +
-            $"and Email not like '%Apr2022%' " +
-            $"and Email not like '%May2022%' " +
-            $"and Email not in ({TestDataCleanUpEmailsInUse.GetInUseEmails()}) order by NEWID() desc");
+            $"and Email not like '%{past5months[0]}%' " +
+            $"and Email not like '%{past5months[1]}%' " +
+            $"and Email not like '%{past5months[2]}%' " +
+            $"and Email not like '%{past5months[3]}%' " +
+            $"and Email not like '%{past5months[4]}%' " +
+            $"and Email not in ({TestDataCleanUpEmailsInUse.GetInUseEmails()}) order by NEWID() desc";
+
+        var userEmailList = await GetMultipleData(query);
 
         return userEmailList;
     }
@@ -34,4 +38,13 @@ public class TestDataCleanUpEasAccDbSqlDataHelper(ObjectContext objectContext, D
     private static string GetAccountIdsQuery(List<string> userEmail) => Join(" or Email = ", userEmail);
 
     private static string GetUserEmailListQuery(List<string> userEmail) => Join(" or Email like ", userEmail);
+
+    private static List<string> GetPastfiveMonthsDate()
+    {
+        List<string> strings = [];
+
+        for (int i = 1; i < 6; i++) strings.Add($"{DateTime.Now.AddMonths(-i):MMMyyyy}");
+
+        return strings;
+    }
 }

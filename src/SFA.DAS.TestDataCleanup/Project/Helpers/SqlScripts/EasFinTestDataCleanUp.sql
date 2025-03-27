@@ -1,5 +1,7 @@
 ﻿select EmpRef into #emprefs from employer_financial.AccountPaye where AccountId in (select id from #accountids);
 
+select Id into #tids from employer_financial.TransferConnectionInvitation where SenderAccountId in (select id from #accountids) or ReceiverAccountId in (select id from #accountids); 
+
 PRINT 'delete from TransactionLine' 
 delete from employer_financial.TransactionLine where AccountId in (select id from #accountids);
 PRINT 'delete from TransactionLine_EOF' 
@@ -20,6 +22,10 @@ PRINT 'delete from EnglishFraction'
 delete from employer_financial.EnglishFraction where EmpRef in (select EmpRef from #emprefs);
 PRINT 'delete from EnglishFractionOverride'
 delete from employer_financial.EnglishFractionOverride where AccountId in (select id from #accountids);
+PRINT 'delete from TransferConnectionInvitationChange' 
+delete from employer_financial.TransferConnectionInvitationChange where TransferConnectionInvitationId in (select id from #tids); 
+PRINT 'delete from TransferConnectionInvitation' 
+delete from employer_financial.TransferConnectionInvitation where id in (select id from #tids); 
 PRINT 'delete from AccountPaye'
 delete from employer_financial.AccountPaye where AccountId in (select id from #accountids);
 PRINT 'delete from Account'
