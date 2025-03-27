@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
+using SFA.DAS.TestDataCleanup.Project.Helpers;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
 
@@ -14,6 +15,8 @@ public class StubYouHaveSignedInEmployerPage(ScenarioContext context, string use
             idOrUserRef = await new UsersSqlDataHelper(objectContext, context.Get<DbConfig>()).GetUserId(username);
 
             objectContext.UpdateLoginIdOrUserRef(username, idOrUserRef);
+
+            objectContext.AddDbNameToTearDown(CleanUpDbName.EasUsersTestDataCleanUp, username);
         }
     }
 
