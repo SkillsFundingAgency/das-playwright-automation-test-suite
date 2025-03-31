@@ -6,16 +6,16 @@ public class FinancePage(ScenarioContext context) : SupportConsoleBasePage(conte
 
     public async Task<LevyDeclarationsPage> ViewLevyDeclarations()
     {
-        var paye = config.PayeScheme.ToCharArray();
+        var payeScheme = config.PayeScheme.ToCharArray();
 
-        string obscurepaye = string.Empty;
+        var obscurePaye = string.Empty;
 
-        for (int i = 0; i < paye.Length; i++)
+        for (var index = 0; index < payeScheme.Length; index++)
         {
-            obscurepaye += ((i == 0 || i == paye.Length - 1 || paye[i].ToString() == "/") ? paye[i].ToString() : "*");
+            obscurePaye += index == 0 || index == payeScheme.Length - 1 || payeScheme[index].ToString() == "/" ? payeScheme[index].ToString() : "*";
         }
 
-        await page.GetByRole(AriaRole.Row, new() { Name = obscurepaye }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Row, new() { Name = obscurePaye }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new LevyDeclarationsPage(context));
     }
