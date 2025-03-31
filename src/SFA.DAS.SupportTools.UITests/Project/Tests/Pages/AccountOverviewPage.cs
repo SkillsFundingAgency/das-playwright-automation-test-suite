@@ -1,10 +1,10 @@
-﻿namespace SFA.DAS.SupportConsole.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
 
 public class AccountOverviewPage(ScenarioContext context) : SupportConsoleBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        //Doing this to refresh the page as the Header disappears at times - known issue
+        //Doing this to refresh the page as the Header dissappears at times - known issue
 
         await RefreshAccountOverviewPage();
 
