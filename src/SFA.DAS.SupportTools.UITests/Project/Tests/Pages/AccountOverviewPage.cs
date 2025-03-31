@@ -4,13 +4,13 @@ public class AccountOverviewPage(ScenarioContext context) : SupportConsoleBasePa
 {
     public override async Task VerifyPage()
     {
-        //Doing this to refresh the page as the Header dissappears at times - known issue
+        //Doing this to refresh the page as the Header disappears at times - known issue
 
         await RefreshAccountOverviewPage();
 
-        await Assertions.Expect(page.Locator("#content")).ToContainTextAsync($"{config.AccountName}", new() { IgnoreCase = true });
+        await Assertions.Expect(page.Locator(".govuk-table")).ToContainTextAsync($"{config.AccountName}", new() { IgnoreCase = true });
 
-        await Assertions.Expect(page.Locator("#content")).ToContainTextAsync($"{config.AccountDetails}", new() { IgnoreCase = true });
+        await Assertions.Expect(page.Locator(".govuk-hint").First).ToContainTextAsync($"{config.AccountDetails}", new() { IgnoreCase = true });
     }
 
     public async Task<TeamMembersPage> ClickTeamMembersLink()

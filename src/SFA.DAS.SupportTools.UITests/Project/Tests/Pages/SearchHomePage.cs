@@ -20,9 +20,9 @@ public class SearchHomePage(ScenarioContext context) : SupportConsoleBasePage(co
 
     private async Task<AccountOverviewPage> SearchAndViewAccount(string criteria)
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Accounts" }).CheckAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Employer Account Search" }).ClickAsync();
 
-        await page.GetByRole(AriaRole.Searchbox, new() { Name = "Enter account name, account" }).FillAsync(criteria);
+        await page.Locator("#PublicHashedId").FillAsync(criteria);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 

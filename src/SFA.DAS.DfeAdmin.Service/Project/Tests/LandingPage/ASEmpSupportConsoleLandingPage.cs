@@ -4,6 +4,6 @@ public class ASEmpSupportConsoleLandingPage(ScenarioContext context) : ASLanding
 {
     protected override string PageTitle => "Apprenticeship service bulk stop utility";
 
-    public override async Task ClickStartNowButton() => await page.GetByRole(AriaRole.Link, new() { Name = "Start now" }).ClickAsync();
+    public override async Task ClickStartNowButton() => await page.GetByRole(AriaRole.Button, new() { Name = "Start now" }).ClickAsync();
 
 }

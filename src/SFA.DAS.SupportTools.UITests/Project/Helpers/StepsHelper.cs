@@ -40,10 +40,17 @@ public class StepsHelper(ScenarioContext context)
 
         return await VerifyPageHelper.VerifyPageAsync(() => new ToolSupportHomePage(context));
     }
-    
-    public async Task<SearchHomePage> Tier1LoginToSupportConsole() => await LoginToSupportConsole(context.GetUser<SupportConsoleTier1User>());
 
-    public async Task<SearchHomePage> Tier2LoginToSupportConsole() => await LoginToSupportConsole(context.GetUser<SupportConsoleTier2User>());
+    private async Task<SearchHomePage> LoginToSupportToolsAsEmployerSupportOnly(DfeAdminUser loginUser)
+    {
+        await new DfeAdminLoginStepsHelper(context).LoginToSupportTool(loginUser);
+
+        return await VerifyPageHelper.VerifyPageAsync(() => new SearchHomePage(context));
+    }
+
+    public async Task<SupportConsoleBasePage> Tier1LoginToSupportConsole() => await LoginToSupportToolsAsEmployerSupportOnly(context.GetUser<SupportConsoleTier1User>());
+
+    public async Task<ToolSupportHomePage> Tier2LoginToSupportConsole() => await LoginToSupportTools(context.GetUser<SupportConsoleTier2User>());
 
     public async Task<AccountOverviewPage> SearchAndViewAccount() => await new SearchHomePage(context).SearchByPublicAccountIdAndViewAccount();
 
@@ -92,12 +99,5 @@ public class StepsHelper(ScenarioContext context)
         var page = await new AccountOverviewPage(context).ClickCommitmentsMenuLink();
 
         return await page.SearchCohort(cohortRef);
-    }
-
-    private async Task<SearchHomePage> LoginToSupportConsole(DfeAdminUser loginUser)
-    {
-        await new DfeAdminLoginStepsHelper(context).LoginToSupportConsole(loginUser);
-
-        return await VerifyPageHelper.VerifyPageAsync(() => new SearchHomePage(context));
     }
 }

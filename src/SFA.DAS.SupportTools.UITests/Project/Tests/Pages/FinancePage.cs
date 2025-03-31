@@ -2,7 +2,7 @@
 
 public class FinancePage(ScenarioContext context) : SupportConsoleBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#content")).ToContainTextAsync("Finance");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Finance");
 
     public async Task<LevyDeclarationsPage> ViewLevyDeclarations()
     {

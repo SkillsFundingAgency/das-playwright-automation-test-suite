@@ -4,7 +4,7 @@ namespace SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
 
 public class ChallengePage(ScenarioContext context) : SupportConsoleBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Paragraph)).ToContainTextAsync("Enter the following information to verify the caller's identity:");
+    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Paragraph).Nth(3)).ToContainTextAsync("Enter the following information to verify the caller's identity:");
 
 
     #region Helpers and Context
