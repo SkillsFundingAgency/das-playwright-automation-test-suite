@@ -48,9 +48,9 @@ public class StepsHelper(ScenarioContext context)
         return await VerifyPageHelper.VerifyPageAsync(() => new SearchHomePage(context));
     }
 
-    public async Task<SupportConsoleBasePage> Tier1LoginToSupportConsole() => await LoginToSupportToolsAsEmployerSupportOnly(context.GetUser<SupportConsoleTier1User>());
+    public async Task<SupportConsoleBasePage> Tier1LoginToSupportTool() => await LoginToSupportToolsAsEmployerSupportOnly(context.GetUser<SupportConsoleTier1User>());
 
-    public async Task<ToolSupportHomePage> Tier2LoginToSupportConsole() => await LoginToSupportTools(context.GetUser<SupportConsoleTier2User>());
+    public async Task<ToolSupportHomePage> Tier2LoginToSupportTool() => await LoginToSupportTools(context.GetUser<SupportConsoleTier2User>());
 
     public async Task<AccountOverviewPage> SearchAndViewAccount() => await new SearchHomePage(context).SearchByPublicAccountIdAndViewAccount();
 

@@ -37,7 +37,7 @@ public class ChallengePage(ScenarioContext context) : SupportConsoleBasePage(con
 
     public async Task Submit() => await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
 
-    public async Task VerifyChallengeResponseErrorMessage(string errorMessage) => await Assertions.Expect(page.Locator("#content")).ToContainTextAsync(errorMessage);
+    public async Task VerifyChallengeResponseErrorMessage(string errorMessage) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(errorMessage);
 
     private async Task EnterPayeChallenge(string char1, string char2)
     {

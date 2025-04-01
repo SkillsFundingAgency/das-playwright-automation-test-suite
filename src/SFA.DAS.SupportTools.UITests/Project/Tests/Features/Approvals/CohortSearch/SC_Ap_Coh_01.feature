@@ -3,7 +3,8 @@
 @supportconsole
 @approvalssupportconsole
 Scenario: SC_Ap_Coh_01 - View Cohort details
-	Given the User is logged into Support Console
+	Given the User is logged into Support Tool
+	And the user navigates to employer support page
 	And the User is on the Account details page
 	When the User searches for a Cohort
 	And the User clicks on 'View this cohort' button
