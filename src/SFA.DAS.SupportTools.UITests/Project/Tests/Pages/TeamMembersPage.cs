@@ -4,9 +4,9 @@ public class TeamMembersPage(ScenarioContext context) : SupportConsoleBasePage(c
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("#content")).ToContainTextAsync("Team members");
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Team members");
 
-        await Assertions.Expect(page.Locator("table.responsive")).ToBeVisibleAsync();
+        await Assertions.Expect(page.Locator("table.govuk-table")).ToBeVisibleAsync();
     }
 
     public async Task<UserInformationOverviewPage> GoToUserInformationOverviewPage()
