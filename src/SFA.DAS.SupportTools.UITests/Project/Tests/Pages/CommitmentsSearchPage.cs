@@ -4,7 +4,6 @@ namespace SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
 
 public class CommitmentsSearchPage : SupportConsoleBasePage
 {
-    //public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#searchForm")).ToContainTextAsync("Search");
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("form .govuk-heading-l")).ToContainTextAsync("Search");
 
     public static string SearchSectionHeaderText => "Search";
