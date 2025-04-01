@@ -22,8 +22,8 @@ public class FinancePage(ScenarioContext context) : SupportConsoleBasePage(conte
 
     public async Task ViewTransactions()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Transactions" }).ClickAsync();
+        await page.Locator("#tab_tab-2").ClickAsync();
 
-        await Assertions.Expect(page.Locator(".data__purple-block")).ToContainTextAsync("Current balance");
+        await Assertions.Expect(page.Locator(".govuk-panel__body")).ToContainTextAsync("Current balance");
     }
 }
