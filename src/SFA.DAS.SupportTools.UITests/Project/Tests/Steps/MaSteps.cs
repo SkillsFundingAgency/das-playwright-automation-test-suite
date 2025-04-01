@@ -16,17 +16,13 @@ public class MaSteps(ScenarioContext context)
     {
         var page = await new SearchHomePage(context).GoToSearchHomePage();
 
-        var page1 = await page.SearchByHashedAccountIdAndViewAccount();
+        var page1 = await page.SearchByPublicAccountIdAndViewAccount();
 
-        var page2 = await page1.GoToSearchHomePage();
+        var page2 = await page1.GoBackToSearchHomePage();
 
-        var page3 = await page2.SearchByAccountNameAndViewAccount();
+        var page3 = await page2.SearchByPayeSchemeAndViewAccount();
 
-        var page4 = await page3.GoToSearchHomePage();
-
-        var page5 = await page4.SearchByPayeSchemeAndViewAccount();
-
-        await page5.GoToSearchHomePage();
+        await page3.GoBackToSearchHomePage();
     }
 
     [Then(@"the user can search by name or email address")]

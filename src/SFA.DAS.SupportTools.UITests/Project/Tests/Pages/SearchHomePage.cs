@@ -16,18 +16,24 @@ public class SearchHomePage(ScenarioContext context) : SupportConsoleBasePage(co
 
     public async Task<AccountOverviewPage> SearchByAccountNameAndViewAccount() => await SearchAndViewAccount(config.AccountName);
 
-    public async Task<AccountOverviewPage> SearchByPayeSchemeAndViewAccount() => await SearchAndViewAccount(config.PayeScheme);
+    public async Task<AccountOverviewPage> SearchByPayeSchemeAndViewAccount() => await SearchAndViewAccount(config.PayeScheme, AccountSearchType.PayeRef);
 
-    private async Task<AccountOverviewPage> SearchAndViewAccount(string criteria)
+    public enum AccountSearchType
+    {
+        PublicHashedId,
+        PayeRef
+    }
+
+    private async Task<AccountOverviewPage> SearchAndViewAccount(string criteria, AccountSearchType searchType = AccountSearchType.PublicHashedId)
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Employer Account Search" }).ClickAsync();
-
-        await page.Locator("#PublicHashedId").FillAsync(criteria);
+        
+        page.Locator($"#{searchType}").FillAsync(criteria);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
-        await driver.SelectRowFromTable("view", config.PublicAccountId, NextPage);
-
+        await page.GetByRole(AriaRole.Link, new() { Name = "view" }).ClickAsync();
+        
         return await VerifyPageAsync(() => new AccountOverviewPage(context));
     }
 

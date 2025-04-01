@@ -15,7 +15,14 @@ public abstract class SupportConsoleBasePage(ScenarioContext context) : BasePage
 
     public async Task<SearchHomePage> GoToSearchHomePage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Apprenticeship service" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Employer Account Search" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SearchHomePage(context));
+    }
+
+    public async Task<SearchHomePage> GoBackToSearchHomePage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back to Search" }).ClickAsync();
 
         return await VerifyPageAsync(() => new SearchHomePage(context));
     }
