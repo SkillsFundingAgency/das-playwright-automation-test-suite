@@ -4,7 +4,8 @@ namespace SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
 
 public class CommitmentsSearchPage : SupportConsoleBasePage
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#searchForm")).ToContainTextAsync("Search");
+    //public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#searchForm")).ToContainTextAsync("Search");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("form .govuk-heading-l")).ToContainTextAsync("Search");
 
     public static string SearchSectionHeaderText => "Search";
     public static string UlnSearchTextBoxHelpTextContent => "Enter ULN number";
@@ -76,7 +77,7 @@ public class CommitmentsSearchPage : SupportConsoleBasePage
 
     private async Task SearchUln(string text) 
     { 
-        await page.GetByRole(AriaRole.Searchbox, new() { Name = "Enter ULN number" }).FillAsync(text); 
+        await page.Locator("#SearchTerm").FillAsync(text);
 
         await ClickSearchButton(); 
     }

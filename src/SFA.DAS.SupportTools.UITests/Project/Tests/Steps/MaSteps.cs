@@ -45,7 +45,7 @@ public class MaSteps(ScenarioContext context)
 
     [When(@"the user navigates to finance page")]
     public async Task WhenTheUserNavigatesToFinancePage() => await new AccountOverviewPage(context).ClickFinanceMenuLink();
-
+    
     [Then(@"the user is redirected to a challenge page")]
     public async Task ThenTheUserIsRedirectedToAChallengePage() => _challengePage = await VerifyPageHelper.VerifyPageAsync(() => new ChallengePage(context));
 

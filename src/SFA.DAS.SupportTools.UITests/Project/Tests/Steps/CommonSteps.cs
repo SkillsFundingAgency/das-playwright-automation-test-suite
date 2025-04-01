@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.SupportTools.UITests.Project.Helpers;
+using SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.SupportTools.UITests.Project.Tests.Steps;
 
@@ -16,4 +17,7 @@ public class CommonSteps(ScenarioContext context)
 
     [Given(@"the User is on the Account details page")]
     public async Task GivenTheUserIsOnTheAccountDetailsPage() => await _stepsHelper.SearchAndViewAccount();
+
+    [Given(@"the user navigates to employer support page")]
+    public async Task WhenTheUserNavigatesToEmployerSupportPage() => await _stepsHelper.GotoSupportSearchPage();
 }

@@ -2,7 +2,7 @@
 
 public class UlnSearchResultsPage(ScenarioContext context) : SupportConsoleBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#commitmentsHeader")).ToContainTextAsync("View ULN");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("View ULN");
 
     public async Task<UlnDetailsPage> SelectULN(CohortDetails cohortDetails)
     {

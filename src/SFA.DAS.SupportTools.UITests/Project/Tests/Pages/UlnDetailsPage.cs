@@ -4,12 +4,12 @@ public class UlnDetailsPage(ScenarioContext context, CohortDetails cohortDetails
 {
     private readonly CohortDetails cohortDetails = cohortDetails;
 
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#content")).ToContainTextAsync(cohortDetails.UlnName);
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(cohortDetails.UlnName);
 
     public async Task VerifyUlnDetailsPageHeaders()
     {
-        await Assertions.Expect(page.Locator("#content")).ToContainTextAsync(cohortDetails.Uln);
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(cohortDetails.Uln);
 
-        await Assertions.Expect(page.Locator("#tab-summary")).ToContainTextAsync(cohortDetails.CohortRef);
+        await Assertions.Expect(page.Locator("#summary")).ToContainTextAsync(cohortDetails.CohortRef);
     }
 }
