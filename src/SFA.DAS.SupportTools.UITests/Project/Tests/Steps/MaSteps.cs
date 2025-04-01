@@ -14,34 +14,28 @@ public class MaSteps(ScenarioContext context)
     [Then(@"the user can search by Hashed account id, account name or PAYE scheme")]
     public async Task ThenTheUserCanSearchByHashedAccountIdAccountNameOrPAYEScheme()
     {
-        var page = await new SearchHomePage(context).GoToSearchHomePage();
+        var searchHomePage = new SearchHomePage(context);
 
-        var page1 = await page.SearchByPublicAccountIdAndViewAccount();
-
-        var page2 = await page1.GoBackToSearchHomePage();
-
-        var page3 = await page2.SearchByPayeSchemeAndViewAccount();
-
-        await page3.GoBackToSearchHomePage();
+        await searchHomePage.GoToEmployerAccountSearchHomePage();
+        await searchHomePage.SearchByPublicAccountIdAndViewAccount();
+        await searchHomePage.GoBackToSearchHomePage();
+        await searchHomePage.SearchByPayeSchemeAndViewAccount();
+        await searchHomePage.GoBackToSearchHomePage();
     }
 
     [Then(@"the user can search by name or email address")]
     public async Task ThenTheUserCanSearchByNameOrEmailAddress()
     {
-        var page = await new SearchHomePage(context).GoToSearchHomePage();
+        var searchHomePage = new SearchHomePage(context);
 
-        var page1 = await page.SearchByNameAndView();
-
-        var page2 = await page1.GoToSearchHomePage();
-
-        var page3 = await page2.SearchByEmailAddressAndView();
-
-        await page3.GoToSearchHomePage();
+        await searchHomePage.GoToEmployerUserSearchHomePage();
+        await searchHomePage.SearchByEmailAddressAndView();
+        await searchHomePage.GoBackToSearchHomePage();
     }
 
     [When(@"the user navigates to finance page")]
     public async Task WhenTheUserNavigatesToFinancePage() => await new AccountOverviewPage(context).ClickFinanceMenuLink();
-    
+
     [Then(@"the user is redirected to a challenge page")]
     public async Task ThenTheUserIsRedirectedToAChallengePage() => _challengePage = await VerifyPageHelper.VerifyPageAsync(() => new ChallengePage(context));
 

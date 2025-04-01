@@ -13,9 +13,16 @@ public abstract class SupportConsoleBasePage(ScenarioContext context) : BasePage
 
     public async Task ClickFinanceMenuLink() => await page.GetByRole(AriaRole.Link, new() { Name = "Finance" }).ClickAsync();
 
-    public async Task<SearchHomePage> GoToSearchHomePage()
+    public async Task<SearchHomePage> GoToEmployerAccountSearchHomePage()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Employer Account Search" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SearchHomePage(context));
+    }
+
+    public async Task<SearchHomePage> GoToEmployerUserSearchHomePage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Employer User Search" }).ClickAsync();
 
         return await VerifyPageAsync(() => new SearchHomePage(context));
     }
