@@ -14,7 +14,7 @@ public class CommitmentsSearchPage : SupportConsoleBasePage
     public static string InvalidUlnWithSpecialChars => "!£$%^&*()@?|#";
     public static string InvalidCohort => "ABCD";
     public static string InvalidCohortWithSpecialChars => "!£$%^&*()@?|#";
-    public static string UlnSearchErrorMessage => "Please enter a 10-digit unique learner number";
+    public static string UlnSearchErrorMessage => "Please enter a valid unique learner number";
     public static string CohortSearchErrorMessage => "Please enter a 6 or 7-digit Cohort number";
     public static string UnauthorisedCohortSearchErrorMessage => "Account is unauthorised to access this Cohort.";
 
@@ -54,9 +54,9 @@ public class CommitmentsSearchPage : SupportConsoleBasePage
 
     public async Task<string> GetCommitmentsSearchPageErrorText()
     {
-        var str = await page.Locator(".error-message").TextContentAsync();
+        var content = await page.Locator("#error-message-SearchTerm").TextContentAsync();
 
-        return str.Trim();
+        return content.Trim();
     }
 
     public async Task<CohortSummaryPage> SearchCohort(string text)

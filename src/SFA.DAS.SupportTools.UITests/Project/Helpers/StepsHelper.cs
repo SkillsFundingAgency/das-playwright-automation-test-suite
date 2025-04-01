@@ -54,7 +54,7 @@ public class StepsHelper(ScenarioContext context)
 
     public async Task<AccountOverviewPage> SearchAndViewAccount() => await new SearchHomePage(context).SearchByPublicAccountIdAndViewAccount();
 
-    public async Task<SearchHomePage> GotoSupportSearchPage() => await new ToolSupportHomePage(context).ClickEmployerSupportToolLink();
+    public async Task<SearchHomePage> NavigateToSupportSearchPage() => await new ToolSupportHomePage(context).ClickEmployerSupportToolLink();
 
     public async Task<UlnSearchResultsPage> SearchForUln(string uln)
     {
