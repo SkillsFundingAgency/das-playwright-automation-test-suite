@@ -9,10 +9,7 @@ public class CommitmentsTrainingProviderHistorySteps : CommitmentsCohortDetailsB
 
     [When(@"the User searches for a Cohort with Training provider history")]
     public async Task WhenTheUserSearchesForACohortWithTrainingProviderHistory() => await SearchesForACohort();
-
-    [When(@"the User clicks on 'View this cohort' button with Training provider history")]
-    public async Task WhenTheUserClicksOnButtonWithTrainingProviderHistory() => await ViewThisCohort();
-
+    
     [When(@"the ULN details page is displayed with Training provider history")]
     public async Task ThenTheULNDetailsPageIsDisplayedWithTrainingProviderHistory()
     {

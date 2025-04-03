@@ -2,7 +2,7 @@
 
 public class CohortDetailsPage(ScenarioContext context) : SupportConsoleBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#commitmentsHeader")).ToContainTextAsync("Cohort Details");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Cohort details");
 
     public async Task ClickViewUlnLink(string uln)
     {

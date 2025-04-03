@@ -7,19 +7,11 @@ public abstract class CommitmentsCohortDetailsBaseSteps(ScenarioContext context)
 {
     protected readonly ScenarioContext _context = context;
     private readonly StepsHelper _stepsHelper = new(context);
-    private CohortSummaryPage cohortSummaryPage;
     private CohortDetailsPage cohortDetailsPage;
     protected SupportConsoleConfig config = context.GetSupportConsoleConfig<SupportConsoleConfig>();
     protected CohortDetails cohortDetails;
 
-    protected async Task<CohortSummaryPage> SearchesForACohort() => cohortSummaryPage = await _stepsHelper.SearchForCohort(cohortDetails.CohortRef);
-
-    protected async Task ViewThisCohort()
-    {
-        AssertCohortRef(await cohortSummaryPage.GetCohortRefNumber(), "Cohort reference mismatch in CohortSummaryPage");
-
-        cohortDetailsPage = await cohortSummaryPage.ClickViewThisCohortButton();
-    }
+    protected async Task<CohortDetailsPage> SearchesForACohort() => cohortDetailsPage = await _stepsHelper.SearchForCohort(cohortDetails.CohortRef);
 
     protected async Task ViewCohortUln()
     {

@@ -96,7 +96,7 @@ public class StepsHelper(ScenarioContext context)
         await page.SearchWithUnauthorisedCohortAccess();
     }
 
-    public async Task<CohortSummaryPage> SearchForCohort(string cohortRef)
+    public async Task<CohortDetailsPage> SearchForCohort(string cohortRef)
     {
         var page = await new AccountOverviewPage(context).ClickCommitmentsMenuLink();
 

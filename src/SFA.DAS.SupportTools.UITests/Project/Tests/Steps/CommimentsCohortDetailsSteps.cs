@@ -10,9 +10,6 @@ public class CommimentsCohortDetailsSteps : CommitmentsCohortDetailsBaseSteps
     [When(@"the User searches for a Cohort")]
     public async Task WhenTheUserSearchesForACohort() => await SearchesForACohort();
 
-    [When(@"the User clicks on 'View this cohort' button")]
-    public async Task WhenTheUserClicksOnButton() => await ViewThisCohort();
-
     [When(@"the user chooses to view Uln of the Cohort")]
     public async Task WhenTheUserChoosesToViewUlnOfTheCohort() => await ViewCohortUln();
 

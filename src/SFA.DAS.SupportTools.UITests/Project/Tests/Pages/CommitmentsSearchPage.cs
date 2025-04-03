@@ -58,18 +58,18 @@ public class CommitmentsSearchPage : SupportConsoleBasePage
         return content.Trim();
     }
 
-    public async Task<CohortSummaryPage> SearchCohort(string text)
+    public async Task<CohortDetailsPage> SearchCohort(string text)
     {
         await SelectCohortRefSearchTypeRadioButton();
 
         await Search(text);
 
-        return await VerifyPageAsync(() => new CohortSummaryPage(context));
+        return await VerifyPageAsync(() => new CohortDetailsPage(context));
     }
 
     private async Task Search(string text) 
     { 
-        await page.GetByRole(AriaRole.Searchbox, new() { Name = "Enter Cohort Reference number" }).FillAsync(text); 
+        await page.Locator("#SearchTerm").FillAsync(text); 
 
         await ClickSearchButton(); 
     }

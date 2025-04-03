@@ -10,9 +10,6 @@ public class CommitmentsPendingChangingSteps : CommitmentsCohortDetailsBaseSteps
     [When(@"the User searches for a Cohort with pending changes")]
     public async Task WhenTheUserSearchesForACohortWithPendingChanges() => await SearchesForACohort();
 
-    [When(@"the User clicks on 'View this cohort' button with pending changes")]
-    public async Task WhenTheUserClicksOnButtonWithPendingChanges() => await ViewThisCohort();
-
     [When(@"the ULN details page is displayed with pending changes")]
     public async Task ThenTheULNDetailsPageIsDisplayedWithPendingChanges()
     {

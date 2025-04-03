@@ -2,7 +2,7 @@
 
 public class CohortSummaryPage(ScenarioContext context) : SupportConsoleBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#commitmentsHeader")).ToContainTextAsync("Cohort Summary");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Cohort details");
 
     public async Task<CohortDetailsPage> ClickViewThisCohortButton()
     {

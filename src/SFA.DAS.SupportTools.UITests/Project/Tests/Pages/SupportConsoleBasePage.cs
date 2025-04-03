@@ -34,5 +34,5 @@ public abstract class SupportConsoleBasePage(ScenarioContext context) : BasePage
         return await VerifyPageAsync(() => new SearchHomePage(context));
     }
 
-    public async Task<string> GetCohortRefNumber() => await page.GetByRole(AriaRole.Row, new() { Name = "Cohort reference" }).TextContentAsync();
+    public async Task<string> GetCohortRefNumber() => await page.Locator(".govuk-summary-list__value").First.TextContentAsync();
 }
