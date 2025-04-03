@@ -22,13 +22,7 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context)
         await LoginToAsAdmin();
     }
 
-    //public async Task LoginToAsAssessor1() => await CheckAndLoginToAsAdmin(context.GetUser<AsAssessor1User>());
-
-   // public async Task LoginToAsAssessor2() => await CheckAndLoginToAsAdmin(context.GetUser<AsAssessor2User>());
-
     public async Task LoginToAsAdmin() => await SubmitValidLoginDetails(new ASAdminLandingPage(context), GetAsAdminUser());
-
-    public async Task LoginToSupportConsole(DfeAdminUser dfeAdminUser) => await SubmitValidLoginDetails(new ASEmpSupportConsoleLandingPage(context), dfeAdminUser);
 
     public async Task LoginToSupportTool(DfeAdminUser dfeAdminUser) => await SubmitValidLoginDetails(new ASEmpSupportToolLandingPage(context), dfeAdminUser);
 
