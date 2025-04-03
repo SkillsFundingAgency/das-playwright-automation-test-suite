@@ -21,8 +21,10 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context)
 
         await LoginToAsAdmin();
     }
-
+    
     public async Task LoginToAsAdmin() => await SubmitValidLoginDetails(new ASAdminLandingPage(context), GetAsAdminUser());
+
+    public async Task LoginToSupportConsole(DfeAdminUser dfeAdminUser) => await SubmitValidLoginDetails(new ASEmpSupportConsoleLandingPage(context), dfeAdminUser);
 
     public async Task LoginToSupportTool(DfeAdminUser dfeAdminUser) => await SubmitValidLoginDetails(new ASEmpSupportToolLandingPage(context), dfeAdminUser);
 

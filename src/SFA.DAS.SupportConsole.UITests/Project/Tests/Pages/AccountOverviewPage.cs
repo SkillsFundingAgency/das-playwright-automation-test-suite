@@ -4,7 +4,7 @@ public class AccountOverviewPage(ScenarioContext context) : SupportConsoleBasePa
 {
     public override async Task VerifyPage()
     {
-        //Doing this to refresh the page as the Header disappears at times - known issue
+        //Doing this to refresh the page as the Header dissappears at times - known issue
 
         await RefreshAccountOverviewPage();
 

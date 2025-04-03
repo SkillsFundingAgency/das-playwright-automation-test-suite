@@ -6,9 +6,9 @@ namespace SFA.DAS.SupportConsole.UITests.Project.Helpers;
 
 public class StepsHelper(ScenarioContext context)
 {
-    public async Task<SearchHomePage> Tier1LoginToSupportConsole() => await LoginToSupportTool(context.GetUser<SupportConsoleTier1User>());
+    public async Task<SearchHomePage> Tier1LoginToSupportConsole() => await LoginToSupportConsole(context.GetUser<SupportConsoleTier1User>());
 
-    public async Task<SearchHomePage> Tier2LoginToSupportConsole() => await LoginToSupportTool(context.GetUser<SupportConsoleTier2User>());
+    public async Task<SearchHomePage> Tier2LoginToSupportConsole() => await LoginToSupportConsole(context.GetUser<SupportConsoleTier2User>());
 
     public async Task<AccountOverviewPage> SearchAndViewAccount() => await new SearchHomePage(context).SearchByPublicAccountIdAndViewAccount();
 
@@ -59,9 +59,9 @@ public class StepsHelper(ScenarioContext context)
         return await page.SearchCohort(cohortRef);
     }
 
-    private async Task<SearchHomePage> LoginToSupportTool(DfeAdminUser loginUser)
+    private async Task<SearchHomePage> LoginToSupportConsole(DfeAdminUser loginUser)
     {
-        await new DfeAdminLoginStepsHelper(context).LoginToSupportTool(loginUser);
+        await new DfeAdminLoginStepsHelper(context).LoginToSupportConsole(loginUser);
 
         return await VerifyPageHelper.VerifyPageAsync(() => new SearchHomePage(context));
     }
