@@ -14,7 +14,7 @@ public class CommitmentsSearchPage : SupportConsoleBasePage
     public static string InvalidCohort => "ABCD";
     public static string InvalidCohortWithSpecialChars => "!£$%^&*()@?|#";
     public static string UlnSearchErrorMessage => "Please enter a valid unique learner number";
-    public static string CohortSearchErrorMessage => "Please enter a 6 or 7-digit Cohort number";
+    public static string CohortSearchErrorMessage => "This is not a valid cohort reference";
     public static string UnauthorisedCohortSearchErrorMessage => "Account is unauthorised to access this Cohort.";
 
 
