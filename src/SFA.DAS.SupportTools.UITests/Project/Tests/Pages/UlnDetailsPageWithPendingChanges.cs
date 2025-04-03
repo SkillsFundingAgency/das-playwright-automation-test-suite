@@ -2,7 +2,7 @@
 
 public class UlnDetailsPageWithPendingChanges(ScenarioContext context, CohortDetails cohortDetails) : UlnDetailsPage(context, cohortDetails)
 {
-    internal async Task ClickPendingChangesTab() => await page.GetByRole(AriaRole.Link, new() { Name = "Pending Changes" }).ClickAsync();
+    internal async Task ClickPendingChangesTab() => await page.Locator("#tab_pending-changes").ClickAsync();
 
-    internal async Task PendingChangesAreDisplayed() => await Assertions.Expect(page.Locator("#tab-pending-changes")).ToContainTextAsync("Changes requested by training provider or employer");
+    internal async Task PendingChangesAreDisplayed() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Changes requested by training provider or employer");
 }
