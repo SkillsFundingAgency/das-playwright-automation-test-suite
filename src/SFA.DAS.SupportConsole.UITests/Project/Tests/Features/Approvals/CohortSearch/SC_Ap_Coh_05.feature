@@ -1,6 +1,6 @@
 ﻿Feature: SC_Ap_Coh_05
 
-@supportconsole
+@supportconsoleX
 @approvalssupportconsole
 Scenario: SC_Ap_Coh_05 - View Previous Training Providers
 	Given the Tier 1 User is logged into Support Console

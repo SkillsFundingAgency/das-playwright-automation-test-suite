@@ -1,7 +1,7 @@
 ﻿Feature: SC_Ma_Search_01
 
 @regression
-@supportconsole
+@supportconsoleX
 @masupportconsole
 Scenario: SC_Ma_Search_01 Search By Hashed account id, account name or PAYE scheme
 	Given the User is logged into Support Console

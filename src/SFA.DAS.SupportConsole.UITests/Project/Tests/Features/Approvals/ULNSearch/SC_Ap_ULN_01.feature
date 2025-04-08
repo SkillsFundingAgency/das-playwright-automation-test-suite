@@ -1,6 +1,6 @@
 ﻿Feature: SC_Ap_ULN_01
 
-@supportconsole
+@supportconsoleX
 @approvalssupportconsole
 Scenario: SC_Ap_ULN_01 - View ULN details
 	Given the User is logged into Support Console

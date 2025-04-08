@@ -1,6 +1,6 @@
 ﻿Feature: SC_Ap_Coh_04
 
-@supportconsole
+@supportconsoleX
 @approvalssupportconsole
 Scenario: SC_Ap_Coh_04 - View Cohort details with pending changes
 	Given the Tier 1 User is logged into Support Console

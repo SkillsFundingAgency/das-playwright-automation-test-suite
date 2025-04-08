@@ -2,7 +2,7 @@
 
 
 @regression
-@supportconsole
+@supportconsoleX
 @masupportconsole
 Scenario: SC_Ma_Challenge_01 Submit correct details
 	Given the Tier 1 User is logged into Support Console

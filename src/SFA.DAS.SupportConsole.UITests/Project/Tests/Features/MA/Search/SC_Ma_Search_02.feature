@@ -1,7 +1,7 @@
 ﻿Feature: SC_Ma_Search_02
 
 @regression
-@supportconsole
+@supportconsoleX
 @masupportconsole
 Scenario: SC_Ma_Search_02 Search By name or email address
 	Given the User is logged into Support Console

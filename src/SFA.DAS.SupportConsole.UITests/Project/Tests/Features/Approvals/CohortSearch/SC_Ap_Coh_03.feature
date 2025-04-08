@@ -1,6 +1,6 @@
 ﻿Feature: SC_Ap_Coh_03
 
-@supportconsole
+@supportconsoleX
 @approvalssupportconsole
 Scenario: SC_Ap_Coh_03 - Search for a unauthorised Cohort
 	Given the User is logged into Support Console

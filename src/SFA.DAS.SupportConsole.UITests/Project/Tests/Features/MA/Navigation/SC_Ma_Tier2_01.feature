@@ -2,7 +2,7 @@
 
 
 @regression
-@supportconsole
+@supportconsoleX
 @masupportconsole
 Scenario: SC_Ma_Tier2_01_Tier2Navigation To Finance page
 	Given the Tier 2 User is logged into Support Console

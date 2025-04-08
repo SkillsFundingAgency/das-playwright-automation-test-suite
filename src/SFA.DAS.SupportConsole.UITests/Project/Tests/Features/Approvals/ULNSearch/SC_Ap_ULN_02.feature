@@ -1,6 +1,6 @@
 ﻿Feature: SC_Ap_ULN_02
 
-@supportconsole
+@supportconsoleX
 @approvalssupportconsole
 Scenario: SC_Ap_ULN_02 - Invalid ULN search
 	Given the User is logged into Support Console
