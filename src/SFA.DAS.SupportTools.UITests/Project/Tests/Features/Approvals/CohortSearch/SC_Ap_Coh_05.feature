@@ -1,8 +1,8 @@
-﻿Feature: SC_Ap_Coh_05
+﻿Feature: ST_Ap_Coh_05
 
 @supportconsole
 @approvalssupportconsole
-Scenario: SC_Ap_Coh_05 - View Previous Training Providers
+Scenario: ST_Ap_Coh_05 - View Previous Training Providers
 	Given the Tier 1 User is logged into Support Tool
 	And the User is on the Account details page
 	When the User searches for a Cohort with Training provider history

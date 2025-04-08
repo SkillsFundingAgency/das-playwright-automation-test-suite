@@ -1,8 +1,8 @@
-﻿Feature: SC_Ap_Coh_03
+﻿Feature: ST_Ap_Coh_03
 
 @supportconsole
 @approvalssupportconsole
-Scenario: SC_Ap_Coh_03 - Search for a unauthorised Cohort
+Scenario: ST_Ap_Coh_03 - Search for a unauthorised Cohort
 	Given the User is logged into Support Tool
 	And the user navigates to employer support page
 	And the User is on the Account details page

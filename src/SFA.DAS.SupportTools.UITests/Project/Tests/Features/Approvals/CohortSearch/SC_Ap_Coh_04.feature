@@ -1,8 +1,8 @@
-﻿Feature: SC_Ap_Coh_04
+﻿Feature: ST_Ap_Coh_04
 
 @supportconsole
 @approvalssupportconsole
-Scenario: SC_Ap_Coh_04 - View Cohort details with pending changes
+Scenario: ST_Ap_Coh_04 - View Cohort details with pending changes
 	Given the Tier 1 User is logged into Support Tool
 	And the User is on the Account details page
 	When the User searches for a Cohort with pending changes

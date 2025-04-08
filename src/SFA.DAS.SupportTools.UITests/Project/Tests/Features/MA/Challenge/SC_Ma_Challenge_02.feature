@@ -1,10 +1,10 @@
-﻿Feature: SC_Ma_Challenge_02
+﻿Feature: ST_Ma_Challenge_02
 
 
 @regression
 @supportconsole
 @masupportconsole
-Scenario: SC_Ma_Challenge_02 Submit incorrect details
+Scenario: ST_Ma_Challenge_02 Submit incorrect details
 	Given the Tier 1 User is logged into Support Tool
 	And the User is on the Account details page
 	When the user navigates to finance page

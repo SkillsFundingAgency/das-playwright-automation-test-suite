@@ -1,10 +1,10 @@
-﻿Feature: SC_Ma_Tier2_02
+﻿Feature: ST_Ma_Tier2_02
 
 
 @regression
 @supportconsole
 @masupportconsole
-Scenario: SC_Ma_Tier2_02_Tier2Navigation To Team Members page
+Scenario: ST_Ma_Tier2_02_Tier2Navigation To Team Members page
 	Given the Tier 2 User is logged into Support Tool
 	And the user navigates to employer support page
 	And the User is on the Account details page

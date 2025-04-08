@@ -1,8 +1,8 @@
-﻿Feature: SC_Ap_Coh_02
+﻿Feature: ST_Ap_Coh_02
 
 @supportconsole
 @approvalssupportconsole
-Scenario: SC_Ap_Coh_02 - Invalid Cohort search
+Scenario: ST_Ap_Coh_02 - Invalid Cohort search
 	Given the User is logged into Support Tool
 	And the user navigates to employer support page
 	And the User is on the Account details page
