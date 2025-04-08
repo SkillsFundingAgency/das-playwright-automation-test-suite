@@ -33,15 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.MongoDb.DataGenerat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.MailosaurAPI.Service", "SFA.DAS.MailosaurAPI.Service\SFA.DAS.MailosaurAPI.Service.csproj", "{CDBBFFC1-80CA-4597-8B53-612C064C0A98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderLogin.Service", "SFA.DAS.ProviderLogin.Service\SFA.DAS.ProviderLogin.Service.csproj", "{2F97FA11-21AB-4687-9B53-E48D40AEBC44}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.UITests", "SFA.DAS.EmployerFinance.UITests\SFA.DAS.EmployerFinance.UITests.csproj", "{66BAC8F4-B93B-4FB3-B749-0AF73C6FC317}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderPortal.UITests", "SFA.DAS.ProviderPortal.UITests\SFA.DAS.ProviderPortal.UITests.csproj", "{0B8C4747-A01A-4098-81A2-F9F472D5CA81}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.TestDataCleanup", "SFA.DAS.TestDataCleanup\SFA.DAS.TestDataCleanup.csproj", "{65FD48DA-BE01-4E42-968E-16E70FE839FD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.AODP.UITests", "SFA.DAS.AODP.UITests\SFA.DAS.AODP.UITests.csproj", "{38A456AF-988A-46F7-875F-D8D530470D2A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.AODP.UITests", "SFA.DAS.AODP.UITests\SFA.DAS.AODP.UITests.csproj", "{A77D5F02-0F76-4E62-AB46-93F1DC43BC93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,22 +89,10 @@ Global
 		{CDBBFFC1-80CA-4597-8B53-612C064C0A98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDBBFFC1-80CA-4597-8B53-612C064C0A98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDBBFFC1-80CA-4597-8B53-612C064C0A98}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F97FA11-21AB-4687-9B53-E48D40AEBC44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F97FA11-21AB-4687-9B53-E48D40AEBC44}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F97FA11-21AB-4687-9B53-E48D40AEBC44}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F97FA11-21AB-4687-9B53-E48D40AEBC44}.Release|Any CPU.Build.0 = Release|Any CPU
-		{66BAC8F4-B93B-4FB3-B749-0AF73C6FC317}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66BAC8F4-B93B-4FB3-B749-0AF73C6FC317}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66BAC8F4-B93B-4FB3-B749-0AF73C6FC317}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66BAC8F4-B93B-4FB3-B749-0AF73C6FC317}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0B8C4747-A01A-4098-81A2-F9F472D5CA81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B8C4747-A01A-4098-81A2-F9F472D5CA81}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B8C4747-A01A-4098-81A2-F9F472D5CA81}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B8C4747-A01A-4098-81A2-F9F472D5CA81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65FD48DA-BE01-4E42-968E-16E70FE839FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65FD48DA-BE01-4E42-968E-16E70FE839FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65FD48DA-BE01-4E42-968E-16E70FE839FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65FD48DA-BE01-4E42-968E-16E70FE839FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A77D5F02-0F76-4E62-AB46-93F1DC43BC93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A77D5F02-0F76-4E62-AB46-93F1DC43BC93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A77D5F02-0F76-4E62-AB46-93F1DC43BC93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A77D5F02-0F76-4E62-AB46-93F1DC43BC93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
