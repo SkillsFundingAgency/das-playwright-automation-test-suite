@@ -9,6 +9,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         private readonly ApprenticeshipTrainingCoursesPage _apprenticeshipTrainingCoursesPage;
         private readonly FATeHomePage _fATeHomePage;
         private readonly Search_TrainingCourses_ApprenticeworkLocationPage _search_TrainingCourses_ApprenticeworkLocationPage;
+        private readonly ApprenticeshipTrainingCourseDetailsPage _apprenticeshipTrainingCourseDetailsPage;
 
         public SearchForTrainingCoursesAndLocationSteps(ScenarioContext context)
         {
@@ -16,6 +17,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _fATeHomePage = new FATeHomePage(context);
             _search_TrainingCourses_ApprenticeworkLocationPage = new Search_TrainingCourses_ApprenticeworkLocationPage(context);
             _apprenticeshipTrainingCoursesPage = new ApprenticeshipTrainingCoursesPage(context);
+            _apprenticeshipTrainingCourseDetailsPage = new ApprenticeshipTrainingCourseDetailsPage(context);
         }
 
       [Given("the user navigates to the Search for apprenticeship training courses and training providers page")]
@@ -23,6 +25,14 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         {
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
             await _fATeHomePage.ClickStartNow();
+            await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
+        }
+
+        [When("the user navigates to Training providers page")]
+        public async Task WhenTheUserNavigatesToTrainingProvidersPage()
+        {
+            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Adult care worker (level 2)");
+            await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
         }
 
         [When("the user searches for a course with an apprenticeship location only")]
@@ -34,7 +44,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         [Then("the relevant training courses are displayed")]
         public async Task ThenTheRelevantTrainingCoursesAreDisplayed()
         {
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Coventry, West Midlands (within 10 miles)");
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Coventry, West Midlands (Across England)");
         }
 
         [When("the user searches for a course without location")]
@@ -74,6 +84,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         {
             await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Selected");
             await _apprenticeshipTrainingCoursesPage.VerifyNoResultsMessage();
+            await _apprenticeshipTrainingCoursesPage.VerifyNoresultStartAnewSearchLink();
         }
     }
 }

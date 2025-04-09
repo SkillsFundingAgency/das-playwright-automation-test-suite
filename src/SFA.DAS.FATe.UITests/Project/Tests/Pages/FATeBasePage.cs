@@ -7,7 +7,21 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
 {
     protected readonly FATeDataHelper fateDataHelper = context.Get<FATeDataHelper>();
 
-    public async Task ClickContinue() => await page.Locator("#continue").ClickAsync();
+    public async Task ClickContinue()
+    {
+        var continueButton = page.Locator("#filters-submit");
+
+        if (!await continueButton.IsVisibleAsync())
+        {
+            continueButton = page.Locator("#continue");
+        }
+        if (!await continueButton.IsVisibleAsync())
+        {
+            continueButton = page.Locator(".govuk-button");
+        }
+
+        await continueButton.ClickAsync();
+    }
     public async Task<ShortlistPage> ViewShortlist()
     {
         await page.Locator("#header-view-shortlist").ClickAsync();
@@ -22,6 +36,16 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     {
         await page.Locator("#home-breadcrumb").ClickAsync();
         return await VerifyPageAsync(() => new Search_TrainingCourses_ApprenticeworkLocationPage(context));
+    }
+    public async Task<ApprenticeshipTrainingCoursesPage> ReturnToCourseSearchResults()
+    {
+        await page.Locator("#courses-breadcrumb").ClickAsync();
+        return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
+    }
+    public async Task<ApprenticeshipTrainingCourseDetailsPage> ReturnToCourseDetail()
+    {
+        await page.Locator("#course-detail-breadcrumb").ClickAsync();
+        return await VerifyPageAsync(() => new ApprenticeshipTrainingCourseDetailsPage(context));
     }
     public async Task SelectAutocompleteOption(string optionText)
     {
@@ -43,6 +67,30 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
         {
             await checkboxLocator.ClickAsync();
         }
+    }
+    public async Task SelectApprenticeshipLevel(string levelName)
+    {
+        var checkbox = page.GetByRole(AriaRole.Checkbox, new() { Name = levelName });
+
+        if (!await checkbox.IsVisibleAsync())
+        {
+            var expandButton = page.GetByRole(AriaRole.Button, new() { Name = "Apprenticeship level , Show" });
+            if (await expandButton.IsVisibleAsync())
+            {
+                await expandButton.ClickAsync();
+                await checkbox.WaitForAsync(new() { State = WaitForSelectorState.Visible });
+            }
+        }
+        if (!await checkbox.IsCheckedAsync())
+        {
+            await checkbox.CheckAsync();
+        }
+    }
+    public async Task VerifyApprenticeshipLevelResult(string level)
+    {
+        var levelLocator = page.Locator("dt.das-definition-list__title:has-text('Apprenticeship level') + dd.das-definition-list__definition");
+        await Assertions.Expect(levelLocator.First).ToBeVisibleAsync();
+        await Assertions.Expect(levelLocator.First).ToContainTextAsync($"Level {level}");
     }
     public async Task VerifyDistanceFilterSelection(string expectedDistance)
     {
