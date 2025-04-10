@@ -230,4 +230,64 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
             await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         }
     }
+    public async Task<(int ProviderCount, TrainingProvidersPage Page)> ViewTrainingProvidersForCourse(string courseId)
+    {
+        string linkId = $"standard-{courseId}";
+        var linkLocator = page.Locator($"a.das-search-results__link#standard-{courseId}:has-text('View')");
+
+        if (!await linkLocator.IsVisibleAsync())
+            throw new Exception($"Could not find the provider link for course ID: {courseId}");
+
+        var linkText = await linkLocator.TextContentAsync();
+        var match = Regex.Match(linkText ?? "", @"\d+");
+        if (!match.Success)
+            throw new Exception("Could not extract the provider count from link text.");
+
+        int providerCount = int.Parse(match.Value);
+
+        await linkLocator.ClickAsync();
+
+        var nextPage = await VerifyPageAsync(() => new TrainingProvidersPage(context));
+        return (providerCount, nextPage);
+    }
+    public async Task VerifyProvidersCount(int expectedCount)
+    {
+        var text = await page.Locator("p.govuk-body.govuk-\\!\\-font-weight-bold.das-no-wrap").TextContentAsync();
+        int actualCount = int.Parse(Regex.Match(text ?? "", @"\d+").Value);
+
+        if (actualCount != expectedCount)
+            throw new Exception($"Expected: {expectedCount}, but found: {actualCount}");
+
+        Console.WriteLine($"✅ Provider count verified: {actualCount}");
+    }
+    public async Task SelectExcellentReviews_EmployerRating()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Reviews From 2023 to 2024 ," }).ClickAsync();
+        await page.Locator("#filteritem-employer-ratings-filter-Excellent").CheckAsync();
+    }
+    public async Task SelectExcellentReviews_ApprenticeRating()
+    {
+        await page.Locator("#filteritem-apprentice-ratings-filter-Good").CheckAsync();
+    }
+    public async Task SelectAchievementRateCheckbox(string ratingValue)
+    {
+        var accordionButton = page.GetByRole(AriaRole.Button, new() { Name = "Achievement rate From 2022 to 2023" });
+        if (await accordionButton.GetAttributeAsync("aria-expanded") == "false")
+        {
+            await accordionButton.ClickAsync();
+        }
+        var checkboxLocator = page.Locator($"#filteritem-qar-filter-{ratingValue}");
+        await checkboxLocator.CheckAsync();
+    }
+    public async Task CheckAndVerifyCheckbox(string checkboxId)
+    {
+        var checkbox = page.Locator($"#{checkboxId}");
+        await checkbox.CheckAsync();
+
+        var isChecked = await checkbox.IsCheckedAsync();
+        if (!isChecked)
+        {
+            throw new InvalidOperationException($"Checkbox with id '{checkboxId}' was not checked successfully.");
+        }
+    }
 }
