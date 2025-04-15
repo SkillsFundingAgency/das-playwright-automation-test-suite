@@ -3,7 +3,6 @@
 public class FATeHomePage(ScenarioContext context) : FATeBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Find apprenticeship training for your apprentice");
-
     public async Task<FATeHomePage> AcceptCookieAndAlert()
     {
         await AcceptAllCookies();

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
@@ -6,7 +7,6 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
 public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
 {
     protected readonly FATeDataHelper fateDataHelper = context.Get<FATeDataHelper>();
-
     public async Task ClickContinue()
     {
         var continueButton = page.Locator("#filters-submit");
@@ -271,7 +271,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task SelectAchievementRateCheckbox(string ratingValue)
     {
-        var accordionButton = page.GetByRole(AriaRole.Button, new() { Name = "Achievement rate From 2022 to 2023" });
+        var accordionButton = page.GetByRole(AriaRole.Button, new() { Name = "Achievement rate From 2023 to 2024" });
         if (await accordionButton.GetAttributeAsync("aria-expanded") == "false")
         {
             await accordionButton.ClickAsync();
@@ -288,6 +288,126 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
         if (!isChecked)
         {
             throw new InvalidOperationException($"Checkbox with id '{checkboxId}' was not checked successfully.");
+        }
+    }
+    public async Task VerifyDefaultSortOrder_AchievementRate()
+    {
+        var sortDropdown = page.Locator("#course-providers-orderby");
+        var selectedValue = await sortDropdown.InputValueAsync();
+
+        if (selectedValue != "AchievementRate")
+        {
+            throw new InvalidOperationException("The default sort order is not set to 'Achievement rate'.");
+        }
+    }
+    public async Task VerifyAchievementRatesDescendingAsync()
+    {
+        var rateElements = page.Locator(".course-provider-results-bottom-panel .govuk-body");
+        var count = await rateElements.CountAsync();
+
+        if (count == 0)
+        {
+            throw new InvalidOperationException("No achievement rate elements found on the page.");
+        }
+
+        var rates = new List<double>();
+
+        for (int i = 0; i < count; i++)
+        {
+            var textContent = await rateElements.Nth(i).TextContentAsync();
+            if (!string.IsNullOrWhiteSpace(textContent))
+            {
+                if (textContent.Contains("No achievement rate - not enough data", StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("No achievement rate data available for this provider.");
+                    continue;
+                }
+
+                var match = Regex.Match(textContent, @"(\d+(\.\d+)?)%");
+                if (match.Success && double.TryParse(match.Groups[1].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double percentage))
+                {
+                    rates.Add(percentage);
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to parse percentage from text: '{textContent}'.");
+                }
+            }
+        }
+
+        if (rates.Count == 0)
+        {
+            Console.WriteLine("No valid achievement rates were parsed from the page.");
+            return;
+        }
+        for (int i = 0; i < rates.Count - 1; i++)
+        {
+            if (rates[i] < rates[i + 1])
+            {
+                throw new InvalidOperationException($"Achievement rates are not in descending order. Rate {rates[i]}% is followed by {rates[i + 1]}%.");
+            }
+        }
+    }
+    public async Task SelectEmployerProviderRatingAsync(string optionValue)
+    {     var dropdown = page.Locator("#course-providers-orderby");
+        await dropdown.SelectOptionAsync(new SelectOptionValue { Value = optionValue });
+    }
+    public async Task VerifyEmployerReviewsSortedAsync(string reviews)
+    {
+        var reviewElements = page.Locator(".das-rating");
+
+        var employerReviews = new List<(double Rating, ILocator Element)>();
+        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        var count = await reviewElements.CountAsync();
+
+        for (int i = 0; i < count; i++)
+        {
+            var reviewElement = reviewElements.Nth(i);
+            var reviewText = await reviewElement.Locator(".das-text--muted").InnerTextAsync();
+
+            if (reviewText.Contains(reviews))
+            {
+                var ratingText = await reviewElement.Locator(".das-rating__label--Excellent").InnerTextAsync();
+                double rating = 0;
+
+                if (ratingText.Contains("Excellent"))
+                    rating = 4;  // 4 stars
+                else if (ratingText.Contains("Good"))
+                    rating = 3;  // 3 stars
+                else if (ratingText.Contains("Poor"))
+                    rating = 2;  // 2 stars
+                else if (ratingText.Contains("Very poor"))
+                    rating = 1;  // 1 star
+
+                employerReviews.Add((rating, reviewElement));
+            }
+        }
+
+        if (employerReviews.Count == 0)
+        {
+            Console.WriteLine("No employer reviews found.");
+            return; 
+        }
+
+        var sortedEmployerReviews = employerReviews.OrderByDescending(r => r.Rating).ToList();
+
+        for (int i = 0; i < sortedEmployerReviews.Count; i++)
+        {
+            var currentReview = sortedEmployerReviews[i];
+            var currentReviewElement = currentReview.Element;
+            var currentRating = currentReview.Rating;
+
+            if (i < sortedEmployerReviews.Count - 1)
+            {
+                var nextReview = sortedEmployerReviews[i + 1];
+                var nextReviewElement = nextReview.Element;
+                var nextRating = nextReview.Rating;
+
+                if (currentRating < nextRating)
+                {
+                    throw new InvalidOperationException($"Employer reviews are not sorted correctly. Rating {currentRating} is followed by {nextRating}.");
+                }
+            }
         }
     }
 }

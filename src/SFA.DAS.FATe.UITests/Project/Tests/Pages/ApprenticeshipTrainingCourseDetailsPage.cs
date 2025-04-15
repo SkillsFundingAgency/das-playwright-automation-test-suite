@@ -10,7 +10,6 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
         var expectedCourseTitle = context.Get<string>("SelectedCourseName");
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(expectedCourseTitle);
     }
-
     public async Task<TrainingProvidersPage> ViewProvidersForThisCourse()
     {
         var viewProvidersButton = page.GetByRole(AriaRole.Link, new() { Name = "View providers for this course" });

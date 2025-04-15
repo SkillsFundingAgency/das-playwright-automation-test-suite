@@ -8,4 +8,3 @@ Scenario: Verify functionality of the filters
     Then the user is able to select and clear single filters
     And the user is able to add multiple filters and clear all 
     And the user is able to verify results for the filters set
-

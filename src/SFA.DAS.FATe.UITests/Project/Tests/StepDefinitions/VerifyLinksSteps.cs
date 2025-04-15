@@ -8,13 +8,11 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
     {
         private readonly FATeHomePage _fATeHomePage;
         private readonly Search_TrainingCourses_ApprenticeworkLocationPage _search_TrainingCourses_ApprenticeworkLocationPage;
-        private readonly SearchForTrainingProviderPage _searchForTrainingProviderPage;
 
         public VerifyLinksSteps(ScenarioContext context)
         {
             _fATeHomePage = new FATeHomePage(context);
             _search_TrainingCourses_ApprenticeworkLocationPage = new Search_TrainingCourses_ApprenticeworkLocationPage(context);
-            _searchForTrainingProviderPage = new SearchForTrainingProviderPage(context);
         }
 
         [When("verifies that all expected links are present and functional")]
@@ -36,6 +34,5 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         {
             await _fATeHomePage.VerifyPaginationLinks(new List<int> { 2, 4, 5, 3, 1 });
         }
-
     }
 }

@@ -10,9 +10,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
     {
         private readonly FATeHomePage _fATeHomePage;
         private readonly FATeStepsHelper _stepsHelper;
-        private readonly FATeDataHelper _fATeDataHelper;
         private readonly Search_TrainingCourses_ApprenticeworkLocationPage _search_TrainingCourses_ApprenticeworkLocationPage;
-        private readonly SearchForTrainingProviderPage _searchForTrainingProviderPage;
         private readonly ApprenticeshipTrainingCoursesPage _apprenticeshipTrainingCoursesPage;
         private readonly ApprenticeshipTrainingCourseDetailsPage _apprenticeshipTrainingCourseDetailsPage;
 
@@ -20,12 +18,11 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         {
             _fATeHomePage = new FATeHomePage(context);
             _stepsHelper = new FATeStepsHelper(context);
-            _fATeDataHelper = new FATeDataHelper();
             _search_TrainingCourses_ApprenticeworkLocationPage = new Search_TrainingCourses_ApprenticeworkLocationPage(context);
-            _searchForTrainingProviderPage = new SearchForTrainingProviderPage(context);
             _apprenticeshipTrainingCoursesPage = new ApprenticeshipTrainingCoursesPage(context);
             _apprenticeshipTrainingCourseDetailsPage = new ApprenticeshipTrainingCourseDetailsPage(context);
         }
+
         [Given("the user navigates to the Apprenticeship training course page")]
         public async Task GivenTheUserNavigatesToTheApprenticeshipTrainingCoursePage()
         {

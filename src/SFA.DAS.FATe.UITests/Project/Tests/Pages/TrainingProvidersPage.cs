@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using SFA.DAS.FATe.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
@@ -87,5 +88,37 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         await VerifyFilterIsSet("At apprentice’s workplace");
         await ClearAllFilters();
         await VerifyNoFiltersAreApplied();
+    }
+    public async Task SelectEmployerProviderRating(string optionValue)
+    {
+        var dropdown = page.Locator("#course-providers-orderby");
+
+        await dropdown.SelectOptionAsync(new SelectOptionValue { Value = optionValue });
+    }
+    public async Task<string> AddProviderToShortlist(string ukprn)
+    {
+        var buttonSelector = $"#add-to-shortlist-{ukprn}";
+        var button = page.Locator(buttonSelector);
+        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
+
+        var parentContainer = button.Locator("xpath=ancestor::div[contains(@class, 'app-course-provider')]");
+        var providerNameLocator = parentContainer.Locator(".govuk-heading-m .das-search-results__link");
+        var providerName = await providerNameLocator.InnerTextAsync();
+
+        await button.ClickAsync();
+        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden });
+
+        return providerName.Trim();
+    }
+    public async Task ClickRemoveFromShortlistAsync()
+    {
+        var removeButton = page.GetByRole(AriaRole.Button, new() { Name = "Remove from shortlist" });
+        await removeButton.ClickAsync();
+    }
+    public async Task ClickViewShortlistAsync()
+    {
+        var viewShortlistLink = page.GetByRole(AriaRole.Link, new() { Name = "View shortlist" });
+        await viewShortlistLink.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
+        await viewShortlistLink.ClickAsync();
     }
 }

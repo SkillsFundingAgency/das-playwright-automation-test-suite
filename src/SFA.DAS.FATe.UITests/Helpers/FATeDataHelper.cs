@@ -24,27 +24,16 @@ namespace SFA.DAS.FATe.UITests.Helpers
         }
 
         public string FullName { get; }
-
         public string Firstname { get; }
-
         public string Lastname { get; }
-
         public string Email { get; }
-
         public string Positions { get; }
-
         public string Course { get; }
-
         public string Location { get; }
-
         public string UKPRN { get; }
-
         public string ProviderDetails { get; }
-
         public string InvalidUKPRN { get; }
-
         public string LocationDetails { get; }
-
         public string PartialCourseName { get; }
         public string NoResultsCourseName { get; }
         public string PartialPostCode { get; }

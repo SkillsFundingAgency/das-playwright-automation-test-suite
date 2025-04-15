@@ -6,7 +6,6 @@ public class SearchForTrainingProviderPage(ScenarioContext context) : FATeBasePa
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).
         ToContainTextAsync("Search for a training provider");
-
     public async Task<SearchForTrainingProviderPage> SearchWithAUkprn()
     {
         await page.Locator("#SearchTerm").ClickAsync();
