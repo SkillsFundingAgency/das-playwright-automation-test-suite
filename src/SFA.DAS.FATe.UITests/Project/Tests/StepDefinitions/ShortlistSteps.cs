@@ -4,12 +4,12 @@ using Azure;
 using SFA.DAS.FATe.UITests.Project.Tests.Pages;
 
 [Binding, Scope(Tag = "fate")]
-public class ShortlistStpes
+public class ShortlistSteps
 {
     private readonly TrainingProvidersPage _trainingProvidersPage;
     private readonly ShortlistPage _shortlistPage;
 
-    public ShortlistStpes(ScenarioContext context)
+    public ShortlistSteps(ScenarioContext context)
     {
         _trainingProvidersPage = new TrainingProvidersPage(context);
         _shortlistPage = new ShortlistPage(context);
