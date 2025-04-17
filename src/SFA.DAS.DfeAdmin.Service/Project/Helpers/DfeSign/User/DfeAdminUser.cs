@@ -59,12 +59,12 @@ public class SupportToolScsUser : DfeAdminUser
     public SupportToolScsUser() : base("supporttoolscs") { }
 }
 
-public class AodpPortalDfeUser1 : DfeAdminUser
+public class AodpPortalDfeUser : DfeAdminUser
 {
-    public AodpPortalDfeUser1() : base("aodpdfeuser1") { }
+    public AodpPortalDfeUser() : base("aodpdfeuser") { }
 }
 
-public class AodpPortalDfeUser2 : DfeAdminUser
+public class AodpPortalAoUser : DfeAdminUser
 {
-    public AodpPortalDfeUser2() : base("aodpdfeuser2") { }
+    public AodpPortalAoUser() : base("aodpaouser") { }
 }
