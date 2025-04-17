@@ -79,6 +79,24 @@ namespace SFA.DAS.Login.Service.Project
             }
         }
 
+        public static async Task SetAodpLoginUser(this ScenarioContext context, List<AodpAccountUser> users)
+        {
+            var notNullUsers = users.Where(x => x != null).ToList();
+
+            if (notNullUsers.Count == 0) return;
+
+            var legalentities = await context.GetAccountLegalEntities(notNullUsers.Select(x => x.Username).ToList());
+
+            for (int i = 0; i < notNullUsers.Count; i++)
+            {
+                notNullUsers[i].UserCreds = legalentities[i];
+
+                notNullUsers[i].IdOrUserRef = legalentities[i].IdOrUserRef;
+
+                SetUser(context, notNullUsers[i]);
+            }
+        }
+
         public static T GetUser<T>(this ScenarioContext context) => context.Get<T>(Key<T>());
 
         public static async Task<List<UserCreds>> GetAccountLegalEntities(this ScenarioContext context, List<string> username)

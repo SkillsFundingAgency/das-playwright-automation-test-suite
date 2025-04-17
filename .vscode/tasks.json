@@ -1,0 +1,33 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Clean Solution",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Solution",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Tests",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "--logger:trx"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+// {
+//     "version": "0.2.0",
+//     "configurations": [
+//         {
+//             "name": "Launch .NET Core",
+//             "type": "coreclr",
+//             "request": "launch",
+//             "program": "${workspaceFolder}/src/SFA.DAS.AODP.UITests/bin/Debug/net9.0/SFA.DAS.AODP.UITests.dll",
+//             "args": [],
+//             "cwd": "${workspaceFolder}",
+//             "console": "integratedTerminal",
+//             "stopAtEntry": false,
+//             "justMyCode": false
+//         }
+//     ]
+// }

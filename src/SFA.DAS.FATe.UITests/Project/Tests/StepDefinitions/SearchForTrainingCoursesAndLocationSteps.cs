@@ -18,7 +18,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _apprenticeshipTrainingCoursesPage = new ApprenticeshipTrainingCoursesPage(context);
         }
 
-      [Given("the user navigates to the Search for apprenticeship training courses and training providers page")]
+        [Given("the user navigates to the Search for apprenticeship training courses and training providers page")]
         public async Task GivenTheUserNavigatesToTheSearchForApprenticeshipTrainingCoursesAndTrainingProvidersPage()
         {
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
