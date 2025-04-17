@@ -1,0 +1,7 @@
+{
+    "cucumberautocomplete.steps": [
+        "**/**/*.cs"
+    ],
+    "cucumberautocomplete.strictGherkinCompletion": false,
+    "editor.formatOnSave": true
+}

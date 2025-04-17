@@ -8,7 +8,7 @@ public class EmployerPortalConfigurationSetup(ScenarioContext context)
     [BeforeScenario(Order = 12)]
     public async Task SetUpEmployerPortalConfigConfiguration()
     {
-        //if (new TestDataSetUpConfigurationHelper(context).NoNeedToSetUpConfiguration()) return;
+        // if (new TestDataSetUpConfigurationHelper(context).NoNeedToSetUpConfiguration()) return;
 
         await context.SetEasLoginUser(
         [

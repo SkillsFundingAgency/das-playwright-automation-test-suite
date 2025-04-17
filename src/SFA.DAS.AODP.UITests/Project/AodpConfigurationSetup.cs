@@ -1,25 +1,27 @@
-﻿// using SFA.DAS.DfeAdmin.Service.Project.Helpers;
-// using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
-// using SFA.DAS.FrameworkHelpers;
-// using SFA.DAS.Login.Service.Project;
-// using SFA.DAS.Login.Service.Project.Helpers;
-// using System.Collections.Generic;
-// using TechTalk.SpecFlow;
+﻿using System.Threading.Tasks;
+using SFA.DAS.Login.Service.Project;
+using SFA.DAS.Login.Service.Project.Helpers;
 
-// namespace SFA.DAS.AODP.UITests.Project;
+namespace SFA.DAS.AODP.UITests.Project;
 
-// [Binding]
-// public class AodpConfigurationSetup(ScenarioContext context)
-// {
-//     [BeforeScenario(Order = 2)]
-//     public void SetUpAodponfigConfiguration()
-//     {
-//         var dfeAdminUsers = context.Get<FrameworkList<DfeAdminUsers>>();
+[Binding]
+public class AodpConfigurationSetup(ScenarioContext context)
+{
+    private const string DfeAdminsConfig = "DfeAdminsConfig";
 
-//         context.SetNonEasLoginUser(new List<NonEasAccountUser>
-//         {
-//             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new AodpPortalDfeUser1()),
-//             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new AodpPortalDfeUser2()),
-//         });
-//     }
-// }
+    private readonly ConfigSection _configSection = context.Get<ConfigSection>();
+
+    [BeforeScenario(Order = 2)]
+    public async Task SetUsers()
+    {
+
+        await context.SetAodpLoginUser(
+            [
+         _configSection.GetConfigSection<AodpPortalDfeUserUser>(),
+         _configSection.GetConfigSection<AodpPortalAoUserUser>()
+        ]);
+
+        // await context.SetEasLoginUser([_configSection.GetConfigSection<AddMultiplePayeAodpUser>()]);
+
+    }
+}

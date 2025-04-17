@@ -32,6 +32,15 @@ public abstract class EasAccountUser : GovSignUser
     public List<AccountDetails> AccountDetails => UserCreds?.AccountDetails;
 }
 
+public abstract class AodpAccountUser : GovSignUser
+{
+    public string OrganisationName => AccountDetails?.FirstOrDefault().Alename;
+
+    public UserCreds UserCreds { get; set; }
+
+    public List<AccountDetails> AccountDetails => UserCreds?.AccountDetails;
+}
+
 #region SingleAccountEasUser
 
 public class EmployerFeedbackUser : EasAccountUser { }
@@ -48,7 +57,15 @@ public class AgreementNotSignedTransfersUser : EasAccountUser { }
 
 public class NewUser : EasAccountUser { }
 
+public class AodpDfeUser : AodpAccountUser { }
+
+public class AodpAoUser : AodpAccountUser { }
+
 public class LevyUser : EasAccountUser { }
+
+public class AodpPortalDfeUserUser : AodpAccountUser { }
+
+public class AodpPortalAoUserUser : AodpAccountUser { }
 
 public class NonLevyUser : EasAccountUser { }
 
@@ -86,6 +103,12 @@ public class AddMultiplePayeLevyUser : EasAccountUser
 {
     public string NoOfPayeToAdd { get; set; }
 }
+
+public class AddMultiplePayeAodpUser : AodpAccountUser
+{
+    public string NoOfPayeToAdd { get; set; }
+}
+
 
 public class DeleteCohortLevyUser : EasAccountUser
 {
