@@ -1,7 +1,4 @@
-﻿using SFA.DAS.Framework;
-using SFA.DAS.ProviderLogin.Service.Project;
-using System.Threading.Tasks;
-
+﻿
 namespace SFA.DAS.ManagingStandards.UITests.Project.Hooks
 {
     [Binding]
