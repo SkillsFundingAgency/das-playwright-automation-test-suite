@@ -1,0 +1,9 @@
+﻿global using SFA.DAS.DfeAdmin.Service.Project.Helpers;
+global using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
+global using SFA.DAS.FrameworkHelpers;
+global using SFA.DAS.Login.Service.Project;
+global using TechTalk.SpecFlow;
+global using SFA.DAS.ConfigurationBuilder;
+global using SFA.DAS.ManagingStandards.UITests.Project.Helpers;
+global using System.Linq;
+global using System.Threading.Tasks;
