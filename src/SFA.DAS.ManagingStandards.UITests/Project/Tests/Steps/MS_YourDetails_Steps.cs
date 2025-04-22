@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Steps;
 

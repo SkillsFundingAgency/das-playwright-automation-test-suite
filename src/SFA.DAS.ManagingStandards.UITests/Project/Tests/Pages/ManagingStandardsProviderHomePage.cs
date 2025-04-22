@@ -1,7 +1,6 @@
 ﻿using Microsoft.Playwright;
 using SFA.DAS.Framework;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
-using static SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.YourContactInformationForThisStandardPage;
 
 namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
 
@@ -93,20 +92,97 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 
         return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
     }
-    //public SelectAStandardPage AccessAddStandard()
-    //{
-    //    formCompletionHelper.ClickLinkByText("Add a standard");
 
-    //    return await VerifyPageAsync(() => new SelectAStandardPage(context));
-    //}
+    public async Task<SelectAStandardPage> AccessAddStandard()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Add a standard" }).ClickAsync();
 
-    //public ManageAStandardPage AccessActuaryLevel7(string standardName)
-    //{
-    //    formCompletionHelper.ClickLinkByText(standardName);
+        return await VerifyPageAsync(() => new SelectAStandardPage(context));
 
-    //    return await VerifyPageAsync(() => new ManageAStandardPage(context, standardName));
-    //}
+    }
+
+    public async Task<ManageAStandardPage> AccessActuaryLevel7(string standardName)
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = standardName }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageAStandardPage(context, standardName));
+    }
 }
+
+public class ManageAStandardPage(ScenarioContext context, string standardName) : ManagingStandardsBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(standardName);
+    }
+
+    public async Task<AreYouSureDeleteStandardPage> ClickDeleteAStandard()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Delete standard" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new AreYouSureDeleteStandardPage(context));
+    }
+}
+
+public class AreYouSureDeleteStandardPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Are you sure you want to delete this standard?");
+    }
+
+    public async Task<ManageTheStandardsYouDeliverPage> DeleteStandard()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Delete standard" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
+    }
+}
+
+
+public class SelectAStandardPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select a standard");
+    }
+
+    public async Task<AddAstandardPage> SelectAStandardAndContinue(string standardName)
+    {
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "To add a standard, start" }).FillAsync(standardName);
+
+        await page.GetByRole(AriaRole.Option, new() { Name = standardName }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new AddAstandardPage(context, standardName));
+    }
+}
+
+public class AddAstandardPage(ScenarioContext context, string standardName) : ManagingStandardsBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(standardName);
+    }
+
+    public async Task<YourContactInformationForThisStandardPage> YesStandardIsCorrectAndContinue()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourContactInformationForThisStandardPage(context));
+    }
+
+    public async Task<ManageTheStandardsYouDeliverPage> Save_NewStandard_Continue()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
+    }
+}
+
 
 public class RegulatedStandardPage(ScenarioContext context) : ManagingStandardsBasePage(context)
 {
@@ -344,12 +420,12 @@ public class YourContactInformationForThisStandardPage(ScenarioContext context) 
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
 
-    //public WhereWillThisStandardBeDeliveredPage Add_ContactInformation()
-    //{
-    //    CompleteContactInfo();
+    public async Task<WhereWillThisStandardBeDeliveredPage> Add_ContactInformation()
+    {
+        await CompleteContactInfo();
 
-    //    return new WhereWillThisStandardBeDeliveredPage(context);
-    //}
+        return await VerifyPageAsync(() => new WhereWillThisStandardBeDeliveredPage(context));
+    }
 
     private async Task CompleteContactInfo()
     {
@@ -361,7 +437,7 @@ public class YourContactInformationForThisStandardPage(ScenarioContext context) 
 
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Your website page" }).FillAsync(managingStandardsDataHelpers.Website);
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Email address" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
     }
 }
@@ -394,6 +470,7 @@ public class TrainingVenuesPage(ScenarioContext context) : ManagingStandardsBase
 
         return await VerifyPageAsync(() => new VenueAddedPage(context));
     }
+
     public async Task<VenueAndDeliveryPage> AccessSeeTrainingVenue()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "See training venues" }).ClickAsync();
@@ -407,18 +484,20 @@ public class TrainingVenuesPage(ScenarioContext context) : ManagingStandardsBase
 
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
-    //public async Task<AddAstandardPage> Save_NewTrainingVenue_Continue(string standardname)
-    //{
-    //    Continue();
 
-    //    return await VerifyPageAsync(() => new AddAstandardPage(context));
-    //}
-    //public async Task<VenueAndDeliveryPage> AccessSeeANewTrainingVenue_AddStandard()
-    //{
-    //    formCompletionHelper.ClickLinkByText("See training venues");
+    public async Task<AddAstandardPage> Save_NewTrainingVenue_Continue(string standardname)
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new VenueAndDeliveryPage(context));
-    //}
+        return await VerifyPageAsync(() => new AddAstandardPage(context, standardname));
+    }
+
+    public async Task<VenueAndDeliveryPage> AccessSeeANewTrainingVenue_AddStandard()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "See training venues" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new VenueAndDeliveryPage(context));
+    }
 }
 
 public class VenueAndDeliveryPage(ScenarioContext context) : ManagingStandardsBasePage(context)
