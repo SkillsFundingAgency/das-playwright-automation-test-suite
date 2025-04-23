@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProviderPortal.UITe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.TestDataCleanup", "SFA.DAS.TestDataCleanup\SFA.DAS.TestDataCleanup.csproj", "{65FD48DA-BE01-4E42-968E-16E70FE839FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ManagingStandards.UITests", "SFA.DAS.ManagingStandards.UITests\SFA.DAS.ManagingStandards.UITests.csproj", "{DEB69DAF-A73C-453D-89D2-2D13BCEDAA2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,10 @@ Global
 		{65FD48DA-BE01-4E42-968E-16E70FE839FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65FD48DA-BE01-4E42-968E-16E70FE839FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65FD48DA-BE01-4E42-968E-16E70FE839FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEB69DAF-A73C-453D-89D2-2D13BCEDAA2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEB69DAF-A73C-453D-89D2-2D13BCEDAA2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEB69DAF-A73C-453D-89D2-2D13BCEDAA2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEB69DAF-A73C-453D-89D2-2D13BCEDAA2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
