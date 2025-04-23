@@ -175,7 +175,7 @@ public class AddAstandardPage(ScenarioContext context, string standardName) : Ma
 
     public async Task<ManageTheStandardsYouDeliverPage> Save_NewStandard_Continue()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save standard" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }
