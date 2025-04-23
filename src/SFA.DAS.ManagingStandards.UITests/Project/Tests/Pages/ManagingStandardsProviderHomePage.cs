@@ -307,7 +307,7 @@ public class WhereWillThisStandardBeDeliveredPage(ScenarioContext context) : Man
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "At one of your training" }).CheckAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new TrainingVenuesPage(context));
     }
