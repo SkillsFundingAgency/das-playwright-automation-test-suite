@@ -6,14 +6,13 @@ public class SearchForTrainingProviderPage(ScenarioContext context) : FATeBasePa
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).
         ToContainTextAsync("Search for a training provider");
-
-    public async Task<SearchForTrainingProviderPage> SearchWithAUkprn()
+    public async Task<Specific_TrainingProviderPage> SearchWithAUkprn()
     {
         await page.Locator("#SearchTerm").ClickAsync();
         await page.Locator("#SearchTerm").FillAsync(fateDataHelper.UKPRN);
         await SelectAutocompleteOption(fateDataHelper.ProviderDetails);
         await ClickContinue();
-        return await VerifyPageAsync(() => new SearchForTrainingProviderPage(context));
+        return await VerifyPageAsync(() => new Specific_TrainingProviderPage(context, "BARKING AND DAGENHAM COLLEGE"));
     }
     public async Task<SearchForTrainingProviderPage> SearchWithoutAUKPRN()
     {

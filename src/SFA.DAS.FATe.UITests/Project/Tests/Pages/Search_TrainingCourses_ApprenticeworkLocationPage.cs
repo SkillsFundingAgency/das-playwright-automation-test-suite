@@ -9,22 +9,22 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
 
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithCourseOnly()
     {
-        await page.Locator("#CourseTerm").ClickAsync();
-        await page.Locator("#CourseTerm").FillAsync(fateDataHelper.PartialCourseName);
+        await page.Locator("#keyword-input").ClickAsync();
+        await page.Locator("#keyword-input").FillAsync(fateDataHelper.PartialCourseName);
         await ClickContinue();
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithCourseNoResults()
     {
-        await page.Locator("#CourseTerm").ClickAsync();
-        await page.Locator("#CourseTerm").FillAsync(fateDataHelper.NoResultsCourseName);
+        await page.Locator("#keyword-input").ClickAsync();
+        await page.Locator("#keyword-input").FillAsync(fateDataHelper.NoResultsCourseName);
         await ClickContinue();
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithCourseAndApprenticeWorkLocation()
     {
-        await page.Locator("#CourseTerm").ClickAsync();
-        await page.Locator("#CourseTerm").FillAsync(fateDataHelper.Course);
+        await page.Locator("#keyword-input").ClickAsync();
+        await page.Locator("#keyword-input").FillAsync(fateDataHelper.Course);
         await page.Locator("#search-location").ClickAsync();
         await page.Locator("#search-location").FillAsync(fateDataHelper.Location);
         await ClickContinue();
@@ -36,11 +36,12 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
         await page.Locator("#search-location").FillAsync(fateDataHelper.Location);
         await SelectAutocompleteOption(fateDataHelper.LocationDetails);
         await ClickContinue();
-        var currentUrl = page.Url;
-        if (!currentUrl.Contains("Distance=10"))
-        {
-            throw new Exception("The URL does not contain the required Distance=10 parameter.");
-        }
+        //Team discusising to keep this or not in the url once confirmed I will remove or update this
+        //var currentUrl = page.Url;
+        //if (!currentUrl.Contains("Distance=10"))
+        //{
+        //    throw new Exception("The URL does not contain the required Distance=10 parameter.");
+        //}
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithoutCourseAndApprenticeWorkLocation()
@@ -58,5 +59,4 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
         await page.Locator("text=Browse all courses").ClickAsync();
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
-
 }

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.FATe.UITests.Project.Tests.Pages;
+﻿using Azure;
+using SFA.DAS.FATe.UITests.Project.Tests.Pages;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
@@ -17,7 +18,11 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
             throw new Exception("Expected a no-results message but none were found.");
         }
     }
-
+    public async Task<Search_TrainingCourses_ApprenticeworkLocationPage> VerifyNoresultStartAnewSearchLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "start a new search" }).ClickAsync();
+        return await VerifyPageAsync(() => new Search_TrainingCourses_ApprenticeworkLocationPage(context));
+    }
     public async Task<ApprenticeshipTrainingCoursesPage> VerifyUrlContainsWordCourses()
     {
         var currentUrl = page.Url;
@@ -61,6 +66,10 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await ApplyFilters();
         await VerifyFilterIsSet("Agriculture, environmental and animal care");
         await ClearSpecificFilter("Agriculture, environmental and animal care");
+        await SelectApprenticeshipLevel("Level 2");
+        await ApplyFilters();
+        await VerifyFilterIsSet("Level 2");
+        await ClearSpecificFilter("Level 2");
         await VerifyNoFiltersAreApplied();
     }
     public async Task ApplyMultipleFilters_ClearAtOnce()
@@ -73,12 +82,14 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await SelectJobCategory("Agriculture, environmental and animal care");
         await SelectJobCategory("Care services");
         await SelectJobCategory("Digital");
+        await SelectApprenticeshipLevel("Level 2");
         await ApplyFilters();
         await VerifyFilterIsSet("Professional");
         await VerifyFilterIsSet("TW14 Hounslow (within 100 miles)");
         await VerifyFilterIsSet("Agriculture, environmental and animal care");
         await VerifyFilterIsSet("Care services");
         await VerifyFilterIsSet("Digital");
+        await VerifyFilterIsSet("Level 2");
         await ClearAllFilters();
         await VerifyNoFiltersAreApplied();
     }
@@ -109,5 +120,13 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await VerifyFilterIsSet("Protective services");
         await VerifyJobCategoryResults("Protective services");
         await ClearAllFilters();
+    }
+    public async Task<ApprenticeshipTrainingCourseDetailsPage> SelectCourseByName(string courseNameWithLevel)
+    {
+        context.Set(courseNameWithLevel, "SelectedCourseName");
+        var courseLink = page.GetByRole(AriaRole.Link, new() { Name = courseNameWithLevel });
+        await Assertions.Expect(courseLink).ToBeVisibleAsync();
+        await courseLink.ClickAsync();
+        return await VerifyPageAsync(() => new ApprenticeshipTrainingCourseDetailsPage(context));
     }
 }
