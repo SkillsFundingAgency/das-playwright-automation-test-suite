@@ -58,3 +58,45 @@ public class SupportToolScsUser : DfeAdminUser
 {
     public SupportToolScsUser() : base("supporttoolscs") { }
 }
+
+public class AodpDfeAdminUser : DfeAdminUser
+{
+    public AodpDfeAdminUser() : base("aodpdfeuser1") { }
+
+}
+
+public class AodpDfeAdminUser1 : DfeAdminUser
+{
+    public AodpDfeAdminUser1() : base("aodpdfeuser2") { }
+
+}
+
+public class AodpAOUser : DfeAdminUser
+{
+    public AodpAOUser() : base("aodpaouser") { }
+
+}
+
+public class AodpAOUser1 : DfeAdminUser
+{
+    public AodpAOUser1() : base("aodpaouser1") { }
+
+}
+
+public class AodpAOUser2 : DfeAdminUser
+{
+    public AodpAOUser2() : base("aodpaouser2") { }
+
+}
+
+public class AodpIFATEUser : DfeAdminUser
+{
+    public AodpIFATEUser() : base("aodpifateuser") { }
+
+}
+
+public class AodpOFQUALUser : DfeAdminUser
+{
+    public AodpOFQUALUser() : base("aodpofqualuser") { }
+
+}
