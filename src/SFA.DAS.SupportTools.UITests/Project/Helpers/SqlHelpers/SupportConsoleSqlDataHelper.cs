@@ -2,7 +2,7 @@
 
 public class SupportConsoleSqlDataHelper(AccountsSqlDataHelper accountsSqlDataHelper, CommitmentsSqlDataHelper commitmentsSqlDataHelper)
 {
-    public async Task<SupportConsoleConfig> GetUpdatedConfig(SupportConsoleConfig supportConsoleConfig)
+    public async Task<SupportToolsConfig> GetUpdatedConfig(SupportToolsConfig supportConsoleConfig)
     {
         string publicAccountId = supportConsoleConfig.PublicAccountId;
 
@@ -10,7 +10,7 @@ public class SupportConsoleSqlDataHelper(AccountsSqlDataHelper accountsSqlDataHe
 
         var comtData = await commitmentsSqlDataHelper.GetCommtDetails(publicAccountId);
 
-        var result = new SupportConsoleConfig
+        var result = new SupportToolsConfig
         {
             Name = $"{fName} {lName}",
             EmailAddress = email,

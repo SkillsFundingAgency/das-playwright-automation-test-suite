@@ -8,7 +8,7 @@ public abstract class CommitmentsCohortDetailsBaseSteps(ScenarioContext context)
     protected readonly ScenarioContext _context = context;
     private readonly StepsHelper _stepsHelper = new(context);
     private CohortDetailsPage cohortDetailsPage;
-    protected SupportConsoleConfig config = context.GetSupportConsoleConfig<SupportConsoleConfig>();
+    protected SupportToolsConfig config = context.GetSupportConsoleConfig<SupportToolsConfig>();
     protected CohortDetails cohortDetails;
 
     protected async Task<CohortDetailsPage> SearchesForACohort() => cohortDetailsPage = await _stepsHelper.SearchForCohort(cohortDetails.CohortRef);

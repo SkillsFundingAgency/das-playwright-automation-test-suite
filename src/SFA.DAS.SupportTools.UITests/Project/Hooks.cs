@@ -30,7 +30,7 @@ public class Hooks(ScenarioContext context)
 
         context.Set(new EmployerPortalSqlDataHelper(_objectContext, _dbConfig));
 
-        var config = context.GetSupportConsoleConfig<SupportConsoleConfig>();
+        var config = context.GetSupportConsoleConfig<SupportToolsConfig>();
 
         var objectContext = context.Get<ObjectContext>();
 

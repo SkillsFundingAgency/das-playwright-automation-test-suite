@@ -8,7 +8,7 @@ public class CommitmentsSteps(ScenarioContext context)
 {
     private readonly StepsHelper _stepsHelper = new(context);
 
-    private readonly SupportConsoleConfig _config = context.GetSupportConsoleConfig<SupportConsoleConfig>();
+    private readonly SupportToolsConfig _config = context.GetSupportConsoleConfig<SupportToolsConfig>();
 
     [When(@"the User searches for an ULN")]
     public async Task WhenTheUserSearchesForAnULN() => await _stepsHelper.SearchForUln(_config.CohortDetails.Uln);

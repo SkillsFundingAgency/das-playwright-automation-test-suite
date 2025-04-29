@@ -27,6 +27,6 @@ public class SupportToolsConfigurationSetup(ScenarioContext context)
             _configSection.GetConfigSection<LevyUser>()
         ]);
 
-        context.SetSupportConsoleConfig(_configSection.GetConfigSection<SupportConsoleConfig>());
+        context.SetSupportConsoleConfig(_configSection.GetConfigSection<SupportToolsConfig>());
     }
 }

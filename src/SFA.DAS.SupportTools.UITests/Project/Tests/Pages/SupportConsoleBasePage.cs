@@ -3,7 +3,7 @@
 public abstract class SupportConsoleBasePage(ScenarioContext context) : BasePage(context)
 {
     #region Helpers and Context
-    protected readonly SupportConsoleConfig config = context.GetSupportConsoleConfig<SupportConsoleConfig>();
+    protected readonly SupportToolsConfig config = context.GetSupportConsoleConfig<SupportToolsConfig>();
     #endregion
 
     //protected static By OrganisationsMenuLink => By.LinkText("Organisations");

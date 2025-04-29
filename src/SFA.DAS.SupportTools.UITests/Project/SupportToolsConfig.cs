@@ -10,7 +10,7 @@ public class CohortDetails((string uln, string fname, string lname, string cohor
     public override string ToString() => $"Uln : '{Uln}', UlnName : '{UlnName}', CohortRef : '{CohortRef}'";
 }
 
-public class SupportConsoleConfig
+public class SupportToolsConfig
 {
     public string Name { get; init; }
     public string EmailAddress { get; init; }
