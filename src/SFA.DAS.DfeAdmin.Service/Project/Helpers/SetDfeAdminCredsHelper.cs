@@ -1,6 +1,4 @@
 ﻿using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
-using System;
-using System.Linq;
 
 namespace SFA.DAS.DfeAdmin.Service.Project.Helpers;
 
