@@ -1,7 +1,7 @@
 ﻿Feature: ST_Ap_Coh_05
 
-@supportconsole
-@approvalssupportconsole
+@supporttools
+@approvalssupport
 Scenario: ST_Ap_Coh_05 - View Previous Training Providers
 	Given the Tier 1 User is logged into Support Tool
 	And the User is on the Account details page

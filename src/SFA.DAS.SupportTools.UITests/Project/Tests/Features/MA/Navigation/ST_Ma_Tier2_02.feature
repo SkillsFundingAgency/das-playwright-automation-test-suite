@@ -2,8 +2,8 @@
 
 
 @regression
-@supportconsole
-@masupportconsole
+@supporttools
+@supportnavigation
 Scenario: ST_Ma_Tier2_02_Tier2Navigation To Team Members page
 	Given the Tier 2 User is logged into Support Tool
 	And the user navigates to employer support page

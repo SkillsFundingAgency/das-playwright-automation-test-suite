@@ -2,7 +2,7 @@
 
 
 @supporttools
-@approvalssupportconsole
+@approvalssupport
 @BulkUtility
 @donotexecuteinparallel
 Scenario: ST_03_Stop Apprentice SCS Role

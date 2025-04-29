@@ -1,8 +1,8 @@
 ﻿Feature: ST_Ma_Search_02
 
 @regression
-@supportconsole
-@masupportconsole
+@supporttools
+@supportsearch
 Scenario: ST_Ma_Search_02 Search By name or email address
 	Given the User is logged into Support Tool
 	And the user navigates to employer support page

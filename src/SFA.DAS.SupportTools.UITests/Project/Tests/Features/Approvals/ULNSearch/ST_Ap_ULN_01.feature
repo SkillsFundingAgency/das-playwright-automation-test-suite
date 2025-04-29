@@ -1,7 +1,7 @@
 ﻿Feature: ST_Ap_ULN_01
 
-@supportconsole
-@approvalssupportconsole
+@supporttools
+@approvalssupport
 Scenario: ST_Ap_ULN_01 - View ULN details
 	Given the User is logged into Support Tool
 	And the user navigates to employer support page

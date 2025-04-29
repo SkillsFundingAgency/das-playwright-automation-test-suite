@@ -2,8 +2,8 @@
 
 
 @regression
-@supportconsole
-@masupportconsole
+@supporttools
+@levychallenge
 Scenario: ST_Ma_Challenge_02 Submit incorrect details
 	Given the Tier 1 User is logged into Support Tool
 	And the User is on the Account details page
