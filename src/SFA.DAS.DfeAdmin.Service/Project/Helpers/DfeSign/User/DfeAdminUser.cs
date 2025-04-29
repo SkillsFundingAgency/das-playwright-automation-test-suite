@@ -39,14 +39,14 @@ public class AanSuperAdminUser : DfeAdminUser
     public AanSuperAdminUser() : base("aansuperadmin") { }
 }
 
-public class SupportConsoleTier1User : DfeAdminUser
+public class SupportToolTier1User : DfeAdminUser
 {
-    public SupportConsoleTier1User() : base("supportconsoletier1") { }
+    public SupportToolTier1User() : base("supporttooltier1") { }
 }
 
-public class SupportConsoleTier2User : DfeAdminUser
+public class SupportToolTier2User : DfeAdminUser
 {
-    public SupportConsoleTier2User() : base("supportconsoletier2") { }
+    public SupportToolTier2User() : base("supporttooltier2") { }
 }
 
 public class SupportToolScpUser : DfeAdminUser

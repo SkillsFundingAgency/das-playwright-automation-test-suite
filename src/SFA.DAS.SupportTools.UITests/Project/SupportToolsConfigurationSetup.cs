@@ -18,8 +18,8 @@ public class SupportToolsConfigurationSetup(ScenarioContext context)
         {
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportToolScsUser()),
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportToolScpUser()),
-            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportConsoleTier1User()),
-            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportConsoleTier2User())
+            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportToolTier1User()),
+            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportToolTier2User())
         });
 
         await context.SetEasLoginUser(
