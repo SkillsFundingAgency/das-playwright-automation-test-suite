@@ -40,4 +40,66 @@ public class StepsHelper(ScenarioContext context)
 
         return await VerifyPageHelper.VerifyPageAsync(() => new ToolSupportHomePage(context));
     }
+
+    private async Task<SearchHomePage> LoginToSupportToolsAsEmployerSupportOnly(DfeAdminUser loginUser)
+    {
+        await new DfeAdminLoginStepsHelper(context).LoginToSupportTool(loginUser);
+
+        return await VerifyPageHelper.VerifyPageAsync(() => new SearchHomePage(context));
+    }
+
+    public async Task<SupportConsoleBasePage> Tier1LoginToSupportTool() => await LoginToSupportToolsAsEmployerSupportOnly(context.GetUser<SupportToolTier1User>());
+
+    public async Task<ToolSupportHomePage> Tier2LoginToSupportTool() => await LoginToSupportTools(context.GetUser<SupportToolTier2User>());
+
+    public async Task<AccountOverviewPage> SearchAndViewAccount() => await new SearchHomePage(context).SearchByPublicAccountIdAndViewAccount();
+
+    public async Task<SearchHomePage> NavigateToSupportSearchPage() => await new ToolSupportHomePage(context).ClickEmployerSupportToolLink();
+
+    public async Task<UlnSearchResultsPage> SearchForUln(string uln)
+    {
+        var page = await new AccountOverviewPage(context).ClickCommitmentsMenuLink();
+
+        return await page.SearchForULN(uln);
+    }
+
+    public async Task SearchWithInvalidUln(bool WithSpecialChars)
+    {
+        var page = await new AccountOverviewPage(context).ClickCommitmentsMenuLink();
+
+        await page.SelectUlnSearchTypeRadioButton();
+
+        if (WithSpecialChars)
+            await page.SearchWithInvalidULNWithSpecialChars();
+        else
+            await page.SearchWithInvalidULN();
+    }
+
+    public async Task SearchWithInvalidCohort(bool WithSpecialChars)
+    {
+        var page = await new AccountOverviewPage(context).ClickCommitmentsMenuLink();
+
+        await page.SelectCohortRefSearchTypeRadioButton();
+
+        if (WithSpecialChars)
+            await page.SearchWithInvalidCohortWithSpecialChars();
+        else
+            await page.SearchWithInvalidCohort();
+    }
+
+    public async Task SearchWithUnauthorisedCohortAccess()
+    {
+        var page = await new AccountOverviewPage(context).ClickCommitmentsMenuLink();
+
+        await page.SelectCohortRefSearchTypeRadioButton();
+
+        await page.SearchWithUnauthorisedCohortAccess();
+    }
+
+    public async Task<CohortDetailsPage> SearchForCohort(string cohortRef)
+    {
+        var page = await new AccountOverviewPage(context).ClickCommitmentsMenuLink();
+
+        return await page.SearchCohort(cohortRef);
+    }
 }

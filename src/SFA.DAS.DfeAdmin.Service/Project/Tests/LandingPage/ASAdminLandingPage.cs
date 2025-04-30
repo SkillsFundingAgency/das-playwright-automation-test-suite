@@ -2,7 +2,7 @@
 
 public class ASAdminLandingPage(ScenarioContext context) : ASLandingCheckBasePage(context)
 {
-    protected override string PageTitle => "Apprenticeship service employer support tool";
+    protected override string PageTitle => "Apprenticeship service admin";
 
     public override async Task ClickStartNowButton() => await page.GetByRole(AriaRole.Link, new() { Name = "Start now" }).ClickAsync();
 }
