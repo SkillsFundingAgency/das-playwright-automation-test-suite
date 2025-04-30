@@ -1,7 +1,7 @@
 ﻿Feature: ST_02_StopApprenticeRecords
 	
 @supporttools
-@approvalssupportconsole
+@approvalssupport
 @BulkUtility
 @donotexecuteinparallel
 Scenario: ST_02_Stop Apprentice Records

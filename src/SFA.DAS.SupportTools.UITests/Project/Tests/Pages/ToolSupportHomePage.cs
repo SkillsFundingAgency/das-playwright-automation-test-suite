@@ -20,6 +20,13 @@ public class ToolSupportHomePage(ScenarioContext context) : ToolSupportBasePage(
         return false;
     }
 
+    public async Task<SearchHomePage> ClickEmployerSupportToolLink()
+    {
+        await page.Locator("#employerSupport").ClickAsync();
+
+        return await VerifyPageAsync(() => new SearchHomePage(context));
+    }
+
     public async Task<SearchForApprenticeshipPage> ClickPauseApprenticeshipsLink()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Pause apprenticeship" }).ClickAsync();

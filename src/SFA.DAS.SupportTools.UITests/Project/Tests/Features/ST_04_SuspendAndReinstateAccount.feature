@@ -2,7 +2,7 @@
 
 
 @supporttools
-@approvalssupportconsole
+@approvalssupport
 @BulkUtility
 Scenario: ST_04_Suspend and Reinstate Employer User Accounts
 	Given the employer user can login to EAS

@@ -1,7 +1,7 @@
 ﻿Feature: ST_05_ValidateCombinationoffilters
 
 @supporttools
-@approvalssupportconsole
+@approvalssupport
 @BulkUtility
 Scenario: ST_05_Validate Combination of filters
 	Given the SCP User is logged into Support Tools
