@@ -12,4 +12,3 @@ Scenario: EF_Nav_01_Navigate to EAS sub sites from Finance Page
 	And the employer can navigate to rename account settings page
 	And the employer can navigate to notification settings page
 	And the employer can navigate to help settings page
-	

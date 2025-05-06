@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 
@@ -152,7 +151,6 @@ public abstract class InterimEmployerBasePage : Navigate
         });
 
         await Assertions.Expect(page1.GetByRole(AriaRole.Main)).ToContainTextAsync("Useful Links");
-        await page1.CloseAsync();
     }
      
     public async Task<RenameAccountPage> GoToRenameAccountPage()
