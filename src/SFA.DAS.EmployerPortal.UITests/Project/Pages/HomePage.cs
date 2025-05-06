@@ -164,18 +164,18 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
     }
 
-    public async Task<TransfersPage> ClickViewDetailsForTransferRequests()
+    public async Task<TransferPage> ClickViewDetailsForTransferRequests()
     {
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "Transfer request received" }).GetByRole(AriaRole.Link).ClickAsync();
 
-        return await VerifyPageAsync(() => new TransfersPage(context));
+        return await VerifyPageAsync(() => new TransferPage(context));
     }
 
-    public async Task<TransfersPage> ClickViewDetailsForTransferConnectionRequests()
+    public async Task<TransferPage> ClickViewDetailsForTransferConnectionRequests()
     {
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "connection requests to review" }).GetByRole(AriaRole.Link).ClickAsync();
 
-        return await VerifyPageAsync(() => new TransfersPage(context));
+        return await VerifyPageAsync(() => new TransferPage(context));
     }
 
     public async Task<MyTransferPledgesPage> ClickViewTransferPledgeApplications()
@@ -201,7 +201,7 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         }
     }
 
-    public class TransfersPage(ScenarioContext context) : EmployerPortalBasePage(context)
+    public class TransferPage(ScenarioContext context) : EmployerPortalBasePage(context)
     {
         public override async Task VerifyPage()
         {
