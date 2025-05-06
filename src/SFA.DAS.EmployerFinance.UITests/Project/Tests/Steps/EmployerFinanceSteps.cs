@@ -92,6 +92,16 @@ public class EmployerFinanceSteps(ScenarioContext context)
         await page.GoToHelpPage();
     }
 
+    [Then(@"the employer can navigate to Accessibility statement page from Finance page")]
+    public async Task ThenTheEmployerCanNavigateToAccessibilityStatementPage()
+    {
+        var page = new InterimFinanceHomePage(context, true, true);
+
+        await page.VerifyPage();
+
+        await page.GoToAccessibilityStatementPage(); 
+    }
+
     [Then(@"'View transactions', 'Download transactions' and 'Transfers' links are displayed")]
     public async Task ThenAndLinksAreDisplayed()
     {

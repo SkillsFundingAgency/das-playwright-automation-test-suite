@@ -51,28 +51,28 @@ public class TasksHelper(ScenarioContext context)
     public async Task<int> GetNumberOfAcceptedTransferPledgeApplicationsWithNoApprentices()
     {
         var accountId = _objectContext.GetDBAccountId();
-
-        var acceptedApplications = await _transferMatchingSqlDataHelper
-            .GetTransferPledgeApplicationsByApplicationStatus(accountId, "3");
-
+        var acceptedApplications = await _transferMatchingSqlDataHelper.GetTransferPledgeApplicationsByApplicationStatus(accountId, "3");
         if (acceptedApplications == null || acceptedApplications.Count == 0)
         {
             return 0;
         }
-        var cohortResult = await _commitmentsSqlHelper
-            .GetPledgeApplicationIdsAndNumberOfDraftApprentices(accountId);
 
-        if (cohortResult == null || cohortResult.Count == 0)
+        var cohortResult = await _commitmentsSqlHelper.GetPledgeApplicationIdsAndNumberOfDraftApprentices(accountId);
+        if (cohortResult == null || (cohortResult).Count == 0)
         {
             return acceptedApplications.Count;
         }
-        var acceptedApplicationIdsWithoutApprentices = acceptedApplications
-            .Where(appId =>
+
+        var acceptedApplicationIdsWithoutApprentices = new List<int>();
+
+        foreach (var appId in acceptedApplications)
+        {
+            var cohortsForApplication = cohortResult.Where(x => x.PledgeApplicationId == appId).ToList();
+            if (cohortsForApplication.Count == 0 || cohortsForApplication.Any(x => x.NumberOfDraftApprentices == 0))
             {
-                var cohorts = cohortResult.Where(x => x.PledgeApplicationId == appId);
-                return !cohorts.Any() || cohorts.All(x => x.NumberOfDraftApprentices == 0);
-            })
-            .ToList();
+                acceptedApplicationIdsWithoutApprentices.Add(appId);
+            }
+        }
 
         return acceptedApplicationIdsWithoutApprentices.Count;
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 
@@ -151,6 +152,20 @@ public abstract class InterimEmployerBasePage : Navigate
         });
 
         await Assertions.Expect(page1.GetByRole(AriaRole.Main)).ToContainTextAsync("Useful Links");
+        await page1.CloseAsync();
+    }
+     
+    public async Task GoToAccessibilityStatementPage()
+    {
+        // var accessibilityPage = await page.RunAndWaitForPopupAsync(async () =>
+        {
+            await page.Locator("footer >> text=Accessibility statement").ClickAsync();
+
+            await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+            await Assertions.Expect(page.GetByRole(AriaRole.Main))
+                .ToContainTextAsync("Accessibility statement");
+        }
     }
 
     public async Task<RenameAccountPage> GoToRenameAccountPage()
