@@ -155,19 +155,6 @@ public abstract class InterimEmployerBasePage : Navigate
         await page1.CloseAsync();
     }
      
-    public async Task GoToAccessibilityStatementPage()
-    {
-        // var accessibilityPage = await page.RunAndWaitForPopupAsync(async () =>
-        {
-            await page.Locator("footer >> text=Accessibility statement").ClickAsync();
-
-            await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-            await Assertions.Expect(page.GetByRole(AriaRole.Main))
-                .ToContainTextAsync("Accessibility statement");
-        }
-    }
-
     public async Task<RenameAccountPage> GoToRenameAccountPage()
     {
         await NavigateToSettings("Rename account");
