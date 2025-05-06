@@ -17,12 +17,16 @@ public class SupportToolsConfigurationSetup(ScenarioContext context)
         context.SetNonEasLoginUser(new List<NonEasAccountUser>
         {
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportToolScsUser()),
-            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportToolScpUser())
+            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportToolScpUser()),
+            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportToolTier1User()),
+            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new SupportToolTier2User())
         });
 
         await context.SetEasLoginUser(
         [
             _configSection.GetConfigSection<LevyUser>()
         ]);
+
+        context.SetSupportConsoleConfig(_configSection.GetConfigSection<SupportToolsConfig>());
     }
 }

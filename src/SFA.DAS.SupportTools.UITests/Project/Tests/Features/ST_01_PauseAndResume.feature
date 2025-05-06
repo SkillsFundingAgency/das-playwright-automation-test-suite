@@ -1,7 +1,7 @@
 ﻿Feature: ST_01_PauseAndResume
 
 @supporttools
-@approvalssupportconsole
+@approvalssupport
 @BulkUtility
 Scenario: ST_01A_Pause Apprentice Records
 	Given the SCP User is logged into Support Tools
@@ -15,7 +15,7 @@ Scenario: ST_01A_Pause Apprentice Records
 
 
 @supporttools
-@approvalssupportconsole
+@approvalssupport
 @BulkUtility
 Scenario: ST_01B_Resume Apprentice Records
 	Given the SCP User is logged into Support Tools
