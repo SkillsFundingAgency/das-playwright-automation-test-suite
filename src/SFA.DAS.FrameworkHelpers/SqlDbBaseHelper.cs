@@ -74,8 +74,8 @@ public class SqlDbBaseHelper(ObjectContext objectContext, string connectionStrin
     }
 
 
-    protected async Task<List<(List<object[]> data, int noOfColumns)>> GetMultipleListOfData(List<string> queryToExecute) =>
-        await GetMultipleListOfData(queryToExecute, connectionString, null);
+    protected async Task<List<(List<object[]> data, int noOfColumns)>> GetMultipleListOfData(List<string> queryToExecute, Dictionary<string, string> parameters = null) =>
+       await GetMultipleListOfData(queryToExecute, connectionString, parameters);
 
     private async Task<List<(List<object[]> data, int noOfColumns)>> GetMultipleListOfData(List<string> queryToExecute, string connectionString, Dictionary<string, string> parameters)
     {
