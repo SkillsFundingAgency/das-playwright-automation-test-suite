@@ -35,15 +35,15 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     public async Task VerifyAndApplySingleFilters()
     {
         await VerifyNoFiltersAreApplied();
-        await VerifyDistanceFilterSelection("Across England");
+        await VerifyDistanceFilterSelection("10 miles");
         await EnterCourseJobOrStandard("Professional");
         await ApplyFilters();
         await VerifyFilterIsSet("Professional");
         await ClearSpecificFilter("Professional");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (Across England)");
-        await ClearSpecificFilter("TW14 Hounslow (Across England)");
+        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
+        await ClearSpecificFilter("TW14 Hounslow (within 10 miles)");
         await VerifyNoFiltersAreApplied();
         await SelectApprenticeTravelDistance("10 miles");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
@@ -53,10 +53,10 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await VerifyNoFiltersAreApplied();
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (Across England)");
-        await SelectApprenticeTravelDistance("10 miles");
-        await ApplyFilters();
         await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
+        await SelectApprenticeTravelDistance("20 miles");
+        await ApplyFilters();
+        await VerifyFilterIsSet("TW14 Hounslow (within 20 miles)");
         await SelectApprenticeTravelDistance("100 miles");
         await ApplyFilters();
         await VerifyFilterIsSet("TW14 Hounslow (within 100 miles)");
@@ -75,7 +75,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     public async Task ApplyMultipleFilters_ClearAtOnce()
     {
         await VerifyNoFiltersAreApplied();
-        await VerifyDistanceFilterSelection("Across England");
+        await VerifyDistanceFilterSelection("10 miles");
         await EnterCourseJobOrStandard("Professional");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await SelectApprenticeTravelDistance("100 miles");
@@ -96,7 +96,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     public async Task ApplyCourseFilterAndVerifyResultsForProfessional()
     {
         await VerifyNoFiltersAreApplied();
-        await VerifyDistanceFilterSelection("Across England");
+        await VerifyDistanceFilterSelection("10 miles");
         await EnterCourseJobOrStandard("professional");
         await ApplyFilters();
         await VerifyFilterIsSet("professional");
@@ -124,7 +124,8 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     public async Task<ApprenticeshipTrainingCourseDetailsPage> SelectCourseByName(string courseNameWithLevel)
     {
         context.Set(courseNameWithLevel, "SelectedCourseName");
-        var courseLink = page.GetByRole(AriaRole.Link, new() { Name = courseNameWithLevel });
+        var courseLink = page.GetByRole(AriaRole.Link, new() { Name = courseNameWithLevel, Exact = true })
+                     .Filter(new() { Has = page.Locator("span.das-no-wrap") });
         await Assertions.Expect(courseLink).ToBeVisibleAsync();
         await courseLink.ClickAsync();
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCourseDetailsPage(context));
