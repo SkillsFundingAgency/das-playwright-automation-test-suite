@@ -182,4 +182,54 @@ public class TasksSteps
         _homePage = await TasksHelper.ClickTransferPledgeApplicationsLink(_homePage);
     }
 
+    [When("there are X transfers applications available to add an apprentice")]
+    public async Task WhenThereAreTransferPledgeApplicationsAvailableToAddAnApprentice()
+    {
+        var tasks = GetTaskQueryResult(); 
+
+        tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices = await _tasksHelper.GetNumberOfAcceptedTransferPledgeApplicationsWithNoApprentices();
+        
+    }
+
+    [Then("display task: 'X transfers available to add an apprentice'")]
+    public async Task ThenDisplayNumberTransfersAvailableToAddAnApprentice()
+    {
+        var tasks = GetTaskQueryResult();
+
+        await _homePage.VerifyTransfersAvailableToAddAnApprenticeMessageShown(tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices);
+    }
+
+    [Then("'View details' link should navigate user to 'My applications' page")]
+    public async Task ThenViewTransferPledgeApplicationsNavigatesToUseTransferFundsPage()
+    {
+        var tasks = GetTaskQueryResult();
+
+       _homePage = await TasksHelper.ClickTransfersAvailableToAddApprenticeLink(_homePage, tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices);
+        
+    }
+
+
+    [When("there are X transfer application has been approved")]
+    public async Task WhenTransferApplicationsHaveBeenApproved()
+    {
+       var tasks = GetTaskQueryResult();
+       tasks.NumberOfTransferPledgeApplicationsApproved = await _tasksHelper.GetNumberOfTransferPledgeApplicationsApproved();
+       SetTaskQueryResult(tasks);
+    }
+
+    [Then("display task: 'X transfers to accept'")]
+    public async Task ThenDisplayNumberOfTransferPledgeApplicationsApproved()
+    {
+        var tasks = GetTaskQueryResult();
+
+        await _homePage.VerifyTransfersToAcceptMessageShown(tasks.NumberOfTransferPledgeApplicationsApproved);
+    }
+
+    [Then("'View details' link should navigate user to 'My applications' to Accept page")]
+    public async Task ThenViewNumberOfTransferPledgeApplicationsApprovedMyApplicationsPage()
+    {
+        var tasks = GetTaskQueryResult();
+
+         _homePage =await TasksHelper.ClickTransfersToAcceptLink(_homePage, tasks.NumberOfTransferPledgeApplicationsApproved);
+    }
 }

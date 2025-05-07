@@ -33,16 +33,16 @@ public abstract class SqlDbHelper(ObjectContext objectContext, string connection
         return returnItems;
     }
 
-    protected async Task<List<string[]>> GetMultipleData(string query)
+    protected async Task<List<string[]>> GetMultipleData(string query, Dictionary<string, string> parameters = null)
     {
-        var result = await GetListOfMultipleData([query]);
+        var result = await GetListOfMultipleData([query],parameters);
 
         return result.FirstOrDefault();
     }
 
-    protected async Task<List<List<string[]>>> GetListOfMultipleData(List<string> query)
+    protected async Task<List<List<string[]>>> GetListOfMultipleData(List<string> query, Dictionary<string, string> parameters =null)
     {
-        List<(List<object[]> data, int noOfColumns)> multidatas = await SqlDbRetryHelper.RetryOnException(async () => await GetMultipleListOfData(query));
+        List<(List<object[]> data, int noOfColumns)> multidatas = await SqlDbRetryHelper.RetryOnException(async () => await GetMultipleListOfData(query, parameters));
 
         var multireturnItems = new List<List<string[]>>();
 
