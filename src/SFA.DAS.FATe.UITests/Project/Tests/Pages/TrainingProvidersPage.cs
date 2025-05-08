@@ -95,34 +95,9 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
 
         await dropdown.SelectOptionAsync(new SelectOptionValue { Value = optionValue });
     }
-    public async Task<string> AddProviderToShortlist(string ukprn)
+    public async Task ClickFirstProviderLink()
     {
-        var buttonSelector = $"#add-to-shortlist-{ukprn}";
-        var button = page.Locator(buttonSelector);
-        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
-
-        var providerNameLocator = page.Locator($"#provider-{ukprn}");
-        await providerNameLocator.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
-
-        var providerName = await providerNameLocator.InnerTextAsync();
-
-        await button.ClickAsync();
-        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden });
-
-        return providerName.Trim();
-    }
-
-
-
-    public async Task ClickRemoveFromShortlistAsync()
-    {
-        var removeButton = page.GetByRole(AriaRole.Button, new() { Name = "Remove from shortlist" });
-        await removeButton.ClickAsync();
-    }
-    public async Task ClickViewShortlistAsync()
-    {
-        var viewShortlistLink = page.GetByRole(AriaRole.Link, new() { Name = "View shortlist" });
-        await viewShortlistLink.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
-        await viewShortlistLink.ClickAsync();
+        var providerLink = page.Locator("a[id^='provider-']").First;
+        await providerLink.ClickAsync();
     }
 }

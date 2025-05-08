@@ -348,6 +348,45 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
             }
         }
     }
+    public async Task<string> AddProviderToShortlist(string ukprn)
+    {
+        var buttonSelector = $"#add-to-shortlist-{ukprn}";
+        var button = page.Locator(buttonSelector);
+        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
+
+        var providerNameLocator = page.Locator($"#provider-{ukprn}");
+        await providerNameLocator.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
+
+        var providerName = await providerNameLocator.InnerTextAsync();
+
+        await button.ClickAsync();
+        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden });
+
+        return providerName.Trim();
+    }
+    public async Task ClickRemoveFromShortlistAsync()
+    {
+        var removeButton = page.GetByRole(AriaRole.Button, new() { Name = "Remove from shortlist" });
+        await removeButton.ClickAsync();
+    }
+    public async Task ViewTrainingProvidersLink()
+    {
+        var link = page.GetByRole(AriaRole.Link, new() { Name = "View training providers for this course" });
+        await link.ClickAsync();
+    }
+
+    public async Task ClickViewShortlistAsync()
+    {
+        var viewShortlistLink = page.GetByRole(AriaRole.Link, new() { Name = "View shortlist" });
+        await viewShortlistLink.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
+        await viewShortlistLink.ClickAsync();
+    }
+    public async Task AddToShortList_TrainingProviderPage()
+    {
+        var button = page.GetByRole(AriaRole.Button, new() { Name = "Add to shortlist" });
+        await button.ClickAsync();
+        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Detached });
+    }
     public async Task SelectEmployerProviderRatingAsync(string optionValue)
     {     var dropdown = page.Locator("#course-providers-orderby");
         await dropdown.SelectOptionAsync(new SelectOptionValue { Value = optionValue });

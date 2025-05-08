@@ -21,7 +21,7 @@ public class ShortlistSteps
         {
             await _trainingProvidersPage.AddProviderToShortlist("10005077");
             await _trainingProvidersPage.ClickViewShortlistAsync();
-            await _shortlistPage.IsProviderInShortlistAsync("Adult care worker (level 2)");
+            await _shortlistPage.VerifyCourseNameShortlisted("Adult care worker (level 2)");
             await _shortlistPage.GoToTrainingProvidersPage();
             await _trainingProvidersPage.ClickRemoveFromShortlistAsync();
             await _trainingProvidersPage.ClickViewShortlistAsync();
