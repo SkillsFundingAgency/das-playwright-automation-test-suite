@@ -1,4 +1,5 @@
 ﻿
+using Azure;
 using SFA.DAS.EmployerFinance.UITests.Project.Tests.Pages;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System.Threading.Tasks;
@@ -90,6 +91,16 @@ public class EmployerFinanceSteps(ScenarioContext context)
         await page.VerifyPage();
 
         await page.GoToHelpPage();
+    }
+
+    [Then(@"the employer can navigate to Accessibility statement page from Finance page")]
+    public async Task ThenTheEmployerCanNavigateToAccessibilityStatementPage()
+    {
+        var page = new InterimFinanceHomePage(context, true, true);
+
+        await page.VerifyPage();
+
+        await page.GoToAccessibilityStatementPage();
     }
 
     [Then(@"'View transactions', 'Download transactions' and 'Transfers' links are displayed")]
