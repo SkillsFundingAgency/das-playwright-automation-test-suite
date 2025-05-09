@@ -1,0 +1,18 @@
+{
+  "bindingCulture": {
+    "feature": "en-GB"
+  },
+  "language": {
+    "feature": "en-GB"
+  },
+  "stepAssemblies": [
+    { "assembly": "SFA.DAS.MailosaurAPI.Service" },
+    { "assembly": "SFA.DAS.Framework" },
+    { "assembly": "SFA.DAS.EmployerPortal.UITests" },
+    { "assembly": "SFA.DAS.ProviderLogin.Service" }
+  ],
+  "generator": {
+    "allowRowTests": false,
+    "addNonParallelizableMarkerForTags": [ "donotexecuteinparallel" ]
+  }
+}
