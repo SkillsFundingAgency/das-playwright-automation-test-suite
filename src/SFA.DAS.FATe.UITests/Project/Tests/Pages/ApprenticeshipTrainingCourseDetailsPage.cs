@@ -21,7 +21,7 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
     {
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await VerifyWorkLocationAndTravelDistance("Apprentice's work location:", "TW14 Hounslow");
-        await VerifyWorkLocationAndTravelDistance("Apprentice can travel:", "across England");
+        await VerifyWorkLocationAndTravelDistance("Apprentice can travel:", "10 miles");
         await ViewProvidersForThisCourse();
         return await VerifyPageAsync(() => new TrainingProvidersPage(context));
     }

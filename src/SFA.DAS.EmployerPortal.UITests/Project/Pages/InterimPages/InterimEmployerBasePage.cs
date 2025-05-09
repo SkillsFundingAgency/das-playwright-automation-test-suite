@@ -152,7 +152,7 @@ public abstract class InterimEmployerBasePage : Navigate
 
         await Assertions.Expect(page1.GetByRole(AriaRole.Main)).ToContainTextAsync("Useful Links");
     }
-
+     
     public async Task<RenameAccountPage> GoToRenameAccountPage()
     {
         await NavigateToSettings("Rename account");

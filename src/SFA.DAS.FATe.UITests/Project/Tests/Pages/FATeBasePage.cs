@@ -117,7 +117,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task ClearSpecificFilter(string filterName)
     {
-        var filterLocator = page.Locator($"a.das-filter__tag.das-breakable:has-text('{filterName}')");
+        var filterLocator = page.Locator($"a.das-filter__tag.das-breakable:has-text(\"{filterName}\")");
 
         if (await filterLocator.CountAsync() > 0)
         {
@@ -156,7 +156,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyFilterIsSet(string filterText)
     {
-        var filterLocator = page.Locator($"a.das-filter__tag.das-breakable:has-text('{filterText}')");
+        var filterLocator = page.Locator($"a.das-filter__tag.das-breakable:has-text(\"{filterText}\")");
         await filterLocator.WaitForAsync();
         await Assertions.Expect(filterLocator).ToBeVisibleAsync();
     }
@@ -252,7 +252,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyProvidersCount(int expectedCount)
     {
-        var text = await page.Locator("p.govuk-body.govuk-\\!\\-font-weight-bold.das-no-wrap").TextContentAsync();
+        var text = await page.Locator("p.govuk-body.govuk-\\!\\-font-weight-bold.govuk-\\!\\-margin-0").TextContentAsync();
         int actualCount = int.Parse(Regex.Match(text ?? "", @"\d+").Value);
 
         if (actualCount != expectedCount)
@@ -302,7 +302,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyAchievementRatesDescendingAsync()
     {
-        var rateElements = page.Locator(".course-provider-results-bottom-panel .govuk-body");
+        var rateElements = page.Locator("dd.govuk-summary-list__value");
         var count = await rateElements.CountAsync();
 
         if (count == 0)

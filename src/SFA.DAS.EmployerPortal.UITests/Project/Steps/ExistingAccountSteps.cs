@@ -56,6 +56,8 @@ public class ExistingAccountSteps
     [Then(@"Employer is able to navigate to Help Page")]
     public async Task ThenEmployerIsAbleToNavigateToHelpPage() => await _homePage.GoToHelpPage();
 
+    [Then(@"the employer can navigate to Accessibility statement page")]
+
     [Then(@"the employer can navigate to home page")]
     public async Task ThenTheEmployerCanNavigateToHomePage() => _homePage = await new HomePage(_context, true).GoToHomePage();
 
