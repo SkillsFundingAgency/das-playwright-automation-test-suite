@@ -2,7 +2,6 @@
 using Azure;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
-
 namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
 public class TasksHelper(ScenarioContext context)
@@ -11,7 +10,7 @@ public class TasksHelper(ScenarioContext context)
     private readonly EmployerFinanceSqlHelper _employerFinanceSqlHelper = context.Get<EmployerFinanceSqlHelper>();
     private readonly TransferMatchingSqlDataHelper _transferMatchingSqlDataHelper = context.Get<TransferMatchingSqlDataHelper>();
     private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
-
+    
     public async Task<int> GetNumberOfApprenticesToReview()
     {
         var accountId = _objectContext.GetDBAccountId();
@@ -39,14 +38,72 @@ public class TasksHelper(ScenarioContext context)
     public async Task<int> GetNumberTransferPledgeApplicationsToReview()
     {
         var accountId = _objectContext.GetDBAccountId();
-        return await _transferMatchingSqlDataHelper.GetNumberTransferPledgeApplicationsToReview(accountId);
+        return await _transferMatchingSqlDataHelper.GetNumberTransferPledgeApplicationsByApplicationStatus(accountId,"0");
+    }
+
+    public async Task<int> GetNumberOfTransferPledgeApplicationsApproved()
+    {
+        var accountId = _objectContext.GetDBAccountId();
+        var approvedApplications = await _transferMatchingSqlDataHelper.GetTransferPledgeApplicationsByApplicationStatus(accountId, "1");
+        return approvedApplications?.Count ?? 0;
+    }
+
+    public async Task<int> GetNumberOfAcceptedTransferPledgeApplicationsWithNoApprentices()
+    {
+        var accountId = _objectContext.GetDBAccountId();
+        var acceptedApplications = await _transferMatchingSqlDataHelper.GetTransferPledgeApplicationsByApplicationStatus(accountId, "3");
+        if (acceptedApplications == null || acceptedApplications.Count == 0)
+        {
+            return 0;
+        }
+
+        var cohortResult = await _commitmentsSqlHelper.GetPledgeApplicationIdsAndNumberOfDraftApprentices(accountId);
+        if (cohortResult == null || (cohortResult).Count == 0)
+        {
+            return acceptedApplications.Count;
+        }
+
+        var acceptedApplicationIdsWithoutApprentices = new List<int>();
+
+        foreach (var appId in acceptedApplications)
+        {
+            var cohortsForApplication = cohortResult.Where(x => x.PledgeApplicationId == appId).ToList();
+            if (cohortsForApplication.Count == 0 || cohortsForApplication.Any(x => x.NumberOfDraftApprentices == 0))
+            {
+                acceptedApplicationIdsWithoutApprentices.Add(appId);
+            }
+        }
+
+        return acceptedApplicationIdsWithoutApprentices.Count;
     }
 
     public static async Task<HomePage> ClickViewApprenticeChangesLink(HomePage homePage, int numberOfChanges)
     {
         var page = await homePage.ClickViewChangesForApprenticeChangesToReview(numberOfChanges);
-
+        
         return await page.GoToHomePage();
+    }
+
+    public static async Task<HomePage> ClickTransfersAvailableToAddApprenticeLink(HomePage homePage, int numberOfChanges)
+    {
+        if (numberOfChanges == 1)
+        {
+            var page = await homePage.ClickViewTransfersAvailableToAddApprentice();
+            return await page.GoToHomePage();  
+        }
+        var multiplePage = await homePage.ClickViewMultipleTransfersAvailableToAddApprenticeLink(); 
+        return await multiplePage.GoToHomePage();
+    }
+
+    public static async Task<HomePage> ClickTransfersToAcceptLink(HomePage homePage, int numberOfChanges)
+    {
+        if (numberOfChanges == 1)
+        {
+            var page = await homePage.ClickViewTransferToAccept();
+            return await page.GoToHomePage();
+        }
+        var multiplePage = await homePage.ClickViewMultipleTransfersToAccept();
+        return await multiplePage.GoToHomePage();
     }
 
     public static async Task<HomePage> ClickViewCohortsToReviewLink(HomePage homePage)

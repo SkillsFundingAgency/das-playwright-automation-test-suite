@@ -163,7 +163,7 @@ public abstract class InterimEmployerBasePage : Navigate
         await Assertions.Expect(page.GetByRole(AriaRole.Main))
             .ToContainTextAsync("Accessibility statement");
     }
-
+     
     public async Task<RenameAccountPage> GoToRenameAccountPage()
     {
         await NavigateToSettings("Rename account");
