@@ -1,4 +1,5 @@
 ﻿
+using Azure;
 using SFA.DAS.EmployerFinance.UITests.Project.Tests.Pages;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System.Threading.Tasks;
