@@ -33,7 +33,7 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
 
     public async Task<ManageTheStandardsYouDeliverPage> AccessStandards()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "The standards you deliver" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Standards" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }
