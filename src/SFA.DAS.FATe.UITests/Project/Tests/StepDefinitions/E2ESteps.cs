@@ -1,6 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Polly;
 using SFA.DAS.FATe.UITests.Helpers;
 using SFA.DAS.FATe.UITests.Project.Tests.Pages;
+using SFA.DAS.ProviderLogin.Service.Project.Helpers;
+using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
+using SFA.DAS.ManagingStandards.UITests.Project.Helpers;
 
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
@@ -16,6 +20,8 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         private readonly ShortlistPage _shortlistPage;
         private readonly TrainingProvidersPage _trainingProvidersPage;
         private string providerName;
+        private ScenarioContext context;
+        private string StandardName;
 
         public E2ESteps(ScenarioContext context)
         {
@@ -26,6 +32,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _specific_TrainingProviderPage = new Specific_TrainingProviderPage(context, providerName);
             _shortlistPage = new ShortlistPage(context);
             _trainingProvidersPage = new TrainingProvidersPage(context);
+
 
         }
 
