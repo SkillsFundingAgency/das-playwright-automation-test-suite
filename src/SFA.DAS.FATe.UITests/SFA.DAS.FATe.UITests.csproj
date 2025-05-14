@@ -27,7 +27,6 @@
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
 		<ProjectReference Include="..\SFA.DAS.ManagingStandards.UITests\SFA.DAS.ManagingStandards.UITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.ProviderLogin.Service\SFA.DAS.ProviderLogin.Service.csproj" />
-		<ProjectReference Include="..\SFA.DAS.DfeAdmin.Service\SFA.DAS.DfeAdmin.Service.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
