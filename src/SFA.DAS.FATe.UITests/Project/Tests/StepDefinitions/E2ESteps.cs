@@ -5,6 +5,8 @@ using SFA.DAS.FATe.UITests.Project.Tests.Pages;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
 using SFA.DAS.ManagingStandards.UITests.Project.Helpers;
+using Microsoft.IdentityModel.Logging;
+using Azure;
 
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
@@ -16,15 +18,18 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         private readonly SearchForTrainingProviderPage _searchForTrainingProviderPage;
         private readonly FATeHomePage _fATeHomePage;
         private readonly Search_TrainingCourses_ApprenticeworkLocationPage _search_TrainingCourses_ApprenticeworkLocationPage;
+        private readonly ApprenticeshipTrainingCoursesPage _apprenticeshipTrainingCoursesPage;
         private readonly Specific_TrainingProviderPage _specific_TrainingProviderPage;
         private readonly ShortlistPage _shortlistPage;
         private readonly TrainingProvidersPage _trainingProvidersPage;
+        private readonly ApprenticeshipTrainingCourseDetailsPage _apprenticeshipTrainingCourseDetailsPage;
         private string providerName;
         private ScenarioContext context;
         private string StandardName;
 
         public E2ESteps(ScenarioContext context)
         {
+            this.context = context;
             _stepsHelper = new FATeStepsHelper(context);
             _fATeHomePage = new FATeHomePage(context);
             _search_TrainingCourses_ApprenticeworkLocationPage = new Search_TrainingCourses_ApprenticeworkLocationPage(context);
@@ -32,8 +37,8 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _specific_TrainingProviderPage = new Specific_TrainingProviderPage(context, providerName);
             _shortlistPage = new ShortlistPage(context);
             _trainingProvidersPage = new TrainingProvidersPage(context);
-
-
+            _apprenticeshipTrainingCoursesPage = new ApprenticeshipTrainingCoursesPage(context);
+            _apprenticeshipTrainingCourseDetailsPage = new ApprenticeshipTrainingCourseDetailsPage(context);
         }
 
         [Given("the user navigates to the training provider details page")]
@@ -119,6 +124,37 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         {
             await _specific_TrainingProviderPage.ReturnToCourseSearchResults();
         }
+
+        [When("the provider is listed on the FAT training providers page")]
+        public async Task WhenTheProviderIsListedOnTheFATTrainingProvidersPage()
+        {
+            var driver = context.Get<Driver>();
+            await driver.Page.GotoAsync(UrlConfig.FAT_BaseUrl);
+            await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
+            await _fATeHomePage.ClickStartNow();
+            await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
+            await _fATeHomePage.EnterCourseJobOrStandard("Craft plasterer");
+            await _fATeHomePage.ApplyFilters();
+            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Craft plasterer (level 3)");
+            await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
+            await _trainingProvidersPage.VerifyProviderListed("REMIT GROUP LIMITED", true);
+            await driver.Page.GotoAsync(UrlConfig.Provider_BaseUrl);
+            await _fATeHomePage.StartNow();
+        }
+        [When("the provider is not listed on the FAT training providers page")]
+        public async Task WhenTheProviderIsNotListedOnTheFATTrainingProvidersPage()
+        {
+            var driver = context.Get<Driver>();
+            await driver.Page.GotoAsync(UrlConfig.FAT_BaseUrl);
+            await _fATeHomePage.ClickStartNow();
+            await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
+            await _fATeHomePage.EnterCourseJobOrStandard("Craft plasterer");
+            await _fATeHomePage.ApplyFilters();
+            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Craft plasterer (level 3)");
+            await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
+            await _trainingProvidersPage.VerifyProviderListed("REMIT GROUP LIMITED", false);
+        }
+
 
     }
 }

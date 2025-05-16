@@ -1,12 +1,15 @@
 ﻿
 
+using System;
+using Azure;
+
 namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
 
 public class ManagingStandardsProviderHomePage(ScenarioContext context) : ProviderHomePage(context)
 {
     public new async Task<YourStandardsAndTrainingVenuesPage> NavigateToYourStandardsAndTrainingVenuesPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Your standards and training" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Your standards and training venues" }).ClickAsync();
 
         return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
     }
@@ -33,7 +36,7 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
 
     public async Task<ManageTheStandardsYouDeliverPage> AccessStandards()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "The standards you deliver" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Standards" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }
@@ -44,6 +47,7 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
 
         return await VerifyPageAsync(() => new TrainingProviderOverviewPage(context));
     }
+
 }
 
 public class TrainingProviderOverviewPage(ScenarioContext context) : ManagingStandardsBasePage(context)
@@ -90,6 +94,22 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 
         return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
     }
+    public async Task<ManageTheStandardsYouDeliverPage> VerifyStandardPresence(string standardName, bool shouldExist = true)
+    {
+        var locator = page.Locator($"//a[contains(@class, 'govuk-link') and normalize-space(text())='{standardName}']");
+
+        var count = await locator.CountAsync();
+
+        if (shouldExist && count == 0)
+            throw new Exception($"Expected to find the standard '{standardName}', but it was not listed.");
+
+        if (!shouldExist && count > 0)
+            throw new Exception($"The standard '{standardName}' was found on the page, but it should NOT be listed.");
+
+        return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
+    }
+
+
 
     public async Task<SelectAStandardPage> AccessAddStandard()
     {

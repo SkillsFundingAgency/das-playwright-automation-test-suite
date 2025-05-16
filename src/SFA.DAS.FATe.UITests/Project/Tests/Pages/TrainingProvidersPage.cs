@@ -100,4 +100,20 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         var providerLink = page.Locator("a[id^='provider-']").First;
         await providerLink.ClickAsync();
     }
+    public async Task VerifyProviderListed(string providerName, bool isListed)
+    {
+        var locator = page.Locator($"//a[@class='govuk-link' and normalize-space(text())='{providerName}']");
+        var visible = await locator.IsVisibleAsync();
+
+        if (isListed)
+        {
+            Assert.True(visible, $"Expected provider '{providerName}' to be listed, but it was not.");
+        }
+        else
+        {
+            Assert.False(visible, $"Expected provider '{providerName}' to NOT be listed, but it was.");
+        }
+    }
+
+
 }
