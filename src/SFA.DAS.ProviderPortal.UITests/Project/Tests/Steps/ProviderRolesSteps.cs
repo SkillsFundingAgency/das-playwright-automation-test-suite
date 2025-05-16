@@ -188,6 +188,14 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
+    [Then(@"user cannot view Your Standards And Training Venues page")]
+    public async Task UserCannotViewYourStandardsAndTrainingVenuesPage()
+    {
+        var page = await providerHomePage.NavigateToShutterPage_EmployerTypeProviderPage();
+
+        providerHomePage = await page.GoToProviderHomePage();
+    }
+
     [Then(@"user can view Developer APIs page as defined in the table below (.*)")]
     public async Task UserCanViewDeveloperAPIsPage(bool canAccess)
     {
