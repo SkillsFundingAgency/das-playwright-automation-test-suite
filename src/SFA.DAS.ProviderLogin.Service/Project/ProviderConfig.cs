@@ -44,4 +44,4 @@ public class ProviderContributorWithApprovalUser : ProviderConfig { }
 
 public class ProviderAccountOwnerUser : ProviderConfig { }
 
-public class EmployerTypeAccountOwnerUser : ProviderConfig { }
+public class EmployerTypeProviderAccount : ProviderConfig { }

@@ -43,7 +43,7 @@ public class ProviderConfigurationSetup(ScenarioContext context) : ProviderConfi
 
         _context.SetNonEasLoginUser(SetProviderCreds<ProviderAccountOwnerUser>());
 
-        _context.SetNonEasLoginUser(SetProviderCreds<EmployerTypeAccountOwnerUser>());
+        _context.SetNonEasLoginUser(SetProviderCreds<EmployerTypeProviderAccount>());
     }
 
     private void SetProviderConfig()

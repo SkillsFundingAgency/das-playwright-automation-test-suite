@@ -23,6 +23,5 @@ public class ProviderPortalConfigurationSetup(ScenarioContext context)
         context.SetNonEasLoginUser(configSection.GetConfigSection<ProviderContributorUser>());
 
         context.SetNonEasLoginUser(configSection.GetConfigSection<ProviderContributorWithApprovalUser>());
-        context.SetNonEasLoginUser(configSection.GetConfigSection<EmployerTypeAccountOwnerUser>());
     }
 }

@@ -31,7 +31,7 @@ public class ProviderLoginSteps(ScenarioContext context)
             bool _ when userRole == ProviderUserRoles.Contributor => context.GetUser<ProviderContributorUser>(),
             bool _ when userRole == ProviderUserRoles.ContributorWithApproval => context.GetUser<ProviderContributorWithApprovalUser>(),
             bool _ when userRole == ProviderUserRoles.AccountOwner => context.GetUser<ProviderAccountOwnerUser>(),
-            bool _ when userRole == ProviderUserRoles.EmployerTypeProviderAccount => context.GetUser<EmployerTypeAccountOwnerUser>(),
+            bool _ when userRole == ProviderUserRoles.EmployerTypeProviderAccount => context.GetUser<EmployerTypeProviderAccount>(),
             bool _ when userRole == ProviderUserRoles.Viewer => context.GetUser<ProviderViewOnlyUser>(),
             _ => null,
         };

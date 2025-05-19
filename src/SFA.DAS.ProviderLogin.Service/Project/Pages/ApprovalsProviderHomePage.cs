@@ -22,7 +22,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "More" }).ClickAsync();
 
-        await page.GetByRole(AriaRole.Link, new() { Name = "Organisations and agreements" }).ClickAsync();
+        await page.Locator("a.das-navigation__link", new PageLocatorOptions { HasTextString = "View employers and manage permissions" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderEmployersAndPermissionsPage(context));
     }
