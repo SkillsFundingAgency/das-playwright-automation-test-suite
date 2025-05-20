@@ -11,5 +11,5 @@ Scenario Outline: Approvals - Update learner data
 
 	Examples: 
  | Method | Endpoint                                       | Payload   | ResponseStatus |
- | PUT    | /provider/10005760/academicyears/2425/learners | uln1.json | OK             |
+ | PUT    | /provider/10005760/academicyears/2425/learners | uln1.json | Accepted       |
 

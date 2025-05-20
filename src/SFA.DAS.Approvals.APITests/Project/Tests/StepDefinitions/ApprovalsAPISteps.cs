@@ -1,6 +1,4 @@
 using RestSharp;
-using SFA.DAS.Approvals.APITests.Project;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -19,7 +17,7 @@ public class ApprovalsAPISteps(ScenarioContext context)
         await _restClient.CreateRestRequest(method, endpoint, payload);
     }
 
-    [Then(@"api (OK) response is received")]
+    [Then(@"api (Accepted) response is received")]
     public async Task ThenApiOKResponseIsReceived(HttpStatusCode responseCode)
     {
         _restResponse = await Execute(responseCode);
