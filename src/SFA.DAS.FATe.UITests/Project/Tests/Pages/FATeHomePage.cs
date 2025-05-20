@@ -19,7 +19,6 @@ public class FATeHomePage(ScenarioContext context) : FATeBasePage(context)
     public async Task StartNow()
     {
         await page.Locator("a.govuk-button--start").ClickAsync();
-
     }
 }
 

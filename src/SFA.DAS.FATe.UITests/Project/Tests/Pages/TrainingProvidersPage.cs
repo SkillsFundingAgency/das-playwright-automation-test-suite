@@ -114,6 +114,4 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
             Assert.False(visible, $"Expected provider '{providerName}' to NOT be listed, but it was.");
         }
     }
-
-
 }

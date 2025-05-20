@@ -10,7 +10,7 @@ using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 {
     [Binding]
-    public class FAT_Provider(ScenarioContext context)
+    public class FAT_ProviderSteps(ScenarioContext context)
     {
         private string StandardName;
 
@@ -42,22 +42,22 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             var page10 = await page9.Save_NewTrainingVenue_Continue(StandardName);
 
             await page10.Save_NewStandard_Continue();
-
         }
+
         [When("the provider deletes the Craft Plasterer course from the standards list")]
         public async Task WhenTheProviderDeletesTheCraftPlastererCourseFromTheStandardsList()
         {
-
             var page = new ManagingStandardsProviderHomePage(context);
 
             var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
 
             var page2 = await page1.AccessStandards();
+
             var page3 = await page2.AccessActuaryLevel7(StandardName);
+
             var page4 = await page3.ClickDeleteAStandard();
+
             await page4.DeleteStandard();
-
         }
-
     }
 }

@@ -141,6 +141,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await driver.Page.GotoAsync(UrlConfig.Provider_BaseUrl);
             await _fATeHomePage.StartNow();
         }
+
         [When("the provider is not listed on the FAT training providers page")]
         public async Task WhenTheProviderIsNotListedOnTheFATTrainingProvidersPage()
         {
@@ -154,7 +155,5 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
             await _trainingProvidersPage.VerifyProviderListed("REMIT GROUP LIMITED", false);
         }
-
-
     }
 }

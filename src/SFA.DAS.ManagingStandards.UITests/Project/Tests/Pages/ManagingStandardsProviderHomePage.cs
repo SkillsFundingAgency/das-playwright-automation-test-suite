@@ -110,7 +110,6 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
     }
 
 
-
     public async Task<SelectAStandardPage> AccessAddStandard()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Add a standard" }).ClickAsync();
