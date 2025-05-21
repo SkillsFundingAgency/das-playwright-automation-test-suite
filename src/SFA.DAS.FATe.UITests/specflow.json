@@ -6,7 +6,10 @@
     "feature": "en-GB"
   },
   "stepAssemblies": [
-    { "assembly": "SFA.DAS.Framework" }
+    { "assembly": "SFA.DAS.Framework" },
+    { "assembly": "SFA.DAS.DfeAdmin.Service" },
+    { "assembly": "SFA.DAS.ProviderLogin.Service" },
+    { "assembly": "SFA.DAS.ManagingStandards.UITests" }
   ],
   "generator": {
     "allowRowTests": false,

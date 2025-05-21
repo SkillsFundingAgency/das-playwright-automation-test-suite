@@ -42,6 +42,8 @@ public class ProviderConfigurationSetup(ScenarioContext context) : ProviderConfi
         _context.SetPerfTestProviderPermissionsConfig(_configSection.GetConfigSection<PerfTestProviderPermissionsConfig>());
 
         _context.SetNonEasLoginUser(SetProviderCreds<ProviderAccountOwnerUser>());
+
+        _context.SetNonEasLoginUser(SetProviderCreds<EmployerTypeProviderAccount>());
     }
 
     private void SetProviderConfig()
