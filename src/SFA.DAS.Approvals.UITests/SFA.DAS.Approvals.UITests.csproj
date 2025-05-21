@@ -64,7 +64,7 @@
 	  <Folder Include="Project\Tests\Features\01_PreApprovals\02_NonLevyFunds\b_ExistingEmployer\" />
 	  <Folder Include="Project\Tests\Features\01_PreApprovals\04_LTM\" />
 	  <Folder Include="Project\Tests\Features\01_PreApprovals\03_TransfersConnection\" />
-	  <Folder Include="Project\Tests\Pages\" />
+	  <Folder Include="Project\Tests\Pages\Employer\" />
 	</ItemGroup>
 
 </Project>
