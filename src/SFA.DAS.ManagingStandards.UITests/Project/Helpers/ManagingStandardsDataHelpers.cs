@@ -13,6 +13,7 @@ public class ManagingStandardsDataHelpers
     public string EmailAddress { get; init; } = "ManagingStandardstest.demo@digital.education.gov.uk";
     public string VenueName { get; init; } = LocationName;
     public string Standard_ActuaryLevel7 { get; init; } = "Actuary (Level 7)";
+    public string Standard_CraftPlastererlevel { get; init; } = "Craft plasterer (Level 3)";
     public string PostCode { get; init; } = "Tw14 9py";
     public string Website { get; init; } = "www.company.co.uk";
     public string UpdatedWebsite { get; init; } = "www.123company.co.uk";

@@ -43,3 +43,5 @@ public class ProviderContributorUser : ProviderConfig { }
 public class ProviderContributorWithApprovalUser : ProviderConfig { }
 
 public class ProviderAccountOwnerUser : ProviderConfig { }
+
+public class EmployerTypeProviderAccount : ProviderConfig { }

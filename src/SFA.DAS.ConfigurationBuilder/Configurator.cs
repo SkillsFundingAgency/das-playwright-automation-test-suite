@@ -40,7 +40,8 @@ namespace SFA.DAS.ConfigurationBuilder
                 .AddSingleJsonFiles(
                 [
                     ("Config", true),
-                    ("ProviderConfig", false)
+                    ("ProviderConfig", false),
+                    ("ApiFramework", true)
                 ])
                 .AddProjectJsonFiles(
                 [

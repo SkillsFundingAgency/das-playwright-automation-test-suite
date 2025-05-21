@@ -9,7 +9,7 @@ public class Moderation_ProviderDetailsPage(ScenarioContext context) : ManagingS
 
     public async Task<Moderation_UpdateProviderPage> ChangeProviderDetail()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Change  provider description" }).ClickAsync();
+        await page.Locator("a.govuk-link:has-text(\"Change\")").ClickAsync();
 
         return await VerifyPageAsync(() => new Moderation_UpdateProviderPage(context));
     }

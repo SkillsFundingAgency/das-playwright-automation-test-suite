@@ -22,7 +22,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "More" }).ClickAsync();
 
-        await page.GetByRole(AriaRole.Link, new() { Name = "Organisations and agreements" }).ClickAsync();
+        await page.Locator("a.das-navigation__link", new PageLocatorOptions { HasTextString = "View employers and manage permissions" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderEmployersAndPermissionsPage(context));
     }
@@ -123,6 +123,13 @@ public partial class ProviderHomePage : InterimProviderBasePage
         return await VerifyPageAsync(() => new ProviderYourStandardsAndTrainingVenuesPage(context));
     }
 
+    public async Task<ProviderInformationNotFoundPage> NavigateToShutterPage_EmployerTypeProviderPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Your standards and training" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ProviderInformationNotFoundPage(context));
+    }
+
     public async Task<ProviderAPIListPage>  NavigateToDeveloperAPIsPage()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Developer APIs" }).ClickAsync();
@@ -185,6 +192,14 @@ public class ProviderYourStandardsAndTrainingVenuesPage(ScenarioContext context)
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your standards and training venues");
+    }
+}
+
+public class ProviderInformationNotFoundPage(ScenarioContext context) : InterimProviderBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Provider information not found on course management");
     }
 }
 
