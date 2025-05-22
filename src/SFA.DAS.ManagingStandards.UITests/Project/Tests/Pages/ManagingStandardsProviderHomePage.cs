@@ -71,12 +71,12 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("#header-standards")).ToContainTextAsync("Manage the standards you deliver");
+        await Assertions.Expect(page.Locator("#header-standards")).ToContainTextAsync("Manage your standards");
     }
 
     public async Task<ManageAStandard_TeacherPage> AccessTeacherLevel6()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Teacher (Level 6)" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Teacher (level 6)" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
