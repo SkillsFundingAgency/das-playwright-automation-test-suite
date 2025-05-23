@@ -58,11 +58,12 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page2 = await page1.AccessStandards();
 
-        var page3 = await page2.AccessRegulatorApprovalLinkFromTheSTandardsTable();
+        var page3 = await page2.AccessTeacherLevel6();
 
-        var page4 = await page3.ApproveStandard_FromStandardsPage();
+        var page4 = await page3.AccessApprovedByRegulationOrNot();
 
-        await page4.AccessTeacherLevel6();
+        var page5 = await page4.ApproveStandard_FromStandardsPage();
+
     }
 
     [Then(@"the provider is able to disapprove regulated standard")]

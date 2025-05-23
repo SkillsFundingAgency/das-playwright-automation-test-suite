@@ -81,13 +81,6 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
 
-    public async Task<RegulatedStandardPage> AccessRegulatorApprovalLinkFromTheSTandardsTable()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Regulator's approval needed" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new RegulatedStandardPage(context));
-    }
-
     public async Task<YourStandardsAndTrainingVenuesPage> ReturnToYourStandardsAndTrainingVenues()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
@@ -208,13 +201,13 @@ public class RegulatedStandardPage(ScenarioContext context) : ManagingStandardsB
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("This is a regulated standard");
     }
 
-    public async Task<ManageTheStandardsYouDeliverPage> ApproveStandard_FromStandardsPage()
+    public async Task<ManageAStandard_TeacherPage> ApproveStandard_FromStandardsPage()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
+        return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
 
     public async Task<YouMustBeApprovePage> DisApproveStandard()
