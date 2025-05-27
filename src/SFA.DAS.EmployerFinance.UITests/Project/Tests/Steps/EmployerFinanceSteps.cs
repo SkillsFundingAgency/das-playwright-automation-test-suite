@@ -103,7 +103,7 @@ public class EmployerFinanceSteps(ScenarioContext context)
         await _financePage.IsTransfersLinkPresent();
     }
 
-    [Then(@"Employer is able to navigate to 'View transactions', 'Download transactions', 'Funding projection' and 'Transfers' pages")]
+    [Then(@"Employer is able to navigate to 'View transactions', 'Download transactions' and 'Transfers' pages")]
     public async Task ThenEmployerIsAbleToNavigateToAndPages()
     {
         var page = await _financePage.GoToViewTransactionsPage();
@@ -113,10 +113,6 @@ public class EmployerFinanceSteps(ScenarioContext context)
         var page1 = await _financePage.GoToDownloadTransactionsPage();
 
         _financePage = await page1.GoToFinancePage();
-
-        var page2 = await _financePage.GoToFundingProjectionPage();
-
-        _financePage = await page2.GoToFinancePage();
 
         var page3 = await _financePage.GoToTransfersPage();
 
@@ -131,55 +127,7 @@ public class EmployerFinanceSteps(ScenarioContext context)
 
         await _financePage.GetFundsSpentLabel();
 
-        await _financePage.GetEstimatedTotalFundsText();
-
         await _financePage.GetEstimatedPlannedSpendingText();
-    }
-
-    [Then(@"Employer can add, edit and remove apprenticeship funding projection")]
-    public async Task ThenEmployerCanAddEditAndRemoveApprenticeshipFundingProjection()
-    {
-        var page = await _financePage.GoToFundingProjectionPage();
-
-        var page1 = await page.GoToEstimateFundingProjectionPage();
-
-        await page1.ClickStart();
-
-        var estimatedCostsPage = new EstimatedCostsPage(context);
-
-        var existingApprenticeship = await estimatedCostsPage.ExistingApprenticeships();
-
-        AddApprenticeshipsToEstimateCostPage addApprenticeshipsToEstimateCostPage;
-
-        if (existingApprenticeship > 0)
-        {
-            await estimatedCostsPage.VerifyPage();
-
-            for (int i = 1; i < existingApprenticeship; i++)
-            {
-                var removePage = await estimatedCostsPage.RemoveApprenticeships();
-
-                estimatedCostsPage = await removePage.ConfirmRemoveApprenticeship();
-            }
-
-            addApprenticeshipsToEstimateCostPage = await estimatedCostsPage.AddApprenticeships();
-        }
-        else
-        {
-            addApprenticeshipsToEstimateCostPage = new AddApprenticeshipsToEstimateCostPage(context);
-        }
-
-        var page2 = await addApprenticeshipsToEstimateCostPage.Add();
-
-        await page2.VerifyTabs();
-
-        var page3 = await page2.EditApprenticeships();
-
-        var page4 = await page3.Edit();
-
-        var page5 = await page4.RemoveApprenticeships();
-
-        await page5.ConfirmRemoveApprenticeship();
     }
 
 }
