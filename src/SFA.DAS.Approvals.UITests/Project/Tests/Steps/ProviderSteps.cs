@@ -1,4 +1,5 @@
-﻿using SFA.DAS.ProviderLogin.Service.Project.Helpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Tests.Pages.Provider;
+using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
 using System.Collections.Generic;
@@ -15,20 +16,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Tests.Steps
         [When("Provider logs into Provider-Portal")]
         public async Task GivenTheProviderLogsIntoPortal() => await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
 
-        [Given("Provider submit ILR successfully for {int} new apprentices")]
-        public void GivenProviderSubmitILRSuccessfullyForNewApprentices(int p0)
-        {
-            //throw new PendingStepException();
-        }
-
         [When(@"creates an apprentice request \(cohort\) by selecting same apprentices")]
         public async Task WhenCreatesAnApprenticeRequestCohortBySelectingSameApprentices()
         {
-            var page = new ProviderHomePage(context);
+            var page = await new ProviderHomePage(context).GotoSelectJourneyPage();
 
-            var page2 = await page.GotoSelectJourneyPage();
+            var page1 = await new AddApprenticeDetails_EntryMothodPage(context).SelectApprenticesFromILR();
 
-            await page2.SelectApprenticesFromILR();
+            var page2 = await page1.SelectCreateANewCohort();
+
+            var page3 = await page2.ChooseLevyEmployer();
+
+            var page4 = await page3.ConfirmEmployer();
+
+            var page5 = await page4.SelectApprenticeFromILRList();
         }
 
         

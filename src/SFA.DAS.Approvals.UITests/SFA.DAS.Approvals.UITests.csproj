@@ -25,6 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\SFA.DAS.Approvals.APITests\SFA.DAS.Approvals.APITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.ProviderLogin.Service\SFA.DAS.ProviderLogin.Service.csproj" />
@@ -46,8 +47,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Helpers\" />
-	  <Folder Include="Hooks\" />
 	  <Folder Include="Project\Tests\Features\01_PreApprovals\FlexiJobApprenticeshipAgency\" />
 	  <Folder Include="Project\Tests\Features\01_PreApprovals\FileUpload\" />
 	  <Folder Include="Project\Tests\Features\01_PreApprovals\ProviderPermissions\" />

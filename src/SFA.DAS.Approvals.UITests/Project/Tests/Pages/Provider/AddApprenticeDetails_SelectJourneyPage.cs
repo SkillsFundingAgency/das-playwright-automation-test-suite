@@ -7,11 +7,20 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Tests.Pages.Provider
 {
-    public class AddApprenticeDetails_SelectJourneyPage(ScenarioContext context) : ApprovalsProviderBasePage(context)
+    internal class AddApprenticeDetails_SelectJourneyPage(ScenarioContext context) : ApprovalsProviderBasePage(context)
     {
         public override async Task VerifyPage()
         {
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
+        }
+
+        public async Task<ChooseAnEmployerPage> SelectCreateANewCohort()
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "Create a new cohort" }).CheckAsync();
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new ChooseAnEmployerPage(context));
         }
     }
 }

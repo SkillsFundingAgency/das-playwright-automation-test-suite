@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Tests.Pages.Provider
 {
-    public class AddApprenticeDetails_EntryMothodPage(ScenarioContext context) : ApprovalsProviderBasePage(context)
+    internal class AddApprenticeDetails_EntryMothodPage(ScenarioContext context) : ApprovalsProviderBasePage(context)
     {
         public override async Task VerifyPage()
         {
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
         }
 
-        internal async Task<AddApprenticeDetails_SelectJourneyPage> SelectApprenticesFromILR()
+        public async Task<AddApprenticeDetails_SelectJourneyPage> SelectApprenticesFromILR()
         {
             await page.GetByRole(AriaRole.Radio, new() { Name = "Select apprentices from ILR" }).CheckAsync();
 

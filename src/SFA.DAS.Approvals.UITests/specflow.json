@@ -9,7 +9,8 @@
     { "assembly": "SFA.DAS.MailosaurAPI.Service" },
     { "assembly": "SFA.DAS.Framework" },
     { "assembly": "SFA.DAS.EmployerPortal.UITests" },
-    { "assembly": "SFA.DAS.ProviderLogin.Service" }
+    { "assembly": "SFA.DAS.ProviderLogin.Service" },
+    { "assembly": "SFA.DAS.Approvals.APITests" }
   ],
   "generator": {
     "allowRowTests": false,

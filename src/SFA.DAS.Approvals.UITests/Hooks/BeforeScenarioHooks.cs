@@ -1,0 +1,120 @@
+﻿using SFA.DAS.API.Framework.Configs;
+using SFA.DAS.Approvals.UITests.Helpers.SqlHelpers;
+using SFA.DAS.TestDataCleanup.Project.Helpers.SqlDbHelper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SFA.DAS.Approvals.UITests.Hooks
+{
+    [Binding]
+    public class BeforeScenarioHooks(ScenarioContext context)
+    {
+        private readonly ObjectContext _objectcontext = context.Get<ObjectContext>();
+        //private CommitmentsSqlDataHelper commitmentsdatahelper;
+        //private RoatpV2SqlDataHelper roatpV2SqlDataHelper;
+        private readonly DbConfig _dbConfig = context.Get<DbConfig>();
+        private readonly string[] _tags = context.ScenarioInfo.Tags;
+
+        [BeforeScenario(Order = 31)]
+        public void SetUpDbHelpers()
+        {
+           // commitmentsdatahelper = new CommitmentsSqlDataHelper(_objectcontext, _dbConfig);
+
+            //context.Set(commitmentsdatahelper);
+
+            //context.Set(new RofjaaDbSqlHelper(_objectcontext, _dbConfig));
+
+            context.Set(new AccountsDbSqlHelper(_objectcontext, _dbConfig));
+
+            //context.Set(roatpV2SqlDataHelper = new RoatpV2SqlDataHelper(_objectcontext, _dbConfig));
+
+            //context.Set(new PublicSectorReportingDataHelper());
+
+            //context.Set(new PublicSectorReportingSqlDataHelper(_objectcontext, _dbConfig));
+
+            //context.Set(new ManageFundingEmployerStepsHelper(context));
+        }
+
+        [BeforeScenario(Order = 32)]
+        public void SetUpHelpers()
+        {
+            //if (new TestDataSetUpConfigurationHelper(context).NoNeedToSetUpConfiguration()) return;
+
+            //var apprenticeStatus = _tags.Contains("liveapprentice") ? ApprenticeStatus.Live :
+            //                       _tags.Contains("onemonthbeforecurrentacademicyearstartdate") ? ApprenticeStatus.OneMonthBeforeCurrentAcademicYearStartDate :
+            //                       _tags.Contains("currentacademicyearstartdate") ? ApprenticeStatus.CurrentAcademicYearStartDate :
+            //                       _tags.Contains("waitingtostartapprentice") ? ApprenticeStatus.WaitingToStart :
+            //                       _tags.Contains("non-levy") ? ApprenticeStatus.StartedInCurrentMonth :
+            //                       _tags.Contains("startdateisfewmonthsbeforenow") ? ApprenticeStatus.StartDateIsFewMonthsBeforeNow : ApprenticeStatus.Random;
+
+            //List<(ApprenticeDataHelper apprenticeDataHelper, ApprenticeCourseDataHelper apprenticeCourseDataHelper)> listOfApprentices = SetProviderSpecificCourse(apprenticeStatus);
+
+            //context.Set<List<(ApprenticeDataHelper, ApprenticeCourseDataHelper)>>(listOfApprentices);
+
+            //var apprenticeDataHelper = listOfApprentices.FirstOrDefault().apprenticeDataHelper;
+
+            //context.Set(apprenticeDataHelper);
+
+            //context.Set(apprenticeDataHelper.apprenticePPIDataHelper);
+
+            //context.Set(new EditedApprenticeDataHelper(apprenticeDataHelper));
+
+            //var apprenticeCourseDataHelper = listOfApprentices.FirstOrDefault().apprenticeCourseDataHelper;
+
+            //context.Set(apprenticeCourseDataHelper);
+
+            //context.Set(new DataLockSqlHelper(_objectcontext, _dbConfig, apprenticeDataHelper, apprenticeCourseDataHelper));
+
+        }
+
+        //private List<(ApprenticeDataHelper apprenticeDataHelper, ApprenticeCourseDataHelper apprenticeCourseDataHelper)> SetProviderSpecificCourse(ApprenticeStatus apprenticeStatus)
+        //{
+        //    var randomCourseDataHelper = new RandomCourseDataHelper(_objectcontext, _dbConfig, GetLarsCode(), _tags);
+
+        //    List<(ApprenticeDataHelper, ApprenticeCourseDataHelper)> listOfApprentices = [];
+
+        //    listOfApprentices.Add((GetApprenticeDataHelper(), GetApprenticeCourseDataHelper(randomCourseDataHelper, apprenticeStatus)));
+
+        //    listOfApprentices.Add((GetApprenticeDataHelper(), GetApprenticeCourseDataHelper(randomCourseDataHelper.AvailableCourses, apprenticeStatus)));
+
+        //    return listOfApprentices;
+        //}
+
+        //private ApprenticeDataHelper GetApprenticeDataHelper() => new(new ApprenticePPIDataHelper(_tags, context.Get<MailosaurUser>()), _objectcontext, commitmentsdatahelper);
+
+        //private ApprenticeCourseDataHelper GetApprenticeCourseDataHelper(RandomCourseDataHelper randomCourseDataHelper, ApprenticeStatus apprenticeStatus) => new(randomCourseDataHelper, apprenticeStatus, _tags);
+
+        //private ApprenticeCourseDataHelper GetApprenticeCourseDataHelper(List<CourseDetails> availableCourses, ApprenticeStatus apprenticeStatus) => new(new RandomCourseDataHelper(availableCourses), apprenticeStatus, _tags);
+
+        //private List<string> GetLarsCode()
+        //{
+        //    return true switch
+        //    {
+        //        bool _ when _tags.Contains("portableflexijob") => roatpV2SqlDataHelper.GetPortableFlexiJobLarsCode(context.GetPortableFlexiJobProviderConfig<PortableFlexiJobProviderConfig>()?.Ukprn),
+        //        bool _ when _tags.Contains("limitingstandards") => roatpV2SqlDataHelper.GetCoursesthatProviderDeosNotOffer(context.GetProviderConfig<ProviderConfig>()?.Ukprn),
+        //        _ => roatpV2SqlDataHelper.GetCoursesThatProviderDeosOffer(context.GetProviderConfig<ProviderConfig>()?.Ukprn),
+        //    };
+        //}
+
+        [BeforeScenario(Order = 30)]
+        public void SetUpDependencyConfig()
+        {
+            //Read outer api cnnfig
+
+
+            //set config for 'Outer_ApiAuthTokenConfig' in the context
+            //context.Set();
+
+            Outer_ApiAuthTokenConfig outer_ApiAuthTokenConfig = new Outer_ApiAuthTokenConfig();
+            outer_ApiAuthTokenConfig.Apim_SubscriptionKey = "9b3489dcd9cc4b8aaa9fbaf259ce358d";
+            outer_ApiAuthTokenConfig.NAS_Apim_SubscriptionKey = "__NAS_Apim_SubscriptionKey__";
+            context.Set(outer_ApiAuthTokenConfig);
+
+        }
+    
+    
+    }
+}
