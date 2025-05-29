@@ -23,4 +23,12 @@ namespace SFA.DAS.Approvals.UITests.Helpers.DataHelpers
         CurrentLevyFunds,
         TransferFunds
     }
+
+    internal enum EmployerType
+    {
+        Levy,
+        NonLevy,
+        NonLevyUserAtMaxReservationLimit
+    }
+
 }

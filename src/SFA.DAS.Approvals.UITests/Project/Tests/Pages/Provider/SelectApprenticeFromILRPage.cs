@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure;
+using SFA.DAS.Approvals.UITests.Helpers.DataHelpers;
 
 namespace SFA.DAS.Approvals.UITests.Project.Tests.Pages.Provider
 {
@@ -15,12 +17,27 @@ namespace SFA.DAS.Approvals.UITests.Project.Tests.Pages.Provider
 
         public async Task<AddApprenticeDetailsPage> SelectApprenticeFromILRList()
         {
-            await page.GetByRole(AriaRole.Row, new PageGetByRoleOptions { Name = "Chloe Murphy 7947822688" })
+            var apprenticeship = context.GetValue<Apprenticeship>();
+
+            await SearchULN(apprenticeship.ApprenticeDetails.ULN);
+
+            var tableRow = apprenticeship.ApprenticeDetails.FirstName + " " + apprenticeship.ApprenticeDetails.LastName + " " + apprenticeship.ApprenticeDetails.ULN;
+
+
+            await page.GetByRole(AriaRole.Row, new PageGetByRoleOptions { Name = tableRow })
                       .GetByRole(AriaRole.Link)
                       .ClickAsync();
 
             return await VerifyPageAsync(() => new AddApprenticeDetailsPage(context));
         }
+
+        private async Task SearchULN(string uln)
+        {
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or" }).FillAsync(uln);
+            await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        }
+
+
     }
 
 }

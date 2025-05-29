@@ -45,7 +45,7 @@ namespace SFA.DAS.Approvals.UITests.Helpers.StepsHelper
             learnerData.percentageLearningToBeDelivered = apprenticeship.TrainingDetails.PercentageLearningToBeDelivered;
             learnerData.epaoPrice = apprenticeship.TrainingDetails.EpaoPrice;
             learnerData.trainingPrice = apprenticeship.TrainingDetails.TrainingPrice;
-            learnerData.agreementId = apprenticeship.AgreementId;
+            learnerData.agreementId = apprenticeship.EmployerDetails.AgreementId;
             learnerData.isFlexiJob = apprenticeship.TrainingDetails.IsFlexiJob;
             learnerData.plannedOTJTrainingHours = apprenticeship.TrainingDetails.PlannedOTJTrainingHours;
             learnerData.standardCode = apprenticeship.TrainingDetails.StandardCode;

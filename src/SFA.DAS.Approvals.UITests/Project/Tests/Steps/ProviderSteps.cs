@@ -30,6 +30,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Tests.Steps
             var page4 = await page3.ConfirmEmployer();
 
             var page5 = await page4.SelectApprenticeFromILRList();
+
+            //verify apprentice details are correct
+            //Click on Add button
+            //Approve cohort
+            //Save Cohort Ref
         }
 
         

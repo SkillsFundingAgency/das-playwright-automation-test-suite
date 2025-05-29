@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
 using SFA.DAS.Approvals.UITests.Helpers.DataHelpers;
+using SFA.DAS.Approvals.UITests.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Helpers.StepsHelper;
 using SpecFlow.Internal.Json;
 using System;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SFA.DAS.Approvals.UITests.Helpers.SqlHelpers;
 
 namespace SFA.DAS.Approvals.UITests.Project.Tests.Steps
 {
@@ -15,15 +17,31 @@ namespace SFA.DAS.Approvals.UITests.Project.Tests.Steps
     {
         private readonly SLDDataPushHelpers sldDataPushHelpers = new(context);
 
-
-        [Given("Provider submit ILR successfully for a new apprentice")]
-        public async Task GivenProviderSubmitILRSuccessfullyForANewApprentice()
+        [Given("Provider successfully submits (\\d+) ILR record containing a learner record for a \"(.*)\" Employer")]
+        public async Task GivenProviderSuccessfullySubmitsILRRecordContainingALearnerRecordForAEmployer(int NoOfApprentices, string employerType)
         {
-            var apprenticeship = new ApprenticeDataHelper().CreateNewApprenticeshipDetails(10000028, "AG12345678");
+            var apprenticeship = new ApprenticeDataHelper(context).CreateNewApprenticeshipDetails(10000028, EmployerType.Levy);
 
-            var listOfLearnerDataList = new List<LearnerDataAPIDataModel> { sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(apprenticeship) };
+            context.Set(apprenticeship);
+        }
+
+
+
+        [Given("SLD push its data into AS")]
+        public async Task GivenSLDPushItsDataIntoAS()
+        {
+            var listOfLearnerDataList = new List<LearnerDataAPIDataModel> { sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(context.GetValue<Apprenticeship>()) };
 
             await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList);
         }
+
+
+
+
+
+
+
+  
+
     }
 }

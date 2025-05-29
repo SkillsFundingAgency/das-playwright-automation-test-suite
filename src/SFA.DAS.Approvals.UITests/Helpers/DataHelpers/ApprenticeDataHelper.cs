@@ -1,4 +1,6 @@
 ﻿using Dynamitey;
+using Polly;
+using SFA.DAS.Approvals.UITests.Helpers.SqlHelpers;
 using SFA.DAS.FrameworkHelpers;
 using System;
 using System.Collections.Generic;
@@ -10,21 +12,44 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Helpers.DataHelpers
 {
-    internal class ApprenticeDataHelper
+    internal class ApprenticeDataHelper(ScenarioContext context)
     {
-        public Apprenticeship CreateNewApprenticeshipDetails(int ukprn, string agreementId)
+        public Apprenticeship CreateNewApprenticeshipDetails(int ukprn, EmployerType employerType)
         {
+            //create random apprentice, training and RPL details
             Apprentice apprentice = CreateNewApprenticeDetails();
             Training training = CreateNewApprenticeshipTrainingDetails(null);
             RPL rpl = CreateNewApprenticeshipRPLDetails();
-            
+
+            //create apprenticeship object with the above details
             Apprenticeship apprenticeship = new Apprenticeship(apprentice, training, rpl);
 
-            apprenticeship.UKPRN = ukprn;
-            apprenticeship.AgreementId = agreementId;
+            //get employer details based on the employer type
+            var employerDetails = GetEmployerDetails(employerType);
 
+            //set employer details and rest in the apprenticeship object
+            apprenticeship.EmployerDetails = employerDetails;
+            apprenticeship.UKPRN = ukprn;
 
             return apprenticeship;
+        }
+
+        private Employer GetEmployerDetails(EmployerType employerType)
+        {
+            Employer employer = new Employer();
+
+            EasAccountUser employerUser = employerType switch
+            {
+                EmployerType.NonLevy => context.GetUser<NonLevyUser>(),
+                EmployerType.NonLevyUserAtMaxReservationLimit => context.GetUser<NonLevyUserAtMaxReservationLimit>(),
+                _ => context.GetUser<LevyUser>()
+            };
+
+            employer.EmployerName = employerUser.OrganisationName;
+
+            employer.AgreementId = context.Get<AccountsDbSqlHelper>().GetAgreementId(employerUser.Username, employer.EmployerName[..3] + "%").ToString();
+
+            return employer;
         }
 
         private Apprentice CreateNewApprenticeDetails()
