@@ -15,7 +15,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Tests.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
         }
 
-        public async Task<AddApprenticeDetails_SelectJourneyPage> SelectApprenticesFromILR()
+        public async Task<AddApprenticeDetails_SelectJourneyPage> SelectOptionToApprenticesFromILR()
         {
             await page.GetByRole(AriaRole.Radio, new() { Name = "Select apprentices from ILR" }).CheckAsync();
 

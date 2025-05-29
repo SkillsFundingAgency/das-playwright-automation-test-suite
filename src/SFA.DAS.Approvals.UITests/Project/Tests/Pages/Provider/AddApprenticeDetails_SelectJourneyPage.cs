@@ -14,7 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Tests.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
         }
 
-        public async Task<ChooseAnEmployerPage> SelectCreateANewCohort()
+        public async Task<ChooseAnEmployerPage> SelectOptionCreateANewCohort()
         {
             await page.GetByRole(AriaRole.Radio, new() { Name = "Create a new cohort" }).CheckAsync();
 

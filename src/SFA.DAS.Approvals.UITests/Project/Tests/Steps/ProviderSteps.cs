@@ -21,9 +21,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Tests.Steps
         {
             var page = await new ProviderHomePage(context).GotoSelectJourneyPage();
 
-            var page1 = await new AddApprenticeDetails_EntryMothodPage(context).SelectApprenticesFromILR();
+            var page1 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
 
-            var page2 = await page1.SelectCreateANewCohort();
+            var page2 = await page1.SelectOptionCreateANewCohort();
 
             var page3 = await page2.ChooseLevyEmployer();
 

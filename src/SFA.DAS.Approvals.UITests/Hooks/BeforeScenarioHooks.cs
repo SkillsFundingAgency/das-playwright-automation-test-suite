@@ -103,14 +103,13 @@ namespace SFA.DAS.Approvals.UITests.Hooks
         [BeforeScenario(Order = 30)]
         public void SetUpDependencyConfig()
         {            
-            //Read api cnnfig from approvals:
+            //Get api cnnfig from approvals:
             var subscriptionKey = context.GetOuterApiAuthTokenConfig<OuterApiAuthTokenConfig>();
 
-            //set config for 'Outer_ApiAuthTokenConfig' in the context:
+            //Set config for 'Outer_ApiAuthTokenConfig' in the context:
             Outer_ApiAuthTokenConfig outer_ApiAuthTokenConfig = new Outer_ApiAuthTokenConfig();
             outer_ApiAuthTokenConfig.Apim_SubscriptionKey = subscriptionKey.Apim_SubscriptionKey;
             context.Set(outer_ApiAuthTokenConfig);
-
 
         }
     
