@@ -10,6 +10,9 @@ public record StandardsTestData
 public class ManagingStandardsDataHelpers
 {
     public const string LocationName = "Test Demo Automation Venue";
+
+    public const string UpdatedLocationName = "Test Demo Automation Venue";
+    public string UpdatedVenueName { get; init; } = UpdatedLocationName;
     public string EmailAddress { get; init; } = "ManagingStandardstest.demo@digital.education.gov.uk";
     public string VenueName { get; init; } = LocationName;
     public string Standard_ActuaryLevel7 { get; init; } = "Actuary (level 7)";
