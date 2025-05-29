@@ -4,7 +4,7 @@ public abstract class StubAddYourUserDetailsBasePage(ScenarioContext context) : 
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add your user details");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What is your name?");
     }
 
     protected async Task EnterNameAndContinue(string firstName, string lastName)
