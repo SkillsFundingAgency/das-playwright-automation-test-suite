@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.API.Framework.Configs;
 using SFA.DAS.Approvals.UITests.Helpers.SqlHelpers;
+using SFA.DAS.Approvals.UITests.Project;
 using SFA.DAS.TestDataCleanup.Project.Helpers.SqlDbHelper;
 using System;
 using System.Collections.Generic;
@@ -101,17 +102,15 @@ namespace SFA.DAS.Approvals.UITests.Hooks
 
         [BeforeScenario(Order = 30)]
         public void SetUpDependencyConfig()
-        {
-            //Read outer api cnnfig
+        {            
+            //Read api cnnfig from approvals:
+            var subscriptionKey = context.GetOuterApiAuthTokenConfig<OuterApiAuthTokenConfig>();
 
-
-            //set config for 'Outer_ApiAuthTokenConfig' in the context
-            //context.Set();
-
+            //set config for 'Outer_ApiAuthTokenConfig' in the context:
             Outer_ApiAuthTokenConfig outer_ApiAuthTokenConfig = new Outer_ApiAuthTokenConfig();
-            outer_ApiAuthTokenConfig.Apim_SubscriptionKey = "9b3489dcd9cc4b8aaa9fbaf259ce358d";
-            outer_ApiAuthTokenConfig.NAS_Apim_SubscriptionKey = "__NAS_Apim_SubscriptionKey__";
+            outer_ApiAuthTokenConfig.Apim_SubscriptionKey = subscriptionKey.Apim_SubscriptionKey;
             context.Set(outer_ApiAuthTokenConfig);
+
 
         }
     

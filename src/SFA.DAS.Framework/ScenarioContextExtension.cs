@@ -22,6 +22,7 @@ public static class ScenarioContextExtension
     private const string EIProjectConfigKey = "eiprojectconfigkey";
     private const string ApprenticeCommitmentsConfigKey = "apprenticecommitmentsconfigkey";
     private const string PortableFlexiJobProviderConfigKey = "portableflexijobproviderconfigkey";
+    private const string OuterApiAuthTokenConfigKey = "outerapiauthtokenconfigkey";
     #endregion
 
     #region Setters
@@ -41,6 +42,7 @@ public static class ScenarioContextExtension
     public static void SetARConfig<T>(this ScenarioContext context, T value) => Set(context, value, ARProjectConfigKey);
     public static void SetEIConfig<T>(this ScenarioContext context, T value) => Set(context, value, EIProjectConfigKey);
     public static void SetApprenticeCommitmentsConfig<T>(this ScenarioContext context, T value) => Set(context, value, ApprenticeCommitmentsConfigKey);
+    public static void SetOuterApiAuthTokenConfig<T>(this ScenarioContext context, T value) => Set(context, value, OuterApiAuthTokenConfigKey);
     private static void Replace<T>(ScenarioContext context, T value, string key) => context.Replace(key, value);
     private static void Set<T>(ScenarioContext context, T value, string key) => context.Set(value, key);
     #endregion
@@ -62,6 +64,7 @@ public static class ScenarioContextExtension
     public static T GetARConfig<T>(this ScenarioContext context) => Get<T>(context, ARProjectConfigKey);
     public static T GetEIConfig<T>(this ScenarioContext context) => Get<T>(context, EIProjectConfigKey);
     public static T GetApprenticeCommitmentsConfig<T>(this ScenarioContext context) => Get<T>(context, ApprenticeCommitmentsConfigKey);
+    public static T GetOuterApiAuthTokenConfig<T>(this ScenarioContext context) => Get<T>(context, OuterApiAuthTokenConfigKey);
     public static T Get<T>(ScenarioContext context, string key) => context.GetValue<T>(key);
     #endregion
 }

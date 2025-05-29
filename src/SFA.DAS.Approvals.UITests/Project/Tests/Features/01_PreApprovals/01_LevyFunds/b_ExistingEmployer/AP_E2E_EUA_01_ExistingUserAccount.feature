@@ -8,7 +8,6 @@ A short summary of the feature
 @selectstandardwithmultipleoptions
 Scenario: AP_E2E_EUA_01 Provider creates cohort from ILR data Employer approves it
  
-#Given SLD post ILR data into Commitments
 Given Provider submit ILR successfully for a new apprentice
 When Provider logs into Provider-Portal
 And creates an apprentice request (cohort) by selecting same apprentices

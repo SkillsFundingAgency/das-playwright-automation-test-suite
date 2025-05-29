@@ -49,13 +49,5 @@ public class ApprovalsAPISteps
         return _restResponse;
     }
 
-    [Given("SLD post ILR data into Commitments")]
-    public async Task<RestResponse> GivenSLDPostILRDataIntoCommitments()
-    {
-        await _restClient.CreateRestRequest(Method.Put, "/provider/10000028/academicyears/2425/learners", "x");
-        _restResponse = await Execute(HttpStatusCode.Accepted);
-        return _restResponse;
-    }
-
     private async Task<RestResponse> Execute(HttpStatusCode responseCode) => await _restClient.Execute(responseCode);
 }
