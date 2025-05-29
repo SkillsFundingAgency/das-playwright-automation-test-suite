@@ -18,9 +18,26 @@ namespace SFA.DAS.Approvals.UITests.Project.Tests.Steps
         private readonly SLDDataPushHelpers sldDataPushHelpers = new(context);
 
         [Given("Provider successfully submits (\\d+) ILR record containing a learner record for a \"(.*)\" Employer")]
-        public async Task GivenProviderSuccessfullySubmitsILRRecordContainingALearnerRecordForAEmployer(int NoOfApprentices, string employerType)
+        public async Task GivenProviderSuccessfullySubmitsILRRecordContainingALearnerRecordForAEmployer(int NoOfApprentices, string type)
         {
-            var apprenticeship = new ApprenticeDataHelper(context).CreateNewApprenticeshipDetails(10000028, EmployerType.Levy);
+            EmployerType employerType;
+            
+            switch (type.ToLower())
+            {
+                case "levy":
+                    employerType = EmployerType.Levy;
+                    break;
+                case "nonlevy":
+                    employerType = EmployerType.NonLevy;
+                    break;
+                case "nonlevyuseratmaxreservationlimit":
+                    employerType = EmployerType.NonLevyUserAtMaxReservationLimit;
+                    break;
+                default:
+                    throw new ArgumentException($"Unknown employer type: {type}");
+            }
+            
+            var apprenticeship = new ApprenticeDataHelper(context).CreateNewApprenticeshipDetails(10000028, employerType);
 
             context.Set(apprenticeship);
         }
