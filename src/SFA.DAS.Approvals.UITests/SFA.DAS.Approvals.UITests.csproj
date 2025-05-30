@@ -47,23 +47,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Project\Tests\Features\01_PreApprovals\FlexiJobApprenticeshipAgency\" />
-	  <Folder Include="Project\Tests\Features\01_PreApprovals\FileUpload\" />
-	  <Folder Include="Project\Tests\Features\01_PreApprovals\ProviderPermissions\" />
-	  <Folder Include="Project\Tests\Features\03_EmployerRoles\" />
-	  <Folder Include="Project\Tests\Features\02_PostApprovals\" />
-	  <Folder Include="Project\Tests\Features\01_PreApprovals\PortableFlexiJob\" />
-	  <Folder Include="Project\Tests\Features\05_LimitingStandards\" />
-	  <Folder Include="Project\Tests\Features\06_Navigation\" />
-	  <Folder Include="Project\Tests\Features\PublicSectorReporting\" />
-	  <Folder Include="Project\Tests\Features\04_ProviderRoles\" />
-	  <Folder Include="Project\Tests\Features\01_PreApprovals\01_LevyFunds\a_NewEmployer\" />
-	  <Folder Include="Project\Tests\Features\01_PreApprovals\01_LevyFunds\b_ExistingEmployer\" />
-	  <Folder Include="Project\Tests\Features\01_PreApprovals\02_NonLevyFunds\a_NewEmployer\" />
-	  <Folder Include="Project\Tests\Features\01_PreApprovals\02_NonLevyFunds\b_ExistingEmployer\" />
-	  <Folder Include="Project\Tests\Features\01_PreApprovals\04_LTM\" />
-	  <Folder Include="Project\Tests\Features\01_PreApprovals\03_TransfersConnection\" />
-	  <Folder Include="Project\Tests\Pages\Employer\" />
+	  <Folder Include="Project\Features\01_PreApprovals\FlexiJobApprenticeshipAgency\" />
+	  <Folder Include="Project\Features\01_PreApprovals\FileUpload\" />
+	  <Folder Include="Project\Features\01_PreApprovals\ProviderPermissions\" />
+	  <Folder Include="Project\Features\03_EmployerRoles\" />
+	  <Folder Include="Project\Features\02_PostApprovals\" />
+	  <Folder Include="Project\Features\01_PreApprovals\PortableFlexiJob\" />
+	  <Folder Include="Project\Features\05_LimitingStandards\" />
+	  <Folder Include="Project\Features\06_Navigation\" />
+	  <Folder Include="Project\Features\PublicSectorReporting\" />
+	  <Folder Include="Project\Features\04_ProviderRoles\" />
+	  <Folder Include="Project\Features\01_PreApprovals\01_LevyFunds\a_NewEmployer\" />
+	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\a_NewEmployer\" />
+	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\b_ExistingEmployer\" />
+	  <Folder Include="Project\Features\01_PreApprovals\04_LTM\" />
+	  <Folder Include="Project\Features\01_PreApprovals\03_TransfersConnection\" />
+	  <Folder Include="Project\Pages\Employer\" />
 	</ItemGroup>
 
 </Project>
