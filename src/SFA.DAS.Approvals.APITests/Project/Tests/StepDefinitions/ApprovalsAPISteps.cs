@@ -42,12 +42,14 @@ public class ApprovalsAPISteps
         _restResponse = await Execute(responseCode);
     }
 
-    public async Task<RestResponse> SLDPushDataToAS(string payload)
+    public async Task<RestResponse> SLDPushDataToAS(string resource, string payload)
     {
-        await _restClient.CreateRestRequest(Method.Put, "/provider/10000028/academicyears/2425/learners", payload);
+        await _restClient.CreateRestRequest(Method.Put, resource, payload);
         _restResponse = await Execute(HttpStatusCode.Accepted);
         return _restResponse;
     }
+
+    
 
     private async Task<RestResponse> Execute(HttpStatusCode responseCode) => await _restClient.Execute(responseCode);
 }
