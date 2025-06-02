@@ -151,8 +151,19 @@ public abstract class InterimEmployerBasePage : Navigate
         });
 
         await Assertions.Expect(page1.GetByRole(AriaRole.Main)).ToContainTextAsync("Useful Links");
-    }
 
+        await page1.CloseAsync();
+    }
+    public async Task GoToAccessibilityStatementPage()
+    {
+        await page.Locator("footer >> text=Accessibility statement").ClickAsync();
+
+        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Assertions.Expect(page.GetByRole(AriaRole.Main))
+            .ToContainTextAsync("Accessibility statement");
+    }
+     
     public async Task<RenameAccountPage> GoToRenameAccountPage()
     {
         await NavigateToSettings("Rename account");

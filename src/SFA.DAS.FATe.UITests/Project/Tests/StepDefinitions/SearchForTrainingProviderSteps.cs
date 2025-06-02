@@ -33,12 +33,6 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _searchForTrainingProviderPage.SearchWithAUkprn();
         }
 
-        [Then("the results page is displayed with training providers")]
-        public async Task ThenTheResultsPageIsDisplayedWithTrainingProviders()
-        {
-            await _searchForTrainingProviderPage.VerifyPage(); // The reuslt page is yet to be developed
-        }
-
         [When("the user should not be able to search without a UKPRN")]
         public async Task WhenTheUserShouldNotBeAbleToSearchWithoutAUKPRN()
         {

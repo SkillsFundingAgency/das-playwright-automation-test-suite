@@ -44,7 +44,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         [Then("the relevant training courses are displayed")]
         public async Task ThenTheRelevantTrainingCoursesAreDisplayed()
         {
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Coventry, West Midlands (Across England)");
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Coventry, West Midlands (within 10 miles)");
         }
 
         [When("the user searches for a course without location")]

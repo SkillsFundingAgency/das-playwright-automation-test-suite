@@ -28,7 +28,7 @@ public class SearchHomePage(ScenarioContext context) : SupportConsoleBasePage(co
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Employer Account Search" }).ClickAsync();
 
-        page.Locator($"#{searchType}").FillAsync(criteria);
+        await page.Locator($"#{searchType}").FillAsync(criteria);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 

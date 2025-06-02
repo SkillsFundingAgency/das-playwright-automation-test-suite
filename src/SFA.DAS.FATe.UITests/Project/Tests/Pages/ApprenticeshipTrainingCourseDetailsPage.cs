@@ -21,7 +21,7 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
     {
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await VerifyWorkLocationAndTravelDistance("Apprentice's work location:", "TW14 Hounslow");
-        await VerifyWorkLocationAndTravelDistance("Apprentice can travel:", "across England");
+        await VerifyWorkLocationAndTravelDistance("Apprentice can travel:", "10 miles");
         await ViewProvidersForThisCourse();
         return await VerifyPageAsync(() => new TrainingProvidersPage(context));
     }
@@ -34,7 +34,7 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
     }
     public async Task VerifyWorkLocationAndTravelDistance(string headingLabel, string expectedValue)
     {
-        var heading = page.Locator($"h3:has-text(\"{headingLabel}\")");
+        var heading = page.Locator($":is(h2, h3):has-text(\"{headingLabel}\")");
         var value = heading.Locator("span[class*='govuk-!-font-weight-regular']");
 
         await Assertions.Expect(value).ToBeVisibleAsync();

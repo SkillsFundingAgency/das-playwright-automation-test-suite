@@ -12,11 +12,11 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
     public async Task VerifyAndApplySingleFilters_ProviderPage()
     {
         await VerifyNoFiltersAreApplied();
-        await VerifyDistanceFilterSelection("Across England");
+        await VerifyDistanceFilterSelection("10 miles");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (Across England)");
-        await ClearSpecificFilter("TW14 Hounslow (Across England)");
+        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
+        await ClearSpecificFilter("TW14 Hounslow (within 10 miles)");
         await VerifyNoFiltersAreApplied();
         await SelectApprenticeTravelDistance("10 miles");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
@@ -26,7 +26,7 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         await VerifyNoFiltersAreApplied();
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (Across England)");
+        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
         await SelectApprenticeTravelDistance("20 miles");
         await ApplyFilters();
         await VerifyFilterIsSet("TW14 Hounslow (within 20 miles)");
@@ -51,8 +51,8 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         await ClearSpecificFilter("Above 70%");
         await CheckAndVerifyCheckbox("filteritem-modes-filter-Workplace");
         await ApplyFilters();
-        await VerifyFilterIsSet("At apprentice’s workplace");
-        await ClearSpecificFilter("At apprentice’s workplace"); 
+        await VerifyFilterIsSet("At apprentice's workplace");
+        await ClearSpecificFilter("At apprentice's workplace"); 
         await CheckAndVerifyCheckbox("filteritem-modes-filter-Provider");
         await ApplyFilters();
         await VerifyFilterIsSet("Day release");
@@ -74,7 +74,7 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
     {
   
         await VerifyNoFiltersAreApplied();
-        await VerifyDistanceFilterSelection("Across England");
+        await VerifyDistanceFilterSelection("10 miles");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await SelectApprenticeTravelDistance("10 miles");
         await SelectAchievementRateCheckbox("Excellent");
@@ -85,40 +85,33 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         await VerifyFilterIsSet("Above 70%");
         await VerifyFilterIsSet("Day release");
         await VerifyFilterIsSet("Block release");
-        await VerifyFilterIsSet("At apprentice’s workplace");
+        await VerifyFilterIsSet("At apprentice's workplace");
         await ClearAllFilters();
         await VerifyNoFiltersAreApplied();
     }
-    public async Task SelectEmployerProviderRating(string optionValue)
+    public async Task SelectSortResultsDropdown(string optionValue)
     {
         var dropdown = page.Locator("#course-providers-orderby");
 
         await dropdown.SelectOptionAsync(new SelectOptionValue { Value = optionValue });
     }
-    public async Task<string> AddProviderToShortlist(string ukprn)
+    public async Task ClickFirstProviderLink()
     {
-        var buttonSelector = $"#add-to-shortlist-{ukprn}";
-        var button = page.Locator(buttonSelector);
-        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
-
-        var parentContainer = button.Locator("xpath=ancestor::div[contains(@class, 'app-course-provider')]");
-        var providerNameLocator = parentContainer.Locator(".govuk-heading-m .das-search-results__link");
-        var providerName = await providerNameLocator.InnerTextAsync();
-
-        await button.ClickAsync();
-        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden });
-
-        return providerName.Trim();
+        var providerLink = page.Locator("a[id^='provider-']").First;
+        await providerLink.ClickAsync();
     }
-    public async Task ClickRemoveFromShortlistAsync()
+    public async Task VerifyProviderListed(string providerName, bool isListed)
     {
-        var removeButton = page.GetByRole(AriaRole.Button, new() { Name = "Remove from shortlist" });
-        await removeButton.ClickAsync();
-    }
-    public async Task ClickViewShortlistAsync()
-    {
-        var viewShortlistLink = page.GetByRole(AriaRole.Link, new() { Name = "View shortlist" });
-        await viewShortlistLink.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
-        await viewShortlistLink.ClickAsync();
+        var locator = page.Locator($"//a[@class='govuk-link' and normalize-space(text())='{providerName}']");
+        var visible = await locator.IsVisibleAsync();
+
+        if (isListed)
+        {
+            Assert.True(visible, $"Expected provider '{providerName}' to be listed, but it was not.");
+        }
+        else
+        {
+            Assert.False(visible, $"Expected provider '{providerName}' to NOT be listed, but it was.");
+        }
     }
 }

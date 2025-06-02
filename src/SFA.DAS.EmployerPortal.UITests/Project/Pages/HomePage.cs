@@ -1,5 +1,7 @@
 ﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
+using SFA.DAS.EmployerPortal.UITests.Project.Tests.Pages;
 using System;
+
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
@@ -88,9 +90,50 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         await VerifyTaskList(messageText);
     }
 
+    public async Task VerifyTransfersAvailableToAddAnApprenticeMessageShown(int numberOfChanges)
+    {
+        var messageText = numberOfChanges == 1 ? "1 transfer available to add an apprentice" : $"{numberOfChanges} transfers available to add an apprentice";
+
+        await VerifyTaskList(messageText);
+    }
+
+    public async Task VerifyTransfersToAcceptMessageShown(int numberOfChanges)
+    {
+        var messageText = numberOfChanges == 1 ? "1 transfer to accept" : $"{numberOfChanges} transfers to accept";
+        
+        await VerifyTaskList(messageText);
+    }
+    
     public async Task VerifyTransferRequestReceivedMessageShown()
     {
         await VerifyTaskList("Transfer request received");
+    }
+    public async Task<UseTransferFundsPage> ClickViewTransfersAvailableToAddApprentice()
+    {
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfer available to add apprentice" }).GetByRole(AriaRole.Link).ClickAsync();
+        
+        return await VerifyPageAsync(() => new UseTransferFundsPage(context));    
+    }
+
+    public async Task<MyTransferApplicationsPage> ClickViewMultipleTransfersAvailableToAddApprenticeLink()
+    {
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfers available to add an apprentice" }).GetByRole(AriaRole.Link).ClickAsync();
+        
+        return await VerifyPageAsync(() => new MyTransferApplicationsPage(context));
+    }
+
+    public async Task<ApplicationDetailsPage> ClickViewTransferToAccept()
+    {
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfer to accept" }).GetByRole(AriaRole.Link).ClickAsync();
+
+        return await VerifyPageAsync(() => new ApplicationDetailsPage(context));
+    }
+
+    public async Task<MyTransferApplicationsPage> ClickViewMultipleTransfersToAccept()
+    {
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfers to accept" }).GetByRole(AriaRole.Link).ClickAsync();
+        
+        return await VerifyPageAsync(() => new MyTransferApplicationsPage(context));   
     }
 
     public async Task VerifyTransferConnectionRequestsMessageShown(int numberOfChanges)
@@ -121,18 +164,18 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
     }
 
-    public async Task<TransfersPage> ClickViewDetailsForTransferRequests()
+    public async Task<TransferPage> ClickViewDetailsForTransferRequests()
     {
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "Transfer request received" }).GetByRole(AriaRole.Link).ClickAsync();
 
-        return await VerifyPageAsync(() => new TransfersPage(context));
+        return await VerifyPageAsync(() => new TransferPage(context));
     }
 
-    public async Task<TransfersPage> ClickViewDetailsForTransferConnectionRequests()
+    public async Task<TransferPage> ClickViewDetailsForTransferConnectionRequests()
     {
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "connection requests to review" }).GetByRole(AriaRole.Link).ClickAsync();
 
-        return await VerifyPageAsync(() => new TransfersPage(context));
+        return await VerifyPageAsync(() => new TransferPage(context));
     }
 
     public async Task<MyTransferPledgesPage> ClickViewTransferPledgeApplications()
@@ -141,37 +184,36 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
 
         return await VerifyPageAsync(() => new MyTransferPledgesPage(context));
     }
-}
 
-public class ManageYourApprenticesPage(ScenarioContext context) : EmployerPortalBasePage(context)
-{
-    public override async Task VerifyPage()
+    public class ManageYourApprenticesPage(ScenarioContext context) : EmployerPortalBasePage(context)
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprentices");
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprentices");
+        }
     }
-}
 
-
-public class ApprenticeRequestsPage(ScenarioContext context) : EmployerPortalBasePage(context)
-{
-    public override async Task VerifyPage()
+    public class ApprenticeRequestsPage(ScenarioContext context) : EmployerPortalBasePage(context)
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
+        }
     }
-}
 
-public class TransfersPage(ScenarioContext context) : EmployerPortalBasePage(context)
-{
-    public override async Task VerifyPage()
+    public class TransferPage(ScenarioContext context) : EmployerPortalBasePage(context)
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Transfers");
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Transfers");
+        }
     }
-}
 
-public class MyTransferPledgesPage(ScenarioContext context) : EmployerPortalBasePage(context)
-{
-    public override async Task VerifyPage()
+    public class MyTransferPledgesPage(ScenarioContext context) : EmployerPortalBasePage(context)
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("My transfer pledges");
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("My transfer pledges");
+        }
     }
 }

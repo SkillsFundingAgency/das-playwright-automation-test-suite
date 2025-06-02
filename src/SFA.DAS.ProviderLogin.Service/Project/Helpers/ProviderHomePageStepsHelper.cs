@@ -1,5 +1,4 @@
-﻿using Microsoft.Playwright;
-using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
+﻿using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
 using SFA.DAS.Login.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 

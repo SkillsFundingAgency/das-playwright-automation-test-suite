@@ -117,7 +117,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task ClearSpecificFilter(string filterName)
     {
-        var filterLocator = page.Locator($"a.das-filter__tag.das-breakable:has-text('{filterName}')");
+        var filterLocator = page.Locator($"a.das-filter__tag.das-breakable:has-text(\"{filterName}\")");
 
         if (await filterLocator.CountAsync() > 0)
         {
@@ -156,7 +156,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyFilterIsSet(string filterText)
     {
-        var filterLocator = page.Locator($"a.das-filter__tag.das-breakable:has-text('{filterText}')");
+        var filterLocator = page.Locator($"a.das-filter__tag.das-breakable:has-text(\"{filterText}\")");
         await filterLocator.WaitForAsync();
         await Assertions.Expect(filterLocator).ToBeVisibleAsync();
     }
@@ -252,7 +252,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyProvidersCount(int expectedCount)
     {
-        var text = await page.Locator("p.govuk-body.govuk-\\!\\-font-weight-bold.das-no-wrap").TextContentAsync();
+        var text = await page.Locator("p.govuk-body.govuk-\\!\\-font-weight-bold.govuk-\\!\\-margin-0").TextContentAsync();
         int actualCount = int.Parse(Regex.Match(text ?? "", @"\d+").Value);
 
         if (actualCount != expectedCount)
@@ -302,7 +302,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyAchievementRatesDescendingAsync()
     {
-        var rateElements = page.Locator(".course-provider-results-bottom-panel .govuk-body");
+        var rateElements = page.Locator("dd.govuk-summary-list__value");
         var count = await rateElements.CountAsync();
 
         if (count == 0)
@@ -347,6 +347,45 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
                 throw new InvalidOperationException($"Achievement rates are not in descending order. Rate {rates[i]}% is followed by {rates[i + 1]}%.");
             }
         }
+    }
+    public async Task<string> AddProviderToShortlist(string ukprn)
+    {
+        var buttonSelector = $"#add-to-shortlist-{ukprn}";
+        var button = page.Locator(buttonSelector);
+        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
+
+        var providerNameLocator = page.Locator($"#provider-{ukprn}");
+        await providerNameLocator.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
+
+        var providerName = await providerNameLocator.InnerTextAsync();
+
+        await button.ClickAsync();
+        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden });
+
+        return providerName.Trim();
+    }
+    public async Task ClickRemoveFromShortlistAsync()
+    {
+        var removeButton = page.GetByRole(AriaRole.Button, new() { Name = "Remove from shortlist" });
+        await removeButton.ClickAsync();
+    }
+    public async Task ViewTrainingProvidersLink()
+    {
+        var link = page.GetByRole(AriaRole.Link, new() { Name = "View training providers for this course" });
+        await link.ClickAsync();
+    }
+
+    public async Task ClickViewShortlistAsync()
+    {
+        var viewShortlistLink = page.GetByRole(AriaRole.Link, new() { Name = "View shortlist" });
+        await viewShortlistLink.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
+        await viewShortlistLink.ClickAsync();
+    }
+    public async Task AddToShortList_TrainingProviderPage()
+    {
+        var button = page.GetByRole(AriaRole.Button, new() { Name = "Add to shortlist" });
+        await button.ClickAsync();
+        await button.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Detached });
     }
     public async Task SelectEmployerProviderRatingAsync(string optionValue)
     {     var dropdown = page.Locator("#course-providers-orderby");

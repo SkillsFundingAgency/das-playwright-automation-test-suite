@@ -56,10 +56,10 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         {
             await _trainingProvidersPage.VerifyDefaultSortOrder_AchievementRate();
             await _trainingProvidersPage.VerifyAchievementRatesDescendingAsync();
-            await _trainingProvidersPage.SelectEmployerProviderRating("EmployerProviderRating");
+            await _trainingProvidersPage.SelectSortResultsDropdown("EmployerProviderRating");
             await _trainingProvidersPage.VerifyEmployerReviewsSortedAsync("employer reviews");
-            await _trainingProvidersPage.SelectEmployerProviderRating("ApprenticeProviderRating");
-            await _trainingProvidersPage.SelectEmployerProviderRating("Distance");
+            await _trainingProvidersPage.SelectSortResultsDropdown("ApprenticeProviderRating");
+            await _trainingProvidersPage.SelectSortResultsDropdown("AchievementRate");
         }
     }
 }
