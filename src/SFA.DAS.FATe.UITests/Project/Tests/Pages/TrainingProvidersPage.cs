@@ -1,13 +1,11 @@
-﻿using System.Globalization;
-using System.Text.RegularExpressions;
-using SFA.DAS.FATe.UITests.Project.Tests.Pages;
-
-namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
 
 public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).
         ToContainTextAsync("Training providers for");
+
+    public async Task RequestTrainingProvider() => await page.GetByRole(AriaRole.Link, new() { Name = "Ask if training providers can" }).ClickAsync();
 
     public async Task VerifyAndApplySingleFilters_ProviderPage()
     {
@@ -52,7 +50,7 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         await CheckAndVerifyCheckbox("filteritem-modes-filter-Workplace");
         await ApplyFilters();
         await VerifyFilterIsSet("At apprentice's workplace");
-        await ClearSpecificFilter("At apprentice's workplace"); 
+        await ClearSpecificFilter("At apprentice's workplace");
         await CheckAndVerifyCheckbox("filteritem-modes-filter-Provider");
         await ApplyFilters();
         await VerifyFilterIsSet("Day release");
@@ -72,7 +70,7 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
     }
     public async Task VerifyAndApplyMultipleFilters_ProviderPage()
     {
-  
+
         await VerifyNoFiltersAreApplied();
         await VerifyDistanceFilterSelection("10 miles");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);

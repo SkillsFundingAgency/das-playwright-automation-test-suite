@@ -1,8 +1,4 @@
-﻿
-using SFA.DAS.RequestApprenticeshipTraining.UITests.Project.Helpers;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.RequestApprenticeshipTraining.UITests.Project;
+﻿namespace SFA.DAS.RequestApprenticeshipTraining.UITests.Project;
 
 [Binding]
 public class RatHooks(ScenarioContext context)

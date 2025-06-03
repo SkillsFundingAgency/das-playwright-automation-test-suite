@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SFA.DAS.RequestApprenticeshipTraining.UITests.Project.Helpers;
+﻿namespace SFA.DAS.RequestApprenticeshipTraining.UITests.Project.Helpers;
 
 public class RoatpV2SqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.ManagingStandardsDbConnectionString)
 {

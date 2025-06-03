@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SFA.DAS.RequestApprenticeshipTraining.UITests.Project.Helpers;
+﻿namespace SFA.DAS.RequestApprenticeshipTraining.UITests.Project.Helpers;
 
 public class RatSqlHelper(ObjectContext objectContext, DbConfig config) : SqlDbHelper(objectContext, config.RatDbConnectionString)
 {

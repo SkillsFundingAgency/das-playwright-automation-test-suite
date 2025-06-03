@@ -1,13 +1,17 @@
-﻿namespace SFA.DAS.RequestApprenticeshipTraining.UITests.Project.Helpers;
+﻿
+
+namespace SFA.DAS.RequestApprenticeshipTraining.UITests.Project.Helpers;
 
 public class EmployerPortalViaRatLoginHelper(ScenarioContext context) : EmployerPortalLoginHelper(context)
 {
-    //public AskIfTrainingProvidersCanRunThisCoursePage LoginViaRat(RatEmployerBaseUser loginUser)
-    //{
-    //    SetCredentials(loginUser, true);
+    public async Task<AskIfTrainingProvidersCanRunThisCoursePage> LoginViaRat(RatEmployerBaseUser loginUser)
+    {
+        SetCredentials(loginUser, true);
 
-    //    new StubSignInEmployerPage(context).Login(loginUser).Continue();
+        var page = await new StubSignInEmployerPage(context).Login(loginUser);
 
-    //    return new(context);
-    //}
+        await page.Continue();
+
+        return await VerifyPageHelper.VerifyPageAsync(() => new AskIfTrainingProvidersCanRunThisCoursePage(context));
+    }
 }

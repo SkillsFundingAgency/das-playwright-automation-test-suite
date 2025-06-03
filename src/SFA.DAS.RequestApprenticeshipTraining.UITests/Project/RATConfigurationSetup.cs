@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SFA.DAS.RequestApprenticeshipTraining.UITests.Project;
+﻿namespace SFA.DAS.RequestApprenticeshipTraining.UITests.Project;
 
 [Binding]
 public class RatConfigurationSetup(ScenarioContext context)

@@ -1,8 +1,4 @@
-﻿using Azure;
-using SFA.DAS.FATe.UITests.Project.Tests.Pages;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
 
 public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBasePage(context)
 {
@@ -18,6 +14,14 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
             throw new Exception("Expected a no-results message but none were found.");
         }
     }
+
+    public async Task SearchApprenticeshipInApprenticeshipTrainingCoursesPage(string searchTerm)
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Course" }).FillAsync(searchTerm);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
+    }
+
     public async Task<Search_TrainingCourses_ApprenticeworkLocationPage> VerifyNoresultStartAnewSearchLink()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "start a new search" }).ClickAsync();
@@ -114,7 +118,8 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await ClearAllFilters();
     }
     public async Task ApplyJobcategoriesFilterAndVerifyResults_ProtectiveServices()
-    {   await VerifyNoFiltersAreApplied();
+    {
+        await VerifyNoFiltersAreApplied();
         await SelectJobCategory("Protective services");
         await ApplyFilters();
         await VerifyFilterIsSet("Protective services");
@@ -128,6 +133,19 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
                      .Filter(new() { Has = page.Locator("span.das-no-wrap") });
         await Assertions.Expect(courseLink).ToBeVisibleAsync();
         await courseLink.ClickAsync();
+        return await VerifyPageAsync(() => new ApprenticeshipTrainingCourseDetailsPage(context));
+    }
+
+    public async Task<ApprenticeshipTrainingCourseDetailsPage> SelectFirstTrainingResult(string title)
+    {
+        var firstLinkText = await page.GetByRole(AriaRole.Link, new() { Name = title, Exact = false }).First.TextContentAsync();
+
+        objectContext.SetTrainingCourseName(firstLinkText);
+
+        objectContext.SetDebugInformation($"selected '{firstLinkText}' course");
+
+        await page.GetByRole(AriaRole.Link, new() { Name = firstLinkText, Exact = true }).ClickAsync();
+
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCourseDetailsPage(context));
     }
 }

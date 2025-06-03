@@ -438,9 +438,9 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
 
             if (i < sortedEmployerReviews.Count - 1)
             {
-                var nextReview = sortedEmployerReviews[i + 1];
-                var nextReviewElement = nextReview.Element;
-                var nextRating = nextReview.Rating;
+                var (Rating, Element) = sortedEmployerReviews[i + 1];
+                var nextReviewElement = Element;
+                var nextRating = Rating;
 
                 if (currentRating < nextRating)
                 {
