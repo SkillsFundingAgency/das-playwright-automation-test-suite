@@ -4,7 +4,8 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
 {
     public override async Task VerifyPage()
     {
-        var expectedCourseTitle = context.Get<string>("SelectedCourseName");
+        var expectedCourseTitle = objectContext.GetTrainingCourseName();
+
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(expectedCourseTitle);
     }
 

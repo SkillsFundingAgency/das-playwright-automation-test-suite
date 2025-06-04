@@ -128,7 +128,8 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     }
     public async Task<ApprenticeshipTrainingCourseDetailsPage> SelectCourseByName(string courseNameWithLevel)
     {
-        context.Set(courseNameWithLevel, "SelectedCourseName");
+        objectContext.SetTrainingCourseName(courseNameWithLevel);
+
         var courseLink = page.GetByRole(AriaRole.Link, new() { Name = courseNameWithLevel, Exact = true })
                      .Filter(new() { Has = page.Locator("span.das-no-wrap") });
         await Assertions.Expect(courseLink).ToBeVisibleAsync();
@@ -138,7 +139,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
 
     public async Task<ApprenticeshipTrainingCourseDetailsPage> SelectFirstTrainingResult(string title)
     {
-        var firstLinkText = await page.GetByRole(AriaRole.Link, new() { Name = title, Exact = false }).First.TextContentAsync();
+        var firstLinkText = await page.GetByRole(AriaRole.Link, new() { Name = title, Exact = false }).Filter(new() { Has = page.Locator("span.das-no-wrap") }).First.TextContentAsync();
 
         objectContext.SetTrainingCourseName(firstLinkText);
 
