@@ -5,7 +5,7 @@ public class RatConfigurationSetup(ScenarioContext context)
 {
     private readonly ConfigSection _configSection = context.Get<ConfigSection>();
 
-    [BeforeScenario(Order = 2)]
+    [BeforeScenario(Order = 12)]
     public async Task SetUpRATConfigConfiguration()
     {
         await context.SetEasLoginUser(
