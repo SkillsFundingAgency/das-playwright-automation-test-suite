@@ -101,7 +101,7 @@ public class WhereIsTheApprenticeshipLocationPage(ScenarioContext context, bool 
 
     public async Task<SelectTrainingOptionsPage> ChooseRegion()
     {
-        var regions = await page.GetByRole(AriaRole.Checkbox, new() { Checked = false }).AllTextContentsAsync();
+        var regions = await page.Locator(".govuk-checkboxes__label").AllTextContentsAsync();
 
         var listOfRegions = regions.ToList();
 
