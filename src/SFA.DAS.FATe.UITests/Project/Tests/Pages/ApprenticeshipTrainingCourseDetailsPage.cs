@@ -63,9 +63,9 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
         await popup.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
         var popupUrl = popup.Url;
 
-        if (!popupUrl.Contains("instituteforapprenticeships"))
+        if (!popupUrl.Contains("skillsengland"))
         {
-            throw new Exception($"Expected URL to contain 'instituteforapprenticeships', but got: {popupUrl}");
+            throw new Exception($"Expected URL to contain 'skillsengland', but got: {popupUrl}");
         }
     }
     public async Task VerifyWorkLocationAndTravelDistanceNotPresent()
