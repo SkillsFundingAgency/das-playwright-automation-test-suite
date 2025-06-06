@@ -14,14 +14,15 @@ public class SearchHomePage(ScenarioContext context) : SupportConsoleBasePage(co
 
     public async Task<AccountOverviewPage> SearchByHashedAccountIdAndViewAccount() => await SearchAndViewAccount(config.HashedAccountId);
 
-    public async Task<AccountOverviewPage> SearchByAccountNameAndViewAccount() => await SearchAndViewAccount(config.AccountName);
+    public async Task<AccountOverviewPage> SearchByAccountNameAndViewAccount() => await SearchAndViewAccount(config.AccountName, AccountSearchType.EmployerName);
 
     public async Task<AccountOverviewPage> SearchByPayeSchemeAndViewAccount() => await SearchAndViewAccount(config.PayeScheme, AccountSearchType.PayeRef);
 
     public enum AccountSearchType
     {
         PublicHashedId,
-        PayeRef
+        PayeRef,
+        EmployerName
     }
 
     private async Task<AccountOverviewPage> SearchAndViewAccount(string criteria, AccountSearchType searchType = AccountSearchType.PublicHashedId)
