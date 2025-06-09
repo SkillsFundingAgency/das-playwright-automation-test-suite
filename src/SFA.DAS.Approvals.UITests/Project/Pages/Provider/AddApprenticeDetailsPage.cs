@@ -12,8 +12,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
     internal class AddApprenticeDetailsPage(ScenarioContext context) : ApprovalsProviderBasePage(context)
     {
+        #region locators
         private ILocator employerName => page.Locator("#employer-value");
         private ILocator trainingCourse => page.Locator("#course-value");
+        private ILocator deliveryModel => page.Locator("#delivery-model-value");
         private ILocator ulnTextBox => page.GetByRole(AriaRole.Textbox, new() { Name = "Unique learner number" });
         private ILocator firstNameTextBox => page.GetByRole(AriaRole.Textbox, new() { Name = "First Name" });
         private ILocator lastNameTextBox => page.GetByRole(AriaRole.Textbox, new() { Name = "Last Name" });
@@ -27,6 +29,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator trainingEndYearTextBox => page.GetByRole(AriaRole.Group, new() { Name = "Planned training end date" }).GetByLabel("Year");
         private ILocator trainingCostTextBox => page.GetByRole(AriaRole.Spinbutton, new() { Name = "Total agreed apprenticeship" });
         private ILocator referenceTextBox => page.GetByRole(AriaRole.Textbox, new() { Name = "Reference (optional)" });
+        private ILocator addButton => page.GetByRole(AriaRole.Button, new() { Name = "Add" });
+        #endregion
 
         public override async Task VerifyPage()
         {
@@ -58,6 +62,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         }
 
+        public async Task<RecognitionOfPriorLearningPage> ClickAddButton()
+        {
+            await addButton.ClickAsync();
+
+            return await VerifyPageAsync(() => new RecognitionOfPriorLearningPage(context));
+        }
 
     }
 }

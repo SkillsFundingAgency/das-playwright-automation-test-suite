@@ -33,17 +33,26 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             await page5.ValidateApprenticeDetailsMatchWithILRData();
 
-            //verify apprentice details are correct
-            //Click on Add button
-            //Approve cohort
-            //Save Cohort Ref
+            var page6 = await page5.ClickAddButton();
+
+            var page7 = await page6.SelectNoForRPL();           
+            
         }
 
 
         [Then("Provider can send it to the Employer for approval")]
-        public void ThenProviderCanSendItToTheEmployerForApproval()
+        public async void ThenProviderCanSendItToTheEmployerForApproval()
         {
-            throw new PendingStepException();
+            var page = new ApproveApprenticeDetailsPage(context);
+
+            await page.VerifyCohort();
+
+            var page1 = await page.ProviderApproveCohort();
+
+            await page1.VerifyCohortApprovedAndSentToEmployer();
+
+            await page1.GoToApprenticeRequests();
+
         }
 
         [Then(@"apprentice request \(cohort\) is available under \'Apprentice requests \>\ With employers\'")]

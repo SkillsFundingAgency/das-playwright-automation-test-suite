@@ -87,7 +87,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             training.TotalPrice = training.EpaoPrice + training.TrainingPrice;
             training.IsFlexiJob = false;
             training.PlannedOTJTrainingHours = 1200;
-            training.StandardCode = 123; // Example standard code
+            training.StandardCode = 5; // Example standard code
             training.ConsumerReference = "CR123456";
 
             return training;
