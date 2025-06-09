@@ -23,14 +23,14 @@ public class MS_TrainingVenue_Steps(ScenarioContext context)
         await page5.AddVenueDetailsAndSubmit();
     }
 
-    [Then(@"the provider is able to update the new training venuw")]
-    public async Task ThenTheProviderIsAbleToUpdateTheNewTrainingVenuw()
+    [Then(@"the provider is able to update the new training venue")]
+    public async Task ThenTheProviderIsAbleToUpdateTheNewTrainingVenue()
     {
         var page = new TrainingVenuesPage(context);
 
         var page1 = await page.AccessNewTrainingVenue_Added();
 
-        var page2 = await page1.Click_UpdateContactDetails();
+        var page2 = await page1.Click_ChangeVenueName();
 
         await page2.UpdateVenueDetailsAndSubmit();
     }

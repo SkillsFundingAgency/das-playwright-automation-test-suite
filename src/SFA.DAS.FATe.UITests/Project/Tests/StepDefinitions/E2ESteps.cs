@@ -1,12 +1,4 @@
-﻿using System.Threading.Tasks;
-using Polly;
-using SFA.DAS.FATe.UITests.Helpers;
-using SFA.DAS.FATe.UITests.Project.Tests.Pages;
-using SFA.DAS.ProviderLogin.Service.Project.Helpers;
-using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
-using SFA.DAS.ManagingStandards.UITests.Project.Helpers;
-using Microsoft.IdentityModel.Logging;
-using Azure;
+﻿using SFA.DAS.FATe.UITests.Project.Tests.Pages;
 
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
@@ -23,10 +15,9 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         private readonly ShortlistPage _shortlistPage;
         private readonly TrainingProvidersPage _trainingProvidersPage;
         private readonly ApprenticeshipTrainingCourseDetailsPage _apprenticeshipTrainingCourseDetailsPage;
-        private string providerName;
-        private ScenarioContext context;
-        private string StandardName;
-
+        private readonly string providerName;
+        private readonly ScenarioContext context;
+        
         public E2ESteps(ScenarioContext context)
         {
             this.context = context;
@@ -110,7 +101,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         [When("the user accesses training providers for this course")]
         public async Task WhenTheUserAccessesTrainingProvidersForThisCourse()
         {
-           await _specific_TrainingProviderPage.ViewTrainingProvidersLink();
+            await _specific_TrainingProviderPage.ViewTrainingProvidersLink();
         }
 
         [Then("the user navigates back to the training provider details page")]

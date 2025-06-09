@@ -1,15 +1,14 @@
-﻿using Azure;
-using SFA.DAS.FATe.UITests.Project.Tests.Pages;
-
-namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
 
 public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : FATeBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        var expectedCourseTitle = context.Get<string>("SelectedCourseName");
+        var expectedCourseTitle = objectContext.GetTrainingCourseName();
+
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(expectedCourseTitle);
     }
+
     public async Task<TrainingProvidersPage> ViewProvidersForThisCourse()
     {
         var viewProvidersButton = page.GetByRole(AriaRole.Link, new() { Name = "View providers for this course" });
@@ -17,6 +16,26 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
         await viewProvidersButton.ClickAsync();
         return await VerifyPageAsync(() => new TrainingProvidersPage(context));
     }
+
+    public async Task<TrainingProvidersPage> ViewProvidersForThisCourse(bool filterByLocation, string location)
+    {
+        if (filterByLocation)
+        {
+            location = string.IsNullOrEmpty(location) ? RandomDataGenerator.RandomTown() : location;
+
+            await page.GetByRole(AriaRole.Combobox, new() { Name = "Enter a city or postcode" }).FillAsync(location);
+
+            await page.GetByRole(AriaRole.Option, new() { Name = location, Exact = false }).First.ClickAsync();
+
+            await Assertions.Expect(page.Locator("form")).ToContainTextAsync("Apprentice can travel:");
+
+        }
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "View providers for this course" }).ClickAsync();
+
+        return new TrainingProvidersPage(context);
+    }
+
     public async Task<TrainingProvidersPage> EnterLocationAndViewProviders_PartialPostcode_AcrossEngland()
     {
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
@@ -34,7 +53,7 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
     }
     public async Task VerifyWorkLocationAndTravelDistance(string headingLabel, string expectedValue)
     {
-        var heading = page.Locator($"h3:has-text(\"{headingLabel}\")");
+        var heading = page.Locator($":is(h2, h3):has-text(\"{headingLabel}\")");
         var value = heading.Locator("span[class*='govuk-!-font-weight-regular']");
 
         await Assertions.Expect(value).ToBeVisibleAsync();
@@ -63,9 +82,9 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
         await popup.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
         var popupUrl = popup.Url;
 
-        if (!popupUrl.Contains("instituteforapprenticeships"))
+        if (!popupUrl.Contains("skillsengland"))
         {
-            throw new Exception($"Expected URL to contain 'instituteforapprenticeships', but got: {popupUrl}");
+            throw new Exception($"Expected URL to contain 'skillsengland', but got: {popupUrl}");
         }
     }
     public async Task VerifyWorkLocationAndTravelDistanceNotPresent()

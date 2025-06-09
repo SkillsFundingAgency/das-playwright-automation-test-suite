@@ -71,21 +71,14 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("#header-standards")).ToContainTextAsync("Manage the standards you deliver");
+        await Assertions.Expect(page.Locator("#header-standards")).ToContainTextAsync("Manage your standards");
     }
 
     public async Task<ManageAStandard_TeacherPage> AccessTeacherLevel6()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Teacher (Level 6)" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Teacher (level 6)" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
-    }
-
-    public async Task<RegulatedStandardPage> AccessRegulatorApprovalLinkFromTheSTandardsTable()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Regulator's approval needed" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new RegulatedStandardPage(context));
     }
 
     public async Task<YourStandardsAndTrainingVenuesPage> ReturnToYourStandardsAndTrainingVenues()
@@ -208,13 +201,13 @@ public class RegulatedStandardPage(ScenarioContext context) : ManagingStandardsB
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("This is a regulated standard");
     }
 
-    public async Task<ManageTheStandardsYouDeliverPage> ApproveStandard_FromStandardsPage()
+    public async Task<ManageAStandard_TeacherPage> ApproveStandard_FromStandardsPage()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
+        return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
 
     public async Task<YouMustBeApprovePage> DisApproveStandard()
@@ -546,9 +539,9 @@ public class VenueAddedPage(ScenarioContext context) : ManagingStandardsBasePage
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Test Demo Automation Venue");
     }
 
-    public async Task<VenueDetailsPage> Click_UpdateContactDetails()
+    public async Task<VenueDetailsPage> Click_ChangeVenueName()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Update contact details" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Change venue name" }).ClickAsync();
 
         return await VerifyPageAsync(() => new VenueDetailsPage(context));
     }
@@ -558,14 +551,14 @@ public class VenueDetailsPage(ScenarioContext context) : ManagingStandardsBasePa
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Venue details");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change venue name");
     }
 
     public async Task<VenueAddedPage> UpdateVenueDetailsAndSubmit()
     {
-        await page.Locator("#Website").FillAsync(managingStandardsDataHelpers.UpdatedWebsite);
+        await page.Locator("#LocationName").FillAsync(managingStandardsDataHelpers.UpdatedVenueName);
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
 
         return await VerifyPageAsync(() => new VenueAddedPage(context));
     }
@@ -609,20 +602,21 @@ public class AddVenueDetailsPage(ScenarioContext context) : ManagingStandardsBas
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add venue details");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add venue name");
     }
 
     public async Task<TrainingVenuesPage> AddVenueDetailsAndSubmit()
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Venue name" }).FillAsync(managingStandardsDataHelpers.VenueName);
 
-        await page.Locator("#Website").FillAsync(managingStandardsDataHelpers.ContactWebsite);
+        //Commented out this for now as we might be resuing them
+        //await page.Locator("#Website").FillAsync(managingStandardsDataHelpers.ContactWebsite);
 
-        await page.Locator("#EmailAddress").FillAsync(managingStandardsDataHelpers.EmailAddress);
+        //await page.Locator("#EmailAddress").FillAsync(managingStandardsDataHelpers.EmailAddress);
 
-        await page.Locator("#PhoneNumber").FillAsync(managingStandardsDataHelpers.EmailAddress);
+        //await page.Locator("#PhoneNumber").FillAsync(managingStandardsDataHelpers.EmailAddress);
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
 
         return await VerifyPageAsync(() => new TrainingVenuesPage(context));
     }
