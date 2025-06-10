@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
+using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -19,64 +20,29 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     public class EmployerSteps
     {
         protected readonly ScenarioContext context;
+        private readonly EmployerStepsHelper employerStepsHelper;
 
-        protected readonly ObjectContext objectContext;
-
-        protected readonly EmployerPortalLoginHelper employerLoginHelper;
-
-        protected readonly EmployerHomePageStepsHelper employerHomePageHelper;
 
         public EmployerSteps(ScenarioContext context)
         {
             this.context = context;
-            this.objectContext = context.Get<ObjectContext>();
-            this.employerLoginHelper = new EmployerPortalLoginHelper(context);
-            this.employerHomePageHelper = new EmployerHomePageStepsHelper(context);
+            employerStepsHelper = new EmployerStepsHelper(context);
         }
 
         [When(@"Employer approves the apprentice request \(cohort\)")]
         public async Task WhenEmployerApprovesTheApprenticeRequestCohort()
         {
-            await EmployerLogInToEmployerPortal();
+            await employerStepsHelper.EmployerLogInToEmployerPortal();
 
             await new InterimApprenticesHomePage(context, false).VerifyPage();
 
             var page = await new ApprenticesHomePage(context).GoToApprenticeRequests();
 
-            var page1 = await page.OpenApprenticeRequestReadyForReview();
-
-            await page1.VerifyCohort();
-
-            var page2 = await page1.EmployerApproveCohort();
-
+            await employerStepsHelper.ApproveCohort(page);           
 
         }
 
 
-
-        private async Task<HomePage> EmployerLogInToEmployerPortal()
-        {
-            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
-
-            var employerType = context.GetValue<Apprenticeship>().EmployerDetails.EmployerType.ToString();
-
-            switch (employerType.ToLower())
-            {
-                case "levy":                    
-                    await employerLoginHelper.Login(context.GetUser<LevyUser>());
-                    break;
-                case "nonlevy":
-                    await employerLoginHelper.Login(context.GetUser<NonLevyUser>());
-                    break;
-                case "nonlevyuseratmaxreservationlimit":
-                    //await employerLoginHelper.Login(context.GetUser<NonLevyUserAtMaxReservationLimit>());
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown employer type: {employerType}");
-            }
-
-            return new HomePage(context);
-        }
 
 
     }

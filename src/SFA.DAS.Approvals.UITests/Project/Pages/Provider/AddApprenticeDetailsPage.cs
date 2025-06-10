@@ -37,13 +37,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Add apprentice details");
         }
 
-        public async Task ValidateApprenticeDetailsMatchWithILRData()
+        public async Task ValidateApprenticeDetailsMatchWithILRData(Apprenticeship apprenticeship)
         {
-            var employerDetails = context.GetValue<Apprenticeship>().EmployerDetails;
+            var employerDetails = apprenticeship.EmployerDetails;           // context.GetValue<Apprenticeship>().EmployerDetails;
             await Assertions.Expect(employerName).ToHaveTextAsync(employerDetails.EmployerName);
 
 
-            var apprenticeDetails = context.GetValue<Apprenticeship>().ApprenticeDetails;
+            var apprenticeDetails = apprenticeship.ApprenticeDetails;       //= context.GetValue<Apprenticeship>().ApprenticeDetails;
             await Assertions.Expect(ulnTextBox).ToHaveValueAsync(apprenticeDetails.ULN.ToString());
             await Assertions.Expect(firstNameTextBox).ToHaveValueAsync(apprenticeDetails.FirstName);
             await Assertions.Expect(lastNameTextBox).ToHaveValueAsync(apprenticeDetails.LastName);
@@ -52,7 +52,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(dateOfBirthTextBox_Month).ToHaveValueAsync(apprenticeDetails.DateOfBirth.Month.ToString());
             await Assertions.Expect(dateOfBirthTextBox_Year).ToHaveValueAsync(apprenticeDetails.DateOfBirth.Year.ToString());
 
-            var trainingDetails = context.GetValue<Apprenticeship>().TrainingDetails;
+            var trainingDetails = apprenticeship.TrainingDetails;           //context.GetValue<Apprenticeship>().TrainingDetails;
             await Assertions.Expect(trainingStartMonthTextBox).ToHaveValueAsync(trainingDetails.StartDate.Month.ToString());
             await Assertions.Expect(trainingStartYearTextBox).ToHaveValueAsync(trainingDetails.StartDate.Year.ToString());
             await Assertions.Expect(trainingEndMonthTextBox).ToHaveValueAsync(trainingDetails.EndDate.Month.ToString());

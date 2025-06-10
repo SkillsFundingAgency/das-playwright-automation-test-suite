@@ -27,12 +27,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Approve apprentice details");
         }
 
-        public async Task VerifyCohort()
+        public async Task VerifyCohort(Apprenticeship apprenticeship)
         {
-            var apprenitceship = context.GetValue<Apprenticeship>();
-
-            await Assertions.Expect(organisation).ToHaveTextAsync(apprenitceship.EmployerDetails.EmployerName.ToString());
-            await Assertions.Expect(reference).ToHaveTextAsync(apprenitceship.CohortReference);
+            await Assertions.Expect(organisation).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
+            await Assertions.Expect(reference).ToHaveTextAsync(apprenticeship.CohortReference);
             await Assertions.Expect(status).ToHaveTextAsync("Ready for approval");
             await Assertions.Expect(messageFromProvider).ToHaveTextAsync("Please review the details and approve the request.");
         }

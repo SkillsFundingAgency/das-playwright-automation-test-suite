@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+﻿using Polly;
+using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
@@ -10,8 +12,18 @@ using System.Threading.Tasks;
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
     [Binding]
-    public class ProviderSteps(ScenarioContext context)
+    public class ProviderSteps
     {
+        private readonly ScenarioContext context;
+        private readonly ProviderStepsHelper providerStepsHelper;
+
+        public ProviderSteps(ScenarioContext _context)
+        {
+            context = _context;
+            providerStepsHelper = new ProviderStepsHelper(context);
+        }
+
+
         [Given(@"the provider logs into portal")]
         [When("Provider logs into Provider-Portal")]
         public async Task GivenTheProviderLogsIntoPortal() => await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
@@ -29,13 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             var page4 = await page3.ConfirmEmployer();
 
-            var page5 = await page4.SelectApprenticeFromILRList();
-
-            await page5.ValidateApprenticeDetailsMatchWithILRData();
-
-            var page6 = await page5.ClickAddButton();
-
-            var page7 = await page6.SelectNoForRPL();           
+            await providerStepsHelper.AddFirstApprenticeFromILRList(page4);  
             
         }
 
@@ -43,15 +49,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("Provider can send it to the Employer for approval")]
         public async Task ThenProviderCanSendItToTheEmployerForApproval()
         {
+            //provider add another apprentice to the cohort   <-- to be added
+
             var page = new ApproveApprenticeDetailsPage(context);
 
-            await page.VerifyCohort();
+            await providerStepsHelper.ProviderApproveCohort(page);
 
-            var page1 = await page.ProviderApproveCohort();
-
-            await page1.VerifyCohortApprovedAndSentToEmployer();
-
-            await page1.GoToApprenticeRequests();
+            
 
         }
 

@@ -25,21 +25,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Approve apprentice details");
         }
 
-        public async Task VerifyCohort()
+        public async Task VerifyCohort(Apprenticeship apprenticeship)
         {
-            var apprenitceship = context.GetValue<Apprenticeship>();
-
-            //verify employer name, cohort status and message:
-            await Assertions.Expect(employerName).ToHaveTextAsync(apprenitceship.EmployerDetails.EmployerName.ToString());
+            await Assertions.Expect(employerName).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(status).ToHaveTextAsync("New request");
             await Assertions.Expect(message).ToHaveTextAsync("No message added.");
 
-
-            //get cohort reference; set it in the context;
             var cohortRef = await cohortReference.InnerTextAsync();
-            apprenitceship.CohortReference = cohortRef;
-            context.Set(apprenitceship, "Apprenticeship");
+            apprenticeship.CohortReference = cohortRef;
+            context.Set(apprenticeship, "Apprenticeship");
         }
+
+
 
 
 
