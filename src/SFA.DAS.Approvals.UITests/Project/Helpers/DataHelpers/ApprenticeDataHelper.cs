@@ -34,6 +34,32 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             return apprenticeship;
         }
 
+        public List<Apprenticeship> CreateNewApprenticeshipDetails(int ukprn, EmployerType employerType, int numberOfApprenticeships)
+        {
+            List<Apprenticeship> apprenticeships = new List<Apprenticeship>();
+            var employerDetails = GetEmployerDetails(employerType);
+
+            for (int i = 0; i < numberOfApprenticeships; i++)
+            {
+                // Create random apprentice, training, and RPL details
+                Apprentice apprentice = CreateNewApprenticeDetails();
+                Training training = CreateNewApprenticeshipTrainingDetails();
+                RPL rpl = CreateNewApprenticeshipRPLDetails();
+
+                // Create apprenticeship object with the generated details
+                Apprenticeship apprenticeship = new Apprenticeship(apprentice, training, rpl);           
+
+                // Set employer details and UKPRN in the apprenticeship object
+                apprenticeship.EmployerDetails = employerDetails;
+                apprenticeship.UKPRN = ukprn;
+
+                // Add to the list
+                apprenticeships.Add(apprenticeship);
+            }
+
+            return apprenticeships;
+        }
+
         private Employer GetEmployerDetails(EmployerType employerType)
         {
             Employer employer = new Employer();

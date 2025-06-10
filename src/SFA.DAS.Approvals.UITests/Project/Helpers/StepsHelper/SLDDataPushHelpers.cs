@@ -32,6 +32,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await _approvalsAPISteps.SLDPushDataToAS(resource, payload);
         }
 
+        public List<LearnerDataAPIDataModel> ConvertToLearnerDataAPIDataModel(List<Apprenticeship> listOfApprenticeships)
+        {
+            List<LearnerDataAPIDataModel> listOfLearnerData = new List<LearnerDataAPIDataModel>();
+
+            foreach (var apprenticeship in listOfApprenticeships)
+            {
+                listOfLearnerData.Add(ConvertToLearnerDataAPIDataModel(apprenticeship));
+            }
+
+            return listOfLearnerData;
+        }
+
+
         public LearnerDataAPIDataModel ConvertToLearnerDataAPIDataModel(Apprenticeship apprenticeship)
         {
             LearnerDataAPIDataModel learnerData = new LearnerDataAPIDataModel();
@@ -56,6 +69,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return learnerData;
 
         }
+
+
+
+
     }
 
     public class LearnerDataAPIDataModel
