@@ -68,7 +68,6 @@
 	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\b_ExistingEmployer\" />
 	  <Folder Include="Project\Features\01_PreApprovals\04_LTM\" />
 	  <Folder Include="Project\Features\01_PreApprovals\03_TransfersConnection\" />
-	  <Folder Include="Project\Pages\Employer\" />
 	</ItemGroup>
 
 </Project>

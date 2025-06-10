@@ -41,7 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
 
         [Then("Provider can send it to the Employer for approval")]
-        public async void ThenProviderCanSendItToTheEmployerForApproval()
+        public async Task ThenProviderCanSendItToTheEmployerForApproval()
         {
             var page = new ApproveApprenticeDetailsPage(context);
 
@@ -56,19 +56,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Then(@"apprentice request \(cohort\) is available under \'Apprentice requests \>\ With employers\'")]
-        public void ThenApprenticeRequestCohortIsAvailableUnder()
+        public async Task ThenApprenticeRequestCohortIsAvailableUnder()
         {
             throw new PendingStepException();
         }
 
-        [When("Employer approves the cohort")]
-        public void WhenEmployerApprovesTheCohort()
-        {
-            throw new PendingStepException();
-        }
 
         [Then(@"apprentice request \(cohort\) is no longer available under any tab in \'Apprentice requests\' section")]
-        public void ThenApprenticeRequestCohortIsNoLongerAvailableUnderAnyTabInSection()
+        public async Task ThenApprenticeRequestCohortIsNoLongerAvailableUnderAnyTabInSection()
         {
             throw new PendingStepException();
         }

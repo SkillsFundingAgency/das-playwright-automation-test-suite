@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class AddApprenticeDetails_EntryMothodPage(ScenarioContext context) : ApprovalsProviderBasePage(context)
+    internal class AddApprenticeDetails_EntryMothodPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {
@@ -24,25 +24,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
         }
 
-        /*
-        internal async Task<ProviderBeforeYouStartBulkUploadPage> SelectFileUpload ()
-        {
-            await page.GetByRole(AriaRole.Radio, new() { Name = "Manually" }).CheckAsync();
-
-            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-            return await VerifyPageAsync(() => new ProviderBeforeYouStartBulkUploadPage(context));
-        }
-
-        internal async Task<ProviderAddApprenticeDetailsViaSelectJourneyPage>  SelectAddManually()
-        {
-            await page.GetByRole(AriaRole.Radio, new() { Name = "Manually" }).CheckAsync();
-
-            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-            return await VerifyPageAsync(() => new ProviderAddApprenticeDetailsViaSelectJourneyPage(context));
-        }
-        */
+        
 
     }
 

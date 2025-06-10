@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class CohortApprovedAndSentToEmployerPage(ScenarioContext context) : ApprovalsProviderBasePage(context)
+    internal class CohortApprovedAndSentToEmployerPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator cohortReference => page.Locator("dt:has-text('Cohort reference') + dd");
@@ -22,13 +22,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Cohort approved and sent to employer");
         }
 
-        public async Task VerifyCohortApprovedAndSentToEmployer()
+        public async Task<CohortApprovedAndSentToEmployerPage> VerifyCohortApprovedAndSentToEmployer()
         {
             var apprenitceship = context.GetValue<Apprenticeship>();
 
             await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenitceship.CohortReference);
             await Assertions.Expect(sentTo).ToHaveTextAsync(apprenitceship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(messageForEmployer).ToHaveTextAsync("Please review the details and approve the request.");
+
+            return this;
         }
         public async Task GoToApprenticeRequests()
         {

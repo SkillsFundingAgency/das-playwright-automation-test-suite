@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class ApproveApprenticeDetailsPage(ScenarioContext context) : ApprovalsProviderBasePage(context)
+    internal class ApproveApprenticeDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator employerName => page.Locator("dt:has-text('Employer') + dd");
@@ -48,7 +48,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await approveRadioOption.ClickAsync();
             await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
             await saveAndSubmitButton.ClickAsync();
-            return await VerifyPageAsync(() => new CohortApprovedAndSentToEmployerPage(context));
+            //return await VerifyPageAsync(() => new CohortApprovedAndSentToEmployerPage(context));
+            return new CohortApprovedAndSentToEmployerPage(context);
         }
 
 

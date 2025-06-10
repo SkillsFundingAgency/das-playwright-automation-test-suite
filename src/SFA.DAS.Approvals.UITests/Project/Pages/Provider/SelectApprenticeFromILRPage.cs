@@ -8,7 +8,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class SelectApprenticeFromILRPage(ScenarioContext context) : ApprovalsProviderBasePage(context)
+    internal class SelectApprenticeFromILRPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {

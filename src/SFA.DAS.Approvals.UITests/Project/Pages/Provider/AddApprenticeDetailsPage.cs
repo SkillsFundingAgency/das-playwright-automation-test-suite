@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
 
-    internal class AddApprenticeDetailsPage(ScenarioContext context) : ApprovalsProviderBasePage(context)
+    internal class AddApprenticeDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator employerName => page.Locator("#employer-value");

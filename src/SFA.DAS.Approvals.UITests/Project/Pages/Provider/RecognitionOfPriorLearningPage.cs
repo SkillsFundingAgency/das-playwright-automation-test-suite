@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class RecognitionOfPriorLearningPage(ScenarioContext context) : ApprovalsProviderBasePage(context)
+    internal class RecognitionOfPriorLearningPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {

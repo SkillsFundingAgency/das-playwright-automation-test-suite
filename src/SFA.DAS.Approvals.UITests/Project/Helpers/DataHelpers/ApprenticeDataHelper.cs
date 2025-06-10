@@ -49,6 +49,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
 
             employer.AgreementId = context.Get<AccountsDbSqlHelper>().GetAgreementId(employerUser.Username, employer.EmployerName[..3] + "%").ToString();
 
+            employer.EmployerType = employerType;
+
             return employer;
         }
 

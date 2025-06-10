@@ -24,7 +24,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
         TransferFunds
     }
 
-    internal enum EmployerType
+    public enum EmployerType
     {
         Levy,
         NonLevy,
