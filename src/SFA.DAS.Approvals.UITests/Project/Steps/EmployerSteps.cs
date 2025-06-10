@@ -34,8 +34,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             this.employerHomePageHelper = new EmployerHomePageStepsHelper(context);
         }
 
-        [When("Employer approves the cohort")]
-        public async Task WhenEmployerApprovesTheCohort()
+        [When(@"Employer approves the apprentice request \(cohort\)")]
+        public async Task WhenEmployerApprovesTheApprenticeRequestCohort()
         {
             await EmployerLogInToEmployerPortal();
 
@@ -45,8 +45,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             var page1 = await page.OpenApprenticeRequestReadyForReview();
 
+            await page1.VerifyCohort();
+
+            var page2 = await page1.EmployerApproveCohort();
+
 
         }
+
 
 
         private async Task<HomePage> EmployerLogInToEmployerPortal()

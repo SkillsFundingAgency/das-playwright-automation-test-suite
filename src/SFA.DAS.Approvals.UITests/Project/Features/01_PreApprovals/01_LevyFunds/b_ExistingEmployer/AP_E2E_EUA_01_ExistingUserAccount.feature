@@ -13,5 +13,5 @@ Scenario: AP_E2E_EUA_01 Provider creates cohort from ILR data Employer approves 
 	When Provider logs into Provider-Portal
 	And creates an apprentice request (cohort) by selecting same apprentices
 	Then Provider can send it to the Employer for approval
-	When Employer approves the cohort
+	When Employer approves the apprentice request (cohort)
 	#And apprentice record is available on Apprenticeships endpoint for SLD
