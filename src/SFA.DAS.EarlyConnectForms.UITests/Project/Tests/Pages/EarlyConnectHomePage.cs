@@ -51,7 +51,7 @@ public class EmailAddressPage(ScenarioContext context) : EarlyConnectBasePage(co
 
     public async Task<EmailAuthCodePage> EnterNewEmailAddress()
     {
-        await page.Locator("#email").FillAsync("Amelia_10Jun2025_010614_Taylor_37480@7sumovsx.mailosaur.net");
+        await page.Locator("#email").FillAsync(earlyConnectDataHelper.Email);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 

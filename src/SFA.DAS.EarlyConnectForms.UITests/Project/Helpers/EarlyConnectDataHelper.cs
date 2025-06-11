@@ -3,7 +3,7 @@ namespace SFA.DAS.EarlyConnectForms.UITests.Project.Helpers;
 
 public class EarlyConnectDataHelper
 {
-    public EarlyConnectDataHelper(string email, string name)
+    public EarlyConnectDataHelper(MailosaurUser user, string name)
     {
         var randomPersonNameHelper = new RandomPersonNameHelper();
         Firstname = randomPersonNameHelper.FirstName;
@@ -12,7 +12,7 @@ public class EarlyConnectDataHelper
         DateOfBirthMonth = RandomDataGenerator.GenerateRandomMonth();
         DateOfBirthYear = RandomDataGenerator.GenerateRandomDobYear();
         TelephoneNumber = $"077{RandomDataGenerator.GenerateRandomNumber(8)}";
-        Email = email;
+        Email = $"EC_{Firstname}_{Lastname}@{user.DomainName}";
         SchoolOrCollegeName = name;
     }
 

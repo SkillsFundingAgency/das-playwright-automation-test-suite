@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EarlyConnectForms.UITests.Project;
+﻿using SFA.DAS.FrameworkHelpers;
+
+namespace SFA.DAS.EarlyConnectForms.UITests.Project;
 
 [Binding]
 public class Hooks
@@ -19,15 +21,19 @@ public class Hooks
     [BeforeScenario(Order = 31)]
     public async Task SetUpHelpers()
     {
+        var mailosaurUser = _context.Get<MailosaurUser>();
+
         var name = _sqlHelper.GetAnEducationalOrganisation();
 
-        var email = _context.Get<MailosaurUser>().GetEmailList().FirstOrDefault().Email;
-
-        var datahelper = new EarlyConnectDataHelper(email, name);
+        var datahelper = new EarlyConnectDataHelper(mailosaurUser, name);
 
         _context.Set(datahelper);
 
-        _objectContext.SetDebugInformation($"'{datahelper.Email}' is used");
+        var email = datahelper.Email;
+
+        _objectContext.SetDebugInformation($"'{email}' is used");
+
+        mailosaurUser.AddToEmailList(email);
 
         var driver = _context.Get<Driver>();
 
