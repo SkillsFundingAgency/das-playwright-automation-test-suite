@@ -41,21 +41,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             var page4 = await page3.ConfirmEmployer();
 
-            await providerStepsHelper.AddFirstApprenticeFromILRList(page4);  
-            
+            var page5 = await providerStepsHelper.AddFirstApprenticeFromILRList(page4);
+
+            await providerStepsHelper.AddOtherApprenticesFromILRList(page5);
+
         }
 
 
         [Then("Provider can send it to the Employer for approval")]
         public async Task ThenProviderCanSendItToTheEmployerForApproval()
         {
-            //provider add another apprentice to the cohort   <-- to be added
-
             var page = new ApproveApprenticeDetailsPage(context);
 
-            await providerStepsHelper.ProviderApproveCohort(page);
-
-            
+            await providerStepsHelper.ProviderApproveCohort(page);           
 
         }
 

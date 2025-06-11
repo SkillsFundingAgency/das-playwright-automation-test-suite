@@ -16,7 +16,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         public async Task<EmployerApproveApprenticeDetailsPage> OpenApprenticeRequestReadyForReview(string cohortRef)
         {
-            //var cohortRef = context.GetValue<Apprenticeship>().CohortReference;
             await page.Locator($"tr[data-cohort='{cohortRef}'] a.govuk-link").ClickAsync();
 
             return new EmployerApproveApprenticeDetailsPage(context);

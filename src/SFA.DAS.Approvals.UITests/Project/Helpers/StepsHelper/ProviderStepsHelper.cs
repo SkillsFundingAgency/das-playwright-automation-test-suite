@@ -25,14 +25,26 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task<ApproveApprenticeDetailsPage> AddFirstApprenticeFromILRList(SelectApprenticeFromILRPage selectApprenticeFromILRPage)
         {
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
-
             var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
-
             await page.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
-
             var page1 = await page.ClickAddButton();
-
             return await page1.SelectNoForRPL();
+        }
+
+        internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRList(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        {
+
+            foreach (var apprenticeship in listOfApprenticeship.Skip(1))
+            {
+                var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink();
+                var page1 = await page.SelectOptionToAddApprenticesFromILRList_AddAnotherApprenticeRoute();
+                var page2 = await page1.SelectApprenticeFromILRList(apprenticeship);
+                await page2.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
+                var page3 = await page2.ClickAddButton();
+                approveApprenticeDetailsPage = await page3.SelectNoForRPL();
+            }
+
+            return approveApprenticeDetailsPage;
         }
 
         internal async Task ProviderApproveCohort(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
