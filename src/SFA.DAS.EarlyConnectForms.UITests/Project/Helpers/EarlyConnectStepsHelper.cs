@@ -1,8 +1,4 @@
-﻿//using SFA.DAS.EarlyConnectForms.UITests.Project.Tests.Pages;
-
-//using static SFA.DAS.EarlyConnectForms.UITests.Project.Tests.Pages.ConfirmSurveySentPage;
-
-using SFA.DAS.EarlyConnectForms.UITests.Project.Tests.Pages;
+﻿using SFA.DAS.EarlyConnectForms.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.EarlyConnectForms.UITests.Project.Helpers;
 
