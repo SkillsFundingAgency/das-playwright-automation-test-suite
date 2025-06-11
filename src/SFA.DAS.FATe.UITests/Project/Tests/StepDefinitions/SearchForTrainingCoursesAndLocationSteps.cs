@@ -3,24 +3,15 @@
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 {
     [Binding, Scope(Tag = "fate")]
-    public class SearchForTrainingCoursesAndLocationSteps
+    public class SearchForTrainingCoursesAndLocationSteps(ScenarioContext context)
     {
-        private readonly FATeStepsHelper _stepsHelper;
-        private readonly ApprenticeshipTrainingCoursesPage _apprenticeshipTrainingCoursesPage;
-        private readonly FATeHomePage _fATeHomePage;
-        private readonly Search_TrainingCourses_ApprenticeworkLocationPage _search_TrainingCourses_ApprenticeworkLocationPage;
-        private readonly ApprenticeshipTrainingCourseDetailsPage _apprenticeshipTrainingCourseDetailsPage;
+        private readonly FATeStepsHelper _stepsHelper = new(context);
+        private readonly ApprenticeshipTrainingCoursesPage _apprenticeshipTrainingCoursesPage = new(context);
+        private readonly FATeHomePage _fATeHomePage = new(context);
+        private readonly Search_TrainingCourses_ApprenticeworkLocationPage _search_TrainingCourses_ApprenticeworkLocationPage = new(context);
+        private readonly ApprenticeshipTrainingCourseDetailsPage _apprenticeshipTrainingCourseDetailsPage = new(context);
 
-        public SearchForTrainingCoursesAndLocationSteps(ScenarioContext context)
-        {
-            _stepsHelper = new FATeStepsHelper(context);
-            _fATeHomePage = new FATeHomePage(context);
-            _search_TrainingCourses_ApprenticeworkLocationPage = new Search_TrainingCourses_ApprenticeworkLocationPage(context);
-            _apprenticeshipTrainingCoursesPage = new ApprenticeshipTrainingCoursesPage(context);
-            _apprenticeshipTrainingCourseDetailsPage = new ApprenticeshipTrainingCourseDetailsPage(context);
-        }
-
-      [Given("the user navigates to the Search for apprenticeship training courses and training providers page")]
+        [Given("the user navigates to the Search for apprenticeship training courses and training providers page")]
         public async Task GivenTheUserNavigatesToTheSearchForApprenticeshipTrainingCoursesAndTrainingProvidersPage()
         {
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();

@@ -1,18 +1,10 @@
-﻿using Azure;
-using SFA.DAS.FATe.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
 
-public class Specific_TrainingProviderPage : FATeBasePage
+public class Specific_TrainingProviderPage(ScenarioContext context, string providerName) : FATeBasePage(context)
 {
-    private readonly string _providerName;
-
-    public Specific_TrainingProviderPage(ScenarioContext context, string providerName) : base(context)
-    {
-        _providerName = providerName;
-    }
-
     public override async Task VerifyPage()
     {
-        await VerifyPage(_providerName);
+        await VerifyPage(providerName);
     }
 
     public async Task VerifyPage(string providerName)
@@ -91,13 +83,13 @@ public class Specific_TrainingProviderPage : FATeBasePage
         {
             var tabLocator = page.Locator("a.govuk-tabs__tab", new() { HasTextString = label });
             await tabLocator.ClickAsync();
-            await page.WaitForTimeoutAsync(500); 
+            await page.WaitForTimeoutAsync(500);
         }
     }
     public async Task ChangeToTableView()
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Change to table and" }).First.ClickAsync();
-        }
+    }
 
 
     public async Task ChangeToGraphView()

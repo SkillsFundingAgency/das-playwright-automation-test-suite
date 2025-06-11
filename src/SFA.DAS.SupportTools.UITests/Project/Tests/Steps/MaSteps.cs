@@ -21,6 +21,8 @@ public class MaSteps(ScenarioContext context)
         await searchHomePage.GoBackToSearchHomePage();
         await searchHomePage.SearchByPayeSchemeAndViewAccount();
         await searchHomePage.GoBackToSearchHomePage();
+        await searchHomePage.SearchByAccountNameAndViewAccount();
+        await searchHomePage.GoBackToSearchHomePage();
     }
 
     [Then(@"the user can search by name or email address")]

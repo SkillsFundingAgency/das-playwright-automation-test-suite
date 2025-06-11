@@ -8,7 +8,7 @@ public class PayeHooks(ScenarioContext context)
     private enum FundType { NonLevyFund, LevyFund, TransferFund }
 
     private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
-    private readonly TryCatchExceptionHelper _tryCatch = context.Get<TryCatchExceptionHelper>();
+    
     private LoginCredentialsHelper _loginCredentialsHelper;
     private bool _isAddPayeDetails;
 
@@ -88,6 +88,8 @@ public class PayeHooks(ScenarioContext context)
     public async Task DeletePayeDetails()
     {
         if (!_isAddPayeDetails) { return; }
+
+        var _tryCatch = context.Get<TryCatchExceptionHelper>();
 
         await _tryCatch.AfterScenarioException(async () =>
         {
