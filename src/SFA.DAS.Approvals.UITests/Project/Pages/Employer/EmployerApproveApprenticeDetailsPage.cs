@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
@@ -24,7 +25,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Approve apprentice details");
+            var headerText = await page.Locator("h1").TextContentAsync();
+            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Approve apprentice details|Approve 2 apprentices' details"));
         }
 
         public async Task VerifyCohort(Apprenticeship apprenticeship)

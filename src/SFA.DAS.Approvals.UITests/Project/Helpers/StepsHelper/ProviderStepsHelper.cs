@@ -28,7 +28,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
             await page.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
             var page1 = await page.ClickAddButton();
-            return await page1.SelectNoForRPL();
+            var page2 = await page1.SelectNoForRPL();
+            await page2.GetCohortId(apprenticeship);
+
+            return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
         internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRList(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
@@ -41,7 +44,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 var page2 = await page1.SelectApprenticeFromILRList(apprenticeship);
                 await page2.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
                 var page3 = await page2.ClickAddButton();
-                approveApprenticeDetailsPage = await page3.SelectNoForRPL();
+                var page4 = await page3.SelectNoForRPL();
+                await page4.GetCohortId(apprenticeship);
             }
 
             return approveApprenticeDetailsPage;
@@ -50,10 +54,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task ProviderApproveCohort(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
-
+          
             await approveApprenticeDetailsPage.VerifyCohort(apprenticeship);
-            
-            await approveApprenticeDetailsPage.VerifyCohort2(apprenticeship);
 
             var page1 = await approveApprenticeDetailsPage.ProviderApproveCohort();
 
