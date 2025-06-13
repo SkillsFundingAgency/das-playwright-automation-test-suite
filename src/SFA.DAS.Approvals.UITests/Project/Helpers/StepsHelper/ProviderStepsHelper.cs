@@ -52,6 +52,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
 
             await approveApprenticeDetailsPage.VerifyCohort(apprenticeship);
+            
+            await approveApprenticeDetailsPage.VerifyCohort2(apprenticeship);
 
             var page1 = await approveApprenticeDetailsPage.ProviderApproveCohort();
 
