@@ -18,9 +18,8 @@ public class MS_TrainingVenue_Steps(ScenarioContext context)
 
         var page4 = await page3.EnterPostcodeAndContinue();
 
-        var page5 = await page4.ChooseTheAddressAndContinue();
+        var page5 = await page4.AddVenueDetailsAndSubmit();
 
-        await page5.AddVenueDetailsAndSubmit();
     }
 
     [Then(@"the provider is able to update the new training venue")]
