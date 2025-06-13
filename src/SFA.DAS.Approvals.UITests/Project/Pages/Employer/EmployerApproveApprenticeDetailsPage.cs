@@ -41,8 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         {
             await approveRadioOption.ClickAsync();
             await saveAndSubmitButton.ClickAsync();
-            return new ApprenticeDetailsApproved(context);
-
+            return await VerifyPageAsync(() => new ApprenticeDetailsApproved(context));
         }
     }
 }

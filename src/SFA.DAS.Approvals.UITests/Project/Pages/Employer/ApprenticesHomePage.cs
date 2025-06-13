@@ -21,7 +21,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         public async Task<ApprenticeRequestsPage> GoToApprenticeRequests()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Apprentice requests" }).ClickAsync();
-            return new ApprenticeRequestsPage(context);
+            return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
         }
 
         public async Task GoToManageYourApprentices()
