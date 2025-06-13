@@ -33,7 +33,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     throw new ArgumentException($"Unknown employer type: {type}");
             }
 
-            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateNewApprenticeshipDetails(10000028, employerType, NoOfApprentices);
+            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateNewApprenticeshipDetails(employerType, NoOfApprentices, null);
 
             context.Set(listOfApprenticeship);
         }

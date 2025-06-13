@@ -14,27 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
 {
     internal class ApprenticeDataHelper(ScenarioContext context)
     {
-        public async Task<Apprenticeship> CreateNewApprenticeshipDetails(int ukprn, EmployerType employerType)
-        {
-            //create random apprentice, training and RPL details
-            Apprentice apprentice = await CreateNewApprenticeDetails();
-            Training training = await CreateNewApprenticeshipTrainingDetails();
-            RPL rpl = await CreateNewApprenticeshipRPLDetails();
-
-            //create apprenticeship object with the above details
-            Apprenticeship apprenticeship = new Apprenticeship(apprentice, training, rpl);
-
-            //get employer details based on the employer type
-            var employerDetails = GetEmployerDetails(employerType);
-
-            //set employer details and rest in the apprenticeship object
-            apprenticeship.EmployerDetails = await employerDetails;
-            apprenticeship.UKPRN = ukprn;
-
-            return apprenticeship;
-        }
-
-        public async Task<List<Apprenticeship>> CreateNewApprenticeshipDetails(int ukprn, EmployerType employerType, int numberOfApprenticeships)
+        public async Task<List<Apprenticeship>> CreateNewApprenticeshipDetails(EmployerType employerType, int numberOfApprenticeships, string? ukprn)
         {
             List<Apprenticeship> apprenticeships = new List<Apprenticeship>();
             var employerDetails = GetEmployerDetails(employerType);
@@ -51,7 +31,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
 
                 // Set employer details and UKPRN in the apprenticeship object
                 apprenticeship.EmployerDetails = await employerDetails;
-                apprenticeship.UKPRN = ukprn;
+                apprenticeship.UKPRN = (ukprn!=null) ? Convert.ToInt32(ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);
 
                 // Add to the list
                 apprenticeships.Add(apprenticeship);

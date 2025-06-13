@@ -53,19 +53,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task ProviderApproveCohort(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
-            var apprenticeship = listOfApprenticeship.FirstOrDefault();
-          
-            await approveApprenticeDetailsPage.VerifyCohort(apprenticeship);
+            foreach (var apprenticeship in listOfApprenticeship)
+            {
+                await approveApprenticeDetailsPage.VerifyCohort(apprenticeship);
 
-            var page1 = await approveApprenticeDetailsPage.ProviderApproveCohort();
+                bool isLast = apprenticeship.Equals(listOfApprenticeship.Last());
 
-            await page1.VerifyCohortApprovedAndSentToEmployer(apprenticeship);
-
-            await page1.GoToApprenticeRequests();
+                if (isLast)
+                {
+                    var page1 = await approveApprenticeDetailsPage.ProviderApproveCohort();
+                    await page1.VerifyCohortApprovedAndSentToEmployer(apprenticeship);
+                    await page1.GoToApprenticeRequests();
+                }
+            }           
 
         }
-
-
 
     }
 }
