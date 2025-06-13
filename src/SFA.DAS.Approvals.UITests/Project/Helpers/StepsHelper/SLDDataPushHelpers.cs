@@ -24,9 +24,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             _approvalsAPISteps = new ApprovalsAPISteps(_context);
         }
 
-        public async Task PushDataToAS(List<LearnerDataAPIDataModel> learnersData)
+        public async Task PushDataToAS(List<LearnerDataAPIDataModel> learnersData, int academicYear)
         {
-            var resource = $"/provider/{learnersData.First().ukprn}/academicyears/2425/learners";
+            var resource = $"/provider/{learnersData.First().ukprn}/academicyears/{academicYear}/learners";
             var payload = JsonHelper.Serialize(learnersData).ToString();
 
             await _approvalsAPISteps.SLDPushDataToAS(resource, payload);

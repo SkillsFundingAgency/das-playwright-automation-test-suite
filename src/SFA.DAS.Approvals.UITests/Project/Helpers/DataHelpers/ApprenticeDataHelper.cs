@@ -44,8 +44,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
         {
             Employer employer = new Employer();
 
-            await Task.Delay(100);
-
             EasAccountUser employerUser = employerType switch
             {
                 EmployerType.NonLevy => context.GetUser<NonLevyUser>(),

@@ -45,16 +45,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
+            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
+
             var listOfLearnerDataList = await sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
 
-            await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList);
+            await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList, academicYear);
         }
-
-
-
-
-
-
 
 
 
