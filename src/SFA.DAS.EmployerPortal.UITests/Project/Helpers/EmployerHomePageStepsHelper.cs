@@ -39,7 +39,7 @@ public class EmployerHomePageStepsHelper
         return new AccountUnavailablePage(_context);
     }
 
-    private async Task GoToEmployerLoginPage(bool openInNewTab)
+    public async Task GoToEmployerLoginPage(bool openInNewTab)
     {
         if (openInNewTab) await OpenInNewTab();
 
@@ -48,8 +48,10 @@ public class EmployerHomePageStepsHelper
         if (await _loginHelper.IsLandingPageDisplayed()) await new CreateAnAccountToManageApprenticeshipsPage(_context).GoToStubSignInPage();
     }
 
-    public async Task NavigateToEmployerApprenticeshipService()
+    public async Task NavigateToEmployerApprenticeshipService(bool openInNewTab = false)
     {
+        if (openInNewTab) await OpenInNewTab();
+
         var driver = _context.Get<Driver>();
 
         var url = UrlConfig.EmployerApprenticeshipService_BaseUrl;
