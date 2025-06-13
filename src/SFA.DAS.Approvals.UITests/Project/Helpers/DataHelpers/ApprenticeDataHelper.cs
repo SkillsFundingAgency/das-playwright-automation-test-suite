@@ -14,12 +14,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
 {
     internal class ApprenticeDataHelper(ScenarioContext context)
     {
-        public Apprenticeship CreateNewApprenticeshipDetails(int ukprn, EmployerType employerType)
+        public async Task<Apprenticeship> CreateNewApprenticeshipDetails(int ukprn, EmployerType employerType)
         {
             //create random apprentice, training and RPL details
-            Apprentice apprentice = CreateNewApprenticeDetails();
-            Training training = CreateNewApprenticeshipTrainingDetails();
-            RPL rpl = CreateNewApprenticeshipRPLDetails();
+            Apprentice apprentice = await CreateNewApprenticeDetails();
+            Training training = await CreateNewApprenticeshipTrainingDetails();
+            RPL rpl = await CreateNewApprenticeshipRPLDetails();
 
             //create apprenticeship object with the above details
             Apprenticeship apprenticeship = new Apprenticeship(apprentice, training, rpl);
@@ -28,15 +28,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             var employerDetails = GetEmployerDetails(employerType);
 
             //set employer details and rest in the apprenticeship object
-            apprenticeship.EmployerDetails = employerDetails;
+            apprenticeship.EmployerDetails = await employerDetails;
             apprenticeship.UKPRN = ukprn;
 
             return apprenticeship;
         }
 
-        private Employer GetEmployerDetails(EmployerType employerType)
+        private async Task<Employer> GetEmployerDetails(EmployerType employerType)
         {
             Employer employer = new Employer();
+
+            await Task.Delay(100);
 
             EasAccountUser employerUser = employerType switch
             {
@@ -47,14 +49,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
 
             employer.EmployerName = employerUser.OrganisationName;
 
-            employer.AgreementId = context.Get<AccountsDbSqlHelper>().GetAgreementId(employerUser.Username, employer.EmployerName[..3] + "%").ToString();
+            employer.AgreementId = await context.Get<AccountsDbSqlHelper>().GetAgreementId(employerUser.Username, employer.EmployerName[..3] + "%");
 
             employer.EmployerType = employerType;
 
             return employer;
         }
 
-        private Apprentice CreateNewApprenticeDetails()
+        private async Task<Apprentice> CreateNewApprenticeDetails()
         {
             Apprentice apprentice = new Apprentice();
 
@@ -64,11 +66,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             apprentice.Email = $"{apprentice.FirstName}.{apprentice.LastName}@l38cxwya.mailosaur.net";
             apprentice.DateOfBirth = RandomDataGenerator.GenerateRandomDate(DateTime.Now.AddYears(-30), DateTime.Now.AddYears(-16));
 
+            await Task.Delay(100); 
             return apprentice;
         }
 
-        private Training CreateNewApprenticeshipTrainingDetails(ApprenticeshipStatus? apprenticeshipStatus=null)
+        private async Task<Training> CreateNewApprenticeshipTrainingDetails(ApprenticeshipStatus? apprenticeshipStatus=null)
         {
+            var lowerDateRangeForStartDate = AcademicYearDatesHelper.GetCurrentAcademicYearStartDate();
+            var academicYearEndDate = AcademicYearDatesHelper.GetCurrentAcademicYearEndDate();
+            var todaysDate = DateTime.Now;
+            var upperDateRangeForStartDate = (academicYearEndDate > todaysDate) ? todaysDate : academicYearEndDate;
+
             Training training = new Training();
 
             if (apprenticeshipStatus == ApprenticeshipStatus.WaitingToStart)
@@ -78,11 +86,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             }
             else
             {
-                training.StartDate = RandomDataGenerator.GenerateRandomDate(DateTime.Now.AddYears(-1), DateTime.Now);
-                training.EndDate = RandomDataGenerator.GenerateRandomDate(DateTime.Now.AddMonths(1), DateTime.Now.AddYears(1));
+                training.StartDate = RandomDataGenerator.GenerateRandomDate(lowerDateRangeForStartDate, upperDateRangeForStartDate);
+                training.EndDate = training.StartDate.AddMonths(15);
             }
 
-
+            training.AcademicYear = AcademicYearDatesHelper.GetCurrentAcademicYear();
             training.PercentageLearningToBeDelivered = 40;
             training.EpaoPrice = Convert.ToInt32(RandomDataGenerator.GenerateRandomNumber(3));
             training.TrainingPrice = Convert.ToInt32("2" + RandomDataGenerator.GenerateRandomNumber(3));
@@ -92,10 +100,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             training.StandardCode = 5; // Example standard code
             training.ConsumerReference = "CR123456";
 
+            await Task.Delay(100);
+
             return training;
         }
 
-        private RPL CreateNewApprenticeshipRPLDetails()
+        private async Task<RPL> CreateNewApprenticeshipRPLDetails()
         {
             RPL rpl = new RPL();
 
@@ -105,6 +115,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             rpl.IsDurationReducedByRPL = true;
             rpl.DurationReducedBy = 3;
             rpl.PriceReducedBy = 500;
+
+            await Task.Delay(100);
 
             return rpl;
         }

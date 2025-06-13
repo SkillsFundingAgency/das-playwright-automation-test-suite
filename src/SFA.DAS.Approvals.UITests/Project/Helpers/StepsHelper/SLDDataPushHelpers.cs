@@ -32,7 +32,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await _approvalsAPISteps.SLDPushDataToAS(resource, payload);
         }
 
-        public LearnerDataAPIDataModel ConvertToLearnerDataAPIDataModel(Apprenticeship apprenticeship)
+        public async Task<LearnerDataAPIDataModel> ConvertToLearnerDataAPIDataModel(Apprenticeship apprenticeship)
         {
             LearnerDataAPIDataModel learnerData = new LearnerDataAPIDataModel();
 
@@ -52,6 +52,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             learnerData.plannedOTJTrainingHours = apprenticeship.TrainingDetails.PlannedOTJTrainingHours;
             learnerData.standardCode = apprenticeship.TrainingDetails.StandardCode;
             learnerData.consumerReference = apprenticeship.TrainingDetails.ConsumerReference;
+
+            await Task.Delay(100); 
 
             return learnerData;
 

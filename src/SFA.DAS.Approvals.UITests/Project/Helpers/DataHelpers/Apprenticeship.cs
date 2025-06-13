@@ -55,6 +55,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int AcademicYear { get; set; }
         public int PercentageLearningToBeDelivered { get; set; }
         public int EpaoPrice { get; set; }
         public int TrainingPrice { get; set; }
