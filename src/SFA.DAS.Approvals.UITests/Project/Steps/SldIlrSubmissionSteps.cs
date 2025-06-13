@@ -33,7 +33,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     throw new ArgumentException($"Unknown employer type: {type}");
             }
 
-            var listOfApprenticeship = new ApprenticeDataHelper(context).CreateNewApprenticeshipDetails(10000028, employerType, NoOfApprentices);
+            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateNewApprenticeshipDetails(10000028, employerType, NoOfApprentices);
 
             context.Set(listOfApprenticeship);
         }
@@ -43,7 +43,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("SLD push its data into AS")]
         public async Task GivenSLDPushItsDataIntoAS()
         {
-            var listOfLearnerDataList = sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(context.GetValue<List<Apprenticeship>>());
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+
+            var listOfLearnerDataList = await sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
 
             await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList);
         }

@@ -18,7 +18,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         {
             await page.Locator($"tr[data-cohort='{cohortRef}'] a.govuk-link").ClickAsync();
 
-            return new EmployerApproveApprenticeDetailsPage(context);
+            return await VerifyPageAsync(() => new EmployerApproveApprenticeDetailsPage(context));
         }
 
 

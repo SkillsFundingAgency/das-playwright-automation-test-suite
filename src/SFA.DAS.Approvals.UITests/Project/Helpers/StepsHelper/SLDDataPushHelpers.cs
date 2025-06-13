@@ -32,20 +32,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await _approvalsAPISteps.SLDPushDataToAS(resource, payload);
         }
 
-        public List<LearnerDataAPIDataModel> ConvertToLearnerDataAPIDataModel(List<Apprenticeship> listOfApprenticeships)
+
+        public async Task<List<LearnerDataAPIDataModel>> ConvertToLearnerDataAPIDataModel(List<Apprenticeship> listOfApprenticeships)
         {
             List<LearnerDataAPIDataModel> listOfLearnerData = new List<LearnerDataAPIDataModel>();
+            await Task.Delay(100);
 
             foreach (var apprenticeship in listOfApprenticeships)
             {
-                listOfLearnerData.Add(ConvertToLearnerDataAPIDataModel(apprenticeship));
+                listOfLearnerData.Add(await ConvertToLearnerDataAPIDataModel(apprenticeship));
+                //listOfLearnerData.Add(ConvertToLearnerDataAPIDataModel(apprenticeship));
             }
 
             return listOfLearnerData;
         }
 
 
-        public LearnerDataAPIDataModel ConvertToLearnerDataAPIDataModel(Apprenticeship apprenticeship)
+        public async Task<LearnerDataAPIDataModel> ConvertToLearnerDataAPIDataModel(Apprenticeship apprenticeship)
         {
             LearnerDataAPIDataModel learnerData = new LearnerDataAPIDataModel();
 
@@ -66,6 +69,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             learnerData.standardCode = apprenticeship.TrainingDetails.StandardCode;
             learnerData.consumerReference = apprenticeship.TrainingDetails.ConsumerReference;
 
+            await Task.Delay(100); 
             return learnerData;
 
         }

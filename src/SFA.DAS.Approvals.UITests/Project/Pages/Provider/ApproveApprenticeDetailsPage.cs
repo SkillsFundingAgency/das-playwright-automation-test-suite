@@ -97,7 +97,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await approveRadioOption.ClickAsync();
             await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
             await saveAndSubmitButton.ClickAsync();
-            return new CohortApprovedAndSentToEmployerPage(context);
+            return await VerifyPageAsync(() => new CohortApprovedAndSentToEmployerPage(context));
         }
 
 
