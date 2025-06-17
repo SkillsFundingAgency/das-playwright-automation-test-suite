@@ -70,36 +70,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
             //context.Set(new DataLockSqlHelper(_objectcontext, _dbConfig, apprenticeDataHelper, apprenticeCourseDataHelper));
 
         }
-
-        //private List<(ApprenticeDataHelper apprenticeDataHelper, ApprenticeCourseDataHelper apprenticeCourseDataHelper)> SetProviderSpecificCourse(ApprenticeStatus apprenticeStatus)
-        //{
-        //    var randomCourseDataHelper = new RandomCourseDataHelper(_objectcontext, _dbConfig, GetLarsCode(), _tags);
-
-        //    List<(ApprenticeDataHelper, ApprenticeCourseDataHelper)> listOfApprentices = [];
-
-        //    listOfApprentices.Add((GetApprenticeDataHelper(), GetApprenticeCourseDataHelper(randomCourseDataHelper, apprenticeStatus)));
-
-        //    listOfApprentices.Add((GetApprenticeDataHelper(), GetApprenticeCourseDataHelper(randomCourseDataHelper.AvailableCourses, apprenticeStatus)));
-
-        //    return listOfApprentices;
-        //}
-
-        //private ApprenticeDataHelper GetApprenticeDataHelper() => new(new ApprenticePPIDataHelper(_tags, context.Get<MailosaurUser>()), _objectcontext, commitmentsdatahelper);
-
-        //private ApprenticeCourseDataHelper GetApprenticeCourseDataHelper(RandomCourseDataHelper randomCourseDataHelper, ApprenticeStatus apprenticeStatus) => new(randomCourseDataHelper, apprenticeStatus, _tags);
-
-        //private ApprenticeCourseDataHelper GetApprenticeCourseDataHelper(List<CourseDetails> availableCourses, ApprenticeStatus apprenticeStatus) => new(new RandomCourseDataHelper(availableCourses), apprenticeStatus, _tags);
-
-        //private List<string> GetLarsCode()
-        //{
-        //    return true switch
-        //    {
-        //        bool _ when _tags.Contains("portableflexijob") => roatpV2SqlDataHelper.GetPortableFlexiJobLarsCode(context.GetPortableFlexiJobProviderConfig<PortableFlexiJobProviderConfig>()?.Ukprn),
-        //        bool _ when _tags.Contains("limitingstandards") => roatpV2SqlDataHelper.GetCoursesthatProviderDeosNotOffer(context.GetProviderConfig<ProviderConfig>()?.Ukprn),
-        //        _ => roatpV2SqlDataHelper.GetCoursesThatProviderDeosOffer(context.GetProviderConfig<ProviderConfig>()?.Ukprn),
-        //    };
-        //}
-
+              
         [BeforeScenario(Order = 30)]
         public void SetUpDependencyConfig()
         {

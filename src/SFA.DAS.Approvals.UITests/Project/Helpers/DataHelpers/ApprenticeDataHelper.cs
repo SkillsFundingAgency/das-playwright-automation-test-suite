@@ -77,7 +77,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
         private async Task<Training> CreateNewApprenticeshipTrainingDetails(ApprenticeshipStatus? apprenticeshipStatus=null)
         {
             CoursesDataHelper coursesDataHelper = new CoursesDataHelper(context);
-            var course = await coursesDataHelper.GetRandomTestCourse();
+            var course = await coursesDataHelper.GetRandomCourse();
 
             var lowerDateRangeForStartDate = AcademicYearDatesHelper.GetCurrentAcademicYearStartDate();
             var academicYearEndDate = AcademicYearDatesHelper.GetCurrentAcademicYearEndDate();
