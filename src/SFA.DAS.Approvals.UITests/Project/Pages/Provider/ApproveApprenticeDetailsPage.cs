@@ -71,9 +71,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(Dob(apprenticeRow)).ToHaveTextAsync(expectedDOB.Trim());
             await Assertions.Expect(TrainingDates(apprenticeRow)).ToHaveTextAsync(expectedTrainingDates.Trim());
             //await Assertions.Expect(Price(apprenticeRow)).ToHaveTextAsync(expectedPrice.Trim());         //<--- commenting it due to known bug: APPMAN-1679
-
-            Debugger.Break();
-
+        
         }
 
         public async Task GetCohortId(Apprenticeship apprenticeship)

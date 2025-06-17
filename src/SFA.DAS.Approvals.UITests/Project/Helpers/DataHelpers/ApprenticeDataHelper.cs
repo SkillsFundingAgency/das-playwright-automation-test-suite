@@ -76,6 +76,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
 
         private async Task<Training> CreateNewApprenticeshipTrainingDetails(ApprenticeshipStatus? apprenticeshipStatus=null)
         {
+            CoursesDataHelper coursesDataHelper = new CoursesDataHelper(context);
+            var course = await coursesDataHelper.GetRandomTestCourse();
+
             var lowerDateRangeForStartDate = AcademicYearDatesHelper.GetCurrentAcademicYearStartDate();
             var academicYearEndDate = AcademicYearDatesHelper.GetCurrentAcademicYearEndDate();
             var todaysDate = DateTime.Now;
@@ -101,7 +104,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             training.TotalPrice = training.EpaoPrice + training.TrainingPrice;
             training.IsFlexiJob = false;
             training.PlannedOTJTrainingHours = 1200;
-            training.StandardCode = 5; // Example standard code
+            training.StandardCode = course.StandardCode;
             training.ConsumerReference = "CR123456";
 
             await Task.Delay(100);

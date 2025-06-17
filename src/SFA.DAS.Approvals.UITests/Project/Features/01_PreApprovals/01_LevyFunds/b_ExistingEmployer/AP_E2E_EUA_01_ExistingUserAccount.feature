@@ -15,3 +15,17 @@ Scenario: AP_E2E_EUA_01 Provider creates cohort from ILR data Employer approves 
 	Then Provider can send it to the Employer for approval
 	When Employer approves the apprentice request (cohort)
 	#And apprentice record is available on Apprenticeships endpoint for SLD
+
+
+@regression
+@e2escenarios
+@selectstandardwithmultipleoptions
+Scenario: AP_E2E_EUA_01b Provider creates cohort from ILR data Employer approves it - Email Verification
+
+	Given previous test has been completed successfully
+	Then Verify following email notifications
+ 
+		| Recipient		| Subject											| EmailText										| 
+		| Employer		| Apprentice details ready to approve				| {cohortRef}									| 
+		| Provider		| Apprenticeship service cohort ready for approval	| {cohortRef}									| 
+		| Apprentice	| You need to confirm your apprenticeship details	| Congratulations on becoming an apprentice		| 
