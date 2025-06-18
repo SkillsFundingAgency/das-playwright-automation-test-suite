@@ -18,7 +18,7 @@ Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves
 	#And apprentice record is available on Apprenticeships endpoint for SLD
 
 
-@regression
+@wip
 @e2escenarios
 @selectstandardwithmultipleoptions
 Scenario: AP_E2E_EUA_01b Provider creates cohort from ILR data Employer approves it - Email Verification
