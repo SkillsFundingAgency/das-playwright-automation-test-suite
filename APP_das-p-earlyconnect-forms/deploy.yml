@@ -13,12 +13,7 @@ jobs:
   strategy:
     runOnce:
       deploy:
-        steps:
-        - task: browserstackcom.browserstack-vsts-extension.browserstack-config-task.BrowserStackConfig@0
-          displayName: 'BrowserStack - Configuration'
-          inputs:
-            BrowserStackServiceEndPoint: 'AS-Browserstack'
-
+        steps:        
         - task: ExtractFiles@1
           displayName: 'Extract files'
           inputs:
@@ -30,6 +25,33 @@ jobs:
           inputs:
             SourcePath: '$(System.DefaultWorkingDirectory)/das-enterprise-automation-test-suite/drop/tests'
             TargetFileNames: '*.json'
+
+        - task: PowerShell@2
+          displayName: 'Update NumberOfTestWorkers'
+          inputs:
+            targetType: filePath
+            filePath: './$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/src/UpdateNoofTestWorkers.ps1'
+            arguments: '-browser $(BROWSER_TYPE)'
+
+        - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
+          displayName: 'Tokenization: Transform file *.runsettings'
+          inputs:
+            SourcePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/runsettings/src/'
+            TargetFileNames: '*.runsettings'
+
+        - task: PowerShell@2
+          displayName: '''Install Playwright Browsers'''
+          inputs:
+            targetType: filePath
+            filePath: './$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/SFA.DAS.Campaigns.UITests/playwright.ps1'
+            arguments: install
+
+        - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
+          displayName: 'Set Screen Resolution'
+          inputs:
+            displaySettings: specific
+            width: 1920
+            height: 1080
 
         - task: AzurePowerShell@5
           displayName: "Get Agent's IP Address"
@@ -47,36 +69,19 @@ jobs:
             ScriptArguments: '-Name $(Release.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
             azurePowerShellVersion: LatestVersion
 
-        - task: DotNetCoreCLI@2
-          displayName: 'Run Browserstack accessibility tests'
+        - task: VSTest@2
+          displayName: 'VsTest - Test Execution '
           inputs:
-            command: test
-            projects: |
-              **/SFA.DAS.ApprenticeAmbassadorNetwork.UITests/SFA.DAS.ApprenticeAmbassadorNetwork.UITests.dll
-              **/SFA.DAS.ApprenticeCommitments.UITests/SFA.DAS.ApprenticeCommitments.UITests.dll
-              **/SFA.DAS.Approvals.UITests/SFA.DAS.Approvals.UITests.dll
-              **/SFA.DAS.Campaigns.UITests/SFA.DAS.Campaigns.UITests.dll
-              **/SFA.DAS.EarlyConnectForms.UITests/SFA.DAS.EarlyConnectForms.UITests.dll
-              **/SFA.DAS.EmployerFinance.UITests/SFA.DAS.EmployerFinance.UITests.dll
-              **/SFA.DAS.EmployerProviderRelationships.UITests/SFA.DAS.EmployerProviderRelationships.UITests.dll
-              **/SFA.DAS.EPAO.UITests/SFA.DAS.EPAO.UITests.dll
-              **/SFA.DAS.FAA.UITests/SFA.DAS.FAA.UITests.dll
-              **/SFA.DAS.FAT-V2.UITests/SFA.DAS.FAT-V2.UITests.dll
-              **/SFA.DAS.FindEPAO.UITests/SFA.DAS.FindEPAO.UITests.dll
-              **/SFA.DAS.FlexiPayments.E2ETests/SFA.DAS.FlexiPayments.E2ETests.dll
-              **/SFA.DAS.ManagingStandards.UITests/SFA.DAS.ManagingStandards.UITests.dll
-              **/SFA.DAS.RAA-V2-Employer.UITests/SFA.DAS.RAA-V2-Employer.UITests.dll
-              **/SFA.DAS.RAA-V2-Provider.UITests/SFA.DAS.RAA-V2-Provider.UITests.dll
-              **/SFA.DAS.RAA-V2-QA.UITests/SFA.DAS.RAA-V2-QA.UITests.dll
-              **/SFA.DAS.RequestApprenticeshipTraining.UITests/SFA.DAS.RequestApprenticeshipTraining.UITests.dll
-              **/SFA.DAS.Registration.UITests/SFA.DAS.Registration.UITests.dll
-              **/SFA.DAS.Roatp.UITests/SFA.DAS.Roatp.UITests.dll
-              **/SFA.DAS.RoatpAdmin.UITests/SFA.DAS.RoatpAdmin.UITests.dll
-              **/SFA.DAS.SupportConsole.UITests/SFA.DAS.SupportConsole.UITests.dll
-              **/SFA.DAS.Transfers.UITests/SFA.DAS.Transfers.UITests.dll
-              **/SFA.DAS.TransferMatching.UITests/SFA.DAS.TransferMatching.UITests.dll
-            arguments: '--filter Category=$(TestCategory)'
-            testRunTitle: 'Accessibility test $(DATE_TIME)'
+            testAssemblyVer2: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
+            searchFolder: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/'
+            testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
+            runSettingsFile: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/runsettings/src/Parellel.runsettings'
+            runInParallel: true
+            otherConsoleOptions: '/logger:trx'
+            rerunFailedTests: true
+            rerunType: basedOnTestFailureCount
+            rerunMaxAttempts: 2
+          continueOnError: true
 
         - task: AzurePowerShell@5
           displayName: "SQL - Remove Whitelisted Agent's IP Address"
@@ -87,5 +92,9 @@ jobs:
             azurePowerShellVersion: LatestVersion
           condition: succeededOrFailed()
 
-        - task: browserstackcom.browserstack-vsts-extension.reports-task.BrowserStackResults@1
-          displayName: 'BrowserStack - Results'
+        - task: PowerShell@2
+          displayName: 'Check .trx File Exists'
+          inputs:
+            targetType: filePath
+            filePath: './$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/src/Check-TestResults.ps1'
+            arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'

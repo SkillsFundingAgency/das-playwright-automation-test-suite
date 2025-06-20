@@ -2,7 +2,7 @@ trigger:
   batch: true
   branches:
     include:
-      - master
+      - "*"
 
 variables:
   - name: BuildConfiguration
@@ -39,16 +39,37 @@ stages:
     dependsOn: Build
     displayName: Deploy to TEST
     variables:
-      - group: "PreProd Management Resources"
-      - group: "PreProd Shared Resources"
-      - group: "PreProd Automation Suite Variables"
-      - group: "TEST APP_das-p-earlyconnect-forms"
+      - group: "TEST DevTest Shared Resources"
+      - group: "TEST Automation Suite Variables"
     jobs:
       - template: pipeline-templates/job/deploy.yml
         parameters:
           Environment: TEST
-          ServiceConnection: SFA-DIG-PreProd-ARM
+          ServiceConnection: SFA-DAS-DevTest-ARM
 
+  - stage: Deploy_TEST2
+    dependsOn: Build
+    displayName: Deploy to TEST2
+    variables:
+      - group: "TEST2 DevTest Shared Resources"
+      - group: "TEST2 Automation Suite Variables"
+    jobs:
+      - template: pipeline-templates/job/deploy.yml
+        parameters:
+          Environment: TEST
+          ServiceConnection: SFA-DAS-DevTest-ARM
+          
+  - stage: Deploy_DEMO
+    dependsOn: Build
+    displayName: Deploy to DEMO
+    variables:
+      - group: "DEMO DevTest Shared Resources"
+      - group: "DEMO Automation Suite Variables"
+    jobs:
+      - template: pipeline-templates/job/deploy.yml
+        parameters:
+          Environment: DEMO
+          ServiceConnection: SFA-DAS-DevTest-ARM
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -57,7 +78,7 @@ stages:
       - group: "PreProd Management Resources"
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
-      - group: "PREPROD das-accessibility-automation-test-suite"
+      - group: "PREPROD APP_das-p-earlyconnect-forms"
     jobs:
       - template: pipeline-templates/job/deploy.yml
         parameters:
