@@ -28,6 +28,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("Provider logs into Provider-Portal")]
         public async Task GivenTheProviderLogsIntoPortal() => await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
 
+
         [When(@"creates an apprentice request \(cohort\) by selecting same apprentices")]
         public async Task WhenCreatesAnApprenticeRequestCohortBySelectingSameApprentices()
         {
@@ -37,7 +38,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             var page2 = await page1.SelectOptionCreateANewCohort();
 
-            var page3 = await page2.ChooseLevyEmployer();
+            var page3 = await providerStepsHelper.SelectEmployer(page2);
 
             var page4 = await page3.ConfirmEmployer();
 
@@ -57,15 +58,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        [Then(@"apprentice request \(cohort\) is available under \'Apprentice requests \>\ With employers\'")]
-        public async Task ThenApprenticeRequestCohortIsAvailableUnder()
+                
+        [When("creates (\\d+) reservations")]
+        public async Task WhenCreatesReservations(int NumberOfReservations)
         {
-            throw new PendingStepException();
+            var page = await new ProviderHomePage(context).GoToManageYourFunding();
+
+            var page2 = await providerStepsHelper.ProviderReserveFunds(NumberOfReservations);
         }
 
-
-        [Then(@"apprentice request \(cohort\) is no longer available under any tab in \'Apprentice requests\' section")]
-        public async Task ThenApprenticeRequestCohortIsNoLongerAvailableUnderAnyTabInSection()
+        
+        [When("used these reservations to add apprentices to a cohort")]
+        public void WhenUsedTheseReservationsToAddApprenticesToACohort()
         {
             throw new PendingStepException();
         }

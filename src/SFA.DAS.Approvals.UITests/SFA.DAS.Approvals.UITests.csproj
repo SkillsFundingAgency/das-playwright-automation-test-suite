@@ -65,7 +65,6 @@
 	  <Folder Include="Project\Features\04_ProviderRoles\" />
 	  <Folder Include="Project\Features\01_PreApprovals\01_LevyFunds\a_NewEmployer\" />
 	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\a_NewEmployer\" />
-	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\b_ExistingEmployer\" />
 	  <Folder Include="Project\Features\01_PreApprovals\04_LTM\" />
 	  <Folder Include="Project\Features\01_PreApprovals\03_TransfersConnection\" />
 	</ItemGroup>

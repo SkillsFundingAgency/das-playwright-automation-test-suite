@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.Playwright;
 using Polly;
 using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
@@ -20,6 +21,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         {
             context = _context;
             listOfApprenticeship = _context.GetValue<List<Apprenticeship>>();
+        }
+
+        internal async Task<ConfirmEmployerPage> SelectEmployer(ChooseAnEmployerPage chooseAnEmployerPage)
+        {
+            var agreementId = listOfApprenticeship.FirstOrDefault().EmployerDetails.AgreementId;
+            return await chooseAnEmployerPage.ChooseAnEmployer(agreementId);
         }
 
         internal async Task<ApproveApprenticeDetailsPage> AddFirstApprenticeFromILRList(SelectApprenticeFromILRPage selectApprenticeFromILRPage)
@@ -65,9 +72,27 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                     await page1.VerifyCohortApprovedAndSentToEmployer(apprenticeship);
                     await page1.GoToApprenticeRequests();
                 }
-            }           
+            }
 
         }
 
+        internal async Task<YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage> ProviderReserveFunds(int NumberOfReservations)
+        {
+            var page = await new FundingForNonLevyEmployersPage(context).ClickOnReserveMoreFundingLink();
+
+            var page1 = await page.ClickOnReserveFundingButton();
+
+            var page2 = await SelectEmployer(page1);
+
+            var page3 = await page2.ConfirmNonLevyEmployer();
+
+            var page4 = await page3.ReserveFunds("Abattoir worker", DateTime.Now);
+
+            var page5 = await page4.ClickConfirmButton();
+
+            var reservatioID = page5.GetReservationIdFromUrl();
+
+            return await page.VerifyPageAsync(() => new YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage(context));
+        }
     }
 }

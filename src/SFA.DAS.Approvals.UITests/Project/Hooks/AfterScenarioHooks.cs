@@ -8,23 +8,29 @@ using TechTalk.SpecFlow;
 namespace SFA.DAS.Approvals.UITests.Project.Hooks
 {
     [Binding]
-    public class AfterScenarioHooks(ScenarioContext context, FeatureContext featureContext)
+    public class AfterScenarioHooks
     {
+        private readonly ScenarioContext _context;
+        private readonly FeatureContext _featureContext;
 
-        private readonly ObjectContext _objectcontext = context.Get<ObjectContext>();
+        public AfterScenarioHooks(ScenarioContext context, FeatureContext featureContext)
+        {
+            _context = context;
+            _featureContext = featureContext;
+        }
 
         [AfterScenario(Order = 31)]
         public void SaveScenarioContextInFeatureContext()
         {
-            if (featureContext.FeatureInfo.Tags.Contains("linkedScenarios"))
+            if (_featureContext.FeatureInfo.Tags.Contains("linkedScenarios"))
             {
-                featureContext["ResultOfPreviousScenario"] = context.ScenarioExecutionStatus;
+                _featureContext["ResultOfPreviousScenario"] = _context.ScenarioExecutionStatus;
 
-                featureContext.TryAdd("ScenarioContextofPreviousScenario", context);
+                if (_featureContext.ContainsKey("ScenarioContextofPreviousScenario"))
+                    _featureContext["ScenarioContextofPreviousScenario"] = _context;
+                else
+                    _featureContext.Add("ScenarioContextofPreviousScenario", _context);
             }
-            
         }
-
-
     }
 }
