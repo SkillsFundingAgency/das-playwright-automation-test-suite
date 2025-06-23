@@ -92,5 +92,12 @@ namespace SFA.DAS.Framework
 
             throw new Exception(MessageHelper.GetExceptionMessage("Page", expected, actual));
         }
+
+        protected async Task SelectRandomRadioOption()
+        {
+            var options = RandomDataGenerator.GetRandom(await page.GetByRole(AriaRole.Radio).AllAsync());
+
+            await options.CheckAsync();
+        }
     }
 }

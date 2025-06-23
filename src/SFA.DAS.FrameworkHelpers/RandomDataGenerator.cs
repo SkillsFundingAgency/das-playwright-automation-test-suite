@@ -20,6 +20,13 @@ namespace SFA.DAS.FrameworkHelpers
             return elements[randomNumber];
         }
 
+        public static T GetRandom<T>(IReadOnlyCollection<T> elements)
+        {
+            var randomNumber = GenerateRandomNumberBetweenTwoValues(0, elements.Count);
+
+            return elements.ElementAt(randomNumber);
+        }
+
         public static DateTime GenerateRandomDate(DateTime startDate, DateTime endDate)
         {
             var noOfdays = (endDate.Date - startDate.Date).TotalDays;
