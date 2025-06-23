@@ -77,6 +77,8 @@ public class StubSignInAssessorPage(ScenarioContext context) : StubSignInBasePag
 
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).FillAsync("epaomailinator+EPA0007@gmail.com");
 
+        await ClickSignIn();
+
         return new StubYouHaveSignedInAssessorPage(context, email, idOrUserRef, newUser);
     }
 }

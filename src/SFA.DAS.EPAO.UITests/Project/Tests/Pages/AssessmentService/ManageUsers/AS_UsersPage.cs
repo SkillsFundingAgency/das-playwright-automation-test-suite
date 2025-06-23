@@ -1,7 +1,4 @@
-﻿using Microsoft.Playwright;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 
 public class AS_UsersPage(ScenarioContext context) : EPAO_BasePage(context)
 {
@@ -16,19 +13,19 @@ public class AS_UsersPage(ScenarioContext context) : EPAO_BasePage(context)
 
     public async Task<AS_UserDetailsPage> ClickPermissionsEditUserLink()
     {
-        
+
         await page.GetByRole(AriaRole.Link, new() { Name = "Liz Kemp" }).ClickAsync();
 
         return await VerifyPageAsync(() => new AS_UserDetailsPage(context));
     }
 
-    //public async Task<AS_InviteUserPage> ClickInviteNewUserButton()
-    //{
-        
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Invite new user" }).ClickAsync();
+    public async Task<AS_InviteUserPage> ClickInviteNewUserButton()
+    {
 
-    //    return await VerifyPageAsync(() => new AS_InviteUserPage(context));
-    //}
+        await page.GetByRole(AriaRole.Link, new() { Name = "Invite new user" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new AS_InviteUserPage(context));
+    }
 
     public async Task<AS_UserDetailsPage> ClickOnNewlyAddedUserLink(string userEmail)
     {

@@ -1,8 +1,6 @@
-﻿//namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 
-//public class AS_UserRemovedPage : EPAO_BasePage
-//{
-//    protected override string PageTitle => "User removed";
-
-//    public AS_UserRemovedPage(ScenarioContext context) : base(context) => VerifyPage();
-//}
+public class AS_UserRemovedPage(ScenarioContext context) : EPAO_BasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("User removed");
+}

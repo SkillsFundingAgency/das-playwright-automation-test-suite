@@ -8,7 +8,7 @@ public class AS_EditUserPermissionsPage(ScenarioContext context) : EPAO_BasePage
 
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Edit user permissions");
 
-    public async Task IsChangeOrganisationDetailsCheckBoxSelected() => await Assertions.Expect(page.GetByRole(AriaRole.Checkbox, new() { Name = "Change organisation details" })).ToBeCheckedAsync();
+    public async Task<bool> IsChangeOrganisationDetailsCheckBoxSelected() => await page.GetByRole(AriaRole.Checkbox, new() { Name = "Change organisation details" }).IsCheckedAsync();
 
     public async Task<AS_UserDetailsPage> ClickSaveButton()
     {

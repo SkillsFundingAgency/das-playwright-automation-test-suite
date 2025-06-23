@@ -1,41 +1,34 @@
-﻿//namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 
-//public class AS_InviteUserPage : EPAO_BasePage
-//{
-//    protected override string PageTitle => "Invite user";
+public class AS_InviteUserPage(ScenarioContext context) : EPAO_BasePage(context)
+{
 
-//    #region Locators
-//    private static By GivenNameTextBox => By.Id("GivenName");
-//    private static By FamilyNameTextBox => By.Id("FamilyName");
-//    private static By EmailTextBox => By.Id("Email");
-//    private static By ChangeOrganisationDetailsCheckBox => By.Id("PrivilegesViewModel.PrivilegeViewModels[0].Selected");
-//    private static By ChangPipelineCheckBox => By.Id("PrivilegesViewModel.PrivilegeViewModels[1].Selected");
-//    private static By ChangeCompletedAssessmentsCheckBox => By.Id("PrivilegesViewModel.PrivilegeViewModels[2].Selected");
-//    private static By ChangeApplyForAStandardCheckBox => By.Id("PrivilegesViewModel.PrivilegeViewModels[3].Selected");
-//    private static By ChangeManageUsersCheckBox => By.Id("PrivilegesViewModel.PrivilegeViewModels[4].Selected");
-//    private static By ChangeRecordGradesCheckBox => By.Id("PrivilegesViewModel.PrivilegeViewModels[5].Selected");
-//    #endregion
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Invite user");
 
-//    public AS_InviteUserPage(ScenarioContext context) : base(context) => VerifyPage();
+    public async Task<string> EnterUserDetailsAndSendInvite()
+    {
+        var newUserEmailId = ePAOAssesmentServiceDataHelper.RandomEmail;
 
-//    public string EnterUserDetailsAndSendInvite()
-//    {
-//        var newUserEmailId = ePAOAssesmentServiceDataHelper.RandomEmail;
-//        formCompletionHelper.EnterText(GivenNameTextBox, "Test Given Name");
-//        formCompletionHelper.EnterText(FamilyNameTextBox, "Test Family Name");
-//        formCompletionHelper.EnterText(EmailTextBox, newUserEmailId);
-//        SelectAllPermissionCheckBoxes();
-//        Continue();
-//        return newUserEmailId;
-//    }
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Given name" }).FillAsync("Test Given Name");
 
-//    private void SelectAllPermissionCheckBoxes()
-//    {
-//        formCompletionHelper.SelectCheckbox(ChangeOrganisationDetailsCheckBox);
-//        formCompletionHelper.SelectCheckbox(ChangPipelineCheckBox);
-//        formCompletionHelper.SelectCheckbox(ChangeCompletedAssessmentsCheckBox);
-//        formCompletionHelper.SelectCheckbox(ChangeApplyForAStandardCheckBox);
-//        formCompletionHelper.SelectCheckbox(ChangeManageUsersCheckBox);
-//        formCompletionHelper.SelectCheckbox(ChangeRecordGradesCheckBox);
-//    }
-//}
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Family name" }).FillAsync("Test Family Name");
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Email address" }).FillAsync(newUserEmailId);
+
+        await SelectAllPermissionCheckBoxes();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Send Invite" }).ClickAsync();
+
+        return newUserEmailId;
+    }
+
+    private async Task SelectAllPermissionCheckBoxes()
+    {
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Change organisation details" }).CheckAsync();
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Pipeline" }).CheckAsync();
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Completed assessments" }).CheckAsync();
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Manage standards" }).CheckAsync();
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Manage users" }).CheckAsync();
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Record grades and issue" }).CheckAsync();
+    }
+}

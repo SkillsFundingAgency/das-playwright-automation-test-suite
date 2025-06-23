@@ -1,16 +1,13 @@
-﻿//namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 
-//class AS_UserInvitedPage : EPAO_BasePage
-//{
-//    protected override string PageTitle => "User invited";
+public class AS_UserInvitedPage(ScenarioContext context) : EPAO_BasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("User invited");
 
-//    private static By InviteSomeoneElseLink => By.LinkText("Invite someone else");
+    public async Task<AS_InviteUserPage> ClickInviteSomeoneElseLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Invite someone else" }).ClickAsync();
 
-//    public AS_UserInvitedPage(ScenarioContext context) : base(context) => VerifyPage();
-
-//    public AS_InviteUserPage ClickInviteSomeoneElseLink()
-//    {
-//        formCompletionHelper.Click(InviteSomeoneElseLink);
-//        return new(context);
-//    }
-//}
+        return await VerifyPageAsync(() => new AS_InviteUserPage(context));
+    }
+}

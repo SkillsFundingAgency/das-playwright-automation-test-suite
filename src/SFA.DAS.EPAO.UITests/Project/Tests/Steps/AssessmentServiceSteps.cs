@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.EPAO.UITests.Project;
 using SFA.DAS.EPAO.UITests.Project.Helpers;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
+using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
 using SFA.DAS.Login.Service.Project;
 using System.Threading.Tasks;
@@ -61,42 +62,42 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
     [Then(@"the User can navigates to record another grade")]
     public async Task ThenTheUserCanNavigatesToRecordAnotherGrade() => await assessmentRecordedPage.ClickRecordAnotherGradeLink();
 
-    //[Given(@"the User should be able to Opt In for the new version of the Standard")]
-    //public async Task GivenTheUserShouldBeAbleToOptInForTheNewVersionOfTheStandard() 
-    //{
-    //    var page = await loggedInHomePage.ApprovedStandardAndVersions();
+    [Given(@"the User should be able to Opt In for the new version of the Standard")]
+    public async Task GivenTheUserShouldBeAbleToOptInForTheNewVersionOfTheStandard()
+    {
+        var page = await loggedInHomePage.ApprovedStandardAndVersions();
 
-    //    var page1 = await page.ClickOnAssociateProjectManagerLink();
+        var page1 = await page.ClickOnAssociateProjectManagerLink();
 
-    //    var page2 = await page1.ClickOnAssociateProjectManagerOptInLinkForVersion1_1();
-        
-    //    await page2.ConfirmOptIn();
-    //}
-    
+        var page2 = await page1.ClickOnAssociateProjectManagerOptInLinkForVersion1_1();
+
+        await page2.ConfirmOptIn();
+    }
+
 
     //[Then(@"'(.*)' message is displayed")]
     //public async Task ThenErrorMessageIsDisplayed(string errorMessage) => Assert.AreEqual(recordAGradePage.GetPageTitle(), errorMessage);
 
-    //[Then(@"the '(.*)' is displayed")]
-    //public async Task ThenErrorIsDisplayed(string errorMessage)
-    //{
-    //    switch (errorMessage)
-    //    {
-    //        case "Family name and ULN missing error":
-    //            Assert.IsTrue(recordAGradePage.VerifyFamilyNameMissingErrorText(), "FamilyName missing Error Text is incorrect");
-    //            Assert.IsTrue(recordAGradePage.VerifyULNMissingErrorText(), "ULN missing Error Text is incorrect");
-    //            break;
-    //        case "Family name missing error":
-    //            Assert.IsTrue(recordAGradePage.VerifyFamilyNameMissingErrorText(), "FamilyName missing Error Text is incorrect");
-    //            break;
-    //        case "ULN missing error":
-    //            Assert.IsTrue(recordAGradePage.VerifyULNMissingErrorText(), "ULN missing Error Text is incorrect");
-    //            break;
-    //        case "ULN validation error":
-    //            Assert.IsTrue(recordAGradePage.VerifyInvalidUlnErrorText(), "ULN validation Error Text is incorrect");
-    //            break;
-    //    }
-    //}
+    [Then(@"the '(.*)' is displayed")]
+    public async Task ThenErrorIsDisplayed(string errorMessage)
+    {
+        switch (errorMessage)
+        {
+            case "Family name and ULN missing error":
+                await recordAGradePage.VerifyFamilyNameMissingErrorText();
+                await recordAGradePage.VerifyULNMissingErrorText();
+                break;
+            case "Family name missing error":
+                await recordAGradePage.VerifyFamilyNameMissingErrorText();
+                break;
+            case "ULN missing error":
+                await recordAGradePage.VerifyULNMissingErrorText();
+                break;
+            case "ULN validation error":
+                await recordAGradePage.VerifyInvalidUlnErrorText();
+                break;
+        }
+    }
 
     [When(@"the User clicks on the continue button '(.*)'")]
     public async Task WhenTheUserClicksOnTheContinueButton(string scenario)
@@ -192,52 +193,60 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
     //    aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangeWebsiteAddress(aS_OrganisationDetailsPage);
     //}
 
-    //[When(@"the User initiates editing permissions of another user")]
-    //public async Task WhenTheUserInitiatesEditingPermissionsOfAnotherUser()
-    //{
-    //    editUserPermissionsPage = loggedInHomePage.ClickManageUsersLink()
-    //        .ClickPermissionsEditUserLink()
-    //        .ClickEditUserPermissionLink();
+    [When(@"the User initiates editing permissions of another user")]
+    public async Task WhenTheUserInitiatesEditingPermissionsOfAnotherUser()
+    {
+        var page = await loggedInHomePage.ClickManageUsersLink();
 
-    //    _permissionsSelected = editUserPermissionsPage.IsChangeOrganisationDetailsCheckBoxSelected();
+        var page1 = await page.ClickPermissionsEditUserLink();
 
-    //    if (_permissionsSelected)
-    //        userDetailsPage = editUserPermissionsPage.UnSelectAllPermissionCheckBoxes().ClickSaveButton();
-    //    else
-    //        userDetailsPage = editUserPermissionsPage.SelectAllPermissionCheckBoxes().ClickSaveButton();
-
-    //    _permissionsSelected = !_permissionsSelected;
-    //}
-
-    //[Then(@"the User is able to change the permissions")]
-    //public async Task ThenTheUserIsAbleToChangeThePermissions() =>
-    //    Assert.Multiple(() =>
-    //    {
-    //        IsViewDashboardPermissionDisplayed(true);
-    //        IsChangeOrganisationDetailsPersmissionDisplayed(_permissionsSelected);
-    //        IsPipelinePermissionDisplayed(_permissionsSelected);
-    //        IsCompletedAssessmentsPermissionDisplayed(_permissionsSelected);
-    //        IsManageStandardsPermissionDisplayed(_permissionsSelected);
-    //        IsManageUsersPermissionDisplayed(_permissionsSelected);
-    //        IsRecordGradesPermissionDisplayed(_permissionsSelected);
-    //    });
+        editUserPermissionsPage = await page1.ClickEditUserPermissionLink();
 
 
-    //[When(@"the User initiates inviting a new user journey")]
-    //public async Task WhenTheUserInitiatesInvitingANewUserJourney() => _newUserEmailId = AssessmentServiceStepsHelper.InviteAUser(loggedInHomePage);
+        _permissionsSelected = await editUserPermissionsPage.IsChangeOrganisationDetailsCheckBoxSelected();
 
-    //[Then(@"a new User is invited and able to initiate inviting another user")]
-    //public async Task ThenANewUserIsInvitedAndAbleToInitiateInvitingAnotherUser() => new AS_UserInvitedPage(_context).ClickInviteSomeoneElseLink();
+        if (_permissionsSelected) await editUserPermissionsPage.UnSelectAllPermissionCheckBoxes();
+        else await editUserPermissionsPage.SelectAllPermissionCheckBoxes();
 
-    //[Then(@"the User can remove newly invited user")]
-    //public async Task ThenTheUserCanRemoveNewlyInvitedUser()
-    //{
-    //    loggedInHomePage.ClickHomeTopMenuLink()
-    //        .ClickManageUsersLink()
-    //        .ClickOnNewlyAddedUserLink(_newUserEmailId)
-    //        .ClicRemoveThisUserLinkInUserDetailPage()
-    //        .ClickRemoveUserButtonInRemoveUserPage();
-    //}
+        userDetailsPage = await editUserPermissionsPage.ClickSaveButton();
+
+        _permissionsSelected = !_permissionsSelected;
+    }
+
+    [Then(@"the User is able to change the permissions")]
+    public void ThenTheUserIsAbleToChangeThePermissions() =>
+
+        Assert.Multiple(async () =>
+        {
+            await IsViewDashboardPermissionDisplayed(true);
+            await IsChangeOrganisationDetailsPersmissionDisplayed(_permissionsSelected);
+            await IsPipelinePermissionDisplayed(_permissionsSelected);
+            await IsCompletedAssessmentsPermissionDisplayed(_permissionsSelected);
+            await IsManageStandardsPermissionDisplayed(_permissionsSelected);
+            await IsManageUsersPermissionDisplayed(_permissionsSelected);
+            await IsRecordGradesPermissionDisplayed(_permissionsSelected);
+        });
+
+
+    [When(@"the User initiates inviting a new user journey")]
+    public async Task WhenTheUserInitiatesInvitingANewUserJourney() => _newUserEmailId = await AssessmentServiceStepsHelper.InviteAUser(loggedInHomePage);
+
+    [Then(@"a new User is invited and able to initiate inviting another user")]
+    public async Task ThenANewUserIsInvitedAndAbleToInitiateInvitingAnotherUser() => await new AS_UserInvitedPage(_context).ClickInviteSomeoneElseLink();
+
+    [Then(@"the User can remove newly invited user")]
+    public async Task ThenTheUserCanRemoveNewlyInvitedUser()
+    {
+        await loggedInHomePage.ClickHomeTopMenuLink();
+
+        var page = await loggedInHomePage.ClickManageUsersLink();
+
+        var page1 = await page.ClickOnNewlyAddedUserLink(_newUserEmailId);
+
+        var page2 = await page1.ClickRemoveThisUserLinkInUserDetailPage();
+
+        await page2.ClickRemoveUserButtonInRemoveUserPage();
+    }
 
     //[Then(@"the user can apply to assess a standard")]
     //public async Task ThenTheUserCanApplyToAssessAStandard()
@@ -250,8 +259,8 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
 
     //    await applyStepsHelper.ApplyForAStandard(page2, EPAOApplyStandardDataHelper.ApplyStandardName);
     //}
-        
-           
+
+
     [Given(@"the certificate is printed")]
     public async Task GivenTheCertificateIsSentToPrinter() => await ePAOAdminSqlDataHelper.UpdateCertificateToPrinted(ePAOAdminDataHelper.LearnerUln);
 
@@ -306,13 +315,13 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
 
     private LearnerCriteria GetLearnerCriteria() => _context.Get<LearnerCriteria>();
 
-    private async Task IsViewDashboardPermissionDisplayed(bool expected) => Assert.AreEqual(expected, userDetailsPage.IsViewDashboardPermissionDisplayed(), "default 'View dashboard' " + AddAssertResultText(expected));
-    private async Task IsChangeOrganisationDetailsPersmissionDisplayed(bool expected) => Assert.AreEqual(expected, userDetailsPage.IsChangeOrganisationDetailsPersmissionDisplayed(), "'Change organisation details' " + AddAssertResultText(expected));
-    private async Task IsPipelinePermissionDisplayed(bool expected) => Assert.AreEqual(expected, userDetailsPage.IsPipelinePermissionDisplayed(), "'Pipeline' " + AddAssertResultText(expected));
-    private async Task IsCompletedAssessmentsPermissionDisplayed(bool expected) => Assert.AreEqual(expected, userDetailsPage.IsCompletedAssessmentsPermissionDisplayed(), "'Completed assessments' " + AddAssertResultText(expected));
-    private async Task IsManageStandardsPermissionDisplayed(bool expected) => Assert.AreEqual(expected, userDetailsPage.IsManageStandardsPermissionDisplayed(), "'Manage standards' " + AddAssertResultText(expected));
-    private async Task IsManageUsersPermissionDisplayed(bool expected) => Assert.AreEqual(expected, userDetailsPage.IsManageUsersPermissionDisplayed(), "'Manage users' " + AddAssertResultText(expected));
-    private async Task IsRecordGradesPermissionDisplayed(bool expected) => Assert.AreEqual(expected, userDetailsPage.IsRecordGradesPermissionDisplayed(), "'Record grades and issue certificates' " + AddAssertResultText(expected));
+    private async Task IsViewDashboardPermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsViewDashboardPermissionDisplayed(), "default 'View dashboard' " + AddAssertResultText(expected));
+    private async Task IsChangeOrganisationDetailsPersmissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsChangeOrganisationDetailsPersmissionDisplayed(), "'Change organisation details' " + AddAssertResultText(expected));
+    private async Task IsPipelinePermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsPipelinePermissionDisplayed(), "'Pipeline' " + AddAssertResultText(expected));
+    private async Task IsCompletedAssessmentsPermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsCompletedAssessmentsPermissionDisplayed(), "'Completed assessments' " + AddAssertResultText(expected));
+    private async Task IsManageStandardsPermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsManageStandardsPermissionDisplayed(), "'Manage standards' " + AddAssertResultText(expected));
+    private async Task IsManageUsersPermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsManageUsersPermissionDisplayed(), "'Manage users' " + AddAssertResultText(expected));
+    private async Task IsRecordGradesPermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsRecordGradesPermissionDisplayed(), "'Record grades and issue certificates' " + AddAssertResultText(expected));
 
     private static string AddAssertResultText(bool condition) => condition ? "permission selected is not shown in 'User details' page" : "permission selected is shown in 'User details' page";
 }

@@ -46,7 +46,7 @@ public class EPAOBaseSteps
     //protected AS_AchievementDatePage achievementDatePage;
     protected AS_CheckAndSubmitAssessmentPage checkAndSubmitAssessmentPage;
     protected AS_LoggedInHomePage loggedInHomePage;
-    //protected AS_EditUserPermissionsPage editUserPermissionsPage;
+    protected AS_EditUserPermissionsPage editUserPermissionsPage;
     protected AS_UserDetailsPage userDetailsPage;
     protected AS_OrganisationDetailsPage aS_OrganisationDetailsPage;
 

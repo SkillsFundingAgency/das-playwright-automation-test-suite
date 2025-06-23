@@ -121,15 +121,14 @@ public class AssessmentServiceStepsHelper(ScenarioContext context)
     //    return await page2.ClickViewOrganisationDetailsLink();
     //}
 
-    //public static async Task<string> InviteAUser(AS_LoggedInHomePage _loggedInHomePage)
-    //{
+    public static async Task<string> InviteAUser(AS_LoggedInHomePage _loggedInHomePage)
+    {
+        var page = await _loggedInHomePage.ClickManageUsersLink();
 
-    //    var page = await _loggedInHomePage.ClickManageUsersLink();
+        var page1 = await page.ClickInviteNewUserButton();
 
-    //    var page1 = await page.ClickInviteNewUserButton();
-
-    //    return await page1.EnterUserDetailsAndSendInvite();
-    //}
+        return await page1.EnterUserDetailsAndSendInvite();
+    }
 
     //public async Task DeleteCertificate(StaffDashboardPage staffDashboardPage)
     //{

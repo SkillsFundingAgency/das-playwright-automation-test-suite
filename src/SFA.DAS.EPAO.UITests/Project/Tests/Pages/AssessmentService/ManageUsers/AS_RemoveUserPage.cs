@@ -1,15 +1,13 @@
-﻿//namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 
-//public class AS_RemoveUserPage : EPAO_BasePage
-//{
-//    protected override string PageTitle => "Remove user";
-//    protected override By PageHeader => By.CssSelector(".govuk-caption-xl");
+public class AS_RemoveUserPage(ScenarioContext context) : EPAO_BasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Remove user");
 
-//    public AS_RemoveUserPage(ScenarioContext context) : base(context) => VerifyPage();
+    public async Task<AS_UserRemovedPage> ClickRemoveUserButtonInRemoveUserPage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Remove user" }).ClickAsync();
 
-//    public AS_UserRemovedPage ClickRemoveUserButtonInRemoveUserPage()
-//    {
-//        Continue();
-//        return new(context);
-//    }
-//}
+        return await VerifyPageAsync(() => new AS_UserRemovedPage(context));
+    }
+}

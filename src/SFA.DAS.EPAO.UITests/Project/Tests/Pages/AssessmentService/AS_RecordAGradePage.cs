@@ -4,17 +4,7 @@ public class AS_RecordAGradePage(ScenarioContext context) : EPAO_BasePage(contex
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Record a grade");
 
-
     private readonly EPAOApplySqlDataHelper _ePAOSqlDataHelper = context.Get<EPAOApplySqlDataHelper>();
-
-    //#region Locators
-    //private static By FamilyNameTextBox => By.Name("Surname");
-    //private static By ULNTextBox => By.Name("Uln");
-    //private static By FamilyNameMissingErrorText => By.LinkText("Enter the apprentice's family name");
-    //private static By ULNMissingErrorText => By.LinkText("Enter the apprentice's ULN");
-    //private static By InvalidUlnErrorText => By.LinkText("The apprentice's ULN should contain exactly 10 numbers");
-
-    //#endregion
 
     public async Task<AS_AssesmentAlreadyRecorded> GoToAssesmentAlreadyRecordedPage()
     {
@@ -45,11 +35,11 @@ public class AS_RecordAGradePage(ScenarioContext context) : EPAO_BasePage(contex
 
     //public void VerifyErrorMessage(string pageTitle) => VerifyElement(PageHeader, pageTitle);
 
-    //public bool VerifyFamilyNameMissingErrorText() => pageInteractionHelper.IsElementDisplayed(FamilyNameMissingErrorText);
+    public async Task VerifyFamilyNameMissingErrorText() => await Assertions.Expect(page.GetByLabel("There is a problem").GetByRole(AriaRole.List)).ToContainTextAsync("Enter the apprentice's family name");
 
-    //public bool VerifyULNMissingErrorText() => pageInteractionHelper.IsElementDisplayed(ULNMissingErrorText);
+    public async Task VerifyULNMissingErrorText() => await Assertions.Expect(page.GetByLabel("There is a problem").GetByRole(AriaRole.List)).ToContainTextAsync("Enter the apprentice's ULN");
 
-    //public bool VerifyInvalidUlnErrorText() => pageInteractionHelper.IsElementDisplayed(InvalidUlnErrorText);
+    public async Task VerifyInvalidUlnErrorText() => await Assertions.Expect(page.GetByLabel("There is a problem").GetByRole(AriaRole.Link)).ToContainTextAsync("The apprentice's ULN should contain exactly 10 numbers");
 
     //public string GetPageTitle() => pageInteractionHelper.GetText(PageHeader);
 
