@@ -18,6 +18,7 @@ public class ManagingStandardsDataHelpers
     public string Standard_ActuaryLevel7 { get; init; } = "Actuary (level 7)";
     public string Standard_CraftPlastererlevel { get; init; } = "Craft plasterer (level 3)";
     public string PostCode { get; init; } = "Tw14 9py";
+    public string FullAddressDetails { get; init; } = "160 Hatton Road, Feltham, TW14 9PY";
     public string Website { get; init; } = "www.company.co.uk";
     public string UpdatedWebsite { get; init; } = "www.123company.co.uk";
     public string ContactWebsite { get; init; } = "www.companycontact.co.uk";

@@ -468,11 +468,11 @@ public class TrainingVenuesPage(ScenarioContext context) : ManagingStandardsBase
         return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
     }
 
-    public async Task<PostcodePage> AccessAddANewTrainingVenue()
+    public async Task<SelectAddressPage> AccessAddANewTrainingVenue()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Add a new training venue" }).ClickAsync();
+        await page.Locator("a.govuk-button", new PageLocatorOptions { HasTextString = "Add a training venue" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new PostcodePage(context));
+        return await VerifyPageAsync(() => new SelectAddressPage(context));
     }
     public async Task<VenueAddedPage> AccessNewTrainingVenue_Added()
     {
@@ -565,20 +565,22 @@ public class VenueDetailsPage(ScenarioContext context) : ManagingStandardsBasePa
 }
 
 
-public class PostcodePage(ScenarioContext context) : ManagingStandardsBasePage(context)
+public class SelectAddressPage(ScenarioContext context) : ManagingStandardsBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What is the postcode of this training venue?");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select an address");
     }
 
-    public async Task<ChooseTheAddressPage> EnterPostcodeAndContinue()
+    public async Task<AddVenueDetailsPage> EnterPostcodeAndContinue()
     {
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Postcode" }).FillAsync(managingStandardsDataHelpers.PostCode);
+        var postcode = managingStandardsDataHelpers.PostCode;
+        var fullAddress = managingStandardsDataHelpers.FullAddressDetails;
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Find address" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new ChooseTheAddressPage(context));
+        await page.Locator("input[role='combobox']").FillAsync(postcode);
+        await page.Locator($"li:has-text(\"{fullAddress}\")").ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+        return await VerifyPageAsync(() => new AddVenueDetailsPage(context));
     }
 }
 public class ChooseTheAddressPage(ScenarioContext context) : ManagingStandardsBasePage(context)
@@ -605,7 +607,7 @@ public class AddVenueDetailsPage(ScenarioContext context) : ManagingStandardsBas
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add venue name");
     }
 
-    public async Task<TrainingVenuesPage> AddVenueDetailsAndSubmit()
+    public async Task<TrainingLocation_ConfirmVenuePage> AddVenueDetailsAndSubmit()
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Venue name" }).FillAsync(managingStandardsDataHelpers.VenueName);
 
@@ -618,6 +620,6 @@ public class AddVenueDetailsPage(ScenarioContext context) : ManagingStandardsBas
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new TrainingVenuesPage(context));
+        return await VerifyPageAsync(() => new TrainingLocation_ConfirmVenuePage(context));
     }
 }
