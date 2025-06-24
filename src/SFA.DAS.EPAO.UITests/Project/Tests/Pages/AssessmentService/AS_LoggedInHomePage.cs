@@ -22,7 +22,7 @@ public class AS_LoggedInHomePage(ScenarioContext context) : EPAO_BasePage(contex
 
     public async Task<AS_RecordAGradePage> GoToRecordAGradePage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Record a grade", Exact = true }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Record a grade", Exact = true }).First.ClickAsync();
 
         return await VerifyPageAsync(() => new AS_RecordAGradePage(context));
     }
