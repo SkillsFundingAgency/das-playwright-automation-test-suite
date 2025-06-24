@@ -1,4 +1,5 @@
-﻿using SFA.DAS.ProviderLogin.Service.Project.Pages;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -31,16 +32,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));
         }
 
-        internal string GetReservationIdFromUrl()
-        {          
-            var url = this.page.Url;            
- 
+        internal async Task GetReservationIdFromUrl(Apprenticeship apprenticeship)
+        {
+            var url = this.page.Url;
             var match = Regex.Match(url, @"reservations/(?<guid>[a-fA-F0-9\-]{36})");
-
             string reservationsId = match.Success ? match.Groups["guid"].Value : null;
 
-            return reservationsId;
+            apprenticeship.ReservationID = reservationsId;
+
+            await Task.Delay(100);
+            context.Set(apprenticeship, "Apprenticeship");
         }
+
+
 
 
 

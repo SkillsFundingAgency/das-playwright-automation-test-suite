@@ -4,6 +4,7 @@ using Polly;
 using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,23 +77,56 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         }
 
-        internal async Task<YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage> ProviderReserveFunds(int NumberOfReservations)
+        internal async Task ProviderReserveFunds()
         {
-            var page = await new FundingForNonLevyEmployersPage(context).ClickOnReserveMoreFundingLink();
-
-            var page1 = await page.ClickOnReserveFundingButton();
-
-            var page2 = await SelectEmployer(page1);
-
-            var page3 = await page2.ConfirmNonLevyEmployer();
-
-            var page4 = await page3.ReserveFunds("Abattoir worker", DateTime.Now);
-
-            var page5 = await page4.ClickConfirmButton();
-
-            var reservatioID = page5.GetReservationIdFromUrl();
-
-            return await page.VerifyPageAsync(() => new YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage(context));
+            foreach (var apprenticeship in listOfApprenticeship)
+            {
+                var page = await new ProviderHomePage(context).GoToManageYourFunding();
+                var page1 = await new FundingForNonLevyEmployersPage(context).ClickOnReserveMoreFundingLink();
+                var page2 = await page1.ClickOnReserveFundingButton();
+                var page3 = await SelectEmployer(page2);
+                var page4 = await page3.ConfirmNonLevyEmployer();
+                var page5 = await page4.ReserveFunds("Abattoir worker", DateTime.Now);
+                var page6 = await page5.ClickConfirmButton();
+                await page6.GetReservationIdFromUrl(apprenticeship);
+                var page7 = await page6.SelectGoToHomePageAndContinue();
+                
+            }
         }
+
+        internal async Task<ApproveApprenticeDetailsPage> ProviderAddsFirstApprenitceUsingReservation()
+        {         
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+            var page = await new ProviderHomePage(context).GoToManageYourFunding();
+            var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
+            var page2 = await page1.SelectOptionToAddApprenticesFromILRList_NonLevyRoute();
+            var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);
+            var page4 = await page3.ClickAddButton();
+            var page5 = await page4.SelectNoForRPL();
+            await page5.GetCohortId(apprenticeship);
+            return await page5.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
+        }
+
+        internal async Task ProviderAddsOtherApprentices(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        {
+            if (listOfApprenticeship.Count > 1)
+            {
+                foreach (var apprenticeship in listOfApprenticeship.Skip(1))
+                {
+                    var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink();
+                    var page1 = await page.SelectOptionToAddApprenticesFromILRList_SelectReservationRoute();
+                    var page2 = await page1.SelectReservation(apprenticeship.ReservationID);
+                    var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);
+                    await page3.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
+                    var page4 = await page3.ClickAddButton();
+                    var page5 = await page4.SelectNoForRPL();
+                    await page5.GetCohortId(apprenticeship);
+                }
+            }
+
+            
+        }
+
+
     }
 }

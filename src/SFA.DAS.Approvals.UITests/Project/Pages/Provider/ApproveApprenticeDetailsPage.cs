@@ -2,6 +2,7 @@
 using SFA.DAS.FrameworkHelpers;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -45,25 +46,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
             var expectedName = apprenticeship.ApprenticeDetails.FirstName + " " + apprenticeship.ApprenticeDetails.LastName;
             var expectedULN = apprenticeship.ApprenticeDetails.ULN.ToString();
-            var expectedDOB = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("d MMM yyyy");
-            var expectedTrainingDates = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy") + " to " + apprenticeship.TrainingDetails.EndDate.ToString("MMM yyyy");
+            var expectedDOB = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("d MMM yyyy", CultureInfo.InvariantCulture);
+            var expectedTrainingDates = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy", CultureInfo.InvariantCulture) + " to " + apprenticeship.TrainingDetails.EndDate.ToString("MMM yyyy", CultureInfo.InvariantCulture);
             var expectedPrice = apprenticeship.TrainingDetails.TotalPrice.ToString("C0");
-
-            /*
-            var apprenticeRow = row(apprenticeship.ApprenticeDetails.ULN.ToString());
-            var name = apprenticeRow.Locator("td:nth-child(1)");
-            var uln = apprenticeRow.Locator("td:nth-child(2)");
-            var dob = apprenticeRow.Locator("td:nth-child(3)");
-            var trainingDates = apprenticeRow.Locator("td:nth-child(4)");
-            var price = apprenticeRow.Locator("td:nth-child(5)");
-            
-
-            await Assertions.Expect(name).ToHaveTextAsync(expectedName.Trim());
-            await Assertions.Expect(uln).ToHaveTextAsync(expectedULN.Trim());
-            await Assertions.Expect(dob).ToHaveTextAsync(expectedDOB.Trim());
-            await Assertions.Expect(trainingDates).ToHaveTextAsync(expectedTrainingDates.Trim());
-            //await Assertions.Expect(price).ToHaveTextAsync(expectedPrice.Trim());         <--- commenting it due to known bug: APPMAN-1679
-            */
 
             var apprenticeRow = row(apprenticeship.ApprenticeDetails.ULN.ToString());
             await Assertions.Expect(Name(apprenticeRow)).ToHaveTextAsync(expectedName.Trim());

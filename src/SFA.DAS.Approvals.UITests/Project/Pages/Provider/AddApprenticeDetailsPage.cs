@@ -34,7 +34,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Add apprentice details");
+            await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Add apprentice details");
         }
 
         public async Task ValidateApprenticeDetailsMatchWithILRData(Apprenticeship apprenticeship)

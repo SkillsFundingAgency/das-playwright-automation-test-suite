@@ -33,19 +33,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenCreatesAnApprenticeRequestCohortBySelectingSameApprentices()
         {
             var page = await new ProviderHomePage(context).GotoSelectJourneyPage();
-
             var page1 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
-
             var page2 = await page1.SelectOptionCreateANewCohort();
-
             var page3 = await providerStepsHelper.SelectEmployer(page2);
-
             var page4 = await page3.ConfirmEmployer();
-
             var page5 = await providerStepsHelper.AddFirstApprenticeFromILRList(page4);
-
             await providerStepsHelper.AddOtherApprenticesFromILRList(page5);
-
         }
 
 
@@ -53,26 +46,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenProviderCanSendItToTheEmployerForApproval()
         {
             var page = new ApproveApprenticeDetailsPage(context);
-
-            await providerStepsHelper.ProviderApproveCohort(page);           
-
+            await providerStepsHelper.ProviderApproveCohort(page);    
         }
 
                 
-        [When("creates (\\d+) reservations")]
-        public async Task WhenCreatesReservations(int NumberOfReservations)
+        [When("creates reservations for each learner")]
+        public async Task WhenCreatesReservationsForEachLearner()
         {
-            var page = await new ProviderHomePage(context).GoToManageYourFunding();
-
-            var page2 = await providerStepsHelper.ProviderReserveFunds(NumberOfReservations);
+            await providerStepsHelper.ProviderReserveFunds();
         }
 
-        
-        [When("used these reservations to add apprentices to a cohort")]
-        public void WhenUsedTheseReservationsToAddApprenticesToACohort()
+
+        [When(@"creates an apprentice request \(cohort\) by selecting apprentices from ILR list via reservations")]
+        public async Task WhenCreatesAnApprenticeRequestCohortBySelectingApprenticesFromILRListViaReservations()
         {
-            throw new PendingStepException();
+            var page = await providerStepsHelper.ProviderAddsFirstApprenitceUsingReservation();
+            await providerStepsHelper.ProviderAddsOtherApprentices(page);
+
         }
+
 
 
     }

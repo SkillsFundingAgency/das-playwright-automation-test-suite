@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Azure;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +19,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Reserve more funding" }).ClickAsync();
             return await VerifyPageAsync(() => new ReserveFundingForNonLevyEmployersPage(context));
-        }   
+        }
+
+        internal async Task<AddApprenticeDetails_EntryMothodPage> SelectReservationToAddApprentice(Apprenticeship apprenticeship )
+        {
+            var rsrvStartDate = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            var rsrvEndDate = apprenticeship.TrainingDetails.StartDate.AddMonths(2).ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            var rsrvWindow = $"{rsrvStartDate} to {rsrvEndDate}";
+            
+            await page.GetByLabel("Employer", new() { Exact = true }).SelectOptionAsync(new[] { apprenticeship.EmployerDetails.EmployerName });
+            //await page.GetByLabel("Start date", new() { Exact = true }).SelectOptionAsync(new[] { "Jun 2025 to Aug 2025" });
+            await page.GetByLabel("Start date", new() { Exact = true }).SelectOptionAsync(new[] { rsrvWindow });
+            await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
+
+            string partialHref = $"reservationId={apprenticeship.ReservationID}";
+            var link = page.Locator($"a[href*='{partialHref}']:text('Add apprentice')");
+            await link.First.ClickAsync();
+
+            return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));
+        }
 
 
     }
