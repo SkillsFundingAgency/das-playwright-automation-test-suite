@@ -25,6 +25,8 @@ public class AS_RecordAGradePage(ScenarioContext context) : EPAO_BasePage(contex
 
     public async Task EnterApprenticeDetailsAndContinue(string familyName, string uln)
     {
+        objectContext.SetDebugInformation($"Entering {familyName} and {uln}");
+
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Family name" }).FillAsync(familyName);
         
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Unique learner number (ULN)" }).FillAsync(uln);

@@ -72,10 +72,11 @@ public class StubSignInAssessorPage(ScenarioContext context) : StubSignInBasePag
 
     private async Task<StubYouHaveSignedInAssessorPage> GoToStubYouHaveSignedInAssessorPage(string email, string idOrUserRef, bool newUser)
     {
+        objectContext.SetDebugInformation($"Entering {idOrUserRef} and {email}");
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Gov UK Identifier" }).FillAsync("4cfa523e-0c49-4d16-a448-a82ec2860c7d");
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Gov UK Identifier" }).FillAsync(idOrUserRef);
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).FillAsync("epaomailinator+EPA0007@gmail.com");
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).FillAsync(email);
 
         await ClickSignIn();
 
