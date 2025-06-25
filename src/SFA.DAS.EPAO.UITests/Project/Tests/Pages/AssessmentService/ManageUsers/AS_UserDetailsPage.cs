@@ -1,7 +1,4 @@
-﻿using Microsoft.Playwright;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 
 public class AS_UserDetailsPage(ScenarioContext context) : EPAO_BasePage(context)
 {
@@ -14,7 +11,14 @@ public class AS_UserDetailsPage(ScenarioContext context) : EPAO_BasePage(context
         return await VerifyPageAsync(() => new AS_EditUserPermissionsPage(context));
     }
 
-    public async Task<bool> IsViewDashboardPermissionDisplayed() { var text = await page.Locator("dl").AllTextContentsAsync(); return text.Contains("View dashboard"); }
+    public async Task<bool> IsViewDashboardPermissionDisplayed() 
+    {
+        var text = await page.Locator("dl").AllTextContentsAsync();
+
+        objectContext.SetDebugInformation($"{text.ToList().ToString(",")}");
+            
+        return text.Contains("View dashboard"); 
+    }
 
     public async Task<bool> IsChangeOrganisationDetailsPersmissionDisplayed() { var text = await page.Locator("dl").AllTextContentsAsync(); return text.Contains("Change organisation details"); }
 

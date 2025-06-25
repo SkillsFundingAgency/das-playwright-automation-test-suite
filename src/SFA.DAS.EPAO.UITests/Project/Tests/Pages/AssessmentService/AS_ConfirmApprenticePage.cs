@@ -54,7 +54,7 @@ public class AS_ConfirmApprenticePage(ScenarioContext context) : EPAO_BasePage(c
 
             if (string.IsNullOrEmpty(standardName)) await SelectRandomRadioOption(); 
 
-            else await page.GetByRole(AriaRole.Radio, new() { Name = standardName }).CheckAsync();
+            else await page.GetByRole(AriaRole.Radio, new() { Name = standardName, Exact = true }).CheckAsync();
 
         }
 
