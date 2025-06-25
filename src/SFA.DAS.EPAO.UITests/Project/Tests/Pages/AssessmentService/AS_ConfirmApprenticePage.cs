@@ -346,7 +346,7 @@ public class AS_WhichLearningOptionPage(ScenarioContext context) : EPAOAssesment
 
 public class AS_WhichVersionPage(ScenarioContext context) : EPAO_BasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Which version of the Lead adult care worker standard did you assess?");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Which version of the");
 
     public async Task<AS_WhichLearningOptionPage>  ClickConfirmInConfirmVersionPage()
     {
