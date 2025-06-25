@@ -11,14 +11,7 @@ public class AS_UserDetailsPage(ScenarioContext context) : EPAO_BasePage(context
         return await VerifyPageAsync(() => new AS_EditUserPermissionsPage(context));
     }
 
-    public async Task<bool> IsViewDashboardPermissionDisplayed() 
-    {
-        var text = await page.Locator("dl").AllTextContentsAsync();
-
-        objectContext.SetDebugInformation($"{text.ToList().ToString(",")}");
-            
-        return text.Contains("View dashboard"); 
-    }
+    public async Task<bool> IsViewDashboardPermissionDisplayed() => await IsPermissionDisplayed("View dashboard");
 
     public async Task<bool> IsChangeOrganisationDetailsPersmissionDisplayed() { var text = await page.Locator("dl").AllTextContentsAsync(); return text.Contains("Change organisation details"); }
 
@@ -31,6 +24,19 @@ public class AS_UserDetailsPage(ScenarioContext context) : EPAO_BasePage(context
     public async Task<bool> IsManageUsersPermissionDisplayed() { var text = await page.Locator("dl").AllTextContentsAsync(); return text.Contains("View dashboard"); }
 
     public async Task<bool> IsRecordGradesPermissionDisplayed() { var text = await page.Locator("dl").AllTextContentsAsync(); return text.Contains("Record grades and issue certificates"); }
+
+    private async Task<bool> IsPermissionDisplayed(string permission)
+    {
+        var text = await page.Locator("dl").AllTextContentsAsync();
+
+        var listOfPermissisons = text.ToList();
+
+        objectContext.SetDebugInformation("Permissions available : ");
+
+        objectContext.SetDebugInformation($"{listOfPermissisons.ToString(",")}");
+
+        return listOfPermissisons.Any(x => x.Contains(permission));
+    }
 
     public async Task<AS_RemoveUserPage> ClickRemoveThisUserLinkInUserDetailPage()
     {
