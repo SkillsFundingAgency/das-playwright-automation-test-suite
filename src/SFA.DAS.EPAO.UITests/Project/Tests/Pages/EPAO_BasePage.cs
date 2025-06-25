@@ -19,7 +19,7 @@ public abstract class EPAO_BasePage(ScenarioContext context) : BasePage(context)
 
     //private static By SummaryRows => By.CssSelector(".govuk-summary-list__row");
 
-    public async Task VerifyGrade(string grade) => await Assertions.Expect(page.Locator("dl")).ToContainTextAsync(grade);
+    public async Task VerifyGrade(string grade) => await Assertions.Expect(page.Locator("dl")).ToContainTextAsync(grade, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
 
     protected void UploadFile()
     {

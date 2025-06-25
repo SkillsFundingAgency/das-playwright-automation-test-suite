@@ -2,7 +2,7 @@
 
 public class AS_ConfirmApprenticePage(ScenarioContext context) : EPAO_BasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Confirm this is the correct apprentice");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Confirm this is the correct apprentice");
 
     public async Task<AS_AssesmentAlreadyRecorded> GoToAssesmentAlreadyRecordedPage()
     {
