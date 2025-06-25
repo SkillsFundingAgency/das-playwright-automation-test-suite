@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
+﻿using System.Runtime.CompilerServices;
+
+namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 
 public class AS_RecordAGradePage(ScenarioContext context) : EPAO_BasePage(context)
 {
@@ -35,15 +37,13 @@ public class AS_RecordAGradePage(ScenarioContext context) : EPAO_BasePage(contex
 
     }
 
-    //public void VerifyErrorMessage(string pageTitle) => VerifyElement(PageHeader, pageTitle);
-
     public async Task VerifyFamilyNameMissingErrorText() => await Assertions.Expect(page.GetByLabel("There is a problem").GetByRole(AriaRole.List)).ToContainTextAsync("Enter the apprentice's family name");
 
     public async Task VerifyULNMissingErrorText() => await Assertions.Expect(page.GetByLabel("There is a problem").GetByRole(AriaRole.List)).ToContainTextAsync("Enter the apprentice's ULN");
 
     public async Task VerifyInvalidUlnErrorText() => await Assertions.Expect(page.GetByLabel("There is a problem").GetByRole(AriaRole.Link)).ToContainTextAsync("The apprentice's ULN should contain exactly 10 numbers");
 
-    //public string GetPageTitle() => pageInteractionHelper.GetText(PageHeader);
+    public async Task VerifyCantFindApprentice() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("We cannot find the apprentice details");
 
     public async Task<AS_CannotFindApprenticePage> EnterApprenticeDetailsForExistingCertificateAndContinue()
     {

@@ -74,9 +74,8 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         await page2.ConfirmOptIn();
     }
 
-
-    //[Then(@"'(.*)' message is displayed")]
-    //public async Task ThenErrorMessageIsDisplayed(string errorMessage) => Assert.AreEqual(recordAGradePage.GetPageTitle(), errorMessage);
+    [Then(@"'(.*)' message is displayed")]
+    public async Task ThenErrorMessageIsDisplayed(string _) => await recordAGradePage.VerifyCantFindApprentice();
 
     [Then(@"the '(.*)' is displayed")]
     public async Task ThenErrorIsDisplayed(string errorMessage)
