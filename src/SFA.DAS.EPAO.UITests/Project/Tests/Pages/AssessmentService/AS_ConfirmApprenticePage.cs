@@ -121,7 +121,7 @@ public class AS_ApprenticeFailedDatePage(ScenarioContext context) : AS_GradeDate
 
 public class AS_AchievementDatePage(ScenarioContext context) : AS_GradeDateBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What grade did the apprentice achieve?");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What is the apprenticeship achievement date?");
 }
 
 public abstract class AS_GradeDateBasePage : EPAOAssesment_BasePage
