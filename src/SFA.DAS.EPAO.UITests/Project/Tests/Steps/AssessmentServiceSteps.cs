@@ -4,6 +4,7 @@ using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
 using SFA.DAS.Login.Service.Project;
+using System.Security;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EPAO.UITests.Project.Tests.Steps;
@@ -213,18 +214,29 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
     }
 
     [Then(@"the User is able to change the permissions")]
-    public void ThenTheUserIsAbleToChangeThePermissions() =>
+    public async Task ThenTheUserIsAbleToChangeThePermissions() 
+    {
+        var permissions = await userDetailsPage.GetDashboardPermissions();
 
-        Assert.Multiple(async () =>
+        Assert.Multiple(() =>
         {
-            await IsViewDashboardPermissionDisplayed(true);
-            await IsChangeOrganisationDetailsPersmissionDisplayed(_permissionsSelected);
-            await IsPipelinePermissionDisplayed(_permissionsSelected);
-            await IsCompletedAssessmentsPermissionDisplayed(_permissionsSelected);
-            await IsManageStandardsPermissionDisplayed(_permissionsSelected);
-            await IsManageUsersPermissionDisplayed(_permissionsSelected);
-            await IsRecordGradesPermissionDisplayed(_permissionsSelected);
+            Assert.AreEqual(true, permissions.Any(x => x.Contains("View dashboard")), "default 'View dashboard' " + AddAssertResultText(true));
+
+            Assert.AreEqual(_permissionsSelected, permissions.Any(x => x.Contains("Change organisation details")), "'Change organisation details' " + AddAssertResultText(_permissionsSelected));
+
+            Assert.AreEqual(_permissionsSelected, permissions.Any(x => x.Contains("Pipeline")), "'Pipeline' " + AddAssertResultText(_permissionsSelected));
+
+            Assert.AreEqual(_permissionsSelected, permissions.Any(x => x.Contains("Completed assessments")), "'Completed assessments' " + AddAssertResultText(_permissionsSelected));
+
+            Assert.AreEqual(_permissionsSelected, permissions.Any(x => x.Contains("Manage standards")), "'Manage standards' " + AddAssertResultText(_permissionsSelected));
+
+            Assert.AreEqual(_permissionsSelected, permissions.Any(x => x.Contains("Manage users")), "'Manage users' " + AddAssertResultText(_permissionsSelected));
+
+            Assert.AreEqual(_permissionsSelected, permissions.Any(x => x.Contains("Record grades and issue certificates")), "'Record grades and issue certificates' " + AddAssertResultText(_permissionsSelected));
         });
+    }
+
+        
 
 
     [When(@"the User initiates inviting a new user journey")]
@@ -313,14 +325,6 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
     }
 
     private LearnerCriteria GetLearnerCriteria() => _context.Get<LearnerCriteria>();
-
-    private async Task IsViewDashboardPermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsViewDashboardPermissionDisplayed(), "default 'View dashboard' " + AddAssertResultText(expected));
-    private async Task IsChangeOrganisationDetailsPersmissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsChangeOrganisationDetailsPersmissionDisplayed(), "'Change organisation details' " + AddAssertResultText(expected));
-    private async Task IsPipelinePermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsPipelinePermissionDisplayed(), "'Pipeline' " + AddAssertResultText(expected));
-    private async Task IsCompletedAssessmentsPermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsCompletedAssessmentsPermissionDisplayed(), "'Completed assessments' " + AddAssertResultText(expected));
-    private async Task IsManageStandardsPermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsManageStandardsPermissionDisplayed(), "'Manage standards' " + AddAssertResultText(expected));
-    private async Task IsManageUsersPermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsManageUsersPermissionDisplayed(), "'Manage users' " + AddAssertResultText(expected));
-    private async Task IsRecordGradesPermissionDisplayed(bool expected) => Assert.AreEqual(expected, await userDetailsPage.IsRecordGradesPermissionDisplayed(), "'Record grades and issue certificates' " + AddAssertResultText(expected));
 
     private static string AddAssertResultText(bool condition) => condition ? "permission selected is not shown in 'User details' page" : "permission selected is shown in 'User details' page";
 }
