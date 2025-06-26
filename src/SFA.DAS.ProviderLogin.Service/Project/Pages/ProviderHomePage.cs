@@ -9,6 +9,8 @@ public partial class ProviderHomePage(ScenarioContext context) : InterimProvider
         await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"UKPRN: {ukprn}", new() { Timeout = 300000 });
     }
 
+    public async Task ClickAddAnApprenticeLink() => await page.GetByRole(AriaRole.Link, new() { Name = "Add an apprentice" }).ClickAsync();
+
     public async Task ClickAddAnEmployerLink() => await page.GetByRole(AriaRole.Link, new() { Name = "Add an employer" }).ClickAsync();
 
     public async Task ClickFundingLink() => await page.GetByRole(AriaRole.Link, new() { Name = "Get funding for non-levy" }).ClickAsync();
