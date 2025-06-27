@@ -28,7 +28,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             var rsrvWindow = $"{rsrvStartDate} to {rsrvEndDate}";
             
             await page.GetByLabel("Employer", new() { Exact = true }).SelectOptionAsync(new[] { apprenticeship.EmployerDetails.EmployerName });
-            //await page.GetByLabel("Start date", new() { Exact = true }).SelectOptionAsync(new[] { "Jun 2025 to Aug 2025" });
             await page.GetByLabel("Start date", new() { Exact = true }).SelectOptionAsync(new[] { rsrvWindow });
             await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
 
