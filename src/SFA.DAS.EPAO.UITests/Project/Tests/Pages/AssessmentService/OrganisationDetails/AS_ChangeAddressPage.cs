@@ -1,64 +1,57 @@
-﻿//namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
 
-//public class AS_ChangeAddressPage : EPAO_BasePage
-//{
-//    protected override string PageTitle => "Change address";
+public class AS_ChangeAddressPage(ScenarioContext context) : EPAO_BasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change address");
 
-//    #region Locators
-//    private static By SearchForANewAddressLink => By.Id("searchAgain");
-//    private static By EnterTheAddressManuallyLink => By.Id("enterAddressManually");
-//    private static By AddressLine1TextBox => By.Id("AddressLine1");
-//    private static By AddressLine2TextBox => By.Id("AddressLine2");
-//    private static By TownOrCityTextBox => By.Id("AddressLine3");
-//    private static By PostCodeTextBox => By.Id("Postcode");
-//    #endregion
+  
+    public async Task<AS_ChangeAddressPage> ClickSearchForANewAddressLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Search for a new address" }).ClickAsync();
 
-//    public AS_ChangeAddressPage(ScenarioContext context) : base(context) => VerifyPage();
+        return await VerifyPageAsync(() => new AS_ChangeAddressPage(context));
+    }
 
-//    public AS_ChangeAddressPage ClickSearchForANewAddressLink()
-//    {
-//        formCompletionHelper.Click(SearchForANewAddressLink);
-//        return this;
-//    }
+    public async Task<AS_ChangeAddressPage> ClickEnterTheAddressManuallyLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Enter the address manually" }).ClickAsync();
 
-//    public AS_ChangeAddressPage ClickEnterTheAddressManuallyLink()
-//    {
-//        formCompletionHelper.Click(EnterTheAddressManuallyLink);
-//        return this;
-//    }
+        return await VerifyPageAsync(() => new AS_ChangeAddressPage(context));
+    }
 
-//    public AS_ConfirmContactAddressPage EnterEmployerAddressAndClickChangeAddressButton()
-//    {
-//        formCompletionHelper.EnterText(AddressLine1TextBox, Helpers.DataHelpers.EPAODataHelper.GetRandomNumber(3));
-//        formCompletionHelper.EnterText(AddressLine2TextBox, "QuintonRoad");
-//        formCompletionHelper.EnterText(TownOrCityTextBox, "Coventry");
-//        formCompletionHelper.EnterText(PostCodeTextBox, "CV1 2WT");
-//        Continue();
-//        return new(context);
-//    }
-//}
+    public async Task<AS_ConfirmContactAddressPage> EnterEmployerAddressAndClickChangeAddressButton()
+    {
+        
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Building and street line 1 of" }).FillAsync(EPAODataHelper.GetRandomNumber(3));
+        
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Building and street line 2 of" }).FillAsync("QuintonRoad");
+        
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Town or city" }).FillAsync("Coventry");
+        
+        
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "County" }).FillAsync("Coventry");
+        
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Postcode" }).FillAsync("CV1 2WT");
 
-//public class AS_ConfirmContactAddressPage : EPAO_BasePage
-//{
-//    protected override string PageTitle => "Confirm contact address";
+        await page.GetByRole(AriaRole.Button, new() { Name = "Change address" }).ClickAsync();
 
+        return await VerifyPageAsync(() => new AS_ConfirmContactAddressPage(context));
+    }
+}
 
-//    public AS_ConfirmContactAddressPage(ScenarioContext context) : base(context)
-//    {
+public class AS_ConfirmContactAddressPage(ScenarioContext context) : EPAO_BasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Confirm contact address");
 
-//        VerifyPage();
-//    }
+    public async Task<AS_ContactAddressUpdatedPage> ClickConfirmAddressButtonInConfirmContactAddressPage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm address" }).ClickAsync();
 
-//    public AS_ContactAddressUpdatedPage ClickConfirmAddressButtonInConfirmContactAddressPage()
-//    {
-//        Continue();
-//        return new(context);
-//    }
-//}
+        return await VerifyPageAsync(() => new AS_ContactAddressUpdatedPage(context));
+    }
+}
 
-//public class AS_ContactAddressUpdatedPage : AS_ChangeOrgDetailsBasePage
-//{
-//    protected override string PageTitle => "Contact address updated";
-
-//    public AS_ContactAddressUpdatedPage(ScenarioContext context) : base(context) => VerifyPage();
-//}
+public class AS_ContactAddressUpdatedPage(ScenarioContext context) : AS_ChangeOrgDetailsBasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Contact address updated");
+}

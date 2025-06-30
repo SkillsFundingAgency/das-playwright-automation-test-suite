@@ -52,13 +52,13 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
     [Then(@"the Assessment is recorded as '(pass|fail|pass with excellence)'")]
     public async Task ThenTheAssessmentIsRecordedAs(string grade) => await assessmentServiceStepsHelper.VerifyApprenticeGrade(grade, GetLearnerCriteria());
 
-    //[Then(@"the Admin user can delete a certificate that has been incorrectly submitted")]
-    //public async Task ThenTheAdminUserCanDeleteACertificateThatHasBeenIncorrectlySubmitted()
-    //{
-    //    var page = await ePAOHomePageHelper.LoginToEpaoAdminHomePage(true);
+    [Then(@"the Admin user can delete a certificate that has been incorrectly submitted")]
+    public async Task ThenTheAdminUserCanDeleteACertificateThatHasBeenIncorrectlySubmitted()
+    {
+        var page = await ePAOHomePageHelper.LoginToEpaoAdminHomePage(true);
 
-    //    await assessmentServiceStepsHelper.DeleteCertificate(page);
-    //}
+        await assessmentServiceStepsHelper.DeleteCertificate(page);
+    }
 
     [Then(@"the User can navigates to record another grade")]
     public async Task ThenTheUserCanNavigatesToRecordAnotherGrade() => await assessmentRecordedPage.ClickRecordAnotherGradeLink();
@@ -182,16 +182,23 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         await new AS_ChangeOrganisationDetailsPage(_context).ClickAccessButton();
     }
 
-    //[Then(@"the User is able to change the Registered details")]
-    //public async Task ThenTheUserIsAbleToChangeTheRegisteredDetails()
-    //{
-    //    aS_OrganisationDetailsPage = new AS_OrganisationDetailsPage(_context);
-    //    aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangeContactName(aS_OrganisationDetailsPage);
-    //    aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangePhoneNumber(aS_OrganisationDetailsPage);
-    //    aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangeAddress(aS_OrganisationDetailsPage);
-    //    aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangeEmailAddress(aS_OrganisationDetailsPage);
-    //    aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangeWebsiteAddress(aS_OrganisationDetailsPage);
-    //}
+    [Then(@"the User is able to change the Registered details")]
+    public async Task ThenTheUserIsAbleToChangeTheRegisteredDetails()
+    {
+        aS_OrganisationDetailsPage = new AS_OrganisationDetailsPage(_context);
+
+        await aS_OrganisationDetailsPage.VerifyPage();
+
+        aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangeContactName(aS_OrganisationDetailsPage);
+
+        aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangePhoneNumber(aS_OrganisationDetailsPage);
+
+        aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangeAddress(aS_OrganisationDetailsPage);
+
+        aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangeEmailAddress(aS_OrganisationDetailsPage);
+
+        aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangeWebsiteAddress(aS_OrganisationDetailsPage);
+    }
 
     [When(@"the User initiates editing permissions of another user")]
     public async Task WhenTheUserInitiatesEditingPermissionsOfAnotherUser()

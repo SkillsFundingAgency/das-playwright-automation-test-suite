@@ -1,7 +1,4 @@
-﻿using Microsoft.Playwright;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 
 public class AS_LandingPage(ScenarioContext context) : EPAO_BasePage(context)
 {
@@ -47,7 +44,7 @@ public class AS_LandingPage(ScenarioContext context) : EPAO_BasePage(context)
         if (await new CheckStubSignInAssessorPage(context).IsPageDisplayed())
         {
             var page = await new StubSignInAssessorPage(context).SubmitValidUserDetails(context.Get<EPAOAssessorPortalLoggedInUser>());
-            
+
             await page.Continue();
         }
     }
