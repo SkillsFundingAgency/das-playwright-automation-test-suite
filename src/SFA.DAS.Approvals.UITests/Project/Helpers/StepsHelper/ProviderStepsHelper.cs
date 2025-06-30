@@ -86,7 +86,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 var page2 = await page1.ClickOnReserveFundingButton();
                 var page3 = await SelectEmployer(page2);
                 var page4 = await page3.ConfirmNonLevyEmployer();
-                var page5 = await page4.ReserveFunds("Abattoir worker", DateTime.Now);
+                var page5 = await page4.ReserveFundsAsync("Abattoir worker", DateTime.Now);
                 var page6 = await page5.ClickConfirmButton();
                 await page6.GetReservationIdFromUrl(apprenticeship);
                 var page7 = await page6.SelectGoToHomePageAndContinue();

@@ -32,8 +32,36 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
 
             string partialHref = $"reservationId={apprenticeship.ReservationID}";
-            var link = page.Locator($"a[href*='{partialHref}']:text('Add apprentice')");
-            await link.First.ClickAsync();
+            var reservationLink = page.Locator($"a[href*='{partialHref}']:text('Add apprentice')");
+            var nextPageButton = page.GetByRole(AriaRole.Link, new() { Name = "Next page" });
+
+            // ✅ First, check if link is already present and visible
+            if (await reservationLink.IsVisibleAsync())
+            {
+                await reservationLink.First.ClickAsync();
+                return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));
+            }
+
+            // 🔁 If not, loop through pagination
+            while (true)
+            {
+                if (await reservationLink.CountAsync() > 0 && await reservationLink.IsVisibleAsync())
+                {
+                    await reservationLink.First.ClickAsync();
+                    break;
+                }
+
+                if (await nextPageButton.IsVisibleAsync())
+                {
+                    await nextPageButton.ClickAsync();
+                    await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
+                }
+                else
+                {
+                    throw new Exception($"Reservation link not found for reservationId='{apprenticeship.ReservationID}' and no next page is available to navigate");
+                }
+            }
+
 
             return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));
         }

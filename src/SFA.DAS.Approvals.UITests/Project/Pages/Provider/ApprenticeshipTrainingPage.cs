@@ -14,7 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprenticeship training");
         }
 
-        internal async Task<CheckYourInformationPage> ReserveFunds(string courseName, DateTime reservationStartDate)
+        internal async Task<CheckYourInformationPage> ReserveFundsAsync(string courseName, DateTime reservationStartDate)
         {
             await page.GetByRole(AriaRole.Combobox, new() { Name = "Start typing to search" }).ClickAsync();
             await page.GetByRole(AriaRole.Combobox, new() { Name = "Start typing to search" }).FillAsync(courseName.Substring(0, 3));
@@ -23,6 +23,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
             return await VerifyPageAsync(() => new CheckYourInformationPage(context));
         }
-        
+
     }
 }
