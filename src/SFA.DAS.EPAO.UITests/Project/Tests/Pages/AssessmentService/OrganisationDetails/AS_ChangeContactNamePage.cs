@@ -1,11 +1,8 @@
-﻿using Microsoft.Playwright;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
 
 public class AS_ChangeContactNamePage(ScenarioContext context) : EPAO_BasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Organisation details");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change contact name");
 
     #region Locators
     private static string PrimaryContactNameRadioButton => "//label[contains(text(),'Mr Preprod Epao0007')]/../input";

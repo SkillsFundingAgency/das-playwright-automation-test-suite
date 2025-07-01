@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
+﻿using SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
+using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
 
 namespace SFA.DAS.EPAO.UITests.Project.Helpers;
@@ -73,53 +74,53 @@ public class AssessmentServiceStepsHelper(ScenarioContext context)
         return await page2.ClickViewOrganisationDetailsLink();
     }
 
-    //public static async Task<AS_OrganisationDetailsPage> ChangePhoneNumber(AS_OrganisationDetailsPage organisationDetailsPage)
-    //{
-    //    var page = await organisationDetailsPage.ClickPhoneNumberChangeLink();
+    public static async Task<AS_OrganisationDetailsPage> ChangePhoneNumber(AS_OrganisationDetailsPage organisationDetailsPage)
+    {
+        var page = await organisationDetailsPage.ClickPhoneNumberChangeLink();
 
-    //    var page1 = await page.EnterRandomPhoneNumberAndClickUpdate();
+        var page1 = await page.EnterRandomPhoneNumberAndClickUpdate();
 
-    //    var page2 = await page1.ClickConfirmButtonInConfirmPhoneNumberPage();
+        var page2 = await page1.ClickConfirmButtonInConfirmPhoneNumberPage();
 
-    //    return await page2.ClickViewOrganisationDetailsLink();
-    //}
+        return await page2.ClickViewOrganisationDetailsLink();
+    }
 
-    //public static async Task<AS_OrganisationDetailsPage> ChangeAddress(AS_OrganisationDetailsPage organisationDetailsPage)
-    //{
-    //    var page = await organisationDetailsPage.ClickAddressChangeLink();
+    public static async Task<AS_OrganisationDetailsPage> ChangeAddress(AS_OrganisationDetailsPage organisationDetailsPage)
+    {
+        var page = await organisationDetailsPage.ClickAddressChangeLink();
 
-    //    var page1 = await page.ClickSearchForANewAddressLink();
+        var page1 = await page.ClickSearchForANewAddressLink();
 
-    //    var page2 = await page1.ClickEnterTheAddressManuallyLink();
+        var page2 = await page1.ClickEnterTheAddressManuallyLink();
 
-    //    var page3 = await page2.EnterEmployerAddressAndClickChangeAddressButton();
+        var page3 = await page2.EnterEmployerAddressAndClickChangeAddressButton();
 
-    //    var page4 = await page3.ClickConfirmAddressButtonInConfirmContactAddressPage();
+        var page4 = await page3.ClickConfirmAddressButtonInConfirmContactAddressPage();
 
-    //    return await page4.ClickViewOrganisationDetailsLink();
-    //}
+        return await page4.ClickViewOrganisationDetailsLink();
+    }
 
-    //public static async Task<AS_OrganisationDetailsPage> ChangeEmailAddress(AS_OrganisationDetailsPage organisationDetailsPage)
-    //{
-    //    var page = await organisationDetailsPage.ClickEmailChangeLink();
+    public static async Task<AS_OrganisationDetailsPage> ChangeEmailAddress(AS_OrganisationDetailsPage organisationDetailsPage)
+    {
+        var page = await organisationDetailsPage.ClickEmailChangeLink();
 
-    //    var page1 = await page.EnterRandomEmailAndClickChange();
+        var page1 = await page.EnterRandomEmailAndClickChange();
 
-    //    var page2 = await page1.ClickConfirmButtonInConfirmEmailAddressPage();
+        var page2 = await page1.ClickConfirmButtonInConfirmEmailAddressPage();
 
-    //    return await page2.ClickViewOrganisationDetailsLink();
-    //}
+        return await page2.ClickViewOrganisationDetailsLink();
+    }
 
-    //public static async Task<AS_OrganisationDetailsPage> ChangeWebsiteAddress(AS_OrganisationDetailsPage organisationDetailsPage)
-    //{
-    //    var page = await organisationDetailsPage.ClickWebsiteChangeLink();
+    public static async Task<AS_OrganisationDetailsPage> ChangeWebsiteAddress(AS_OrganisationDetailsPage organisationDetailsPage)
+    {
+        var page = await organisationDetailsPage.ClickWebsiteChangeLink();
 
-    //    var page1 = await page.EnterRandomWebsiteAddressAndClickUpdate();
+        var page1 = await page.EnterRandomWebsiteAddressAndClickUpdate();
 
-    //    var page2 = await page1.ClickConfirmButtonInConfirmWebsiteAddressPage();
+        var page2 = await page1.ClickConfirmButtonInConfirmWebsiteAddressPage();
 
-    //    return await page2.ClickViewOrganisationDetailsLink();
-    //}
+        return await page2.ClickViewOrganisationDetailsLink();
+    }
 
     public static async Task<string> InviteAUser(AS_LoggedInHomePage _loggedInHomePage)
     {
@@ -130,18 +131,24 @@ public class AssessmentServiceStepsHelper(ScenarioContext context)
         return await page1.EnterUserDetailsAndSendInvite();
     }
 
-    //public async Task DeleteCertificate(StaffDashboardPage staffDashboardPage)
-    //{
-    //    staffDashboardPage
-    //        .Search()
-    //        .SearchFor(_ePAOAdminDataHelper.LearnerUln)
-    //        .SelectACertificate()
-    //        .ClickDeleteCertificateLink()
-    //        .ClickYesAndContinue()
-    //        .EnterAuditDetails()
-    //        .ClickDeleteCertificateButton()
-    //        .ClickReturnToDashboard();
-    //}
+    public async Task DeleteCertificate(StaffDashboardPage staffDashboardPage)
+    {
+        var page = await staffDashboardPage.Search();
+
+        var page1 = await page.SearchFor(_ePAOAdminDataHelper.LearnerUln);
+
+        var page2 = await page1.SelectACertificate();
+
+        var page3 = await page2.ClickDeleteCertificateLink();
+
+        var page4 = await page3.ClickYesAndContinue();
+
+        var page5 = await page4.EnterAuditDetails();
+
+        var page6 = await page5.ClickDeleteCertificateButton();
+
+        await page6.ClickReturnToDashboard();
+    }
 
     private async Task<AS_RecordAGradePage> GoToRecordAGradePage() => await new AS_LoggedInHomePage(context).GoToRecordAGradePage();
 

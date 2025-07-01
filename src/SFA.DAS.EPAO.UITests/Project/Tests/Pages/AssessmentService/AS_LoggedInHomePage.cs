@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
+using SFA.DAS.EPAO.UITests.Project.Tests.Pages.EPAOWithdrawalPages;
 
 namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 
@@ -53,25 +54,38 @@ public class AS_LoggedInHomePage(ScenarioContext context) : EPAO_BasePage(contex
 
     public async Task VerifySignedInUserName(string expectedText) => await Assertions.Expect(page.Locator("body")).ToContainTextAsync(expectedText);
 
-    //public async Task<AS_SignedOutPage> ClickSignOutLink()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
+    public async Task<AS_SignedOutPage> ClickSignOutLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new AS_SignedOutPage(context));
-    //}
-    //public async AS_WithdrawFromAStandardsPage ClickWithdrawFromAStandardLink()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Withdraw from a standard" }).ClickAsync();
+        return await VerifyPageAsync(() => new AS_SignedOutPage(context));
+    }
 
-    //    return await VerifyPageAsync(() => new AS_WithdrawFromAStandardsPage(context));
-    //}
+    public async Task<AS_WithdrawFromAStandardsPage> ClickWithdrawFromAStandardLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Withdraw from a standard" }).ClickAsync();
 
-    //public async AS_WithdrawFromAStandardsPage ClickWithdrawFromTheRegisterLink()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Withdraw from all standards" }).ClickAsync();
+        return await VerifyPageAsync(() => new AS_WithdrawFromAStandardsPage(context));
+    }
 
-    //    return await VerifyPageAsync(() => new AS_WithdrawFromAStandardsPage(context));
-    //}
+    public async Task<AS_WithdrawFromAStandardsPage> ClickWithdrawFromTheRegisterLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Withdraw from all standards" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new AS_WithdrawFromAStandardsPage(context));
+    }
+}
+
+public class AS_SignedOutPage(ScenarioContext context) : EPAO_BasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You have successfully signed out.");
+
+    public async Task<StubSignInAssessorPage> ClickSignBackInLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Click here to sign back in" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new StubSignInAssessorPage(context));
+    }
 }
 
 
