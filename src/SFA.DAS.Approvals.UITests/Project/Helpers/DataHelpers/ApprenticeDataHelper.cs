@@ -23,7 +23,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             {
                 // Create random apprentice, training, and RPL details
                 Apprentice apprentice = await CreateNewApprenticeDetails();
-                Training training = await CreateNewApprenticeshipTrainingDetails();
+                Training training = await CreateNewApprenticeshipTrainingDetails(employerType);
                 RPL rpl = await CreateNewApprenticeshipRPLDetails();
 
                 // Create apprenticeship object with the generated details
@@ -74,29 +74,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             return apprentice;
         }
 
-        private async Task<Training> CreateNewApprenticeshipTrainingDetails(ApprenticeshipStatus? apprenticeshipStatus=null)
+        private async Task<Training> CreateNewApprenticeshipTrainingDetails(EmployerType employerType, ApprenticeshipStatus? apprenticeshipStatus=null)
         {
+            Training training = new Training();
+
             CoursesDataHelper coursesDataHelper = new CoursesDataHelper(context);
             var course = await coursesDataHelper.GetRandomCourse();
 
-            var lowerDateRangeForStartDate = AcademicYearDatesHelper.GetCurrentAcademicYearStartDate();
-            var academicYearEndDate = AcademicYearDatesHelper.GetCurrentAcademicYearEndDate();
-            var todaysDate = DateTime.Now;
-            var upperDateRangeForStartDate = (academicYearEndDate > todaysDate) ? todaysDate : academicYearEndDate;
-
-            Training training = new Training();
-
-            if (apprenticeshipStatus == ApprenticeshipStatus.WaitingToStart)
-            {
-                training.StartDate = RandomDataGenerator.GenerateRandomDate(DateTime.Now.AddYears(-1), DateTime.Now);
-                training.EndDate = RandomDataGenerator.GenerateRandomDate(DateTime.Now.AddMonths(1), DateTime.Now.AddYears(1));
-            }
-            else
-            {
-                training.StartDate = RandomDataGenerator.GenerateRandomDate(lowerDateRangeForStartDate, upperDateRangeForStartDate);
-                training.EndDate = training.StartDate.AddMonths(15);
-            }
-
+            training.StartDate = (employerType == EmployerType.Levy) ? await GetStartDate(apprenticeshipStatus) : DateTime.Now;
+            training.EndDate = training.StartDate.AddMonths(15);
             training.AcademicYear = AcademicYearDatesHelper.GetCurrentAcademicYear();
             training.PercentageLearningToBeDelivered = 40;
             training.EpaoPrice = Convert.ToInt32(RandomDataGenerator.GenerateRandomNumber(3));
@@ -110,6 +96,26 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             await Task.Delay(100);
 
             return training;
+        }
+
+        private async Task<DateTime> GetStartDate(ApprenticeshipStatus? apprenticeshipStatus = null)
+        {
+            var lowerDateRangeForStartDate = AcademicYearDatesHelper.GetCurrentAcademicYearStartDate();
+            var academicYearEndDate = AcademicYearDatesHelper.GetCurrentAcademicYearEndDate();
+            var todaysDate = DateTime.Now;
+            var upperDateRangeForStartDate = (academicYearEndDate > todaysDate) ? todaysDate : academicYearEndDate;
+
+            
+
+            if (apprenticeshipStatus == ApprenticeshipStatus.WaitingToStart)
+            {
+                return RandomDataGenerator.GenerateRandomDate(DateTime.Now.AddMonths(2), DateTime.Now);
+            }
+            else
+            {
+                return RandomDataGenerator.GenerateRandomDate(lowerDateRangeForStartDate, upperDateRangeForStartDate);
+            }
+
         }
 
         private async Task<RPL> CreateNewApprenticeshipRPLDetails()

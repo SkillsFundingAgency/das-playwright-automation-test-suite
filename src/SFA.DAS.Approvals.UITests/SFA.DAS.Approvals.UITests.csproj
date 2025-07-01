@@ -53,19 +53,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Project\Features\01_PreApprovals\FlexiJobApprenticeshipAgency\" />
-	  <Folder Include="Project\Features\01_PreApprovals\FileUpload\" />
-	  <Folder Include="Project\Features\01_PreApprovals\ProviderPermissions\" />
+	  <Folder Include="Project\Features\01_PreApprovals\06_FlexiJobApprenticeshipAgency\" />
+	  <Folder Include="Project\Features\01_PreApprovals\05_FileUpload\" />
+	  <Folder Include="Project\Features\01_PreApprovals\08_G&amp;S\" />
+	  <Folder Include="Project\Features\01_PreApprovals\09_ProviderPermissions\" />
 	  <Folder Include="Project\Features\03_EmployerRoles\" />
 	  <Folder Include="Project\Features\02_PostApprovals\" />
-	  <Folder Include="Project\Features\01_PreApprovals\PortableFlexiJob\" />
+	  <Folder Include="Project\Features\01_PreApprovals\07_PortableFlexiJob\" />
 	  <Folder Include="Project\Features\05_LimitingStandards\" />
 	  <Folder Include="Project\Features\06_Navigation\" />
 	  <Folder Include="Project\Features\PublicSectorReporting\" />
 	  <Folder Include="Project\Features\04_ProviderRoles\" />
 	  <Folder Include="Project\Features\01_PreApprovals\01_LevyFunds\a_NewEmployer\" />
 	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\a_NewEmployer\" />
-	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\b_ExistingEmployer\" />
 	  <Folder Include="Project\Features\01_PreApprovals\04_LTM\" />
 	  <Folder Include="Project\Features\01_PreApprovals\03_TransfersConnection\" />
 	</ItemGroup>

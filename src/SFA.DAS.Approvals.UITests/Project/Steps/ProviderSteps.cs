@@ -28,23 +28,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("Provider logs into Provider-Portal")]
         public async Task GivenTheProviderLogsIntoPortal() => await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
 
+
         [When(@"creates an apprentice request \(cohort\) by selecting same apprentices")]
         public async Task WhenCreatesAnApprenticeRequestCohortBySelectingSameApprentices()
         {
             var page = await new ProviderHomePage(context).GotoSelectJourneyPage();
-
             var page1 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
-
             var page2 = await page1.SelectOptionCreateANewCohort();
-
-            var page3 = await page2.ChooseLevyEmployer();
-
+            var page3 = await providerStepsHelper.SelectEmployer(page2);
             var page4 = await page3.ConfirmEmployer();
-
             var page5 = await providerStepsHelper.AddFirstApprenticeFromILRList(page4);
-
             await providerStepsHelper.AddOtherApprenticesFromILRList(page5);
-
         }
 
 
@@ -52,23 +46,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenProviderCanSendItToTheEmployerForApproval()
         {
             var page = new ApproveApprenticeDetailsPage(context);
-
-            await providerStepsHelper.ProviderApproveCohort(page);           
-
+            await providerStepsHelper.ProviderApproveCohort(page);    
         }
 
-        [Then(@"apprentice request \(cohort\) is available under \'Apprentice requests \>\ With employers\'")]
-        public async Task ThenApprenticeRequestCohortIsAvailableUnder()
+                
+        [When("creates reservations for each learner")]
+        public async Task WhenCreatesReservationsForEachLearner()
         {
-            throw new PendingStepException();
+            await providerStepsHelper.ProviderReserveFunds();
         }
 
 
-        [Then(@"apprentice request \(cohort\) is no longer available under any tab in \'Apprentice requests\' section")]
-        public async Task ThenApprenticeRequestCohortIsNoLongerAvailableUnderAnyTabInSection()
+        [When(@"creates an apprentice request \(cohort\) by selecting apprentices from ILR list via reservations")]
+        public async Task WhenCreatesAnApprenticeRequestCohortBySelectingApprenticesFromILRListViaReservations()
         {
-            throw new PendingStepException();
+            var page = await providerStepsHelper.ProviderAddsFirstApprenitceUsingReservation();
+            await providerStepsHelper.ProviderAddsOtherApprentices(page);
+
         }
+
 
 
     }
