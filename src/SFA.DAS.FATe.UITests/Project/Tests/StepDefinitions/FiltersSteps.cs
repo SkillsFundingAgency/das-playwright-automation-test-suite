@@ -30,6 +30,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCoursesPage.ApplyCourseFilterAndVerifyResultsForProfessional();
             await _apprenticeshipTrainingCoursesPage.ApplyLocationFilterAndVerifyResultsForTW14_50miles();
             await _apprenticeshipTrainingCoursesPage.ApplyJobcategoriesFilterAndVerifyResults_ProtectiveServices();
+            await _apprenticeshipTrainingCoursesPage.ApplyFoundationStandardsFilterAndVerifyResultsForFoundationStandards();
         }
     }
 }

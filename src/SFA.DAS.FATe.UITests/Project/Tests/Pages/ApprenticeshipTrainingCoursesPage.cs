@@ -107,6 +107,22 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await VerifyCourseSearchResults("professional");
         await ClearAllFilters();
     }
+    public async Task ApplyFoundationStandardsFilterAndVerifyResultsForFoundationStandards()
+    {
+        await VerifyNoFiltersAreApplied();
+        await SelectApprenticeshipType("Foundation");
+        await ApplyFilters();
+        await VerifyFilterIsSet("Foundation");
+        await VerifyAllResultsHaveFoundationTag();
+        await ClearAllFilters();
+    }
+
+    public async Task ApplyFoundationStandardsFilter()
+    {
+        await VerifyNoFiltersAreApplied();
+        await SelectApprenticeshipType("Foundation");
+        await ApplyFilters();
+    }
     public async Task ApplyLocationFilterAndVerifyResultsForTW14_50miles()
     {
         await SelectApprenticeTravelDistance("50 miles");
