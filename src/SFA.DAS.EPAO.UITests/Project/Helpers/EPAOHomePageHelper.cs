@@ -1,5 +1,4 @@
-﻿using Polly;
-using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign;
+﻿using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 using SFA.DAS.Framework;

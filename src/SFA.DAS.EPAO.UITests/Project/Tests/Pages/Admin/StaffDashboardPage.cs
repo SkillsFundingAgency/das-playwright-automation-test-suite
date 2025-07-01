@@ -1,13 +1,23 @@
-﻿using SFA.DAS.EPAO.UITests.Project.Helpers.DataHelpers;
-using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
-using SFA.DAS.EPAO.UITests.Project.Tests.Pages.EPAOWithdrawalPages;
-using System;
+﻿using SFA.DAS.EPAO.UITests.Project.Tests.Pages.EPAOWithdrawalPages;
 
 namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 
 public class StaffDashboardPage(ScenarioContext context) : EPAOAdmin_BasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Staff dashboard");
+
+    private static string NewOrganisationApplication => ("a.govuk-link[href='/OrganisationApplication#new']");
+    private static string InProgressOrganisationApplication => ("a.govuk-link[href='/OrganisationApplication#in-progress']");
+    private static string ApprovedOrganisationApplication => ("a.govuk-link[href='/OrganisationApplication#approved']");
+    private static string NewStandardApplication => ("a.govuk-link[href='/StandardApplication#new']");
+    private static string NewWithdrawalApplications => ("a.govuk-link[href='/WithdrawalApplication#new']");
+    private static string InProgressStandardApplication => ("a.govuk-link[href='/StandardApplication#in-progress']");
+    private static string FeedbackWithdrawalApplications => ("a.govuk-link[href='/WithdrawalApplication#feedback']");
+    private static string NewFinancialHeathAssesment => ("a.govuk-link[href='/Financial/Open']");
+    private static string SearchLink => ("a.govuk-link[href='/Search']");
+    private static string BatchSearch => ("a.govuk-link[href='/BatchSearch']");
+    private static string Register => ("a.govuk-link[href='/Register']");
+    private static string AddOrganisationLink => ("a.govuk-link[href='/register/add-organisation']");
 
     public async Task<SearchPage> Search()
     {
@@ -81,14 +91,14 @@ public class StaffDashboardPage(ScenarioContext context) : EPAOAdmin_BasePage(co
 
     public async Task<AD_WithdrawalApplicationsPage> GoToNewWithdrawalApplications()
     {
-        await page.GetByText("Withdrawal applications").GetByRole(AriaRole.Link, new() { Name = "New" }).ClickAsync();
+        await page.Locator(NewWithdrawalApplications).ClickAsync();
 
         return await VerifyPageAsync(() => new AD_WithdrawalApplicationsPage(context));
     }
 
     public async Task<AD_WithdrawalApplicationsPage> GoToFeedbackWithdrawalApplications()
     {
-        await page.GetByText("Withdrawal applications").GetByRole(AriaRole.Link, new() { Name = "Feedback" }).ClickAsync();
+        await page.Locator(FeedbackWithdrawalApplications).ClickAsync();
 
         return await VerifyPageAsync(() => new AD_WithdrawalApplicationsPage(context));
     }
@@ -114,7 +124,7 @@ public class SearchResultsPage(ScenarioContext context) : EPAOAdmin_BasePage(con
 
     public async Task<CertificateDetailsPage> SelectACertificate()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = ePAOAdminDataHelper.GivenNames}).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = ePAOAdminDataHelper.GivenNames }).ClickAsync();
 
         return await VerifyPageAsync(() => new CertificateDetailsPage(context));
     }
@@ -194,7 +204,7 @@ public class AuditDetailsPage(ScenarioContext context) : EPAOAdmin_BasePage(cont
     public async Task<CheckYourAnswersBeforeDeletingThisCertificatePage> EnterAuditDetails()
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "What’s the reason for" }).FillAsync("EAPO Entered incorrect details");
-        
+
         await page.Locator("#IncidentNumber").FillAsync("INC-014589527");
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();

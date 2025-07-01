@@ -6,7 +6,10 @@ public class AS_LandingPage(ScenarioContext context) : EPAO_BasePage(context)
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprenticeship assessment service");
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" }).ClickAsync();
+        if (await page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" }).IsVisibleAsync())
+        {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" }).ClickAsync();
+        }
     }
 
     public async Task<StubSignInAssessorPage> GoToStubSign()
