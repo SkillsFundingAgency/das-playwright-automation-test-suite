@@ -13,7 +13,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         #region locators
         private ILocator selectApprenticesFromILR => page.Locator("text=/Select apprentice[s]? from ILR/");
-
         private ILocator ContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         #endregion
 
@@ -24,23 +23,33 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         public async Task<AddApprenticeDetails_SelectJourneyPage> SelectOptionToApprenticesFromILR()
         {
-            await selectApprenticesFromILR.CheckAsync();
-
-            await ContinueButton.ClickAsync();
-
+            await SelectOptionToAddApprenticeFromILRAndContinue();
             return await VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
         }
 
         public async Task<SelectApprenticeFromILRPage> SelectOptionToAddApprenticesFromILRList_AddAnotherApprenticeRoute()
         {
-            await selectApprenticesFromILR.CheckAsync();
-
-            await ContinueButton.ClickAsync();
-
+            await SelectOptionToAddApprenticeFromILRAndContinue();
             return await VerifyPageAsync(() => new SelectApprenticeFromILRPage(context));
         }
 
+        public async Task<SelectApprenticeFromILRPage> SelectOptionToAddApprenticesFromILRList_NonLevyRoute()
+        {
+            await SelectOptionToAddApprenticeFromILRAndContinue();
+            return await VerifyPageAsync(() => new SelectApprenticeFromILRPage(context));
+        }
 
+        public async Task<ProviderSelectAReservationPage> SelectOptionToAddApprenticesFromILRList_SelectReservationRoute()
+        {
+            await SelectOptionToAddApprenticeFromILRAndContinue();
+            return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
+        }
+
+        private async Task SelectOptionToAddApprenticeFromILRAndContinue()
+        {
+            await selectApprenticesFromILR.CheckAsync();
+            await ContinueButton.ClickAsync();
+        }
 
     }
 
