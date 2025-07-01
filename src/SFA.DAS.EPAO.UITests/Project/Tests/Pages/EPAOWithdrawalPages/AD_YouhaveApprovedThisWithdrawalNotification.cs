@@ -144,7 +144,7 @@ public class AD_CheckTheWithdrawDatePage(ScenarioContext context) : EPAO_BasePag
 
 public class AD_CompleteReview(ScenarioContext context) : EPAO_BasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("Complete review");
+    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading).First).ToContainTextAsync("Complete review");
 
     public async Task<AD_YouhaveApprovedThisWithdrawalNotification> ClickApproveApplication()
     {
