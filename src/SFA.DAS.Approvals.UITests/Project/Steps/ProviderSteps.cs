@@ -44,14 +44,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerStepsHelper.ProviderReserveFunds();
         }
 
-
-        [When(@"creates an apprentice request \(cohort\) by selecting apprentices from ILR list via reservations")]
-        public async Task WhenCreatesAnApprenticeRequestCohortBySelectingApprenticesFromILRListViaReservations()
+        [When(@"sends an apprentice request \(cohort\) to the employer by selecting apprentices from ILR list and reservations")]
+        public async Task WhenSendsAnApprenticeRequestCohortToTheEmployerBySelectingApprenticesFromILRListAndReservations()
         {
             var page = await providerStepsHelper.ProviderAddsFirstApprenitceUsingReservation();
-            await providerStepsHelper.ProviderAddsOtherApprentices(page);
-
+            var page1 = await providerStepsHelper.ProviderAddsOtherApprentices(page);
+            await providerStepsHelper.ProviderApproveCohort(page1);
         }
+
 
         [Given(@"Provider sends an apprentice request \(cohort\) to an employer")]
         public async Task GivenProviderSendsAnApprenticeRequestCohortToAnEmployer()

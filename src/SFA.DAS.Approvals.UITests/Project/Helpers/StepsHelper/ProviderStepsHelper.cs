@@ -107,7 +107,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page5.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task ProviderAddsOtherApprentices(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        internal async Task<ApproveApprenticeDetailsPage> ProviderAddsOtherApprentices(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
             if (listOfApprenticeship.Count > 1)
             {
@@ -122,7 +122,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                     var page5 = await page4.SelectNoForRPL();
                     await page5.GetCohortId(apprenticeship);
                 }
-            }            
+            }
+
+            return await approveApprenticeDetailsPage.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
         internal async Task<ApprenticeRequests_ProviderPage> ProviderCreateAndApproveACohortViaIlrRoute()

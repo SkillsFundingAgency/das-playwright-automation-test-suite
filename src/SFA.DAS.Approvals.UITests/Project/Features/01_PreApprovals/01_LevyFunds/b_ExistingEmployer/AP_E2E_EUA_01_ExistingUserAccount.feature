@@ -13,7 +13,7 @@ Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves
 	When Provider sends an apprentice request (cohort) to the employer by selecting same apprentices
 	And Employer approves the apprentice request (cohort)
 	#Then Apprentice records are available under Manager Your Apprentices section
-	#And apprentice record is available on Apprenticeships endpoint for SLD
+	#And Apprentice records are available on Apprenticeships endpoint for SLD
 
 
 @wip
