@@ -12,7 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select apprentices from ILR for ");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select apprentice from ILR for ");
         }
 
         public async Task<AddApprenticeDetailsPage> SelectApprenticeFromILRList(Apprenticeship apprenticeship)

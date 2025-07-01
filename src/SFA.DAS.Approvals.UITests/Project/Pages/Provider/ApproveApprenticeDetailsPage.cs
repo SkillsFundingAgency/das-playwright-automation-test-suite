@@ -64,7 +64,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             var cohortRef = await cohortReference.InnerTextAsync();
             apprenticeship.CohortReference = cohortRef;
 
-            await Task.Delay(100); 
+            await Task.Delay(100);
             context.Set(apprenticeship, "Apprenticeship");
         }
 

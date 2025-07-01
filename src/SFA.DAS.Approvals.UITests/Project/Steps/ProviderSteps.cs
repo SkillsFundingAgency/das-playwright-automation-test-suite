@@ -1,4 +1,5 @@
 ﻿using Polly;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
@@ -15,12 +16,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     public class ProviderSteps
     {
         private readonly ScenarioContext context;
-        private readonly ProviderStepsHelper providerStepsHelper;
+        private readonly SLDDataPushHelpers sldDataPushHelpers;
+        private ProviderStepsHelper providerStepsHelper;
 
         public ProviderSteps(ScenarioContext _context)
         {
             context = _context;
             providerStepsHelper = new ProviderStepsHelper(context);
+            sldDataPushHelpers = new(context);
         }
 
 
@@ -46,10 +49,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenProviderCanSendItToTheEmployerForApproval()
         {
             var page = new ApproveApprenticeDetailsPage(context);
-            await providerStepsHelper.ProviderApproveCohort(page);    
+            await providerStepsHelper.ProviderApproveCohort(page);
         }
 
-                
+
         [When("creates reservations for each learner")]
         public async Task WhenCreatesReservationsForEachLearner()
         {
@@ -64,6 +67,45 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerStepsHelper.ProviderAddsOtherApprentices(page);
 
         }
+
+        [Given(@"Provider sends an apprentice request \(cohort\) to an employer")]
+        public async Task GivenProviderSendsAnApprenticeRequestCohortToAnEmployer()
+        {
+            //create apprenticeships object
+            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateNewApprenticeshipDetails(EmployerType.Levy, 1, null);
+            context.Set(listOfApprenticeship);
+
+            //recreate SLD pushing ILR data to AS
+            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
+            var listOfLearnerDataList = await sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
+            await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList, academicYear);
+
+            // create cohort using ILR data
+            var page = await ProviderCreateAndApproveACohortViaIlrRoute();
+
+            //Provider verify that cohort is under 'Apprentice requests > With employers' section
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers, cohortRef);
+
+        }
+
+
+        private async Task<ApprenticeRequests_ProviderPage> ProviderCreateAndApproveACohortViaIlrRoute()
+        {
+            providerStepsHelper = new ProviderStepsHelper(context);
+
+            var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
+            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+            var page3 = await page2.SelectOptionCreateANewCohort();
+            var page4 = await providerStepsHelper.SelectEmployer(page3);
+            var page5 = await page4.ConfirmEmployer();
+            var page6 = await providerStepsHelper.AddFirstApprenticeFromILRList(page5);
+            await providerStepsHelper.AddOtherApprenticesFromILRList(page6);
+
+            return await providerStepsHelper.ProviderApproveCohort(page6);
+        }
+
 
 
 

@@ -4,6 +4,7 @@ using Polly;
 using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
     {
         private readonly ScenarioContext context;
         private List<Apprenticeship> listOfApprenticeship;
+        private readonly ObjectContext objectContext;
 
         public ProviderStepsHelper(ScenarioContext _context)
         {
             context = _context;
             listOfApprenticeship = _context.GetValue<List<Apprenticeship>>();
+            objectContext = context.Get<ObjectContext>();
         }
 
         internal async Task<ConfirmEmployerPage> SelectEmployer(ChooseAnEmployerPage chooseAnEmployerPage)
@@ -39,6 +42,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page2 = await page1.SelectNoForRPL();
             await page2.GetCohortId(apprenticeship);
 
+            objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.CohortReference}");
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
@@ -59,21 +63,27 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return approveApprenticeDetailsPage;
         }
 
-        internal async Task ProviderApproveCohort(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        internal async Task<ApprenticeRequests_ProviderPage> ProviderApproveCohort(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 await approveApprenticeDetailsPage.VerifyCohort(apprenticeship);
 
+                /*
                 bool isLast = apprenticeship.Equals(listOfApprenticeship.Last());
 
                 if (isLast)
                 {
-                    var page1 = await approveApprenticeDetailsPage.ProviderApproveCohort();
-                    await page1.VerifyCohortApprovedAndSentToEmployer(apprenticeship);
-                    await page1.GoToApprenticeRequests();
+                    var page = await approveApprenticeDetailsPage.ProviderApproveCohort();
+                    await page.VerifyCohortApprovedAndSentToEmployer(apprenticeship);
+                    return await page.GoToApprenticeRequests();
                 }
+                */
             }
+
+            var page = await approveApprenticeDetailsPage.ProviderApproveCohort();
+            await page.VerifyCohortApprovedAndSentToEmployer(listOfApprenticeship.FirstOrDefault());
+            return await page.GoToApprenticeRequests();
 
         }
 

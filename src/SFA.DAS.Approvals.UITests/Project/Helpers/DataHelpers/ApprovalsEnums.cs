@@ -31,4 +31,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
         NonLevyUserAtMaxReservationLimit
     }
 
+    public enum ApprenticeRequests
+    {
+        ReadyForReview,
+        WithEmployers,
+        WithTrainingProviders,
+        Drafts,
+        WithTransferSendingEmployers
+    }
+
 }
