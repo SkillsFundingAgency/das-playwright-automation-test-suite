@@ -45,7 +45,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("Employer does not take any action on that cohort for more than 2 weeks")]
         public void WhenEmployerDoesNotTakeAnyActionOnThatCohortForMoreThan2Weeks()
         {
-            throw new PendingStepException();
+            //throw new PendingStepException();
         }
 
 

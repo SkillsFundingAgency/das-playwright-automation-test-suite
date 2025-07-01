@@ -33,6 +33,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
                     break;
             }
 
+            Task.Delay(1000).Wait(); 
             int count = await page.Locator($"#details_link_{cohortRef}").CountAsync();
 
             if (count == 0)

@@ -32,26 +32,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task GivenTheProviderLogsIntoPortal() => await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
 
 
-        [When(@"creates an apprentice request \(cohort\) by selecting same apprentices")]
-        public async Task WhenCreatesAnApprenticeRequestCohortBySelectingSameApprentices()
+        [When(@"Provider sends an apprentice request \(cohort\) to the employer by selecting same apprentices")]
+        public async Task WhenProviderSendsAnApprenticeRequestCohortToTheEmployerBySelectingSameApprentices()
         {
-            var page = await new ProviderHomePage(context).GotoSelectJourneyPage();
-            var page1 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
-            var page2 = await page1.SelectOptionCreateANewCohort();
-            var page3 = await providerStepsHelper.SelectEmployer(page2);
-            var page4 = await page3.ConfirmEmployer();
-            var page5 = await providerStepsHelper.AddFirstApprenticeFromILRList(page4);
-            await providerStepsHelper.AddOtherApprenticesFromILRList(page5);
+            await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
         }
-
-
-        [Then("Provider can send it to the Employer for approval")]
-        public async Task ThenProviderCanSendItToTheEmployerForApproval()
-        {
-            var page = new ApproveApprenticeDetailsPage(context);
-            await providerStepsHelper.ProviderApproveCohort(page);
-        }
-
 
         [When("creates reservations for each learner")]
         public async Task WhenCreatesReservationsForEachLearner()
@@ -81,31 +66,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList, academicYear);
 
             // create cohort using ILR data
-            var page = await ProviderCreateAndApproveACohortViaIlrRoute();
+            var page = await new ProviderStepsHelper(context).ProviderCreateAndApproveACohortViaIlrRoute();
 
             //Provider verify that cohort is under 'Apprentice requests > With employers' section
             var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
             await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers, cohortRef);
 
         }
-
-
-        private async Task<ApprenticeRequests_ProviderPage> ProviderCreateAndApproveACohortViaIlrRoute()
-        {
-            providerStepsHelper = new ProviderStepsHelper(context);
-
-            var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
-            var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
-            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
-            var page3 = await page2.SelectOptionCreateANewCohort();
-            var page4 = await providerStepsHelper.SelectEmployer(page3);
-            var page5 = await page4.ConfirmEmployer();
-            var page6 = await providerStepsHelper.AddFirstApprenticeFromILRList(page5);
-            await providerStepsHelper.AddOtherApprenticesFromILRList(page6);
-
-            return await providerStepsHelper.ProviderApproveCohort(page6);
-        }
-
 
 
 
