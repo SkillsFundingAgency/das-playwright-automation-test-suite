@@ -73,7 +73,6 @@ public class SqlDbBaseHelper(ObjectContext objectContext, string connectionStrin
         return result.FirstOrDefault();
     }
 
-
     protected async Task<List<(List<object[]> data, int noOfColumns)>> GetMultipleListOfData(List<string> queryToExecute, Dictionary<string, string> parameters = null) =>
        await GetMultipleListOfData(queryToExecute, connectionString, parameters);
 
@@ -150,4 +149,6 @@ public class SqlDbBaseHelper(ObjectContext objectContext, string connectionStrin
     private static async Task<SqlConnection> GetSqlConnection(string connectionString) => await GetSqlConnectionHelper.GetSqlConnection(connectionString);
 
     private void SetDebugInformation(string x) => objectContext.SetDebugInformation(x);
+
+
 }

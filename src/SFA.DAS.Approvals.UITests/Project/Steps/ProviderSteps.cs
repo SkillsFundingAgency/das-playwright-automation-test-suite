@@ -1,4 +1,5 @@
-﻿using Polly;
+﻿using Azure;
+using Polly;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
@@ -74,6 +75,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
+        [Then("return the cohort back to the Provider")]
+        public async Task ThenReturnTheCohortBackToTheProvider()
+        {
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+
+            await new ApprenticeRequests_ProviderPage(context).NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.ReadyForReview, cohortRef);
+            //await new ApprenticeRequests_ProviderPage(context).CohortExistsAsync(cohortRef);
+        }
 
 
     }

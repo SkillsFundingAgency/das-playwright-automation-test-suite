@@ -15,11 +15,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
         }
 
-        internal async Task NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests apprenticeRequests, string cohortRef)
+        internal async Task NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests apprenticeRequests, string? cohortRef)
         {
             switch (apprenticeRequests)
             {
                 case ApprenticeRequests.ReadyForReview:
+                    await page.GetByRole(AriaRole.Link, new() { Name = "With transfer sending employers" }).ClickAsync();  //Has to toggle b/w boxes to make desired option clickable
                     await page.GetByRole(AriaRole.Link, new() { Name = "Ready for review" }).ClickAsync();
                     break;
                 case ApprenticeRequests.WithEmployers:
@@ -33,15 +34,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
                     break;
             }
 
-            Task.Delay(1000).Wait(); 
-            int count = await page.Locator($"#details_link_{cohortRef}").CountAsync();
-
-            if (count == 0)
+            if (!string.IsNullOrWhiteSpace(cohortRef))
             {
-                throw new Exception($"Cohort with reference {cohortRef} not found in {apprenticeRequests} section.");
+                if (!await CohortExistsAsync(cohortRef))
+                {
+                    throw new Exception($"Cohort with reference '{cohortRef}' not found in '{apprenticeRequests}' section.");
+                }
             }
 
-            
+        }
+
+        private async Task<bool> CohortExistsAsync(string cohortRef)
+        {
+            await page.WaitForTimeoutAsync(1000);
+
+            var locator = page.Locator($"#details_link_{cohortRef}");
+            int count = await locator.CountAsync();
+            return count > 0;
         }
 
         internal async Task<ApproveApprenticeDetailsPage> OpenEditableCohortAsync(string cohortRef)

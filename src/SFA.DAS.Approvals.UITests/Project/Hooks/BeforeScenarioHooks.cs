@@ -22,9 +22,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
         [BeforeScenario(Order = 31)]
         public void SetUpDbHelpers()
         {
-            // commitmentsdatahelper = new CommitmentsSqlDataHelper(_objectcontext, _dbConfig);
+            //commitmentsdatahelper = new CommitmentsSqlDataHelper(_objectcontext, _dbConfig);
 
             //context.Set(commitmentsdatahelper);
+
+            context.Set(new CommitmentsDbSqlHelper(_objectcontext, _dbConfig));
 
             //context.Set(new RofjaaDbSqlHelper(_objectcontext, _dbConfig));
 
