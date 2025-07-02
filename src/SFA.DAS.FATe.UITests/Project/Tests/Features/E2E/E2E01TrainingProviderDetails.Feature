@@ -16,3 +16,4 @@ Feature: E2E Training Provider
     And the user accesses training providers for this course
     Then the user navigates back to the training provider details page
     And the user accesses training courses page
+    And the user is able to access foundation apprenticeship courses

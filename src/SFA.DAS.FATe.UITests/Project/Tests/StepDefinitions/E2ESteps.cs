@@ -115,6 +115,15 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         {
             await _specific_TrainingProviderPage.ReturnToCourseSearchResults();
         }
+        [Then("the user is able to access foundation apprenticeship courses")]
+        public async Task ThenTheUserIsAbleToAccessFoundationApprenticeshipCourses()
+        {
+            await _apprenticeshipTrainingCoursesPage.ApplyFoundationStandardsFilter();
+            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Finishing trades foundation apprenticeship (level 2)");
+            await _apprenticeshipTrainingCourseDetailsPage.ClickViewKnowledgeSkillsAndBehaviours();
+            await _apprenticeshipTrainingCourseDetailsPage.VerifyIFATELinkOpensInNewTab();
+        }
+
 
         [When("the provider is listed on the FAT training providers page")]
         public async Task WhenTheProviderIsListedOnTheFATTrainingProvidersPage()
