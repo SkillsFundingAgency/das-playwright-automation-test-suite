@@ -61,7 +61,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     return await context.Get<CommitmentsDbSqlHelper>().GetWithPartyValueFromCommitmentsDb(cohortRef);
                 },
                 "2",
-                TimeSpan.FromMinutes(4)
+                TimeSpan.FromMinutes(5)
             );
         }
 

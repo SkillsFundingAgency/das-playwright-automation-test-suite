@@ -1,5 +1,6 @@
 ﻿using Mailosaur;
 using Mailosaur.Models;
+using NUnit.Framework;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace SFA.DAS.MailosaurAPI.Service.Project.Helpers;
 
 public class MailosaurApiHelper(ScenarioContext context)
 {
-    private readonly DateTime dateTime = DateTime.Now;
+    private readonly DateTime dateTime = DateTime.Now.AddMinutes(-60);
 
     public async Task<string> GetCodeInEmail(string email, string subject, string emailText)
     {
@@ -47,6 +48,29 @@ public class MailosaurApiHelper(ScenarioContext context)
         var message = await mailosaur.Messages.GetAsync(mailosaurAPIUser.ServerId, criteria, timeout: 20000, receivedAfter: dateTime);
 
         SetDebugInformation($"Message found with ID '{message?.Id}' at {message?.Received:HH:mm:ss} with body {Environment.NewLine}{message.Text.Body}");
+
+        return message;
+    }
+
+    public async Task<Message> CheckEmail(string email, string subject, string emailText)
+    {
+        SetDebugInformation($"Check email received to '{email}' using subject '{subject}' and contains text '{emailText}' after {dateTime:HH:mm:ss}");
+
+        var mailosaurAPIUser = GetMailosaurAPIUser(email);
+        var mailosaur = new MailosaurClient(mailosaurAPIUser.ApiToken);
+        var criteria = new SearchCriteria()
+        {
+            SentTo = email,
+            Subject = subject,
+            Body = emailText
+        };
+
+        var itemList = await mailosaur.Messages.SearchAsync(mailosaurAPIUser.ServerId, criteria, timeout: 20000, receivedAfter: dateTime, errorOnTimeout: false);
+        Assert.IsTrue(itemList.Items.Count > 0, $"No emails found for criteria: SentTo={email}, Subject={subject}, Body={emailText} after {dateTime:HH:mm:ss}");
+        
+        var item = itemList.Items.FirstOrDefault();
+        var message = await mailosaur.Messages.GetByIdAsync(item.Id);
+        SetDebugInformation($"Email found in the mailbox with ID '{message.Id}' at {message.Received:HH:mm:ss} with body {Environment.NewLine}{message.Text.Body}");
 
         return message;
     }

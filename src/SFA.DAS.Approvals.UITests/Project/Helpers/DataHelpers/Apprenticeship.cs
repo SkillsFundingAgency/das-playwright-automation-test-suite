@@ -38,7 +38,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
         public string AgreementId { get; set; }
         public string EmployerName { get; set; }
         public EmployerType EmployerType  { get; set; }
-}
+        public string Email { get; set; }
+    }
 
 
     public class Apprentice
