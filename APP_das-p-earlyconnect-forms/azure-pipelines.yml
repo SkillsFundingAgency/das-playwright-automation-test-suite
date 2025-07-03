@@ -12,7 +12,7 @@ variables:
   - group: "Release Automation Suite Variables"
   - group: "Release Automation Suite Variables (Db)"
   - group: "Provider Release Automation Suite Variables"
-  - group: "RELEASE APP_das-p-earlyconnect-forms"
+  - group: "RELEASE APP_das-GAA"
   - name: Deploy
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
@@ -78,7 +78,7 @@ stages:
       - group: "PreProd Management Resources"
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
-      - group: "PREPROD APP_das-p-earlyconnect-forms"
+      - group: "PREPROD APP_das-GAA"
     jobs:
       - template: pipeline-templates/job/deploy.yml
         parameters:
