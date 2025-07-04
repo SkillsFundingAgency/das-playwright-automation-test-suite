@@ -11,13 +11,13 @@ Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves
 	And SLD push its data into AS
 	When Provider sends an apprentice request (cohort) to the employer by selecting same apprentices
 	And Employer approves the apprentice request (cohort)
-	#Then Apprentice records are available under Manager Your Apprentices section
+	Then Provider can access live apprentice records under Manager Your Apprentices section
 	#And Apprentice records are available on Apprenticeships endpoint for SLD
 
 
 @regression
 @e2escenarios
-Scenario Outline: AP_E2E_EUA_01b Verify emails
+Scenario Outline: AP_E2E_EUA_01b emails validation
 	Given previous test has been completed successfully
 	Then Verify the "<Recipient>" receive "<NotificationType>" email
 

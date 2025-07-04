@@ -84,8 +84,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
 
             await new ApprenticeRequests_ProviderPage(context).NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.ReadyForReview, cohortRef);
-            //await new ApprenticeRequests_ProviderPage(context).CohortExistsAsync(cohortRef);
         }
+
+        [Then("Provider can access live apprentice records under Manager Your Apprentices section")]
+        public async Task ThenProviderCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
+        {
+            var apprenticeship = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
+            var uln = apprenticeship.ApprenticeDetails.ULN.ToString();
+            var name = apprenticeship.ApprenticeDetails.FirstName + " " + apprenticeship.ApprenticeDetails.LastName;
+
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+            await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(uln, name);
+
+            //await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails("7234170749", "uCcRWb RBUQwkXRF");
+        }
+
 
 
     }

@@ -8,7 +8,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages
 {
     public abstract class ApprovalsBasePage(ScenarioContext context) : BasePage(context)
     {
-        //protected readonly ApprovalsDataHelpers managingStandardsDataHelpers = context.Get<ManagingStandardsDataHelpers>();
+        
     }
 
 }

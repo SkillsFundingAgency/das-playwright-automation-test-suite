@@ -65,7 +65,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             );
         }
 
-        
+
+        [Then("Employer can access live apprentice records under Manager Your Apprentices section")]
+        public async Task ThenEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
+        {
+            await employerStepsHelper.EmployerLogInToEmployerPortal();
+
+            await new ApprenticesHomePage(context).GoToManageYourApprentices();
+        }
+
+
+
 
     }
 

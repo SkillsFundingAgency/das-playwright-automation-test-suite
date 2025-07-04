@@ -42,6 +42,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
                     body = $" sent you apprentice details to approve (reference {cohortReference}).";
                     break;
 
+                case ("Reservation made on your behalf", "employer"):
+                    rcvrEmail = employerEmail;
+                    subject = "funding reservation made on your behalf";
+                    body = $" reserved apprenticeship funding on your behalf for the following:";
+                    break;
+
                 //provider emails below this area
                 case ("cohort ready for review", "provider"):
                     rcvrEmail = providerEmail;

@@ -66,7 +66,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then(@"Verify the ""(.*)"" receive ""(.*)"" email")]
         public async Task ThenVerifyTheReceiveEmail(string recipient, string notificationType)
         {
-            await approvalsEmailsHelper.VerifyEmailAsync(recipient, notificationType);
+            await new ApprovalsEmailsHelper(context).VerifyEmailAsync(recipient, notificationType);
         }
 
         [Then(@"the '(.*)' receives '(.*)' email notification")]
