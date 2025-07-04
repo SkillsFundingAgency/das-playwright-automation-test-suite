@@ -1,8 +1,10 @@
 ﻿using Azure;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
+using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,17 +26,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             employerLoginHelper = new EmployerPortalLoginHelper(context);
             employerHomePageHelper = new EmployerHomePageStepsHelper(context);
             listOfApprenticeship = _context.GetValue<List<Apprenticeship>>();
-        }
-
-        internal async Task ApproveCohort(ApprenticeRequestsPage apprenticeRequestsPage)
-        {
-            var apprenticeship = listOfApprenticeship.FirstOrDefault();
-
-            var page = await apprenticeRequestsPage.OpenApprenticeRequestReadyForReview(apprenticeship.CohortReference);
-
-            await page.VerifyCohort(apprenticeship);
-
-            var page1 = await page.EmployerApproveCohort();
         }
 
         internal async Task<HomePage> EmployerLogInToEmployerPortal()
@@ -59,6 +50,37 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             }
 
             return new HomePage(context);
+        }
+
+        internal async Task ApproveCohort(ApprenticeRequestsPage apprenticeRequestsPage)
+        {
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+
+            var page = await apprenticeRequestsPage.OpenApprenticeRequestReadyForReview(apprenticeship.CohortReference);
+
+            await page.VerifyCohort(apprenticeship);
+
+            var page1 = await page.EmployerApproveCohort();
+        }
+
+        internal async Task CheckApprenticeOnManageYourApprenticesPage()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+
+            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
+            await new InterimApprenticesHomePage(context, false).VerifyPage();
+            await new ApprenticesHomePage(context).GoToManageYourApprentices();
+
+            var page = new ManageYourApprenticesPage(context);
+            
+            foreach (var apprentice in listOfApprenticeship)
+            {
+                var uln = apprentice.ApprenticeDetails.ULN.ToString();
+                var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
+
+                await page.VerifyApprenticeFound(uln, name);
+            }
+            
         }
     }
 }

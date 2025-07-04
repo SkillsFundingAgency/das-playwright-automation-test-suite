@@ -9,7 +9,7 @@ namespace SFA.DAS.MailosaurAPI.Service.Project.Helpers;
 
 public class MailosaurApiHelper(ScenarioContext context)
 {
-    private readonly DateTime dateTime = DateTime.Now.AddMinutes(-60);
+    private readonly DateTime dateTime = DateTime.Now.AddMinutes(-10);
 
     public async Task<string> GetCodeInEmail(string email, string subject, string emailText)
     {

@@ -15,6 +15,7 @@ using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using Microsoft.VisualBasic;
+using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -69,9 +70,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("Employer can access live apprentice records under Manager Your Apprentices section")]
         public async Task ThenEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
         {
-            await employerStepsHelper.EmployerLogInToEmployerPortal();
-
-            await new ApprenticesHomePage(context).GoToManageYourApprentices();
+            await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage();
         }
 
 
