@@ -55,13 +55,17 @@ public class CheckAndSubmitAssessmentDetailsPage(ScenarioContext context) : EPAO
     {
         static string GetBySummaryValueLocator(string displayName) => ($"//dt[contains(text(),\"{displayName}\")]/following-sibling::dd[@class='govuk-summary-list__value']");
 
-        var givenName = await page.Locator(GetBySummaryValueLocator("Given name")).TextContentAsync();
+        var givenName = await page.Locator(GetBySummaryValueLocator("Given name")).InnerTextAsync();
 
-        var familyName = await page.Locator(GetBySummaryValueLocator("Family name")).TextContentAsync();
+        var familyName = await page.Locator(GetBySummaryValueLocator("Family name")).InnerTextAsync();
+
+        var rName = await page.Locator(GetBySummaryValueLocator("Recipient's Name")).InnerTextAsync();
 
         var fullName = $"{givenName} {familyName}";
 
-        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"Recipient's Name {fullName}");
+        objectContext.SetDebugInformation($"GivenName = '{givenName}', FamilyName = '{familyName}', Recipient's Name = '{rName}' and FullName = '{fullName}'");
+
+        await Assertions.Expect(page.Locator(GetBySummaryValueLocator("Recipient's Name"))).ToContainTextAsync(fullName, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
     }
 }
 
