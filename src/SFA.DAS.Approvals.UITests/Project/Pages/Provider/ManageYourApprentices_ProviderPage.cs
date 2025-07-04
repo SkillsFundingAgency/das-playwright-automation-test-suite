@@ -23,5 +23,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new ApprenticeDetails_ProviderPage(context, name));
         }
 
+
+
     }
 }

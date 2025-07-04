@@ -12,7 +12,7 @@ Scenario: AP_NL_E2E_EUA_01a Provider creates cohort from ILR data Employer appro
 	And creates reservations for each learner
 	And sends an apprentice request (cohort) to the employer by selecting apprentices from ILR list and reservations
 	And Employer approves the apprentice request (cohort)
-	#Then Employer can access live apprentice records under Manager Your Apprentices section
+	Then Employer can access live apprentice records under Manager Your Apprentices section
 	#And Apprentice records are available on Apprenticeships endpoint for SLD
 
 

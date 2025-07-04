@@ -89,15 +89,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("Provider can access live apprentice records under Manager Your Apprentices section")]
         public async Task ThenProviderCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
         {
-            var apprenticeship = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
-            var uln = apprenticeship.ApprenticeDetails.ULN.ToString();
-            var name = apprenticeship.ApprenticeDetails.FirstName + " " + apprenticeship.ApprenticeDetails.LastName;
+            //var apprenticeship = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
+            //var uln = apprenticeship.ApprenticeDetails.ULN.ToString();
+            //var name = apprenticeship.ApprenticeDetails.FirstName + " " + apprenticeship.ApprenticeDetails.LastName;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
             await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
-            await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(uln, name);
+            //await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(uln, name);
 
-            //await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails("7234170749", "uCcRWb RBUQwkXRF");
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+
+            foreach (var apprentice in listOfApprenticeship)
+            {
+                var uln = apprentice.ApprenticeDetails.ULN.ToString();
+                var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
+
+                var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(uln, name);
+                await page.ReturnBackToManageYourApprenticesPage();
+            }
         }
 
 
