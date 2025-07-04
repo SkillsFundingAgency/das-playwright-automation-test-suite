@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.EPAO.UITests.Project.Tests.Pages.EPAOWithdrawalPages;
+using SFA.DAS.Framework;
 
 namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 
@@ -33,12 +34,18 @@ public class StaffDashboardPage(ScenarioContext context) : EPAOAdmin_BasePage(co
     //    return await VerifyPageAsync(() => new OrganisationSearchPage(context));
     //}
 
-    //public async Task<AddOrganisationPage> AddOrganisation()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Add an organisation" }).ClickAsync();
+    public async Task<AddOrganisationPage> AddOrganisation()
+    {
+        var uri = new Uri(new Uri(UrlConfig.Admin_BaseUrl), $"register/add-organisation");
 
-    //    return await VerifyPageAsync(() => new AddOrganisationPage(context));
-    //}
+        objectContext.SetDebugInformation(uri.AbsoluteUri);
+
+        await page.GotoAsync(uri.AbsoluteUri);
+        await page.GotoAsync(uri.AbsoluteUri);
+        await page.GotoAsync(uri.AbsoluteUri);
+
+        return await VerifyPageAsync(() => new AddOrganisationPage(context));
+    }
 
     //public async Task<BatchSearchPage> SearchEPAOBatch()
     //{

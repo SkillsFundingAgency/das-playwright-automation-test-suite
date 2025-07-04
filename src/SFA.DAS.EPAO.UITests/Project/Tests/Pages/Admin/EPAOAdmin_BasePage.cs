@@ -12,22 +12,4 @@ public abstract class EPAOAdmin_BasePage(ScenarioContext context) : EPAO_BasePag
         return await VerifyPageAsync(() => new ASAdminLandingPage(context));
     }
 
-    //protected IWebElement GetData(string headerName)
-    //{
-    //    foreach (var row in pageInteractionHelper.FindElements(TRows))
-    //    {
-    //        if (row.FindElement(THeader).Text == headerName)
-    //        {
-    //            return row.FindElement(TData);
-    //        }
-    //    }
-    //    throw new NotFoundException($"{headerName} not found");
-    //}
-
-    //protected StaffDashboardPage ReturnToDashboard()
-    //{
-    //    formCompletionHelper.ClickElement(() => pageInteractionHelper.FindElement(ReturnToDashboardlink));
-    //    return new(context);
-    //}
-
 }

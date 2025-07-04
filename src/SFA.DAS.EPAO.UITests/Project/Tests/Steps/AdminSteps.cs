@@ -9,8 +9,8 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
     private ConfirmReasonBasePage confirmReasonBasePage;
     private ConfirmationAmendReprintBasePage confirmationAmendReprintBasePage;
 
-    //[Then(@"the admin can add organisation")]
-    //public async Task ThenTheAdminCanAddOrganisation() => await AdminStepshelper.AddOrganisation(await GoToEpaoAdminHomePage());
+    [Then(@"the admin can add organisation")]
+    public async Task ThenTheAdminCanAddOrganisation() => await AdminStepshelper.AddOrganisation(await GoToEpaoAdminHomePage());
 
     //[Then(@"the admin can make organisation to be live")]
     //public async Task ThenTheAdminCanMakeOrganisationToBeLive()

@@ -9,16 +9,16 @@ public class AdminStepshelper
     //    var page = await staffDashboardPage.SearchEPAO();
 
     //    var page1 = await page.SearchForAnOrganisation();
-        
+
     //    return await page1.SelectAnOrganisation();
     //}
 
-    //public static async Task<OrganisationDetailsPage> AddOrganisation(StaffDashboardPage staffDashboardPage)
-    //{
-    //    var page = await staffDashboardPage.AddOrganisation();
-        
-    //    return await page.EnterDetails();
-    //}
+    public static async Task<OrganisationDetailsPage> AddOrganisation(StaffDashboardPage staffDashboardPage)
+    {
+        var page = await staffDashboardPage.AddOrganisation();
+
+        return await page.EnterDetails();
+    }
 
     public static async Task<CertificateDetailsPage> SearchAssessments(StaffDashboardPage staffDashboardPage, string uln)
     {
