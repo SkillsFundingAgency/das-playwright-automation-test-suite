@@ -126,7 +126,7 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
 
         await page.VerifyIncidentNumber(1, incidentNumber);
 
-        await page.VerifyFirstReason(2, amendReason);
+        await page.VerifyFirstReason(1, amendReason);
     }
 
     [Then(@"the certificate history contains the incident number '(.*)' and reprint reason '(.*)'")]

@@ -129,13 +129,15 @@ public class CertificateAddressPage(ScenarioContext context, string pageTitlePre
 
     public async Task EnterRecipientName(string recipientName)
     {
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Recipient's name" }).FillAsync(recipientName);
+        await EnterText("Recipient's name", recipientName);
     }
 
     public async Task EnterEmployerName(string employer)
     {
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Employer name" }).FillAsync(employer);
+        await EnterText("Employer name", employer);
     }
+
+    private async Task EnterText(string textBoxName, string text) { if (!(string.IsNullOrEmpty(text))) await page.GetByRole(AriaRole.Textbox, new() { Name = textBoxName }).FillAsync(text); }
 
     public async Task EnterAddress()
     {
