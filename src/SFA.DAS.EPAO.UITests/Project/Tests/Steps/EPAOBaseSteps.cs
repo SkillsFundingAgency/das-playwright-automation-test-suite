@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.EPAO.UITests.Project.Helpers;
+using SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
@@ -28,14 +29,14 @@ public class EPAOBaseSteps
     protected readonly AssessmentServiceStepsHelper assessmentServiceStepsHelper;
     protected readonly EPAOHomePageHelper ePAOHomePageHelper;
     //protected readonly ApplyStepsHelper applyStepsHelper;
-    //protected readonly AdminStepshelper adminStepshelper;
+    protected readonly AdminStepshelper adminStepshelper;
     //protected readonly EPAOWithdrawalHelper ePAOWithdrawalHelper;
 
-    //protected StaffDashboardPage staffDashboardPage;
+    protected StaffDashboardPage staffDashboardPage;
     //protected OrganisationDetailsPage organisationDetailsPage;
-    //protected CertificateDetailsPage certificateDetailsPage;
-    //protected CertificateAddressPage certificateAddressPage;
-    //protected CheckAndSubmitAssessmentDetailsPage checkAndSubmitAssessmentDetailsPage;
+    protected CertificateDetailsPage certificateDetailsPage;
+    protected CertificateAddressPage certificateAddressPage;
+    protected CheckAndSubmitAssessmentDetailsPage checkAndSubmitAssessmentDetailsPage;
 
     //protected AP_ApplicationOverviewPage applicationOverviewPage;
     //protected AP_PR1_SearchForYourOrganisationPage searchForYourOrganisationPage;
@@ -69,7 +70,7 @@ public class EPAOBaseSteps
         ePAOAdminCASqlDataHelper = context.Get<EPAOAdminCASqlDataHelper>();
         ePAOApplySqlDataHelper = context.Get<EPAOApplySqlDataHelper>();
 
-        //adminStepshelper = new AdminStepshelper();
+        adminStepshelper = new AdminStepshelper();
         ePAOHomePageHelper = new EPAOHomePageHelper(context);
         //applyStepsHelper = new ApplyStepsHelper(context);
         assessmentServiceStepsHelper = new AssessmentServiceStepsHelper(context);

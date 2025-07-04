@@ -1,39 +1,32 @@
-﻿//namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
 
-//public class AS_ChangeWebsitePage : EPAO_BasePage
-//{
-//    protected override string PageTitle => "Change website address";
+public class AS_ChangeWebsitePage(ScenarioContext context) : EPAO_BasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change website address");
 
-//    #region Locators
-//    private static By WebsiteAddressTextBox => By.Id("WebsiteLink");
-//    #endregion
+    public async Task<AS_ConfirmWebsiteAddressPage> EnterRandomWebsiteAddressAndClickUpdate()
+    {
+        await page.Locator("#WebsiteLink").FillAsync(ePAOAssesmentServiceDataHelper.RandomWebsiteAddress);
 
-//    public AS_ChangeWebsitePage(ScenarioContext context) : base(context) => VerifyPage();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Update address" }).ClickAsync();
 
-//    public AS_ConfirmWebsiteAddressPage EnterRandomWebsiteAddressAndClickUpdate()
-//    {
-//        formCompletionHelper.EnterText(WebsiteAddressTextBox, ePAOAssesmentServiceDataHelper.RandomWebsiteAddress);
-//        Continue();
-//        return new(context);
-//    }
-//}
+        return await VerifyPageAsync(() => new AS_ConfirmWebsiteAddressPage(context));
+    }
+}
 
-//public class AS_ConfirmWebsiteAddressPage : EPAO_BasePage
-//{
-//    protected override string PageTitle => "Confirm website address";
+public class AS_ConfirmWebsiteAddressPage(ScenarioContext context) : EPAO_BasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Confirm website address");
 
-//    public AS_ConfirmWebsiteAddressPage(ScenarioContext context) : base(context) => VerifyPage();
+    public async Task<AS_WebsiteAddressUpdatedPage> ClickConfirmButtonInConfirmWebsiteAddressPage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
 
-//    public AS_WebsiteAddressUpdatedPage ClickConfirmButtonInConfirmWebsiteAddressPage()
-//    {
-//        Continue();
-//        return new(context);
-//    }
-//}
+        return await VerifyPageAsync(() => new AS_WebsiteAddressUpdatedPage(context));
+    }
+}
 
-//public class AS_WebsiteAddressUpdatedPage : AS_ChangeOrgDetailsBasePage
-//{
-//    protected override string PageTitle => "Website address updated";
-
-//    public AS_WebsiteAddressUpdatedPage(ScenarioContext context) : base(context) => VerifyPage();
-//}
+public class AS_WebsiteAddressUpdatedPage(ScenarioContext context) : AS_ChangeOrgDetailsBasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Website address updated");
+}

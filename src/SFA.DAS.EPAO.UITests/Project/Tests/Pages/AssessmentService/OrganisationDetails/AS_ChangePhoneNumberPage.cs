@@ -1,39 +1,33 @@
-﻿//namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
 
-//public class AS_ChangePhoneNumberPage : EPAO_BasePage
-//{
-//    protected override string PageTitle => "Change phone number";
 
-//    #region Locators
-//    private static By PhoneNumberTextBox => By.CssSelector(".govuk-input");
-//    #endregion
+public class AS_ChangePhoneNumberPage(ScenarioContext context) : EPAO_BasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change phone number");
 
-//    public AS_ChangePhoneNumberPage(ScenarioContext context) : base(context) => VerifyPage();
+    public async Task<AS_ConfirmPhoneNumberPage> EnterRandomPhoneNumberAndClickUpdate()
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Phone number" }).FillAsync(EPAODataHelper.GetRandomNumber(10));
 
-//    public AS_ConfirmPhoneNumberPage EnterRandomPhoneNumberAndClickUpdate()
-//    {
-//        formCompletionHelper.EnterText(PhoneNumberTextBox, Helpers.DataHelpers.EPAODataHelper.GetRandomNumber(10));
-//        Continue();
-//        return new(context);
-//    }
-//}
+        await page.GetByRole(AriaRole.Button, new() { Name = "Update number" }).ClickAsync();
 
-//public class AS_ConfirmPhoneNumberPage : EPAO_BasePage
-//{
-//    protected override string PageTitle => "Confirm phone number";
+        return await VerifyPageAsync(() => new AS_ConfirmPhoneNumberPage(context));
+    }
+}
 
-//    public AS_ConfirmPhoneNumberPage(ScenarioContext context) : base(context) => VerifyPage();
+public class AS_ConfirmPhoneNumberPage(ScenarioContext context) : EPAO_BasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Confirm phone number");
 
-//    public AS_ContactPhoneNumberUpdatedPage ClickConfirmButtonInConfirmPhoneNumberPage()
-//    {
-//        Continue();
-//        return new(context);
-//    }
-//}
+    public async Task<AS_ContactPhoneNumberUpdatedPage> ClickConfirmButtonInConfirmPhoneNumberPage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
 
-//public class AS_ContactPhoneNumberUpdatedPage : AS_ChangeOrgDetailsBasePage
-//{
-//    protected override string PageTitle => "Contact phone number updated";
+        return await VerifyPageAsync(() => new AS_ContactPhoneNumberUpdatedPage(context));
+    }
+}
 
-//    public AS_ContactPhoneNumberUpdatedPage(ScenarioContext context) : base(context) => VerifyPage();
-//}
+public class AS_ContactPhoneNumberUpdatedPage(ScenarioContext context) : AS_ChangeOrgDetailsBasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Contact phone number updated");
+}

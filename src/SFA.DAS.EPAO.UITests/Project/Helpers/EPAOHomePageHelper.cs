@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign;
+using SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 using SFA.DAS.Framework;
 
@@ -17,32 +18,24 @@ public class EPAOHomePageHelper
         _dfeAdminLoginStepsHelper = new DfeAdminLoginStepsHelper(_context);
     }
 
-    //public async Task<StaffDashboardPage> LoginToEpaoAdminHomePage(bool openInNewTab)
-    //{
-    //    var driver = _context.Get<Driver>();
+    public async Task<StaffDashboardPage> LoginToEpaoAdminHomePage(bool openInNewTab)
+    {
+        var url = UrlConfig.Admin_BaseUrl;
 
-    //    var url = UrlConfig.Admin_BaseUrl;
+        await OpenUrl(url, openInNewTab);
 
-    //    _context.Get<ObjectContext>().SetDebugInformation(url);
+        await _dfeAdminLoginStepsHelper.CheckAndLoginToAsAdmin();
 
-    //    await driver.Page.GotoAsync(url);
-
-    //    await _dfeAdminLoginStepsHelper.CheckAndLoginToAsAdmin();
-
-    //    return new StaffDashboardPage(_context);
-    //}
+        return await VerifyPageHelper.VerifyPageAsync(() => new StaffDashboardPage(_context));
+    }
 
     public async Task<AS_LandingPage> GoToEpaoAssessmentLandingPage(bool openInNewTab = false)
     {
-        var driver = _context.Get<Driver>();
-
         var url = UrlConfig.EPAOAssessmentService_BaseUrl;
 
-        _context.Get<ObjectContext>().SetDebugInformation(url);
+        await OpenUrl(url, openInNewTab);
 
-        await driver.Page.GotoAsync(url);
-
-        return new AS_LandingPage(_context);
+        return await VerifyPageHelper.VerifyPageAsync(() => new AS_LandingPage(_context));
     }
 
     //public async Task<AS_ApplyForAStandardPage> GoToEpaoApplyForAStandardPage()
