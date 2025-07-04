@@ -143,17 +143,19 @@ public class CertificateDetailsPage(ScenarioContext context) : EPAOAdmin_BasePag
         return await VerifyPageAsync(() => new AreYouSureYouWantToDeletePage(context));
     }
 
-    //public async Task<AmendReasonPage> ClickAmendCertificateLink()
-    //{
-    //    formCompletionHelper.ClickElement(AmendCertificateLink);
-    //    return await VerifyPageAsync(() => new AmendReasonPage(context));
-    //}
+    public async Task<AmendReasonPage> ClickAmendCertificateLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Amend certificate information" }).ClickAsync();
 
-    //public async Task<ReprintReasonPage>  ClickReprintCertificateLink()
-    //{
-    //    formCompletionHelper.ClickElement(ReprintCertificateLink);
-    //    return await VerifyPageAsync(() => new ReprintReasonPage(context));
-    //}
+        return await VerifyPageAsync(() => new AmendReasonPage(context));
+    }
+
+    public async Task<ReprintReasonPage> ClickReprintCertificateLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Request certificate reprint" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ReprintReasonPage(context));
+    }
 
     public async Task ClickShowAllHistory()
     {
@@ -181,6 +183,11 @@ public class CertificateDetailsPage(ScenarioContext context) : EPAOAdmin_BasePag
 
         await Assertions.Expect(page.Locator(by)).ToContainTextAsync(reason);
     }
+}
+
+public class ReprintReasonPage(ScenarioContext context) : ConfirmReasonBasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("Are you sure this certificate needs reprinting?");
 }
 
 public class AreYouSureYouWantToDeletePage(ScenarioContext context) : EPAOAdmin_BasePage(context)
