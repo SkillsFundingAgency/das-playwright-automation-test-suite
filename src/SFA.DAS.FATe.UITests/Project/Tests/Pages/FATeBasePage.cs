@@ -86,6 +86,26 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
             await checkbox.CheckAsync();
         }
     }
+    public async Task SelectApprenticeshipType(string typeName)
+    {
+        var checkbox = page.Locator($"input.govuk-checkboxes__input[name='ApprenticeshipTypes'][value='{typeName}']");
+        var expandButton = page.GetByRole(AriaRole.Button, new() { Name = "Apprenticeship type , Show" });
+
+        if (!await checkbox.IsVisibleAsync())
+        {
+            if (await expandButton.IsVisibleAsync())
+            {
+                await expandButton.ClickAsync();
+                await checkbox.WaitForAsync(new() { State = WaitForSelectorState.Visible });
+            }
+        }
+
+        if (!await checkbox.IsCheckedAsync())
+        {
+            await checkbox.CheckAsync();
+        }
+    }
+
     public async Task VerifyApprenticeshipLevelResult(string level)
     {
         var levelLocator = page.Locator("dt.das-definition-list__title:has-text('Apprenticeship level') + dd.das-definition-list__definition");
@@ -203,6 +223,20 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
         var jobCategoryLocator = page.Locator($"dt.das-definition-list__title:has-text('Job Category') + dd.das-definition-list__definition");
         await Assertions.Expect(jobCategoryLocator.First).ToBeVisibleAsync();
         await Assertions.Expect(jobCategoryLocator.First).ToContainTextAsync(jobCategory);
+    }
+    public async Task VerifyAllResultsHaveFoundationTag()
+    {
+        var foundationTags = page.Locator("li.das-search-results__list-item strong.govuk-tag");
+
+        int count = await foundationTags.CountAsync();
+        Assert.True(count > 0, "No search results found with a Foundation tag.");
+
+        for (int i = 0; i < count; i++)
+        {
+            var tag = foundationTags.Nth(i);
+            await Assertions.Expect(tag).ToBeVisibleAsync();
+            await Assertions.Expect(tag).ToHaveTextAsync("Foundation");
+        }
     }
     public async Task VerifyPaginationLinks(List<int> pageNumbers)
     {

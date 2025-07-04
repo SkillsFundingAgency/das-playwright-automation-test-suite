@@ -6,7 +6,6 @@ A short summary of the feature
 
 @regression
 @e2escenarios
-@selectstandardwithmultipleoptions
 Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves it
  
 	Given Provider successfully submits 2 ILR record containing a learner record for a "Levy" Employer
@@ -20,7 +19,6 @@ Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves
 
 @wip
 @e2escenarios
-@selectstandardwithmultipleoptions
 Scenario: AP_E2E_EUA_01b Provider creates cohort from ILR data Employer approves it - Email Verification
 
 	Given previous test has been completed successfully

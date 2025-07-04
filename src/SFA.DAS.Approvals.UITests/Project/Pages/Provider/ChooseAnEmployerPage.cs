@@ -15,27 +15,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Choose an employer");
         }
 
-        public async Task<ConfirmEmployerPage> ChooseLevyEmployer() => await ChooseAnEmployer("Levy");
-        internal async Task<ConfirmEmployerPage> ChooseNonLevyEmployer() => await ChooseAnEmployer("NonLevy");
-        internal async Task<ConfirmEmployerPage> ChooseNonLevyEmployerAtMaxReservationLimit() => await ChooseAnEmployer("NonLevyUserAtMaxReservationLimit");
-
-        private async Task<ConfirmEmployerPage> ChooseAnEmployer(string employerType)
+        internal async Task<ConfirmEmployerPage> ChooseAnEmployer(string agreementId)
         {
-
-            EasAccountUser employerUser = employerType switch
-            {
-                "NonLevy" => context.GetUser<NonLevyUser>(),
-                "NonLevyUserAtMaxReservationLimit" => context.GetUser<NonLevyUserAtMaxReservationLimit>(),
-                _ => context.GetUser<LevyUser>()
-            };
-
-            var employerName = employerUser.OrganisationName[..3] + "%";
-
-            var agreementId = await context.Get<AccountsDbSqlHelper>().GetAgreementId(employerUser.Username, employerName);
-
             await page.GetByRole(AriaRole.Row, new() { Name = agreementId }).GetByRole(AriaRole.Link).ClickAsync();
 
             return await VerifyPageAsync(() => new ConfirmEmployerPage(context));
+
         }
 
 
