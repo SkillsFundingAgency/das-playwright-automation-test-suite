@@ -7,6 +7,12 @@ jobs:
   workspace:
     clean: all
   steps:
+    - task: UseDotNet@2
+      displayName: 'Install .NET 9.0 SDK'
+      inputs:
+        packageType: 'sdk'
+        version: '9.0.x'
+
     - task: DotNetCoreCLI@2
       displayName: dotnet build
       inputs:
