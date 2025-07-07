@@ -59,7 +59,7 @@ jobs:
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.runsettings'
             inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests/runsettings/src/'
+              SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
               TargetFileNames: '*.runsettings'
 
           - task: PowerShell@2
