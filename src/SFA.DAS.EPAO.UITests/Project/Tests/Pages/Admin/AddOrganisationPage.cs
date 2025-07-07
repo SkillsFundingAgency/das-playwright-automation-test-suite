@@ -76,7 +76,7 @@ public class OrganisationDetailsPage(ScenarioContext context) : EPAOAdmin_BasePa
 
     private async Task VerifyOrganisationDetails(string headerName, string value)
     {
-        var details = await page.Locator(".govuk-summary-list__row").AllTextContentsAsync();
+        var details = await page.Locator(".govuk-summary-list__row").AllInnerTextsAsync();
 
         CollectionAssert.Contains(details, $"{headerName} {value}");
     }
