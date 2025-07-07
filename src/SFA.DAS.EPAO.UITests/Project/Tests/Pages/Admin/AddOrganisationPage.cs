@@ -78,7 +78,9 @@ public class OrganisationDetailsPage(ScenarioContext context) : EPAOAdmin_BasePa
     {
         var details = await page.Locator(".govuk-summary-list__row").AllInnerTextsAsync();
 
-        CollectionAssert.Contains(details, $"{headerName} {value}");
+        var list = details.ToList().Select(x => x.RemoveMultipleSpace()).ToList();
+
+        CollectionAssert.Contains(list, $"{headerName} {value}");
     }
 }
 

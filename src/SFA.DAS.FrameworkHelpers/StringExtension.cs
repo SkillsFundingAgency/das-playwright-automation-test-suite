@@ -46,6 +46,8 @@ public static partial class StringExtension
         return index >= 0;
     }
 
+    public static string RemoveMultipleSpace(this string input) => Regex.Replace(input, @"\s+", " ");
+
     public static bool CompareToIgnoreCase(this string strA, string strB) => string.Compare(strA.RemoveSpace(), strB, true) == 0;
 
     public static string RemoveSpace(this string s) => MyRegex().Replace(s, string.Empty);
