@@ -1,12 +1,16 @@
 trigger:
-  batch: true
   branches:
     include:
-      - "*"
+      - master
+
+pr:
+  branches:
+    include:
+      - master
 
 variables:
-  - name: buildConfiguration
-    value: 'release'
+  - name: BuildConfiguration
+    value: release
   - name: BuildPlatform
     value: any cpu
   - group: "Release Automation Suite Variables"
@@ -18,6 +22,7 @@ variables:
 
 resources:
   repositories:
+    - repository: self
     - repository: das-platform-building-blocks
       type: github
       name: SkillsFundingAgency/das-platform-building-blocks
@@ -36,9 +41,7 @@ stages:
   - stage: Build
     displayName: Build Stage
     jobs:
-      - template: ../code-build.yml
-        parameters:
-          BuildConfiguration: $(buildConfiguration)
+      - template: code-build.yml
 
   - stage: Deploy_TEST
     dependsOn: Build
