@@ -33,7 +33,7 @@ public class EPAOBaseSteps
     //protected readonly EPAOWithdrawalHelper ePAOWithdrawalHelper;
 
     protected StaffDashboardPage staffDashboardPage;
-    //protected OrganisationDetailsPage organisationDetailsPage;
+    protected OrganisationDetailsPage organisationDetailsPage;
     protected CertificateDetailsPage certificateDetailsPage;
     protected CertificateAddressPage certificateAddressPage;
     protected CheckAndSubmitAssessmentDetailsPage checkAndSubmitAssessmentDetailsPage;

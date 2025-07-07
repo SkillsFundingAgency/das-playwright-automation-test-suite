@@ -125,7 +125,6 @@ public class AddContactPage(ScenarioContext context) : EPAOAdmin_BasePage(contex
     }
 }
 
-
 public class ContactDetailsPage(ScenarioContext context) : EPAOAdmin_BasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("View contact");

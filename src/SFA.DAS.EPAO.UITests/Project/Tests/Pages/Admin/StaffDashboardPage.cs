@@ -27,12 +27,12 @@ public class StaffDashboardPage(ScenarioContext context) : EPAOAdmin_BasePage(co
         return await VerifyPageAsync(() => new SearchPage(context));
     }
 
-    //public async Task<OrganisationSearchPage> SearchEPAO()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Search organisations" }).ClickAsync();
+    public async Task<OrganisationSearchPage> SearchEPAO()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Search organisations" }).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new OrganisationSearchPage(context));
-    //}
+        return await VerifyPageAsync(() => new OrganisationSearchPage(context));
+    }
 
     public async Task<AddOrganisationPage> AddOrganisation()
     {
@@ -47,12 +47,12 @@ public class StaffDashboardPage(ScenarioContext context) : EPAOAdmin_BasePage(co
         return await VerifyPageAsync(() => new AddOrganisationPage(context));
     }
 
-    //public async Task<BatchSearchPage> SearchEPAOBatch()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Batch search" }).ClickAsync();
+    public async Task<BatchSearchPage> SearchEPAOBatch()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Batch search" }).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new BatchSearchPage(context));
-    //}
+        return await VerifyPageAsync(() => new BatchSearchPage(context));
+    }
 
     //public async Task<OrganisationApplicationsPage> GoToNewOrganisationApplications()
     //{
