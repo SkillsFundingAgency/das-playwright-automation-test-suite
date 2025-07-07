@@ -28,15 +28,6 @@ jobs:
               artifactName: 'drop'
               downloadPath: '$(System.DefaultWorkingDirectory)'
 
-          - task: PowerShell@2
-            displayName: 'DEBUG: List directories and files after extraction'
-            inputs:
-              targetType: 'inline'
-              script: |
-                Write-Host "Current working directory: $(System.DefaultWorkingDirectory)"
-                Write-Host "Listing: $(System.DefaultWorkingDirectory)/drop"
-                Get-ChildItem -Recurse "$(System.DefaultWorkingDirectory)/drop" | Select-Object FullName, Length, LastWriteTime
-
           - task: ExtractFiles@1
             displayName: 'Extract files'
             inputs:
@@ -75,12 +66,6 @@ jobs:
               displaySettings: specific
               width: 1920
               height: 1080
-
-          - script: dir $(System.DefaultWorkingDirectory) /S
-            displayName: 'List ALL contents in System.DefaultWorkingDirectory (recursive)'
-
-          - script: dir $(Build.SourcesDirectory) /S
-            displayName: 'List ALL contents in Build.SourcesDirectory (recursive)'
 
           - task: AzurePowerShell@5
             displayName: "Get Agent's IP Address"
