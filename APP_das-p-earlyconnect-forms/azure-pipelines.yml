@@ -19,6 +19,7 @@ resources:
       name: SkillsFundingAgency/das-platform-automation
       ref: refs/tags/5.1.17
       endpoint: SkillsFundingAgency
+
 pool:
   vmImage: 'windows-latest'
 
