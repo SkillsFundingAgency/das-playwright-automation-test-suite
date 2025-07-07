@@ -42,6 +42,8 @@ stages:
     displayName: Build Stage
     jobs:
       - template: ../code-build.yml
+        parameters:
+          BuildConfiguration: $(BuildConfiguration)
 
   - stage: Deploy_TEST
     dependsOn: Build
