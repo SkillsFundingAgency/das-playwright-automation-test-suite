@@ -41,7 +41,7 @@ stages:
   - stage: Build
     displayName: Build Stage
     jobs:
-      - template: code-build.yml
+      - template: ../code-build.yml
 
   - stage: Deploy_TEST
     dependsOn: Build
