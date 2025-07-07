@@ -24,6 +24,6 @@ pool:
   vmImage: 'windows-latest'
 
 jobs:
-  - template: code-build.yml
+  - template: ../code-build.yml
     parameters:
       BuildConfiguration: $(buildConfiguration)
