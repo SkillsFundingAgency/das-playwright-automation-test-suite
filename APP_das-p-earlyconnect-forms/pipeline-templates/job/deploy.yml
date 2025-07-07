@@ -14,36 +14,59 @@ jobs:
     runOnce:
       deploy:
         steps:
+          - checkout: self
+            displayName: 'Checkout current branch'
+
+          - checkout: das-platform-automation
+            displayName: 'Checkout das-platform-automation'
+
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download build artifacts'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.DefaultWorkingDirectory)'
+
+          - task: PowerShell@2
+            displayName: 'DEBUG: List directories and files after extraction'
+            inputs:
+              targetType: 'inline'
+              script: |
+                Write-Host "Current working directory: $(System.DefaultWorkingDirectory)"
+                Write-Host "Listing: $(System.DefaultWorkingDirectory)/drop"
+                Get-ChildItem -Recurse "$(System.DefaultWorkingDirectory)/drop" | Select-Object FullName, Length, LastWriteTime
+
           - task: ExtractFiles@1
             displayName: 'Extract files'
             inputs:
-              archiveFilePatterns: '**/tests.zip'
-              destinationFolder: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests'
+              archiveFilePatterns: 'drop/tests.zip'
+              destinationFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
 
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.json'
             inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests'
+              SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests'
               TargetFileNames: '*.json'
 
           - task: PowerShell@2
             displayName: 'Update NumberOfTestWorkers'
             inputs:
-              targetType: filePath
-              filePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/src/UpdateNoofTestWorkers.ps1'
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/src/UpdateNoofTestWorkers.ps1'
               arguments: '-browser $(BROWSER_TYPE)'
 
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.runsettings'
             inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/runsettings/src/'
+              SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests/runsettings/src/'
               TargetFileNames: '*.runsettings'
 
           - task: PowerShell@2
             displayName: 'Install Playwright Browsers'
             inputs:
-              targetType: filePath
-              filePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/SFA.DAS.Campaigns.UITests/playwright.ps1'
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/SFA.DAS.Campaigns.UITests/playwright.ps1'
               arguments: install
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
@@ -52,6 +75,12 @@ jobs:
               displaySettings: specific
               width: 1920
               height: 1080
+
+          - script: dir $(System.DefaultWorkingDirectory) /S
+            displayName: 'List ALL contents in System.DefaultWorkingDirectory (recursive)'
+
+          - script: dir $(Build.SourcesDirectory) /S
+            displayName: 'List ALL contents in Build.SourcesDirectory (recursive)'
 
           - task: AzurePowerShell@5
             displayName: "Get Agent's IP Address"
@@ -70,12 +99,12 @@ jobs:
               azurePowerShellVersion: LatestVersion
 
           - task: VSTest@2
-            displayName: 'VsTest - Test Execution '
+            displayName: 'VsTest - Test Execution'
             inputs:
               testAssemblyVer2: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
-              searchFolder: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/'
+              searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
               testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
-              runSettingsFile: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/runsettings/src/Parellel.runsettings'
+              runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
               runInParallel: true
               otherConsoleOptions: '/logger:trx'
               rerunFailedTests: true
@@ -95,6 +124,6 @@ jobs:
           - task: PowerShell@2
             displayName: 'Check .trx File Exists'
             inputs:
-              targetType: filePath
-              filePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/src/Check-TestResults.ps1'
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
               arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
