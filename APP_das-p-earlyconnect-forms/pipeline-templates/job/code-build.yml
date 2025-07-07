@@ -12,6 +12,15 @@ jobs:
   variables:
     - group: BUILD Management Resources
   steps:
+    # Install .NET 9 SDK before anything else
+    - task: UseDotNet@2
+      displayName: 'Install .NET 9 SDK'
+      inputs:
+        packageType: 'sdk'
+        version: '9.0.x'
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+
+    # Debug step: List folders/files (super helpful for path issues)
     - powershell: |
         Write-Host "##[section]DEBUG: Current working directory"
         Get-Location
