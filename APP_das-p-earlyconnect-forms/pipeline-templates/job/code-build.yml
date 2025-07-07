@@ -1,22 +1,6 @@
-trigger:
-  batch: true
-  branches:
-    include:
-      - "*"
-
-pool:
-  vmImage: 'windows-latest'
-
-variables:
-  buildConfiguration: 'release'
-
-resources:
-  repositories:
-    - repository: das-platform-building-blocks
-      type: github
-      name: SkillsFundingAgency/das-platform-building-blocks
-      ref: refs/tags/2.1.28
-      endpoint: SkillsFundingAgency
+parameters:
+  - name: BuildConfiguration
+    type: string
 
 jobs:
 - job: CodeBuild
@@ -28,14 +12,19 @@ jobs:
   variables:
     - group: BUILD Management Resources
   steps:
-    - script: |
-        echo "## Debug Info ##"
-        echo "Current directory: %CD%"
-        dir
-        echo "Parent directory contents:"
-        cd ..
-        dir
-      displayName: 'Debug - Show Directory Structure'
+    - powershell: |
+        Write-Host "##[section]DEBUG: Current working directory"
+        Get-Location
+        Write-Host "##[section]DEBUG: Files/folders in current directory"
+        Get-ChildItem -Force
+        Write-Host "##[section]DEBUG: Files/folders in parent directory"
+        Get-ChildItem .. -Force
+        Write-Host "##[section]DEBUG: Files/folders in root of repo"
+        Get-ChildItem $Env:BUILD_SOURCESDIRECTORY -Force
+        Write-Host "##[section]DEBUG: Files/folders in src"
+        Get-ChildItem $Env:BUILD_SOURCESDIRECTORY\src -Force
+      displayName: "DEBUG: List Directories and Files"
+      continueOnError: true
 
     - template: azure-pipelines-templates/build/step/gitversion.yml@das-platform-building-blocks
 
@@ -43,7 +32,7 @@ jobs:
       displayName: dotnet build
       inputs:
         projects: '../src/**/*.csproj'
-        arguments: '--configuration $(buildConfiguration)'
+        arguments: '--configuration $(BuildConfiguration)'
 
     - task: DotNetCoreCLI@2
       displayName: dotnet unit test
@@ -58,7 +47,7 @@ jobs:
         command: 'pack'
         projects: '../src/**/*.csproj'
         packDirectory: '$(build.artifactstagingdirectory)/publish'
-        arguments: '--configuration $(buildConfiguration) --no-restore'
+        arguments: '--configuration $(BuildConfiguration) --no-restore'
 
     - task: DotNetCoreCLI@2
       displayName: 'dotnet publish'
@@ -67,7 +56,7 @@ jobs:
         publishWebProjects: false
         zipAfterPublish: false
         projects: '../src/**/*Tests.csproj'
-        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
+        arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
 
     - task: CopyFiles@2
       displayName: 'Copy plain files to: $(build.artifactstagingdirectory)/tests/files'
