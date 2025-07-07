@@ -32,6 +32,7 @@ resources:
 
 stages:
   - stage: Build
+    displayName: Build Stage
     jobs:
       - template: pipeline-templates/job/code-build.yml
 
@@ -56,9 +57,9 @@ stages:
     jobs:
       - template: pipeline-templates/job/deploy.yml
         parameters:
-          Environment: TEST
+          Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
-          
+
   - stage: Deploy_DEMO
     dependsOn: Build
     displayName: Deploy to DEMO
