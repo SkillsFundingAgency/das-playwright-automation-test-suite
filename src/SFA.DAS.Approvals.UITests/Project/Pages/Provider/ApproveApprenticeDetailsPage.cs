@@ -55,7 +55,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(Uln(apprenticeRow)).ToHaveTextAsync(expectedULN.Trim());
             await Assertions.Expect(Dob(apprenticeRow)).ToHaveTextAsync(expectedDOB.Trim());
             await Assertions.Expect(TrainingDates(apprenticeRow)).ToHaveTextAsync(expectedTrainingDates.Trim());
-            //await Assertions.Expect(Price(apprenticeRow)).ToHaveTextAsync(expectedPrice.Trim());         //<--- commenting it due to known bug: APPMAN-1679
+            await Assertions.Expect(Price(apprenticeRow)).ToHaveTextAsync(expectedPrice.Trim());
         
         }
 
@@ -64,7 +64,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             var cohortRef = await cohortReference.InnerTextAsync();
             apprenticeship.CohortReference = cohortRef;
 
-            await Task.Delay(100); 
+            await Task.Delay(100);
             context.Set(apprenticeship, "Apprenticeship");
         }
 

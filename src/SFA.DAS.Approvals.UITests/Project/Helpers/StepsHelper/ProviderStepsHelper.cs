@@ -4,6 +4,8 @@ using Polly;
 using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+using SFA.DAS.FrameworkHelpers;
+using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
 using System.Collections.Generic;
@@ -17,11 +19,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
     {
         private readonly ScenarioContext context;
         private List<Apprenticeship> listOfApprenticeship;
+        private readonly ObjectContext objectContext;
 
         public ProviderStepsHelper(ScenarioContext _context)
         {
             context = _context;
             listOfApprenticeship = _context.GetValue<List<Apprenticeship>>();
+            objectContext = context.Get<ObjectContext>();
         }
 
         internal async Task<ConfirmEmployerPage> SelectEmployer(ChooseAnEmployerPage chooseAnEmployerPage)
@@ -39,6 +43,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page2 = await page1.SelectNoForRPL();
             await page2.GetCohortId(apprenticeship);
 
+            objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.CohortReference}");
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
@@ -59,21 +64,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return approveApprenticeDetailsPage;
         }
 
-        internal async Task ProviderApproveCohort(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        internal async Task<ApprenticeRequests_ProviderPage> ProviderApproveCohort(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 await approveApprenticeDetailsPage.VerifyCohort(apprenticeship);
-
-                bool isLast = apprenticeship.Equals(listOfApprenticeship.Last());
-
-                if (isLast)
-                {
-                    var page1 = await approveApprenticeDetailsPage.ProviderApproveCohort();
-                    await page1.VerifyCohortApprovedAndSentToEmployer(apprenticeship);
-                    await page1.GoToApprenticeRequests();
-                }
             }
+
+            var page = await approveApprenticeDetailsPage.ProviderApproveCohort();
+            await page.VerifyCohortApprovedAndSentToEmployer(listOfApprenticeship.FirstOrDefault());
+            return await page.GoToApprenticeRequests();
 
         }
 
@@ -107,7 +107,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page5.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task ProviderAddsOtherApprentices(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        internal async Task<ApproveApprenticeDetailsPage> ProviderAddsOtherApprentices(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
             if (listOfApprenticeship.Count > 1)
             {
@@ -124,7 +124,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 }
             }
 
-            
+            return await approveApprenticeDetailsPage.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
+        }
+
+        internal async Task<ApprenticeRequests_ProviderPage> ProviderCreateAndApproveACohortViaIlrRoute()
+        {
+            var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
+            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+            var page3 = await page2.SelectOptionCreateANewCohort();
+            var page4 = await SelectEmployer(page3);
+            var page5 = await page4.ConfirmEmployer();
+            var page6 = await AddFirstApprenticeFromILRList(page5);
+            await AddOtherApprenticesFromILRList(page6);
+
+            return await ProviderApproveCohort(page6);
         }
 
 

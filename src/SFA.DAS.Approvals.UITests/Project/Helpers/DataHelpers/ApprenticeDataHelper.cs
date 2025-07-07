@@ -57,6 +57,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
 
             employer.EmployerType = employerType;
 
+            employer.Email = employerUser.Username;
+
             return employer;
         }
 

@@ -1,4 +1,5 @@
 ﻿@approvals
+@linkedScenarios
 Feature: AP_NL_E2E_EUA_01a_ExistingUserAccount
 
 @regression
@@ -9,7 +10,20 @@ Scenario: AP_NL_E2E_EUA_01a Provider creates cohort from ILR data Employer appro
 	And SLD push its data into AS
 	When Provider logs into Provider-Portal
 	And creates reservations for each learner
-	And creates an apprentice request (cohort) by selecting apprentices from ILR list via reservations
-	Then Provider can send it to the Employer for approval
-	When Employer approves the apprentice request (cohort)
-	#And apprentice record is available on Apprenticeships endpoint for SLD
+	And sends an apprentice request (cohort) to the employer by selecting apprentices from ILR list and reservations
+	And Employer approves the apprentice request (cohort)
+	Then Employer can access live apprentice records under Manager Your Apprentices section
+	#And Apprentice records are available on Apprenticeships endpoint for SLD
+
+
+@regression
+@e2escenarios
+Scenario Outline: AP_NL_E2E_EUA_01b emails validation
+	Given previous test has been completed successfully
+	Then Verify the "<Recipient>" receive "<NotificationType>" email
+
+Examples:
+		| Recipient		| NotificationType								|
+		| Employer      | Reservation made on your behalf 				|
+		| Employer      | Apprentice details ready to approve 			|
+		| Apprentice	| Confirm apprenticeship details                |
