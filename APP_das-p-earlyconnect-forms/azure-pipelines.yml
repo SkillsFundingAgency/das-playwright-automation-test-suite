@@ -5,7 +5,16 @@ trigger:
       - "*"
 
 variables:
-  buildConfiguration: 'release'
+  - name: buildConfiguration
+    value: 'release'
+  - name: BuildPlatform
+    value: any cpu
+  - group: "Release Automation Suite Variables"
+  - group: "Release Automation Suite Variables (Db)"
+  - group: "Provider Release Automation Suite Variables"
+  - group: "RELEASE APP_das-p-earlyconnect-forms"
+  - name: Deploy
+    value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
 resources:
   repositories:
@@ -23,7 +32,59 @@ resources:
 pool:
   vmImage: 'windows-latest'
 
-jobs:
-  - template: ../code-build.yml
-    parameters:
-      BuildConfiguration: $(buildConfiguration)
+stages:
+  - stage: Build
+    displayName: Build Stage
+    jobs:
+      - template: ../code-build.yml
+        parameters:
+          BuildConfiguration: $(buildConfiguration)
+
+  - stage: Deploy_TEST
+    dependsOn: Build
+    displayName: Deploy to TEST
+    variables:
+      - group: "TEST DevTest Shared Resources"
+      - group: "TEST Automation Suite Variables"
+    jobs:
+      - template: pipeline-templates/job/deploy.yml
+        parameters:
+          Environment: TEST
+          ServiceConnection: SFA-DAS-DevTest-ARM
+
+  - stage: Deploy_TEST2
+    dependsOn: Build
+    displayName: Deploy to TEST2
+    variables:
+      - group: "TEST2 DevTest Shared Resources"
+      - group: "TEST2 Automation Suite Variables"
+    jobs:
+      - template: pipeline-templates/job/deploy.yml
+        parameters:
+          Environment: TEST2
+          ServiceConnection: SFA-DAS-DevTest-ARM
+
+  - stage: Deploy_DEMO
+    dependsOn: Build
+    displayName: Deploy to DEMO
+    variables:
+      - group: "DEMO DevTest Shared Resources"
+      - group: "DEMO Automation Suite Variables"
+    jobs:
+      - template: pipeline-templates/job/deploy.yml
+        parameters:
+          Environment: DEMO
+          ServiceConnection: SFA-DAS-DevTest-ARM
+
+  - stage: Deploy_PP
+    dependsOn: Build
+    displayName: Deploy to PP
+    variables:
+      - group: "PreProd Management Resources"
+      - group: "PreProd Shared Resources"
+      - group: "PreProd Automation Suite Variables"
+    jobs:
+      - template: pipeline-templates/job/deploy.yml
+        parameters:
+          Environment: PP
+          ServiceConnection: SFA-DIG-PreProd-ARM
