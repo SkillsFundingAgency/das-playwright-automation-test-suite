@@ -1,8 +1,12 @@
 parameters:
   - name: BuildConfiguration
     type: string
+<<<<<<< HEAD:pipeline-templates/job/code-build.yml
   - name: projectName
     type: string
+=======
+  - name: projectsToBuild
+>>>>>>> 8bc4d8f (parameterised projects to build):code-build.yml
 
 jobs:
 - job: CodeBuild
@@ -12,6 +16,7 @@ jobs:
   variables:
     - group: BUILD Management Resources
   steps:
+<<<<<<< HEAD:pipeline-templates/job/code-build.yml
     - powershell: |
         $projects = @('${{ parameters.projectName }}' -split "`r?`n" | ForEach-Object { $_.Trim().Replace('"','') } | Where-Object { $_ -ne "" })
         $first = $projects[0]
@@ -26,6 +31,13 @@ jobs:
     - task: DotNetCoreCLI@2
       displayName: dotnet build
       inputs:
+=======
+    - template: azure-pipelines-templates/build/step/gitversion.yml@das-platform-building-blocks
+    - task: DotNetCoreCLI@2
+      displayName: dotnet build
+      inputs:
+        projects: ${{ parameters.projectsToBuild }}
+>>>>>>> 8bc4d8f (parameterised projects to build):code-build.yml
         arguments: '--configuration $(BuildConfiguration)'
         projects: |
           $(projectsToBuild)
@@ -35,15 +47,23 @@ jobs:
       inputs:
         command: 'test'
         arguments: '--filter "TestCategory=Unittests" --logger trx;logfilename=UnittestResults.trx'
+<<<<<<< HEAD:pipeline-templates/job/code-build.yml
         projects: |
           $(projectsToBuild)
+=======
+        projects: ${{ parameters.projectsToBuild }}
+>>>>>>> 8bc4d8f (parameterised projects to build):code-build.yml
 
     - task: DotNetCoreCLI@2
       displayName: 'dotnet pack'
       inputs:
         command: 'pack'
+<<<<<<< HEAD:pipeline-templates/job/code-build.yml
         projects: |
           $(projectsToBuild)
+=======
+        projects: ${{ parameters.projectsToBuild }}
+>>>>>>> 8bc4d8f (parameterised projects to build):code-build.yml
         packDirectory: '$(build.artifactstagingdirectory)/publish'
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
@@ -53,8 +73,12 @@ jobs:
         command: publish
         publishWebProjects: false
         zipAfterPublish: false
+<<<<<<< HEAD:pipeline-templates/job/code-build.yml
         projects: |
           $(projectsToBuild)
+=======
+        projects: ${{ parameters.projectsToBuild }}
+>>>>>>> 8bc4d8f (parameterised projects to build):code-build.yml
         arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
 
     - task: CopyFiles@2

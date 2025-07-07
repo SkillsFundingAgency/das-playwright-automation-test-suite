@@ -39,8 +39,85 @@ pool:
   vmImage: 'windows-latest'
 
 stages:
+<<<<<<< HEAD
   - template: ../pipeline-templates/stage/enviroment-stage.yml
     parameters:
       projectName: $(projectName)
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
+=======
+  - stage: Build
+    displayName: Build Stage
+    jobs:
+      - template: ../code-build.yml
+        parameters:
+          BuildConfiguration: $(BuildConfiguration)
+          projectsToBuild: |
+            src/SFA.DAS.EmployerPortal.UITests/*.csproj
+
+  - stage: Deploy_TEST
+    dependsOn: Build
+    displayName: Deploy to TEST
+    variables:
+      - group: "TEST DevTest Shared Resources"
+      - group: "TEST Automation Suite Variables"
+    jobs:
+      - template: ../deploy.yml
+        parameters:
+          Environment: TEST
+          ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: |
+            **\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+            **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll
+          projectName: SFA.DAS.EmployerPortal.UITests
+
+  - stage: Deploy_TEST2
+    dependsOn: Build
+    displayName: Deploy to TEST2
+    variables:
+      - group: "TEST2 DevTest Shared Resources"
+      - group: "TEST2 Automation Suite Variables"
+    jobs:
+      - template: ../deploy.yml
+        parameters:
+          Environment: TEST2
+          ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: |
+            **\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+            **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll
+          projectName: SFA.DAS.EmployerPortal.UITests
+
+  - stage: Deploy_DEMO
+    dependsOn: Build
+    displayName: Deploy to DEMO
+    variables:
+      - group: "DEMO DevTest Shared Resources"
+      - group: "DEMO Automation Suite Variables"
+    jobs:
+      - template: ../deploy.yml
+        parameters:
+          Environment: DEMO
+          ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: |
+            **\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+            **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll
+          projectName: SFA.DAS.EmployerPortal.UITests
+
+  - stage: Deploy_PP
+    dependsOn: Build
+    displayName: Deploy to PP
+    variables:
+      - group: "PreProd Management Resources"
+      - group: "PreProd Shared Resources"
+      - group: "PreProd Automation Suite Variables"
+      - group: "PREPROD E2_as-emp-account"
+    jobs:
+      - template: ../deploy.yml
+        parameters:
+          Environment: PP
+          ServiceConnection: SFA-DIG-PreProd-ARM
+          TestAssembly: |
+            **\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+            **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll
+          projectName: SFA.DAS.EmployerPortal.UITests
+>>>>>>> 8bc4d8f (parameterised projects to build)
