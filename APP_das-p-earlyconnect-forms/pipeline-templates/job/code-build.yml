@@ -6,7 +6,7 @@ jobs:
 - job: CodeBuild
   displayName: Code Build
   pool:
-    name: DAS - Continuous Integration Agents
+    vmImage: 'windows-latest'
   workspace:
     clean: all
   variables:
