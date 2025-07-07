@@ -13,37 +13,37 @@ jobs:
   strategy:
     runOnce:
       deploy:
-        steps:        
+        steps:
           - task: ExtractFiles@1
             displayName: 'Extract files'
             inputs:
               archiveFilePatterns: '**/tests.zip'
-              destinationFolder: '$(System.DefaultWorkingDirectory)/das-enterprise-automation-test-suite/drop/tests'
+              destinationFolder: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests'
 
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.json'
             inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/das-enterprise-automation-test-suite/drop/tests'
+              SourcePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests'
               TargetFileNames: '*.json'
 
           - task: PowerShell@2
             displayName: 'Update NumberOfTestWorkers'
             inputs:
               targetType: filePath
-              filePath: './$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/src/UpdateNoofTestWorkers.ps1'
+              filePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/src/UpdateNoofTestWorkers.ps1'
               arguments: '-browser $(BROWSER_TYPE)'
 
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.runsettings'
             inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/runsettings/src/'
+              SourcePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/runsettings/src/'
               TargetFileNames: '*.runsettings'
 
           - task: PowerShell@2
             displayName: 'Install Playwright Browsers'
             inputs:
               targetType: filePath
-              filePath: './$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/SFA.DAS.Campaigns.UITests/playwright.ps1'
+              filePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/SFA.DAS.Campaigns.UITests/playwright.ps1'
               arguments: install
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
@@ -66,7 +66,7 @@ jobs:
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AzSqlIpException.ps1'
-              ScriptArguments: '-Name $(Release.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
+              ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
               azurePowerShellVersion: LatestVersion
 
           - task: VSTest@2
@@ -75,7 +75,7 @@ jobs:
               testAssemblyVer2: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
               searchFolder: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/'
               testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
-              runSettingsFile: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/runsettings/src/Parellel.runsettings'
+              runSettingsFile: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/runsettings/src/Parellel.runsettings'
               runInParallel: true
               otherConsoleOptions: '/logger:trx'
               rerunFailedTests: true
@@ -88,7 +88,7 @@ jobs:
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AzSqlIpException.ps1'
-              ScriptArguments: '-Name $(Release.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
+              ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
               azurePowerShellVersion: LatestVersion
             condition: succeededOrFailed()
 
@@ -96,5 +96,5 @@ jobs:
             displayName: 'Check .trx File Exists'
             inputs:
               targetType: filePath
-              filePath: './$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/src/Check-TestResults.ps1'
+              filePath: '$(System.DefaultWorkingDirectory)/das-playwright-automation-test-suite/drop/tests/src/Check-TestResults.ps1'
               arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
