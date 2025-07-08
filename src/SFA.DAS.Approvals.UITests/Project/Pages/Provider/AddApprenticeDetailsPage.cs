@@ -57,7 +57,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(trainingStartYearTextBox).ToHaveValueAsync(trainingDetails.StartDate.Year.ToString());
             await Assertions.Expect(trainingEndMonthTextBox).ToHaveValueAsync(trainingDetails.EndDate.Month.ToString());
             await Assertions.Expect(trainingEndYearTextBox).ToHaveValueAsync(trainingDetails.EndDate.Year.ToString());
-            //await Assertions.Expect(trainingCostTextBox).ToHaveValueAsync(trainingDetails.TotalPrice.ToString());
+            await Assertions.Expect(trainingCostTextBox).ToHaveValueAsync(trainingDetails.TotalPrice.ToString());
             await Assertions.Expect(referenceTextBox).ToHaveValueAsync("");
 
         }
@@ -67,6 +67,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await addButton.ClickAsync();
 
             return await VerifyPageAsync(() => new RecognitionOfPriorLearningPage(context));
+        }
+
+        public async Task ClickAddButtonLeadToError()
+        {
+            await addButton.ClickAsync();
         }
 
     }

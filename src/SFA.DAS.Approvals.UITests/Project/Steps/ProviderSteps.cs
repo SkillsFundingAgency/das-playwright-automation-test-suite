@@ -19,12 +19,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private readonly ScenarioContext context;
         private readonly SLDDataPushHelpers sldDataPushHelpers;
         private ProviderStepsHelper providerStepsHelper;
+        private ApprenticeDataHelper apprenticeDataHelper;
 
         public ProviderSteps(ScenarioContext _context)
         {
             context = _context;
             providerStepsHelper = new ProviderStepsHelper(context);
             sldDataPushHelpers = new(context);
+            apprenticeDataHelper = new ApprenticeDataHelper(context);
         }
 
 
@@ -58,7 +60,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task GivenProviderSendsAnApprenticeRequestCohortToAnEmployer()
         {
             //create apprenticeships object
-            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateApprenticeshipAsync(EmployerType.Levy, 1, null);
+            var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(EmployerType.Levy, 1, null);
             context.Set(listOfApprenticeship);
 
             //recreate SLD pushing ILR data to AS
@@ -108,8 +110,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("Provider adds an apprentice using Foundation level standard")]
         public async Task GivenProviderAddsAnApprenticeUsingFoundationLevelStandard()
         {
+            var coursesDataHelper = new CoursesDataHelper(context);
+            var employerType = EmployerType.Levy;
+
+            //create apprenticeships object with Foundation level standard and a learner aged 14 years old:
+            var trainingDetails = await apprenticeDataHelper.CreateNewApprenticeshipTrainingDetails(employerType, null, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourses());
+            var apprenticeDetails = await apprenticeDataHelper.CreateNewApprenticeDetails(14);
+
             //create apprenticeships object
-            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateApprenticeshipAsync(EmployerType.Levy, 1, null);
+            var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(employerType, 1, null, apprenticeDetails, trainingDetails, null);
             context.Set(listOfApprenticeship);
 
             //recreate SLD pushing ILR data to AS
@@ -117,8 +126,33 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var listOfLearnerDataList = await sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
             await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList, academicYear);
 
+        }
+
+        [Then("system does not allow to add apprentice details if their age is below 15 years and over 25 years")]
+        public async Task ThenSystemDoesNotAllowToAddApprenticeDetailsIfTheirAgeIsBelow15YearsAndOver25Years()
+        {
+            var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDate();
 
         }
+
+        [Then("system allows to save apprentice details with a warning if their age is in range of {int} - {int} years")]
+        public void ThenSystemAllowsToSaveApprenticeDetailsWithAWarningIfTheirAgeIsInRangeOf_Years(int p0, int p1)
+        {
+            throw new PendingStepException();
+        }
+
+        [Then("above warning disappears if apprentice age is in range of {int} - {int} years")]
+        public void ThenAboveWarningDisappearsIfApprenticeAgeIsInRangeOf_Years(int p0, int p1)
+        {
+            throw new PendingStepException();
+        }
+
+        [When("user go to {string} page for the same apprentice")]
+        public void WhenUserGoToPageForTheSameApprentice(string p0)
+        {
+            throw new PendingStepException();
+        }
+
 
 
 

@@ -1,4 +1,5 @@
 ﻿using Dynamitey;
+using MongoDB.Driver.Linq;
 using Polly;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.FrameworkHelpers;
@@ -89,7 +90,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             return employer;
         }
 
-        private async Task<Apprentice> CreateNewApprenticeDetails()
+        internal async Task<Apprentice> CreateNewApprenticeDetails(int age = 0 )
         {
             Apprentice apprentice = new Apprentice();
 
@@ -97,20 +98,32 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             apprentice.FirstName = RandomDataGenerator.GenerateRandomAlphabeticString(6);
             apprentice.LastName = RandomDataGenerator.GenerateRandomAlphabeticString(9);
             apprentice.Email = $"{apprentice.FirstName}.{apprentice.LastName}@l38cxwya.mailosaur.net";
-            apprentice.DateOfBirth = RandomDataGenerator.GenerateRandomDate(DateTime.Now.AddYears(-30), DateTime.Now.AddYears(-16));
+            apprentice.DateOfBirth =  (age == 0) ? RandomDataGenerator.GenerateRandomDate(DateTime.Now.AddYears(-30), DateTime.Now.AddYears(-16)) : DateTime.Now.AddYears(-age);
 
             await Task.Delay(100); 
             return apprentice;
         }
 
-        private async Task<Training> CreateNewApprenticeshipTrainingDetails(EmployerType employerType, ApprenticeshipStatus? apprenticeshipStatus=null)
+        internal async Task<Training> CreateNewApprenticeshipTrainingDetails(EmployerType employerType, ApprenticeshipStatus? apprenticeshipStatus=null, Func<CoursesDataHelper, Task<Courses>>? courseSelector = null)
         {
             Training training = new Training();
 
             CoursesDataHelper coursesDataHelper = new CoursesDataHelper(context);
-            var course = await coursesDataHelper.GetRandomCourse();
+            var course = (courseSelector == null) ? await coursesDataHelper.GetRandomCourse() : await courseSelector(coursesDataHelper);
 
-            training.StartDate = (employerType == EmployerType.Levy) ? await GetStartDate(apprenticeshipStatus) : DateTime.Now;
+            if (course.ApprenticeshipType == "FoundationApprenticeship") 
+            {
+                training.StartDate = course.EffectiveFrom;
+            }
+            else if (employerType == EmployerType.Levy)
+            {
+                training.StartDate = await GetStartDate(apprenticeshipStatus);                
+            }
+            else
+            {
+                training.StartDate = DateTime.Now;
+            }
+
             training.EndDate = training.StartDate.AddMonths(15);
             training.AcademicYear = AcademicYearDatesHelper.GetCurrentAcademicYear();
             training.PercentageLearningToBeDelivered = 40;
@@ -139,7 +152,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
 
             if (apprenticeshipStatus == ApprenticeshipStatus.WaitingToStart)
             {
-                return RandomDataGenerator.GenerateRandomDate(DateTime.Now.AddMonths(2), DateTime.Now);
+                return RandomDataGenerator.GenerateRandomDate(DateTime.Now, DateTime.Now.AddMonths(2));
             }
             else
             {
@@ -148,7 +161,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
 
         }
 
-        private async Task<RPL> CreateNewApprenticeshipRPLDetails()
+        internal async Task<RPL> CreateNewApprenticeshipRPLDetails()
         {
             RPL rpl = new RPL();
 

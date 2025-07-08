@@ -47,6 +47,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
+        internal async Task<AddApprenticeDetailsPage> TryAddFirstApprenticeFromILRList(SelectApprenticeFromILRPage selectApprenticeFromILRPage)
+        {
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+            var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
+            await page.ClickAddButtonLeadToError();
+            return await page.VerifyPageAsync(() => new AddApprenticeDetailsPage(context));
+        }
+
         internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRList(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
 
@@ -127,7 +135,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await approveApprenticeDetailsPage.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
+        internal async Task<AddApprenticeDetailsPage> ProviderCreateACohortViaIlrRouteWithInvalidDate()
+        {
+            var page = await GoToSelectApprenticeFromILRPage();
+            var page1 = await TryAddFirstApprenticeFromILRList(page);
+
+            return await page1.VerifyPageAsync(() => new AddApprenticeDetailsPage(context));
+        }
+
         internal async Task<ApprenticeRequests_ProviderPage> ProviderCreateAndApproveACohortViaIlrRoute()
+        {
+            var page = await GoToSelectApprenticeFromILRPage();
+            var page1 = await AddFirstApprenticeFromILRList(page);
+            await AddOtherApprenticesFromILRList(page1);
+
+            return await ProviderApproveCohort(page1);
+        }
+
+        private async Task<SelectApprenticeFromILRPage> GoToSelectApprenticeFromILRPage()
         {
             var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
@@ -135,10 +160,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page3 = await page2.SelectOptionCreateANewCohort();
             var page4 = await SelectEmployer(page3);
             var page5 = await page4.ConfirmEmployer();
-            var page6 = await AddFirstApprenticeFromILRList(page5);
-            await AddOtherApprenticesFromILRList(page6);
 
-            return await ProviderApproveCohort(page6);
+            return await page5.VerifyPageAsync(() => new SelectApprenticeFromILRPage(context));
         }
 
 
