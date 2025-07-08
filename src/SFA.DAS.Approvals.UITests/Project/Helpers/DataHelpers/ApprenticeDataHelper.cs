@@ -14,10 +14,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
 {
     internal class ApprenticeDataHelper(ScenarioContext context)
     {
-        public async Task<List<Apprenticeship>> CreateNewApprenticeshipDetails(EmployerType employerType, int numberOfApprenticeships, string? ukprn)
+        /*
+        public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(EmployerType employerType, int numberOfApprenticeships, string? ukprn)
         {
             List<Apprenticeship> apprenticeships = new List<Apprenticeship>();
-            var employerDetails = GetEmployerDetails(employerType);
+            var employerDetails = await GetEmployerDetails(employerType);
 
             for (int i = 0; i < numberOfApprenticeships; i++)
             {
@@ -30,8 +31,34 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
                 Apprenticeship apprenticeship = new Apprenticeship(apprentice, training, rpl);           
 
                 // Set employer details and UKPRN in the apprenticeship object
-                apprenticeship.EmployerDetails = await employerDetails;
+                apprenticeship.EmployerDetails = employerDetails;
                 apprenticeship.UKPRN = (ukprn!=null) ? Convert.ToInt32(ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);
+
+                // Add to the list
+                apprenticeships.Add(apprenticeship);
+            }
+
+            return apprenticeships;
+        }
+        */
+        public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(EmployerType EmployerType, int NumberOfApprenticeships, string? Ukprn, Apprentice? ApprenticeDetails = null, Training? Training = null, RPL? Rpl = null)
+        {
+            List<Apprenticeship> apprenticeships = new List<Apprenticeship>();
+            var employerDetails = await GetEmployerDetails(EmployerType);
+
+            for (int i = 0; i < NumberOfApprenticeships; i++)
+            {
+                // Create random apprentice, training, and RPL details
+                var apprenticeDetails = (ApprenticeDetails == null ) ?await CreateNewApprenticeDetails() : ApprenticeDetails;
+                var training = (Training == null) ? await CreateNewApprenticeshipTrainingDetails(EmployerType) : Training;
+                var rpl = (Rpl == null) ? await CreateNewApprenticeshipRPLDetails() : Rpl;
+
+                // Create apprenticeship object with the generated details
+                Apprenticeship apprenticeship = new Apprenticeship(apprenticeDetails, training, rpl);
+
+                // Set employer details and UKPRN in the apprenticeship object
+                apprenticeship.EmployerDetails = employerDetails;
+                apprenticeship.UKPRN = (Ukprn != null) ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);
 
                 // Add to the list
                 apprenticeships.Add(apprenticeship);
@@ -107,7 +134,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
             var todaysDate = DateTime.Now;
             var upperDateRangeForStartDate = (academicYearEndDate > todaysDate) ? todaysDate : academicYearEndDate;
 
-            
+            await Task.Delay(100);
+
 
             if (apprenticeshipStatus == ApprenticeshipStatus.WaitingToStart)
             {

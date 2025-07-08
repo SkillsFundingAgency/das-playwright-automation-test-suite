@@ -58,7 +58,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task GivenProviderSendsAnApprenticeRequestCohortToAnEmployer()
         {
             //create apprenticeships object
-            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateNewApprenticeshipDetails(EmployerType.Levy, 1, null);
+            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateApprenticeshipAsync(EmployerType.Levy, 1, null);
             context.Set(listOfApprenticeship);
 
             //recreate SLD pushing ILR data to AS
@@ -102,6 +102,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
                 await page.VerifyApprenticeFound(uln, name);
             }
+
+        }
+
+        [Given("Provider adds an apprentice using Foundation level standard")]
+        public async Task GivenProviderAddsAnApprenticeUsingFoundationLevelStandard()
+        {
+            //create apprenticeships object
+            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateApprenticeshipAsync(EmployerType.Levy, 1, null);
+            context.Set(listOfApprenticeship);
+
+            //recreate SLD pushing ILR data to AS
+            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
+            var listOfLearnerDataList = await sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
+            await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList, academicYear);
+
 
         }
 
