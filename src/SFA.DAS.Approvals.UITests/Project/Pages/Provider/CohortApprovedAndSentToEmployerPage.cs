@@ -28,10 +28,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(sentTo).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(messageForEmployer).ToHaveTextAsync("Please review the details and approve the request.");
         }
-        public async Task GoToApprenticeRequests()
+        public async Task<ApprenticeRequests_ProviderPage> GoToApprenticeRequests()
         {
             await goToApprenticeRequestsLink.ClickAsync();
-            //await context.GetPage<ApprenticeRequestsPage>().VerifyPage();
+            return await VerifyPageAsync(() => new ApprenticeRequests_ProviderPage(context));
         }
 
 

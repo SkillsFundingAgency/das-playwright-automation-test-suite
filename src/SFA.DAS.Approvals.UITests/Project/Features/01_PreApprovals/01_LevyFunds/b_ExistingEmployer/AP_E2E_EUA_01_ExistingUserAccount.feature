@@ -7,24 +7,21 @@ A short summary of the feature
 @regression
 @e2escenarios
 Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves it
- 
 	Given Provider successfully submits 2 ILR record containing a learner record for a "Levy" Employer
 	And SLD push its data into AS
-	When Provider logs into Provider-Portal
-	And creates an apprentice request (cohort) by selecting same apprentices
-	Then Provider can send it to the Employer for approval
-	When Employer approves the apprentice request (cohort)
-	#And apprentice record is available on Apprenticeships endpoint for SLD
+	When Provider sends an apprentice request (cohort) to the employer by selecting same apprentices
+	And Employer approves the apprentice request (cohort)
+	Then Provider can access live apprentice records under Manager Your Apprentices section
+	#And Apprentice records are available on Apprenticeships endpoint for SLD
 
 
-@wip
+@regression
 @e2escenarios
-Scenario: AP_E2E_EUA_01b Provider creates cohort from ILR data Employer approves it - Email Verification
-
+Scenario Outline: AP_E2E_EUA_01b emails validation
 	Given previous test has been completed successfully
-	Then Verify following email notifications
- 
-		| Recipient		| Subject											| EmailText										| 
-		| Employer		| Apprentice details ready to approve				| {cohortRef}									| 
-		| Provider		| Apprenticeship service cohort ready for approval	| {cohortRef}									| 
-		| Apprentice	| You need to confirm your apprenticeship details	| Congratulations on becoming an apprentice		| 
+	Then Verify the "<Recipient>" receive "<NotificationType>" email
+
+Examples:
+		| Recipient		| NotificationType								|
+		| Employer      | Apprentice details ready to approve 			|
+		| Apprentice	| Confirm apprenticeship details                |

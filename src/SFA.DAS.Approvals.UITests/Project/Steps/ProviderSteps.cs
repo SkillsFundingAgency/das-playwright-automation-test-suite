@@ -1,4 +1,6 @@
-﻿using Polly;
+﻿using Azure;
+using Polly;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
@@ -15,12 +17,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     public class ProviderSteps
     {
         private readonly ScenarioContext context;
-        private readonly ProviderStepsHelper providerStepsHelper;
+        private readonly SLDDataPushHelpers sldDataPushHelpers;
+        private ProviderStepsHelper providerStepsHelper;
 
         public ProviderSteps(ScenarioContext _context)
         {
             context = _context;
             providerStepsHelper = new ProviderStepsHelper(context);
+            sldDataPushHelpers = new(context);
         }
 
 
@@ -29,39 +33,75 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task GivenTheProviderLogsIntoPortal() => await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
 
 
-        [When(@"creates an apprentice request \(cohort\) by selecting same apprentices")]
-        public async Task WhenCreatesAnApprenticeRequestCohortBySelectingSameApprentices()
+        [When(@"Provider sends an apprentice request \(cohort\) to the employer by selecting same apprentices")]
+        public async Task WhenProviderSendsAnApprenticeRequestCohortToTheEmployerBySelectingSameApprentices()
         {
-            var page = await new ProviderHomePage(context).GotoSelectJourneyPage();
-            var page1 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
-            var page2 = await page1.SelectOptionCreateANewCohort();
-            var page3 = await providerStepsHelper.SelectEmployer(page2);
-            var page4 = await page3.ConfirmEmployer();
-            var page5 = await providerStepsHelper.AddFirstApprenticeFromILRList(page4);
-            await providerStepsHelper.AddOtherApprenticesFromILRList(page5);
+            await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
         }
 
-
-        [Then("Provider can send it to the Employer for approval")]
-        public async Task ThenProviderCanSendItToTheEmployerForApproval()
-        {
-            var page = new ApproveApprenticeDetailsPage(context);
-            await providerStepsHelper.ProviderApproveCohort(page);    
-        }
-
-                
         [When("creates reservations for each learner")]
         public async Task WhenCreatesReservationsForEachLearner()
         {
             await providerStepsHelper.ProviderReserveFunds();
         }
 
-
-        [When(@"creates an apprentice request \(cohort\) by selecting apprentices from ILR list via reservations")]
-        public async Task WhenCreatesAnApprenticeRequestCohortBySelectingApprenticesFromILRListViaReservations()
+        [When(@"sends an apprentice request \(cohort\) to the employer by selecting apprentices from ILR list and reservations")]
+        public async Task WhenSendsAnApprenticeRequestCohortToTheEmployerBySelectingApprenticesFromILRListAndReservations()
         {
             var page = await providerStepsHelper.ProviderAddsFirstApprenitceUsingReservation();
-            await providerStepsHelper.ProviderAddsOtherApprentices(page);
+            var page1 = await providerStepsHelper.ProviderAddsOtherApprentices(page);
+            await providerStepsHelper.ProviderApproveCohort(page1);
+        }
+
+
+        [Given(@"Provider sends an apprentice request \(cohort\) to an employer")]
+        public async Task GivenProviderSendsAnApprenticeRequestCohortToAnEmployer()
+        {
+            //create apprenticeships object
+            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateNewApprenticeshipDetails(EmployerType.Levy, 1, null);
+            context.Set(listOfApprenticeship);
+
+            //recreate SLD pushing ILR data to AS
+            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
+            var listOfLearnerDataList = await sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
+            await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList, academicYear);
+
+            // create cohort using ILR data
+            var page = await new ProviderStepsHelper(context).ProviderCreateAndApproveACohortViaIlrRoute();
+
+            //Provider verify that cohort is under 'Apprentice requests > With employers' section
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers, cohortRef);
+
+        }
+
+        [Then("return the cohort back to the Provider")]
+        public async Task ThenReturnTheCohortBackToTheProvider()
+        {
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+
+            await new ApprenticeRequests_ProviderPage(context).NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.ReadyForReview, cohortRef);
+        }
+
+        [Then("Provider can access live apprentice records under Manager Your Apprentices section")]
+        public async Task ThenProviderCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+            var page = new ManageYourApprentices_ProviderPage(context);
+
+            foreach (var apprentice in listOfApprenticeship)
+            {
+                var uln = apprentice.ApprenticeDetails.ULN.ToString();
+                var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
+
+                await page.VerifyApprenticeFound(uln, name);
+            }
 
         }
 

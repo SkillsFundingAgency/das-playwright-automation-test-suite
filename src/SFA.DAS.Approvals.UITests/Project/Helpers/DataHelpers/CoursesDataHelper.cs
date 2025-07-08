@@ -38,12 +38,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
                 },
                 new Courses
                 {
-                    StandardCode = 276,
-                    Title = "Building services engineering site management (degree)",
-                    MaxFunding = 18000,
-                    EffectiveFrom = new DateTime(2018, 05, 08),
-                    EffectiveTo = new DateTime(2025, 02, 28),
-                    Version = "1.0"
+                    StandardCode = 101,
+                    Title = "Retailer",
+                    MaxFunding = 5000,
+                    EffectiveFrom = new DateTime(2015, 08, 01),                    
+                    Version = "1.2"
                 },
                 new Courses
                 {

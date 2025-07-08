@@ -13,6 +13,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
+using Microsoft.VisualBasic;
+using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -21,12 +24,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     {
         protected readonly ScenarioContext context;
         private readonly EmployerStepsHelper employerStepsHelper;
+        private readonly CommonStepsHelper commonStepsHelper;
+        private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
 
 
         public EmployerSteps(ScenarioContext context)
         {
             this.context = context;
             employerStepsHelper = new EmployerStepsHelper(context);
+            commonStepsHelper = new CommonStepsHelper(context);
+            commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();
         }
 
         [When(@"Employer approves the apprentice request \(cohort\)")]
@@ -42,9 +49,33 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
+        [When("Employer does not take any action on that cohort for more than 2 weeks")]
+        public async Task WhenEmployerDoesNotTakeAnyActionOnThatCohortForMoreThan2Weeks()
+        {
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            await commitmentsDbSqlHelper.UpdateCohortLastUpdatedDate(cohortRef, DateAndTime.Now.AddDays(-15));
+
+            //test environments are configured to run web job: "ExpireInactiveCohortsWithEmployerAfter2WeeksSchedule" every 4th minute
+            await commonStepsHelper.WaitForStatusUpdateAsync(
+                getStatusFunc: async () =>
+                {
+                    return await context.Get<CommitmentsDbSqlHelper>().GetWithPartyValueFromCommitmentsDb(cohortRef);
+                },
+                "2",
+                TimeSpan.FromMinutes(5)
+            );
+        }
+
+
+        [Then("Employer can access live apprentice records under Manager Your Apprentices section")]
+        public async Task ThenEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
+        {
+            await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage();
+        }
+
 
 
 
     }
-   
+
 }
