@@ -133,6 +133,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenSystemDoesNotAllowToAddApprenticeDetailsIfTheirAgeIsBelow15YearsAndOver25Years()
         {
             var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDate();
+            await page.VerfiyErrorMessage("DateOfBirth", "The apprentice must be at least 15 years old at the start of their training");
 
         }
 

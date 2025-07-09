@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
@@ -30,6 +31,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator trainingCostTextBox => page.GetByRole(AriaRole.Spinbutton, new() { Name = "Total agreed apprenticeship" });
         private ILocator referenceTextBox => page.GetByRole(AriaRole.Textbox, new() { Name = "Reference (optional)" });
         private ILocator addButton => page.GetByRole(AriaRole.Button, new() { Name = "Add" });
+        private ILocator errorSummary => page.GetByRole(AriaRole.Heading, new() { Name = "There is a problem" });
         #endregion
 
         public override async Task VerifyPage()
@@ -37,7 +39,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Add apprentice details");
         }
 
-        public async Task ValidateApprenticeDetailsMatchWithILRData(Apprenticeship apprenticeship)
+        internal async Task ValidateApprenticeDetailsMatchWithILRData(Apprenticeship apprenticeship)
         {
             var employerDetails = apprenticeship.EmployerDetails;           
             await Assertions.Expect(employerName).ToHaveTextAsync(employerDetails.EmployerName);
@@ -62,17 +64,31 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         }
 
-        public async Task<RecognitionOfPriorLearningPage> ClickAddButton()
+        internal async Task<RecognitionOfPriorLearningPage> ClickAddButton()
         {
             await addButton.ClickAsync();
 
             return await VerifyPageAsync(() => new RecognitionOfPriorLearningPage(context));
         }
 
-        public async Task ClickAddButtonLeadToError()
+        internal async Task ClickAddButtonLeadToError()
         {
             await addButton.ClickAsync();
         }
+
+        internal async Task VerfiyErrorMessage(string fieldName, string errorMsg)
+        {
+            //assert error summary on top of the page
+            await Assertions.Expect(errorSummary).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = errorMsg })).ToBeVisibleAsync();
+
+            //assert error message is displayed above the text box too
+            ILocator errorLocator = page.Locator($"#error-message-{fieldName}");
+            await Assertions.Expect(errorLocator).ToBeVisibleAsync();
+            await Assertions.Expect(errorLocator).ToContainTextAsync(errorMsg);
+        }
+
+
 
     }
 }
