@@ -40,7 +40,7 @@ public class EPAOBaseSteps
     protected CheckAndSubmitAssessmentDetailsPage checkAndSubmitAssessmentDetailsPage;
 
     //protected AP_ApplicationOverviewPage applicationOverviewPage;
-    //protected AP_PR1_SearchForYourOrganisationPage searchForYourOrganisationPage;
+    protected AP_PR1_SearchForYourOrganisationPage searchForYourOrganisationPage;
 
     protected AO_HomePage homePage;
 
