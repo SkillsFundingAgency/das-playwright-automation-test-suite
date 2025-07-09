@@ -1,0 +1,80 @@
+﻿using Dynamitey;
+using MongoDB.Driver.Linq;
+using Polly;
+using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
+using SFA.DAS.FrameworkHelpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+
+
+namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel
+{
+    internal class ApprenticeDataHelper(ScenarioContext context)
+    {
+        public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(
+            EmployerType EmployerType, 
+            int NumberOfApprenticeships, 
+            string Ukprn, 
+            IApprenticeFactory? apprenticeFactory = null,
+            ITrainingFactory? trainingFactory = null,
+            IRPLFactory? rplFactory = null)
+
+        {
+            apprenticeFactory ??= new ApprenticeFactory();
+            trainingFactory ??= new TrainingFactory();
+            rplFactory ??= new RPLFactory();
+
+            List<Apprenticeship> apprenticeships = new List<Apprenticeship>();
+            var employerDetails = await GetEmployerDetails(EmployerType);
+
+            for (int i = 0; i < NumberOfApprenticeships; i++)
+            {
+                // Create random apprentice, training, and RPL details
+                var apprenticeDetails = await apprenticeFactory.CreateApprenticeAsync();
+                var training = await trainingFactory.CreateTrainingAsync(EmployerType);
+                var rpl = await rplFactory.CreateRPLAsync();
+
+
+                // Create apprenticeship object with above generated details
+                Apprenticeship apprenticeship = new Apprenticeship(apprenticeDetails, training, rpl)
+                {
+                    EmployerDetails = employerDetails,
+                    UKPRN = Ukprn != null ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn),
+                };
+                
+
+                // Add to the list
+                apprenticeships.Add(apprenticeship);
+            }
+
+            return apprenticeships;
+        }
+
+        private async Task<Employer> GetEmployerDetails(EmployerType employerType)
+        {
+            Employer employer = new Employer();
+
+            EasAccountUser employerUser = employerType switch
+            {
+                EmployerType.NonLevy => context.GetUser<NonLevyUser>(),
+                EmployerType.NonLevyUserAtMaxReservationLimit => context.GetUser<NonLevyUserAtMaxReservationLimit>(),
+                _ => context.GetUser<LevyUser>()
+            };
+
+            employer.EmployerName = employerUser.OrganisationName;
+
+            employer.AgreementId = await context.Get<AccountsDbSqlHelper>().GetAgreementId(employerUser.Username, employer.EmployerName[..3] + "%");
+
+            employer.EmployerType = employerType;
+
+            employer.Email = employerUser.Username;
+
+            return employer;
+        }
+
+    }
+}

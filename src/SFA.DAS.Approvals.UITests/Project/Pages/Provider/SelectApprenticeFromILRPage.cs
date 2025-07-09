@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Azure;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {

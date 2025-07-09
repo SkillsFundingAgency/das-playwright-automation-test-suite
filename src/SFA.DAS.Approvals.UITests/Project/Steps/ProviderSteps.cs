@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Polly;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
@@ -110,15 +111,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("Provider adds an apprentice using Foundation level standard")]
         public async Task GivenProviderAddsAnApprenticeUsingFoundationLevelStandard()
         {
-            var coursesDataHelper = new CoursesDataHelper(context);
+            var coursesDataHelper = new CoursesDataHelper();
             var employerType = EmployerType.Levy;
 
             //create apprenticeships object with Foundation level standard and a learner aged 14 years old:
-            var trainingDetails = await apprenticeDataHelper.CreateNewApprenticeshipTrainingDetails(employerType, null, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourses());
-            var apprenticeDetails = await apprenticeDataHelper.CreateNewApprenticeDetails(14);
+            var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourses());
+            var apprenticeDetails = new ApprenticeFactory(-14);
 
-            //create apprenticeships object
-            var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(employerType, 1, null, apprenticeDetails, trainingDetails, null);
+            //create apprenticeships object            
+            var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(employerType, 1, null, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
             context.Set(listOfApprenticeship);
 
             //recreate SLD pushing ILR data to AS

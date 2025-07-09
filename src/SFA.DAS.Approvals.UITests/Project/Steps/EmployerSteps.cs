@@ -1,5 +1,4 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
-using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
@@ -16,6 +15,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using Microsoft.VisualBasic;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {

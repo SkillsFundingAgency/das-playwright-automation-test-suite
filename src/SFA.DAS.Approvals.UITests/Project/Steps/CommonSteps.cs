@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration.UserSecrets;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.MailosaurAPI.Service.Project.Helpers;
 using System;
