@@ -88,6 +88,7 @@ stages:
       - group: "PreProd Management Resources"
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
+      - group: "PREPROD APP_das-GAA"
     jobs:
       - template: pipeline-templates/job/deploy.yml
         parameters:
