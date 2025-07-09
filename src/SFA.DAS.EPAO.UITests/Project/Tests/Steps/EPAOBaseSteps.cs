@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.EPAO.UITests.Project.Helpers;
+using SFA.DAS.EPAO.UITests.Project.Tests.Pages;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
@@ -41,7 +42,7 @@ public class EPAOBaseSteps
     //protected AP_ApplicationOverviewPage applicationOverviewPage;
     //protected AP_PR1_SearchForYourOrganisationPage searchForYourOrganisationPage;
 
-    //protected AO_HomePage homePage;
+    protected AO_HomePage homePage;
 
     protected AS_RecordAGradePage recordAGradePage;
     //protected AS_AchievementDatePage achievementDatePage;
