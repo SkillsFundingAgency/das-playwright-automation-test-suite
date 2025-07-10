@@ -6,7 +6,7 @@ public class FATeHomePage(ScenarioContext context) : FATeBasePage(context)
     
     public async Task<FATeHomePage> AcceptCookieAndAlert()
     {
-        await AcceptAllCookies();
+        await AcceptAllCookiesIfVisible();
 
         await page.Locator(".das-cookie-banner__hide-button").ClickAsync();
 

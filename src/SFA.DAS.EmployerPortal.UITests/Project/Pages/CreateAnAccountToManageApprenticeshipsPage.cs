@@ -13,7 +13,7 @@ public class CreateAnAccountToManageApprenticeshipsPage(ScenarioContext context)
     {
         await Assertions.Expect(PageIdentifier).ToContainTextAsync(PageTitle);
 
-        await AcceptAllCookies();
+        await AcceptAllCookiesIfVisible();
     }
 
     public async Task<StubSignInEmployerPage> GoToStubSignInPage() => await StubSignInPage(async () => await page.GetByRole(AriaRole.Link, new() { Name = "sign in" }).ClickAsync());

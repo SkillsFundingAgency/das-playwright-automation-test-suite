@@ -36,13 +36,13 @@ public class StaffDashboardPage(ScenarioContext context) : EPAOAdmin_BasePage(co
 
     public async Task<AddOrganisationPage> AddOrganisation()
     {
-        var uri = new Uri(new Uri(UrlConfig.Admin_BaseUrl), $"register/add-organisation");
+        var uri = UriHelper.GetAbsoluteUri(UrlConfig.Admin_BaseUrl, $"register/add-organisation");
 
-        objectContext.SetDebugInformation(uri.AbsoluteUri);
+        objectContext.SetDebugInformation(uri);
 
-        await page.GotoAsync(uri.AbsoluteUri);
-        await page.GotoAsync(uri.AbsoluteUri);
-        await page.GotoAsync(uri.AbsoluteUri);
+        await page.GotoAsync(uri);
+        await page.GotoAsync(uri);
+        await page.GotoAsync(uri);
 
         return await VerifyPageAsync(() => new AddOrganisationPage(context));
     }
