@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SFA.DAS.EmployerPortal.UITests.Project.Pages.HomePage;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 {
@@ -52,16 +53,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return new HomePage(context);
         }
 
-        internal async Task ApproveCohort(ApprenticeRequestsPage apprenticeRequestsPage)
+        internal async Task<EmployerApproveApprenticeDetailsPage> OpenCohort()
         {
+            await EmployerLogInToEmployerPortal();
+
+            await new InterimApprenticesHomePage(context, false).VerifyPage();
+
+            var page = await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
 
-            var page = await apprenticeRequestsPage.OpenApprenticeRequestReadyForReview(apprenticeship.CohortReference);
+            var page1 = await page.OpenApprenticeRequestReadyForReview(apprenticeship.CohortReference);
 
-            await page.VerifyCohort(apprenticeship);
-
-            var page1 = await page.EmployerApproveCohort();
+            await page1.VerifyCohort(apprenticeship);
+            
+            return page1;
         }
+
 
         internal async Task CheckApprenticeOnManageYourApprenticesPage()
         {
@@ -71,7 +79,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await new InterimApprenticesHomePage(context, false).VerifyPage();
             await new ApprenticesHomePage(context).GoToManageYourApprentices();
 
-            var page = new ManageYourApprenticesPage(context);
+            var page = new Pages.Employer.ManageYourApprenticesPage(context);
             
             foreach (var apprentice in listOfApprenticeship)
             {
@@ -82,5 +90,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             }
             
         }
+
+
+
+
+
     }
 }

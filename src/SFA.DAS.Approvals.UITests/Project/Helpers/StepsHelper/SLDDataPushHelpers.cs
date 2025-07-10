@@ -41,7 +41,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             foreach (var apprenticeship in listOfApprenticeships)
             {
                 listOfLearnerData.Add(await ConvertToLearnerDataAPIDataModel(apprenticeship));
-                //listOfLearnerData.Add(ConvertToLearnerDataAPIDataModel(apprenticeship));
             }
 
             return listOfLearnerData;

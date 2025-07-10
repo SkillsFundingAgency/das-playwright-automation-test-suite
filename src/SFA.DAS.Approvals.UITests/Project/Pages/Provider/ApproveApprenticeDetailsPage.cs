@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+﻿using Azure;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.FrameworkHelpers;
 using System;
 using System.Diagnostics;
@@ -37,7 +38,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Approve apprentice details|Approve 2 apprentices' details"));
         }
 
-        public async Task VerifyCohort(Apprenticeship apprenticeship)
+        internal async Task VerifyCohort(Apprenticeship apprenticeship)
         {
             await Assertions.Expect(employerName).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenticeship.CohortReference);
@@ -59,7 +60,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         
         }
 
-        public async Task GetCohortId(Apprenticeship apprenticeship)
+        internal async Task GetCohortId(Apprenticeship apprenticeship)
         {
             var cohortRef = await cohortReference.InnerTextAsync();
             apprenticeship.CohortReference = cohortRef;
@@ -68,19 +69,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             context.Set(apprenticeship, "Apprenticeship");
         }
 
-        public async Task<AddApprenticeDetails_EntryMothodPage> ClickOnAddAnotherApprenticeLink()
+        internal async Task<AddApprenticeDetails_EntryMothodPage> ClickOnAddAnotherApprenticeLink()
         {
             await AddAnotherApprenticeLink.ClickAsync();
             return new AddApprenticeDetails_EntryMothodPage(context);
         }
 
-        public async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()
+        internal async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()
         {
             await approveRadioOption.ClickAsync();
             await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
             await saveAndSubmitButton.ClickAsync();
             return await VerifyPageAsync(() => new CohortApprovedAndSentToEmployerPage(context));
         }
+
+        internal async Task ValidateWarningMessageForFoundationCourses(string warningMsg) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(warningMsg);
 
 
 

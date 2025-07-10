@@ -21,25 +21,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
         }
 
-        public async Task<AddApprenticeDetails_SelectJourneyPage> SelectOptionToApprenticesFromILR()
+        internal async Task<AddApprenticeDetails_SelectJourneyPage> SelectOptionToApprenticesFromILR()
         {
             await SelectOptionToAddApprenticeFromILRAndContinue();
             return await VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
         }
 
-        public async Task<SelectApprenticeFromILRPage> SelectOptionToAddApprenticesFromILRList_AddAnotherApprenticeRoute()
+        internal async Task<SelectApprenticeFromILRPage> SelectOptionToAddApprenticesFromILRList_AddAnotherApprenticeRoute()
         {
             await SelectOptionToAddApprenticeFromILRAndContinue();
             return await VerifyPageAsync(() => new SelectApprenticeFromILRPage(context));
         }
 
-        public async Task<SelectApprenticeFromILRPage> SelectOptionToAddApprenticesFromILRList_NonLevyRoute()
+        internal async Task<SelectApprenticeFromILRPage> SelectOptionToAddApprenticesFromILRList_NonLevyRoute()
         {
             await SelectOptionToAddApprenticeFromILRAndContinue();
             return await VerifyPageAsync(() => new SelectApprenticeFromILRPage(context));
         }
 
-        public async Task<ProviderSelectAReservationPage> SelectOptionToAddApprenticesFromILRList_SelectReservationRoute()
+        internal async Task<ProviderSelectAReservationPage> SelectOptionToAddApprenticesFromILRList_SelectReservationRoute()
         {
             await SelectOptionToAddApprenticeFromILRAndContinue();
             return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));

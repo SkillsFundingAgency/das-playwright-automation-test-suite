@@ -15,7 +15,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select apprentices from ILR for ");
         }
 
-        public async Task<AddApprenticeDetailsPage> SelectApprenticeFromILRList(Apprenticeship apprenticeship)
+        internal async Task<AddApprenticeDetailsPage> SelectApprenticeFromILRList(Apprenticeship apprenticeship)
         {
             await SearchULN(apprenticeship.ApprenticeDetails.ULN);
 

@@ -14,7 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
         }
 
-        public async Task<EmployerApproveApprenticeDetailsPage> OpenApprenticeRequestReadyForReview(string cohortRef)
+        internal async Task<EmployerApproveApprenticeDetailsPage> OpenApprenticeRequestReadyForReview(string cohortRef)
         {
             await page.Locator($"tr[data-cohort='{cohortRef}'] a.govuk-link").ClickAsync();
 

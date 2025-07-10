@@ -64,16 +64,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         }
 
-        internal async Task<RecognitionOfPriorLearningPage> ClickAddButton()
+        internal async Task ClickAddButton()
         {
-            await addButton.ClickAsync();
-
-            return await VerifyPageAsync(() => new RecognitionOfPriorLearningPage(context));
-        }
-
-        internal async Task ClickAddButtonLeadToError()
-        {
-            await addButton.ClickAsync();
+            await addButton.ClickAsync();           
         }
 
         internal async Task VerfiyErrorMessage(string fieldName, string errorMsg)

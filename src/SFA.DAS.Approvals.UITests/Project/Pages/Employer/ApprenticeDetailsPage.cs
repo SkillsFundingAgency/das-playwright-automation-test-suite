@@ -12,7 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         private readonly ScenarioContext context;
         private readonly string pageTitle;
 
-        public ApprenticeDetailsPage(ScenarioContext context, string pageTitle) : base(context)
+        internal ApprenticeDetailsPage(ScenarioContext context, string pageTitle) : base(context)
         {
             this.context = context;
             this.pageTitle = pageTitle;

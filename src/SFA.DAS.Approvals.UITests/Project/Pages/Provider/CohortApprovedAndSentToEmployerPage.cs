@@ -22,13 +22,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Cohort approved and sent to employer");
         }
 
-        public async Task VerifyCohortApprovedAndSentToEmployer(Apprenticeship apprenticeship)
+        internal async Task VerifyCohortApprovedAndSentToEmployer(Apprenticeship apprenticeship)
         {
             await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenticeship.CohortReference);
             await Assertions.Expect(sentTo).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(messageForEmployer).ToHaveTextAsync("Please review the details and approve the request.");
         }
-        public async Task<ApprenticeRequests_ProviderPage> GoToApprenticeRequests()
+        internal async Task<ApprenticeRequests_ProviderPage> GoToApprenticeRequests()
         {
             await goToApprenticeRequestsLink.ClickAsync();
             return await VerifyPageAsync(() => new ApprenticeRequests_ProviderPage(context));

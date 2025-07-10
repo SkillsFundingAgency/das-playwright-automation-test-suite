@@ -19,15 +19,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     {
         private readonly ScenarioContext context;
         private readonly SLDDataPushHelpers sldDataPushHelpers;
+        private readonly SldIlrSubmissionSteps sldIlrSubmissionSteps;
         private ProviderStepsHelper providerStepsHelper;
         private ApprenticeDataHelper apprenticeDataHelper;
 
         public ProviderSteps(ScenarioContext _context)
         {
-            context = _context;
-            providerStepsHelper = new ProviderStepsHelper(context);
+            context = _context;            
             sldDataPushHelpers = new(context);
-            apprenticeDataHelper = new ApprenticeDataHelper(context);
+            sldIlrSubmissionSteps = new SldIlrSubmissionSteps(context);
+            providerStepsHelper = new ProviderStepsHelper(context);
+            apprenticeDataHelper = new ApprenticeDataHelper(context);            
         }
 
 
@@ -54,28 +56,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page = await providerStepsHelper.ProviderAddsFirstApprenitceUsingReservation();
             var page1 = await providerStepsHelper.ProviderAddsOtherApprentices(page);
             await providerStepsHelper.ProviderApproveCohort(page1);
-        }
-
-
-        [Given(@"Provider sends an apprentice request \(cohort\) to an employer")]
-        public async Task GivenProviderSendsAnApprenticeRequestCohortToAnEmployer()
-        {
-            //create apprenticeships object
-            var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(EmployerType.Levy, 1, null);
-            context.Set(listOfApprenticeship);
-
-            //recreate SLD pushing ILR data to AS
-            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
-            var listOfLearnerDataList = await sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
-            await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList, academicYear);
-
-            // create cohort using ILR data
-            var page = await new ProviderStepsHelper(context).ProviderCreateAndApproveACohortViaIlrRoute();
-
-            //Provider verify that cohort is under 'Apprentice requests > With employers' section
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
-            await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers, cohortRef);
-
         }
 
         [Then("return the cohort back to the Provider")]
@@ -108,52 +88,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        [Given("Provider adds an apprentice using Foundation level standard")]
-        public async Task GivenProviderAddsAnApprenticeUsingFoundationLevelStandard()
-        {
-            var coursesDataHelper = new CoursesDataHelper();
-            var employerType = EmployerType.Levy;
-
-            //create apprenticeships object with Foundation level standard and a learner aged 14 years old:
-            var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourses());
-            var apprenticeDetails = new ApprenticeFactory(-14);
-
-            //create apprenticeships object            
-            var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(employerType, 1, null, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
-            context.Set(listOfApprenticeship);
-
-            //recreate SLD pushing ILR data to AS
-            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
-            var listOfLearnerDataList = await sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
-            await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList, academicYear);
-
-        }
-
         [Then("system does not allow to add apprentice details if their age is below 15 years and over 25 years")]
         public async Task ThenSystemDoesNotAllowToAddApprenticeDetailsIfTheirAgeIsBelow15YearsAndOver25Years()
         {
-            var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDate();
-            await page.VerfiyErrorMessage("DateOfBirth", "The apprentice must be at least 15 years old at the start of their training");
-
+            var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDoB();
+            await page.VerfiyErrorMessage("DateOfBirth", "The apprentice must be 25 years old or younger at the start of their training");
+            await page.ClickNavBarLinkAsync("Home");
         }
 
-        [Then("system allows to save apprentice details with a warning if their age is in range of {int} - {int} years")]
-        public void ThenSystemAllowsToSaveApprenticeDetailsWithAWarningIfTheirAgeIsInRangeOf_Years(int p0, int p1)
-        {
-            throw new PendingStepException();
-        }
 
-        [Then("above warning disappears if apprentice age is in range of {int} - {int} years")]
-        public void ThenAboveWarningDisappearsIfApprenticeAgeIsInRangeOf_Years(int p0, int p1)
-        {
-            throw new PendingStepException();
-        }
 
-        [When("user go to {string} page for the same apprentice")]
-        public void WhenUserGoToPageForTheSameApprentice(string p0)
-        {
-            throw new PendingStepException();
-        }
 
 
 
