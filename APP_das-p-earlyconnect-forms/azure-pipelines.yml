@@ -44,7 +44,6 @@ stages:
       - template: ../code-build.yml
         parameters:
           BuildConfiguration: $(BuildConfiguration)
-          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
 
   - stage: Deploy_TEST
     dependsOn: Build
@@ -57,6 +56,7 @@ stages:
         parameters:
           Environment: TEST
           ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -69,6 +69,7 @@ stages:
         parameters:
           Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -81,6 +82,7 @@ stages:
         parameters:
           Environment: DEMO
           ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -95,3 +97,4 @@ stages:
         parameters:
           Environment: PP
           ServiceConnection: SFA-DIG-PreProd-ARM
+          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
