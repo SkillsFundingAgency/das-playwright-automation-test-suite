@@ -89,7 +89,7 @@ jobs:
           - task: VSTest@2
             displayName: 'VsTest - Test Execution'
             inputs:
-              testAssemblyVer2: $(TestAssembly)
+              testAssemblyVer2: ${{ parameters.TestAssembly }}
               searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
               testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
               runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
