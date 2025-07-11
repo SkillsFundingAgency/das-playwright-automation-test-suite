@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign;
+using SFA.DAS.EPAO.UITests.Project.Tests.Pages;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 using SFA.DAS.Framework;
@@ -38,14 +39,12 @@ public class EPAOHomePageHelper
         return await VerifyPageHelper.VerifyPageAsync(() => new AS_LandingPage(_context));
     }
 
-    //public async Task<AS_ApplyForAStandardPage> GoToEpaoApplyForAStandardPage()
-    //{
-    //    var page = await GoToEpaoAssessmentLandingPage(true);
-
-    //    await page.AlreadyLoginGoToApplyForAStandardPage();
-    //}
-
-    //public async Task<AP_PR1_SearchForYourOrganisationPage> LoginInAsApplyUser(GovSignUser loginUser) { await StubSign(loginUser); return new AP_PR1_SearchForYourOrganisationPage(_context); }
+    public async Task<AP_PR1_SearchForYourOrganisationPage> LoginInAsApplyUser(GovSignUser loginUser) 
+    {
+        await StubSign(loginUser); 
+        
+        return await VerifyPageHelper.VerifyPageAsync(() => new AP_PR1_SearchForYourOrganisationPage(_context));
+    }
 
     public async Task<AS_LoggedInHomePage> LoginInAsNonApplyUser(GovSignUser loginUser) { await StubSign(loginUser); return new AS_LoggedInHomePage(_context); }
 

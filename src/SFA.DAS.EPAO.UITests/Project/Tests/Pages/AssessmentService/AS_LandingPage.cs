@@ -6,29 +6,12 @@ public class AS_LandingPage(ScenarioContext context) : EPAO_BasePage(context)
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprenticeship assessment service");
 
-        if (await page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" }).IsVisibleAsync())
-        {
-            await page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" }).ClickAsync();
-        }
+        await AcceptAllCookiesIfVisible();
     }
 
     public async Task<StubSignInAssessorPage> GoToStubSign()
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Start now" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new StubSignInAssessorPage(context));
-    }
-
-    //public async Task<AS_ApplyForAStandardPage> AlreadyLoginGoToApplyForAStandardPage()
-    //{
-    //    await CheckAndLogin();
-
-    //    return await VerifyPageAsync(() => new AS_ApplyForAStandardPage(context));
-    //}
-
-    public async Task<StubSignInAssessorPage> GoToStubSignInAssessorPage()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "create an account" }).ClickAsync();
 
         return await VerifyPageAsync(() => new StubSignInAssessorPage(context));
     }

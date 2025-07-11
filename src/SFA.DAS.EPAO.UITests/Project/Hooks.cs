@@ -82,8 +82,4 @@ public class Hooks(ScenarioContext context)
     [AfterScenario(Order = 34)]
     [Scope(Tag = "makeorganisationlive")]
     public async Task MakeOrganisationLive() => await _tryCatch.AfterScenarioException(async () => await _ePAOAdminSqlDataHelper.UpdateOrgStatusToLive(EPAOAdminDataHelper.MakeLiveOrganisationEpaoId));
-
-    //[AfterScenario(Order = 18)]
-    //[Scope(Tag = "cancelstandard")]
-    //public void CancelStandard() => _tryCatch.AfterScenarioException(() => new CancelStandardStepsHelper(context).CancelYourStandard());
 }

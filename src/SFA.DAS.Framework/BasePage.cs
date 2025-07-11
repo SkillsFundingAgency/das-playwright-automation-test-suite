@@ -64,7 +64,7 @@ namespace SFA.DAS.Framework
             return nextPage;
         }
 
-        protected async Task AcceptAllCookies()
+        protected async Task AcceptAllCookiesIfVisible()
         {
             var cookieLocator = page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" });
 
