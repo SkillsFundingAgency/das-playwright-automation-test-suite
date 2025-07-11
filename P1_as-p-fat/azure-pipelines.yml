@@ -1,0 +1,100 @@
+trigger:
+  branches:
+    include:
+      - master
+
+pr:
+  branches:
+    include:
+      - master
+
+variables:
+  - name: BuildConfiguration
+    value: release
+  - name: BuildPlatform
+    value: any cpu
+  - group: "Release Automation Suite Variables"
+  - group: "Release Automation Suite Variables (Db)"
+  - group: "Provider Release Automation Suite Variables"
+  - group: "RELEASE APP_as-fat"
+  - name: Deploy
+    value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
+
+resources:
+  repositories:
+    - repository: self
+    - repository: das-platform-building-blocks
+      type: github
+      name: SkillsFundingAgency/das-platform-building-blocks
+      ref: refs/tags/2.1.28
+      endpoint: SkillsFundingAgency
+    - repository: das-platform-automation
+      type: github
+      name: SkillsFundingAgency/das-platform-automation
+      ref: refs/tags/5.1.17
+      endpoint: SkillsFundingAgency
+
+pool:
+  vmImage: 'windows-latest'
+
+stages:
+  - stage: Build
+    displayName: Build Stage
+    jobs:
+      - template: ../code-build.yml
+        parameters:
+          BuildConfiguration: $(BuildConfiguration)
+
+  - stage: Deploy_TEST
+    dependsOn: Build
+    displayName: Deploy to TEST
+    variables:
+      - group: "TEST DevTest Shared Resources"
+      - group: "TEST Automation Suite Variables"
+    jobs:
+      - template: ../deploy.yml
+        parameters:
+          Environment: TEST
+          ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: '**\SFA.DAS.FATe.UITests\SFA.DAS.FATe.UITests.dll'
+
+  - stage: Deploy_TEST2
+    dependsOn: Build
+    displayName: Deploy to TEST2
+    variables:
+      - group: "TEST2 DevTest Shared Resources"
+      - group: "TEST2 Automation Suite Variables"
+    jobs:
+      - template: ../deploy.yml
+        parameters:
+          Environment: TEST2
+          ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: '**\SFA.DAS.FATe.UITests\SFA.DAS.FATe.UITests.dll'
+
+  - stage: Deploy_DEMO
+    dependsOn: Build
+    displayName: Deploy to DEMO
+    variables:
+      - group: "DEMO DevTest Shared Resources"
+      - group: "DEMO Automation Suite Variables"
+    jobs:
+      - template: ../deploy.yml
+        parameters:
+          Environment: DEMO
+          ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: '**\SFA.DAS.FATe.UITests\SFA.DAS.FATe.UITests.dll'
+
+  - stage: Deploy_PP
+    dependsOn: Build
+    displayName: Deploy to PP
+    variables:
+      - group: "PreProd Management Resources"
+      - group: "PreProd Shared Resources"
+      - group: "PreProd Automation Suite Variables"
+      - group: "PREPROD APP_as-fat"
+    jobs:
+      - template: ../deploy.yml
+        parameters:
+          Environment: PP
+          ServiceConnection: SFA-DIG-PreProd-ARM
+          TestAssembly: '**\SFA.DAS.FATe.UITests\SFA.DAS.FATe.UITests.dll'
