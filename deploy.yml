@@ -3,6 +3,9 @@ parameters:
     type: string
   - name: Environment
     type: string
+  - name: TestAssembly
+    type: string
+
 
 jobs:
 - deployment: Deploy_AutomationTests

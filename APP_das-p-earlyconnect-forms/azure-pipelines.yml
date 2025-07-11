@@ -16,7 +16,7 @@ variables:
   - group: "Release Automation Suite Variables"
   - group: "Release Automation Suite Variables (Db)"
   - group: "Provider Release Automation Suite Variables"
-  - group: $(ReleaseGroup)
+  - group: "RELEASE APP_das-p-GAA"
   - name: Deploy
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
@@ -44,6 +44,7 @@ stages:
       - template: ../code-build.yml
         parameters:
           BuildConfiguration: $(BuildConfiguration)
+          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
 
   - stage: Deploy_TEST
     dependsOn: Build
@@ -88,7 +89,7 @@ stages:
       - group: "PreProd Management Resources"
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
-      - group: $(PPReleaseGroup)
+      - group: "PREPROD APP_das-GAA"
     jobs:
       - template: ../deploy.yml
         parameters:
