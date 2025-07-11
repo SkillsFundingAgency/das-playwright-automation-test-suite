@@ -16,7 +16,7 @@ variables:
   - group: "Release Automation Suite Variables"
   - group: "Release Automation Suite Variables (Db)"
   - group: "Provider Release Automation Suite Variables"
-  - group: "RELEASE APP_as-support-console"
+  - group: "RELEASE E2_as-emp-account"
   - name: Deploy
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
@@ -56,7 +56,8 @@ stages:
         parameters:
           Environment: TEST
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: '**\SFA.DAS.SupportTools.UITests\SFA.DAS.SupportTools.UITests.dll'
+          TestAssembly: '**\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+                         **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll'
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -69,7 +70,8 @@ stages:
         parameters:
           Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: '**\SFA.DAS.SupportTools.UITests\SFA.DAS.SupportTools.UITests.dll'
+          TestAssembly: '**\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+                         **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll'
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -82,7 +84,8 @@ stages:
         parameters:
           Environment: DEMO
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: '**\SFA.DAS.SupportTools.UITests\SFA.DAS.SupportTools.UITests.dll'
+          TestAssembly: '**\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+                         **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll'
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -91,10 +94,11 @@ stages:
       - group: "PreProd Management Resources"
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
-      - group: "PREPROD APP_as-support-console"
+      - group: "PREPROD E2_as-emp-account"
     jobs:
       - template: ../deploy.yml
         parameters:
           Environment: PP
           ServiceConnection: SFA-DIG-PreProd-ARM
-          TestAssembly: '**\SFA.DAS.SupportTools.UITests\SFA.DAS.SupportTools.UITests.dll'
+          TestAssembly: '**\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+                         **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll'
