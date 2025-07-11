@@ -29,9 +29,9 @@ public class EPAOBaseSteps
 
     protected readonly AssessmentServiceStepsHelper assessmentServiceStepsHelper;
     protected readonly EPAOHomePageHelper ePAOHomePageHelper;
-    //protected readonly ApplyStepsHelper applyStepsHelper;
+
     protected readonly AdminStepshelper adminStepshelper;
-    //protected readonly EPAOWithdrawalHelper ePAOWithdrawalHelper;
+
 
     protected StaffDashboardPage staffDashboardPage;
     protected OrganisationDetailsPage organisationDetailsPage;
@@ -39,13 +39,11 @@ public class EPAOBaseSteps
     protected CertificateAddressPage certificateAddressPage;
     protected CheckAndSubmitAssessmentDetailsPage checkAndSubmitAssessmentDetailsPage;
 
-    //protected AP_ApplicationOverviewPage applicationOverviewPage;
     protected AP_PR1_SearchForYourOrganisationPage searchForYourOrganisationPage;
 
     protected AO_HomePage homePage;
 
     protected AS_RecordAGradePage recordAGradePage;
-    //protected AS_AchievementDatePage achievementDatePage;
     protected AS_CheckAndSubmitAssessmentPage checkAndSubmitAssessmentPage;
     protected AS_LoggedInHomePage loggedInHomePage;
     protected AS_EditUserPermissionsPage editUserPermissionsPage;
@@ -73,8 +71,8 @@ public class EPAOBaseSteps
 
         adminStepshelper = new AdminStepshelper();
         ePAOHomePageHelper = new EPAOHomePageHelper(context);
-        //applyStepsHelper = new ApplyStepsHelper(context);
+
         assessmentServiceStepsHelper = new AssessmentServiceStepsHelper(context);
-        //ePAOWithdrawalHelper = new EPAOWithdrawalHelper(context);
+
     }
 }

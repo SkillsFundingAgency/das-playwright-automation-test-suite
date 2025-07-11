@@ -17,13 +17,6 @@ public static class ObjectContextExtension
     private const string HasMultiStandards = "HasMultiStandards";
     #endregion
 
-
-    public static void SetApplyOrganisationName(this ObjectContext objectContext, string value) => objectContext.Replace(ApplyOrganisationName, value);
-    public static string GetApplyOrganisationName(this ObjectContext objectContext) => objectContext.Get(ApplyOrganisationName);
-
-    public static void SetApplyStandardName(this ObjectContext objectContext, string value) => objectContext.Replace(ApplyStandardName, value);
-    public static string GetApplyStandardName(this ObjectContext objectContext) => objectContext.Get(ApplyStandardName);
-
     public static void SetOrganisationIdentifier(this ObjectContext objectContext, string value) => objectContext.Replace(OrganisationIdentifier, value);
     public static string GetOrganisationIdentifier(this ObjectContext objectContext) => objectContext.Get(OrganisationIdentifier);
 
@@ -45,8 +38,6 @@ public static class ObjectContextExtension
     }
 
     public static string GetLearnerULN(this ObjectContext objectContext) => objectContext.Get(LearnerULN);
-    public static string GetLearnerFirstName(this ObjectContext objectContext) => objectContext.Get(LearnerFirstName);
-    public static string GetLearnerLastName(this ObjectContext objectContext) => objectContext.Get(LearnerLastName);
     public static string GetLearnerStandardCode(this ObjectContext objectContext) => objectContext.Get(LearnerStandardCode);
     public static string GetLearnerStandardName(this ObjectContext objectContext) => objectContext.Get(LearnerStandardName);
 }
