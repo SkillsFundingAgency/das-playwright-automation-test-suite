@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.EPAO.UITests.Project.Tests.Pages.EPAOWithdrawalPages;
+using SFA.DAS.Framework;
 
 namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 
@@ -26,26 +27,32 @@ public class StaffDashboardPage(ScenarioContext context) : EPAOAdmin_BasePage(co
         return await VerifyPageAsync(() => new SearchPage(context));
     }
 
-    //public async Task<OrganisationSearchPage> SearchEPAO()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Search organisations" }).ClickAsync();
+    public async Task<OrganisationSearchPage> SearchEPAO()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Search organisations" }).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new OrganisationSearchPage(context));
-    //}
+        return await VerifyPageAsync(() => new OrganisationSearchPage(context));
+    }
 
-    //public async Task<AddOrganisationPage> AddOrganisation()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Add an organisation" }).ClickAsync();
+    public async Task<AddOrganisationPage> AddOrganisation()
+    {
+        var uri = new Uri(new Uri(UrlConfig.Admin_BaseUrl), $"register/add-organisation");
 
-    //    return await VerifyPageAsync(() => new AddOrganisationPage(context));
-    //}
+        objectContext.SetDebugInformation(uri.AbsoluteUri);
 
-    //public async Task<BatchSearchPage> SearchEPAOBatch()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Batch search" }).ClickAsync();
+        await page.GotoAsync(uri.AbsoluteUri);
+        await page.GotoAsync(uri.AbsoluteUri);
+        await page.GotoAsync(uri.AbsoluteUri);
 
-    //    return await VerifyPageAsync(() => new BatchSearchPage(context));
-    //}
+        return await VerifyPageAsync(() => new AddOrganisationPage(context));
+    }
+
+    public async Task<BatchSearchPage> SearchEPAOBatch()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Batch search" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new BatchSearchPage(context));
+    }
 
     //public async Task<OrganisationApplicationsPage> GoToNewOrganisationApplications()
     //{
