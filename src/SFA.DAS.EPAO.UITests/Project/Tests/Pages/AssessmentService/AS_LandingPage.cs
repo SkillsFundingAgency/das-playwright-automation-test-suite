@@ -16,20 +16,6 @@ public class AS_LandingPage(ScenarioContext context) : EPAO_BasePage(context)
         return await VerifyPageAsync(() => new StubSignInAssessorPage(context));
     }
 
-    //public async Task<AS_ApplyForAStandardPage> AlreadyLoginGoToApplyForAStandardPage()
-    //{
-    //    await CheckAndLogin();
-
-    //    return await VerifyPageAsync(() => new AS_ApplyForAStandardPage(context));
-    //}
-
-    public async Task<StubSignInAssessorPage> GoToStubSignInAssessorPage()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "create an account" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new StubSignInAssessorPage(context));
-    }
-
     public async Task<AS_LoggedInHomePage> AlreadyLoginGoToLoggedInHomePage()
     {
         await CheckAndLogin();

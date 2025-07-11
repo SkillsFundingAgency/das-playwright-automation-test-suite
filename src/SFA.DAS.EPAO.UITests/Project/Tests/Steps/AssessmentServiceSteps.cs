@@ -266,19 +266,6 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         await page2.ClickRemoveUserButtonInRemoveUserPage();
     }
 
-    //[Then(@"the user can apply to assess a standard")]
-    //public async Task ThenTheUserCanApplyToAssessAStandard()
-    //{
-    //    var page = await loggedInHomePage.ApplyToAssessStandard();
-
-    //    var page1 = await page.SelectApplication();
-
-    //    var page2 = await page1.StartApplication();
-
-    //    await applyStepsHelper.ApplyForAStandard(page2, EPAOApplyStandardDataHelper.ApplyStandardName);
-    //}
-
-
     [Given(@"the certificate is printed")]
     public async Task GivenTheCertificateIsSentToPrinter() => await ePAOAdminSqlDataHelper.UpdateCertificateToPrinted(ePAOAdminDataHelper.LearnerUln);
 

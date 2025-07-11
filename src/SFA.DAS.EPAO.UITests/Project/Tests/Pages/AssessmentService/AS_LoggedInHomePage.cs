@@ -7,13 +7,6 @@ public class AS_LoggedInHomePage(ScenarioContext context) : EPAO_BasePage(contex
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#Home")).ToContainTextAsync("Home");
 
-    //public async Task<AS_ApplyToAssessStandardPage> ApplyToAssessStandard()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Apply to assess a standard" }).ClickAsync();
-
-    //    return await VerifyPageAsync(() => new AS_ApplyToAssessStandardPage(context));
-    //}
-
     public async Task<ApprovedStandardsAndVersionsLandingPage> ApprovedStandardAndVersions()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Approved standards and" }).ClickAsync();

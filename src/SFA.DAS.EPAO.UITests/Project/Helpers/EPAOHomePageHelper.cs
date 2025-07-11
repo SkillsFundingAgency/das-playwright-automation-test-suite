@@ -39,13 +39,6 @@ public class EPAOHomePageHelper
         return await VerifyPageHelper.VerifyPageAsync(() => new AS_LandingPage(_context));
     }
 
-    //public async Task<AS_ApplyForAStandardPage> GoToEpaoApplyForAStandardPage()
-    //{
-    //    var page = await GoToEpaoAssessmentLandingPage(true);
-
-    //    await page.AlreadyLoginGoToApplyForAStandardPage();
-    //}
-
     public async Task<AP_PR1_SearchForYourOrganisationPage> LoginInAsApplyUser(GovSignUser loginUser) 
     {
         await StubSign(loginUser); 
