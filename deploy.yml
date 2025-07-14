@@ -3,6 +3,9 @@ parameters:
     type: string
   - name: Environment
     type: string
+  - name: TestAssembly
+    type: string
+
 
 jobs:
 - deployment: Deploy_AutomationTests
@@ -86,7 +89,7 @@ jobs:
           - task: VSTest@2
             displayName: 'VsTest - Test Execution'
             inputs:
-              testAssemblyVer2: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
+              testAssemblyVer2: ${{ parameters.TestAssembly }}
               searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
               testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
               runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'

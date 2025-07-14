@@ -52,10 +52,11 @@ stages:
       - group: "TEST DevTest Shared Resources"
       - group: "TEST Automation Suite Variables"
     jobs:
-      - template: pipeline-templates/job/deploy.yml
+      - template: ../deploy.yml
         parameters:
           Environment: TEST
           ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -64,10 +65,11 @@ stages:
       - group: "TEST2 DevTest Shared Resources"
       - group: "TEST2 Automation Suite Variables"
     jobs:
-      - template: pipeline-templates/job/deploy.yml
+      - template: ../deploy.yml
         parameters:
           Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -76,10 +78,11 @@ stages:
       - group: "DEMO DevTest Shared Resources"
       - group: "DEMO Automation Suite Variables"
     jobs:
-      - template: pipeline-templates/job/deploy.yml
+      - template: ../deploy.yml
         parameters:
           Environment: DEMO
           ServiceConnection: SFA-DAS-DevTest-ARM
+          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -90,7 +93,8 @@ stages:
       - group: "PreProd Automation Suite Variables"
       - group: "PREPROD APP_das-GAA"
     jobs:
-      - template: pipeline-templates/job/deploy.yml
+      - template: ../deploy.yml
         parameters:
           Environment: PP
           ServiceConnection: SFA-DIG-PreProd-ARM
+          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
