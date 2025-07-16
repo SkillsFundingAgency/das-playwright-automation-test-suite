@@ -1,7 +1,5 @@
 ﻿using SFA.DAS.EPAO.UITests.Project.Tests.Pages;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
-using SFA.DAS.Framework;
-using System;
 
 namespace SFA.DAS.EPAO.UITests.Project.Tests.Steps;
 
@@ -23,7 +21,7 @@ public class AssessmentOpportunitySteps(ScenarioContext context) : EPAOBaseSteps
 
         homePage = new AO_HomePage(_context);
     }
-    
+
     [Then(@"the Approved tab is displayed and selected")]
     public async Task ThenTheApprovedTabIsDisplayedAndSelected() => await homePage.VerifyApprovedTab();
 
@@ -51,7 +49,7 @@ public class AssessmentOpportunitySteps(ScenarioContext context) : EPAOBaseSteps
     public async Task WhenTheUserClicksOnOneOfTheStandardsListedUnderProposedTabToViewIt()
     {
         await homePage.ClickInProposedTab();
-        
+
         await homePage.ClickOnAProposedStandard();
     }
 

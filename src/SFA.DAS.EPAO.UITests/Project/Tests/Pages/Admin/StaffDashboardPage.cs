@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.EPAO.UITests.Project.Tests.Pages.EPAOWithdrawalPages;
-using SFA.DAS.Framework;
 
 namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 
@@ -9,7 +8,7 @@ public class StaffDashboardPage(ScenarioContext context) : EPAOAdmin_BasePage(co
 
     private static string NewWithdrawalApplications => ("a.govuk-link[href='/WithdrawalApplication#new']");
     private static string FeedbackWithdrawalApplications => ("a.govuk-link[href='/WithdrawalApplication#feedback']");
-   
+
     public async Task<SearchPage> Search()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Search", Exact = true }).ClickAsync();

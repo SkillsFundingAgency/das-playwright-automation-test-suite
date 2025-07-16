@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 
 public class AddOrganisationPage(ScenarioContext context) : EPAOAdmin_BasePage(context)
 {

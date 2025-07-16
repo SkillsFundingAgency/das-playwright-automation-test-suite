@@ -1,18 +1,4 @@
-﻿global using NUnit.Framework;
-global using SFA.DAS.ConfigurationBuilder;
-global using SFA.DAS.EPAO.UITests.Project.Helpers.DataHelpers;
-global using SFA.DAS.EPAO.UITests.Project.Helpers.SqlHelpers;
-global using SFA.DAS.FrameworkHelpers;
-global using SFA.DAS.Login.Service.Project.Helpers;
-global using System;
-global using System.Collections.Generic;
-global using System.Linq;
-global using System.Text.RegularExpressions;
-global using TechTalk.SpecFlow;
-using SFA.DAS.Login.Service.Project;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EPAO.UITests.Project;
+﻿namespace SFA.DAS.EPAO.UITests.Project;
 
 [Binding]
 public class Hooks(ScenarioContext context)

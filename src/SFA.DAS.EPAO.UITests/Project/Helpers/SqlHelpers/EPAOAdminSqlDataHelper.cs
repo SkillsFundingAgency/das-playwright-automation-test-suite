@@ -1,8 +1,4 @@
-﻿using SFA.DAS.ConfigurationBuilder;
-using SFA.DAS.FrameworkHelpers;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EPAO.UITests.Project.Helpers.SqlHelpers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Helpers.SqlHelpers;
 
 public class EPAOAdminSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AssessorDbConnectionString)
 {

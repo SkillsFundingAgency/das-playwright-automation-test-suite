@@ -1,8 +1,6 @@
 ﻿using SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.EPAOWithdrawalPages;
-using SFA.DAS.Framework;
-using SFA.DAS.Login.Service.Project;
 
 namespace SFA.DAS.EPAO.UITests.Project.Helpers;
 
