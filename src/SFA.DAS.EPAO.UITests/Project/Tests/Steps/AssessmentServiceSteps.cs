@@ -1,11 +1,7 @@
-﻿using SFA.DAS.EPAO.UITests.Project;
-using SFA.DAS.EPAO.UITests.Project.Helpers;
+﻿using SFA.DAS.EPAO.UITests.Project.Helpers;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
-using SFA.DAS.Login.Service.Project;
-using System.Security;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EPAO.UITests.Project.Tests.Steps;
 
@@ -42,7 +38,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
     public async Task WhenTheUserProvidesTheMatchingUlnAndInvalidFamilyNameForTheExistingCertificate()
     {
         var page = await loggedInHomePage.GoToRecordAGradePage();
-        
+
         await page.EnterApprenticeDetailsForExistingCertificateAndContinue();
     }
 
@@ -133,7 +129,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
     public async Task WhenTheUserCertifiesAnApprenticeAndRecordsAGrade(string grade, string route)
     {
         var page = await CertifyApprentice(grade, route, await SetLearnerDetails(), true);
-        
+
         await page.ClickContinueInCheckAndSubmitAssessmentPage();
     }
 
@@ -221,7 +217,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
     }
 
     [Then(@"the User is able to change the permissions")]
-    public async Task ThenTheUserIsAbleToChangeThePermissions() 
+    public async Task ThenTheUserIsAbleToChangeThePermissions()
     {
         var permissions = await userDetailsPage.GetDashboardPermissions();
 
@@ -243,7 +239,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         });
     }
 
-        
+
 
 
     [When(@"the User initiates inviting a new user journey")]
@@ -288,13 +284,13 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         checkAndSubmitAssessmentPage = await page3.ClickBackLink();
     }
 
-    private async Task<AS_AssessmentRecordedPage> RecordAGrade(string grade, string route, LearnerCriteria learnerCriteria, bool deleteCertificate) 
+    private async Task<AS_AssessmentRecordedPage> RecordAGrade(string grade, string route, LearnerCriteria learnerCriteria, bool deleteCertificate)
     {
         var page = await CertifyApprentice(grade, route, learnerCriteria, deleteCertificate);
 
         return assessmentRecordedPage = await page.ClickContinueInCheckAndSubmitAssessmentPage();
     }
-        
+
 
     private async Task<AS_CheckAndSubmitAssessmentPage> CertifyApprentice(string grade, string route, LearnerCriteria learnerCriteria, bool deleteExistingCertificate) =>
         await assessmentServiceStepsHelper.CertifyApprentice(grade, route, learnerCriteria, deleteExistingCertificate);

@@ -137,7 +137,7 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
         await page.VerifyActionHistoryItem(2, "ReprintReason");
 
         await page.VerifyIncidentNumber(2, incidentNumber);
-        
+
         await page.VerifyFirstReason(2, reprintReason);
     }
 
@@ -180,7 +180,7 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
     {
         return checkAndSubmitAssessmentDetailsPage = await page.EnterTicketRefeferenceAndSelectReason(ticketReference, reason);
     }
-        
+
     private async Task<StaffDashboardPage> GoToEpaoAdminHomePage() => await ePAOHomePageHelper.LoginToEpaoAdminHomePage(false);
 
     private async Task SearchEpaoRegister(string value) { objectContext.SetOrganisationIdentifier(value); organisationDetailsPage = await AdminStepshelper.SearchEpaoRegister(await GoToEpaoAdminHomePage()); }

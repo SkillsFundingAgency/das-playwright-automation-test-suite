@@ -1,7 +1,4 @@
-﻿using SFA.DAS.FrameworkHelpers;
-using System.Collections.Generic;
-
-namespace SFA.DAS.EPAO.UITests.Project.Helpers.SqlHelpers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Helpers.SqlHelpers;
 
 internal static class EPAOCAInUseUlns
 {
