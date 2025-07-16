@@ -305,7 +305,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
     {
         var learnerDetails = await func();
 
-        if (string.IsNullOrEmpty(learnerDetails[0])) Assert.Fail("No test data found in the db");
+        if (string.IsNullOrEmpty(learnerDetails[0])) Assert.Inconclusive("No test data found in the db");
 
         ePAOAdminDataHelper.LearnerUln = learnerDetails[0];
         ePAOAdminDataHelper.StandardCode = learnerDetails[1];
