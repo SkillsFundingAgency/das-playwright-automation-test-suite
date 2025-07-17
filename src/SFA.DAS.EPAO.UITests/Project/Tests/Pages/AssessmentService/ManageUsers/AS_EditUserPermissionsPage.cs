@@ -1,7 +1,4 @@
-﻿using Microsoft.Playwright;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 
 public class AS_EditUserPermissionsPage(ScenarioContext context) : EPAO_BasePage(context)
 {

@@ -9,58 +9,56 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
     private ConfirmReasonBasePage confirmReasonBasePage;
     private ConfirmationAmendReprintBasePage confirmationAmendReprintBasePage;
 
-    //[Then(@"the admin can add organisation")]
-    //public async Task ThenTheAdminCanAddOrganisation() => await AdminStepshelper.AddOrganisation(await GoToEpaoAdminHomePage());
+    [Then(@"the admin can add organisation")]
+    public async Task ThenTheAdminCanAddOrganisation() => await AdminStepshelper.AddOrganisation(await GoToEpaoAdminHomePage());
 
-    //[Then(@"the admin can make organisation to be live")]
-    //public async Task ThenTheAdminCanMakeOrganisationToBeLive()
-    //{
-    //    var epaoid = EPAOAdminDataHelper.MakeLiveOrganisationEpaoId;
+    [Then(@"the admin can make organisation to be live")]
+    public async Task ThenTheAdminCanMakeOrganisationToBeLive()
+    {
+        var epaoid = EPAOAdminDataHelper.MakeLiveOrganisationEpaoId;
 
-    //    await ePAOAdminSqlDataHelper.UpdateOrgStatusToNew(epaoid);
+        await ePAOAdminSqlDataHelper.UpdateOrgStatusToNew(epaoid);
 
-    //    objectContext.SetOrganisationIdentifier(epaoid);
+        objectContext.SetOrganisationIdentifier(epaoid);
 
-    //    organisationDetailsPage = await AdminStepshelper.MakeEPAOOrganisationLive(await GoToEpaoAdminHomePage());
-    //}
+        organisationDetailsPage = await AdminStepshelper.MakeEPAOOrganisationLive(await GoToEpaoAdminHomePage());
+    }
 
-    //[Then(@"the admin can edit the organisation")]
-    //public async Task ThenTheAdminCanEditTheOrganisation()
-    //{
-    //    var page = await organisationDetailsPage.EditOrganisation();
+    [Then(@"the admin can edit the organisation")]
+    public async Task ThenTheAdminCanEditTheOrganisation()
+    {
+        var page = await organisationDetailsPage.EditOrganisation();
 
-    //    var page1 = await page.EditOrganisation();
+        organisationDetailsPage = await page.EditDetails();
 
-    //    var page2 = await page1.EditDetails();
+        await organisationDetailsPage.VerifyOrganisationCharityNumber();
 
-    //    var page3 = await page2.VerifyOrganisationCharityNumber();
+        await organisationDetailsPage.VerifyOrganisationCompanyNumber();
+    }
 
-    //    organisationDetailsPage = await page3.VerifyOrganisationCompanyNumber();
-    //}
+    [Then(@"the admin can search using organisation name")]
+    public async Task ThenTheAdminCanSearchUsingOrganisationName() => await SearchEpaoRegister(EPAOAdminDataHelper.OrganisationName);
 
-    //[Then(@"the admin can search using organisation name")]
-    //public async Task ThenTheAdminCanSearchUsingOrganisationName() => await SearchEpaoRegister(EPAOAdminDataHelper.OrganisationName);
+    [Then(@"the admin can search using organisation epao id")]
+    public async Task ThenTheAdminCanSearchUsingOrganisationEpaoId() => await SearchEpaoRegister(EPAOAdminDataHelper.OrganisationEpaoId);
 
-    //[Then(@"the admin can search using organisation epao id")]
-    //public async Task ThenTheAdminCanSearchUsingOrganisationEpaoId() => await SearchEpaoRegister(EPAOAdminDataHelper.OrganisationEpaoId);
+    [Then(@"the admin can add contact details")]
+    public async Task ThenTheAdminCanAddContactDetails()
+    {
+        var page = await organisationDetailsPage.AddNewContact();
 
-    //[Then(@"the admin can add contact details")]
-    //public async Task ThenTheAdminCanAddContactDetails()
-    //{
-    //    var page = await organisationDetailsPage.AddNewContact();
+        var page1 = await page.AddContact();
 
-    //    var page1 = await page.AddContact();
+        var page2 = await page1.ReturnToOrganisationDetailsPage();
 
-    //    var page2 = await page1.ReturnToOrganisationDetailsPage();
+        var page3 = await page2.SelectContact();
 
-    //    var page3 = await page2.SelectContact();
-
-    //    organisationDetailsPage = await page3.ReturnToOrganisationDetailsPage();
-    //}
+        organisationDetailsPage = await page3.ReturnToOrganisationDetailsPage();
+    }
 
 
-    //[Then(@"the admin can search using organisation ukprn")]
-    //public async Task ThenTheAdminCanSearchUsingOrganisationUkprn() => await SearchEpaoRegister(EPAOAdminDataHelper.OrganisationUkprn);
+    [Then(@"the admin can search using organisation ukprn")]
+    public async Task ThenTheAdminCanSearchUsingOrganisationUkprn() => await SearchEpaoRegister(EPAOAdminDataHelper.OrganisationUkprn);
 
     [Given(@"the (Admin all roles user) is logged into the Admin Service Application")]
     public async Task GivenTheAdminIsLoggedIntoTheAdminServiceApplication(string _) => staffDashboardPage = await GoToEpaoAdminHomePage();
@@ -139,23 +137,23 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
         await page.VerifyActionHistoryItem(2, "ReprintReason");
 
         await page.VerifyIncidentNumber(2, incidentNumber);
-        
+
         await page.VerifyFirstReason(2, reprintReason);
     }
 
-    //[Then(@"the admin can search batches")]
-    //public async Task ThenTheAdminCanSearchBatches()
-    //{
-    //    var page = await GoToEpaoAdminHomePage();
+    [Then(@"the admin can search batches")]
+    public async Task ThenTheAdminCanSearchBatches()
+    {
+        var page = await GoToEpaoAdminHomePage();
 
-    //    var page1 = await page.SearchEPAOBatch();
+        var page1 = await page.SearchEPAOBatch();
 
-    //    var page2 = await page1.SearchBatches();
+        var page2 = await page1.SearchBatches();
 
-    //    var page3 = await page2.VerifyingBatchDetails();
-        
-    //    await page3.SignOut();
-    //}
+        await page2.VerifyingBatchDetails();
+
+        await page2.SignOut();
+    }
 
     private async Task<CertificateDetailsPage> SelectACertificate()
     {
@@ -182,8 +180,8 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
     {
         return checkAndSubmitAssessmentDetailsPage = await page.EnterTicketRefeferenceAndSelectReason(ticketReference, reason);
     }
-        
+
     private async Task<StaffDashboardPage> GoToEpaoAdminHomePage() => await ePAOHomePageHelper.LoginToEpaoAdminHomePage(false);
 
-    //private async Task SearchEpaoRegister(string value) { objectContext.SetOrganisationIdentifier(value); organisationDetailsPage = await AdminStepshelper.SearchEpaoRegister(await GoToEpaoAdminHomePage()); }
+    private async Task SearchEpaoRegister(string value) { objectContext.SetOrganisationIdentifier(value); organisationDetailsPage = await AdminStepshelper.SearchEpaoRegister(await GoToEpaoAdminHomePage()); }
 }

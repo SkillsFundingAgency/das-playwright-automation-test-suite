@@ -6,18 +6,8 @@ public class StaffDashboardPage(ScenarioContext context) : EPAOAdmin_BasePage(co
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Staff dashboard");
 
-    private static string NewOrganisationApplication => ("a.govuk-link[href='/OrganisationApplication#new']");
-    private static string InProgressOrganisationApplication => ("a.govuk-link[href='/OrganisationApplication#in-progress']");
-    private static string ApprovedOrganisationApplication => ("a.govuk-link[href='/OrganisationApplication#approved']");
-    private static string NewStandardApplication => ("a.govuk-link[href='/StandardApplication#new']");
     private static string NewWithdrawalApplications => ("a.govuk-link[href='/WithdrawalApplication#new']");
-    private static string InProgressStandardApplication => ("a.govuk-link[href='/StandardApplication#in-progress']");
     private static string FeedbackWithdrawalApplications => ("a.govuk-link[href='/WithdrawalApplication#feedback']");
-    private static string NewFinancialHeathAssesment => ("a.govuk-link[href='/Financial/Open']");
-    private static string SearchLink => ("a.govuk-link[href='/Search']");
-    private static string BatchSearch => ("a.govuk-link[href='/BatchSearch']");
-    private static string Register => ("a.govuk-link[href='/Register']");
-    private static string AddOrganisationLink => ("a.govuk-link[href='/register/add-organisation']");
 
     public async Task<SearchPage> Search()
     {
@@ -26,68 +16,32 @@ public class StaffDashboardPage(ScenarioContext context) : EPAOAdmin_BasePage(co
         return await VerifyPageAsync(() => new SearchPage(context));
     }
 
-    //public async Task<OrganisationSearchPage> SearchEPAO()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Search organisations" }).ClickAsync();
+    public async Task<OrganisationSearchPage> SearchEPAO()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Search organisations" }).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new OrganisationSearchPage(context));
-    //}
+        return await VerifyPageAsync(() => new OrganisationSearchPage(context));
+    }
 
-    //public async Task<AddOrganisationPage> AddOrganisation()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Add an organisation" }).ClickAsync();
+    public async Task<AddOrganisationPage> AddOrganisation()
+    {
+        var uri = UriHelper.GetAbsoluteUri(UrlConfig.Admin_BaseUrl, $"register/add-organisation");
 
-    //    return await VerifyPageAsync(() => new AddOrganisationPage(context));
-    //}
+        objectContext.SetDebugInformation(uri);
 
-    //public async Task<BatchSearchPage> SearchEPAOBatch()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Batch search" }).ClickAsync();
+        await page.GotoAsync(uri);
+        await page.GotoAsync(uri);
+        await page.GotoAsync(uri);
 
-    //    return await VerifyPageAsync(() => new BatchSearchPage(context));
-    //}
+        return await VerifyPageAsync(() => new AddOrganisationPage(context));
+    }
 
-    //public async Task<OrganisationApplicationsPage> GoToNewOrganisationApplications()
-    //{
-    //    await page.GetByText("Organisation applications").GetByRole(AriaRole.Link, new() { Name = "New" }).ClickAsync();
+    public async Task<BatchSearchPage> SearchEPAOBatch()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Batch search" }).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new OrganisationApplicationsPage(context));
-    //}
-
-    //public async Task<OrganisationApplicationsPage> GoToInProgressOrganisationApplication()
-    //{
-    //    await page.GetByText("Organisation applications").GetByRole(AriaRole.Link, new() { Name = "In progress" }).ClickAsync();
-
-    //    return await VerifyPageAsync(() => new OrganisationApplicationsPage(context));
-    //}
-
-    //public async Task<OrganisationApplicationsPage> GoToApprovedOrganisationApplication()
-    //{
-    //    await page.GetByText("Organisation applications").GetByRole(AriaRole.Link, new() { Name = "Approved" }).ClickAsync();
-
-    //    return await VerifyPageAsync(() => new OrganisationApplicationsPage(context));
-    //}
-
-    //public async Task<FinancialAssesmentPage> GoToNewFinancialAssesmentPage()
-    //{
-    //    await page.GetByText("Financial health assessment").GetByRole(AriaRole.Link, new() { Name = "New" }).ClickAsync();
-
-    //    return await VerifyPageAsync(() => new FinancialAssesmentPage(context));
-    //}
-
-    //public async Task<StandardApplicationsPage> GoToNewStandardApplications()
-    //{
-    //    await page.GetByText("Standard applications").GetByRole(AriaRole.Link, new() { Name = "New" }).ClickAsync();
-
-    //    return await VerifyPageAsync(() => new StandardApplicationsPage(context));
-    //}
-
-    //public async Task<StandardApplicationsPage> GoToInProgressStandardApplication()
-    //{
-    //    await page.GetByText("Standard applications").GetByRole(AriaRole.Link, new() { Name = "In progress" }).ClickAsync();
-
-    //    return await VerifyPageAsync(() => new StandardApplicationsPage(context));
-    //}
+        return await VerifyPageAsync(() => new BatchSearchPage(context));
+    }
 
     public async Task<AD_WithdrawalApplicationsPage> GoToNewWithdrawalApplications()
     {

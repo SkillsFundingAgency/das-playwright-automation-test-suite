@@ -1,7 +1,6 @@
 ﻿using SFA.DAS.EPAO.UITests.Project.Helpers;
-using SFA.DAS.EPAO.UITests.Project.Tests.Steps;
 
-namespace SFA.DAS.EPAO.UITests.Project.Tests.StepDefinitions
+namespace SFA.DAS.EPAO.UITests.Project.Tests.Steps
 {
     [Binding]
     public class EPAOWithdrawalSteps(ScenarioContext context) : EPAOBaseSteps(context)

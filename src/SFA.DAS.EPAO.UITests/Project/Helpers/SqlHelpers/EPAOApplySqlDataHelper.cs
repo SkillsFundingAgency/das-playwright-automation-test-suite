@@ -1,10 +1,4 @@
-﻿using SFA.DAS.ConfigurationBuilder;
-using SFA.DAS.FrameworkHelpers;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EPAO.UITests.Project.Helpers.SqlHelpers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Helpers.SqlHelpers;
 
 public partial class EPAOApplySqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AssessorDbConnectionString)
 {
