@@ -4,6 +4,7 @@ using Microsoft.Playwright;
 using Polly;
 using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
@@ -25,7 +26,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         public ProviderStepsHelper(ScenarioContext _context)
         {
             context = _context;
-            //listOfApprenticeship = _context.GetValue<List<Apprenticeship>>();
             objectContext = context.Get<ObjectContext>();
         }
 
@@ -192,6 +192,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page5.VerifyPageAsync(() => new SelectApprenticeFromILRPage(context));
         }
 
+        internal async Task<ApprenticeDetails_ProviderPage> ProviderSearchOpenApprovedApprenticeRecord(ManageYourApprentices_ProviderPage manageYourApprenticesPage, string uln, string name)
+        {
+            await manageYourApprenticesPage.SearchApprentice(uln);
+            return await manageYourApprenticesPage.OpenFirstItemFromTheList(name);
+        }
+
+        internal async Task TryEditApprenticeAgeAndValidateError(ApprenticeDetails_ProviderPage apprenticeDetailsPage, DateTime dateOfBirth)
+        {
+            string expectedErrorMessage = "The apprentice must be younger than 25 years old at the start of their training";
+            var page = await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();
+            await page.EditDoB(dateOfBirth);
+            await page.ClickUpdateDetailsButton();
+            await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
+        }
 
     }
 }

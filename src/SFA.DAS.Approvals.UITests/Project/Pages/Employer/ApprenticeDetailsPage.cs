@@ -29,5 +29,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new ManageYourApprenticesPage(context));
         }
 
+        internal async Task<EditApprenticeDetailsPage> ClickOnEditApprenticeDetailsLink()
+        { 
+            await page.Locator("#edit-apprentice-link").ClickAsync();
+            return await VerifyPageAsync(() => new EditApprenticeDetailsPage(context));
+        }
+
     }
 }

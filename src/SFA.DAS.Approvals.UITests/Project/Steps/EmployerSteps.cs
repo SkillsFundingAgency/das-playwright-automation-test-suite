@@ -74,8 +74,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenEmployerReviewsTheAboveCohort()
         {
             await employerStepsHelper.OpenCohort();
-
-
         }
 
 
@@ -86,8 +84,33 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var warningMsg = "! Warning Check apprentices are eligible for foundation apprenticeships If someone is aged between 22 and 24, to be funded for a foundation apprenticeship they must either: have an Education, Health and Care (EHC) plan be or have been in the care of their local authority be a prisoner or have been in prison";
             
             await page.ValidateWarningMessageForFoundationCourses(warningMsg);
+            
             await page.EmployerApproveCohort();
         }
+
+
+        [When("Employer tries to edit live apprentice record by setting age old than 24 years")]
+        public async Task WhenEmployerTriesToEditLiveApprenticeRecordBySettingAgeOldThan24Years()
+        {
+            await employerStepsHelper.EmployerLogInToEmployerPortal();
+            await new InterimApprenticesHomePage(context, false).VerifyPage();
+
+        }
+
+        [Then("the employer is stopped with an error message")]
+        public async Task ThenTheEmployerIsStoppedWithAnErrorMessage()
+        {
+            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
+            var uln = apprentice.ApprenticeDetails.ULN.ToString();
+            var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
+            var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
+
+            var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedApprenticeRecord(new ApprenticesHomePage(context), uln, name);
+            await employerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
+        }
+
+
+
 
 
     }

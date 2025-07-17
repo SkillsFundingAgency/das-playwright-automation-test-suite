@@ -71,12 +71,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         }
 
 
-        internal async Task CheckApprenticeOnManageYourApprenticesPage()
+        internal async Task CheckApprenticeOnManageYourApprenticesPage(bool login = false)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
-            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
+            await (login ? EmployerLogInToEmployerPortal() : employerHomePageHelper.NavigateToEmployerApprenticeshipService(true));
+
             await new InterimApprenticesHomePage(context, false).VerifyPage();
+
             await new ApprenticesHomePage(context).GoToManageYourApprentices();
 
             var page = new Pages.Employer.ManageYourApprenticesPage(context);
@@ -86,12 +88,27 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 var uln = apprentice.ApprenticeDetails.ULN.ToString();
                 var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
 
-                await page.VerifyApprenticeFound(uln, name);
-            }
-            
+                await page.SearchApprentice(uln, name);
+            }        
+        
         }
 
+        internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, string uln, string name)
+        {
+            await apprenticesHomePage.GoToManageYourApprentices();
+            var page = new Pages.Employer.ManageYourApprenticesPage(context);
+            await page.SearchApprentice(uln, name);
+            return await page.OpenFirstItemFromTheList(name);
+        }
 
+        internal async Task TryEditApprenticeAgeAndValidateError(ApprenticeDetailsPage apprenticeDetailsPage, DateTime dateOfBirth)
+        {
+            string expectedErrorMessage = "The apprentice must be younger than 25 years old at the start of their training";
+            var page = await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();
+            await page.EditDoB(dateOfBirth);
+            await page.ClickUpdateDetailsButton();
+            await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
+        }
 
 
 

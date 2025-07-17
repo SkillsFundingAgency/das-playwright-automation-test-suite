@@ -3,6 +3,7 @@ using Polly;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
@@ -96,6 +97,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.ClickNavBarLinkAsync("Home");
         }
 
+        [When("Provider tries to edit live apprentice record by setting age old than 24 years")]
+        public async Task WhenProviderTriesToEditLiveApprenticeRecordBySettingAgeOldThanYears()
+        {
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+        }
+
+        [Then("the provider is stopped with an error message")]
+        public async Task ThenTheProviderIsStoppedWithAnErrorMessage()
+        {
+            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
+            var uln = apprentice.ApprenticeDetails.ULN.ToString();
+            var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
+            var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
+
+            var apprenticeDetailsPage = await providerStepsHelper.ProviderSearchOpenApprovedApprenticeRecord(new ManageYourApprentices_ProviderPage(context), uln, name);
+            await providerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
+        }
 
 
 

@@ -24,9 +24,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
         }
 
-        internal async Task GoToManageYourApprentices()
+        internal async Task<ManageYourApprenticesPage> GoToManageYourApprentices()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Manage your apprentices" }).ClickAsync();
+            return await VerifyPageAsync(() => new ManageYourApprenticesPage(context));
         }
 
     }
