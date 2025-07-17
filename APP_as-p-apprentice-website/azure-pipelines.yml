@@ -1,12 +1,18 @@
 trigger:
-  branches:
-    include:
-      - master
+#   branches:
+#     include:
+#       - master
+#   paths:
+#     include:
+#       - src/SFA.DAS.Campaigns.UITests/**
 
 pr:
   branches:
     include:
       - master
+  paths:
+    include:
+      - src/SFA.DAS.Campaigns.UITests/**
 
 variables:
   - name: BuildConfiguration
