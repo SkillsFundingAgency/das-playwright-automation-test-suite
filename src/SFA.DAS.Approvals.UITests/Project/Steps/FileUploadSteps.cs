@@ -53,7 +53,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             ICsvFileFactory csvFileFactory = new CsvFileFactory();
 
             listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(EmployerType.Levy, 1, null, listOfApprenticeship, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
-            await csvFileFactory.CreateCsvFile(listOfApprenticeship, fileUploadHelper.CsvFileLocation);
+            await csvFileFactory.CreateCsvFile(listOfApprenticeship, fileUploadHelper.CsvFileLocation());
 
             context["listOfApprenticeship"] = listOfApprenticeship;
         }
@@ -65,7 +65,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
             var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToUploadCsvFile();
             var page3 = await page2.ClickContinueButton();
-            await page3.UploadFile(fileUploadHelper.CsvFileLocation);
+            await page3.UploadFile(fileUploadHelper.CsvFileLocation());
         }
 
         [Then("system does not allow to upload the file and displays an error message")]

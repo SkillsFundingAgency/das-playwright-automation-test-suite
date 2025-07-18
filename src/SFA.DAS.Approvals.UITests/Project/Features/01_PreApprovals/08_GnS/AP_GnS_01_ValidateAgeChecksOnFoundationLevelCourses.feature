@@ -17,7 +17,7 @@ Scenario: AP_GnS_01a_Verify Age Checks On Foundation Level Courses
 
 @regression
 @e2escenarios
-Scenario: AP_GnS_01b_Verify Age Checks On Foundation Level Courses post approval
+Scenario Outline: AP_GnS_01b_Verify Age Checks On Foundation Level Courses post approval
  
     Given previous test has been completed successfully
 	When Employer tries to edit live apprentice record by setting age old than 24 years

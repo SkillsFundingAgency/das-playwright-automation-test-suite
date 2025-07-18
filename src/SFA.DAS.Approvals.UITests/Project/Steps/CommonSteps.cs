@@ -1,16 +1,7 @@
-﻿using Microsoft.Extensions.Configuration.UserSecrets;
-using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using SFA.DAS.FrameworkHelpers;
-using SFA.DAS.MailosaurAPI.Service.Project.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
+
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
