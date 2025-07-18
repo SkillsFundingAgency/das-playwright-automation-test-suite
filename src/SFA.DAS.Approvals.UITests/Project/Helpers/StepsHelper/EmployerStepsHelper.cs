@@ -1,5 +1,5 @@
 ﻿using Azure;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SFA.DAS.EmployerPortal.UITests.Project.Pages.HomePage;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 {
@@ -52,35 +53,64 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return new HomePage(context);
         }
 
-        internal async Task ApproveCohort(ApprenticeRequestsPage apprenticeRequestsPage)
+        internal async Task<EmployerApproveApprenticeDetailsPage> OpenCohort()
         {
+            await EmployerLogInToEmployerPortal();
+
+            await new InterimApprenticesHomePage(context, false).VerifyPage();
+
+            var page = await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
 
-            var page = await apprenticeRequestsPage.OpenApprenticeRequestReadyForReview(apprenticeship.CohortReference);
+            var page1 = await page.OpenApprenticeRequestReadyForReview(apprenticeship.CohortReference);
 
-            await page.VerifyCohort(apprenticeship);
-
-            var page1 = await page.EmployerApproveCohort();
+            await page1.VerifyCohort(apprenticeship);
+            
+            return page1;
         }
 
-        internal async Task CheckApprenticeOnManageYourApprenticesPage()
+
+        internal async Task CheckApprenticeOnManageYourApprenticesPage(bool login = false)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
-            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
+            await (login ? EmployerLogInToEmployerPortal() : employerHomePageHelper.NavigateToEmployerApprenticeshipService(true));
+
             await new InterimApprenticesHomePage(context, false).VerifyPage();
+
             await new ApprenticesHomePage(context).GoToManageYourApprentices();
 
-            var page = new ManageYourApprenticesPage(context);
+            var page = new Pages.Employer.ManageYourApprenticesPage(context);
             
             foreach (var apprentice in listOfApprenticeship)
             {
                 var uln = apprentice.ApprenticeDetails.ULN.ToString();
-                var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
-
-                await page.VerifyApprenticeFound(uln, name);
-            }
-            
+                var name = apprentice.ApprenticeDetails.FullName;
+                
+                await page.SearchApprentice(uln, name);
+            }        
+        
         }
+
+        internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, string uln, string name)
+        {
+            await apprenticesHomePage.GoToManageYourApprentices();
+            var page = new Pages.Employer.ManageYourApprenticesPage(context);
+            await page.SearchApprentice(uln, name);
+            return await page.OpenFirstItemFromTheList(name);
+        }
+
+        internal async Task TryEditApprenticeAgeAndValidateError(ApprenticeDetailsPage apprenticeDetailsPage, DateTime dateOfBirth)
+        {
+            string expectedErrorMessage = "The apprentice must be younger than 25 years old at the start of their training";
+            var page = await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();
+            await page.EditDoB(dateOfBirth);
+            await page.ClickUpdateDetailsButton();
+            await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
+        }
+
+
+
     }
 }

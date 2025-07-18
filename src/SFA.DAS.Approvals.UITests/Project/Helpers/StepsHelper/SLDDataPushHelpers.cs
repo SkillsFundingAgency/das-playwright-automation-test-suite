@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Polly;
 using SFA.DAS.Approvals.APITests.Project;
 using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SpecFlow.Internal.Json;
 using System;
 using System.Collections.Generic;
@@ -41,7 +41,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             foreach (var apprenticeship in listOfApprenticeships)
             {
                 listOfLearnerData.Add(await ConvertToLearnerDataAPIDataModel(apprenticeship));
-                //listOfLearnerData.Add(ConvertToLearnerDataAPIDataModel(apprenticeship));
             }
 
             return listOfLearnerData;

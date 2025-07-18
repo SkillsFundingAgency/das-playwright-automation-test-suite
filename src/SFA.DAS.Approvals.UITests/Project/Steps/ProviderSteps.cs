@@ -1,7 +1,9 @@
 ﻿using Azure;
 using Polly;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
@@ -17,14 +19,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     public class ProviderSteps
     {
         private readonly ScenarioContext context;
-        private readonly SLDDataPushHelpers sldDataPushHelpers;
         private ProviderStepsHelper providerStepsHelper;
 
         public ProviderSteps(ScenarioContext _context)
         {
-            context = _context;
-            providerStepsHelper = new ProviderStepsHelper(context);
-            sldDataPushHelpers = new(context);
+            context = _context;            
+            providerStepsHelper = new ProviderStepsHelper(context);          
         }
 
 
@@ -53,28 +53,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerStepsHelper.ProviderApproveCohort(page1);
         }
 
-
-        [Given(@"Provider sends an apprentice request \(cohort\) to an employer")]
-        public async Task GivenProviderSendsAnApprenticeRequestCohortToAnEmployer()
-        {
-            //create apprenticeships object
-            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateNewApprenticeshipDetails(EmployerType.Levy, 1, null);
-            context.Set(listOfApprenticeship);
-
-            //recreate SLD pushing ILR data to AS
-            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
-            var listOfLearnerDataList = await sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
-            await sldDataPushHelpers.PushDataToAS(listOfLearnerDataList, academicYear);
-
-            // create cohort using ILR data
-            var page = await new ProviderStepsHelper(context).ProviderCreateAndApproveACohortViaIlrRoute();
-
-            //Provider verify that cohort is under 'Apprentice requests > With employers' section
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
-            await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers, cohortRef);
-
-        }
-
         [Then("return the cohort back to the Provider")]
         public async Task ThenReturnTheCohortBackToTheProvider()
         {
@@ -98,12 +76,42 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             foreach (var apprentice in listOfApprenticeship)
             {
                 var uln = apprentice.ApprenticeDetails.ULN.ToString();
-                var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
+                var name = apprentice.ApprenticeDetails.FullName;
 
                 await page.VerifyApprenticeFound(uln, name);
             }
 
         }
+
+        [Then("system does not allow to add apprentice details if their age is below 15 years and over 25 years")]
+        public async Task ThenSystemDoesNotAllowToAddApprenticeDetailsIfTheirAgeIsBelow15YearsAndOver25Years()
+        {
+            var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDoB();
+            await page.VerfiyErrorMessage("DateOfBirth", "The apprentice must be 25 years old or younger at the start of their training");
+            await page.ClickNavBarLinkAsync("Home");
+        }
+
+        [When("Provider tries to edit live apprentice record by setting age old than 24 years")]
+        public async Task WhenProviderTriesToEditLiveApprenticeRecordBySettingAgeOldThanYears()
+        {
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+        }
+
+        [Then("the provider is stopped with an error message")]
+        public async Task ThenTheProviderIsStoppedWithAnErrorMessage()
+        {
+            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
+            var uln = apprentice.ApprenticeDetails.ULN.ToString();
+            var name = apprentice.ApprenticeDetails.FullName;
+            var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
+
+            var apprenticeDetailsPage = await providerStepsHelper.ProviderSearchOpenApprovedApprenticeRecord(new ManageYourApprentices_ProviderPage(context), uln, name);
+            await providerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
+        }
+
+
+
 
 
 

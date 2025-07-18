@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+﻿using Azure;
+using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new ApprenticeDetails_ProviderPage(context, name));
         }
 
-        internal async Task VerifyApprenticeFound(string ULN, string name)
+        internal async Task SearchApprentice(string ULN, string name)
         {
             await SearchApprentice(ULN);
             var apprenticeLink = page.GetByRole(AriaRole.Link, new() { Name = name });
@@ -38,6 +39,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
                 throw new Exception($"Apprentice with ULN {ULN} and name {name} not found.");
             }
 
+        }
+
+        internal async Task<ApprenticeDetailsPage> OpenFirstItemFromTheList(string apprenticeName)
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = apprenticeName }).ClickAsync();
+            return await VerifyPageAsync(() => new ApprenticeDetailsPage(context, apprenticeName));
         }
 
         private async Task SearchApprentice(string ULN)

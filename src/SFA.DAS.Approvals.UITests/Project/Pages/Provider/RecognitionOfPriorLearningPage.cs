@@ -14,7 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Recognition of prior learning (RPL)");
         }
 
-        public async Task<ApproveApprenticeDetailsPage> SelectNoForRPL()
+        internal async Task<ApproveApprenticeDetailsPage> SelectNoForRPL()
         {
             await page.GetByText("No", new() { Exact = true }).ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();

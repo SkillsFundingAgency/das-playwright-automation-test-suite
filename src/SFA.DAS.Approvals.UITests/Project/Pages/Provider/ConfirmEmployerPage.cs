@@ -13,7 +13,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Confirm employer");
         }
 
-        public async Task<SelectApprenticeFromILRPage> ConfirmEmployer()
+        internal async Task<SelectApprenticeFromILRPage> ConfirmEmployer()
         {
             await page.Locator("#confirm-true").ClickAsync();
 

@@ -12,7 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         private readonly ScenarioContext context;
         private readonly string pageTitle;
 
-        public ApprenticeDetailsPage(ScenarioContext context, string pageTitle) : base(context)
+        internal ApprenticeDetailsPage(ScenarioContext context, string pageTitle) : base(context)
         {
             this.context = context;
             this.pageTitle = pageTitle;
@@ -27,6 +27,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Back to manage your apprentices" }).ClickAsync();
             return await VerifyPageAsync(() => new ManageYourApprenticesPage(context));
+        }
+
+        internal async Task<EditApprenticeDetailsPage> ClickOnEditApprenticeDetailsLink()
+        { 
+            await page.Locator("#edit-apprentice-link").ClickAsync();
+            return await VerifyPageAsync(() => new EditApprenticeDetailsPage(context));
         }
 
     }

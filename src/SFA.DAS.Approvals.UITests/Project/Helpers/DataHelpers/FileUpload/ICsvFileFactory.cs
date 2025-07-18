@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.Approvals.UITests.Project.Helpers
+namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.FileUploadModel
 {
-    internal class SharedTestContext
+    internal interface ICsvFileFactory
     {
-        public List<Apprenticeship> ListOfApprenticeships { get; set; }
+        Task CreateCsvFile(List<Apprenticeship> listOfApprenticeship, string CsvFileLocation);
     }
-
 }
