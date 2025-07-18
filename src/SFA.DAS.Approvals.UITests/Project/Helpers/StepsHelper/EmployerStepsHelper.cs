@@ -86,8 +86,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             foreach (var apprentice in listOfApprenticeship)
             {
                 var uln = apprentice.ApprenticeDetails.ULN.ToString();
-                var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
-
+                var name = apprentice.ApprenticeDetails.FullName;
+                
                 await page.SearchApprentice(uln, name);
             }        
         

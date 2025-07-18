@@ -19,18 +19,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     public class ProviderSteps
     {
         private readonly ScenarioContext context;
-        private readonly SLDDataPushHelpers sldDataPushHelpers;
-        private readonly SldIlrSubmissionSteps sldIlrSubmissionSteps;
         private ProviderStepsHelper providerStepsHelper;
-        private ApprenticeDataHelper apprenticeDataHelper;
 
         public ProviderSteps(ScenarioContext _context)
         {
             context = _context;            
-            sldDataPushHelpers = new(context);
-            sldIlrSubmissionSteps = new SldIlrSubmissionSteps(context);
-            providerStepsHelper = new ProviderStepsHelper(context);
-            apprenticeDataHelper = new ApprenticeDataHelper(context);            
+            providerStepsHelper = new ProviderStepsHelper(context);          
         }
 
 
@@ -82,7 +76,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             foreach (var apprentice in listOfApprenticeship)
             {
                 var uln = apprentice.ApprenticeDetails.ULN.ToString();
-                var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
+                var name = apprentice.ApprenticeDetails.FullName;
 
                 await page.VerifyApprenticeFound(uln, name);
             }
@@ -109,7 +103,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
             var uln = apprentice.ApprenticeDetails.ULN.ToString();
-            var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
+            var name = apprentice.ApprenticeDetails.FullName;
             var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
 
             var apprenticeDetailsPage = await providerStepsHelper.ProviderSearchOpenApprovedApprenticeRecord(new ManageYourApprentices_ProviderPage(context), uln, name);

@@ -19,7 +19,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         {
             await SearchULN(apprenticeship.ApprenticeDetails.ULN);
 
-            var tableRow = apprenticeship.ApprenticeDetails.FirstName + " " + apprenticeship.ApprenticeDetails.LastName + " " + apprenticeship.ApprenticeDetails.ULN;
+            var tableRow = apprenticeship.ApprenticeDetails.FullName + " " + apprenticeship.ApprenticeDetails.ULN;
 
 
             await page.GetByRole(AriaRole.Row, new PageGetByRoleOptions { Name = tableRow })

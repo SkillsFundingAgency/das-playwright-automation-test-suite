@@ -102,7 +102,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
             var uln = apprentice.ApprenticeDetails.ULN.ToString();
-            var name = apprentice.ApprenticeDetails.FirstName + " " + apprentice.ApprenticeDetails.LastName;
+            var name = apprentice.ApprenticeDetails.FullName;
             var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
 
             var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedApprenticeRecord(new ApprenticesHomePage(context), uln, name);

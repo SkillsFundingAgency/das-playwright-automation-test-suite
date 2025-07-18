@@ -15,10 +15,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 {
     internal class ApprenticeDataHelper(ScenarioContext context)
     {
-        public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(
+        public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(            
             EmployerType EmployerType, 
             int NumberOfApprenticeships, 
-            string Ukprn, 
+            string Ukprn = null,
+            List<Apprenticeship>? apprenticeships = null,
             IApprenticeFactory? apprenticeFactory = null,
             ITrainingFactory? trainingFactory = null,
             IRPLFactory? rplFactory = null)
@@ -28,7 +29,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             trainingFactory ??= new TrainingFactory();
             rplFactory ??= new RPLFactory();
 
-            List<Apprenticeship> apprenticeships = new List<Apprenticeship>();
+            apprenticeships = (apprenticeships == null) ? new List<Apprenticeship>(): apprenticeships;
             var employerDetails = await GetEmployerDetails(EmployerType);
 
             for (int i = 0; i < NumberOfApprenticeships; i++)

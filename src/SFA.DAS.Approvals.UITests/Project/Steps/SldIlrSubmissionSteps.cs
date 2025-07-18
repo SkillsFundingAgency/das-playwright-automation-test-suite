@@ -46,7 +46,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     throw new ArgumentException($"Unknown employer type: {type}");
             }
 
-            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateApprenticeshipAsync(employerType, NoOfApprentices, null);
+            var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateApprenticeshipAsync(employerType, NoOfApprentices);
 
             context.Set(listOfApprenticeship);
         }
@@ -87,7 +87,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourses());
             var apprenticeDetails = new ApprenticeFactory(age);
 
-            var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(employerType, 1, null, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
+            var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(employerType, 1, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
             context.Set(listOfApprenticeship);
             await SLDPushDataIntoAS();
         }

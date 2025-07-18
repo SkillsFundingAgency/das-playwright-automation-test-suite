@@ -2,7 +2,7 @@
 @linkedScenarios
 Feature: AP_GnS_01_ValidateAgeChecksOnFoundationLevelCourses
 
-This test is a part of Growth & Skills feature where Foundation courses are limited to young learners b/w the age range of 15-25
+This test is a part of Growth & Skills feature where Foundation courses are limited to young learners aged b/w 15-25 years
 
 @regression
 @e2escenarios
