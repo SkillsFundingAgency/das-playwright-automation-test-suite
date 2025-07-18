@@ -44,9 +44,6 @@
 		<None Update="appsettings.Project.json">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
-		<None Update="Project\CsvFiles\AP_GnS_0_BulkUpload.csv">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
 		<None Update="specflow.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -67,7 +64,6 @@
 	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\a_NewEmployer\" />
 	  <Folder Include="Project\Features\01_PreApprovals\04_LTM\" />
 	  <Folder Include="Project\Features\01_PreApprovals\03_TransfersConnection\" />
-	  <Folder Include="Project\CsvFiles\" />
 	</ItemGroup>
 
 </Project>
