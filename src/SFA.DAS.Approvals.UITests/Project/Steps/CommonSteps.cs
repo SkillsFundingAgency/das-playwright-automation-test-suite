@@ -1,5 +1,8 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using Microsoft.VisualBasic;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using System;
 
 
@@ -11,6 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         protected readonly ScenarioContext context;
         protected readonly FeatureContext featureContext;
         private readonly ApprovalsEmailsHelper approvalsEmailsHelper;
+        private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
         private List<Apprenticeship> listOfApprenticeship;
 
         public CommonSteps(ScenarioContext context, FeatureContext featureContext)
@@ -18,6 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             this.context = context;
             this.featureContext = featureContext;
             approvalsEmailsHelper = new ApprovalsEmailsHelper(context);
+            commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();
             listOfApprenticeship = new List<Apprenticeship>();
         }
 
@@ -64,6 +69,38 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheReceivesEmailNotification(string recipient, string notificationType)
         {
             await approvalsEmailsHelper.VerifyEmailAsync(recipient, notificationType);
+        }
+
+        [Given("A live apprentice record exists for an apprentice on Foundation level course")]
+        public async Task GivenALiveApprenticeRecordExistsForAnApprenticeOnFoundationLevelCourse()
+        {
+            //GET Apprenticeship details from the database
+            var ukprn = Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);            
+            EasAccountUser employerUser = context.GetUser<LevyUser>();
+            
+            var accountLegalEntityId = Convert.ToInt32(await context.Get<AccountsDbSqlHelper>().GetAccountLegalEntityId(employerUser.Username, employerUser.OrganisationName[..3] + "%"));            
+            var details = await commitmentsDbSqlHelper.GetEditableApprenticeDetails(ukprn, accountLegalEntityId);
+
+            var uln = details[0].ToString();
+            var firstName = details[1].ToString();
+            var LastName = details[2].ToString();
+            var dob = Convert.ToDateTime(details[3].ToString());
+
+            //SET Apprenticeship details in the context
+            Apprenticeship apprenticeship = new Apprenticeship();
+            
+            apprenticeship.UKPRN = ukprn;
+            apprenticeship.EmployerDetails.EmployerType = EmployerType.Levy;
+            apprenticeship.EmployerDetails.Email = employerUser.Username;
+            apprenticeship.EmployerDetails.EmployerName = employerUser.OrganisationName;
+            apprenticeship.ApprenticeDetails.ULN = uln;
+            apprenticeship.ApprenticeDetails.FirstName = firstName;
+            apprenticeship.ApprenticeDetails.LastName = LastName;
+            apprenticeship.ApprenticeDetails.DateOfBirth = dob;
+
+            listOfApprenticeship.Add(apprenticeship);
+            context.Set(listOfApprenticeship);
+
         }
 
 

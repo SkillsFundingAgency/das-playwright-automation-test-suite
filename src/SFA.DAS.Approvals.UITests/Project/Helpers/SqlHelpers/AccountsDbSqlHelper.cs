@@ -40,6 +40,28 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return GetDataAsObject(query).ToString();
         }
 
+        public async Task<string> GetAccountLegalEntityId(string email, string name)
+        {
+            var query = @$"SELECT ale.Id
+	                        FROM [employer_account].[AccountLegalEntity] ale
+	                        WHERE ale.AccountId = 
+		                        (
+			                        SELECT TOP 1 acc.Id
+			                        FROM [employer_account].[Membership] msp
+			                        INNER JOIN [employer_account].[User] usr
+			                        ON msp.UserId = usr.Id
+			                        INNER JOIN [employer_account].[Account] acc
+			                        ON acc.Id = msp.AccountId
+			                        WHERE usr.Email =  '{email}'
+			                        AND Name Like '{name}'
+		                        )
+	                        AND ale.SignedAgreementId is not null";
+
+            var result = await GetData(query);
+
+            return result.FirstOrDefault() ?? string.Empty;
+        }
+
         private async Task<string> ReadDataFromDataBase(string queryToExecute, Dictionary<string, string> parameters) => await ReadDataFromDataBase(queryToExecute, connectionString, parameters);
 
         private async Task<string> ReadDataFromCommtDataBase(string queryToExecute) => await ReadDataFromDataBase(queryToExecute, _dbConfig.CommitmentsDbConnectionString, null);
