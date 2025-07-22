@@ -89,8 +89,8 @@ public class HowYouWantToBeInvolvedPage(ScenarioContext context) : AanBasePage(c
     public async Task<MonthlyEmailPage> SelectHowYouWantToBeInvolved()
     {
         await page.GetByRole(AriaRole.Checkbox, new() { Name = "Share your knowledge," }).CheckAsync();
-        
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Assist with the delivery of" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Increasing engagement with" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
@@ -99,7 +99,7 @@ public class HowYouWantToBeInvolvedPage(ScenarioContext context) : AanBasePage(c
 
     public async Task<RegistrationConfirmationPage> Add1MoreSelection()
     {
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Increasing engagement with" }).CheckAsync();
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Assist with the delivery of" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Checkbox, new() { Name = "Getting started with" }).CheckAsync();
 
