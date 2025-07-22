@@ -5,7 +5,7 @@ namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project;
 [Binding]
 public class AANConfigurationSetup(ScenarioContext context)
 {
-    [BeforeScenario(Order = 2)]
+    [BeforeScenario(Order = 12)]
     public async Task SetUpAANConfigConfiguration()
     {
         var configSection = context.Get<ConfigSection>();
