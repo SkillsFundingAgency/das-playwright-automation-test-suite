@@ -19,7 +19,6 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     //    private static By SetUpAnApprenticeshipSectionHeader => By.Id("set-up-an-apprenticeship");
     //    protected static By FinancesSectionHeading => By.XPath("//h2[text()='Finances']");
     //    protected static By YourFinancesLink => By.LinkText("Your finances");
-    //    protected static By AANLink => By.LinkText("Join the Apprentice Ambassador Network");
     //    private static By TransferRequestViewDetailsLink => By.XPath("//li[contains(span, 'Transfer request received')]/span/a[text()='View details']");
     //    private static By TransferConnectionRequestViewDetailsLink => By.XPath("//li[contains(span, 'connection requests to review')]/span/a[text()='View details']");
     //    #endregion
@@ -34,7 +33,7 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
 
     public HomePage(ScenarioContext context) : this(context, false) { }
 
-    //public void GoToAanHomePage() => formCompletionHelper.Click(AANLink);
+    public async Task GoToAanHomePage() => await page.GetByRole(AriaRole.Link, new() { Name = "Join the Apprentice" }).ClickAsync();
 
     public async Task VerifyAccountName(string name)
     {

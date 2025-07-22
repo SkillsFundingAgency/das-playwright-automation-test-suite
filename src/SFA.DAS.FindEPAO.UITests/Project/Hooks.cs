@@ -1,17 +1,10 @@
-﻿namespace SFA.DAS.FindEPAO.UITests.Project;
+﻿using SFA.DAS.Framework.Hooks;
+
+namespace SFA.DAS.FindEPAO.UITests.Project;
 
 [Binding]
-public class Hooks(ScenarioContext context)
+public class Hooks(ScenarioContext context) :FrameworkBaseHooks(context)
 {
     [BeforeScenario(Order = 22)]
-    public async Task NavigateToFindEPAOHomepage()
-    {
-        var driver = context.Get<Driver>();
-
-        var url = UrlConfig.FindEPAO_BaseUrl;
-
-        context.Get<ObjectContext>().SetDebugInformation(url);
-
-        await driver.Page.GotoAsync(url);
-    }
+    public async Task NavigateToFindEPAOHomepage() => await Navigate(UrlConfig.FindEPAO_BaseUrl);
 }
