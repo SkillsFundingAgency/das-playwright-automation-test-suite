@@ -44,12 +44,16 @@
 		<None Update="appsettings.Project.json">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
+		<None Update="Project\AP_GnS_0_BulkUpload.csv">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="specflow.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Project\CsvFiles\" />
 	  <Folder Include="Project\Features\01_PreApprovals\06_FlexiJobApprenticeshipAgency\" />
 	  <Folder Include="Project\Features\01_PreApprovals\05_FileUpload\" />
 	  <Folder Include="Project\Features\01_PreApprovals\09_ProviderPermissions\" />

@@ -1,0 +1,4 @@
+CohortRef,AgreementID,ULN,FamilyName,GivenNames,DateOfBirth,EmailAddress,StdCode,StartDate,EndDate,TotalPrice,EPAOrgID,ProviderRef,RecognisePriorLearning,TrainingTotalHours,TrainingHoursReduction,IsDurationReducedByRPL,DurationReducedBy,PriceReducedBy
+,9V6ED2,2622215877,qRcGjqUkS,CDHcgP,2000-10-31,CDHcgP.qRcGjqUkS@l38cxwya.mailosaur.net,297,2025-07-23,2026-10,2898,EPA0001,LjcZqA,True, 1500, 300,True, 3, 500
+,KZXYRD,2425165583,zbOHNfAHl,jnbOqi,1996-03-19,jnbOqi.zbOHNfAHl@l38cxwya.mailosaur.net,806,2025-08-01,2026-11,3369,EPA0001,Njzpeq,True, 1500, 300,True, 3, 500
+,KZXYRD,7528139350,rcUFgpxgd,HejIGO,2000-07-23,HejIGO.rcUFgpxgd@l38cxwya.mailosaur.net,809,2025-08-01,2026-11,2939,EPA0001,iFiFBm,True, 1500, 300,True, 3, 500

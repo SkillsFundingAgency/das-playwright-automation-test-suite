@@ -13,9 +13,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.FileUploadModel
 
         internal string CsvFileLocation()
         {
-            var fileName = $"{context.ScenarioInfo.Title[..8]}_BulkUpload.csv";
-            return Path.Combine(AppContext.BaseDirectory, "Project", "CsvFiles", fileName);
-            
+            //var approvalsConfig = context.GetApprovalsConfig<ApprovalsConfig>();
+            //return Path.GetFullPath(@"..\..\..\") + approvalsConfig.BulkUploadFileLocation;
+
+            return Path.GetFullPath(@"..\..\..\") + $"{context.ScenarioInfo.Title[..8]}_BulkUpload.csv";
+
+            //var fileName = $"{context.ScenarioInfo.Title[..8]}_BulkUpload.csv";
+            //return Path.Combine(AppContext.BaseDirectory, "Project", "CsvFiles", fileName);
+
         }
 
     }
