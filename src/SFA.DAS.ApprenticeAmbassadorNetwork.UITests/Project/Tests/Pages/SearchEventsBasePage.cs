@@ -29,7 +29,7 @@ namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages
 
         private static readonly string BodyText = (".govuk-body");
 
-        private async Task VerifySelectedFilter(string x) => await Assertions.Expect(page.Locator("#events-filter")).ToContainTextAsync(x);
+        private async Task VerifySelectedFilter(string x) => await Assertions.Expect(page.Locator("#events-filter, #directory-filter")).ToContainTextAsync(x);
 
         protected static string EventLink => ("li.das-search-results__list-item a");
 
