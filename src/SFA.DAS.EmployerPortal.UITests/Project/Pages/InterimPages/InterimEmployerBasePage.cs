@@ -80,6 +80,7 @@ public class InterimApprenticesHomePage(ScenarioContext context, bool gotourl) :
 
     public override async Task VerifyPage()
     {
+        await Task.Delay(1000);
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentices");
     }
 }
@@ -93,6 +94,7 @@ public class InterimFinanceHomePage(ScenarioContext context, bool navigate, bool
 
     public override async Task VerifyPage()
     {
+        await Task.Delay(1000); 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Finance");
     }
 }

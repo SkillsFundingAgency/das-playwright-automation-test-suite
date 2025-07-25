@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
+namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel
 {
     public class Apprenticeship
     {
@@ -37,7 +37,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
     {
         public string AgreementId { get; set; }
         public string EmployerName { get; set; }
-        public EmployerType EmployerType  { get; set; }
+        public EmployerType EmployerType { get; set; }
         public string Email { get; set; }
     }
 
@@ -47,6 +47,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
         public string ULN { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string FullName => FirstName + " " + LastName;
         public string Email { get; set; }
         public DateTime DateOfBirth { get; set; }
 

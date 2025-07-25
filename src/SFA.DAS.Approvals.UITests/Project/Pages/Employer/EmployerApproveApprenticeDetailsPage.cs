@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +29,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Approve apprentice details|Approve 2 apprentices' details"));
         }
 
-        public async Task VerifyCohort(Apprenticeship apprenticeship)
+        internal async Task VerifyCohort(Apprenticeship apprenticeship)
         {
             await Assertions.Expect(organisation).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(reference).ToHaveTextAsync(apprenticeship.CohortReference);
@@ -37,11 +37,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(messageFromProvider).ToHaveTextAsync("Please review the details and approve the request.");
         }
 
-        public async Task<ApprenticeDetailsApproved> EmployerApproveCohort()
+        internal async Task<ApprenticeDetailsApproved> EmployerApproveCohort()
         {
             await approveRadioOption.ClickAsync();
             await saveAndSubmitButton.ClickAsync();
             return await VerifyPageAsync(() => new ApprenticeDetailsApproved(context));
         }
+
+        internal async Task ValidateWarningMessageForFoundationCourses(string warningMsg) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(warningMsg);
     }
 }
