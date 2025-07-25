@@ -9,11 +9,7 @@ public class SignInToYourApprenticeshipServiceAccountPage(ScenarioContext contex
 
     public async Task<CreateAnAccountToManageApprenticeshipsPage> GoManageApprenticeLandingPage()
     {
-        var url = UrlConfig.EmployerApprenticeshipService_BaseUrl;
-
-        objectContext.SetDebugInformation(url);
-
-        await driver.Page.GotoAsync(url);
+        await Navigate(UrlConfig.EmployerApprenticeshipService_BaseUrl);
 
         return await VerifyPageAsync(() => new CreateAnAccountToManageApprenticeshipsPage(context));
     }

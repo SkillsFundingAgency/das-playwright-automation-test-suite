@@ -9,3 +9,4 @@ global using System.Collections.Generic;
 global using System.Threading.Tasks;
 global using TechTalk.SpecFlow;
 global using Microsoft.Playwright;
+global using System.Linq;

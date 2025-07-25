@@ -11,7 +11,7 @@ public abstract class Employer_BaseSteps(ScenarioContext context) : AppEmp_BaseS
 
     protected async Task EmployerSign(EasAccountUser user) => await EmployerSign(async () => await new EmployerPortalLoginHelper(context).Login(user, true));
 
-    //protected async Task EmployerSign(MultipleEasAccountUser user) => await EmployerSign(async () => await new MultipleAccountsLoginHelper(context, user).Login(user, true));
+    protected async Task EmployerSign(MultipleEasAccountUser user) => await EmployerSign(async () => await new MultipleAccountsLoginHelper(context, user).Login(user, true));
 
     private static async Task EmployerSign(Func<Task<HomePage>> func)
     {
