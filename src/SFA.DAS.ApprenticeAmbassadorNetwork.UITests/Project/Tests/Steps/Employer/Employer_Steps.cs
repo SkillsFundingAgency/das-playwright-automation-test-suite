@@ -105,16 +105,16 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
     public async Task FilterByDate() => await FilterByDate(networkHubPage);
 
     [Then(@"the user should be able to successfully filter events by event format")]
-    public async Task FilterByEventFormat() => await FilterByEventFormat(searchNetworkEventsPage);
+    public async Task FilterByEventFormat() => await FilterByEventFormat(new SearchNetworkEventsPage(context));
 
     [Then(@"the user should be able to successfully filter events by event type")]
-    public async Task FilterByEventType() => await FilterByEventType(searchNetworkEventsPage);
+    public async Task FilterByEventType() => await FilterByEventType(new SearchNetworkEventsPage(context));
 
     [Then(@"the user should be able to successfully filter events by regions")]
-    public async Task FilterByEventRegion() => await FilterByEventRegion(searchNetworkEventsPage);
+    public async Task FilterByEventRegion() => await FilterByEventRegion(new SearchNetworkEventsPage(context));
 
     [Then(@"the user should be able to successfully filter events by multiple combination of filters")]
-    public async Task FilterByMultipleCombination() => await FilterByMultipleCombination(searchNetworkEventsPage);
+    public async Task FilterByMultipleCombination() => await FilterByMultipleCombination(new SearchNetworkEventsPage(context));
 
     [Then(@"the user should be able to successfully filter events by role Network Directory")]
     public async Task FilterByRole_NetworkDirectory() => await FilterByEventRoleNetworkDirectory(networkHubPage);

@@ -17,7 +17,7 @@ public class AANHooks(ScenarioContext context) : FrameworkBaseHooks(context)
 
         //context.Set(new ApprenticeStepsHelper(context));
 
-        //context.Set(new EmployerStepsHelper(context));
+        context.Set(new EmployerStepsHelper(context));
 
         //context.Set(new AanAdminCreateEventDatahelper());
     }
