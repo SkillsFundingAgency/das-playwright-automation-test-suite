@@ -13,7 +13,7 @@ public class ApprenticeMessagePage : AppEmpCommonBasePage
             await Assertions.Expect(page.GetByRole(AriaRole.Strong)).ToContainTextAsync("Apprentice");
         }
 
-        if (string.IsNullOrEmpty(ApprenticeName))
+        if (!string.IsNullOrEmpty(ApprenticeName))
         {
             await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(ApprenticeName);
         }       
