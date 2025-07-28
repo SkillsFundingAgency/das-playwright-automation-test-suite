@@ -103,6 +103,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
+        [Given(@"a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date")]
+        public void GivenALiveApprenticeRecordExistsWithStartdateOfMonthsAndEndDateOfMonthsFromCurrentDate(int startDateFromNow, int endDateFromNow)
+        {
+            throw new PendingStepException();
+        }
+
 
     }
 }
