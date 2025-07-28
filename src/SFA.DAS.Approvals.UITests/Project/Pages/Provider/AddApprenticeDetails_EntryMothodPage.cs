@@ -12,7 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
 
         #region locators
-        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=/Select apprentice[s]? from ILR/");
+        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=Select learners from ILR");     //("text=/Select apprentice[s]? from ILR/");
         private ILocator optionToUploadACsvFile => page.Locator("text=Upload a CSV file");
         private ILocator ContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         #endregion
@@ -35,16 +35,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new UsingFileUploadPage(context));
         }
 
-        internal async Task<SelectApprenticeFromILRPage> SelectOptionToAddApprenticesFromILRList_AddAnotherApprenticeRoute()
+        internal async Task<SelectLearnerFromILRPage> SelectOptionToAddApprenticesFromILRList_AddAnotherApprenticeRoute()
         {
             await SelectOptionToAddApprenticeFromILRAndContinue();
-            return await VerifyPageAsync(() => new SelectApprenticeFromILRPage(context));
+            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
-        internal async Task<SelectApprenticeFromILRPage> SelectOptionToAddApprenticesFromILRList_NonLevyRoute()
+        internal async Task<SelectLearnerFromILRPage> SelectOptionToAddApprenticesFromILRList_NonLevyRoute()
         {
             await SelectOptionToAddApprenticeFromILRAndContinue();
-            return await VerifyPageAsync(() => new SelectApprenticeFromILRPage(context));
+            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
         internal async Task<ProviderSelectAReservationPage> SelectOptionToAddApprenticesFromILRList_SelectReservationRoute()

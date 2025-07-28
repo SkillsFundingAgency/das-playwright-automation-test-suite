@@ -8,11 +8,11 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class SelectApprenticeFromILRPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class SelectLearnerFromILRPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select apprentices from ILR for ");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select learner from ILR");
         }
 
         internal async Task<AddApprenticeDetailsPage> SelectApprenticeFromILRList(Apprenticeship apprenticeship)
