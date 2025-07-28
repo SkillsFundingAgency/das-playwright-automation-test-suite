@@ -23,25 +23,21 @@ public class ApprenticeMessagePage : AppEmpCommonBasePage
 
     private readonly bool IsRegionalChair;
 
-    //private static By CodeOfConduct => By.CssSelector("input[id='hasAgreedToCodeOfConduct']");
-
-    //private static By SendMessageButton => By.CssSelector("[id='sendMessage']");
-
     public ApprenticeMessagePage(ScenarioContext context, bool isRegionalChair) : base(context)
     {
         IsRegionalChair = isRegionalChair;
     }
 
-    public ApprenticeMessagePage(ScenarioContext context, string apprenticeName) : base(context)
+    public ApprenticeMessagePage(ScenarioContext context, string apprenticeName, bool isRegionalChair) : this(context, isRegionalChair)
     {
         ApprenticeName = apprenticeName;
     }
 
-    public async Task<ApprenticeMessagePage> GoToApprenticeMessagePage((string id, string fullname) apprentice)
+    public async Task<ApprenticeMessagePage> GoToApprenticeMessagePage((string id, string fullname, bool isRegionalChair) apprentice)
     {
         await GoToId(apprentice.id);
 
-        return await VerifyPageAsync(() => new ApprenticeMessagePage(context, apprentice.fullname));
+        return await VerifyPageAsync(() => new ApprenticeMessagePage(context, apprentice.fullname, apprentice.isRegionalChair));
     }
 
     public async Task<SucessfullySentMessagePage> SendMessage(string message)

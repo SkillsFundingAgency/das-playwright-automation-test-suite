@@ -4,7 +4,7 @@ namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Helpers;
 
 public class AANSqlHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AANDbConnectionString)
 {
-    public async Task<(string id, string FullName)> GetLiveApprenticeDetails(bool isRegionalChair, string email)
+    public async Task<(string id, string FullName, bool IsRegionalChair)> GetLiveApprenticeDetails(bool isRegionalChair, string email)
     {
         string GetuserType() => isRegionalChair ? string.Empty : "UserType = 'Apprentice' and";
 
@@ -14,7 +14,7 @@ public class AANSqlHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlD
 
         var list = await GetData(query);
 
-        return (list[0], $"{list[1]} {list[2]}");
+        return (list[0], $"{list[1]} {list[2]}", isRegionalChair);
     }
 
     public async Task<(string id , DateTime startdate)> GetNextActiveEventDetails(string email)

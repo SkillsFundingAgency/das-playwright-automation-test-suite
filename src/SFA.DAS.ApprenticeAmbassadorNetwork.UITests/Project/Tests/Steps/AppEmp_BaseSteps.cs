@@ -10,7 +10,7 @@ public abstract class AppEmp_BaseSteps(ScenarioContext context) : BaseSteps(cont
 
     protected NetworkDirectoryPage networkDirectoryPage;
 
-    protected (string id, string FullName) Apprentice;
+    protected (string id, string FullName, bool IsRegionalChair) Apprentice;
 
     protected async Task AccessNetworkDirectory(NetworkHubPage networkHubPage, bool isRegionalChair, string email)
     {
@@ -23,19 +23,9 @@ public abstract class AppEmp_BaseSteps(ScenarioContext context) : BaseSteps(cont
         Assert.That(!string.IsNullOrEmpty(Apprentice.id), $"No member found who '{x} regional chair' and email is not '{email}', use the sql query in test data attachment to debug the test");
     }
 
-    protected static async Task<NetworkDirectoryPage> SendRegionalChairMessage(NetworkDirectoryPage networkDirectoryPage, (string id, string fullname) apprentice, string message)
+    protected static async Task<NetworkDirectoryPage> SendMessage(NetworkDirectoryPage networkDirectoryPage, (string id, string fullname, bool isRegionalChair) apprentice, string message)
     {
-        return await SendMessage(networkDirectoryPage, true, apprentice, message);
-    }
-
-    protected static async Task<NetworkDirectoryPage> SendApprenticeMessage(NetworkDirectoryPage networkDirectoryPage, (string id, string fullname) apprentice, string message)
-    {
-        return await SendMessage(networkDirectoryPage, false, apprentice, message);
-    }
-
-    private static async Task<NetworkDirectoryPage> SendMessage(NetworkDirectoryPage networkDirectoryPage, bool isRegionalChair, (string id, string fullname) apprentice, string message)
-    {
-        var page = await networkDirectoryPage.GoToApprenticeMessagePage(isRegionalChair);
+        var page = await networkDirectoryPage.GoToApprenticeMessagePage(apprentice.isRegionalChair);
 
         var page1 = await page.GoToApprenticeMessagePage(apprentice);
 

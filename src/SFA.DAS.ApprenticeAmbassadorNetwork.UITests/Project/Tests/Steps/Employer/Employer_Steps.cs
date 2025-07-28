@@ -37,10 +37,10 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
     private async Task AccessNetworkDirectory(bool isRegionalChair) => await AccessNetworkDirectory(networkHubPage, isRegionalChair, string.Empty);
 
     [Then(@"the user should be able to (ask for industry advice|ask for help with a network activity|request a case study|get in touch after meeting at a network event) to a regional chair member successfully")]
-    public async Task TheUserShouldBeAbleToAskARegionalChairMemberSuccessfully(string message) => await SendRegionalChairMessage(networkDirectoryPage, Apprentice, message);
+    public async Task TheUserShouldBeAbleToAskARegionalChairMemberSuccessfully(string message) => await SendMessage(networkDirectoryPage, Apprentice, message);
 
     [Then(@"the user should be able to (ask for industry advice|ask for help with a network activity|request a case study|get in touch after meeting at a network event) to an apprentice member successfully")]
-    public async Task TheUserShouldBeAbleToAskToTheMemberSuccessfully(string message) => await SendApprenticeMessage(networkDirectoryPage, Apprentice, message);
+    public async Task TheUserShouldBeAbleToAskToTheMemberSuccessfully(string message) => await SendMessage(networkDirectoryPage, Apprentice, message);
 
     [When(@"the user should be able to successfully verify ambassador profile")]
     public async Task VerifyYourAmbassadorProfile() => await VerifyYourAmbassadorProfile(networkHubPage, user.Username);
@@ -120,10 +120,10 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
     public async Task FilterByRole_NetworkDirectory() => await FilterByEventRoleNetworkDirectory(networkHubPage);
 
     [Then(@"the user should be able to successfully filter events by regions Network Directory")]
-    public async Task FilterByEventRegion_NetworkDirectory() => await FilterByEventRegionNetworkDirectory(networkDirectoryPage);
+    public async Task FilterByEventRegion_NetworkDirectory() => await FilterByEventRegionNetworkDirectory(new NetworkDirectoryPage(context));
 
     [Then(@"the user should be able to successfully filter events by multiple combination of filters Network Directory")]
-    public async Task FilterByMultipleCombination_NetworkDirectory() => await FilterByMultipleCombinationNetworkDirectory(networkDirectoryPage);
+    public async Task FilterByMultipleCombination_NetworkDirectory() => await FilterByMultipleCombinationNetworkDirectory(new NetworkDirectoryPage(context));
 
     [Given(@"the following events have been created:")]
     public async Task GivenTheFollowingEventsHaveBeenCreated(Table table)
