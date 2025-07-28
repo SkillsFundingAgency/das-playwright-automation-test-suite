@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using NUnit.Framework.Internal.Execution;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
+﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages
 {
@@ -151,11 +147,11 @@ namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages
             await page.Locator("#Radius").SelectOptionAsync([$"{radius}"]);
         }
 
-        private async Task ApplyFilter(string x) 
+        private async Task ApplyFilter(string x)
         {
             await page.GetByRole(AriaRole.Checkbox, new() { Name = x }).CheckAsync();
 
-            await ApplyFilter(); 
+            await ApplyFilter();
         }
 
         public async Task ApplyFilter() => await page.Locator("#filters-submit").ClickAsync();

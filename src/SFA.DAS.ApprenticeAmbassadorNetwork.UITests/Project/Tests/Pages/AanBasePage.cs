@@ -6,6 +6,6 @@ public abstract class AanBasePage(ScenarioContext context) : BasePage(context)
 
     //protected static By EventTag => By.CssSelector(".govuk-tag.app-tag");
 
-    protected static string DateFormat => Configurator.IsAdoExecution ? "yyyy-MM-dd" : "yyyy-MM-dd";
+    protected static string DateFormat => "yyyy-MM-dd";
 }
 

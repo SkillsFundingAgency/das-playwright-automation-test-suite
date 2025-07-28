@@ -1,6 +1,4 @@
-﻿using Azure;
-
-namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
+﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
 
 public class YourAmbassadorProfilePage(ScenarioContext context) : AanBasePage(context)
 {
@@ -81,13 +79,6 @@ public class YourApprenticeshipInformationPage(ScenarioContext context) : AanBas
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your apprenticeship information");
     }
-
-    //public YourAmbassadorProfilePage ChangeSeconLineAddressAndContinue()
-    //{
-    //    formCompletionHelper.EnterText(AddressLine2, RandomDataGenerator.GenerateRandomAlphabeticString(12));
-    //    Continue();
-    //    return await VerifyPageAsync(() => new YourAmbassadorProfilePage(context));
-    //}
 
     public async Task<YourAmbassadorProfilePage> HideApprenticeshipInformation()
     {
