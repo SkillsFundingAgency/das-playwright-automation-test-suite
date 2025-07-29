@@ -15,6 +15,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         protected readonly FeatureContext featureContext;
         private readonly ApprovalsEmailsHelper approvalsEmailsHelper;
         private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
+        private readonly ApprenticeDataHelper apprenticeDataHelper;
         private List<Apprenticeship> listOfApprenticeship;
 
         public CommonSteps(ScenarioContext context, FeatureContext featureContext)
@@ -23,6 +24,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             this.featureContext = featureContext;
             approvalsEmailsHelper = new ApprovalsEmailsHelper(context);
             commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();
+            apprenticeDataHelper = new ApprenticeDataHelper(context);
             listOfApprenticeship = new List<Apprenticeship>();
         }
 
@@ -74,18 +76,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("A live apprentice record exists for an apprentice on Foundation level course")]
         public async Task GivenALiveApprenticeRecordExistsForAnApprenticeOnFoundationLevelCourse()
         {
-            ApprenticeDataHelper apprenticeDataHelper = new ApprenticeDataHelper(context);
             Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(EmployerType.Levy);
             var additionalWhereFilter = @"AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
-                        
-            var details = await commitmentsDbSqlHelper.GetEditableApprenticeDetails(apprenticeship.UKPRN, apprenticeship.EmployerDetails.AccountLegalEntityId, additionalWhereFilter);
 
-            //SET Apprenticeship details in the context:
-            apprenticeship.ApprenticeDetails.ULN = details[0].ToString();
-            apprenticeship.ApprenticeDetails.FirstName = details[1].ToString();
-            apprenticeship.ApprenticeDetails.LastName = details[2].ToString();
-            apprenticeship.ApprenticeDetails.DateOfBirth = Convert.ToDateTime(details[3].ToString());
-
+            // Get editable apprentice details from the database
+            apprenticeship = await commitmentsDbSqlHelper.GetEditableApprenticeDetails(apprenticeship, additionalWhereFilter);
             listOfApprenticeship.Add(apprenticeship);
             context.Set(listOfApprenticeship);
         }
