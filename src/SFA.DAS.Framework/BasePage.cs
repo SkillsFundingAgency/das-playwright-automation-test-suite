@@ -53,6 +53,15 @@ namespace SFA.DAS.Framework
             page = driver.Page;
         }
 
+        protected async Task Navigate(string url)
+        {
+            var driver = context.Get<Driver>();
+
+            context.Get<ObjectContext>().SetDebugInformation(url);
+
+            await driver.Page.GotoAsync(url);
+        }
+
         public async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
         {
             var nextPage = func.Invoke();

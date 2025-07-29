@@ -1,6 +1,4 @@
-﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages;
-
-namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
+﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
 
 public class ProfileSettingsPage(ScenarioContext context) : AanBasePage(context)
 {
@@ -9,11 +7,12 @@ public class ProfileSettingsPage(ScenarioContext context) : AanBasePage(context)
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Profile Settings");
     }
 
-    //public YourAmbassadorProfilePage AccessYourAmbassadorProfile()
-    //{
-    //    formCompletionHelper.ClickLinkByText("Your ambassador profile");
-    //    return new YourAmbassadorProfilePage(context);
-    //}
+    public async Task<YourAmbassadorProfilePage> AccessYourAmbassadorProfile()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Your ambassador profile" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourAmbassadorProfilePage(context));
+    }
 
     public async Task<LeavingTheNetworkPage> AccessLeaveTheNetwork()
     {

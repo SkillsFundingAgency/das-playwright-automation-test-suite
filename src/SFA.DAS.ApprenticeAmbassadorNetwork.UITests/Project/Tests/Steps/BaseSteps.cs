@@ -7,4 +7,13 @@ public abstract class BaseSteps(ScenarioContext context)
     protected readonly ObjectContext objectContext = context.Get<ObjectContext>();
 
     protected readonly AANSqlHelper _aanSqlHelper = context.Get<AANSqlHelper>();
+
+    protected async Task Navigate(string url)
+    {
+        var driver = context.Get<Driver>();
+
+        context.Get<ObjectContext>().SetDebugInformation(url);
+
+        await driver.Page.GotoAsync(url);
+    }
 }
