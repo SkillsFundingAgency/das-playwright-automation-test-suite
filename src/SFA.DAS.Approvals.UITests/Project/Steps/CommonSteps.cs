@@ -74,33 +74,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("A live apprentice record exists for an apprentice on Foundation level course")]
         public async Task GivenALiveApprenticeRecordExistsForAnApprenticeOnFoundationLevelCourse()
         {
-            //GET Apprenticeship details from the database
-            var ukprn = Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);            
-            EasAccountUser employerUser = context.GetUser<LevyUser>();
-            
-            var accountLegalEntityId = Convert.ToInt32(await context.Get<AccountsDbSqlHelper>().GetAccountLegalEntityId(employerUser.Username, employerUser.OrganisationName[..3] + "%"));            
-            var details = await commitmentsDbSqlHelper.GetEditableApprenticeDetails(ukprn, accountLegalEntityId);
+            ApprenticeDataHelper apprenticeDataHelper = new ApprenticeDataHelper(context);
+            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(EmployerType.Levy);
+            var additionalWhereFilter = @"AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+                        
+            var details = await commitmentsDbSqlHelper.GetEditableApprenticeDetails(apprenticeship.UKPRN, apprenticeship.EmployerDetails.AccountLegalEntityId, additionalWhereFilter);
 
-            var uln = details[0].ToString();
-            var firstName = details[1].ToString();
-            var LastName = details[2].ToString();
-            var dob = Convert.ToDateTime(details[3].ToString());
-
-            //SET Apprenticeship details in the context
-            Apprenticeship apprenticeship = new Apprenticeship();
-            
-            apprenticeship.UKPRN = ukprn;
-            apprenticeship.EmployerDetails.EmployerType = EmployerType.Levy;
-            apprenticeship.EmployerDetails.Email = employerUser.Username;
-            apprenticeship.EmployerDetails.EmployerName = employerUser.OrganisationName;
-            apprenticeship.ApprenticeDetails.ULN = uln;
-            apprenticeship.ApprenticeDetails.FirstName = firstName;
-            apprenticeship.ApprenticeDetails.LastName = LastName;
-            apprenticeship.ApprenticeDetails.DateOfBirth = dob;
+            //SET Apprenticeship details in the context:
+            apprenticeship.ApprenticeDetails.ULN = details[0].ToString();
+            apprenticeship.ApprenticeDetails.FirstName = details[1].ToString();
+            apprenticeship.ApprenticeDetails.LastName = details[2].ToString();
+            apprenticeship.ApprenticeDetails.DateOfBirth = Convert.ToDateTime(details[3].ToString());
 
             listOfApprenticeship.Add(apprenticeship);
             context.Set(listOfApprenticeship);
-
         }
 
         [Given(@"a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date")]

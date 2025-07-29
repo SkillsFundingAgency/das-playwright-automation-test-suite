@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +25,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return result.FirstOrDefault() ?? string.Empty;
         }
 
-        internal async Task<List<string>> GetEditableApprenticeDetails(int ukprn, int accountLegalEntityId)
+        internal async Task<Apprenticeship> GetEditableApprenticeDetails(Apprenticeship apprenticeship)
+        {
+            var details = await GetEditableApprenticeDetails(apprenticeship.UKPRN, apprenticeship.EmployerDetails.AccountLegalEntityId);
+            var uln = details[0].ToString();
+            var firstName = details[1].ToString();
+            var LastName = details[2].ToString();
+            var dob = Convert.ToDateTime(details[3].ToString());
+
+            apprenticeship.ApprenticeDetails.ULN = uln;
+            apprenticeship.ApprenticeDetails.FirstName = firstName;
+            apprenticeship.ApprenticeDetails.LastName = LastName;
+            apprenticeship.ApprenticeDetails.DateOfBirth = dob;
+
+            return apprenticeship;
+        }
+
+        internal async Task<List<string>> GetEditableApprenticeDetails(int ukprn, int accountLegalEntityId, string additionalWhereFilter = null )
         {
             string query =
                 @$"SELECT TOP(1) a.ULN, a.FirstName, a.LastName, a.DateOfBirth
@@ -36,7 +54,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
                 AND c.IsDeleted = 0
                 And c.Approvals = 3
                 AND c.ChangeOfPartyRequestId is null
-                AND a.TrainingCode IN ('803','804','805','806','807','808','809', '810', '811')                
+                --AND a.TrainingCode IN ('803','804','805','806','807','808','809', '810', '811')                
                 And c.ChangeOfPartyRequestId is null
                 AND c.PledgeApplicationId is null
                 AND a.PaymentStatus = 1
@@ -46,6 +64,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
                 AND a.ContinuationOfId is null
                 AND a.DeliveryModel = 0
                 AND a.IsOnFlexiPaymentPilot = 0
+                {additionalWhereFilter}
                 Order by c.CreatedOn DESC";            
             
             return await GetData(query);            
