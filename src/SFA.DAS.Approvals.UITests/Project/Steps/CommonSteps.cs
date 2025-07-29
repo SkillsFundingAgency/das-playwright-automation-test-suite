@@ -76,21 +76,27 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("A live apprentice record exists for an apprentice on Foundation level course")]
         public async Task GivenALiveApprenticeRecordExistsForAnApprenticeOnFoundationLevelCourse()
         {
-            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(EmployerType.Levy);
-            var additionalWhereFilter = @"AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
 
-            // Get editable apprentice details from the database
+            var additionalWhereFilter = @"AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
+        }
+
+        [Given(@"a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date")]
+        public async Task GivenALiveApprenticeRecordExistsWithStartdateOfMonthsAndEndDateOfMonthsFromCurrentDate(int startDateFromNow, int endDateFromNow)
+        {
+            var additionalWhereFilter = @$"AND a.StartDate > DATEADD(month, {startDateFromNow}, GETDATE()) 
+                                            AND a.EndDate > DATEADD(month, {endDateFromNow}, GETDATE())";
+            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
+
+        }
+
+        private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter)
+        {
+            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(employerType);
             apprenticeship = await commitmentsDbSqlHelper.GetEditableApprenticeDetails(apprenticeship, additionalWhereFilter);
             listOfApprenticeship.Add(apprenticeship);
             context.Set(listOfApprenticeship);
         }
-
-        [Given(@"a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date")]
-        public void GivenALiveApprenticeRecordExistsWithStartdateOfMonthsAndEndDateOfMonthsFromCurrentDate(int startDateFromNow, int endDateFromNow)
-        {
-            throw new PendingStepException();
-        }
-
 
     }
 }

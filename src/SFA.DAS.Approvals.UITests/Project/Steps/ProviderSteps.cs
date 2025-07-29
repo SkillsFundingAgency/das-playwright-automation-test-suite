@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TechTalk.SpecFlow.Assist;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -65,7 +66,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Then("Provider can access live apprentice records under Manager Your Apprentices section")]
-        public async Task ThenProviderCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
+        internal async Task<ManageYourApprentices_ProviderPage> ThenProviderAccessLiveApprenticeRecords()
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
@@ -81,6 +82,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 await page.VerifyApprenticeFound(uln, name);
             }
 
+            return page;
         }
 
         [Then("system does not allow to add apprentice details if their age is below 15 years and over 25 years")]
@@ -110,10 +112,35 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
         }
 
+        [When("Provider tries to add a new apprentice using details from table below")]
+        public async Task WhenProviderTriesToAddANewApprenticeUsingDetailsFromTableBelow(Table table)
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
 
 
 
 
+            var OltdDetails = table.CreateSet<OltdDetails>().ToList();
 
+            foreach (var item in OltdDetails)
+            {
+                // Push data on SLD end point  
+
+                // Try to add above apprentice and validate error message  
+            }
+        }
+
+
+
+
+    }
+
+    internal class OltdDetails
+    {
+        internal int NewStartDate { get; set; }
+        internal int NewEndDate { get; set; }
+        internal bool DisplayOverlapErrorOnStartDate { get; set; }
+        internal bool DisplayOverlapErrorOnEndDate { get; set; }
     }
 }
