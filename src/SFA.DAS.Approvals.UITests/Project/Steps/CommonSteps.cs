@@ -84,8 +84,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given(@"a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date")]
         public async Task GivenALiveApprenticeRecordExistsWithStartdateOfMonthsAndEndDateOfMonthsFromCurrentDate(int startDateFromNow, int endDateFromNow)
         {
-            var additionalWhereFilter = @$"AND a.StartDate > DATEADD(month, {startDateFromNow}, GETDATE()) 
-                                            AND a.EndDate > DATEADD(month, {endDateFromNow}, GETDATE())";
+            var additionalWhereFilter = @$"AND a.StartDate < DATEADD(month, {startDateFromNow}, GETDATE()) 
+                                            AND a.EndDate > DATEADD(month, {endDateFromNow}, GETDATE())
+                                            AND a.TrainingCode < 800";
             await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
 
         }

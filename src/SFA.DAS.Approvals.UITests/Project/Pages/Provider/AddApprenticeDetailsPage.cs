@@ -77,8 +77,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
             //assert error message is displayed above the text box too
             ILocator errorLocator = page.Locator($"#error-message-{fieldName}");
-            await Assertions.Expect(errorLocator).ToBeVisibleAsync();
-            await Assertions.Expect(errorLocator).ToContainTextAsync(errorMsg);
+            if (errorMsg == "")
+            {
+                await Assertions.Expect(errorLocator).ToBeHiddenAsync();
+            }
+            else
+            {
+                await Assertions.Expect(errorLocator).ToBeVisibleAsync();
+                await Assertions.Expect(errorLocator).ToContainTextAsync(errorMsg);
+            }            
+
+            
         }
 
 
