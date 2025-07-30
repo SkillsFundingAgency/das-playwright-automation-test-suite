@@ -33,16 +33,16 @@ namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Appren
 
         private async Task SubmitUserDetails(AanBaseUser user, bool firstlogin)
         {
-            var page = await new StubSignInApprenticeAccountsPage(context).SubmitValidUserDetails(user);
-
-            await page.Continue();
-
             if (firstlogin)
             {
                 if (tags.Any(x => x == "aanapprenticeonboardingreset")) { await context.Get<AANSqlHelper>().ResetApprenticeOnboardingJourney(user.Username); }
 
                 objectContext.SetLoginCredentials(user);
             }
+
+            var page = await new StubSignInApprenticeAccountsPage(context).SubmitValidUserDetails(user);
+
+            await page.Continue();
         }
     }
 }

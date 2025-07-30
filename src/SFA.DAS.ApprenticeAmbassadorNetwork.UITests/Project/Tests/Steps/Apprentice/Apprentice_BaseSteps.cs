@@ -1,6 +1,4 @@
 ﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Apprentice;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps;
-using SFA.DAS.Login.Service.Project.Helpers;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Apprentice;
 
@@ -16,7 +14,14 @@ public abstract class Apprentice_BaseSteps(ScenarioContext context) : AppEmp_Bas
 
     protected Apprentice_NetworkHubPage networkHubPage;
 
-    protected async Task<SignInPage> GetSignInPage() => new(context);
+    protected async Task<SignInPage> GetSignInPage()
+    {
+        var page = new SignInPage(context);
+
+        await page.VerifyPage();
+
+        return page;
+    }
 
     protected async Task<Apprentice_NetworkHubPage> SubmitUserDetails_OnboardingJourneyComplete(AanBaseUser user)
     {

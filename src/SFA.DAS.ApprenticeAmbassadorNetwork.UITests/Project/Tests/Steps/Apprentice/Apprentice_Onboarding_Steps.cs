@@ -89,6 +89,8 @@ public class Apprentice_Onboarding_Steps(ScenarioContext context) : Apprentice_B
     [Then(@"the user can sign back in to the AAN Apprentice platform")]
     public async Task TheUserCanSignBackIn()
     {
+        await applicationSubmittedPage.SignOut();
+
         await Navigate(UrlConfig.AAN_Apprentice_BaseUrl);
 
         await SubmitUserDetails_OnboardingJourneyComplete(objectContext.GetLoginCredentials());

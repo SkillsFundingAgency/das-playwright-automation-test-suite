@@ -1,6 +1,4 @@
-﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Employer.Onboarding;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages;
-using System.Threading;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Apprentice;
 
@@ -58,7 +56,7 @@ public class RequiresLineManagerApprovalPage(ScenarioContext context) : AanBaseP
         return await VerifyPageAsync(() => new ShutterPage(context));
     }
 
-    public async Task<AccessDeniedPage>  YesHaveApprovalFromMaanagerAndNonPrivateBetaUser()
+    public async Task<AccessDeniedPage> YesHaveApprovalFromMaanagerAndNonPrivateBetaUser()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
 
@@ -86,7 +84,7 @@ public class FindYourRegionalNetworkPage(ScenarioContext context) : AanBasePage(
 
     public async Task<CheckYourAnswersPage> AddOneMoreRegionAndContinue()
     {
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "North East" }).CheckAsync();
+        await page.GetByRole(AriaRole.Radio, new() { Name = "North East" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
@@ -179,7 +177,7 @@ public class EmployerDetailsPage(ScenarioContext context) : AanBasePage(context)
     public async Task<CurrentJobTitlePage> EnterEmployersDetailsAndContinue()
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Employer name" }).FillAsync(aanDataHelpers.VenueName);
-        
+
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new CurrentJobTitlePage(context));
@@ -271,7 +269,7 @@ public class WhyDoYouWantToJoinNetworkPage(ScenarioContext context) : AanBasePag
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Why do you want to join the network?");
     }
-    
+
     public async Task<ReceiveNotificationsPage> EnterInformationToJoinNetwork()
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Reasons for joining the" }).FillAsync(aanDataHelpers.UpdateProviderDescriptionText);
@@ -308,9 +306,9 @@ public class EngagedWithAmbassadorPage(ScenarioContext context) : AanBasePage(co
 
     public async Task<CheckYourAnswersPage> YesHaveEngagedWithAnAmbassadaorAndContinue()
     {
-        
+
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
-        
+
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new CheckYourAnswersPage(context));
@@ -384,15 +382,15 @@ public class RegistrationCompletePage(ScenarioContext context) : AanBasePage(con
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You have joined the Apprenticeship Ambassador Network");
     }
 
-
     public async Task<Apprentice_NetworkHubPage> ContinueToAmbassadorHub()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Go to the online portal" }).ClickAsync();
 
         return await VerifyPageAsync(() => new Apprentice_NetworkHubPage(context));
     }
-}
 
+    public async Task SignOut() => await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
+}
 
 public class ShutterPage(ScenarioContext context) : AanBasePage(context)
 {
