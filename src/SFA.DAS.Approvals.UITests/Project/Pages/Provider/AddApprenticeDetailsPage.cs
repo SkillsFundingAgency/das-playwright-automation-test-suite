@@ -73,7 +73,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         {
             //assert error summary on top of the page
             await Assertions.Expect(errorSummary).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = errorMsg })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = errorMsg }).First).ToBeVisibleAsync();
 
             //assert error message is displayed above the text box too
             ILocator errorLocator = page.Locator($"#error-message-{fieldName}");
