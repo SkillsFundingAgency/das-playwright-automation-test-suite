@@ -7,7 +7,7 @@ public class YourAmbassadorProfilePage(ScenarioContext context) : AanBasePage(co
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your ambassador profile");
     }
 
-    public async Task VerifyYourAmbassadorProfile(string value) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("London");
+    public async Task VerifyYourAmbassadorProfile(string value) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(value); 
 
     public async Task<YourPersonalDetailsPage> AccessChangeForPersonalDetails()
     {
@@ -95,7 +95,16 @@ public class YourApprenticeshipInformationPage(ScenarioContext context) : AanBas
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save changes" }).ClickAsync();
 
-        return new YourAmbassadorProfilePage(context);
+        return await VerifyPageAsync(() => new YourAmbassadorProfilePage(context));
+    }
+
+    public async Task<YourAmbassadorProfilePage> ChangeSeconLineAddressAndContinue()
+    {
+        await page.Locator("#EmployerAddress2").FillAsync(RandomDataGenerator.GenerateRandomAlphabeticString(12));
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourAmbassadorProfilePage(context));
     }
 }
 
