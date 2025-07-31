@@ -7,11 +7,6 @@ public class AccessDeniedPage(ScenarioContext context) : EmployerPortalBasePage(
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Access denied");
     }
 
-    public async Task VerifyHomeLink()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
-    }
-
     public async Task<HomePage> GoBackToTheServiceHomePage(string orgName)
     {
         objectContext.SetOrganisationName(orgName);

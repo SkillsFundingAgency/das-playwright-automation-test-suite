@@ -82,7 +82,7 @@ public class YourApprenticeshipInformationPage(ScenarioContext context) : AanBas
 
     public async Task<YourAmbassadorProfilePage> HideApprenticeshipInformation()
     {
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Display all my organisation" }).UncheckAsync();
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Display all" }).UncheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save changes" }).ClickAsync();
 
@@ -91,7 +91,7 @@ public class YourApprenticeshipInformationPage(ScenarioContext context) : AanBas
 
     public async Task<YourAmbassadorProfilePage> DisplayApprenticeshipInformation()
     {
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Display all my organisation" }).CheckAsync();
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Display all" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save changes" }).ClickAsync();
 

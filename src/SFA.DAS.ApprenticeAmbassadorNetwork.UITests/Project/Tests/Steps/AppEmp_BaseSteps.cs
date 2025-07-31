@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
-using System;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps;
 
@@ -160,7 +159,7 @@ public abstract class AppEmp_BaseSteps(ScenarioContext context) : BaseSteps(cont
         await searchNetworkEventsPage.FilterEventByEventFormat_InPerson();
 
         await searchNetworkEventsPage.FilterEventByEventFormat_Hybrid();
-        
+
         await searchNetworkEventsPage.FilterEventByEventFormat_Online();
 
         await searchNetworkEventsPage.FilterEventByEventType_TrainingEvent();

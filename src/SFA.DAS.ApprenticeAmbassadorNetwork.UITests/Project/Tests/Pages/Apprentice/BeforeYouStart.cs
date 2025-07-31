@@ -1,6 +1,4 @@
-﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages;
-
-namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Apprentice;
+﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Apprentice;
 
 public class BeforeYouStartPage(ScenarioContext context) : AanBasePage(context)
 {
@@ -63,6 +61,19 @@ public class RequiresLineManagerApprovalPage(ScenarioContext context) : AanBaseP
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new AccessDeniedPage(context));
+    }
+}
+
+public class AccessDeniedPage(ScenarioContext context) : AanBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You do not have access to this area of the website");
+    }
+
+    public async Task VerifyHomeLink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
     }
 }
 

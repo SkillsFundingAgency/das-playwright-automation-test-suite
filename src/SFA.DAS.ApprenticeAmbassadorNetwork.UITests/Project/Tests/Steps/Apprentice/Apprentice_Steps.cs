@@ -122,11 +122,11 @@ public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(co
     public async Task FilterByRole_NetworkDirectory() => await FilterByEventRoleNetworkDirectory(networkHubPage);
 
     [Then(@"the user should be able to successfully filter events by regions Network Directory")]
-    public async Task FilterByEventRegion_NetworkDirectory() => await FilterByEventRegionNetworkDirectory(networkDirectoryPage);
+    public async Task FilterByEventRegion_NetworkDirectory() => await FilterByEventRegionNetworkDirectory(new NetworkDirectoryPage(context));
 
     [Then(@"the user should be able to successfully filter events by multiple combination of filters Network Directory")]
     public async Task FilterByMultipleCombination_NetworkDirectory() => await
-        FilterByMultipleCombinationNetworkDirectory(networkDirectoryPage);
+        FilterByMultipleCombinationNetworkDirectory(new NetworkDirectoryPage(context));
 
     //[Given(@"the following events have been created:")]
     //public async Task GivenTheFollowingEventsHaveBeenCreated(Table table)
