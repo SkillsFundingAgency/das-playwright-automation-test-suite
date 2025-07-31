@@ -2,45 +2,44 @@
 using NUnit.Framework;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Employer;
+using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Apprentice;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
 using TechTalk.SpecFlow.Assist;
 
-namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Employer;
+namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.StepDefinitions.Apprentice;
 
-[Binding, Scope(Tag = "@aanemployer")]
-public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(context)
+[Binding, Scope(Tag = "@aanaprentice")]
+public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(context)
 {
-    private EventsHubPage eventsHubPage;
-
     private SearchNetworkEventsPage searchNetworkEventsPage;
 
-    private AanEmployerOnBoardedUser user;
+    private EventsHubPage eventsHubPage;
 
-    [Given(@"an onboarded employer logs into the AAN portal")]
-    [When(@"an onboarded employer logs into the AAN portal")]
-    public async Task AnOnboardedEmployerLogsIntoTheAANPortal()
-    {
-        await EmployerSign(user = context.GetUser<AanEmployerOnBoardedUser>());
+    private AanApprenticeOnBoardedUser user;
 
-        networkHubPage = new Employer_NetworkHubPage(context);
-
-        await networkHubPage.VerifyPage();
-    }
+    [Given(@"an onboarded apprentice logs into the AAN portal")]
+    [When(@"an onboarded apprentice logs into the AAN portal")]
+    public async Task AnOnboardedApprenticeLogsIntoTheAANPortal() => networkHubPage = await
+        SubmitUserDetails_OnboardingJourneyComplete(user = context.Get<AanApprenticeOnBoardedUser>());
 
     [Then(@"the user should be able to successfully verify a regional chair member profile")]
-    public async Task VerifyARegionalChairMemberProfile() => await AccessNetworkDirectory(true);
+    public async Task VerifyRegionalChairMemberProfile() => await AccessNetworkDirectory(true);
 
-    [Then(@"the user should be able to successfully verify apprentice member profile")]
+    [Then(@"the user should be able to successfully verify an apprentice member profile")]
     public async Task VerifyApprenticeMemberProfile() => await AccessNetworkDirectory(false);
 
-    private async Task AccessNetworkDirectory(bool isRegionalChair) => await AccessNetworkDirectory(networkHubPage, isRegionalChair, string.Empty);
+    private async Task AccessNetworkDirectory(bool isRegionalChair) => await
+        AccessNetworkDirectory(networkHubPage, isRegionalChair, user.Username);
 
-    [Then(@"the user should be able to (ask for industry advice|ask for help with a network activity|request a case study|get in touch after meeting at a network event) to a regional chair member successfully")]
-    public async Task TheUserShouldBeAbleToAskARegionalChairMemberSuccessfully(string message) => await SendMessage(networkDirectoryPage, Apprentice, message);
+    [Then(
+        @"the user should be able to (ask for industry advice|ask for help with a network activity|request a case study|get in touch after meeting at a network event) to an apprentice member successfully")]
+    public async Task TheUserShouldBeAbleToAskAnApprenticeMemberSuccessfully(string message) => await
+        SendMessage(networkDirectoryPage, Apprentice, message);
 
-    [Then(@"the user should be able to (ask for industry advice|ask for help with a network activity|request a case study|get in touch after meeting at a network event) to an apprentice member successfully")]
-    public async Task TheUserShouldBeAbleToAskToTheMemberSuccessfully(string message) => await SendMessage(networkDirectoryPage, Apprentice, message);
+    [Then(
+        @"the user should be able to (ask for industry advice|ask for help with a network activity|request a case study|get in touch after meeting at a network event) to a regional chair member successfully")]
+    public async Task TheUserShouldBeAbleToAskARegionalChairMemberSuccessfully(string message) => await
+        SendMessage(networkDirectoryPage, Apprentice, message);
 
     [When(@"the user should be able to successfully verify ambassador profile")]
     public async Task VerifyYourAmbassadorProfile() => await VerifyYourAmbassadorProfile(networkHubPage, user.Username);
@@ -54,11 +53,15 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
 
         var page2 = await page1.AccessChangeForInterestInNetwork();
 
-        var page3 = await page2.UpdateAreaOfInterestAndContinue("Champion the delivery of");
+        var page3 = await page2.UpdateAreaOfInterestAndContinue("Organising events");
 
-        var page4 = await page3.AccessChangeForContactDetails();
+        var page4 = await page3.AccessChangeForApprenticeshipInformation();
 
-        await page4.ChangeLinkedlnUrlAndContinue();
+        var page5 = await page4.ChangeSeconLineAddressAndContinue();
+
+        var page6 = await page5.AccessChangeForContactDetails();
+
+        await page6.ChangeLinkedlnUrlAndContinue();
     }
 
     [When(@"the user should be able to successfully hide ambassador profile information")]
@@ -79,6 +82,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await page5.HideLinkedlnInformation();
     }
 
+
     [Then(@"the user should be able to successfully display ambassador profile information")]
     public async Task ThenTheUserShouldBeAbleToSuccessfullyDisplayAmbassadorProfileInformation()
     {
@@ -95,6 +99,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await page4.DisplayLinkedlnInformation();
     }
 
+
     [Then(@"the user should be able to successfully signup for a future event")]
     public async Task SignupForAFutureEvent() => eventsHubPage = await SignupForAFutureEvent(networkHubPage, user.Username);
 
@@ -110,9 +115,6 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
     [Then(@"the user should be able to successfully filter events by event type")]
     public async Task FilterByEventType() => await FilterByEventType(new SearchNetworkEventsPage(context));
 
-    [Then(@"the user should be able to successfully filter events by regions")]
-    public async Task FilterByEventRegion() => await FilterByEventRegion(new SearchNetworkEventsPage(context));
-
     [Then(@"the user should be able to successfully filter events by multiple combination of filters")]
     public async Task FilterByMultipleCombination() => await FilterByMultipleCombination(new SearchNetworkEventsPage(context));
 
@@ -123,30 +125,33 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
     public async Task FilterByEventRegion_NetworkDirectory() => await FilterByEventRegionNetworkDirectory(new NetworkDirectoryPage(context));
 
     [Then(@"the user should be able to successfully filter events by multiple combination of filters Network Directory")]
-    public async Task FilterByMultipleCombination_NetworkDirectory() => await FilterByMultipleCombinationNetworkDirectory(new NetworkDirectoryPage(context));
+    public async Task FilterByMultipleCombination_NetworkDirectory() => await
+        FilterByMultipleCombinationNetworkDirectory(new NetworkDirectoryPage(context));
 
-    [Given(@"the following events have been created:")]
-    public async Task GivenTheFollowingEventsHaveBeenCreated(Table table)
-    {
-        await Navigate(UrlConfig.AAN_Admin_BaseUrl);
+    //[Given(@"the following events have been created:")]
+    //public async Task GivenTheFollowingEventsHaveBeenCreated(Table table)
+    //{
+    //    await Navigate(UrlConfig.AAN_Admin_BaseUrl);
 
-        var user = context.GetUser<AanAdminUser>();
+    //    var user = context.GetUser<AanAdminUser>();
 
-        await new DfeSignInPage(context).SubmitValidLoginDetails(user);
+    //    await new DfeSignInPage(context).SubmitValidLoginDetails(user);
 
-        //var stepsHelper = context.Get<AanAdminStepsHelper>();
+    //    var stepsHelper = context.Get<AanAdminStepsHelper>();
 
-        //var events = table.CreateSet<NetworkEventWithLocation>().ToList();
+    //    var events = table.CreateSet<NetworkEventWithLocation>().ToList();
 
-        //foreach (var e in events)
-        //{
-        //    var confirmationPage = stepsHelper
-        //        .CheckYourEvent(EventFormat.InPerson, false, false, e.EventTitle, e.Location).SubmitEvent();
-        //    confirmationPage.AccessHub();
-        //}
+    //    foreach (var e in events)
+    //    {
+    //        var confirmationPage = stepsHelper
+    //            .CheckYourEvent(EventFormat.InPerson, false, false, e.EventTitle, e.Location).SubmitEvent();
+    //        confirmationPage.AccessHub();
+    //    }
 
-        await Navigate(UrlConfig.AAN_Employer_BaseUrl);
-    }
+    //    ;
+
+    //    tabHelper.GoToUrl(UrlConfig.AAN_Apprentice_BaseUrl);
+    //}
 
     [When(@"the user filters events within (.*) miles of ""([^""]*)""")]
     public async Task WhenTheUserFiltersEventsWithinMilesOf(int radius, string location)
@@ -155,11 +160,12 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
 
         var searchNetworkEventsPage = await page.AccessAllNetworkEvents();
 
-        await searchNetworkEventsPage.EnterKeywordFilter("Location Filter Employer Test Event");
+        await searchNetworkEventsPage.EnterKeywordFilter("Location Filter Apprentice Test Event");
 
         await searchNetworkEventsPage.FilterEventsByLocation(location, radius);
 
-        var stepsHelper = context.Get<EmployerStepsHelper>();
+        var stepsHelper = context.Get<ApprenticeStepsHelper>();
+
         stepsHelper.ClearEventTitleCache();
     }
 
@@ -168,23 +174,23 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
     {
         var searchNetworkEventsPage = new SearchNetworkEventsPage(context);
 
-        await searchNetworkEventsPage.EnterKeywordFilter("Location Filter Employer Test Event");
+        await searchNetworkEventsPage.EnterKeywordFilter("Location Filter Apprentice Test Event");
 
         await searchNetworkEventsPage.FilterEventsByLocation(location, 0);
 
-        var stepsHelper = context.Get<EmployerStepsHelper>();
-
+        var stepsHelper = context.Get<ApprenticeStepsHelper>();
         stepsHelper.ClearEventTitleCache();
     }
+
 
     [Then(@"the following events can be found within the search results:")]
     public async Task ThenTheFollowingEventsCanBeFoundWithinTheSearchResults(Table table)
     {
-        var stepsHelper = context.Get<EmployerStepsHelper>();
+        var stepsHelper = context.Get<ApprenticeStepsHelper>();
 
-        var results = await stepsHelper.GetAllSearchResults();
+        var page = await stepsHelper.GetAllSearchResults();
 
-        var titles = results.Select(x => x.EventTitle).ToList();
+        var titles = page.Select(x => x.EventTitle).ToList();
 
         var expectedEvents = table.CreateSet<NetworkEvent>().ToList();
 
@@ -197,11 +203,11 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
     [Then(@"the following events can not be found within the search results:")]
     public async Task ThenTheFollowingEventsCanNotBeFoundWithinTheSearchResults(Table table)
     {
-        var stepsHelper = context.Get<EmployerStepsHelper>();
+        var stepsHelper = context.Get<ApprenticeStepsHelper>();
 
-        var results = await stepsHelper.GetAllSearchResults();
+        var page = await stepsHelper.GetAllSearchResults();
 
-        var titles = results.Select(x => x.EventTitle).ToList();
+        var titles = page.Select(x => x.EventTitle).ToList();
 
         var unexpectedEvents = table.CreateSet<NetworkEvent>().ToList();
 
@@ -222,8 +228,10 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
     [Then(@"the following events can be found within the search results in the given order:")]
     public async Task ThenTheFollowingEventsCanBeFoundWithinTheSearchResultsInTheGivenOrder(Table table)
     {
-        var stepsHelper = context.Get<EmployerStepsHelper>();
+        var stepsHelper = context.Get<ApprenticeStepsHelper>();
+
         var eventSearchResults = await stepsHelper.GetAllSearchResults();
+
         var expectedEvents = table.CreateSet<NetworkEventWithOrdinal>().OrderBy(e => e.Order).ToList();
 
         var filteredSearchResults = eventSearchResults
