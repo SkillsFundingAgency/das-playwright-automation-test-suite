@@ -54,7 +54,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
 
         var page2 = await page1.AccessChangeForInterestInNetwork();
 
-        var page3 = await page2.SelectProjectManagementAndContinue();
+        var page3 = await page2.UpdateAreaOfInterestAndContinue("Champion the delivery of");
 
         var page4 = await page3.AccessChangeForContactDetails();
 

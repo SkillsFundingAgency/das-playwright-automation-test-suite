@@ -53,7 +53,7 @@ public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(co
 
         var page2 = await page1.AccessChangeForInterestInNetwork();
 
-        var page3 = await page2.SelectProjectManagementAndContinue();
+        var page3 = await page2.UpdateAreaOfInterestAndContinue("Organising events");
 
         var page4 = await page3.AccessChangeForApprenticeshipInformation();
 
