@@ -102,7 +102,7 @@ public class YourApprenticeshipInformationPage(ScenarioContext context) : AanBas
     {
         await page.Locator("#EmployerAddress2").FillAsync(RandomDataGenerator.GenerateRandomAlphabeticString(12));
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save changes" }).ClickAsync();
 
         return await VerifyPageAsync(() => new YourAmbassadorProfilePage(context));
     }
