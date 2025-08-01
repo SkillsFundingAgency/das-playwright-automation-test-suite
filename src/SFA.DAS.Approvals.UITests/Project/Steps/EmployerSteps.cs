@@ -1,5 +1,4 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
-using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
@@ -16,6 +15,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using Microsoft.VisualBasic;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -39,13 +39,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When(@"Employer approves the apprentice request \(cohort\)")]
         public async Task WhenEmployerApprovesTheApprenticeRequestCohort()
         {
-            await employerStepsHelper.EmployerLogInToEmployerPortal();
+            var page = await employerStepsHelper.OpenCohort();
 
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
-
-            var page = await new ApprenticesHomePage(context).GoToApprenticeRequests();
-
-            await employerStepsHelper.ApproveCohort(page);           
+            await page.EmployerApproveCohort();
 
         }
 
@@ -72,6 +68,47 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage();
         }
+
+
+        [When("Employer reviews the above cohort")]
+        public async Task WhenEmployerReviewsTheAboveCohort()
+        {
+            await employerStepsHelper.OpenCohort();
+        }
+
+
+        [Then("display the warning message for foundation courses")]
+        public async Task ThenDisplayTheWarningMessageForFoundationCourses()
+        {
+            var page = new EmployerApproveApprenticeDetailsPage(context);
+            var warningMsg = "! Warning Check apprentices are eligible for foundation apprenticeships If someone is aged between 22 and 24, to be funded for a foundation apprenticeship they must either: have an Education, Health and Care (EHC) plan be or have been in the care of their local authority be a prisoner or have been in prison";
+            
+            await page.ValidateWarningMessageForFoundationCourses(warningMsg);
+            
+            await page.EmployerApproveCohort();
+        }
+
+
+        [When("Employer tries to edit live apprentice record by setting age old than 24 years")]
+        public async Task WhenEmployerTriesToEditLiveApprenticeRecordBySettingAgeOldThan24Years()
+        {
+            await employerStepsHelper.EmployerLogInToEmployerPortal();
+            await new InterimApprenticesHomePage(context, false).VerifyPage();
+
+        }
+
+        [Then("the employer is stopped with an error message")]
+        public async Task ThenTheEmployerIsStoppedWithAnErrorMessage()
+        {
+            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
+            var uln = apprentice.ApprenticeDetails.ULN.ToString();
+            var name = apprentice.ApprenticeDetails.FullName;
+            var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
+
+            var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedApprenticeRecord(new ApprenticesHomePage(context), uln, name);
+            await employerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
+        }
+
 
 
 

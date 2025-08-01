@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SFA.DAS.EPAO.UITests.Project.Helpers.SqlHelpers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Helpers.SqlHelpers;
 
 public partial class EPAOAdminCASqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AssessorDbConnectionString)
 {

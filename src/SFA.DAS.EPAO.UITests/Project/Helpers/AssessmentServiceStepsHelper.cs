@@ -20,7 +20,7 @@ public class AssessmentServiceStepsHelper(ScenarioContext context)
 
             await page1.VerifyGrade(grade);
         }
-            
+
         else
         {
             if (grade.ContainsCompareCaseInsensitive("pass"))
@@ -30,7 +30,7 @@ public class AssessmentServiceStepsHelper(ScenarioContext context)
                 await page.VerifyGrade(grade);
             }
 
-            else 
+            else
             {
                 var page = await recordAGradePage.SearchApprentice(false);
 
@@ -226,11 +226,11 @@ public class AssessmentServiceStepsHelper(ScenarioContext context)
         }
         else
         {
-            if (learnerCriteria.WithOptions) 
+            if (learnerCriteria.WithOptions)
             {
                 var page = await confirmApprenticePage.GoToWhichLearningOptionPage(learnerCriteria.HasMultiStandards);
 
-                return await page.SelectLearningOptionAndContinue(); 
+                return await page.SelectLearningOptionAndContinue();
             }
 
             else return await confirmApprenticePage.GoToDeclarationPage(learnerCriteria.HasMultiStandards);

@@ -1,6 +1,4 @@
-﻿using Azure;
-
-namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.EPAOWithdrawalPages;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.EPAOWithdrawalPages;
 
 public class AS_WithdrawFromAStandardsPage(ScenarioContext context) : EPAO_BasePage(context)
 {
@@ -224,7 +222,7 @@ public class AS_WhatIsTheMainReasonYouWantToWithdrawFromAllStandardsPage(Scenari
     public async Task<AS_WillYouCompleteEPAOForAllRegisteredLearnersPage> ClickAssessmentPlanHasChangedAndEnterOptionalReason()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Assessment plan has changed" }).CheckAsync();
-        
+
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Enter more details (optional)" }).FillAsync("Assessment plan has changed");
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();

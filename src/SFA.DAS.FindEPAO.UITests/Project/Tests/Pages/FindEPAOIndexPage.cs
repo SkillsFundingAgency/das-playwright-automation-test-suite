@@ -1,7 +1,4 @@
-﻿
-
-
-namespace SFA.DAS.FindEPAO.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.FindEPAO.UITests.Project.Tests.Pages;
 
 public abstract class FindEPAOBasePage(ScenarioContext context) : BasePage(context)
 {

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SFA.DAS.EPAO.UITests.Project;
+﻿namespace SFA.DAS.EPAO.UITests.Project;
 
 [Binding, Scope(Tag = "recordagrade")]
 public class RecordAGradeHooks
@@ -33,7 +31,8 @@ public class RecordAGradeHooks
             case bool _ when _tags.Contains("epaoca2standard2version1option"): SetLearnerCriteria(true, true, true, true, false, false); break;
             case bool _ when _tags.Contains("epaoca1standard2version1versionconfirmed"): SetLearnerCriteria(true, true, false, false, true, false); break;
             default: SetLearnerCriteria(true, false, false, false, true, false); break;
-        };
+        }
+        ;
     }
 
     [AfterScenario(Order = 35)]

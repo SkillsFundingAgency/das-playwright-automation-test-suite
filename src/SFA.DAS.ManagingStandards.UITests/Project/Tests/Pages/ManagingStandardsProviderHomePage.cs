@@ -74,9 +74,9 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
         await Assertions.Expect(page.Locator("#header-standards")).ToContainTextAsync("Manage your standards");
     }
 
-    public async Task<ManageAStandard_TeacherPage> AccessTeacherLevel6()
+    public async Task<ManageAStandard_TeacherPage> AccessPodiatrist()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Teacher (level 6)" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Podiatrist (level 6)" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
@@ -98,6 +98,24 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 
         if (!shouldExist && count > 0)
             throw new Exception($"The standard '{standardName}' was found on the page, but it should NOT be listed.");
+
+        return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
+    }
+    public async Task<ManageTheStandardsYouDeliverPage> VerifyOrangeMoreDetailsNeededTagForStandardAsync(string standardName, bool shouldExist = true)
+    {
+        var locator = page.Locator($@"
+        //td[
+            .//strong[contains(@class, 'govuk-tag--orange') and normalize-space(text())='More details needed']
+            and .//a[normalize-space(text())='{standardName}']
+        ]");
+
+        var count = await locator.CountAsync();
+
+        if (shouldExist && count == 0)
+            throw new Exception($"Expected to find an orange 'More details needed' tag for the standard '{standardName}', but it was not found.");
+
+        if (!shouldExist && count > 0)
+            throw new Exception($"Found an orange 'More details needed' tag for the standard '{standardName}', but it should NOT be present.");
 
         return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }
@@ -249,6 +267,12 @@ public class ManageAStandard_TeacherPage(ScenarioContext context, string standar
         await page.GetByRole(AriaRole.Link, new() { Name = "Change   the regulated" }).ClickAsync();
 
         return await VerifyPageAsync(() => new RegulatedStandardPage(context));
+    }
+    public async Task<ManageTheStandardsYouDeliverPage> Return_StandardsManagement()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back to standards management" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }
 
     public async Task<WhereWillThisStandardBeDeliveredPage> AccessWhereYouWillDeliverThisStandard()
@@ -536,7 +560,7 @@ public class VenueAddedPage(ScenarioContext context) : ManagingStandardsBasePage
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Test Demo Automation Venue");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Venue details and standards");
     }
 
     public async Task<VenueDetailsPage> Click_ChangeVenueName()
