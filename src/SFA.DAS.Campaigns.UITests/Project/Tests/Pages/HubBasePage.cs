@@ -14,7 +14,7 @@ public abstract class HubBasePage(ScenarioContext context) : CampaingnsHeaderBas
         {
             try
             {
-                await page.GetByRole(AriaRole.Link, new() { Name = fiuCardHeading }).ClickAsync();
+                await page.Locator($"a.fiu-card__link:has-text('{fiuCardHeading}')").ClickAsync();
 
                 objectContext.SetDebugInformation($"Clicked fiu card - '{fiuCardHeading}'");
 
