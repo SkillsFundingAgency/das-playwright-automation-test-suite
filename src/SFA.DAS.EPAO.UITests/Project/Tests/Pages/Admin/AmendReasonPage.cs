@@ -1,6 +1,4 @@
-﻿using Azure;
-
-namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 
 public class AmendReasonPage(ScenarioContext context) : ConfirmReasonBasePage(context)
 {
@@ -146,13 +144,13 @@ public class CertificateAddressPage(ScenarioContext context, string pageTitlePre
     public async Task EnterAddress()
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Building and street line 1 of" }).FillAsync(EPAODataHelper.AddressLine1);
-        
+
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Building and street line 2 of" }).FillAsync(EPAODataHelper.AddressLine2);
-        
+
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Building and street line 3 of" }).FillAsync(EPAODataHelper.AddressLine3);
-        
+
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Town or city" }).FillAsync(EPAODataHelper.TownName);
-        
+
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Postcode" }).FillAsync(EPAODataHelper.PostCode);
     }
 
@@ -161,7 +159,7 @@ public class CertificateAddressPage(ScenarioContext context, string pageTitlePre
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Reason for change" }).FillAsync(reasonForChange);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-        
+
         return new(context);
     }
 }

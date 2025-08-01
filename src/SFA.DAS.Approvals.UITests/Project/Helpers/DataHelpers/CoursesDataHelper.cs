@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
 {
-    internal class CoursesDataHelper(ScenarioContext context)
+    internal class CoursesDataHelper()
     {
         internal async Task<Courses> GetRandomCourse()
         {

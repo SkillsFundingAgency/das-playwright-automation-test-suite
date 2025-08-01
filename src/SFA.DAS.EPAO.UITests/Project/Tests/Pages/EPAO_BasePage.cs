@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Framework;
-
-namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages;
 
 public abstract class EPAO_BasePage(ScenarioContext context) : BasePage(context)
 {
@@ -9,5 +7,5 @@ public abstract class EPAO_BasePage(ScenarioContext context) : BasePage(context)
     protected readonly EPAOApplyStandardDataHelper standardDataHelper = context.Get<EPAOApplyStandardDataHelper>();
     protected readonly EPAOAdminDataHelper ePAOAdminDataHelper = context.Get<EPAOAdminDataHelper>();
 
-    public async Task VerifyGrade(string grade) => await Assertions.Expect(page.Locator("dl")).ToContainTextAsync(grade, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
+    public async Task VerifyGrade(string grade) => await Assertions.Expect(page.Locator("dl")).ToContainTextAsync(grade, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
 }

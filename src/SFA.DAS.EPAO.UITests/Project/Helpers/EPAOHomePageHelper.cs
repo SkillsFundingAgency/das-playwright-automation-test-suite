@@ -39,10 +39,10 @@ public class EPAOHomePageHelper
         return await VerifyPageHelper.VerifyPageAsync(() => new AS_LandingPage(_context));
     }
 
-    public async Task<AP_PR1_SearchForYourOrganisationPage> LoginInAsApplyUser(GovSignUser loginUser) 
+    public async Task<AP_PR1_SearchForYourOrganisationPage> LoginInAsApplyUser(GovSignUser loginUser)
     {
-        await StubSign(loginUser); 
-        
+        await StubSign(loginUser);
+
         return await VerifyPageHelper.VerifyPageAsync(() => new AP_PR1_SearchForYourOrganisationPage(_context));
     }
 

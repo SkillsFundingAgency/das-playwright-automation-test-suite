@@ -130,7 +130,6 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         {
             var driver = context.Get<Driver>();
             await driver.Page.GotoAsync(UrlConfig.FAT_BaseUrl);
-            await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
             await _fATeHomePage.ClickStartNow();
             await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
             await _fATeHomePage.EnterCourseJobOrStandard("Craft plasterer");

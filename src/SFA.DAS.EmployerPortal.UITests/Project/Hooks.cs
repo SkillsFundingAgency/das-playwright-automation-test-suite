@@ -1,26 +1,18 @@
 ﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
+using SFA.DAS.Framework.Hooks;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project;
 
 [Binding]
-public class Hooks(ScenarioContext context)
+public class Hooks(ScenarioContext context) : FrameworkBaseHooks(context)
 {
     private readonly DbConfig _dbConfig = context.Get<DbConfig>();
 
     private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
 
     [BeforeScenario(Order = 22)]
-    public async Task Navigate()
-    {
-        var driver = context.Get<Driver>();
-
-        var url = UrlConfig.EmployerApprenticeshipService_BaseUrl;
-
-        context.Get<ObjectContext>().SetDebugInformation(url);
-
-        await driver.Page.GotoAsync(url);
-    }
+    public async Task Navigate() => await Navigate(UrlConfig.EmployerApprenticeshipService_BaseUrl);
 
     [BeforeScenario(Order = 23)]
     public void SetUpDataHelpers()

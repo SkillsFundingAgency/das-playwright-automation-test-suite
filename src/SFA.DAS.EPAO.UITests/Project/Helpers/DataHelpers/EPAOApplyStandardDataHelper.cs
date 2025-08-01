@@ -1,6 +1,4 @@
-﻿using SFA.DAS.FrameworkHelpers;
-
-namespace SFA.DAS.EPAO.UITests.Project.Helpers.DataHelpers;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Helpers.DataHelpers;
 
 public class EPAOApplyStandardDataHelper : EPAODataHelper
 {

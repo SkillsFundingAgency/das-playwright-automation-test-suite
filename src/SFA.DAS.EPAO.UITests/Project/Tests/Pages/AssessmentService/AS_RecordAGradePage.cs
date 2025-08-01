@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
+﻿namespace SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 
 public class AS_RecordAGradePage(ScenarioContext context) : EPAO_BasePage(context)
 {
@@ -30,7 +28,7 @@ public class AS_RecordAGradePage(ScenarioContext context) : EPAO_BasePage(contex
         objectContext.SetDebugInformation($"Entering {familyName} and {uln}");
 
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Family name" }).FillAsync(familyName);
-        
+
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Unique learner number (ULN)" }).FillAsync(uln);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
