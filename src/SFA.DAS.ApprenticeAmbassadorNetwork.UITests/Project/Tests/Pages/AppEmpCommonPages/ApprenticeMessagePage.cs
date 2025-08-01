@@ -4,13 +4,15 @@ public class ApprenticeMessagePage : AppEmpCommonBasePage
 {
     public override async Task VerifyPage()
     {
+        var locator = page.Locator(".govuk-tag.app-tag");
+
         if (IsRegionalChair)
         {
-            await Assertions.Expect(page.GetByRole(AriaRole.Strong)).ToContainTextAsync("Regional chair");
+            await Assertions.Expect(locator).ToContainTextAsync("Regional chair");
         }
         else
         {
-            await Assertions.Expect(page.GetByRole(AriaRole.Strong)).ToContainTextAsync("Apprentice");
+            await Assertions.Expect(locator).ToContainTextAsync("Apprentice");
         }
 
         if (!string.IsNullOrEmpty(ApprenticeName))
