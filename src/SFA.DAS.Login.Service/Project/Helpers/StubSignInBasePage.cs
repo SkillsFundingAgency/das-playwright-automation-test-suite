@@ -4,7 +4,7 @@ public abstract class StubSignInBasePage(ScenarioContext context) : BasePage(con
 {
     protected async Task EnterLoginDetails(string email, string userref)
     {
-        objectContext.SetDebugInformation($"Entering {userref} and {email}");
+        objectContext.SetDebugInformation($"Entering - Userref:'{userref}' and Email:'{email}'");
 
         await page.GetByRole(AriaRole.Textbox, new() { Name = "ID" }).FillAsync(userref);
 

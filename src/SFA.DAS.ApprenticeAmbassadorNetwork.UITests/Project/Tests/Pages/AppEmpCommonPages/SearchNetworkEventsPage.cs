@@ -7,12 +7,12 @@ public class SearchNetworkEventsPage(ScenarioContext context) : SearchEventsBase
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Search network events");
     }
 
-    //Clicking on last event so that the event would be for sure in the future
     public async Task<EventPage> ClickOnLastEvent()
     {
         await FilterEventFromTomorrow();
 
-        await page.Locator(EventLink).Last.ClickAsync();
+        //Clicking on last event so that the event would be for sure in the future
+        await page.Locator("a.das-search-results__link").Last.ClickAsync();
 
         return new EventPage(context);
     }

@@ -33,6 +33,8 @@ namespace SFA.DAS.Framework
 
         protected readonly IPage page;
 
+        protected readonly string[] tags;
+
         protected static float LandingPageTimeout => 60000;
 
         /// <summary>
@@ -43,6 +45,8 @@ namespace SFA.DAS.Framework
         protected BasePage(ScenarioContext context)
         {
             this.context = context;
+
+             tags = context.ScenarioInfo.Tags;
 
             objectContext = context.Get<ObjectContext>();
 

@@ -27,8 +27,6 @@ namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages
 
         private async Task VerifySelectedFilter(string x) => await Assertions.Expect(page.Locator("#events-filter, #directory-filter")).ToContainTextAsync(x);
 
-        protected static string EventLink => ("li.das-search-results__list-item a");
-
         public async Task FilterEventFromTomorrow() => await FilterEventByDate(null);
 
         public async Task FilterEventByOneMonth() => await FilterEventByDate(DateTime.Now.AddDays(30));

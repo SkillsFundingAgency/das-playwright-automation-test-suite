@@ -6,6 +6,8 @@ public abstract class AppEmpCommonBasePage(ScenarioContext context) : AanBasePag
     {
         var url = page.Url;
 
+        objectContext.SetDebugInformation($"Current page url is :'{url}'");
+
         var guid = url.Split('/').ToList().Single(x => x.Count(c => c == '-') == 4);
 
         var newUrl = url.Replace(guid, id);
