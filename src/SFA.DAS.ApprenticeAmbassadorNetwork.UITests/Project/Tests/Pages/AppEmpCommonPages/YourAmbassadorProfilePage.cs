@@ -7,7 +7,7 @@ public class YourAmbassadorProfilePage(ScenarioContext context) : AanBasePage(co
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your ambassador profile");
     }
 
-    public async Task VerifyYourAmbassadorProfile(string value) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("London");
+    public async Task VerifyYourAmbassadorProfile(string value) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(value); 
 
     public async Task<YourPersonalDetailsPage> AccessChangeForPersonalDetails()
     {
@@ -16,11 +16,11 @@ public class YourAmbassadorProfilePage(ScenarioContext context) : AanBasePage(co
         return await VerifyPageAsync(() => new YourPersonalDetailsPage(context));
     }
 
-    public async Task<InterestIinTheNetworkPage> AccessChangeForInterestInNetwork()
+    public async Task<InterestinTheNetworkPage> AccessChangeForInterestInNetwork()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Change" }).Nth(1).ClickAsync();
 
-        return await VerifyPageAsync(() => new InterestIinTheNetworkPage(context));
+        return await VerifyPageAsync(() => new InterestinTheNetworkPage(context));
     }
 
     public async Task<YourApprenticeshipInformationPage> AccessChangeForApprenticeshipInformation()
@@ -82,7 +82,7 @@ public class YourApprenticeshipInformationPage(ScenarioContext context) : AanBas
 
     public async Task<YourAmbassadorProfilePage> HideApprenticeshipInformation()
     {
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Display all my organisation" }).UncheckAsync();
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Display all" }).UncheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save changes" }).ClickAsync();
 
@@ -91,24 +91,33 @@ public class YourApprenticeshipInformationPage(ScenarioContext context) : AanBas
 
     public async Task<YourAmbassadorProfilePage> DisplayApprenticeshipInformation()
     {
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Display all my organisation" }).CheckAsync();
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Display all" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save changes" }).ClickAsync();
 
-        return new YourAmbassadorProfilePage(context);
+        return await VerifyPageAsync(() => new YourAmbassadorProfilePage(context));
+    }
+
+    public async Task<YourAmbassadorProfilePage> ChangeSeconLineAddressAndContinue()
+    {
+        await page.Locator("#EmployerAddress2").FillAsync(RandomDataGenerator.GenerateRandomAlphabeticString(12));
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save changes" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourAmbassadorProfilePage(context));
     }
 }
 
-public class InterestIinTheNetworkPage(ScenarioContext context) : AanBasePage(context)
+public class InterestinTheNetworkPage(ScenarioContext context) : AanBasePage(context)
 {
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your areas of interest as an ambassador");
     }
 
-    public async Task<YourAmbassadorProfilePage> SelectProjectManagementAndContinue()
+    public async Task<YourAmbassadorProfilePage> UpdateAreaOfInterestAndContinue(string area)
     {
-        var locator = page.GetByRole(AriaRole.Checkbox, new() { Name = "Champion the delivery of" });
+        var locator = page.GetByRole(AriaRole.Checkbox, new() { Name = area});
 
         if (await locator.IsCheckedAsync())
         {

@@ -1,4 +1,5 @@
-﻿Feature: AP_DO_01_ULN_Overlap_Provider
+﻿@approvals
+Feature: AP_DO_01_ULN_Overlap_Provider
 
 
 @regression

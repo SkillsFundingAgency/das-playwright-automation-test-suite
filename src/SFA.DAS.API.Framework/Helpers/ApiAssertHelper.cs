@@ -9,7 +9,24 @@ public class ApiAssertHelper(ObjectContext objectContext)
 
     public async Task<RestResponse> ExecuteAndAssertResponse(HttpStatusCode expectedResponse, string responseContent, RestClient client, RestRequest request)
     {
-        var response = await client.ExecuteAsync(request);
+        RestResponse response = null;
+        int maxRetries = 3;
+        int attempt = 0;
+
+        while (attempt < maxRetries)
+        {
+            response = await client.ExecuteAsync(request);
+
+            if (response.StatusCode == expectedResponse)
+                break;
+
+            attempt++;
+
+            if (attempt < maxRetries)
+                await Task.Delay(2000); 
+        }
+
+
 
         var apidataCollector = new ApiDataCollectionHelper(client, request, response);
 

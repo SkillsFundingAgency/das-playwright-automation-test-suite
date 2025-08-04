@@ -20,12 +20,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     public class ProviderSteps
     {
         private readonly ScenarioContext context;
-        private ProviderStepsHelper providerStepsHelper;
+        private readonly ProviderStepsHelper providerStepsHelper;
+        private readonly SldIlrSubmissionSteps sldIlrSubmissionSteps;
 
         public ProviderSteps(ScenarioContext _context)
         {
             context = _context;            
-            providerStepsHelper = new ProviderStepsHelper(context);          
+            providerStepsHelper = new ProviderStepsHelper(context);
+            sldIlrSubmissionSteps = new SldIlrSubmissionSteps(context);
         }
 
 
@@ -116,19 +118,41 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenProviderTriesToAddANewApprenticeUsingDetailsFromTableBelow(Table table)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
-            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
-
-
-
+            var listOfValidApprenticeship = listOfApprenticeship;
+            var apprentice = listOfValidApprenticeship.FirstOrDefault();
 
             var OltdDetails = table.CreateSet<OltdDetails>().ToList();
 
             foreach (var item in OltdDetails)
             {
+                //Update valid apprentice object with new start and end dates. Then push it as new apprentice details on SLD endpoint
+                apprentice.TrainingDetails.StartDate = DateTime.Now.AddMonths(item.NewStartDate);       //apprentice.TrainingDetails.StartDate.AddMonths(item.NewStartDate);
+                apprentice.TrainingDetails.EndDate = DateTime.Now.AddMonths(item.NewEndDate);         //apprentice.TrainingDetails.EndDate.AddMonths(item.NewEndDate);
+
+                listOfApprenticeship[0] = apprentice;
+                context.Set(listOfApprenticeship);
+
                 // Push data on SLD end point  
+                await new SldIlrSubmissionSteps(context).SLDPushDataIntoAS();
 
                 // Try to add above apprentice and validate error message  
+                var page = await providerStepsHelper.GoToSelectApprenticeFromILRPage();
+                var page1 = await providerStepsHelper.TryAddFirstApprenticeFromILRList(page);
+                var oltdErrorMsg = "The date overlaps with existing dates for the same apprentice";
+
+
+                if (item.DisplayOverlapErrorOnStartDate)
+                    await page1.VerfiyErrorMessage("StartDate", oltdErrorMsg);
+                else
+                    await page1.VerfiyErrorMessage("StartDate", "");
+
+                if (item.DisplayOverlapErrorOnEndDate)
+                    await page1.VerfiyErrorMessage("EndDate", oltdErrorMsg);
+                else
+                    await page1.VerfiyErrorMessage("EndDate", "");
+
             }
+
         }
 
         //[When(@"the provider adds (.*) apprentices and sends to employer to review")]
@@ -136,11 +160,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
     }
 
-    internal class OltdDetails
+    public class OltdDetails
     {
-        internal int NewStartDate { get; set; }
-        internal int NewEndDate { get; set; }
-        internal bool DisplayOverlapErrorOnStartDate { get; set; }
-        internal bool DisplayOverlapErrorOnEndDate { get; set; }
+        public int NewStartDate { get; set; }
+        public int NewEndDate { get; set; }
+        public bool DisplayOverlapErrorOnStartDate { get; set; }
+        public bool DisplayOverlapErrorOnEndDate { get; set; }
     }
 }
