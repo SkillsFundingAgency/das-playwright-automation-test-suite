@@ -110,7 +110,27 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
         }
 
+        internal async Task AddEmptyCohort()
+        {
+            await EmployerLogInToEmployerPortal();
 
+            await new InterimApprenticesHomePage(context, false).VerifyPage();
+
+            await new ApprenticesHomePage(context).GoToAddAnApprentice();
+
+            var trainingProviderPage =  await new AddApprenticePage(context).ClickStartNowButton();
+
+           // await new SelectFundingPage(context).SelectFundingtype();
+
+            var confirmTrainingProvider =   await trainingProviderPage.SubmitValidUkprn();
+
+            var confirmApprentices =   await confirmTrainingProvider.ConfirmTrainingProviderDetails();
+
+            await confirmApprentices.SelectAddApprencticesByProvider();
+
+            await new ConfirmRequestSentPage(context).VerifyPage();
+
+        }
 
     }
 }

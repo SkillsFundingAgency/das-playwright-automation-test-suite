@@ -205,7 +205,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         }
 
 
+        //internal async Task<ApproveApprenticeDetailsPage> AddApprentice(int numberOfApprentices)
+        //{
+        //    var providerApproveApprenticeDetailsPage = CurrentCohortDetails();
 
+        //    providerApproveApprenticeDetailsPage = AddApprentice(providerApproveApprenticeDetailsPage, numberOfApprentices);
+
+        //    return _providerCommonStepsHelper.SetApprenticeDetails(providerApproveApprenticeDetailsPage, numberOfApprentices);
+        //}
+
+        //private ProviderApproveApprenticeDetailsPage CurrentCohortDetails() => _providerCommonStepsHelper.CurrentCohortDetails();
 
     }
 }

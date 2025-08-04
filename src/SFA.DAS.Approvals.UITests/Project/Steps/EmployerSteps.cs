@@ -110,6 +110,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
+        [Given(@"Employer create and send an empty cohort to the training provider to add learner details")]
+        public async Task GivenEmployerCreatesEmptyRequestCohort()
+        {
+            await employerStepsHelper.AddEmptyCohort();
+        }
 
 
 
