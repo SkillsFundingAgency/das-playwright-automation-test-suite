@@ -14,12 +14,12 @@ public class AdminAdministratorHubPage(ScenarioContext context) : AanAdminBasePa
         return await VerifyPageAsync(() => new ManageEventsPage(context));
     }
 
-    //public ManageAmbassadorsPage AccessManageAmbassadors()
-    //{
-    //    formCompletionHelper.ClickLinkByText("Manage ambassadors");
+    public async Task<ManageAmbassadorsPage> AccessManageAmbassadors()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage ambassadors" }).ClickAsync();
 
-    //    return new ManageAmbassadorsPage(context);
-    //}
+        return await VerifyPageAsync(() => new ManageAmbassadorsPage(context));
+    }
 
     public async Task<NotificationsSettingsPage> ManageNotifications()
     {

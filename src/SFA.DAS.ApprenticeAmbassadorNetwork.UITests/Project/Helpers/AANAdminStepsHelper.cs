@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin.CreateEvent;
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Helpers;
 
 public class AanAdminStepsHelper(ScenarioContext context)

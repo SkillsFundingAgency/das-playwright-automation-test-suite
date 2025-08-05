@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin.CreateEvent;
+﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin;
 
 public class InPersonOrOnlinePage(ScenarioContext context, EventFormat eventFormat) : AanAdminBasePage(context)
 {
@@ -11,7 +9,7 @@ public class InPersonOrOnlinePage(ScenarioContext context, EventFormat eventForm
 
     private readonly string _pageTitle = eventFormat == EventFormat.Online ? "Online event link" : "In person event location";
 
-    private static string LinkInput => ("input#onlineEventLink");
+    private static string LinkInput => "input#onlineEventLink";
 
     public async Task<IsEventAtSchoolPage> SubmitInPersonDetails(string location = null)
     {
@@ -139,9 +137,9 @@ public class EventOrganiserNamePage(ScenarioContext context) : AanAdminBasePage(
         await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("Create event Provide details of the event organiser");
     }
 
-    private static string OrganiserName => ("input#OrganiserName");
+    private static string OrganiserName => "input#OrganiserName";
 
-    private static string OrganiserEmail => ("input#OrganiserEmail");
+    private static string OrganiserEmail => "input#OrganiserEmail";
 
     public async Task<EventAttendeesPage> SubmitOrganiserName()
     {
@@ -174,7 +172,7 @@ public class EventAttendeesPage(ScenarioContext context) : AanAdminBasePage(cont
         await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("Create event How many audience members do you expect at this event?");
     }
 
-    private static string NumberOfAttendees => ("input#NumberOfAttendees");
+    private static string NumberOfAttendees => "input#NumberOfAttendees";
 
     public async Task<CheckYourEventPage> SubmitEventAttendees()
     {

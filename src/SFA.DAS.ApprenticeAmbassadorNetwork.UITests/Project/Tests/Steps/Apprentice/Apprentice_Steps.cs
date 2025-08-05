@@ -2,11 +2,10 @@
 using NUnit.Framework;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Apprentice;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
 using TechTalk.SpecFlow.Assist;
 
-namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.StepDefinitions.Apprentice;
+namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Apprentice;
 
 [Binding, Scope(Tag = "@aanaprentice")]
 public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(context)
