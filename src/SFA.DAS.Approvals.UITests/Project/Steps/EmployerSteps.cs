@@ -15,8 +15,6 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using Microsoft.VisualBasic;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper.Employer;
-
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
     [Binding]
@@ -26,7 +24,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private readonly EmployerStepsHelper employerStepsHelper;
         private readonly CommonStepsHelper commonStepsHelper;
         private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
-        private readonly EmployerCreateCohortStepsHelper employerCreateCohortStepsHelper;
+      //  private readonly EmployerCreateCohortStepsHelper employerCreateCohortStepsHelper;
 
         public EmployerSteps(ScenarioContext context)
         {
@@ -107,11 +105,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await employerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
         }
 
-        [When("the Employer create a cohort and send to provider to add apprentices")]
-        public void TheEmployerCreateACohortAndSendToProviderToAddApprentices()
-        {
-            employerCreateCohortStepsHelper.EmployerCreateCohortViaLevyFundsAndSendsToProvider();
-        }
+        //[When("the Employer create a cohort and send to provider to add apprentices")]
+        //public void TheEmployerCreateACohortAndSendToProviderToAddApprentices()
+        //{
+        //    employerCreateCohortStepsHelper.EmployerCreateCohortViaLevyFundsAndSendsToProvider();
+        //}
 
 
     }
