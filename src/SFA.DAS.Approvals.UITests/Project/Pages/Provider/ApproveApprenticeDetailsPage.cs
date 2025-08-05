@@ -75,10 +75,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return new AddApprenticeDetails_EntryMothodPage(context);
         }
 
-        internal async Task<ProviderSelectAReservationPage> ClickOnAddAnotherApprenticeLink_SelectReservationRoute()
+        internal async Task<AddApprenticeDetails_EntryMothodPage> ClickOnAddAnotherApprenticeLink_SelectReservationRoute()
         {
             await AddAnotherApprenticeLink.ClickAsync();
-            return new ProviderSelectAReservationPage(context);
+            return new AddApprenticeDetails_EntryMothodPage(context);
         }
        
 
