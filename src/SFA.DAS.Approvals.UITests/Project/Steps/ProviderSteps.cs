@@ -155,10 +155,35 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        //[When(@"the provider adds (.*) apprentices and sends to employer to review")]
-        //public void WhenTheProviderAddsApprenticesAndSendsToEmployerToReview(int numberOfApprentices) => new ProviderHomePageStepsHelper.AddApprentice(numberOfApprentices).SubmitSendToEmployerToReview();
+        [When(@"the provider adds (.*) apprentices and sends to employer to review")]
+        public async Task WhenTheProviderAddsApprenticesAndSendsToEmployerToReview(int numberOfApprentices)
+        {
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var apprentices = context.GetValue<List<Apprenticeship>>().ToList();
 
-    }
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            await page1.SelectCohort(cohortRef);
+
+            await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
+
+            var page = await new ApproveApprenticeDetailsPage(context).ProviderApproveCohort();
+
+        }
+
+        [Then("the provider approves the cohorts")]
+        public async Task ThenTheProviderApprovesCohort()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            var page = await new ApproveApprenticeDetailsPage(context).ProviderApproveCohort();
+        }
+
+
+
+        }  
+
 
     public class OltdDetails
     {

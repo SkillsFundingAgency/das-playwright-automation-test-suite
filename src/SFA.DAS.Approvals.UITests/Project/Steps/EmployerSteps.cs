@@ -116,7 +116,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await employerStepsHelper.AddEmptyCohort();
         }
 
+        [Then ("the Employer sees the cohort in Ready to review with status of Ready for review")]
+        public async Task ThenTheEmployerReviewsCohort()
+        {
+            var page = await employerStepsHelper.OpenCohort();
 
+        }
+
+        [When ("the Employer approves the cohort and sends to provider")]
+        public async Task ThenTheEmployerApprovesCohort()
+        {
+            var page = new EmployerApproveApprenticeDetailsPage(context);
+            await page.EmployerApproveCohort();
+
+        }
 
     }
 

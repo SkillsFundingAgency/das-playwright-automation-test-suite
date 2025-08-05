@@ -205,16 +205,32 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         }
 
 
-        //internal async Task<ApproveApprenticeDetailsPage> AddApprentice(int numberOfApprentices)
-        //{
-        //    var providerApproveApprenticeDetailsPage = CurrentCohortDetails();
+        internal async Task ProviderAddApprencticesFromIlrRoute()
+        {
+            var page = await GoToSelectApprenticeFromILRPageForExistingCohort();
+            var page1 = await AddFirstApprenticeFromILRList(page);
+            await AddOtherApprenticesFromILRList(page1);
+        }
 
-        //    providerApproveApprenticeDetailsPage = AddApprentice(providerApproveApprenticeDetailsPage, numberOfApprentices);
+        internal async Task<SelectLearnerFromILRPage> GoToSelectApprenticeFromILRPageForExistingCohort()
+        {
+            var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
+            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+            var page3 = await page2.SelectOptionUseExistingCohort();
+            var page4 = await SelectanExistingEmployer(page3);
 
-        //    return _providerCommonStepsHelper.SetApprenticeDetails(providerApproveApprenticeDetailsPage, numberOfApprentices);
-        //}
+            return await page4.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
+        }
 
-        //private ProviderApproveApprenticeDetailsPage CurrentCohortDetails() => _providerCommonStepsHelper.CurrentCohortDetails();
+
+        internal async Task<SelectLearnerFromILRPage> SelectanExistingEmployer(ChooseAnExistingEmployerPage chooseAnExistingEmployerPage)
+        {
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var firstApprentice = listOfApprenticeship.FirstOrDefault();
+            var cohortReference = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+           return await chooseAnExistingEmployerPage.ChooseAnExistingEmployer(cohortReference);
+        }
 
     }
 }
