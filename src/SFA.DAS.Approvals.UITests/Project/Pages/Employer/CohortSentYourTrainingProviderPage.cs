@@ -13,18 +13,18 @@ using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 
 
 
-    namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
+
+namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class CohortSentYourTrainingProviderPage(ScenarioContext context) : CohortReferenceBasePage(context)
+    internal class CohortSentYourTrainingProviderPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         //private ILocator messageForTrainingProvider => page.Locator("dt:has-text('Message for training provider') + dd");
 
         public override async Task VerifyPage()
         {
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice request sent to training provider");
-        }
-
-       
+        
+        } 
 
     }
 
