@@ -69,10 +69,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             context.Set(apprenticeship, "Apprenticeship");
         }
 
-        internal async Task<SelectLearnerFromILRPage> ClickOnAddAnotherApprenticeLink()
+        internal async Task<AddApprenticeDetails_EntryMothodPage> ClickOnAddAnotherApprenticeLink()
         {
             await AddAnotherApprenticeLink.ClickAsync();
-            return new SelectLearnerFromILRPage(context);
+            return new AddApprenticeDetails_EntryMothodPage(context);
         }
 
         internal async Task<ProviderSelectAReservationPage> ClickOnAddAnotherApprenticeLink_SelectReservationRoute()

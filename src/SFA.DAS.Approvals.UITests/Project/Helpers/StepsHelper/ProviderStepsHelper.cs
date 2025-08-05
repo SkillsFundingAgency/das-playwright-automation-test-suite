@@ -79,12 +79,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             foreach (var apprenticeship in listOfApprenticeship.Skip(1))
             {
                 var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink();
-                var page1 = await page.SelectApprenticeFromILRList(apprenticeship);
-                await page1.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
-                await page1.ClickAddButton();
-                var page2 = new RecognitionOfPriorLearningPage(context);
-                var page3 = await page2.SelectNoForRPL();
-                await page3.GetCohortId(apprenticeship);
+                var page1 = await page.SelectOptionToAddApprenticesFromILRList_AddAnotherApprenticeRoute();
+                var page2 = await page1.SelectApprenticeFromILRList(apprenticeship);
+                await page2.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
+                await page2.ClickAddButton();
+                var page3 = new RecognitionOfPriorLearningPage(context);
+                var page4 = await page3.SelectNoForRPL();
+                await page4.GetCohortId(apprenticeship);
             }
 
             return approveApprenticeDetailsPage;
