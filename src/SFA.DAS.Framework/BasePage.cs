@@ -33,6 +33,8 @@ namespace SFA.DAS.Framework
 
         protected readonly IPage page;
 
+        protected readonly string[] tags;
+
         protected static float LandingPageTimeout => 60000;
 
         /// <summary>
@@ -44,6 +46,8 @@ namespace SFA.DAS.Framework
         {
             this.context = context;
 
+             tags = context.ScenarioInfo.Tags;
+
             objectContext = context.Get<ObjectContext>();
 
             driver = context.Get<Driver>();
@@ -51,6 +55,15 @@ namespace SFA.DAS.Framework
             retryHelper = context.Get<RetryHelper>();
 
             page = driver.Page;
+        }
+
+        protected async Task Navigate(string url)
+        {
+            var driver = context.Get<Driver>();
+
+            context.Get<ObjectContext>().SetDebugInformation(url);
+
+            await driver.Page.GotoAsync(url);
         }
 
         public async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage

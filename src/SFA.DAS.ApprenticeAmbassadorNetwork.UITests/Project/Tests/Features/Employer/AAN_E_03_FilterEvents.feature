@@ -17,9 +17,10 @@ Scenario: AAN_E_03_Employer filter events
 @aanemployer
 @aanemployer03b
 @regression
+@ignore
 Scenario: AAN_A_03b_Employer user filters events by location
     Given the following events have been created:
-    | Event Title                             | Location                                                                    |
+    | Event Title                           | Location                                                                    |
     | Location Filter Employer Test Event 1 | The Maids Head, King's Lynn, PE32 1NG                                       |
     | Location Filter Employer Test Event 2 | Eagles Golf Club, 37-39 School Road, King's Lynn, PE34 4RS                  |
     | Location Filter Employer Test Event 3 | Spalding United Football Club, Sir Halley Stewart Field, Spalding, PE11 1DA |

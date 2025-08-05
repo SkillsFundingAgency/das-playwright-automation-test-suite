@@ -42,7 +42,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
     {
         var page = new ManageTheStandardsYouDeliverPage(context);
 
-        var page1 = await page.AccessTeacherLevel6();
+        var page1 = await page.AccessPodiatrist();
 
         var page2 = await page1.UpdateTheseContactDetails();
 
@@ -58,7 +58,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page2 = await page1.AccessStandards();
 
-        var page3 = await page2.AccessTeacherLevel6();
+        var page3 = await page2.AccessPodiatrist();
 
         var page4 = await page3.AccessApprovedByRegulationOrNot();
 
@@ -75,7 +75,12 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page2 = await page1.DisApproveStandard();
 
-        await page2.ContinueToTeacher_ManageStandardPage();
+        var page3 = await page2.ContinueToTeacher_ManageStandardPage();
+
+        var page4 = await page3.Return_StandardsManagement();
+
+        await page4.VerifyOrangeMoreDetailsNeededTagForStandardAsync("Podiatrist (level 6)", shouldExist: true);
+
     }
 
     [When(@"the provider is able to change the standard delivered in one of the training locations")]
@@ -125,7 +130,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page2 = await page1.AccessStandards();
 
-        var page3 = await page2.AccessTeacherLevel6();
+        var page3 = await page2.AccessPodiatrist();
 
         var page4 = await page3.AccessWhereYouWillDeliverThisStandard();
 

@@ -3,6 +3,30 @@ using SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
+public class MultipleAccountsLoginHelper(ScenarioContext context, MultipleEasAccountUser multipleAccountUser) : EmployerPortalLoginHelper(context)
+{
+    public string OrganisationName { get; set; } = multipleAccountUser.OrganisationName;
+
+    protected override void SetLoginCredentials(EasAccountUser loginUser, bool isLevy) =>
+        loginCredentialsHelper.SetLoginCredentials(loginUser.Username, loginUser.IdOrUserRef, OrganisationName, isLevy);
+
+    protected override async Task<HomePage> Login(EasAccountUser loginUser)
+    {
+        var page = await new CreateAnAccountToManageApprenticeshipsPage(context).GoToStubSignInPage();
+
+        var page1 = await page.Login(loginUser);
+
+        var page2 = await page1.ContinueToYourAccountsPage();
+        
+        return await page2.OpenAccount();
+    }
+
+    //public async Task<MyAccountTransferFundingPage> LoginToMyAccountTransferFunding(StubSignInEmployerPage signInPage) => signInPage.Login(GetLoginCredentials()).ContinueToMyAccountTransferFundingPage();
+
+    //public new async Task<HomePage> ReLogin() => await Login(GetLoginCredentials());
+}
+
+
 public class CreateAccountEmployerPortalLoginHelper(ScenarioContext context) : EmployerPortalLoginHelper(context)
 {
     protected override async Task<HomePage> Login(EasAccountUser loginUser)
