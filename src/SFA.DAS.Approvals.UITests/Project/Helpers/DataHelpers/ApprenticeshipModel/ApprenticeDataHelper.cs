@@ -16,6 +16,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 {
     internal class ApprenticeDataHelper(ScenarioContext context)
     {
+        private readonly ObjectContext _objectContext;
         public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(            
             EmployerType EmployerType, 
             int NumberOfApprenticeships, 
@@ -99,6 +100,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
             return employer;
         }
+        public string ApprenticeFirstname { get; set; }
 
+        public string ApprenticeLastname { get; set; }
+
+        public string ApprenticeFullName => $"{ApprenticeFirstname} {ApprenticeLastname}";
+        public string MessageToProvider => $"Apprentice {ApprenticeFullName}, Total Cost {_objectContext.GetApprenticeTotalCost()}";
     }
 }

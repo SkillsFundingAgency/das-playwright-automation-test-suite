@@ -1,7 +1,6 @@
 ﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
-using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.Framework;
 using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.Login.Service.Project.Helpers;
@@ -16,6 +15,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using Microsoft.VisualBasic;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper.Employer;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -26,7 +26,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private readonly EmployerStepsHelper employerStepsHelper;
         private readonly CommonStepsHelper commonStepsHelper;
         private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
-
+        private readonly EmployerCreateCohortStepsHelper employerCreateCohortStepsHelper;
 
         public EmployerSteps(ScenarioContext context)
         {
@@ -82,9 +82,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = new EmployerApproveApprenticeDetailsPage(context);
             var warningMsg = "! Warning Check apprentices are eligible for foundation apprenticeships If someone is aged between 22 and 24, to be funded for a foundation apprenticeship they must either: have an Education, Health and Care (EHC) plan be or have been in the care of their local authority be a prisoner or have been in prison";
-            
             await page.ValidateWarningMessageForFoundationCourses(warningMsg);
-            
             await page.EmployerApproveCohort();
         }
 
@@ -109,8 +107,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await employerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
         }
 
-
-
+        [When("the Employer create a cohort and send to provider to add apprentices")]
+        public void TheEmployerCreateACohortAndSendToProviderToAddApprentices()
+        {
+            employerCreateCohortStepsHelper.EmployerCreateCohortViaLevyFundsAndSendsToProvider();
+        }
 
 
     }
