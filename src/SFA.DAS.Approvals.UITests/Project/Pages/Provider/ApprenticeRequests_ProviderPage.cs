@@ -15,7 +15,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
         }
 
-        internal async Task NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests apprenticeRequests, string? cohortRef)
+        internal async Task NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests apprenticeRequests)
         {
             switch (apprenticeRequests)
             {
@@ -34,17 +34,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
                     break;
             }
 
-            if (!string.IsNullOrWhiteSpace(cohortRef))
-            {
-                if (!await CohortExistsAsync(cohortRef))
-                {
-                    throw new Exception($"Cohort with reference '{cohortRef}' not found in '{apprenticeRequests}' section.");
-                }
-            }
-
         }
 
-        private async Task<bool> CohortExistsAsync(string cohortRef)
+        internal async Task<bool> VerifyCohortExistsAsync(string cohortRef)
         {
             await page.WaitForTimeoutAsync(1000);
 
@@ -53,16 +45,33 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return count > 0;
         }
 
-        internal async Task<ApproveApprenticeDetailsPage> OpenEditableCohortAsync(string cohortRef)
+        internal async Task<ApproveApprenticeDetailsPage> OpenEditableCohortAsync(string? cohortRef)
         {
-            await page.Locator($"#details_link_{cohortRef}").ClickAsync();
+            await ClickDetailsLinkAsync(cohortRef);
             return await VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<ViewApprenticeDetails_ProviderPage> OpenNonEditableCohortAsync(string cohortRef)
+        internal async Task<ViewApprenticeDetails_ProviderPage> OpenNonEditableCohortAsync(string? cohortRef)
         {
-            await page.Locator($"#details_link_{cohortRef}").ClickAsync();
+            await ClickDetailsLinkAsync(cohortRef);
             return await VerifyPageAsync(() => new ViewApprenticeDetails_ProviderPage(context));
+        }
+
+        private async Task ClickDetailsLinkAsync(string? cohortRef)
+        {
+            if (cohortRef == null)
+            {
+                // Locate all "Details" links inside the table
+                var detailsLinks = page.Locator("table.govuk-table a.cohort-details-link");
+
+                // Click the last one
+                await detailsLinks.Last.ClickAsync();
+            }
+            else
+            {
+                await page.Locator($"#details_link_{cohortRef}").ClickAsync();
+            }
+
         }
 
     }

@@ -9,7 +9,8 @@ using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class ApproveApprenticeDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class ApproveApprenticeDetailsPage(ScenarioContext context) : ApprovalsBasePage(context), IPageWithABackLink
+
     {
         #region locators
         private ILocator employerName => page.Locator("dt:has-text('Employer') + dd");
@@ -89,10 +90,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await saveAndSubmitButton.ClickAsync();
             return await VerifyPageAsync(() => new CohortApprovedAndSentToEmployerPage(context));
         }
+              
 
         internal async Task ValidateWarningMessageForFoundationCourses(string warningMsg) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(warningMsg);
 
-
+        public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
 
     }
 }

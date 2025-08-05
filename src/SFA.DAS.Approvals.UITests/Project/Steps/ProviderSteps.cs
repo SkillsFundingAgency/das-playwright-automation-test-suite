@@ -3,6 +3,7 @@ using Polly;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.Approvals.UITests.Project.Pages;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
@@ -20,21 +21,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     public class ProviderSteps
     {
         private readonly ScenarioContext context;
+        private readonly ProviderHomePageStepsHelper providerHomePageStepsHelper;
         private readonly ProviderStepsHelper providerStepsHelper;
         private readonly SldIlrSubmissionSteps sldIlrSubmissionSteps;
 
         public ProviderSteps(ScenarioContext _context)
         {
-            context = _context;            
+            context = _context;         
+            providerHomePageStepsHelper = new ProviderHomePageStepsHelper(context);
             providerStepsHelper = new ProviderStepsHelper(context);
             sldIlrSubmissionSteps = new SldIlrSubmissionSteps(context);
         }
-
-
-        [Given(@"the provider logs into portal")]
-        [When("Provider logs into Provider-Portal")]
-        public async Task GivenTheProviderLogsIntoPortal() => await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
-
+       
 
         [When(@"Provider sends an apprentice request \(cohort\) to the employer by selecting same apprentices")]
         public async Task WhenProviderSendsAnApprenticeRequestCohortToTheEmployerBySelectingSameApprentices()
@@ -61,10 +59,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
 
-            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            await providerHomePageStepsHelper.GoToProviderHomePage(false);
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            
+            var page = new ApprenticeRequests_ProviderPage(context);
+            await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.ReadyForReview);
+            await page.VerifyCohortExistsAsync(cohortRef);
 
-            await new ApprenticeRequests_ProviderPage(context).NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.ReadyForReview, cohortRef);
         }
 
         [Then("Provider can access live apprentice records under Manager Your Apprentices section")]
@@ -72,7 +73,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
-            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            await providerHomePageStepsHelper.GoToProviderHomePage(true);
             await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
             var page = new ManageYourApprentices_ProviderPage(context);
 
@@ -92,13 +93,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDoB();
             await page.VerfiyErrorMessage("DateOfBirth", "The apprentice must be 25 years old or younger at the start of their training");
-            await page.ClickNavBarLinkAsync("Home");
+            await page.ClickOnNavBarLinkAsync("Home");
         }
 
         [When("Provider tries to edit live apprentice record by setting age old than 24 years")]
         public async Task WhenProviderTriesToEditLiveApprenticeRecordBySettingAgeOldThanYears()
         {
-            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            await providerHomePageStepsHelper.GoToProviderHomePage(true);
             await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
         }
 
@@ -155,7 +156,58 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
+        [When("user navigates to Apprentice requests page")]
+        public async Task WhenUserNavigatesToApprenticeRequestsPage()
+        {
+            await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+        }
 
+
+        [Then("the user can view apprentice details from items under section: \"(.*)\"")]
+        public async Task ThenTheUserCanViewApprenticeDetailsFromItemsUnderSection(string sectionName)
+        {
+            var ApprenticeRequests_ProviderPage = new ApprenticeRequests_ProviderPage(context);
+            IPageWithABackLink page;
+
+            switch (sectionName)
+            {
+                case "Ready for review":
+                    await ApprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.ReadyForReview);
+                    page = await ApprenticeRequests_ProviderPage.OpenEditableCohortAsync(null);
+                    break;
+                case "With employers":
+                    await ApprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers);
+                    page = await ApprenticeRequests_ProviderPage.OpenNonEditableCohortAsync(null);
+                    break;
+                case "Drafts":
+                    await ApprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.Drafts);
+                    page = await ApprenticeRequests_ProviderPage.OpenEditableCohortAsync(null);
+                    break;
+                case "With transfer sending employers":
+                    await ApprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithTransferSendingEmployers);
+                    page = await ApprenticeRequests_ProviderPage.OpenNonEditableCohortAsync(null);
+                    break;
+                default:
+                    throw new ArgumentException($"Unknown section name: {sectionName}");
+
+            }
+
+            await page.ClickOnBackLinkAsync();
+
+        }
+
+
+        [Then("the user can create a cohort by selecting learners from ILR")]
+        public void ThenTheUserCanCreateACohortBySelectingLearnersFromILR()
+        {
+            throw new PendingStepException();
+        }
+
+        [Then("the user can edit email address of the apprentice before approval")]
+        public void ThenTheUserCanEditEmailAddressOfTheApprenticeBeforeApproval()
+        {
+            throw new PendingStepException();
+        }
 
 
     }

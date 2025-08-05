@@ -40,4 +40,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers
         WithTransferSendingEmployers
     }
 
+    public enum ProviderUserRoles
+    {
+        Contributor,
+        ContributorWithApproval,
+        AccountOwner,
+        Viewer
+    }
+
 }

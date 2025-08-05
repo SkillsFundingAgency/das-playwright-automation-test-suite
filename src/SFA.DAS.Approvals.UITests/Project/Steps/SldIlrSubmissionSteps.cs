@@ -73,7 +73,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page = await new ProviderStepsHelper(context).ProviderCreateAndApproveACohortViaIlrRoute();
             var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
 
-            await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers, cohortRef);
+            await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers);
+            await page.VerifyCohortExistsAsync(cohortRef);
 
         }
 
