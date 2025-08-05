@@ -20,7 +20,9 @@ namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Helpers
             while (await searchEventsPage.HasNextPage())
             {
                 await searchEventsPage.ClickNextPage();
+
                 var titles = await searchEventsPage.GetSearchResults();
+
                 eventTitles.AddRange(titles);
             }
 

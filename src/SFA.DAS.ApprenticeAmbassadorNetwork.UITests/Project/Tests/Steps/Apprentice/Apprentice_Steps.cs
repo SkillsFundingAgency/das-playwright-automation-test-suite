@@ -128,30 +128,30 @@ public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(co
     public async Task FilterByMultipleCombination_NetworkDirectory() => await
         FilterByMultipleCombinationNetworkDirectory(new NetworkDirectoryPage(context));
 
-    //[Given(@"the following events have been created:")]
-    //public async Task GivenTheFollowingEventsHaveBeenCreated(Table table)
-    //{
-    //    await Navigate(UrlConfig.AAN_Admin_BaseUrl);
+    [Given(@"the following events have been created:")]
+    public async Task GivenTheFollowingEventsHaveBeenCreated(Table table)
+    {
+        await Navigate(UrlConfig.AAN_Admin_BaseUrl);
 
-    //    var user = context.GetUser<AanAdminUser>();
+        var user = context.GetUser<AanAdminUser>();
 
-    //    await new DfeSignInPage(context).SubmitValidLoginDetails(user);
+        await new DfeSignInPage(context).SubmitValidLoginDetails(user);
 
-    //    var stepsHelper = context.Get<AanAdminStepsHelper>();
+        var stepsHelper = context.Get<AanAdminStepsHelper>();
 
-    //    var events = table.CreateSet<NetworkEventWithLocation>().ToList();
+        var events = table.CreateSet<NetworkEventWithLocation>().ToList();
 
-    //    foreach (var e in events)
-    //    {
-    //        var confirmationPage = stepsHelper
-    //            .CheckYourEvent(EventFormat.InPerson, false, false, e.EventTitle, e.Location).SubmitEvent();
-    //        confirmationPage.AccessHub();
-    //    }
+        foreach (var e in events)
+        {
+            var page = await stepsHelper.CheckYourEvent(EventFormat.InPerson, false, false, e.EventTitle, e.Location);
 
-    //    ;
+            var confirmationPage = await page.SubmitEvent();
 
-    //    tabHelper.GoToUrl(UrlConfig.AAN_Apprentice_BaseUrl);
-    //}
+            await confirmationPage.AccessHub();
+        }
+
+        await Navigate(UrlConfig.AAN_Apprentice_BaseUrl);
+    }
 
     [When(@"the user filters events within (.*) miles of ""([^""]*)""")]
     public async Task WhenTheUserFiltersEventsWithinMilesOf(int radius, string location)

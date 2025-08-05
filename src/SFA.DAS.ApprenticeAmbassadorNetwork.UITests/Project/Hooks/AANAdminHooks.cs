@@ -1,44 +1,44 @@
-﻿//namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Hooks;
+﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Hooks;
 
-//[Binding, Scope(Tag = "@aanadmin")]
-//public class AANAdminHooks(ScenarioContext context) : AANBaseHooks(context)
-//{
-//    [BeforeScenario(Order = 31)]
-//    public void Navigate_Admin() => tabHelper.GoToUrl(UrlConfig.AAN_Admin_BaseUrl);
+[Binding, Scope(Tag = "@aanadmin")]
+public class AANAdminHooks(ScenarioContext context) : FrameworkBaseHooks(context)
+{
+    [BeforeScenario(Order = 31)]
+    public async Task Navigate_Admin() => await Navigate(UrlConfig.AAN_Admin_BaseUrl);
 
-//    [BeforeScenario(Order = 33)]
-//    public void SetUpDataHelpers()
-//    {
-//        if (context.ScenarioInfo.Tags.Contains("aanadmincreateevent"))
-//        {
-//            context.Set(new AanAdminCreateEventDatahelper());
-//        }
+    [BeforeScenario(Order = 33)]
+    public void SetUpDataHelpers()
+    {
+        if (context.ScenarioInfo.Tags.Contains("aanadmincreateevent"))
+        {
+            context.Set(new AanAdminCreateEventDatahelper());
+        }
 
-//        if (context.ScenarioInfo.Tags.Contains("aanadminchangeevent"))
-//        {
-//            context.Set(new AanAdminUpdateEventDatahelper());
-//        }
-//    }
+        if (context.ScenarioInfo.Tags.Contains("aanadminchangeevent"))
+        {
+            context.Set(new AanAdminUpdateEventDatahelper());
+        }
+    }
 
-//    [AfterScenario(Order = 30), Scope(Tag = "@aanadmincreateevent")]
-//    public void DeleteAdminCreatedEvent()
-//    {
-//        if (context.TestError != null) return;
+    [AfterScenario(Order = 30), Scope(Tag = "@aanadmincreateevent")]
+    public async Task DeleteAdminCreatedEvent()
+    {
+        if (context.TestError != null) return;
 
-//        context.Get<TryCatchExceptionHelper>().AfterScenarioException(() =>
-//        {
-//            var eventId = context.Get<ObjectContext>().GetAanAdminEventId();
+        await context.Get<TryCatchExceptionHelper>().AfterScenarioException(async () =>
+        {
+            var eventId = context.Get<ObjectContext>().GetAanAdminEventId();
 
-//            if (!string.IsNullOrEmpty(eventId)) context.Get<AANSqlHelper>().DeleteAdminCreatedEvent(eventId);
-//        });
-//    }
+            if (!string.IsNullOrEmpty(eventId)) await context.Get<AANSqlHelper>().DeleteAdminCreatedEvent(eventId);
+        });
+    }
 
-//    [AfterScenario(Order = 34), Scope(Tag = "@aanadn01b")]
-//    public void DeleteLocationFilterEvents()
-//    {
-//        context.Get<TryCatchExceptionHelper>().AfterScenarioException(() =>
-//        {
-//            context.Get<AANSqlHelper>().DeleteLocationFilterEventsBeginning("Location Filter Test");
-//        });
-//    }
-//}
+    [AfterScenario(Order = 34), Scope(Tag = "@aanadn01b")]
+    public async Task DeleteLocationFilterEvents()
+    {
+        await context.Get<TryCatchExceptionHelper>().AfterScenarioException(async () =>
+        {
+            await context.Get<AANSqlHelper>().DeleteLocationFilterEventsBeginning("Location Filter Test");
+        });
+    }
+}
