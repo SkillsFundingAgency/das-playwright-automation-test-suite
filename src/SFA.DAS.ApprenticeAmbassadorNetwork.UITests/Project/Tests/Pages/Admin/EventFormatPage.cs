@@ -77,7 +77,7 @@ public class EventTitlePage(ScenarioContext context) : AanAdminBasePage(context)
 
         var x = RandomDataGenerator.GetRandomElementFromListOfElements(availableOption);
 
-        await page.Locator($"{locator} option").SelectOptionAsync(x);
+        await page.Locator($"{locator}").SelectOptionAsync(x);
 
         return x;
     }
@@ -154,7 +154,7 @@ public class GuestSpeakersPage(ScenarioContext context) : AanAdminBasePage(conte
 
         int delete = RandomDataGenerator.GenerateRandomNumberBetweenTwoValues(1, add);
 
-        for (int i = 0; i < delete; i++) await page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).ClickAsync();
+        for (int i = 0; i < delete; i++) await page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).First.ClickAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
