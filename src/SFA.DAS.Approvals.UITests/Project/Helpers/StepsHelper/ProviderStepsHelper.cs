@@ -219,12 +219,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
             var page3 = await page2.SelectOptionUseExistingCohort();
             var page4 = await SelectanExistingEmployer(page3);
+            var page5 = await page4.ClickOnAddAnotherApprenticeLink();
 
-            return await page4.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
+            return await page5.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
 
-        internal async Task<SelectLearnerFromILRPage> SelectanExistingEmployer(ChooseAnExistingEmployerPage chooseAnExistingEmployerPage)
+        internal async Task<ApproveApprenticeDetailsPage> SelectanExistingEmployer(ChooseAnExistingEmployerPage chooseAnExistingEmployerPage)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var firstApprentice = listOfApprenticeship.FirstOrDefault();
