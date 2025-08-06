@@ -1,14 +1,12 @@
-#trigger:
-#   branches:
-#     include:
-#       - master
-#   paths:
-#     include:
-#       - src/SFA.DAS.Campaigns.UITests/**
-trigger:
-  paths:
+trigger: none
+pr: none
+schedules:
+- cron: '0 3 * * 1-5'
+  displayName: ScheduledRun
+  branches:
     include:
-    - src/SFA.DAS.Campaigns.UITests/**
+    - master
+  always: true
 
 variables:
   - name: BuildConfiguration
