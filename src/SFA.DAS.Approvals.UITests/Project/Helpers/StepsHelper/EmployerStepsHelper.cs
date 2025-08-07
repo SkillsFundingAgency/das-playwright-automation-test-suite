@@ -127,19 +127,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await confirmApprentices.SelectAddApprencticesByProvider();
 
-            await new ConfirmRequestSentPage(context).SetCohortReference(listOfApprenticeship.FirstOrDefault());
+            foreach (var apprenticeship in listOfApprenticeship)
+            {
+                await new ConfirmRequestSentPage(context).SetCohortReference(apprenticeship);
+            }
 
         }
 
-        internal async Task ReadyForReviewCohort()
+        internal async Task ReadyForReviewCohort(string status)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var cohort = listOfApprenticeship.FirstOrDefault().CohortReference;
 
-            await EmployerLogInToEmployerPortal();
-           // await new InterimApprenticesHomePage(context, false).VerifyPage();
+            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);            
 
-           var page1 =  await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            var page1 =  await new ApprenticesHomePage(context).GoToApprenticeRequests();
             await page1.OpenApprenticeRequestReadyForReview(cohort);
         }
 

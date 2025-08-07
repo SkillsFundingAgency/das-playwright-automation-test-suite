@@ -19,15 +19,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         public async Task SetCohortReference(Apprenticeship apprenticeship)
         { 
             await GetCohortId(apprenticeship);
+
+            await Task.Delay(100);
+            context.Set(apprenticeship, "Apprenticeship");
         }
 
         internal async Task GetCohortId(Apprenticeship apprenticeship)
         {
             var cohortRef = await cohortReference.InnerTextAsync();
             apprenticeship.CohortReference = cohortRef;
-
-            await Task.Delay(100);
-            context.Set(apprenticeship, "Apprenticeship");
         }
 
     }

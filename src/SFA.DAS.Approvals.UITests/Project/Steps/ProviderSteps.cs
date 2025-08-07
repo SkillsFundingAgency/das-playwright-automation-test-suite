@@ -167,7 +167,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
 
-            var page = await new ApproveApprenticeDetailsPage(context).ProviderApproveCohort();
+           var page = await new ApproveApprenticeDetailsPage(context).ProviderSendCohortForEmployerApproval();
 
         }
 
@@ -175,9 +175,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheProviderApprovesCohort()
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
-            var page = await new ApproveApprenticeDetailsPage(context).ProviderApproveCohort();
+            var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            await page1.SelectCohort(cohortRef);
+            var page = await new ApproveApprenticeDetailsPage(context).ProviderApprovesCohortAfterEmployerApproval();
         }
 
 

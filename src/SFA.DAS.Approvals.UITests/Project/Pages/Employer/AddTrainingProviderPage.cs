@@ -15,10 +15,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         public async Task<ConfirmTrainingProvider> SubmitValidUkprn()
         {
+            var ukprn = context.GetProviderConfig<ProviderConfig>().Ukprn;
             var input = page.Locator("#Ukprn");
             await input.ClickAsync();
-            await input.FillAsync("10000028");
-            var option = page.Locator("li[role='option']:has-text(\"10000028\")");
+            await input.FillAsync(ukprn);
+            var option = page.Locator($"li[role='option']:has-text(\"{ukprn}\")");
             await option.ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
