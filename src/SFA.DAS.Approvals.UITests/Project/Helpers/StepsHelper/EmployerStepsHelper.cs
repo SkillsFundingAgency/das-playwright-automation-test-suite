@@ -133,5 +133,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         }
 
+        internal async Task EmployerNavigateToApprenticeRequestsPage()
+        {
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+
+            var page =  await GoToEmployerApprenticesHomePage();
+            var page1 = await page.GoToApprenticeRequests();
+            //var page2 = await page1.ValidateCohortStatus(apprenticeship.CohortReference, ""CohortStatus);         <-- to be implemented
+        }
+
+        private async Task<ApprenticesHomePage> GoToEmployerApprenticesHomePage()
+        {
+            await employerHomePageHelper.GotoEmployerHomePage();
+            await new InterimApprenticesHomePage(context, false).VerifyPage();
+            return new ApprenticesHomePage(context);
+        }
     }
 }
