@@ -36,6 +36,7 @@ Scenario: AAN_ADN_01b admin user filter events
 @aanadmin
 @aanadn01c
 @regression
+@notareallocation
 Scenario: AAN_ADN_01c admin user filter events by a location that does not exist
     Given an admin logs into the AAN portal
     When the user filters events within 10 miles of "Lilliput"

@@ -139,7 +139,10 @@ namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages
 
             await page.GetByRole(AriaRole.Combobox, new() { Name = "Enter a city, town or postcode" }).FillAsync(location);
 
-            await page.GetByRole(AriaRole.Option, new() { Name = location }).ClickAsync();
+            if (!context.ScenarioInfo.Tags.Contains("notareallocation"))
+            {
+                await page.GetByRole(AriaRole.Option, new() { Name = location }).ClickAsync();
+            }
         }
 
         private async Task EnterRadius(int radius)
