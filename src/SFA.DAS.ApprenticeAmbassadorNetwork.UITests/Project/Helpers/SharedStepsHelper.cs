@@ -15,6 +15,8 @@ namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Helpers
                 return context.Get<List<NetworkEventSearchResult>>(SearchResultsKey);
             }
 
+            await searchEventsPage.VerifyPage();
+
             var eventTitles = await searchEventsPage.GetSearchResults();
 
             while (await searchEventsPage.HasNextPage())

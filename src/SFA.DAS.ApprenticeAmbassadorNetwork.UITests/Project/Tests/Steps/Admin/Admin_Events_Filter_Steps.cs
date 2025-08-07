@@ -13,6 +13,8 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : BaseSteps(cont
 {
     private ManageEventsPage manageEventsPage;
 
+    private List<string> titles;
+
     [Then(@"the user should be able to successfully filter events by date")]
     public async Task TheUserShouldBeAbleToSuccessfullyFilterEventsByDate()
     {
@@ -114,7 +116,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : BaseSteps(cont
 
         var results = await stepsHelper.GetAllSearchResults();
 
-        var titles = results.Select(x => x.EventTitle).ToList();
+        titles = results.Select(x => x.EventTitle).Select(y => y.RemoveMultipleSpace().TrimEnd().TrimStart()).ToList();
 
         var expectedEvents = table.CreateSet<NetworkEvent>().ToList();
 
@@ -128,14 +130,8 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : BaseSteps(cont
     }
 
     [Then(@"the following events can not be found within the search results:")]
-    public async Task ThenTheFollowingEventsCanNotBeFoundWithingTheSearchResults(Table table)
+    public void ThenTheFollowingEventsCanNotBeFoundWithingTheSearchResults(Table table)
     {
-        var stepsHelper = context.Get<AanAdminStepsHelper>();
-
-        var results = await stepsHelper.GetAllSearchResults();
-
-        var titles = results.Select(x => x.EventTitle).ToList();
-
         var unexpectedEvents = table.CreateSet<NetworkEvent>().ToList();
 
         foreach (var unexpected in unexpectedEvents)
