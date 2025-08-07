@@ -49,6 +49,8 @@ public class CheckYourEventPage(ScenarioContext context) : AanAdminBasePage(cont
 
     public async Task<EventTitlePage> ChangeEventType()
     {
+        await page.Locator("form div").Filter(new() { HasText = "Type" }).GetByRole(AriaRole.Link).ClickAsync();
+
         await page.Locator(ChangeType).ClickAsync();
 
         return await VerifyPageAsync(() => new EventTitlePage(context));
