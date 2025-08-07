@@ -44,6 +44,8 @@ stages:
       - template: ../code-build.yml
         parameters:
           BuildConfiguration: $(BuildConfiguration)
+          projectsToBuild: |
+            src/SFA.DAS.EmployerPortal.UITests/*.csproj
 
   - stage: Deploy_TEST
     dependsOn: Build
@@ -56,8 +58,10 @@ stages:
         parameters:
           Environment: TEST
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: '**\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
-                         **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll'
+          TestAssembly: |
+            **\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+            **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll
+          projectName: SFA.DAS.EmployerPortal.UITests
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -70,8 +74,10 @@ stages:
         parameters:
           Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: '**\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
-                         **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll'
+          TestAssembly: |
+            **\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+            **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll
+          projectName: SFA.DAS.EmployerPortal.UITests
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -84,8 +90,10 @@ stages:
         parameters:
           Environment: DEMO
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: '**\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
-                         **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll'
+          TestAssembly: |
+            **\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+            **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll
+          projectName: SFA.DAS.EmployerPortal.UITests
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -100,5 +108,7 @@ stages:
         parameters:
           Environment: PP
           ServiceConnection: SFA-DIG-PreProd-ARM
-          TestAssembly: '**\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
-                         **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll'
+          TestAssembly: |
+            **\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.dll
+            **\SFA.DAS.PayeCreation.Tests\SFA.DAS.PayeCreation.Tests.dll
+          projectName: SFA.DAS.EmployerPortal.UITests

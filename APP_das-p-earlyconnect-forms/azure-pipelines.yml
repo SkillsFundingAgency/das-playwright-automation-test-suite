@@ -16,7 +16,7 @@ variables:
   - group: "Release Automation Suite Variables"
   - group: "Release Automation Suite Variables (Db)"
   - group: "Provider Release Automation Suite Variables"
-  - group: "RELEASE APP_das-p-GAA"
+  - group: "RELEASE APP_das-GAA"
   - name: Deploy
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
@@ -44,6 +44,8 @@ stages:
       - template: ../code-build.yml
         parameters:
           BuildConfiguration: $(BuildConfiguration)
+          projectsToBuild: |
+            src/SFA.DAS.EarlyConnectForms.UITests/*.csproj
 
   - stage: Deploy_TEST
     dependsOn: Build
@@ -57,6 +59,7 @@ stages:
           Environment: TEST
           ServiceConnection: SFA-DAS-DevTest-ARM
           TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
+          projectName: SFA.DAS.EarlyConnectForms.UITests
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -70,6 +73,7 @@ stages:
           Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
           TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
+          projectName: SFA.DAS.EarlyConnectForms.UITests
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -83,6 +87,7 @@ stages:
           Environment: DEMO
           ServiceConnection: SFA-DAS-DevTest-ARM
           TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
+          projectName: SFA.DAS.EarlyConnectForms.UITests
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -98,3 +103,4 @@ stages:
           Environment: PP
           ServiceConnection: SFA-DIG-PreProd-ARM
           TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
+          projectName: SFA.DAS.EarlyConnectForms.UITests

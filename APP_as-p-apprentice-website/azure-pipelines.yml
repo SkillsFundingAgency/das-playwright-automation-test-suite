@@ -44,6 +44,9 @@ stages:
       - template: ../code-build.yml
         parameters:
           BuildConfiguration: $(BuildConfiguration)
+          projectsToBuild: |
+            src/SFA.DAS.Campaigns.UITests/*.csproj
+
 
   - stage: Deploy_TEST
     dependsOn: Build
@@ -52,11 +55,12 @@ stages:
       - group: "TEST DevTest Shared Resources"
       - group: "TEST Automation Suite Variables"
     jobs:
-      - template: job/deploy.yml
+      - template: ../deploy.yml
         parameters:
           Environment: TEST
           ServiceConnection: SFA-DAS-DevTest-ARM
           TestAssembly: '**\SFA.DAS.Campaigns.UITests\SFA.DAS.Campaigns.UITests.dll'
+          projectName: SFA.DAS.Campaigns.UITests
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -65,11 +69,12 @@ stages:
       - group: "TEST2 DevTest Shared Resources"
       - group: "TEST2 Automation Suite Variables"
     jobs:
-      - template: job/deploy.yml
+      - template: ../deploy.yml
         parameters:
           Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
           TestAssembly: '**\SFA.DAS.Campaigns.UITests\SFA.DAS.Campaigns.UITests.dll'
+          projectName: SFA.DAS.Campaigns.UITests
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -78,11 +83,12 @@ stages:
       - group: "DEMO DevTest Shared Resources"
       - group: "DEMO Automation Suite Variables"
     jobs:
-      - template: job/deploy.yml
+      - template: ../deploy.yml
         parameters:
           Environment: DEMO
           ServiceConnection: SFA-DAS-DevTest-ARM
           TestAssembly: '**\SFA.DAS.Campaigns.UITests\SFA.DAS.Campaigns.UITests.dll'
+          projectName: SFA.DAS.Campaigns.UITests
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -92,8 +98,9 @@ stages:
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
     jobs:
-      - template: job/deploy.yml
+      - template: ../deploy.yml
         parameters:
           Environment: PP
           ServiceConnection: SFA-DIG-PreProd-ARM
           TestAssembly: '**\SFA.DAS.Campaigns.UITests\SFA.DAS.Campaigns.UITests.dll'
+          projectName: SFA.DAS.Campaigns.UITests
