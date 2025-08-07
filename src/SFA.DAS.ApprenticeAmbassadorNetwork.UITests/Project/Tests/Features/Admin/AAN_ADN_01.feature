@@ -23,7 +23,7 @@ Scenario: AAN_ADN_01b admin user filter events
     | Location Filter Test Event 1 | The Maids Head, King's Lynn, PE32 1NG                                       |
     | Location Filter Test Event 2 | Eagles Golf Club, 37-39 School Road, King's Lynn, PE34 4RS                  |
     | Location Filter Test Event 3 | Spalding United Football Club, Sir Halley Stewart Field, Spalding, PE11 1DA |
-    When the user filters events within 10 miles of "PE30 5HF"
+    When the user filters events within 5 miles of "PE30 5HF"
     Then the following events can be found within the search results:
     | Event Title                  |
     | Location Filter Test Event 1 |

@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
+using NUnit.Framework;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin;
+using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
 using TechTalk.SpecFlow.Assist;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Admin;
@@ -98,6 +100,8 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : BaseSteps(cont
 
         await manageEvents.FilterEventsByLocation(location, radius);
 
+        await manageEvents.SelectOrderByClosest();
+
         var stepsHelper = context.Get<AanAdminStepsHelper>();
 
         stepsHelper.ClearEventTitleCache();
@@ -114,10 +118,13 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : BaseSteps(cont
 
         var expectedEvents = table.CreateSet<NetworkEvent>().ToList();
 
-        foreach (var expected in expectedEvents)
+        Assert.Multiple(() => 
         {
-            titles.Should().Contain(expected.EventTitle);
-        }
+            foreach (var expected in expectedEvents)
+            {
+                CollectionAssert.Contains(titles, expected.EventTitle);
+            }
+        });
     }
 
     [Then(@"the following events can not be found within the search results:")]
@@ -133,7 +140,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : BaseSteps(cont
 
         foreach (var unexpected in unexpectedEvents)
         {
-            titles.Should().NotContain(unexpected.EventTitle);
+            CollectionAssert.DoesNotContain(titles, unexpected.EventTitle);
         }
     }
 
