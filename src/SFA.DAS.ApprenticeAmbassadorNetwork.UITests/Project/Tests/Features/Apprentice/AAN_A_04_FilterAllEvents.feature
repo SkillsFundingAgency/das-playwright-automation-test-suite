@@ -45,6 +45,7 @@ Scenario: AAN_A_04b_Apprentice user filters events by location
 @aanaprentice
 @aanapprentice04c
 @regression
+@notareallocation
 Scenario:AAN_A_04c apprentice user filters events by a location that does not exist
     Given an onboarded apprentice logs into the AAN portal
     When the user filters events within 10 miles of "Lilliput"

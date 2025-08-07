@@ -46,6 +46,7 @@ Scenario: AAN_A_03b_Employer user filters events by location
 @aanemployer
 @aanemployer03b
 @regression
+@notareallocation
 Scenario:AAN_A_03c Employer user filters events by a location that does not exist
     Given an onboarded employer logs into the AAN portal
     When the user filters events within 10 miles of "Lilliput"
