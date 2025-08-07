@@ -51,8 +51,6 @@ public class CheckYourEventPage(ScenarioContext context) : AanAdminBasePage(cont
     {
         await page.Locator("form div").Filter(new() { HasText = "Type" }).GetByRole(AriaRole.Link).ClickAsync();
 
-        await page.Locator(ChangeType).ClickAsync();
-
         return await VerifyPageAsync(() => new EventTitlePage(context));
     }
 
@@ -65,7 +63,7 @@ public class CheckYourEventPage(ScenarioContext context) : AanAdminBasePage(cont
 
     public async Task<EventOutlinePage> ChangeEventDescription()
     {
-        await page.Locator(ChangeDescription).ClickAsync();
+        await page.Locator("form div").Filter(new() { HasText = "Event outline" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new EventOutlinePage(context));
     }
@@ -79,7 +77,7 @@ public class CheckYourEventPage(ScenarioContext context) : AanAdminBasePage(cont
 
     public async Task<EventOrganiserNamePage> ChangeEventOrganiser()
     {
-        await page.Locator(ChangeOrganiser).ClickAsync();
+        await page.Locator("form div").Filter(new() { HasText = "Organiser name" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new EventOrganiserNamePage(context));
     }
