@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Azure;
+using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin;
@@ -102,7 +103,10 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : BaseSteps(cont
 
         await manageEvents.FilterEventsByLocation(location, radius);
 
-        await manageEvents.SelectOrderByClosest();
+        if (!context.ScenarioInfo.Tags.Contains("notareallocation"))
+        {
+            await manageEvents.SelectOrderByClosest();
+        }
 
         var stepsHelper = context.Get<AanAdminStepsHelper>();
 
