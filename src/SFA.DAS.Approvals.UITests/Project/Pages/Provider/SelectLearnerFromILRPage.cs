@@ -8,7 +8,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class SelectApprenticeFromILRPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class SelectLearnerFromILRPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {
@@ -31,7 +31,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         private async Task SearchULN(string uln)
         {
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or" }).FillAsync(uln);
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or unique learner number (ULN)" }).FillAsync(uln);
             await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
         }
 
