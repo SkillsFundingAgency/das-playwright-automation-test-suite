@@ -121,8 +121,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             var trainingProviderPage =  await new AddApprenticePage(context).ClickStartNowButton();
 
-           // await new SelectFundingPage(context).SelectFundingtype();
-
             var confirmTrainingProvider =   await trainingProviderPage.SubmitValidUkprn();
 
             var confirmApprentices =   await confirmTrainingProvider.ConfirmTrainingProviderDetails();
@@ -131,6 +129,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await new ConfirmRequestSentPage(context).SetCohortReference(listOfApprenticeship.FirstOrDefault());
 
+        }
+
+        internal async Task ReadyForReviewCohort()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var cohort = listOfApprenticeship.FirstOrDefault().CohortReference;
+
+            await EmployerLogInToEmployerPortal();
+           // await new InterimApprenticesHomePage(context, false).VerifyPage();
+
+           var page1 =  await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            await page1.OpenApprenticeRequestReadyForReview(cohort);
         }
 
     }

@@ -119,7 +119,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then ("the Employer sees the cohort in Ready to review with status of Ready for review")]
         public async Task ThenTheEmployerReviewsCohort()
         {
-            var page = await employerStepsHelper.OpenCohort();
+             await employerStepsHelper.ReadyForReviewCohort();
 
         }
 
