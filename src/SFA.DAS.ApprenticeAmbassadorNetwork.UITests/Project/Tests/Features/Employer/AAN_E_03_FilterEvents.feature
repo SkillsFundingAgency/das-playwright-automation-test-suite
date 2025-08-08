@@ -34,10 +34,23 @@ Scenario: AAN_E_03b_Employer user filters events by location
     | Location Filter Employer Test Event 3 |
     When the user filters events Across England centered on "PE30 5HF"
     And the user orders the results by Closest
+    #Here are the approximate driving distances from PE30 5HF (King's Lynn) to each of the requested locations:
+    #The Maids Head, King's Lynn, PE32 1NG
+    #Distance: ~7.5 miles
+    #Estimated Drive Time: ~15 minutes
+    #This route heads southeast out of King's Lynn toward the village of Great Massingham 1.
+    #Eagles Golf Club, 37-39 School Road, King's Lynn, PE34 4RS
+    #Distance: ~6.2 miles
+    #Estimated Drive Time: ~13 minutes
+    #Located in Marshland St James, this is a short drive east from central King's Lynn 1.
+    #Spalding United Football Club, Sir Halley Stewart Field, Spalding, PE11 1DA
+    #Distance: ~22.5 miles
+    #Estimated Drive Time: ~40 minutes
+    #This journey heads north-east into Lincolnshire, passing through Wisbech and Holbeach
     Then the following events can be found within the search results in the given order:
     | Event Title                           | Order |
-    | Location Filter Employer Test Event 1 | 1     |
-    | Location Filter Employer Test Event 2 | 2     |
+    | Location Filter Employer Test Event 2 | 1     |
+    | Location Filter Employer Test Event 1 | 2     |
     | Location Filter Employer Test Event 3 | 3     |
 
 @aan
