@@ -8,18 +8,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
     internal class AddTrainingProviderPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
+        private ILocator ukprnInputBox => page.Locator("#Ukprn");
         public override async Task VerifyPage()
         {
             await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Select your training provider");
         }
 
-        public async Task<ConfirmTrainingProvider> SubmitValidUkprn()
+        public async Task<ConfirmTrainingProvider> SubmitValidUkprn(int Ukprn)
         {
-            var ukprn = context.GetProviderConfig<ProviderConfig>().Ukprn;
-            var input = page.Locator("#Ukprn");
-            await input.ClickAsync();
-            await input.FillAsync(ukprn);
-            var option = page.Locator($"li[role='option']:has-text(\"{ukprn}\")");
+            await ukprnInputBox.ClickAsync();
+            await ukprnInputBox.FillAsync(Ukprn.ToString());
+            var option = page.Locator($"li[role='option']:has-text(\"{Ukprn}\")");
             await option.ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 

@@ -158,7 +158,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When(@"the provider adds (.*) apprentices and sends to employer to review")]
         public async Task WhenTheProviderAddsApprenticesAndSendsToEmployerToReview(int numberOfApprentices)
         {
-            //var apprentices = context.GetValue<List<Apprenticeship>>().ToList();          <--- unused variable commented out
             var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
             
 

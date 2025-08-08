@@ -113,6 +113,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task AddEmptyCohort()
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var ukprn = listOfApprenticeship.FirstOrDefault().UKPRN;
+
             await EmployerLogInToEmployerPortal();
 
             await new InterimApprenticesHomePage(context, false).VerifyPage();
@@ -121,16 +123,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             var trainingProviderPage =  await new AddApprenticePage(context).ClickStartNowButton();
 
-            var confirmTrainingProvider =   await trainingProviderPage.SubmitValidUkprn();
+            var confirmTrainingProviderPage =   await trainingProviderPage.SubmitValidUkprn(ukprn);
 
-            var confirmApprentices =   await confirmTrainingProvider.ConfirmTrainingProviderDetails();
+            var confirmApprenticesPage =   await confirmTrainingProviderPage.ConfirmTrainingProviderDetails();
 
-            await confirmApprentices.SelectAddApprencticesByProvider();
+            var confirmRequestSentPage = await confirmApprenticesPage.SelectAddApprencticesByProvider();
 
-            foreach (var apprenticeship in listOfApprenticeship)
-            {
-                await new ConfirmRequestSentPage(context).SetCohortReference(apprenticeship);
-            }
+            await confirmRequestSentPage.SetCohortReference(listOfApprenticeship);
 
         }
 

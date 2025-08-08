@@ -13,10 +13,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Start adding apprentices");
         }
 
-        internal async Task SelectAddApprencticesByProvider()
+        internal async Task<ConfirmRequestSentPage> SelectAddApprencticesByProvider()
         {
             await page.Locator("#WhoIsAddingApprentices-Provider").CheckAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+            return await VerifyPageAsync(() => new ConfirmRequestSentPage(context));
         }
     
     }
