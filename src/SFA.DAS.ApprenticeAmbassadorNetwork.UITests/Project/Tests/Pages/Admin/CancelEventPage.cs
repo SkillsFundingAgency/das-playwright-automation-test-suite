@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin.CancelEvent;
+﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin;
 
 public class CancelEventPage(ScenarioContext context) : AanAdminBasePage(context)
 {

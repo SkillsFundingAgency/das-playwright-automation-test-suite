@@ -16,7 +16,6 @@ Scenario: AAN_A_04_Apprentice filter all events
 @aanaprentice
 @aanapprentice04b
 @regression
-@ignore
 Scenario: AAN_A_04b_Apprentice user filters events by location
     Given the following events have been created:
     | Event Title                             | Location                                                                    |

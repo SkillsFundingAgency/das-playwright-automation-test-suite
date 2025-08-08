@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
+﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Helpers

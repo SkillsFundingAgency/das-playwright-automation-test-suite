@@ -3,7 +3,7 @@
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Admin;
 
 [Binding, Scope(Tag = "@aanadmin")]
-public class Admin_Notifications_Steps(ScenarioContext context) : BaseSteps(context)
+public class Admin_Notifications_Steps(ScenarioContext context) : AanBaseSteps(context)
 {
 
     [Given(@"user select notification settings on dashboard")]

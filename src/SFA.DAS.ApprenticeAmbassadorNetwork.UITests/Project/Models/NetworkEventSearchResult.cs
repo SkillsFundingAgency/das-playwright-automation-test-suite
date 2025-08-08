@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models
+﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
+
+public class NetworkEventSearchResult
 {
-    public class NetworkEventSearchResult
-    {
-        public string EventTitle { get; set; }
-        public int Index { get; set; }
-    }
+    public string EventTitle { get; set; }
+    public int Index { get; set; }
 }

@@ -3,7 +3,7 @@
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Admin;
 
 [Binding, Scope(Tag = "@aanadmin")]
-public class Admin_Login_Steps(ScenarioContext context) : BaseSteps(context)
+public class Admin_Login_Steps(ScenarioContext context) : AanBaseSteps(context)
 {
     [Given(@"an admin logs into the AAN portal")]
     [When(@"an admin logs into the AAN portal")]

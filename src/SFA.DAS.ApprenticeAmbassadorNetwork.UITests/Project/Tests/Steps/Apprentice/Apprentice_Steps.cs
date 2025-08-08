@@ -1,9 +1,6 @@
-﻿using FluentAssertions;
-using NUnit.Framework;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
+﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
-using TechTalk.SpecFlow.Assist;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Apprentice;
 
@@ -15,6 +12,8 @@ public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(co
     private EventsHubPage eventsHubPage;
 
     private AanApprenticeOnBoardedUser user;
+
+    private List<string> titles;
 
     [Given(@"an onboarded apprentice logs into the AAN portal")]
     [When(@"an onboarded apprentice logs into the AAN portal")]
@@ -178,6 +177,7 @@ public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(co
         await searchNetworkEventsPage.FilterEventsByLocation(location, 0);
 
         var stepsHelper = context.Get<ApprenticeStepsHelper>();
+
         stepsHelper.ClearEventTitleCache();
     }
 
@@ -189,30 +189,21 @@ public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(co
 
         var page = await stepsHelper.GetAllSearchResults();
 
-        var titles = page.Select(x => x.EventTitle).ToList();
+        titles = [.. page.Select(x => x.EventTitle)];
 
-        var expectedEvents = table.CreateSet<NetworkEvent>().ToList();
+        var expectedEvents = table.CreateSet<NetworkEvent>().Select(x => x.EventTitle).ToList();
 
-        foreach (var expected in expectedEvents)
-        {
-            titles.Should().Contain(expected.EventTitle);
-        }
+        AssertListContains(titles, expectedEvents);
     }
 
     [Then(@"the following events can not be found within the search results:")]
-    public async Task ThenTheFollowingEventsCanNotBeFoundWithinTheSearchResults(Table table)
+    public void ThenTheFollowingEventsCanNotBeFoundWithinTheSearchResults(Table table)
     {
-        var stepsHelper = context.Get<ApprenticeStepsHelper>();
-
-        var page = await stepsHelper.GetAllSearchResults();
-
-        var titles = page.Select(x => x.EventTitle).ToList();
-
         var unexpectedEvents = table.CreateSet<NetworkEvent>().ToList();
 
         foreach (var unexpected in unexpectedEvents)
         {
-            titles.Should().NotContain(unexpected.EventTitle);
+            CollectionAssert.DoesNotContain(titles, unexpected.EventTitle);
         }
     }
 

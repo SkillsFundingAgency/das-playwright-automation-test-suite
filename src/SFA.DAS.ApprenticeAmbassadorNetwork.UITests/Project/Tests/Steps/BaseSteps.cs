@@ -1,6 +1,8 @@
-﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps;
+﻿using Mailosaur.Operations;
 
-public abstract class BaseSteps(ScenarioContext context)
+namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps;
+
+public abstract class AanBaseSteps(ScenarioContext context)
 {
     protected readonly ScenarioContext context = context;
 
@@ -15,5 +17,18 @@ public abstract class BaseSteps(ScenarioContext context)
         context.Get<ObjectContext>().SetDebugInformation(url);
 
         await driver.Page.GotoAsync(url);
+    }
+
+    protected static void AssertListContains(List<string> actual, List<string> expectedresults)
+    {
+        actual = actual.Select(y => y.RemoveMultipleSpace().TrimEnd().TrimStart()).ToList();
+
+        Assert.Multiple(() =>
+        {
+            foreach (var expected in expectedresults)
+            {
+                CollectionAssert.Contains(actual, expected);
+            }
+        });
     }
 }

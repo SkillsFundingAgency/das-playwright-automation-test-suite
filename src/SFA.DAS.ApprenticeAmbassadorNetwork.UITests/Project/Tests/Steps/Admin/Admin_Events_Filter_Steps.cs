@@ -1,16 +1,11 @@
-﻿using Azure;
-using FluentAssertions;
-using NUnit.Framework;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
+﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
-using TechTalk.SpecFlow.Assist;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Admin;
 
 
 [Binding, Scope(Tag = "@aanadmin")]
-public class Admin_Events_Filter_Steps(ScenarioContext context) : BaseSteps(context)
+public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(context)
 {
     private ManageEventsPage manageEventsPage;
 
@@ -103,11 +98,6 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : BaseSteps(cont
 
         await manageEvents.FilterEventsByLocation(location, radius);
 
-        if (!context.ScenarioInfo.Tags.Contains("notareallocation"))
-        {
-            await manageEvents.SelectOrderByClosest();
-        }
-
         var stepsHelper = context.Get<AanAdminStepsHelper>();
 
         stepsHelper.ClearEventTitleCache();
@@ -120,17 +110,11 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : BaseSteps(cont
 
         var results = await stepsHelper.GetAllSearchResults();
 
-        titles = results.Select(x => x.EventTitle).Select(y => y.RemoveMultipleSpace().TrimEnd().TrimStart()).ToList();
+        titles = [.. results.Select(x => x.EventTitle)];
 
-        var expectedEvents = table.CreateSet<NetworkEvent>().ToList();
+        var expectedEvents = table.CreateSet<NetworkEvent>().Select(x => x.EventTitle).ToList();
 
-        Assert.Multiple(() => 
-        {
-            foreach (var expected in expectedEvents)
-            {
-                CollectionAssert.Contains(titles, expected.EventTitle);
-            }
-        });
+        AssertListContains(titles, expectedEvents);
     }
 
     [Then(@"the following events can not be found within the search results:")]

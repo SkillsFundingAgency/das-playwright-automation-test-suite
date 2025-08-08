@@ -1,10 +1,7 @@
-﻿using FluentAssertions;
-using NUnit.Framework;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
+﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Employer;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
-using TechTalk.SpecFlow.Assist;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Employer;
 
@@ -16,6 +13,8 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
     private SearchNetworkEventsPage searchNetworkEventsPage;
 
     private AanEmployerOnBoardedUser user;
+
+    private List<string> titles;
 
     [Given(@"an onboarded employer logs into the AAN portal")]
     [When(@"an onboarded employer logs into the AAN portal")]
@@ -184,30 +183,21 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
 
         var results = await stepsHelper.GetAllSearchResults();
 
-        var titles = results.Select(x => x.EventTitle).ToList();
+        titles = [.. results.Select(x => x.EventTitle)];
 
-        var expectedEvents = table.CreateSet<NetworkEvent>().ToList();
+        var expectedEvents = table.CreateSet<NetworkEvent>().Select(x => x.EventTitle).ToList();
 
-        foreach (var expected in expectedEvents)
-        {
-            titles.Should().Contain(expected.EventTitle);
-        }
+        AssertListContains(titles, expectedEvents);
     }
 
     [Then(@"the following events can not be found within the search results:")]
-    public async Task ThenTheFollowingEventsCanNotBeFoundWithinTheSearchResults(Table table)
+    public void ThenTheFollowingEventsCanNotBeFoundWithinTheSearchResults(Table table)
     {
-        var stepsHelper = context.Get<EmployerStepsHelper>();
-
-        var results = await stepsHelper.GetAllSearchResults();
-
-        var titles = results.Select(x => x.EventTitle).ToList();
-
         var unexpectedEvents = table.CreateSet<NetworkEvent>().ToList();
 
         foreach (var unexpected in unexpectedEvents)
         {
-            titles.Should().NotContain(unexpected.EventTitle);
+            CollectionAssert.DoesNotContain(titles, unexpected.EventTitle);
         }
     }
 

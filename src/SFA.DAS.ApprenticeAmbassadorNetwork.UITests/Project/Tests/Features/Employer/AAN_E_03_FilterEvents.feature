@@ -17,7 +17,6 @@ Scenario: AAN_E_03_Employer filter events
 @aanemployer
 @aanemployer03b
 @regression
-@ignore
 Scenario: AAN_A_03b_Employer user filters events by location
     Given the following events have been created:
     | Event Title                           | Location                                                                    |
@@ -27,11 +26,11 @@ Scenario: AAN_A_03b_Employer user filters events by location
     When an onboarded employer logs into the AAN portal
     And the user filters events within 10 miles of "PE30 5HF"
     Then the following events can be found within the search results:
-    | Event Title                             |
+    | Event Title                           |
     | Location Filter Employer Test Event 1 |
     | Location Filter Employer Test Event 2 |
     And the following events can not be found within the search results:
-    | Event Title                             |
+    | Event Title                           |
     | Location Filter Employer Test Event 3 |
     When the user filters events Across England centered on "PE30 5HF"
     And the user orders the results by Closest

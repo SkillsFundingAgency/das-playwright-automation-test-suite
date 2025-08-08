@@ -1,7 +1,6 @@
 ﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Employer;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
-using System;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Employer;
 

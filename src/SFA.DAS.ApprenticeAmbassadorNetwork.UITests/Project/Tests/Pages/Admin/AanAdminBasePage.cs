@@ -1,6 +1,4 @@
-﻿using NUnit.Framework;
-
-namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin;
+﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin;
 
 public abstract class AanAdminBasePage(ScenarioContext context) : AanBasePage(context)
 {

@@ -1,9 +1,8 @@
-﻿using NUnit.Framework;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin;
+﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Admin;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Admin;
 
-public class AdminCreateEventBaseSteps(ScenarioContext context) : BaseSteps(context)
+public class AdminCreateEventBaseSteps(ScenarioContext context) : AanBaseSteps(context)
 {
     protected SucessfullyPublisedEventPage sucessfullyPublisedEventPage;
 

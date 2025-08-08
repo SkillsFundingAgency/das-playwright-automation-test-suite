@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
+﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
 
 public class EventsHubPage(ScenarioContext context) : AanBasePage(context)
 {
