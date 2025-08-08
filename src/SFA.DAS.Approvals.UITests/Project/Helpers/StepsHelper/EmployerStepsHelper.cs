@@ -134,7 +134,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         }
 
-        internal async Task ReadyForReviewCohort(string status)
+        internal async Task ReadyForReviewCohort()
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var cohort = listOfApprenticeship.FirstOrDefault().CohortReference;

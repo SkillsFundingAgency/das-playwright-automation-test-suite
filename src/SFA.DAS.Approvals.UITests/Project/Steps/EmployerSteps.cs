@@ -116,10 +116,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await employerStepsHelper.AddEmptyCohort();
         }
 
-        [Then ("the Employer sees the cohort in Ready to review with status of (.*)")]
-        public async Task ThenTheEmployerReviewsCohort(string status)
+        [Then ("the Employer sees the cohort in Ready to review with status of Ready for review")]
+        public async Task ThenTheEmployerReviewsCohort()
         {
-             await employerStepsHelper.ReadyForReviewCohort(string status);
+             await employerStepsHelper.ReadyForReviewCohort();
 
         }
 
