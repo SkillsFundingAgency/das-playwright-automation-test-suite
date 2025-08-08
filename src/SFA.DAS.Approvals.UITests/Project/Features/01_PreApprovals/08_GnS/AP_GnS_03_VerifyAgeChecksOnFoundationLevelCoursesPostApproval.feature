@@ -1,4 +1,4 @@
-﻿#@approvals tag to be added here once feature[APPMAN-1658] is available in PP environment
+﻿@approvals
 Feature: AP_GnS_03_VerifyAgeChecksOnFoundationLevelCoursesPostApproval
 
 A short summary of the feature
