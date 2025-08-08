@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps;
 
-public abstract class BaseSteps(ScenarioContext context)
+public abstract class AanBaseSteps(ScenarioContext context)
 {
     protected readonly ScenarioContext context = context;
 
@@ -15,5 +15,16 @@ public abstract class BaseSteps(ScenarioContext context)
         context.Get<ObjectContext>().SetDebugInformation(url);
 
         await driver.Page.GotoAsync(url);
+    }
+
+    protected static void AssertListContains(List<string> actual, List<string> expectedresults)
+    {
+        Assert.Multiple(() =>
+        {
+            foreach (var expected in expectedresults)
+            {
+                CollectionAssert.Contains(actual, expected);
+            }
+        });
     }
 }

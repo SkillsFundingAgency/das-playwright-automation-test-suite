@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Helpers;
+﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Helpers;
 
 public class AANSqlHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AANDbConnectionString)
 {
@@ -17,7 +15,7 @@ public class AANSqlHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlD
         return (list[0], $"{list[1]} {list[2]}", isRegionalChair);
     }
 
-    public async Task<(string id , DateTime startdate)> GetNextActiveEventDetails(string email)
+    public async Task<(string id, DateTime startdate)> GetNextActiveEventDetails(string email)
     {
         var date = DateTime.UtcNow.AddDays(1).ToString("yyyy-MM-dd");
 

@@ -4,6 +4,7 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<PackageId>SFA.DAS.Framework</PackageId>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+		<!--HasRuntimeOutput>true</HasRuntimeOutput-->
 	</PropertyGroup>
 
 	<ItemGroup>
