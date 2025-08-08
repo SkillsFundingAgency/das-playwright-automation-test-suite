@@ -5,7 +5,6 @@
 		<RootNamespace>SFA.DAS.ProviderLogin.Service</RootNamespace>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 	</PropertyGroup>
-	
 	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.DfeAdmin.Service\SFA.DAS.DfeAdmin.Service.csproj" />
 	</ItemGroup>
