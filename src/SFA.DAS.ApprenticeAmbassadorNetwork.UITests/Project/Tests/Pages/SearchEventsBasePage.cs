@@ -34,6 +34,8 @@ public abstract class SearchEventsBasePage(ScenarioContext context) : AanBasePag
     public async Task SelectOrderByClosest()
     {
         await page.GetByLabel("Sort by").SelectOptionAsync(new[] { "closest" });
+
+        await Assertions.Expect(page.GetByLabel("Sort by")).ToBeVisibleAsync();
     }
 
     public async Task FilterEventsByLocation(string location, int radius)
@@ -162,15 +164,17 @@ public abstract class SearchEventsBasePage(ScenarioContext context) : AanBasePag
     public async Task<List<NetworkEventSearchResult>> GetSearchResults()
     {
         var index = 0;
+
         var list = await page.Locator(EventTitle).AllTextContentsAsync();
 
-        return list
+        list = [.. list.Select(y => y.RemoveMultipleSpace().TrimEnd().TrimStart())];
+
+        return [.. list
             .Select(x => new NetworkEventSearchResult
             {
                 EventTitle = x,
                 Index = index++
-            })
-            .ToList();
+            })];
     }
 
     protected async Task<bool> HasNextPageLink()

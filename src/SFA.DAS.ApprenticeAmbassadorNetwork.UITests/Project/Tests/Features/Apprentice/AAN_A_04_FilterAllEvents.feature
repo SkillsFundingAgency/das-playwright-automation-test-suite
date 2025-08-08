@@ -23,7 +23,7 @@ Scenario: AAN_A_04b_Apprentice user filters events by location
     | Location Filter Apprentice Test Event 2 | Eagles Golf Club, 37-39 School Road, King's Lynn, PE34 4RS                  |
     | Location Filter Apprentice Test Event 3 | Spalding United Football Club, Sir Halley Stewart Field, Spalding, PE11 1DA |
     When an onboarded apprentice logs into the AAN portal
-    And the user filters events within 10 miles of "PE30 5HF"
+    And the user filters events within 5 miles of "PE30 5HF"
     Then the following events can be found within the search results:
     | Event Title                             |
     | Location Filter Apprentice Test Event 1 |

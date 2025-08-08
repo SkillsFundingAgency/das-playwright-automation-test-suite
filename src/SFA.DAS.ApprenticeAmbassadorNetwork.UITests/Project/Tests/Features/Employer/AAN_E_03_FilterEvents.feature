@@ -17,7 +17,7 @@ Scenario: AAN_E_03_Employer filter events
 @aanemployer
 @aanemployer03b
 @regression
-Scenario: AAN_A_03b_Employer user filters events by location
+Scenario: AAN_E_03b_Employer user filters events by location
     Given the following events have been created:
     | Event Title                           | Location                                                                    |
     | Location Filter Employer Test Event 1 | The Maids Head, King's Lynn, PE32 1NG                                       |
@@ -35,7 +35,7 @@ Scenario: AAN_A_03b_Employer user filters events by location
     When the user filters events Across England centered on "PE30 5HF"
     And the user orders the results by Closest
     Then the following events can be found within the search results in the given order:
-    | Event Title                             | Order |
+    | Event Title                           | Order |
     | Location Filter Employer Test Event 1 | 1     |
     | Location Filter Employer Test Event 2 | 2     |
     | Location Filter Employer Test Event 3 | 3     |
@@ -46,7 +46,7 @@ Scenario: AAN_A_03b_Employer user filters events by location
 @aanemployer03b
 @regression
 @notareallocation
-Scenario:AAN_A_03c Employer user filters events by a location that does not exist
+Scenario:AAN_E_03c Employer user filters events by a location that does not exist
     Given an onboarded employer logs into the AAN portal
     When the user filters events within 10 miles of "Lilliput"
     Then the heading text "We cannot find the location you entered" is displayed
@@ -57,7 +57,7 @@ Scenario:AAN_A_03c Employer user filters events by a location that does not exis
 @aanemployer
 @aanemployer03b
 @regression
-Scenario:AAN_A_03d Employer user filters events and finds no matching results
+Scenario:AAN_E_03d Employer user filters events and finds no matching results
     Given an onboarded employer logs into the AAN portal
     When the user navigates to Network Events
     And the user filters events so that there are no results
