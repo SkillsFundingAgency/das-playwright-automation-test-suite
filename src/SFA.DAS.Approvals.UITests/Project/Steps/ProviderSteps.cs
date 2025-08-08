@@ -49,7 +49,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenSendsAnApprenticeRequestCohortToTheEmployerBySelectingApprenticesFromILRListAndReservations()
         {
             var page = await providerStepsHelper.ProviderAddsFirstApprenitceUsingReservation();
-            var page1 = await providerStepsHelper.ProviderAddsOtherApprentices(page);
+            var page1 = await providerStepsHelper.ProviderAddsOtherApprenticesUsingReservation(page);
             await providerStepsHelper.ProviderApproveCohort(page1);
         }
 
