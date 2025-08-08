@@ -205,7 +205,33 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         }
 
 
+        internal async Task ProviderAddApprencticesFromIlrRoute()
+        {
+            var page = await GoToSelectApprenticeFromILRPageForExistingCohort();
+            var page1 = await AddFirstApprenticeFromILRList(page);
+            await AddOtherApprenticesFromILRList(page1);
+        }
 
+        internal async Task<SelectLearnerFromILRPage> GoToSelectApprenticeFromILRPageForExistingCohort()
+        {
+            var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
+            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+            var page3 = await page2.SelectOptionUseExistingCohort();
+            var page4 = await SelectanExistingEmployer(page3);
+            var page5 = await page4.ClickOnAddAnotherApprenticeLink();
+
+            return await page5.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
+        }
+
+
+        internal async Task<ApproveApprenticeDetailsPage> SelectanExistingEmployer(ChooseAnExistingEmployerPage chooseAnExistingEmployerPage)
+        {
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var firstApprentice = listOfApprenticeship.FirstOrDefault();
+            var cohortReference = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+           return await chooseAnExistingEmployerPage.ChooseAnExistingEmployer(cohortReference);
+        }
 
     }
 }

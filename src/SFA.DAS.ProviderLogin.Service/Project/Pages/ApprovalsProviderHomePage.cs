@@ -149,9 +149,8 @@ public partial class ProviderHomePage : InterimProviderBasePage
         await page.GetByRole(AriaRole.Link, new() { Name = "View employer requests for" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderViewEmployerRequestsForTrainingPage(context));
-    }
+    }  
 
-  
     private async Task AddNewApprentices() => await page.GetByRole(AriaRole.Link, new() { Name = "Add new apprentices" }).ClickAsync();
 }
 
@@ -217,6 +216,12 @@ public class ProviderApprenticeRequestsPage(ScenarioContext context) : InterimPr
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
+    }
+
+    public async Task SelectCohort(string cohortReference)
+    {
+        var linkId = $"#details_link_{cohortReference}";
+        await page.Locator(linkId).ClickAsync();        
     }
 }
 
@@ -393,5 +398,6 @@ public class ProviderNotificationSettingsPage(ScenarioContext context) : Interim
         await page.GetByRole(AriaRole.Link, new() { Name = "Cancel" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderHomePage(context));
-    }
+    } 
+
 }
