@@ -15,7 +15,7 @@ public class SignUpPage(ScenarioContext context) : CampaingnsVerifyLinks(context
         await page.GetByLabel("Email address").FillAsync(campaignsDataHelper.Email);
     }
 
-    public async Task SelectCompanySizeOption1() => await page.GetByLabel("Less than 10 employees").CheckAsync();
+    public async Task SelectCompanySizeOption1() => await page.Locator("#SizeOfYourCompany").CheckAsync();
     public async Task SelectCompanySizeOption2() => await page.Locator("#between10and49employees").CheckAsync();
     public async Task SelectCompanySizeOption3() => await page.Locator("#between50and249employees").CheckAsync();
     public async Task SelectCompanySizeOption4() => await page.Locator("#over250employees").CheckAsync();
@@ -34,7 +34,7 @@ public class SignUpPage(ScenarioContext context) : CampaingnsVerifyLinks(context
 
         await page.GetByLabel("Region").SelectOptionAsync([regionoption]);
 
-        await page.GetByLabel("I'am happy to be take part in").CheckAsync();
+        await page.Locator("#IncludeInUR").CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Sign up" }).ClickAsync();
 

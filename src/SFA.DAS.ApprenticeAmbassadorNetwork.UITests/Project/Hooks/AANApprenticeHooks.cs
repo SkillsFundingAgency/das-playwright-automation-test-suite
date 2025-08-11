@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Framework.Hooks;
-
-namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Hooks;
+﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Hooks;
 
 [Binding, Scope(Tag = "@aanaprentice")]
 public class AANApprenticeHooks(ScenarioContext context) : FrameworkBaseHooks(context)

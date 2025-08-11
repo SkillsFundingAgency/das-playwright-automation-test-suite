@@ -8,6 +8,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Project\CsvFiles\**" />
+	  <EmbeddedResource Remove="Project\CsvFiles\**" />
+	  <None Remove="Project\CsvFiles\**" />
+	  <SpecFlowFeatureFiles Remove="Project\CsvFiles\**" />
+	  <SpecFlowObsoleteCodeBehindFiles Remove="Project\CsvFiles\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Compile Include="..\NUnitConfigurator.cs" Link="NUnitConfigurator.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>

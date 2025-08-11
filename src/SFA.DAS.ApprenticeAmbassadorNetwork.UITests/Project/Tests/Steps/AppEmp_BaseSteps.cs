@@ -1,9 +1,8 @@
-﻿using NUnit.Framework;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
+﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps;
 
-public abstract class AppEmp_BaseSteps(ScenarioContext context) : BaseSteps(context)
+public abstract class AppEmp_BaseSteps(ScenarioContext context) : AanBaseSteps(context)
 {
     private (string id, DateTime startdate) Event;
 

@@ -79,12 +79,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             foreach (var apprenticeship in listOfApprenticeship.Skip(1))
             {
                 var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink();
-                var page1 = await page.SelectApprenticeFromILRList(apprenticeship);
-                await page1.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
-                await page1.ClickAddButton();
-                var page2 = new RecognitionOfPriorLearningPage(context);
-                var page3 = await page2.SelectNoForRPL();
-                await page3.GetCohortId(apprenticeship);
+                var page1 = await page.SelectOptionToAddApprenticesFromILRList_AddAnotherApprenticeRoute();
+                var page2 = await page1.SelectApprenticeFromILRList(apprenticeship);
+                await page2.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
+                await page2.ClickAddButton();
+                var page3 = new RecognitionOfPriorLearningPage(context);
+                var page4 = await page3.SelectNoForRPL();
+                await page4.GetCohortId(apprenticeship);
             }
 
             return approveApprenticeDetailsPage;
@@ -130,12 +131,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await new ProviderHomePage(context).GoToManageYourFunding();
             var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
-            var page2 = await page1.SelectApprenticeFromILRList(apprenticeship);            
-            await page2.ClickAddButton();
-            var page3 = new RecognitionOfPriorLearningPage(context);
-            var page4 = await page3.SelectNoForRPL();
-            await page4.GetCohortId(apprenticeship);
-            return await page4.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
+            var page2 = await page1.SelectOptionToAddApprenticesFromILRList_NonLevyRoute();
+            var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);            
+            await page3.ClickAddButton();
+            var page4 = new RecognitionOfPriorLearningPage(context);
+            var page5 = await page4.SelectNoForRPL();
+            await page5.GetCohortId(apprenticeship);
+            return await page5.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
         internal async Task<ApproveApprenticeDetailsPage> ProviderAddsOtherApprenticesUsingReservation(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
@@ -147,13 +149,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 foreach (var apprenticeship in listOfApprenticeship.Skip(1))
                 {
                     var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink_SelectReservationRoute();
-                    var page1 = await page.SelectReservation(apprenticeship.ReservationID);
-                    var page2 = await page1.SelectApprenticeFromILRList(apprenticeship);
-                    await page2.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
-                    await page2.ClickAddButton();
-                    var page3 = new RecognitionOfPriorLearningPage(context);
-                    var page4 = await page3.SelectNoForRPL();
-                    await page4.GetCohortId(apprenticeship);
+                    var page1 = await page.SelectOptionToAddApprenticesFromILRList_SelectReservationRoute();
+                    var page2 = await page1.SelectReservation(apprenticeship.ReservationID);
+                    var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);
+                    await page3.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
+                    await page3.ClickAddButton();
+                    var page4 = new RecognitionOfPriorLearningPage(context);
+                    var page5 = await page4.SelectNoForRPL();
+                    await page5.GetCohortId(apprenticeship);
                 }
             }
 

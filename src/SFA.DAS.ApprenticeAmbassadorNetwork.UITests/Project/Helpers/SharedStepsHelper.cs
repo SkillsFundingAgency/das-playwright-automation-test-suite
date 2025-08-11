@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
+﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Helpers
@@ -15,12 +14,16 @@ namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Helpers
                 return context.Get<List<NetworkEventSearchResult>>(SearchResultsKey);
             }
 
+            await searchEventsPage.VerifyPage();
+
             var eventTitles = await searchEventsPage.GetSearchResults();
 
             while (await searchEventsPage.HasNextPage())
             {
                 await searchEventsPage.ClickNextPage();
+
                 var titles = await searchEventsPage.GetSearchResults();
+
                 eventTitles.AddRange(titles);
             }
 

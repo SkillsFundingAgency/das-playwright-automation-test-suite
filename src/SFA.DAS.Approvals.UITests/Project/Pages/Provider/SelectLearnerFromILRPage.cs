@@ -12,7 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select learner from ILR");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select apprentices from ILR for ");
         }
 
         internal async Task<AddApprenticeDetailsPage> SelectApprenticeFromILRList(Apprenticeship apprenticeship)
@@ -31,7 +31,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         private async Task SearchULN(string uln)
         {
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or" }).FillAsync(uln);
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or unique learner number (ULN)" }).FillAsync(uln);
             await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
         }
 
