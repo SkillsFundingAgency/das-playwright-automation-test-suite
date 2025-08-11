@@ -72,23 +72,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             
+            var retryPolicy = Policy
+                    .HandleResult<string>(result => result == null) // Retry if learnerDataId is null
+                    .WaitAndRetryAsync(
+                        retryCount: 5,
+                        sleepDurationProvider: attempt => TimeSpan.FromSeconds(1),
+                        onRetry: (result, timeSpan, retryCount, context) =>
+                        {
+                            objectContext.SetDebugInformation($"Retry {retryCount} - learner not found in learnerData db. Waiting {timeSpan.TotalSeconds}s before next attempt.");
+                        });
+
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
-                //await Task.Delay(1000);
-                //var learnerDataId = await learnerDataDbSqlHelper.GetLearnerDataId(uln);
-                //objectContext.SetDebugInformation($"[{learnerDataId} found in learnerData db for ULN: {uln}]");
-
-                var retryPolicy = Policy
-                                    .HandleResult<string>(result => result == null) // Retry if learnerDataId is null
-                                    .WaitAndRetryAsync(
-                                        retryCount: 5,
-                                        sleepDurationProvider: attempt => TimeSpan.FromSeconds(1),
-                                        onRetry: (result, timeSpan, retryCount, context) =>
-                                        {
-                                            objectContext.SetDebugInformation($"Retry {retryCount} - learnerDataId not found. Waiting {timeSpan.TotalSeconds}s before next attempt.");
-                                        });
-
                 var learnerDataId = await retryPolicy.ExecuteAsync(() => learnerDataDbSqlHelper.GetLearnerDataId(uln));
                 Assert.IsNotNull(learnerDataId, $"No record found in LearnerData db for ULN: {uln}");
                 apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(learnerDataId);
