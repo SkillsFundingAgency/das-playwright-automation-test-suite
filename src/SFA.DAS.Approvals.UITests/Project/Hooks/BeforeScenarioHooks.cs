@@ -24,21 +24,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
         {
             //commitmentsdatahelper = new CommitmentsSqlDataHelper(_objectcontext, _dbConfig);
 
-            //context.Set(commitmentsdatahelper);
+            context.Set(new AccountsDbSqlHelper(_objectcontext, _dbConfig));
 
             context.Set(new CommitmentsDbSqlHelper(_objectcontext, _dbConfig));
 
-            //context.Set(new RofjaaDbSqlHelper(_objectcontext, _dbConfig));
+            context.Set(new LearningDbSqlHelper(_objectcontext, _dbConfig));
 
-            context.Set(new AccountsDbSqlHelper(_objectcontext, _dbConfig));
+            context.Set(new LearnerDataDbSqlHelper(_objectcontext, _dbConfig));
 
-            //context.Set(roatpV2SqlDataHelper = new RoatpV2SqlDataHelper(_objectcontext, _dbConfig));
+            //context.Set(commitmentsdatahelper);
+
+            //context.Set(new ManageFundingEmployerStepsHelper(context));
 
             //context.Set(new PublicSectorReportingDataHelper());
 
             //context.Set(new PublicSectorReportingSqlDataHelper(_objectcontext, _dbConfig));
 
-            //context.Set(new ManageFundingEmployerStepsHelper(context));
+            //context.Set(new RofjaaDbSqlHelper(_objectcontext, _dbConfig));
+
+            //context.Set(roatpV2SqlDataHelper = new RoatpV2SqlDataHelper(_objectcontext, _dbConfig));
         }
 
         [BeforeScenario(Order = 32)]
