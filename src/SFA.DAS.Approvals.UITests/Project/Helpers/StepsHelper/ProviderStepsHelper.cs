@@ -78,8 +78,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             foreach (var apprenticeship in listOfApprenticeship.Skip(1))
             {
-                var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink();
-                var page1 = await page.SelectOptionToAddApprenticesFromILRList_AddAnotherApprenticeRoute();
+                var page1 = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink();
                 var page2 = await page1.SelectApprenticeFromILRList(apprenticeship);
                 await page2.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
                 await page2.ClickAddButton();
@@ -131,8 +130,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await new ProviderHomePage(context).GoToManageYourFunding();
             var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
-            var page2 = await page1.SelectOptionToAddApprenticesFromILRList_NonLevyRoute();
-            var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);            
+            //var page2 = await page1.SelectOptionToAddApprenticesFromILRList_NonLevyRoute();
+            var page3 = await page1.SelectApprenticeFromILRList(apprenticeship);            
             await page3.ClickAddButton();
             var page4 = new RecognitionOfPriorLearningPage(context);
             var page5 = await page4.SelectNoForRPL();
@@ -149,8 +148,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 foreach (var apprenticeship in listOfApprenticeship.Skip(1))
                 {
                     var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink_SelectReservationRoute();
-                    var page1 = await page.SelectOptionToAddApprenticesFromILRList_SelectReservationRoute();
-                    var page2 = await page1.SelectReservation(apprenticeship.ReservationID);
+                    //var page1 = await page.SelectOptionToAddApprenticesFromILRList_SelectReservationRoute();
+                    var page2 = await page.SelectReservation(apprenticeship.ReservationID);
                     var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);
                     await page3.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
                     await page3.ClickAddButton();

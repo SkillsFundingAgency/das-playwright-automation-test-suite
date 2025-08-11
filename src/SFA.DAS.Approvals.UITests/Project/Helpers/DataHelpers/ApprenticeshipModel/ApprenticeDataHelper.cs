@@ -69,6 +69,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
         private async Task<Employer> GetEmployerDetails(EmployerType employerType)
         {
+            var accountsDbSqlHelper = context.Get<AccountsDbSqlHelper>();
             Employer employer = new Employer();
 
             EasAccountUser employerUser = employerType switch
