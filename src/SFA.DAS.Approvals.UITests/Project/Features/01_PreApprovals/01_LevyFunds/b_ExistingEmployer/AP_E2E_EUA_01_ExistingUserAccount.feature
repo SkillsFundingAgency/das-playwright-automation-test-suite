@@ -22,7 +22,7 @@ Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves
 
 @regression
 @e2escenarios
-Scenario Outline: AP_E2E_EUA_01c emails validation
+Scenario Outline: AP_E2E_EUA_01b emails validation
 	Given previous test has been completed successfully
 	Then Verify the "<Recipient>" receive "<NotificationType>" email
 
