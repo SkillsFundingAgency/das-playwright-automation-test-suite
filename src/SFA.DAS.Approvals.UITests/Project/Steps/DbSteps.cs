@@ -75,12 +75,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
                 await Task.Delay(1000);
-                var learnerData = await learnerDataDbSqlHelper.GetLearnerDataId(uln);
-                Assert.IsNotNull(learnerData, $"LearnerData record not found for ULN: {uln}");
-                apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(learnerData);
+                var learnerDataId = await learnerDataDbSqlHelper.GetLearnerDataId(uln);
+                objectContext.SetDebugInformation($"[{learnerDataId} found in learnerData db for ULN: {uln}]");
+                Assert.IsNotNull(learnerDataId, $"No record found in LearnerData db for ULN: {uln}");
+                apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(learnerDataId);
                 await Task.Delay(100);
                 context.Set(apprenticeship, "Apprenticeship");
-                objectContext.SetDebugInformation($"[{learnerData} set as learnerDataId for ULN: {uln}]");
+                objectContext.SetDebugInformation($"[{learnerDataId} set as learnerDataId for ULN: {uln}]");
             }
 
         }
