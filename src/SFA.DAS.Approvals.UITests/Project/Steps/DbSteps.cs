@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+﻿using Polly;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
@@ -74,9 +75,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
-                await Task.Delay(1000);
-                var learnerDataId = await learnerDataDbSqlHelper.GetLearnerDataId(uln);
-                objectContext.SetDebugInformation($"[{learnerDataId} found in learnerData db for ULN: {uln}]");
+                //await Task.Delay(1000);
+                //var learnerDataId = await learnerDataDbSqlHelper.GetLearnerDataId(uln);
+                //objectContext.SetDebugInformation($"[{learnerDataId} found in learnerData db for ULN: {uln}]");
+
+                var retryPolicy = Policy
+                                    .HandleResult<string>(result => result == null) // Retry if learnerDataId is null
+                                    .WaitAndRetryAsync(
+                                        retryCount: 5,
+                                        sleepDurationProvider: attempt => TimeSpan.FromSeconds(1),
+                                        onRetry: (result, timeSpan, retryCount, context) =>
+                                        {
+                                            objectContext.SetDebugInformation($"Retry {retryCount} - learnerDataId not found. Waiting {timeSpan.TotalSeconds}s before next attempt.");
+                                        });
+
+                var learnerDataId = await retryPolicy.ExecuteAsync(() => learnerDataDbSqlHelper.GetLearnerDataId(uln));
                 Assert.IsNotNull(learnerDataId, $"No record found in LearnerData db for ULN: {uln}");
                 apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(learnerDataId);
                 await Task.Delay(100);
