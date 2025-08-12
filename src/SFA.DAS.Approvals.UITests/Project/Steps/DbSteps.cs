@@ -132,8 +132,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        [Then("Learning Db is updated with respective Apprenticeship Id")]
-        public async Task ThenLearningDbIsUpdatedWithRespectiveApprenticeshipId()
+
+        [Then("Apprenticeship record is created in Learning Db")]
+        public async Task ThenApprenticeshipRecordIsCreatedInLearningDb()
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
@@ -149,6 +150,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 objectContext.SetDebugInformation($"[{result} set as LearningIdKey for ULN: {uln}]");
             }
         }
+
 
     }
 }

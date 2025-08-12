@@ -12,6 +12,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
 
         internal async Task<string> GetLearnerDataId(string ULN)
         {
+            objectContext.SetDebugInformation($"LearnerDataDbSqlHelper: ConnectionString: {_dbConfig.LearnerDataDbConnectionString}");
+            
             string query = $"SELECT Id FROM LearnerData WHERE ULN = '{ULN}'";
             var result = await GetData(query);
             return result.FirstOrDefault() ?? string.Empty;
