@@ -1,12 +1,5 @@
 ﻿using SFA.DAS.API.Framework.Configs;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
-using SFA.DAS.Approvals.UITests.Project;
-using SFA.DAS.TestDataCleanup.Project.Helpers.SqlDbHelper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Hooks
 {
@@ -72,16 +65,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
             //context.Set(new DataLockSqlHelper(_objectcontext, _dbConfig, apprenticeDataHelper, apprenticeCourseDataHelper));
 
         }
-              
+
         [BeforeScenario(Order = 30)]
         public void SetUpDependencyConfig()
         {
             //Get api cnnfig from approvals:
             var subscriptionKey = context.GetOuterApiAuthTokenConfig<OuterApiAuthTokenConfig>();
 
+            if (subscriptionKey is null) return;
+
             //Set config for 'Outer_ApiAuthTokenConfig' in the context:
-            Outer_ApiAuthTokenConfig outer_ApiAuthTokenConfig = new Outer_ApiAuthTokenConfig();
-            outer_ApiAuthTokenConfig.Apim_SubscriptionKey = subscriptionKey.Apim_SubscriptionKey;
+            Outer_ApiAuthTokenConfig outer_ApiAuthTokenConfig = new()
+            {
+                Apim_SubscriptionKey = subscriptionKey.Apim_SubscriptionKey
+            };
             context.Set(outer_ApiAuthTokenConfig);
 
         }

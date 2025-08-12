@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SFA.DAS.API.Framework.Configs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
