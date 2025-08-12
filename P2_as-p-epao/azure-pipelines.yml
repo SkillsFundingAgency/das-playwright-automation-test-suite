@@ -19,6 +19,8 @@ variables:
   - group: "RELEASE P2_as-epao"
   - name: Deploy
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
+  - name: projectName
+    value: "SFA.DAS.EPAO.UITests"
 
 resources:
   repositories:
@@ -45,7 +47,7 @@ stages:
         parameters:
           BuildConfiguration: $(BuildConfiguration)
           projectsToBuild: |
-            src/SFA.DAS.EPAO.UITests/*.csproj
+            src/$(projectName)/*.csproj
             src/SFA.DAS.FindEPAO.UITests/*.csproj
 
   - stage: Deploy_TEST
@@ -59,9 +61,6 @@ stages:
         parameters:
           Environment: TEST
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: |
-            **\SFA.DAS.EPAO.UITests.dll
-            **\SFA.DAS.FindEPAO.UITests\SFA.DAS.FindEPAO.UITests.dll'
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -74,9 +73,6 @@ stages:
         parameters:
           Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: |
-            **\SFA.DAS.EPAO.UITests.dll
-            **\SFA.DAS.FindEPAO.UITests\SFA.DAS.FindEPAO.UITests.dll'
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -89,9 +85,6 @@ stages:
         parameters:
           Environment: DEMO
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: |
-            **\SFA.DAS.EPAO.UITests.dll
-            **\SFA.DAS.FindEPAO.UITests\SFA.DAS.FindEPAO.UITests.dll'
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -106,6 +99,3 @@ stages:
         parameters:
           Environment: PP
           ServiceConnection: SFA-DIG-PreProd-ARM
-          TestAssembly: |
-            **\SFA.DAS.EPAO.UITests.dll
-            **\SFA.DAS.FindEPAO.UITests\SFA.DAS.FindEPAO.UITests.dll'

@@ -19,6 +19,8 @@ variables:
   - group: "RELEASE APP_das-GAA"
   - name: Deploy
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
+  - name: projectName
+    value: "SFA.DAS.EarlyConnectForms.UITests"
 
 resources:
   repositories:
@@ -45,7 +47,7 @@ stages:
         parameters:
           BuildConfiguration: $(BuildConfiguration)
           projectsToBuild: |
-            src/SFA.DAS.EarlyConnectForms.UITests/*.csproj
+            src/$(projectName)/*.csproj
 
   - stage: Deploy_TEST
     dependsOn: Build
@@ -58,8 +60,7 @@ stages:
         parameters:
           Environment: TEST
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
-          projectName: SFA.DAS.EarlyConnectForms.UITests
+          projectName: $(projectName)
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -72,8 +73,7 @@ stages:
         parameters:
           Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
-          projectName: SFA.DAS.EarlyConnectForms.UITests
+          projectName: $(projectName)
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -86,8 +86,7 @@ stages:
         parameters:
           Environment: DEMO
           ServiceConnection: SFA-DAS-DevTest-ARM
-          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
-          projectName: SFA.DAS.EarlyConnectForms.UITests
+          projectName: $(projectName)
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -102,5 +101,4 @@ stages:
         parameters:
           Environment: PP
           ServiceConnection: SFA-DIG-PreProd-ARM
-          TestAssembly: '**\SFA.DAS.EarlyConnectForms.UITests\SFA.DAS.EarlyConnectForms.UITests.dll'
-          projectName: SFA.DAS.EarlyConnectForms.UITests
+          projectName: $(projectName)

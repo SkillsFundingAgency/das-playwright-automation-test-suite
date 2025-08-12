@@ -5,6 +5,7 @@ parameters:
     type: string
   - name: TestAssembly
     type: string
+    default: '**\**\SFA.DAS*tests*.dll'
   - name: projectName
 
 jobs:
