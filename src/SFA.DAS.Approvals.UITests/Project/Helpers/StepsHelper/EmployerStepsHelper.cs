@@ -133,31 +133,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         }
 
-        internal async Task ReadyForReviewCohort()
+        internal async Task ReadyForReviewCohort(string status)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var cohort = listOfApprenticeship.FirstOrDefault().CohortReference;
 
-            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);            
+            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
 
-            var page1 =  await new ApprenticesHomePage(context).GoToApprenticeRequests();
-            await page1.OpenApprenticeRequestReadyForReview(cohort);
+            var page1 = await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            var page2 = await page1.OpenApprenticeRequestReadyForReview(cohort);
+            await page2.ValidateCohortStatus(status);
         }
 
-        internal async Task EmployerNavigateToApprenticeRequestsPage()
-        {
-            var apprenticeship = listOfApprenticeship.FirstOrDefault();
-
-            var page =  await GoToEmployerApprenticesHomePage();
-            var page1 = await page.GoToApprenticeRequests();
-            //var page2 = await page1.ValidateCohortStatus(apprenticeship.CohortReference, ""CohortStatus);         <-- to be implemented
-        }
-
-        private async Task<ApprenticesHomePage> GoToEmployerApprenticesHomePage()
-        {
-            await employerHomePageHelper.GotoEmployerHomePage();
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
-            return new ApprenticesHomePage(context);
-        }
     }
 }

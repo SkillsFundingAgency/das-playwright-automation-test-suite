@@ -155,7 +155,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        [When(@"the provider adds (.*) apprentices and sends to employer to review")]
+        [When(@"the provider adds (.*) apprentices along with RPL details and sends to employer to review")]
         public async Task WhenTheProviderAddsApprenticesAndSendsToEmployerToReview(int numberOfApprentices)
         {
             var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
@@ -165,9 +165,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
             await page1.SelectCohort(cohortRef);
 
-            await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
+           var approveApprenticeDetails =  await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
 
-           var page = await new ApproveApprenticeDetailsPage(context).ProviderSendCohortForEmployerApproval();
+           await approveApprenticeDetails.ProviderSendCohortForEmployerApproval();
 
         }
 

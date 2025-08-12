@@ -41,5 +41,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             throw new TimeoutException($"Status did not update to '{expectedStatus}' within {maxWaitTime.TotalMinutes} minutes.");
         }
+
+        internal async Task<bool> VerifyText(ILocator locator, string expected)
+        {
+            var actual = await locator.InnerTextAsync();
+
+            if(actual.Equals(expected,StringComparison.OrdinalIgnoreCase)) { return true; }
+
+            throw new Exception(MessageHelper.GetExceptionMessage("Text", expected, actual));
+        }
     }
 }

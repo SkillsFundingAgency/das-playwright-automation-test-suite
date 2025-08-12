@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,5 +46,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         }
 
         internal async Task ValidateWarningMessageForFoundationCourses(string warningMsg) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(warningMsg);
+
+        internal async Task ValidateCohortStatus(string cohortStatus)
+        {
+            await new CommonStepsHelper(context).VerifyText(status, cohortStatus);
+        }
     }
 }

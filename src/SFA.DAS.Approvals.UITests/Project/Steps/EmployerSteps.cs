@@ -116,10 +116,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await employerStepsHelper.AddEmptyCohort();
         }
 
-        [Then ("the Employer sees the cohort in Ready to review with status of Ready for review")]
-        public async Task ThenTheEmployerReviewsCohort()
+        [Then ("the Employer sees the cohort in Ready to review with status of (.*)")]
+        public async Task ThenTheEmployerReviewsCohort(string status)
         {
-             await employerStepsHelper.ReadyForReviewCohort();
+             await employerStepsHelper.ReadyForReviewCohort(status);
 
         }
 
@@ -128,6 +128,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = new EmployerApproveApprenticeDetailsPage(context);
             await page.EmployerApproveCohort();
+
+        }
+
+        [Then ("verify RPL details")]
+        public async Task ThenTheEmployerVerifyRPLDetails(string status)
+        {
+            await employerStepsHelper.ReadyForReviewCohort(status);
 
         }
 
