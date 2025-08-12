@@ -145,7 +145,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 var uln = apprenticeship.ApprenticeDetails.ULN;
                 var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
                 var result = await learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln);
-                Assert.IsNotNull(result, $"Apprenticeship record not found in Learning Db for ApprenticeshipId: {apprenticeshipId}");
+                Assert.IsNotEmpty(result, $"Apprenticeship record not found in Learning Db for ApprenticeshipId: {apprenticeshipId}");
                 apprenticeship.ApprenticeDetails.LearningIdKey = result;
                 await Task.Delay(100);
                 context.Set(apprenticeship, "Apprenticeship");
