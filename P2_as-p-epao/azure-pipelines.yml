@@ -61,6 +61,7 @@ stages:
         parameters:
           Environment: TEST
           ServiceConnection: SFA-DAS-DevTest-ARM
+          projectName: $(projectName)
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -73,6 +74,7 @@ stages:
         parameters:
           Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
+          projectName: $(projectName)
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -85,6 +87,7 @@ stages:
         parameters:
           Environment: DEMO
           ServiceConnection: SFA-DAS-DevTest-ARM
+          projectName: $(projectName)
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -99,3 +102,4 @@ stages:
         parameters:
           Environment: PP
           ServiceConnection: SFA-DIG-PreProd-ARM
+          projectName: $(projectName)
