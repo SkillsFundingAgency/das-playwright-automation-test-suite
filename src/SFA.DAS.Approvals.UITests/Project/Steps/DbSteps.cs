@@ -20,6 +20,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
         private readonly LearningDbSqlHelper learningDbSqlHelper;
         private readonly LearnerDataDbSqlHelper learnerDataDbSqlHelper;
+        private readonly ApprenticeDataHelper apprenticeDataHelper;
         private List<Apprenticeship> listOfApprenticeship;
 
 
@@ -31,40 +32,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();
             learningDbSqlHelper = context.Get<LearningDbSqlHelper>();
             learnerDataDbSqlHelper = context.Get<LearnerDataDbSqlHelper>();
-        }
-
-        [Given("A live apprentice record exists for an apprentice on Foundation level course")]
-        public async Task GivenALiveApprenticeRecordExistsForAnApprenticeOnFoundationLevelCourse()
-        {
-            listOfApprenticeship = new List<Apprenticeship>();
-
-            //GET Apprenticeship details from the database
-            var ukprn = Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);
-            EasAccountUser employerUser = context.GetUser<LevyUser>();
-
-            var accountLegalEntityId = Convert.ToInt32(await context.Get<AccountsDbSqlHelper>().GetAccountLegalEntityId(employerUser.Username, employerUser.OrganisationName[..3] + "%"));
-            var details = await commitmentsDbSqlHelper.GetEditableApprenticeDetails(ukprn, accountLegalEntityId);
-
-            var uln = details[0].ToString();
-            var firstName = details[1].ToString();
-            var LastName = details[2].ToString();
-            var dob = Convert.ToDateTime(details[3].ToString());
-
-            //SET Apprenticeship details in the context
-            Apprenticeship apprenticeship = new Apprenticeship();
-
-            apprenticeship.UKPRN = ukprn;
-            apprenticeship.EmployerDetails.EmployerType = EmployerType.Levy;
-            apprenticeship.EmployerDetails.Email = employerUser.Username;
-            apprenticeship.EmployerDetails.EmployerName = employerUser.OrganisationName;
-            apprenticeship.ApprenticeDetails.ULN = uln;
-            apprenticeship.ApprenticeDetails.FirstName = firstName;
-            apprenticeship.ApprenticeDetails.LastName = LastName;
-            apprenticeship.ApprenticeDetails.DateOfBirth = dob;
-
-            listOfApprenticeship.Add(apprenticeship);
-            context.Set(listOfApprenticeship);
-
+            accountsDbSqlHelper = context.Get<AccountsDbSqlHelper>();
+            apprenticeDataHelper = new ApprenticeDataHelper(context);
         }
 
         [Then("a record is created in LearnerData Db for each learner")]
@@ -151,6 +120,35 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 context.Set(apprenticeship, "Apprenticeship");
                 objectContext.SetDebugInformation($"[{result} set as LearningIdKey for ULN: {uln}]");
             }
+        }
+
+        [Given("A live apprentice record exists for an apprentice on Foundation level course")]
+        public async Task GivenALiveApprenticeRecordExistsForAnApprenticeOnFoundationLevelCourse()
+        {
+            listOfApprenticeship = new List<Apprenticeship>();
+
+            var additionalWhereFilter = @"AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
+        }
+
+        [Given(@"a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date")]
+        public async Task GivenALiveApprenticeRecordExistsWithStartdateOfMonthsAndEndDateOfMonthsFromCurrentDate(int startDateFromNow, int endDateFromNow)
+        {
+            listOfApprenticeship = new List<Apprenticeship>();
+
+            var additionalWhereFilter = @$"AND a.StartDate < DATEADD(month, {startDateFromNow}, GETDATE()) 
+                                            AND a.EndDate > DATEADD(month, {endDateFromNow}, GETDATE())
+                                            AND a.TrainingCode < 800";
+            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
+
+        }
+
+        private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter)
+        {
+            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(employerType);
+            apprenticeship = await commitmentsDbSqlHelper.GetEditableApprenticeDetails(apprenticeship, additionalWhereFilter);
+            listOfApprenticeship.Add(apprenticeship);
+            context.Set(listOfApprenticeship);
         }
 
 

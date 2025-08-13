@@ -14,8 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         protected readonly ScenarioContext context;
         protected readonly FeatureContext featureContext;
         private readonly ApprovalsEmailsHelper approvalsEmailsHelper;
-        private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
-        private readonly ApprenticeDataHelper apprenticeDataHelper;
+        private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;        
         private List<Apprenticeship> listOfApprenticeship;
 
         public CommonSteps(ScenarioContext context, FeatureContext featureContext)
@@ -23,8 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             this.context = context;
             this.featureContext = featureContext;
             approvalsEmailsHelper = new ApprovalsEmailsHelper(context);
-            commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();
-            apprenticeDataHelper = new ApprenticeDataHelper(context);
+            commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();            
             listOfApprenticeship = new List<Apprenticeship>();
         }
 
@@ -73,31 +71,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await approvalsEmailsHelper.VerifyEmailAsync(recipient, notificationType);
         }
 
-        [Given("A live apprentice record exists for an apprentice on Foundation level course")]
-        public async Task GivenALiveApprenticeRecordExistsForAnApprenticeOnFoundationLevelCourse()
-        {
-
-            var additionalWhereFilter = @"AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
-            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
-        }
-
-        [Given(@"a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date")]
-        public async Task GivenALiveApprenticeRecordExistsWithStartdateOfMonthsAndEndDateOfMonthsFromCurrentDate(int startDateFromNow, int endDateFromNow)
-        {
-            var additionalWhereFilter = @$"AND a.StartDate < DATEADD(month, {startDateFromNow}, GETDATE()) 
-                                            AND a.EndDate > DATEADD(month, {endDateFromNow}, GETDATE())
-                                            AND a.TrainingCode < 800";
-            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
-
-        }
-
-        private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter)
-        {
-            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(employerType);
-            apprenticeship = await commitmentsDbSqlHelper.GetEditableApprenticeDetails(apprenticeship, additionalWhereFilter);
-            listOfApprenticeship.Add(apprenticeship);
-            context.Set(listOfApprenticeship);
-        }
+        
 
     }
 }

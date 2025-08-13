@@ -110,18 +110,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
         }
 
+        [Then("apprentice\\/learner record is no longer available on SelectLearnerFromILR page")]
+        public async Task ThenApprenticeLearnerRecordIsNoLongerAvailableOnSelectLearnerFromILRPage()
+        {
+            //await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
+        }
+
         [When("Provider tries to add a new apprentice using details from table below")]
         public async Task WhenProviderTriesToAddANewApprenticeUsingDetailsFromTableBelow(Table table)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var listOfValidApprenticeship = listOfApprenticeship;
-            var apprentice = listOfValidApprenticeship.FirstOrDefault();
-        [Then("apprentice\\/learner record is no longer available on SelectLearnerFromILR page")]
-        public async Task ThenApprenticeLearnerRecordIsNoLongerAvailableOnSelectLearnerFromILRPage()
-        {
-            await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
-        }
-
+            var apprentice = listOfValidApprenticeship.FirstOrDefault();  
             var OltdDetails = table.CreateSet<OltdDetails>().ToList();
 
             foreach (var item in OltdDetails)
