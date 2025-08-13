@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
-		<RootNamespace>SFA.DAS.Approvals.UITests</RootNamespace>
+		<RootNamespace>SFA.DAS.Transfers.UITests</RootNamespace>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
@@ -25,16 +25,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\SFA.DAS.Approvals.APITests\SFA.DAS.Approvals.APITests.csproj" />
+		<ProjectReference Include="..\SFA.DAS.Approvals.UITests\SFA.DAS.Approvals.UITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.ProviderLogin.Service\SFA.DAS.ProviderLogin.Service.csproj" />
-		<ProjectReference Include="..\SFA.DAS.MailosaurAPI.Service\SFA.DAS.MailosaurAPI.Service.csproj" />
-		<ProjectReference Include="..\SFA.DAS.API.Framework\SFA.DAS.API.Framework.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-
 		<None Update="appsettings.Environment.json">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
@@ -42,30 +39,9 @@
 		<None Update="appsettings.Project.json">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
-		<None Update="Project\AP_GnS_0_BulkUpload.csv">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 		<None Update="specflow.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Project\Features\01_PreApprovals\06_FlexiJobApprenticeshipAgency\" />
-	  <Folder Include="Project\Features\01_PreApprovals\05_FileUpload\" />
-	  <Folder Include="Project\Features\01_PreApprovals\09_ProviderPermissions\" />
-	  <Folder Include="Project\Features\02_PostApprovals\01_OverlappingTrainingDateRequest\" />
-	  <Folder Include="Project\Features\03_EmployerRoles\" />
-	  <Folder Include="Project\Features\01_PreApprovals\07_PortableFlexiJob\" />
-	  <Folder Include="Project\Features\05_LimitingStandards\" />
-	  <Folder Include="Project\Features\06_Navigation\" />
-	  <Folder Include="Project\Features\07_FlexiJobApprenticeshipAgency\" />
-	  <Folder Include="Project\Features\PublicSectorReporting\" />
-	  <Folder Include="Project\Features\04_ProviderRoles\" />
-	  <Folder Include="Project\Features\01_PreApprovals\01_LevyFunds\a_NewEmployer\" />
-	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\a_NewEmployer\" />
-	  <Folder Include="Project\Features\01_PreApprovals\04_LTM\" />
-	  <Folder Include="Project\Features\01_PreApprovals\03_TransfersConnection\" />
 	</ItemGroup>
 
 </Project>

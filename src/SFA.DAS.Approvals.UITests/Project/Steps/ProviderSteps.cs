@@ -1,9 +1,6 @@
-﻿using Azure;
-using Polly;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
-using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
@@ -29,7 +26,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             providerStepsHelper = new ProviderStepsHelper(context);
             sldIlrSubmissionSteps = new SldIlrSubmissionSteps(context);
         }
-
 
         [Given(@"the provider logs into portal")]
         [When("Provider logs into Provider-Portal")]
@@ -120,6 +116,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var listOfValidApprenticeship = listOfApprenticeship;
             var apprentice = listOfValidApprenticeship.FirstOrDefault();
+        [Then("apprentice\\/learner record is no longer available on SelectLearnerFromILR page")]
+        public async Task ThenApprenticeLearnerRecordIsNoLongerAvailableOnSelectLearnerFromILRPage()
+        {
+            await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
+        }
 
             var OltdDetails = table.CreateSet<OltdDetails>().ToList();
 
