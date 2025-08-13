@@ -101,6 +101,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
         }
 
+        [Then("apprentice\\/learner record is no longer available on SelectLearnerFromILR page")]
+        public async Task ThenApprenticeLearnerRecordIsNoLongerAvailableOnSelectLearnerFromILRPage()
+        {
+            await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
+        }
 
 
 

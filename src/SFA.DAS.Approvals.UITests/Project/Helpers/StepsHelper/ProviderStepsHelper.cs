@@ -207,5 +207,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
         }
 
+        internal async Task ProviderVerifyLearnerNotAvailableForSelection()
+        {
+            var selectLearnerFromILRPage = await GoToSelectApprenticeFromILRPage();
+            
+            foreach (var apprenticeship in listOfApprenticeship)
+            {
+                var uln = apprenticeship.ApprenticeDetails.ULN.ToString();
+
+                await selectLearnerFromILRPage.SearchULN(uln);
+                await selectLearnerFromILRPage.VerifyNoResultsFound();
+                await selectLearnerFromILRPage.ClearSearch();
+            }
+
+        }
+
     }
 }
