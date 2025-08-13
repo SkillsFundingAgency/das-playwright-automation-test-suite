@@ -1,12 +1,8 @@
-﻿using FluentAssertions;
-using NUnit.Framework;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
+﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Apprentice;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
-using TechTalk.SpecFlow.Assist;
 
-namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.StepDefinitions.Apprentice;
+namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Apprentice;
 
 [Binding, Scope(Tag = "@aanaprentice")]
 public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(context)
@@ -16,6 +12,8 @@ public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(co
     private EventsHubPage eventsHubPage;
 
     private AanApprenticeOnBoardedUser user;
+
+    private List<string> titles;
 
     [Given(@"an onboarded apprentice logs into the AAN portal")]
     [When(@"an onboarded apprentice logs into the AAN portal")]
@@ -128,30 +126,30 @@ public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(co
     public async Task FilterByMultipleCombination_NetworkDirectory() => await
         FilterByMultipleCombinationNetworkDirectory(new NetworkDirectoryPage(context));
 
-    //[Given(@"the following events have been created:")]
-    //public async Task GivenTheFollowingEventsHaveBeenCreated(Table table)
-    //{
-    //    await Navigate(UrlConfig.AAN_Admin_BaseUrl);
+    [Given(@"the following events have been created:")]
+    public async Task GivenTheFollowingEventsHaveBeenCreated(Table table)
+    {
+        await Navigate(UrlConfig.AAN_Admin_BaseUrl);
 
-    //    var user = context.GetUser<AanAdminUser>();
+        var user = context.GetUser<AanAdminUser>();
 
-    //    await new DfeSignInPage(context).SubmitValidLoginDetails(user);
+        await new DfeSignInPage(context).SubmitValidLoginDetails(user);
 
-    //    var stepsHelper = context.Get<AanAdminStepsHelper>();
+        var stepsHelper = context.Get<AanAdminStepsHelper>();
 
-    //    var events = table.CreateSet<NetworkEventWithLocation>().ToList();
+        var events = table.CreateSet<NetworkEventWithLocation>().ToList();
 
-    //    foreach (var e in events)
-    //    {
-    //        var confirmationPage = stepsHelper
-    //            .CheckYourEvent(EventFormat.InPerson, false, false, e.EventTitle, e.Location).SubmitEvent();
-    //        confirmationPage.AccessHub();
-    //    }
+        foreach (var e in events)
+        {
+            var page = await stepsHelper.CheckYourEvent(EventFormat.InPerson, false, false, e.EventTitle, e.Location);
 
-    //    ;
+            var confirmationPage = await page.SubmitEvent();
 
-    //    tabHelper.GoToUrl(UrlConfig.AAN_Apprentice_BaseUrl);
-    //}
+            await confirmationPage.AccessHub();
+        }
+
+        await Navigate(UrlConfig.AAN_Apprentice_BaseUrl);
+    }
 
     [When(@"the user filters events within (.*) miles of ""([^""]*)""")]
     public async Task WhenTheUserFiltersEventsWithinMilesOf(int radius, string location)
@@ -179,6 +177,7 @@ public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(co
         await searchNetworkEventsPage.FilterEventsByLocation(location, 0);
 
         var stepsHelper = context.Get<ApprenticeStepsHelper>();
+
         stepsHelper.ClearEventTitleCache();
     }
 
@@ -190,30 +189,21 @@ public class Apprentice_Steps(ScenarioContext context) : Apprentice_BaseSteps(co
 
         var page = await stepsHelper.GetAllSearchResults();
 
-        var titles = page.Select(x => x.EventTitle).ToList();
+        titles = [.. page.Select(x => x.EventTitle)];
 
-        var expectedEvents = table.CreateSet<NetworkEvent>().ToList();
+        var expectedEvents = table.CreateSet<NetworkEvent>().Select(x => x.EventTitle).ToList();
 
-        foreach (var expected in expectedEvents)
-        {
-            titles.Should().Contain(expected.EventTitle);
-        }
+        AssertListContains(titles, expectedEvents);
     }
 
     [Then(@"the following events can not be found within the search results:")]
-    public async Task ThenTheFollowingEventsCanNotBeFoundWithinTheSearchResults(Table table)
+    public void ThenTheFollowingEventsCanNotBeFoundWithinTheSearchResults(Table table)
     {
-        var stepsHelper = context.Get<ApprenticeStepsHelper>();
-
-        var page = await stepsHelper.GetAllSearchResults();
-
-        var titles = page.Select(x => x.EventTitle).ToList();
-
         var unexpectedEvents = table.CreateSet<NetworkEvent>().ToList();
 
         foreach (var unexpected in unexpectedEvents)
         {
-            titles.Should().NotContain(unexpected.EventTitle);
+            CollectionAssert.DoesNotContain(titles, unexpected.EventTitle);
         }
     }
 

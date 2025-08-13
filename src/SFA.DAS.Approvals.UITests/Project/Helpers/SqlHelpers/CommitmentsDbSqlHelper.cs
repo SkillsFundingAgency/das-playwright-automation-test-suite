@@ -51,5 +51,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return await GetData(query);            
         }
 
+        internal async Task<string> GetValueFromApprenticeshipTable(string columnName, string ULN)
+        {
+            string query = $"SELECT TOP(1) {columnName} FROM [dbo].[Apprenticeship] WHERE ULN = {ULN}";
+            var result = await GetData(query);
+            return result.FirstOrDefault() ?? string.Empty;
+
+        }
     }
 }
