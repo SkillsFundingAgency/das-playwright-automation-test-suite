@@ -17,8 +17,7 @@ Scenario: AAN_E_03_Employer filter events
 @aanemployer
 @aanemployer03b
 @regression
-@ignore
-Scenario: AAN_A_03b_Employer user filters events by location
+Scenario: AAN_E_03b_Employer user filters events by location
     Given the following events have been created:
     | Event Title                           | Location                                                                    |
     | Location Filter Employer Test Event 1 | The Maids Head, King's Lynn, PE32 1NG                                       |
@@ -27,18 +26,31 @@ Scenario: AAN_A_03b_Employer user filters events by location
     When an onboarded employer logs into the AAN portal
     And the user filters events within 10 miles of "PE30 5HF"
     Then the following events can be found within the search results:
-    | Event Title                             |
+    | Event Title                           |
     | Location Filter Employer Test Event 1 |
     | Location Filter Employer Test Event 2 |
     And the following events can not be found within the search results:
-    | Event Title                             |
+    | Event Title                           |
     | Location Filter Employer Test Event 3 |
     When the user filters events Across England centered on "PE30 5HF"
     And the user orders the results by Closest
+    #Here are the approximate driving distances from PE30 5HF (King's Lynn) to each of the requested locations:
+    #The Maids Head, King's Lynn, PE32 1NG
+    #Distance: ~7.5 miles
+    #Estimated Drive Time: ~15 minutes
+    #This route heads southeast out of King's Lynn toward the village of Great Massingham 1.
+    #Eagles Golf Club, 37-39 School Road, King's Lynn, PE34 4RS
+    #Distance: ~6.2 miles
+    #Estimated Drive Time: ~13 minutes
+    #Located in Marshland St James, this is a short drive east from central King's Lynn 1.
+    #Spalding United Football Club, Sir Halley Stewart Field, Spalding, PE11 1DA
+    #Distance: ~22.5 miles
+    #Estimated Drive Time: ~40 minutes
+    #This journey heads north-east into Lincolnshire, passing through Wisbech and Holbeach
     Then the following events can be found within the search results in the given order:
-    | Event Title                             | Order |
-    | Location Filter Employer Test Event 1 | 1     |
-    | Location Filter Employer Test Event 2 | 2     |
+    | Event Title                           | Order |
+    | Location Filter Employer Test Event 2 | 1     |
+    | Location Filter Employer Test Event 1 | 2     |
     | Location Filter Employer Test Event 3 | 3     |
 
 @aan
@@ -46,7 +58,8 @@ Scenario: AAN_A_03b_Employer user filters events by location
 @aanemployer
 @aanemployer03b
 @regression
-Scenario:AAN_A_03c Employer user filters events by a location that does not exist
+@notareallocation
+Scenario:AAN_E_03c Employer user filters events by a location that does not exist
     Given an onboarded employer logs into the AAN portal
     When the user filters events within 10 miles of "Lilliput"
     Then the heading text "We cannot find the location you entered" is displayed
@@ -57,7 +70,7 @@ Scenario:AAN_A_03c Employer user filters events by a location that does not exis
 @aanemployer
 @aanemployer03b
 @regression
-Scenario:AAN_A_03d Employer user filters events and finds no matching results
+Scenario:AAN_E_03d Employer user filters events and finds no matching results
     Given an onboarded employer logs into the AAN portal
     When the user navigates to Network Events
     And the user filters events so that there are no results

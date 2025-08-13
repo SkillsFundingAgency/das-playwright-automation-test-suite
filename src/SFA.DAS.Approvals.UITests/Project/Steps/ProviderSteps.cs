@@ -1,17 +1,9 @@
-﻿using Azure;
-using Polly;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
-using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -23,10 +15,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         public ProviderSteps(ScenarioContext _context)
         {
-            context = _context;            
-            providerStepsHelper = new ProviderStepsHelper(context);          
+            context = _context;
+            providerStepsHelper = new ProviderStepsHelper(context);
         }
-
 
         [Given(@"the provider logs into portal")]
         [When("Provider logs into Provider-Portal")]
@@ -49,7 +40,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenSendsAnApprenticeRequestCohortToTheEmployerBySelectingApprenticesFromILRListAndReservations()
         {
             var page = await providerStepsHelper.ProviderAddsFirstApprenitceUsingReservation();
-            var page1 = await providerStepsHelper.ProviderAddsOtherApprentices(page);
+            var page1 = await providerStepsHelper.ProviderAddsOtherApprenticesUsingReservation(page);
             await providerStepsHelper.ProviderApproveCohort(page1);
         }
 
@@ -110,6 +101,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
         }
 
+        [Then("apprentice\\/learner record is no longer available on SelectLearnerFromILR page")]
+        public async Task ThenApprenticeLearnerRecordIsNoLongerAvailableOnSelectLearnerFromILRPage()
+        {
+            await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
+        }
 
 
 

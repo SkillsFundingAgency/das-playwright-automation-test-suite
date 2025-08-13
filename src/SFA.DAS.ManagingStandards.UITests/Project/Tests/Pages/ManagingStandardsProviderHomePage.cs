@@ -270,7 +270,7 @@ public class ManageAStandard_TeacherPage(ScenarioContext context, string standar
     }
     public async Task<ManageTheStandardsYouDeliverPage> Return_StandardsManagement()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Back to standards management" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back to manage your standards" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }

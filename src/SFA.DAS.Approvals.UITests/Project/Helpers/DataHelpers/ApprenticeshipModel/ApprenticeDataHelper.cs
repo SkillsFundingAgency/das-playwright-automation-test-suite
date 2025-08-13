@@ -1,23 +1,14 @@
-﻿using Dynamitey;
-using MongoDB.Driver.Linq;
-using Polly;
-using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
-using SFA.DAS.FrameworkHelpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel
 {
     internal class ApprenticeDataHelper(ScenarioContext context)
     {
-        public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(            
-            EmployerType EmployerType, 
-            int NumberOfApprenticeships, 
+        public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(
+            EmployerType EmployerType,
+            int NumberOfApprenticeships,
             string Ukprn = null,
             List<Apprenticeship>? apprenticeships = null,
             IApprenticeFactory? apprenticeFactory = null,
@@ -29,7 +20,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             trainingFactory ??= new TrainingFactory();
             rplFactory ??= new RPLFactory();
 
-            apprenticeships = (apprenticeships == null) ? new List<Apprenticeship>(): apprenticeships;
+            apprenticeships = (apprenticeships == null) ? new List<Apprenticeship>() : apprenticeships;
             var employerDetails = await GetEmployerDetails(EmployerType);
 
             for (int i = 0; i < NumberOfApprenticeships; i++)
@@ -41,12 +32,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
 
                 // Create apprenticeship object with above generated details
-                Apprenticeship apprenticeship = new Apprenticeship(apprenticeDetails, training, rpl)
+                Apprenticeship apprenticeship = new(apprenticeDetails, training, rpl)
                 {
                     EmployerDetails = employerDetails,
                     UKPRN = Ukprn != null ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn),
                 };
-                
+
 
                 // Add to the list
                 apprenticeships.Add(apprenticeship);
@@ -57,7 +48,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
         private async Task<Employer> GetEmployerDetails(EmployerType employerType)
         {
-            Employer employer = new Employer();
+            Employer employer = new();
 
             EasAccountUser employerUser = employerType switch
             {

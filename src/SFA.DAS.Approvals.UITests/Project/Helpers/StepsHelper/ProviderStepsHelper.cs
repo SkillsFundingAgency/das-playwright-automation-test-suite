@@ -37,7 +37,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await chooseAnEmployerPage.ChooseAnEmployer(agreementId);
         }
 
-        internal async Task<ApproveApprenticeDetailsPage> AddFirstApprenticeFromILRList(SelectApprenticeFromILRPage selectApprenticeFromILRPage)
+        internal async Task<ApproveApprenticeDetailsPage> AddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
@@ -63,7 +63,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<AddApprenticeDetailsPage> TryAddFirstApprenticeFromILRList(SelectApprenticeFromILRPage selectApprenticeFromILRPage)
+        internal async Task<AddApprenticeDetailsPage> TryAddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
@@ -140,7 +140,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page5.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<ApproveApprenticeDetailsPage> ProviderAddsOtherApprentices(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        internal async Task<ApproveApprenticeDetailsPage> ProviderAddsOtherApprenticesUsingReservation(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
@@ -148,7 +148,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             {
                 foreach (var apprenticeship in listOfApprenticeship.Skip(1))
                 {
-                    var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink();
+                    var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink_SelectReservationRoute();
                     var page1 = await page.SelectOptionToAddApprenticesFromILRList_SelectReservationRoute();
                     var page2 = await page1.SelectReservation(apprenticeship.ReservationID);
                     var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);
@@ -180,7 +180,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await ProviderApproveCohort(page1);
         }
 
-        internal async Task<SelectApprenticeFromILRPage> GoToSelectApprenticeFromILRPage()
+        internal async Task<SelectLearnerFromILRPage> GoToSelectApprenticeFromILRPage()
         {
             var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
@@ -189,7 +189,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page4 = await SelectEmployer(page3);
             var page5 = await page4.ConfirmEmployer();
 
-            return await page5.VerifyPageAsync(() => new SelectApprenticeFromILRPage(context));
+            return await page5.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
         internal async Task<ApprenticeDetails_ProviderPage> ProviderSearchOpenApprovedApprenticeRecord(ManageYourApprentices_ProviderPage manageYourApprenticesPage, string uln, string name)
@@ -205,6 +205,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page.EditDoB(dateOfBirth);
             await page.ClickUpdateDetailsButton();
             await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
+        }
+
+        internal async Task ProviderVerifyLearnerNotAvailableForSelection()
+        {
+            var selectLearnerFromILRPage = await GoToSelectApprenticeFromILRPage();
+            
+            foreach (var apprenticeship in listOfApprenticeship)
+            {
+                var uln = apprenticeship.ApprenticeDetails.ULN.ToString();
+
+                await selectLearnerFromILRPage.SearchULN(uln);
+                await selectLearnerFromILRPage.VerifyNoResultsFound();
+                await selectLearnerFromILRPage.ClearSearch();
+            }
+
         }
 
     }

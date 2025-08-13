@@ -1,10 +1,7 @@
-﻿using FluentAssertions;
-using NUnit.Framework;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
+﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Models;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.AppEmpCommonPages;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Employer;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
-using TechTalk.SpecFlow.Assist;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Employer;
 
@@ -16,6 +13,8 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
     private SearchNetworkEventsPage searchNetworkEventsPage;
 
     private AanEmployerOnBoardedUser user;
+
+    private List<string> titles;
 
     [Given(@"an onboarded employer logs into the AAN portal")]
     [When(@"an onboarded employer logs into the AAN portal")]
@@ -134,16 +133,19 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
 
         await new DfeSignInPage(context).SubmitValidLoginDetails(user);
 
-        //var stepsHelper = context.Get<AanAdminStepsHelper>();
+        var stepsHelper = context.Get<AanAdminStepsHelper>();
 
-        //var events = table.CreateSet<NetworkEventWithLocation>().ToList();
+        var events = table.CreateSet<NetworkEventWithLocation>().ToList();
 
-        //foreach (var e in events)
-        //{
-        //    var confirmationPage = stepsHelper
-        //        .CheckYourEvent(EventFormat.InPerson, false, false, e.EventTitle, e.Location).SubmitEvent();
-        //    confirmationPage.AccessHub();
-        //}
+        foreach (var e in events)
+        {
+            var page = await stepsHelper
+                .CheckYourEvent(EventFormat.InPerson, false, false, e.EventTitle, e.Location);
+
+            var confirmationPage = await page.SubmitEvent();
+
+            await confirmationPage.AccessHub();
+        }
 
         await Navigate(UrlConfig.AAN_Employer_BaseUrl);
     }
@@ -184,30 +186,21 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
 
         var results = await stepsHelper.GetAllSearchResults();
 
-        var titles = results.Select(x => x.EventTitle).ToList();
+        titles = [.. results.Select(x => x.EventTitle)];
 
-        var expectedEvents = table.CreateSet<NetworkEvent>().ToList();
+        var expectedEvents = table.CreateSet<NetworkEvent>().Select(x => x.EventTitle).ToList();
 
-        foreach (var expected in expectedEvents)
-        {
-            titles.Should().Contain(expected.EventTitle);
-        }
+        AssertListContains(titles, expectedEvents);
     }
 
     [Then(@"the following events can not be found within the search results:")]
-    public async Task ThenTheFollowingEventsCanNotBeFoundWithinTheSearchResults(Table table)
+    public void ThenTheFollowingEventsCanNotBeFoundWithinTheSearchResults(Table table)
     {
-        var stepsHelper = context.Get<EmployerStepsHelper>();
-
-        var results = await stepsHelper.GetAllSearchResults();
-
-        var titles = results.Select(x => x.EventTitle).ToList();
-
         var unexpectedEvents = table.CreateSet<NetworkEvent>().ToList();
 
         foreach (var unexpected in unexpectedEvents)
         {
-            titles.Should().NotContain(unexpected.EventTitle);
+            CollectionAssert.DoesNotContain(titles, unexpected.EventTitle);
         }
     }
 
@@ -223,7 +216,9 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
     public async Task ThenTheFollowingEventsCanBeFoundWithinTheSearchResultsInTheGivenOrder(Table table)
     {
         var stepsHelper = context.Get<EmployerStepsHelper>();
+
         var eventSearchResults = await stepsHelper.GetAllSearchResults();
+
         var expectedEvents = table.CreateSet<NetworkEventWithOrdinal>().OrderBy(e => e.Order).ToList();
 
         var filteredSearchResults = eventSearchResults
@@ -234,9 +229,11 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         for (var i = 0; i < expectedEvents.Count; i++)
         {
             var expectedEvent = expectedEvents[i];
+
             var actualEvent = filteredSearchResults.ElementAtOrDefault(i);
 
-            Assert.NotNull(actualEvent, $"Expected event with index {i} was not found.");
+            Assert.NotNull(actualEvent, $"Expected event with index {i} was not found.", $"actualEvent - {actualEvent.EventTitle}");
+            
             Assert.AreEqual(expectedEvent.EventTitle, actualEvent.EventTitle, $"Event at index {i + 1} does not match the expected title.");
         }
     }

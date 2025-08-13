@@ -14,11 +14,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         }
 
 
-        internal async Task<SelectApprenticeFromILRPage> SelectReservation(string reservationId)
+        internal async Task<SelectLearnerFromILRPage> SelectReservation(string reservationId)
         {
             await page.Locator($"input[type='radio'][value='{reservationId}']").ClickAsync();
             await page.Locator("button:has-text('Continue')").ClickAsync();
-            return await VerifyPageAsync(() => new SelectApprenticeFromILRPage(context));
+            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }   
 
     }

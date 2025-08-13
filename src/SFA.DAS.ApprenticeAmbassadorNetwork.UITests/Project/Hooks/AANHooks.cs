@@ -1,5 +1,4 @@
 ﻿global using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Helpers;
-using SFA.DAS.Framework.Hooks;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Hooks;
 
@@ -13,12 +12,12 @@ public class AANHooks(ScenarioContext context) : FrameworkBaseHooks(context)
 
         context.Set(new AANDataHelpers());
 
-        //context.Set(new AanAdminStepsHelper(context));
+        context.Set(new AanAdminStepsHelper(context));
 
         context.Set(new ApprenticeStepsHelper(context));
 
         context.Set(new EmployerStepsHelper(context));
 
-        //context.Set(new AanAdminCreateEventDatahelper());
+        context.Set(new AanAdminCreateEventDatahelper());
     }
 }
