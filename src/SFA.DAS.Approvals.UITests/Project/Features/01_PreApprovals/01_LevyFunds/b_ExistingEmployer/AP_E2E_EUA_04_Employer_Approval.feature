@@ -1,8 +1,10 @@
-﻿Feature: AP_E2E_EUA_04_Employer_Approval
+﻿@approvals
+@linkedScenarios
+Feature: AP_E2E_EUA_04_Employer_Approval
 
-A short summary of the feature
 
-@tag1
+@regression
+@e2escenarios
 	Scenario: AP_E2E_EUA_04 Provider sends cohort to employer for review then employer approves then provider approves
 	Given new learner details are processed in ILR for 2 apprentices
 	And Employer create and send an empty cohort to the training provider to add learner details
