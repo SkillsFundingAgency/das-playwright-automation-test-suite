@@ -110,7 +110,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         //    await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
         //}
 
-        internal async Task TryEditApprenticeAgeAndValidateErrors(ApprenticeDetailsPage apprenticeDetailsPage, DateTime dateOfBirth)
+        internal async Task TryEditApprenticeAgeAndValidateError(ApprenticeDetailsPage apprenticeDetailsPage, DateTime dateOfBirth)
         {
             var expectedErrorMessages = new List<string>
     {
