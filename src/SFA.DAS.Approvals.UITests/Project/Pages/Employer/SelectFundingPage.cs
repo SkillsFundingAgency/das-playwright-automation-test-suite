@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
+namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
     internal class SelectFundingPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
