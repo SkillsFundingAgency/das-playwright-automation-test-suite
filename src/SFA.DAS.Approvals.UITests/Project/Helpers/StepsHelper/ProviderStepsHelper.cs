@@ -208,7 +208,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task<ApproveApprenticeDetailsPage> ProviderAddApprencticesFromIlrRoute()
         {
             var page = await GoToSelectApprenticeFromILRPageForExistingCohort();
-            var page1 = await AddFirstApprenticeFromILRList(page);
+            var page1 = await AddFirstApprenticeFromILRListWithRPLDetails(page);
            return await AddOtherApprenticesFromILRListWithRPL(page1);
         }
 
@@ -251,7 +251,34 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             }
 
             return approveApprenticeDetailsPage;
-        }        
+        }
+
+        internal async Task<ApproveApprenticeDetailsPage> AddFirstApprenticeFromILRListWithRPLDetails(SelectLearnerFromILRPage selectApprenticeFromILRPage)
+        {
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+            var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
+            await page.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
+            await page.ClickAddButton();
+
+            ApproveApprenticeDetailsPage page2;
+
+            if (apprenticeship.TrainingDetails.StandardCode is 805 or 806 or 807 or 808 or 809 or 810 or 811)       //RPL check does not appear for foundation courses
+            {
+                page2 = new ApproveApprenticeDetailsPage(context);
+            }
+            else
+            {
+                var page1 = new RecognitionOfPriorLearningPage(context);
+                var page3 = await page1.SelectYesForRPL();
+                page2 = await page3.EnterRPLDataAndContinue(apprenticeship);
+            }
+
+            await page2.GetCohortId(apprenticeship);
+
+            objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.CohortReference}");
+            return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
+        }
 
     }
 }

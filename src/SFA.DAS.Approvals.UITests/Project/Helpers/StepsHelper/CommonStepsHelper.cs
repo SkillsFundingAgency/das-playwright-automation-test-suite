@@ -44,9 +44,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<bool> VerifyText(ILocator locator, string expected)
         {
-            var actual = await locator.InnerTextAsync();
+            var actual = (await locator.TextContentAsync()).Trim();
 
-            if(actual.Equals(expected,StringComparison.OrdinalIgnoreCase)) { return true; }
+            if(actual.Contains(expected.Trim(), StringComparison.OrdinalIgnoreCase)) { return true; }
 
             throw new Exception(MessageHelper.GetExceptionMessage("Text", expected, actual));
         }

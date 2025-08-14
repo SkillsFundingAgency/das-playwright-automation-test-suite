@@ -20,7 +20,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         private ILocator doNotApproveRadioOption => page.Locator("label:has-text('No, request changes from training provider')");
         private ILocator messageToEmployerTextBox => page.Locator(".govuk-textarea").First;
         private ILocator saveAndSubmitButton => page.Locator("button:has-text('Save and submit')");
-        private ILocator saveAndexitLink => page.Locator("a:has-text('Save and exit')");
+        private ILocator editLink => page.Locator(".edit-apprentice");
+        private ILocator editLink2 => page.Locator("table tr").Nth(1).Locator(".edit-apprentice");
         #endregion
 
 
@@ -50,6 +51,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         internal async Task ValidateCohortStatus(string cohortStatus)
         {
             await new CommonStepsHelper(context).VerifyText(status, cohortStatus);
+        }
+
+
+        internal async Task VerifyRPLDetails(List<Apprenticeship> apprenticeships)
+        {
+            for (int i=0; i< apprenticeships.Count; i++)
+            {
+                await editLink.Nth(i).ClickAsync();
+                var page1 = await new EditApprenticeDetailsPage(context).RecognitionOfPriorLearning(apprenticeships[i]);
+            }           
         }
     }
 }

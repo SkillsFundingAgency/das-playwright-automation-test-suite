@@ -132,10 +132,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Then ("verify RPL details")]
-        public async Task ThenTheEmployerVerifyRPLDetails(string status)
+        public async Task ThenTheEmployerVerifyRPLDetails()
         {
-            await employerStepsHelper.ReadyForReviewCohort(status);
-
+           var apprenticeships = context.GetValue<List<Apprenticeship>>();
+            var page = new EmployerApproveApprenticeDetailsPage(context);
+           await page.VerifyRPLDetails(apprenticeships);
         }
 
     }
