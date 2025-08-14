@@ -110,7 +110,40 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
         }
 
+        internal async Task AddEmptyCohort()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var ukprn = listOfApprenticeship.FirstOrDefault().UKPRN;
 
+            await EmployerLogInToEmployerPortal();
+
+            await new InterimApprenticesHomePage(context, false).VerifyPage();
+
+            await new ApprenticesHomePage(context).GoToAddAnApprentice();
+
+            var trainingProviderPage =  await new AddApprenticePage(context).ClickStartNowButton();
+
+            var confirmTrainingProviderPage =   await trainingProviderPage.SubmitValidUkprn(ukprn);
+
+            var confirmApprenticesPage =   await confirmTrainingProviderPage.ConfirmTrainingProviderDetails();
+
+            var confirmRequestSentPage = await confirmApprenticesPage.SelectAddApprencticesByProvider();
+
+            await confirmRequestSentPage.SetCohortReference(listOfApprenticeship);
+
+        }
+
+        internal async Task ReadyForReviewCohort(string status)
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var cohort = listOfApprenticeship.FirstOrDefault().CohortReference;
+
+            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
+
+            var page1 = await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            var page2 = await page1.OpenApprenticeRequestReadyForReview(cohort);
+            await page2.ValidateCohortStatus(status);
+        }
 
     }
 }
