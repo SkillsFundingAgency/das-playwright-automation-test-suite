@@ -51,7 +51,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
         public string FullName => FirstName + " " + LastName;
         public string Email { get; set; }
         public DateTime DateOfBirth { get; set; }
-
+        public int ApprenticeshipId { get; set; }
+        public string LearningIdKey { get; set; }
+        public int LearnerDataId { get; set; }    
     }
 
     public class Training

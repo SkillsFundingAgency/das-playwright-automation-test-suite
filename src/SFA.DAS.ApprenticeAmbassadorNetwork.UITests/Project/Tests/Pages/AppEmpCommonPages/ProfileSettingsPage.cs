@@ -34,9 +34,13 @@ public class LeavingTheNetworkPage(ScenarioContext context) : AanBasePage(contex
     public async Task<ConfirmLeaveTheNetworkPage> CompleteFeedbackAboutLeavingAndContinue()
     {
         await page.GetByRole(AriaRole.Checkbox, new() { Name = "I am unable to commit the" }).CheckAsync();
+
         await page.GetByRole(AriaRole.Radio, new() { Name = "Excellent" }).CheckAsync();
+
         await page.GetByRole(AriaRole.Checkbox, new() { Name = "Professional networking" }).CheckAsync();
+
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
         return await VerifyPageAsync(() => new ConfirmLeaveTheNetworkPage(context));
     }
 }

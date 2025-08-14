@@ -1,8 +1,5 @@
-﻿using Azure;
-using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Employer;
+﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Employer;
 using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Employer.Onboarding;
-using SFA.DAS.Login.Service.Project;
-using SFA.DAS.Login.Service.Project.Helpers;
 
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Employer;
 

@@ -1,24 +1,17 @@
-﻿using DnsClient;
-using Dynamitey;
+﻿using Dynamitey;
 using MongoDB.Driver.Linq;
 using Polly;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
-using SFA.DAS.FrameworkHelpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel
 {
     internal class ApprenticeDataHelper(ScenarioContext context)
     {
-        public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(            
-            EmployerType EmployerType, 
-            int NumberOfApprenticeships, 
+        public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(
+            EmployerType EmployerType,
+            int NumberOfApprenticeships,
             string Ukprn = null,
             List<Apprenticeship>? apprenticeships = null,
             IApprenticeFactory? apprenticeFactory = null,
@@ -30,7 +23,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             trainingFactory ??= new TrainingFactory();
             rplFactory ??= new RPLFactory();
 
-            apprenticeships = (apprenticeships == null) ? new List<Apprenticeship>(): apprenticeships;
+            apprenticeships = (apprenticeships == null) ? new List<Apprenticeship>() : apprenticeships;
             var employerDetails = await GetEmployerDetails(EmployerType);
             var ukprn = Ukprn != null ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);
 
@@ -51,7 +44,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
                     TrainingDetails = training,
                     RPLDetails = rpl,
                 };
-                
+
 
                 // Add to the list
                 apprenticeships.Add(apprenticeship);

@@ -29,11 +29,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new AddApprenticeDetailsPage(context));
         }
 
-        private async Task SearchULN(string uln)
+        internal async Task SearchULN(string uln)
         {
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or" }).FillAsync(uln);
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or unique learner number (ULN)" }).FillAsync(uln);
             await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
         }
+
+        internal async Task ClearSearch() => await page.GetByRole(AriaRole.Link, new() { Name = "Clear search" }).ClickAsync();
+
+        internal async Task VerifyNoResultsFound() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("0 apprentice records");
 
 
     }

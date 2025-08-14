@@ -83,9 +83,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var coursesDataHelper = new CoursesDataHelper();
             var employerType = EmployerType.Levy;
 
-            //create apprenticeships object with Foundation level standard and a learner aged 25 years:
+            //create apprenticeships object with Foundation level standard and a learner aged > 25 years:
             var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourses());
-            var apprenticeDetails = new ApprenticeFactory(age);
+            var apprenticeDetails = new ApprenticeFactory(age+1);
 
             var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(employerType, 1, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
             context.Set(listOfApprenticeship);
