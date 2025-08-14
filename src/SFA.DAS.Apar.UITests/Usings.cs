@@ -11,3 +11,5 @@ global using TechTalk.SpecFlow;
 global using SFA.DAS.ConfigurationBuilder;
 global using SFA.DAS.AparAdmin.Service;
 global using System.Linq;
+global using SFA.DAS.Framework;
+global using SFA.DAS.Framework.Hooks;
