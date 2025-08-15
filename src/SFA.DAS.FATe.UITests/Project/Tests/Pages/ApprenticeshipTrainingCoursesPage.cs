@@ -19,7 +19,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Course" }).FillAsync(searchTerm);
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filter" }).ClickAsync();
+        await page.Locator("#filters-submit").ClickAsync();
     }
 
     public async Task<Search_TrainingCourses_ApprenticeworkLocationPage> VerifyNoresultStartAnewSearchLink()
