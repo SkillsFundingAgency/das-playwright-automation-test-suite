@@ -106,7 +106,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
 
             var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedApprenticeRecord(new ApprenticesHomePage(context), uln, name);
-            await employerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
+            await employerStepsHelper.TryEditApprenticeAgeAndValidateErrors(apprenticeDetailsPage, DoB);
         }
 
 
