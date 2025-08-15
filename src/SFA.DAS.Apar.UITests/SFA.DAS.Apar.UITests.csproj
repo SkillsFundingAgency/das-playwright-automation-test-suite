@@ -32,7 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="RoatpNUnitConfigurator.cs">
+		<Compile Update="AparNUnitConfigurator.cs">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Compile>
 	</ItemGroup>
