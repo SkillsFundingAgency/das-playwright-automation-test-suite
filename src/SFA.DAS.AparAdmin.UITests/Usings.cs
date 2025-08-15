@@ -6,3 +6,5 @@ global using SFA.DAS.FrameworkHelpers;
 global using SFA.DAS.Framework;
 global using Microsoft.Playwright;
 global using System.Threading.Tasks;
+global using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign;
+global using SFA.DAS.Framework.Hooks;

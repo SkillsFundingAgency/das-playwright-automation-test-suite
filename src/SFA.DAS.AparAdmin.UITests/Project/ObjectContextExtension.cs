@@ -1,6 +1,4 @@
-﻿
-
-namespace SFA.DAS.AparAdmin.UITests;
+﻿namespace SFA.DAS.AparAdmin.UITests.Project;
 
 public static class ObjectContextExtension
 {

@@ -1,7 +1,6 @@
 ﻿using SFA.DAS.AparAdmin.UITests.Project.Helpers;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
-using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign;
-using SFA.DAS.Framework.Hooks;
+
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Steps;
 

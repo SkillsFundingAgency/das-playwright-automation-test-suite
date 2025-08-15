@@ -1,6 +1,4 @@
-﻿
-
-namespace SFA.DAS.Apar.UITests.Project;
+﻿namespace SFA.DAS.Apar.UITests.Project;
 
 [Binding]
 public class AparConfigurationSetup(ScenarioContext context)

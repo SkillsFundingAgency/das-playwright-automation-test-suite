@@ -1,6 +1,4 @@
-﻿using SFA.DAS.AparAdmin.Service.Project.Pages;
-using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
-using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign;
+﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Helpers;
 
@@ -15,8 +13,8 @@ public class AssessorLoginStepsHelper(ScenarioContext context)
         return await VerifyPageHelper.VerifyPageAsync(() => new AparAssessorApplicationsHomePage(context));
     }
 
-    public async Task<AparAssessorApplicationsHomePage> Assessor2Login() 
-    { 
+    public async Task<AparAssessorApplicationsHomePage> Assessor2Login()
+    {
         await _dfeAdminLoginStepsHelper.LoginToAsAssessor2();
 
         return await VerifyPageHelper.VerifyPageAsync(() => new AparAssessorApplicationsHomePage(context));

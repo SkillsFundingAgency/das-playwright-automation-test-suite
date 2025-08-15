@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SFA.DAS.AparAdmin.UITests.Project.Hooks;
+﻿namespace SFA.DAS.AparAdmin.UITests.Project.Hooks;
 
 [Binding, Scope(Tag = "roatpadmintestdataprep")]
 public class AparAdminTestDataPrepHooks(ScenarioContext context) : AparBaseHooks(context)
