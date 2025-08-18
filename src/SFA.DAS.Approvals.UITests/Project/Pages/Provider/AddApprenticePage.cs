@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
+﻿using Azure;
+using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Add an apprentice");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add an apprentice");
         }       
 
 

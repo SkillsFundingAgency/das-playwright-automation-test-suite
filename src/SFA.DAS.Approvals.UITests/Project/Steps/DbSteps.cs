@@ -1,4 +1,5 @@
 ﻿using Polly;
+using Polly.Retry;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
@@ -40,18 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenARecordIsCreatedInLearnerDataDbForEachLearner()
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
-
-            var retryPolicy = Policy
-                .HandleResult<string>(result => string.IsNullOrEmpty(result)) // Retry if result is null or empty
-                .WaitAndRetryAsync(
-                    retryCount: 5,
-                    sleepDurationProvider: attempt => TimeSpan.FromSeconds(1),
-                    onRetry: (result, timeSpan, retryCount, context) =>
-                    {
-                        objectContext.SetDebugInformation(
-                            $"Retry {retryCount} - learner not found in learnerData db. Waiting {timeSpan.TotalSeconds}s before next attempt.");
-                    });
-
+            var retryPolicy = DbRetryPolicy("LearnerDataId", "LearnerData db");
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
@@ -91,13 +81,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenLearnerDataDbIsUpdatedWithRespectiveApprenticeshipId()
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var retryPolicy = DbRetryPolicy("ApprenticeshipId", "LearnerData db");
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
                 var learnerDataId = apprenticeship.ApprenticeDetails.LearnerDataId;
                 var apprenticeshipIdExpected = apprenticeship.ApprenticeDetails.ApprenticeshipId;
-                var apprenticeshipIdActual = await learnerDataDbSqlHelper.GetApprenticeshipIdLinkedWithLearnerData(learnerDataId);
+                var apprenticeshipIdActual = await retryPolicy.ExecuteAsync(() => learnerDataDbSqlHelper.GetApprenticeshipIdLinkedWithLearnerData(learnerDataId));
                 Assert.AreEqual(apprenticeshipIdExpected.ToString(), apprenticeshipIdActual, $"[Id] from LearnerData db ({apprenticeshipIdActual}) does not match with [LearnerDataId] in Apprenticeship > Commitments db ({apprenticeshipIdExpected})");
             }
 
@@ -108,12 +99,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenApprenticeshipRecordIsCreatedInLearningDb()
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var retryPolicy = DbRetryPolicy("ApprenticeshipRecord", "Learning db");
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
                 var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
-                var result = await learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln);
+                var result = await retryPolicy.ExecuteAsync(() => learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln));
                 Assert.IsNotEmpty(result, $"Apprenticeship record not found in Learning Db for ApprenticeshipId: {apprenticeshipId}");
                 apprenticeship.ApprenticeDetails.LearningIdKey = result;
                 await Task.Delay(100);
@@ -151,6 +143,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             context.Set(listOfApprenticeship);
         }
 
+        private AsyncRetryPolicy<string> DbRetryPolicy(string value, string dbName)
+        {
+            return Policy
+                .HandleResult<string>(result => string.IsNullOrEmpty(result)) // Retry if result is null or empty  
+                .WaitAndRetryAsync(
+                    retryCount: 5,
+                    sleepDurationProvider: attempt => TimeSpan.FromSeconds(1),
+                    onRetry: (result, timeSpan, retryCount, context) =>
+                    {
+                        objectContext.SetDebugInformation(
+                            $"Retry {retryCount} - {value} not found in {dbName}. Waiting {timeSpan.TotalSeconds}s before next attempt.");
+                    });
+        }
 
     }
 }

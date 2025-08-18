@@ -31,7 +31,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task GivenPreviousTestHasBeenCompletedSuccessfully()
         {
             await Task.CompletedTask;
-
+            
             if (!featureContext.ContainsKey("ResultOfPreviousScenario"))
             {
                 throw new Exception("Result of previous scenario is missing. Please run the test at Feature level!");
@@ -39,6 +39,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             var scenarioAStatus = (ScenarioExecutionStatus)featureContext["ResultOfPreviousScenario"];
 
+            Assume.That(scenarioAStatus == ScenarioExecutionStatus.OK, ($"Cannot run this test as previous test in the same feature file failed with status: '{scenarioAStatus}'"));
+            {
+                var previousScenarioContext = (ScenarioContext)featureContext["ScenarioContextofPreviousScenario"];
+
+                var x = previousScenarioContext.GetValue<List<Apprenticeship>>();
+
+                foreach (var apprenticeship in x)
+                {
+                    listOfApprenticeship.Add(apprenticeship);
+                }
+
+                context.Set(listOfApprenticeship);
+            }
+
+            /*
             if (scenarioAStatus == ScenarioExecutionStatus.OK)
             {
                 var previousScenarioContext = (ScenarioContext)featureContext["ScenarioContextofPreviousScenario"];
@@ -55,7 +70,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             else
             {
                 throw new Exception($"Cannot run this test as previous test in the same feature file failed with status: '{scenarioAStatus}'");
-            }           
+            } 
+            */
 
         }
 

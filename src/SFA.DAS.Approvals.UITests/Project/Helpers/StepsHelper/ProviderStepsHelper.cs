@@ -240,7 +240,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         }
 
 
-        internal async Task<ApproveApprenticeDetailsPage> SelectanExistingEmployer(ChooseAnExistingEmployerPage chooseAnExistingEmployerPage)
+        internal async Task<ApproveApprenticeDetailsPage> SelectanExistingEmployer(ChooseACohortPage chooseAnExistingEmployerPage)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var firstApprentice = listOfApprenticeship.FirstOrDefault();

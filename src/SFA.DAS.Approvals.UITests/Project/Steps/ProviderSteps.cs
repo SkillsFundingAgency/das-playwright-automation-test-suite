@@ -127,8 +127,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             foreach (var item in OltdDetails)
             {
                 //Update valid apprentice object with new start and end dates. Then push it as new apprentice details on SLD endpoint
-                apprentice.TrainingDetails.StartDate = DateTime.Now.AddMonths(item.NewStartDate);       //apprentice.TrainingDetails.StartDate.AddMonths(item.NewStartDate);
-                apprentice.TrainingDetails.EndDate = DateTime.Now.AddMonths(item.NewEndDate);         //apprentice.TrainingDetails.EndDate.AddMonths(item.NewEndDate);
+                apprentice.TrainingDetails.StartDate = DateTime.Now.AddMonths(item.NewStartDate);
+                apprentice.TrainingDetails.EndDate = DateTime.Now.AddMonths(item.NewEndDate);
 
                 listOfApprenticeship[0] = apprentice;
                 context.Set(listOfApprenticeship);
@@ -159,17 +159,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When(@"the provider adds (.*) apprentices along with RPL details and sends to employer to review")]
         public async Task WhenTheProviderAddsApprenticesAndSendsToEmployerToReview(int numberOfApprentices)
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
-            
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;            
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
             var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
             await page1.SelectCohort(cohortRef);
-
-           var approveApprenticeDetails =  await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
-
-           await approveApprenticeDetails.ProviderSendCohortForEmployerApproval();
-
+            var page2 =  await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
+            await page2.ProviderSendCohortForEmployerApproval();
         }
 
         [Then("the provider approves the cohorts")]

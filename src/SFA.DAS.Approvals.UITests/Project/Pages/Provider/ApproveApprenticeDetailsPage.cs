@@ -74,13 +74,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task<SelectLearnerFromILRPage> ClickOnAddAnotherApprenticeLink()
         {
             await AddAnotherApprenticeLink.ClickAsync();
-            return new SelectLearnerFromILRPage(context);
+            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
         internal async Task<ProviderSelectAReservationPage> ClickOnAddAnotherApprenticeLink_SelectReservationRoute()
         {
             await AddAnotherApprenticeLink.ClickAsync();
-            return new ProviderSelectAReservationPage(context);
+            return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
         }
        
 

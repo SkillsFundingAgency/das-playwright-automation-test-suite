@@ -29,9 +29,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             listOfApprenticeship = _context.GetValue<List<Apprenticeship>>();
         }
 
-        internal async Task<HomePage> EmployerLogInToEmployerPortal()
+        internal async Task<HomePage> EmployerLogInToEmployerPortal(bool openInNewTab = true)
         {
-            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
+            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(openInNewTab);
 
             var employerType = listOfApprenticeship.FirstOrDefault().EmployerDetails.EmployerType.ToString();
 
@@ -115,21 +115,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var ukprn = listOfApprenticeship.FirstOrDefault().UKPRN;
 
-            await EmployerLogInToEmployerPortal();
-
+            await EmployerLogInToEmployerPortal(false);
             await new InterimApprenticesHomePage(context, false).VerifyPage();
-
-            await new ApprenticesHomePage(context).GoToAddAnApprentice();
-
-            var trainingProviderPage =  await new AddApprenticePage(context).ClickStartNowButton();
-
-            var confirmTrainingProviderPage =   await trainingProviderPage.SubmitValidUkprn(ukprn);
-
-            var confirmApprenticesPage =   await confirmTrainingProviderPage.ConfirmTrainingProviderDetails();
-
-            var confirmRequestSentPage = await confirmApprenticesPage.SelectAddApprencticesByProvider();
-
-            await confirmRequestSentPage.SetCohortReference(listOfApprenticeship);
+            var page = await new ApprenticesHomePage(context).GoToAddAnApprentice();
+            var page1 =  await page.ClickStartNowButton();
+            var page2 =   await page1.SubmitValidUkprn(ukprn);
+            var page3 =   await page2.ConfirmTrainingProviderDetails();
+            var page4 = await page3.SelectAddApprencticesByProvider();
+            await page4.SetCohortReference(listOfApprenticeship);
 
         }
 
