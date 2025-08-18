@@ -43,7 +43,7 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
 
     public async Task<TrainingProviderOverviewPage> AccessProviderOverview()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Provider overview" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Overview" }).ClickAsync();
 
         return await VerifyPageAsync(() => new TrainingProviderOverviewPage(context));
     }
