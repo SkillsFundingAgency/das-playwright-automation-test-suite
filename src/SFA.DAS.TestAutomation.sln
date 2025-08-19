@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.AparAdmin.Service",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.AparAdmin.UITests", "SFA.DAS.AparAdmin.UITests\SFA.DAS.AparAdmin.UITests.csproj", "{0376945F-ED6D-42BE-BDE2-611DF83F813E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProvideFeedback.UITests", "SFA.DAS.ProvideFeedback.UITests\SFA.DAS.ProvideFeedback.UITests.csproj", "{B9937433-99C3-4549-8394-65AAF4FE3FA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -185,6 +187,10 @@ Global
 		{0376945F-ED6D-42BE-BDE2-611DF83F813E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0376945F-ED6D-42BE-BDE2-611DF83F813E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0376945F-ED6D-42BE-BDE2-611DF83F813E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9937433-99C3-4549-8394-65AAF4FE3FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9937433-99C3-4549-8394-65AAF4FE3FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9937433-99C3-4549-8394-65AAF4FE3FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9937433-99C3-4549-8394-65AAF4FE3FA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
