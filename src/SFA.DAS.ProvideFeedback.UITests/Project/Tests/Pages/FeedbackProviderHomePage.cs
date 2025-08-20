@@ -54,6 +54,6 @@ public class FeedbackOverviewPage(ScenarioContext context) : ProviderFeedbackBas
 
     public async Task VerifyText(string expectedText)
     {
-        await Assertions.Expect(page.Locator("#app-All, #emp-All")).ToContainTextAsync(expectedText);
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(expectedText);
     }
 }
