@@ -21,7 +21,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new ReserveFundingForNonLevyEmployersPage(context));
         }
 
-        internal async Task<AddApprenticeDetails_EntryMothodPage> SelectReservationToAddApprentice(Apprenticeship apprenticeship )
+        internal async Task<SelectLearnerFromILRPage> SelectReservationToAddApprentice(Apprenticeship apprenticeship )
         {
             var rsrvStartDate = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
             var rsrvEndDate = apprenticeship.TrainingDetails.StartDate.AddMonths(2).ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
@@ -39,7 +39,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             if (await reservationLink.IsVisibleAsync())
             {
                 await reservationLink.First.ClickAsync();
-                return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));
+                return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
             }
 
             // 🔁 If not, loop through pagination
@@ -63,7 +63,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             }
 
 
-            return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));
+            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
 

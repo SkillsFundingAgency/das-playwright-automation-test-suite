@@ -22,5 +22,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
             return await VerifyPageAsync(() => new ChooseAnEmployerPage(context));
         }
+
+        internal async Task<ChooseACohortPage> SelectOptionUseExistingCohort()
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "Add to an existing cohort" }).CheckAsync();
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new ChooseACohortPage(context));
+        }
     }
 }

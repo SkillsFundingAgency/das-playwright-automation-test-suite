@@ -21,5 +21,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
             return await VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
+
+        internal async Task<AddRecognitionOfPriorLearningDetailsPage> SelectYesForRPL()
+        {
+            await page.GetByText("Yes", new() { Exact = true }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new AddRecognitionOfPriorLearningDetailsPage(context));
+        }
     }
 }

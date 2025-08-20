@@ -110,8 +110,34 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
+        [Given(@"Employer create and send an empty cohort to the training provider to add learner details")]
+        public async Task GivenEmployerCreatesEmptyRequestCohort()
+        {
+            await employerStepsHelper.AddEmptyCohort();
+        }
 
+        [Then ("the Employer sees the cohort in Ready to review with status of (.*)")]
+        public async Task ThenTheEmployerReviewsCohort(string status)
+        {
+             await employerStepsHelper.ReadyForReviewCohort(status);
 
+        }
+
+        [When ("the Employer approves the cohort and sends to provider")]
+        public async Task ThenTheEmployerApprovesCohort()
+        {
+            var page = new EmployerApproveApprenticeDetailsPage(context);
+            await page.EmployerApproveCohort();
+
+        }
+
+        [Then ("verify RPL details")]
+        public async Task ThenTheEmployerVerifyRPLDetails()
+        {
+           var apprenticeships = context.GetValue<List<Apprenticeship>>();
+            var page = new EmployerApproveApprenticeDetailsPage(context);
+           await page.VerifyRPLDetails(apprenticeships);
+        }
 
     }
 
