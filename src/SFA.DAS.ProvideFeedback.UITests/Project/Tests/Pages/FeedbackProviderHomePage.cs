@@ -34,22 +34,22 @@ public class FeedbackOverviewPage(ScenarioContext context) : ProviderFeedbackBas
 
     public async Task VerifyApprenticeFeedbackRating(string period, string expectedRating)
     {
-        await Assertions.Expect(page.Locator($"apprentice-rating-description-{period}")).ToContainTextAsync(expectedRating);
+        await Assertions.Expect(page.Locator($"#apprentice-rating-description-{period}")).ToContainTextAsync(expectedRating);
     }
 
     public async Task SelectApprenticeTabForAcademicYear(string academicYear)
     {
-        await page.Locator($"tab_app-{academicYear}").ClickAsync();
+        await page.Locator($"#tab_app-{academicYear}").ClickAsync();
     }
 
     public async Task VerifyEmployerFeedbackRating(string period, string expectedRating)
     {
-        await Assertions.Expect(page.Locator($"employer-rating-description-{period}")).ToContainTextAsync(expectedRating);
+        await Assertions.Expect(page.Locator($"#employer-rating-description-{period}")).ToContainTextAsync(expectedRating);
     }
 
     public async Task SelectEmployerTabForAcademicYear(string academicYear)
     {
-        await page.Locator($"tab_emp-{academicYear}").ClickAsync();
+        await page.Locator($"#tab_emp-{academicYear}").ClickAsync();
     }
 
     public async Task VerifyText(string expectedText)
