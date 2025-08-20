@@ -40,6 +40,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.TrainingDetails.StartDate = Convert.ToDateTime(details[8]);
             apprenticeship.TrainingDetails.EndDate = Convert.ToDateTime(details[9]);
             apprenticeship.TrainingDetails.TotalPrice = Convert.ToInt32(details[10]);
+            apprenticeship.TrainingDetails.TrainingPrice = Convert.ToInt32(details[10]);
             apprenticeship.TrainingDetails.AcademicYear = AcademicYearDatesHelper.GetCurrentAcademicYear();
             apprenticeship.TrainingDetails.ConsumerReference = details[11];
 

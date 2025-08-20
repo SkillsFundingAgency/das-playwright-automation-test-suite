@@ -120,15 +120,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenProviderTriesToAddANewApprenticeUsingDetailsFromTableBelow(Table table)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
-            var listOfValidApprenticeship = listOfApprenticeship;
-            var apprentice = listOfValidApprenticeship.FirstOrDefault();  
+            var apprentice = listOfApprenticeship.FirstOrDefault();
+            var originalStartDate = apprentice.TrainingDetails.StartDate;
+            var originalEndDate = apprentice.TrainingDetails.EndDate;
             var OltdDetails = table.CreateSet<OltdDetails>().ToList();
 
             foreach (var item in OltdDetails)
             {
                 //Update valid apprentice object with new start and end dates. Then push it as new apprentice details on SLD endpoint
-                apprentice.TrainingDetails.StartDate = DateTime.Now.AddMonths(item.NewStartDate);
-                apprentice.TrainingDetails.EndDate = DateTime.Now.AddMonths(item.NewEndDate);
+                apprentice.TrainingDetails.StartDate = originalStartDate.AddMonths(Convert.ToInt32(item.NewStartDate));
+                apprentice.TrainingDetails.EndDate = originalEndDate.AddMonths(Convert.ToInt32(item.NewEndDate));
 
                 listOfApprenticeship[0] = apprentice;
                 context.Set(listOfApprenticeship);
@@ -187,8 +188,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
     public class OltdDetails
     {
-        public int NewStartDate { get; set; }
-        public int NewEndDate { get; set; }
+        public string NewStartDate { get; set; }
+        public string NewEndDate { get; set; }
         public bool DisplayOverlapErrorOnStartDate { get; set; }
         public bool DisplayOverlapErrorOnEndDate { get; set; }
     }
