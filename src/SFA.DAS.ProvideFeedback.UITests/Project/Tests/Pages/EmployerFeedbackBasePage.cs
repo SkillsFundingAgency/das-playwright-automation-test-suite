@@ -1,6 +1,4 @@
-﻿using Microsoft.Playwright;
-using SFA.DAS.Framework;
-using System.Linq;
+﻿
 
 namespace SFA.DAS.ProvideFeedback.UITests.Project.Tests.Pages;
 
@@ -19,7 +17,7 @@ public abstract class EmployerFeedbackBasePage(ScenarioContext context) : BasePa
 
     protected async Task SelectOptionAndContinue(string selector)
     {
-        var x = await page.Locator(selector).Filter(new LocatorFilterOptions {Visible = true }).AllTextContentsAsync();
+        var x = await page.Locator(selector).Filter(new LocatorFilterOptions { Visible = true }).AllTextContentsAsync();
 
         objectContext.SetDebugInformation($"list found - {x.ToString(",")}");
 

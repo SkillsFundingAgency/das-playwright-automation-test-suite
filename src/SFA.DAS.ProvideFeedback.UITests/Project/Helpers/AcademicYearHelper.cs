@@ -2,7 +2,7 @@
 
 public class AcademicYearHelper
 {
-    public static string GetCurrentAcademicYear()
+    public string GetCurrentAcademicYear()
     {
         var now = DateTime.UtcNow;
         var year = now.Year;
@@ -18,7 +18,7 @@ public class AcademicYearHelper
         return $"AY{startYear}{endYear}";
     }
 
-    public static string GetPreviousAcademicYear()
+    public string GetPreviousAcademicYear()
     {
         var now = DateTime.UtcNow.AddYears(-1);
         var year = now.Year;
