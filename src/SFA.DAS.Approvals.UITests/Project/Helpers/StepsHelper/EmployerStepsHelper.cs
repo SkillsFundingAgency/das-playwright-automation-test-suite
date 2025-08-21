@@ -60,13 +60,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await new InterimApprenticesHomePage(context, false).VerifyPage();
 
             var page = await new ApprenticesHomePage(context).GoToApprenticeRequests();
-            
+
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
 
             var page1 = await page.OpenApprenticeRequestReadyForReview(apprenticeship.CohortReference);
 
             await page1.VerifyCohort(apprenticeship);
-            
+
             return page1;
         }
 
@@ -82,15 +82,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await new ApprenticesHomePage(context).GoToManageYourApprentices();
 
             var page = new Pages.Employer.ManageYourApprenticesPage(context);
-            
+
             foreach (var apprentice in listOfApprenticeship)
             {
                 var uln = apprentice.ApprenticeDetails.ULN.ToString();
                 var name = apprentice.ApprenticeDetails.FullName;
-                
+
                 await page.SearchApprentice(uln, name);
-            }        
-        
+            }
+
         }
 
         internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, string uln, string name)
