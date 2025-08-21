@@ -36,6 +36,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
     public class Employer
     {
         public string AgreementId { get; set; }
+        public int AccountLegalEntityId { get; set; }
         public string EmployerName { get; set; }
         public EmployerType EmployerType { get; set; }
         public string Email { get; set; }
