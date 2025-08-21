@@ -1,14 +1,8 @@
-﻿using SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Apprentice.StubPages;
-
+﻿
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Apprentice;
 
-public class SignInPage(ScenarioContext context) : AanBasePage(context)
+public class SignInPage(ScenarioContext context) : ApprenticeSignInPage(context)
 {
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(StubSignInApprenticeAccountsPage.StubSignInPageTitle);
-    }
-
     public async Task<BeforeYouStartPage> SubmitValidUserDetails(AanBaseUser user)
     {
         await SubmitUserDetails(user, true);
@@ -39,8 +33,6 @@ public class SignInPage(ScenarioContext context) : AanBasePage(context)
             objectContext.SetLoginCredentials(user);
         }
 
-        var page = await new StubSignInApprenticeAccountsPage(context).SubmitValidUserDetails(user);
-
-        await page.Continue();
+        await SubmitUserDetails(user);
     }
 }
