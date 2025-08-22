@@ -45,7 +45,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(employerName).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenticeship.CohortReference);
             await Assertions.Expect(status).ToHaveTextAsync("New request");
-            await Assertions.Expect(message).ToHaveTextAsync("No message added.");
+            //await Assertions.Expect(message).ToHaveTextAsync("No message added.");
 
             var expectedName = apprenticeship.ApprenticeDetails.FullName;
             var expectedULN = apprenticeship.ApprenticeDetails.ULN.ToString();

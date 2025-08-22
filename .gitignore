@@ -245,7 +245,7 @@ SFA.DAS.Learners/Tools/PhantomJS/tools/phantomjs/ChangeLog
 
 /src/SFA.DAS.Approvals.UITests/Properties/launchSettings.json
 *.orig
-/src/SFA.DAS.Approvals.UITests/Project/CsvFiles/*.csv
+/src/SFA.DAS.Approvals.UITests/*.csv
 
 src/.idea/.idea.SFA.DAS.TestAutomation/.idea/
 
