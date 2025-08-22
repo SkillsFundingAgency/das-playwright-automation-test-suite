@@ -1,4 +1,7 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
+﻿using Dynamitey;
+using MongoDB.Driver.Linq;
+using Polly;
+using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using System;
 
 
@@ -22,6 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
             apprenticeships = (apprenticeships == null) ? new List<Apprenticeship>() : apprenticeships;
             var employerDetails = await GetEmployerDetails(EmployerType);
+            var ukprn = Ukprn != null ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);
 
             for (int i = 0; i < NumberOfApprenticeships; i++)
             {
@@ -32,10 +36,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
 
                 // Create apprenticeship object with above generated details
-                Apprenticeship apprenticeship = new(apprenticeDetails, training, rpl)
-                {
+                Apprenticeship apprenticeship = new Apprenticeship()
+                {                    
+                    UKPRN = ukprn,       //Ukprn != null ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn),
                     EmployerDetails = employerDetails,
-                    UKPRN = Ukprn != null ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn),
+                    ApprenticeDetails = apprenticeDetails,
+                    TrainingDetails = training,
+                    RPLDetails = rpl,
                 };
 
 
@@ -46,24 +53,42 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             return apprenticeships;
         }
 
+        internal async Task<Apprenticeship> CreateEmptyCohortAsync(EmployerType EmployerType, string Ukprn = null)
+        {
+            var employerDetails = await GetEmployerDetails(EmployerType);
+            var ukprn = Ukprn != null ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);
+
+            Apprenticeship apprenticeship = new Apprenticeship()
+            {
+                UKPRN = ukprn,
+                EmployerDetails = employerDetails,
+            };
+
+            return apprenticeship;
+        }
+
         private async Task<Employer> GetEmployerDetails(EmployerType employerType)
         {
-            Employer employer = new();
+            var accountsDbSqlHelper = context.Get<AccountsDbSqlHelper>();
+            Employer employer = new Employer();
 
             EasAccountUser employerUser = employerType switch
             {
                 EmployerType.NonLevy => context.GetUser<NonLevyUser>(),
                 EmployerType.NonLevyUserAtMaxReservationLimit => context.GetUser<NonLevyUserAtMaxReservationLimit>(),
                 _ => context.GetUser<LevyUser>()
-            };
+            };                      
 
             employer.EmployerName = employerUser.OrganisationName;
-
-            employer.AgreementId = await context.Get<AccountsDbSqlHelper>().GetAgreementId(employerUser.Username, employer.EmployerName[..3] + "%");
 
             employer.EmployerType = employerType;
 
             employer.Email = employerUser.Username;
+
+            employer.AgreementId = await accountsDbSqlHelper.GetAgreementId(employerUser.Username, employer.EmployerName[..3] + "%");
+
+            var aleId = await accountsDbSqlHelper.GetAccountLegalEntityId(employerUser.Username, employer.EmployerName[..3] + "%");
+            employer.AccountLegalEntityId = Convert.ToInt32(aleId);               //Convert.ToInt32(accountsDbSqlHelper.GetAccountLegalEntityId(employerUser.Username, employer.EmployerName[..3] + "%"));
 
             return employer;
         }
