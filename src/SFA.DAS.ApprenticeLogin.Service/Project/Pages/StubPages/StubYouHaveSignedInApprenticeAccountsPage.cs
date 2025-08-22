@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Apprentice.StubPages;
+﻿namespace SFA.DAS.ApprenticeLogin.Service.Project.Pages.StubPages;
 
 public class StubYouHaveSignedInApprenticeAccountsPage(ScenarioContext context, string username, string idOrUserRef, bool newUser) : StubYouHaveSignedInBasePage(context, username, idOrUserRef, newUser)
 {
