@@ -1,20 +1,5 @@
 ﻿namespace SFA.DAS.ProvideFeedback.UITests.Project.Tests.Pages;
 
-public abstract class ProviderFeedbackBasePage(ScenarioContext context) : BasePage(context)
-{
-    //protected static By NavigationBarFeedbackLink => By.CssSelector(".app-navigation__link[href*='feedback']");
-
-    //protected static By ContinueToSubmitButton => By.CssSelector("button.govuk-button[type=submit]");
-
-    //protected async Task ClickContinueButton() => formCompletionHelper.ClickButtonByText(ContinueToSubmitButton, "Continue");
-
-    //public ApprenticeFeedbackSelectProviderPage NavigateToGiveFeedbackOnYourTrainingProvider()
-    //{
-    //    formCompletionHelper.Click(NavigationBarFeedbackLink);
-    //    return new(context);
-    //}
-}
-
 public class FeedbackProviderHomePage(ScenarioContext context) : ProviderHomePage(context)
 {
     public async Task<FeedbackOverviewPage> SelectYourFeedback()
@@ -25,7 +10,7 @@ public class FeedbackProviderHomePage(ScenarioContext context) : ProviderHomePag
     }
 }
 
-public class FeedbackOverviewPage(ScenarioContext context) : ProviderFeedbackBasePage(context)
+public class FeedbackOverviewPage(ScenarioContext context) : BasePage(context)
 {
     public override async Task VerifyPage()
     {
