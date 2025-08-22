@@ -1,8 +1,6 @@
-﻿using SFA.DAS.FrameworkHelpers;
-using System;
-using System.Collections.Generic;
+﻿
 
-namespace SFA.DAS.ApprenticeApp.Service.Project;
+namespace SFA.DAS.ApprenticeLogin.Service.Project;
 
 public static class ObjectContextExtension
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.ApprenticeApp.Service.Project.Pages.StubPages;
+﻿namespace SFA.DAS.ApprenticeLogin.Service.Project.Pages.StubPages;
 
 public class StubSignInApprenticeAccountsPage(ScenarioContext context) : StubSignInBasePage(context)
 {

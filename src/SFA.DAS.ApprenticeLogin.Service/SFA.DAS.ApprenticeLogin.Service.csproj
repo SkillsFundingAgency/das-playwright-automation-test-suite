@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
-		<RootNamespace>SFA.DAS.ApprenticeApp.Service</RootNamespace>
+		<RootNamespace>SFA.DAS.ApprenticeLogin.Service</RootNamespace>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 	</PropertyGroup>
 

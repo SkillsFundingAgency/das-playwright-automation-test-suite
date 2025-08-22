@@ -14,4 +14,4 @@ global using System.Threading.Tasks;
 global using TechTalk.SpecFlow;
 global using NUnit.Framework;
 global using TechTalk.SpecFlow.Assist;
-global using SFA.DAS.ApprenticeApp.Service.Project.Pages;
+global using SFA.DAS.ApprenticeLogin.Service.Project.Pages;

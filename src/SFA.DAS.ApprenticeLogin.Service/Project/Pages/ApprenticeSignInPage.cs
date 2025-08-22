@@ -1,6 +1,4 @@
-﻿
-
-namespace SFA.DAS.ApprenticeApp.Service.Project.Pages;
+﻿namespace SFA.DAS.ApprenticeLogin.Service.Project.Pages;
 
 public class ApprenticeSignInPage(ScenarioContext context) : BasePage(context)
 {

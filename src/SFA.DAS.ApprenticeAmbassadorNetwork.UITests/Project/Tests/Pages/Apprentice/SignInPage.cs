@@ -1,4 +1,6 @@
 ﻿
+using SFA.DAS.ApprenticeLogin.Service.Project.Pages;
+
 namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Apprentice;
 
 public class SignInPage(ScenarioContext context) : ApprenticeSignInPage(context)

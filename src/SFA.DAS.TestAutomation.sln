@@ -69,7 +69,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.AparAdmin.UITests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ProvideFeedback.UITests", "SFA.DAS.ProvideFeedback.UITests\SFA.DAS.ProvideFeedback.UITests.csproj", "{B9937433-99C3-4549-8394-65AAF4FE3FA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ApprenticeApp.Service", "SFA.DAS.ApprenticeApp.Service\SFA.DAS.ApprenticeApp.Service.csproj", "{6BF71575-34E8-49B4-9E4D-6A8BF57E9722}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ApprenticeLogin.Service", "SFA.DAS.ApprenticeLogin.Service\SFA.DAS.ApprenticeLogin.Service.csproj", "{6BF71575-34E8-49B4-9E4D-6A8BF57E9722}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

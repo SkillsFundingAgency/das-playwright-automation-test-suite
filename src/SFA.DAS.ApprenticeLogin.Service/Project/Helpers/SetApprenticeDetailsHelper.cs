@@ -1,6 +1,4 @@
-﻿using SFA.DAS.FrameworkHelpers;
-
-namespace SFA.DAS.ApprenticeApp.Service.Project.Helpers;
+﻿namespace SFA.DAS.ApprenticeLogin.Service.Project.Helpers;
 
 public class SetApprenticeDetailsHelper(ScenarioContext context)
 {
