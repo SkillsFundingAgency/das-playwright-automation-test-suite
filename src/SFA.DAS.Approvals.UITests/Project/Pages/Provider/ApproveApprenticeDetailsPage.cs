@@ -41,6 +41,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Approve apprentice details|Approve 2 apprentices' details"));
         }
 
+        public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
+
         internal async Task VerifyCohort(Apprenticeship apprenticeship)
         {
             await Assertions.Expect(employerName).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());

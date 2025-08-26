@@ -3,7 +3,9 @@ using Mailosaur.Models;
 using Microsoft.Playwright;
 using Polly;
 using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.FrameworkHelpers;
@@ -21,12 +23,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
     {
         private readonly ScenarioContext context;
         private readonly ObjectContext objectContext;
+        private readonly ApprenticeDataHelper apprenticeDataHelper;
         private List<Apprenticeship> listOfApprenticeship;
 
         public ProviderStepsHelper(ScenarioContext _context)
         {
             context = _context;
             objectContext = context.Get<ObjectContext>();
+            apprenticeDataHelper = new ApprenticeDataHelper(context);
         }
 
         internal async Task<ConfirmEmployerPage> SelectEmployer(ChooseAnEmployerPage chooseAnEmployerPage)
@@ -294,6 +298,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.CohortReference}");
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
+
+
 
     }
 }

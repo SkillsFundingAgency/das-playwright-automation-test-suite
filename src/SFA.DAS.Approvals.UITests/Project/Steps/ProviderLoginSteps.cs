@@ -20,7 +20,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         
         [Given(@"the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer)")]
         [When(@"the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer)")]
-        public async Task GivenTheProviderLogsInAs(ProviderConfig config) => await _providerHomePageStepsHelper.GoToProviderHomePage(config, true);
+        public async Task GivenTheProviderLogsInAs(ProviderConfig config) => await _providerHomePageStepsHelper.GoToProviderHomePage(config, false);
 
         [StepArgumentTransformation(@"(Contributor|ContributorWithApproval|AccountOwner|Viewer)")]
         public ProviderConfig GetProviderUserRole(string providerUserRoles)
