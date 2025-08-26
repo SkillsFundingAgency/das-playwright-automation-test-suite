@@ -41,11 +41,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task ValidateApprenticeDetailsMatchWithILRData(Apprenticeship apprenticeship)
         {
-            var employerDetails = apprenticeship.EmployerDetails;           
+            var employerDetails = apprenticeship.EmployerDetails;
+            var apprenticeDetails = apprenticeship.ApprenticeDetails;
+            var trainingDetails = apprenticeship.TrainingDetails;
+
             await Assertions.Expect(employerName).ToHaveTextAsync(employerDetails.EmployerName);
 
+            if (trainingDetails.TotalPrice == 0)
+            {
+                trainingDetails.TotalPrice = trainingDetails.TrainingPrice + trainingDetails.EpaoPrice;
+            }
 
-            var apprenticeDetails = apprenticeship.ApprenticeDetails;       
             await Assertions.Expect(ulnTextBox).ToHaveValueAsync(apprenticeDetails.ULN.ToString());
             await Assertions.Expect(firstNameTextBox).ToHaveValueAsync(apprenticeDetails.FirstName);
             await Assertions.Expect(lastNameTextBox).ToHaveValueAsync(apprenticeDetails.LastName);
@@ -53,8 +59,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(dateOfBirthTextBox_Day).ToHaveValueAsync(apprenticeDetails.DateOfBirth.Day.ToString());
             await Assertions.Expect(dateOfBirthTextBox_Month).ToHaveValueAsync(apprenticeDetails.DateOfBirth.Month.ToString());
             await Assertions.Expect(dateOfBirthTextBox_Year).ToHaveValueAsync(apprenticeDetails.DateOfBirth.Year.ToString());
-
-            var trainingDetails = apprenticeship.TrainingDetails;           
+         
             await Assertions.Expect(trainingStartMonthTextBox).ToHaveValueAsync(trainingDetails.StartDate.Month.ToString());
             await Assertions.Expect(trainingStartYearTextBox).ToHaveValueAsync(trainingDetails.StartDate.Year.ToString());
             await Assertions.Expect(trainingEndMonthTextBox).ToHaveValueAsync(trainingDetails.EndDate.Month.ToString());

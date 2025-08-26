@@ -183,9 +183,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await ProviderApproveCohort(page1);
         }
 
-        internal async Task<SelectLearnerFromILRPage> GoToSelectApprenticeFromILRPage()
+        internal async Task<SelectLearnerFromILRPage> GoToSelectApprenticeFromILRPage(bool login=true)
         {
-            var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            if (login) { await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false); }
+
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
             var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
             var page3 = await page2.SelectOptionCreateANewCohort();

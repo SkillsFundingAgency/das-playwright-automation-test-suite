@@ -218,14 +218,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheUserCanCreateACohortBySelectingLearnersFromILR()
         {
             await dbSteps.FindAvailableLearner();
-            var agreementId = context.GetValue<List<Apprenticeship>>().FirstOrDefault().EmployerDetails.AgreementId;
-
-            var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
-            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
-            var page3 = await page2.SelectOptionCreateANewCohort();
-            var page4 = await page3.ChooseAnEmployer(agreementId);
-            var page5 = await page4.ConfirmEmployer();
-            await page5.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
+            var page = await providerStepsHelper.GoToSelectApprenticeFromILRPage(false);
+            await providerStepsHelper.AddFirstApprenticeFromILRList(page);
         }
 
         [Then("the provider approves the cohorts")]
