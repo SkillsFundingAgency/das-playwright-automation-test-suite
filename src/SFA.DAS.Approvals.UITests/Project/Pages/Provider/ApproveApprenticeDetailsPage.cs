@@ -30,6 +30,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator Dob(ILocator apprenticeRow) => apprenticeRow.Locator("td:nth-child(3)");
         private ILocator TrainingDates(ILocator apprenticeRow) => apprenticeRow.Locator("td:nth-child(4)");
         private ILocator Price(ILocator apprenticeRow) => apprenticeRow.Locator("td:nth-child(5)");
+        private ILocator sendToEmployerRadioOption => page.Locator("label:has-text('No, send to employer to review or add details')");
+        private ILocator messageToEmployerToReviewTextBox => page.Locator(".govuk-textarea").Last;
         #endregion
 
 
@@ -73,13 +75,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task<SelectLearnerFromILRPage> ClickOnAddAnotherApprenticeLink()
         {
             await AddAnotherApprenticeLink.ClickAsync();
-            return new SelectLearnerFromILRPage(context);
+            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
         internal async Task<ProviderSelectAReservationPage> ClickOnAddAnotherApprenticeLink_SelectReservationRoute()
         {
             await AddAnotherApprenticeLink.ClickAsync();
-            return new ProviderSelectAReservationPage(context);
+            return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
         }
        
 
@@ -90,11 +92,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await saveAndSubmitButton.ClickAsync();
             return await VerifyPageAsync(() => new CohortApprovedAndSentToEmployerPage(context));
         }
-              
+
+        internal async Task<CohortSentToEmployerForReview> ProviderSendCohortForEmployerApproval()
+        {
+            await sendToEmployerRadioOption.ClickAsync();
+            await messageToEmployerToReviewTextBox.FillAsync("Please review the details and approve the request.");
+            await saveAndSubmitButton.ClickAsync();
+            return await VerifyPageAsync(() => new CohortSentToEmployerForReview(context));
+        }
 
         internal async Task ValidateWarningMessageForFoundationCourses(string warningMsg) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(warningMsg);
 
-        public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
+        internal async Task<CohortApproved> ProviderApprovesCohortAfterEmployerApproval()
+        {
+            await approveRadioOption.ClickAsync();
+            await saveAndSubmitButton.ClickAsync();
+            return await VerifyPageAsync(() => new CohortApproved(context));
+        }
 
     }
 }

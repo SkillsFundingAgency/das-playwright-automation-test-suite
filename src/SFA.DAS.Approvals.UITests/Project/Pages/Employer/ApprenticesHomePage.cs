@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,9 +14,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentices");
         }
 
-        internal async Task GoToAddAnApprentice()
+        internal async Task<AddApprenticePage> GoToAddAnApprentice()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Add an apprentice" }).ClickAsync();
+            return await VerifyPageAsync(() => new AddApprenticePage(context));            
         }
 
         internal async Task<ApprenticeRequestsPage> GoToApprenticeRequests()

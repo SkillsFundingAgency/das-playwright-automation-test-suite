@@ -8,14 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Project\CsvFiles\**" />
-	  <EmbeddedResource Remove="Project\CsvFiles\**" />
-	  <None Remove="Project\CsvFiles\**" />
-	  <SpecFlowFeatureFiles Remove="Project\CsvFiles\**" />
-	  <SpecFlowObsoleteCodeBehindFiles Remove="Project\CsvFiles\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Compile Include="..\NUnitConfigurator.cs" Link="NUnitConfigurator.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
@@ -39,8 +31,6 @@
 		<ProjectReference Include="..\SFA.DAS.ProviderLogin.Service\SFA.DAS.ProviderLogin.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.MailosaurAPI.Service\SFA.DAS.MailosaurAPI.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.API.Framework\SFA.DAS.API.Framework.csproj" />
-		<ProjectReference Include="..\SFA.DAS.Approvals.APITests\SFA.DAS.Approvals.APITests.csproj" />
-		
 	</ItemGroup>
 
 	<ItemGroup>

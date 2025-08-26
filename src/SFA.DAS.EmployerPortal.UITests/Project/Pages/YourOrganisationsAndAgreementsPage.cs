@@ -9,10 +9,7 @@ public class YourOrganisationsAndAgreementsPage(ScenarioContext context, bool na
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your organisations and agreements");
     }
 
-    //private static By TransferStatus => By.CssSelector("p.govuk-body");
-
-
-    //public bool VerifyTransfersStatus(string expected) => VerifyElement(() => pageInteractionHelper.FindElements(TransferStatus), $"Transfers status:  {expected}");
+    public async Task VerifyTransfersStatus(string expected) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"Transfers status: {expected}");
 
     public async Task<SearchForYourOrganisationPage> ClickAddNewOrganisationButton()
     {

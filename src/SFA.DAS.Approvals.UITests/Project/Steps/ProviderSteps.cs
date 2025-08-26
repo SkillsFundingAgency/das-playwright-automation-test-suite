@@ -1,6 +1,4 @@
-﻿using Azure;
-using Polly;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Pages;
@@ -32,7 +30,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             providerStepsHelper = new ProviderStepsHelper(context);
             sldIlrSubmissionSteps = new SldIlrSubmissionSteps(context);
         }
-       
+
+        [Given(@"the provider logs into portal")]
+        [When("Provider logs into Provider-Portal")]
+        public async Task GivenTheProviderLogsIntoPortal() => await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+
 
         [When(@"Provider sends an apprentice request \(cohort\) to the employer by selecting same apprentices")]
         public async Task WhenProviderSendsAnApprenticeRequestCohortToTheEmployerBySelectingSameApprentices()
@@ -92,8 +94,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenSystemDoesNotAllowToAddApprenticeDetailsIfTheirAgeIsBelow15YearsAndOver25Years()
         {
             var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDoB();
-            await page.VerfiyErrorMessage("DateOfBirth", "The apprentice must be 25 years old or younger at the start of their training");
-            await page.ClickOnNavBarLinkAsync("Home");
+            await page.VerfiyErrorMessage("DateOfBirth", "The apprentice must be 24 years or under at the start of their training");
+            await page.ClickNavBarLinkAsync("Home");
         }
 
         [When("Provider tries to edit live apprentice record by setting age old than 24 years")]
@@ -115,20 +117,26 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
         }
 
+        [Then("apprentice\\/learner record is no longer available on SelectLearnerFromILR page")]
+        public async Task ThenApprenticeLearnerRecordIsNoLongerAvailableOnSelectLearnerFromILRPage()
+        {
+            //await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
+        }
+
         [When("Provider tries to add a new apprentice using details from table below")]
         public async Task WhenProviderTriesToAddANewApprenticeUsingDetailsFromTableBelow(Table table)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
-            var listOfValidApprenticeship = listOfApprenticeship;
-            var apprentice = listOfValidApprenticeship.FirstOrDefault();
-
+            var apprentice = listOfApprenticeship.FirstOrDefault();
+            var originalStartDate = apprentice.TrainingDetails.StartDate;
+            var originalEndDate = apprentice.TrainingDetails.EndDate;
             var OltdDetails = table.CreateSet<OltdDetails>().ToList();
 
             foreach (var item in OltdDetails)
             {
                 //Update valid apprentice object with new start and end dates. Then push it as new apprentice details on SLD endpoint
-                apprentice.TrainingDetails.StartDate = DateTime.Now.AddMonths(item.NewStartDate);       //apprentice.TrainingDetails.StartDate.AddMonths(item.NewStartDate);
-                apprentice.TrainingDetails.EndDate = DateTime.Now.AddMonths(item.NewEndDate);         //apprentice.TrainingDetails.EndDate.AddMonths(item.NewEndDate);
+                apprentice.TrainingDetails.StartDate = originalStartDate.AddMonths(Convert.ToInt32(item.NewStartDate));
+                apprentice.TrainingDetails.EndDate = originalEndDate.AddMonths(Convert.ToInt32(item.NewEndDate));
 
                 listOfApprenticeship[0] = apprentice;
                 context.Set(listOfApprenticeship);
@@ -192,8 +200,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             }
 
-            await page.ClickOnBackLinkAsync();
+        [When(@"the provider adds (.*) apprentices along with RPL details and sends to employer to review")]
+        public async Task WhenTheProviderAddsApprenticesAndSendsToEmployerToReview(int numberOfApprentices)
+        {
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;            
 
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            await page1.SelectCohort(cohortRef);
+            var page2 =  await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
+            await page2.ProviderSendCohortForEmployerApproval();
         }
 
 
@@ -201,6 +217,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public void ThenTheUserCanCreateACohortBySelectingLearnersFromILR()
         {
             throw new PendingStepException();
+        }
+        [Then("the provider approves the cohorts")]
+        public async Task ThenTheProviderApprovesCohort()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            await page1.SelectCohort(cohortRef);
+            var page = await new ApproveApprenticeDetailsPage(context).ProviderApprovesCohortAfterEmployerApproval();
         }
 
         [Then("the user can edit email address of the apprentice before approval")]
@@ -210,12 +237,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-    }
+        }  
+
 
     public class OltdDetails
     {
-        public int NewStartDate { get; set; }
-        public int NewEndDate { get; set; }
+        public string NewStartDate { get; set; }
+        public string NewEndDate { get; set; }
         public bool DisplayOverlapErrorOnStartDate { get; set; }
         public bool DisplayOverlapErrorOnEndDate { get; set; }
     }
