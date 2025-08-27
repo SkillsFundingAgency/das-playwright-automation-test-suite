@@ -12,7 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("View apprentice details");
+            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("View apprentice details");
         }
 
         internal async Task<RecognitionOfPriorLearningPage> UpdateEmail(string email)

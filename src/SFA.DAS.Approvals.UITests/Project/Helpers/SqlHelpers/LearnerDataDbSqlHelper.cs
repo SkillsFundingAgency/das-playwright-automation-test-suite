@@ -43,6 +43,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.TrainingDetails.PercentageLearningToBeDelivered = Convert.ToInt32(details[10]);
             apprenticeship.TrainingDetails.EpaoPrice = Convert.ToInt32(details[11]);
             apprenticeship.TrainingDetails.TrainingPrice = Convert.ToInt32(details[12]);
+            apprenticeship.TrainingDetails.TotalPrice = apprenticeship.TrainingDetails.EpaoPrice + apprenticeship.TrainingDetails.TrainingPrice;
             apprenticeship.TrainingDetails.StandardCode = Convert.ToInt32(details[13]);
             apprenticeship.TrainingDetails.IsFlexiJob = Convert.ToBoolean(details[14]);
             apprenticeship.TrainingDetails.PlannedOTJTrainingHours = Convert.ToInt32(details[15]);
