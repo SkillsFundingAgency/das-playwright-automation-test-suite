@@ -7,6 +7,7 @@ public partial class ProviderHomePage(ScenarioContext context) : InterimProvider
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"UKPRN: {ukprn}", new() { Timeout = 300000 });
+
         await AcceptAllCookiesIfVisible();
     }
 

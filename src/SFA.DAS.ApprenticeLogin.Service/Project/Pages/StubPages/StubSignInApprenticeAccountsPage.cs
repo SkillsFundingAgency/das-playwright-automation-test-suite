@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Pages.Apprentice.StubPages;
+﻿namespace SFA.DAS.ApprenticeLogin.Service.Project.Pages.StubPages;
 
 public class StubSignInApprenticeAccountsPage(ScenarioContext context) : StubSignInBasePage(context)
 {
