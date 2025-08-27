@@ -18,6 +18,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator status => page.Locator("dt:has-text('Status') + dd");
         private ILocator message => page.Locator("h2:has-text('Message') + div.govuk-inset-text");
         private ILocator row(string ULN) => page.Locator($"table tbody tr:has-text('{ULN}')");
+        private ILocator editLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"Edit  {name}" });
         private ILocator AddAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
         private ILocator DeleteThisCohortLink => page.Locator("a:has-text('Delete this cohort')");
         private ILocator approveRadioOption => page.Locator("label:has-text('Yes, approve and notify employer')");
@@ -74,6 +75,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             context.Set(apprenticeship, "Apprenticeship");
         }
 
+        internal async Task<ViewApprenticeDetails_ProviderPage> ClickOnEditApprenticeLink(string name)
+        {
+            await editLink(name).ClickAsync();
+            return await VerifyPageAsync(() => new ViewApprenticeDetails_ProviderPage(context));
+        }
+
         internal async Task<SelectLearnerFromILRPage> ClickOnAddAnotherApprenticeLink()
         {
             await AddAnotherApprenticeLink.ClickAsync();
@@ -86,7 +93,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
         }
        
-
         internal async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()
         {
             await approveRadioOption.ClickAsync();

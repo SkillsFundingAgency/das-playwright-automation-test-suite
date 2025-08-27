@@ -235,9 +235,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Then("the user can edit email address of the apprentice before approval")]
-        public void ThenTheUserCanEditEmailAddressOfTheApprenticeBeforeApproval()
+        public async Task ThenTheUserCanEditEmailAddressOfTheApprenticeBeforeApprovalAsync()
         {
-            throw new PendingStepException();
+            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
+            var page = await new ApproveApprenticeDetailsPage(context).ClickOnEditApprenticeLink(apprentice.ApprenticeDetails.FullName);
+            var page1 = await page.UpdateEmail(apprentice.ApprenticeDetails.Email + ".uk");
+            var page3 = await page1.SelectNoForRPL();
         }
 
 
