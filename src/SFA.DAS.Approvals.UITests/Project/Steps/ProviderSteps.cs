@@ -243,6 +243,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page3 = await page1.SelectNoForRPL();
         }
 
+        [Then("the user can send a cohort to employer")]
+        public async Task ThenTheUserCanSendACohortToEmployer()
+        {
+            await new ApproveApprenticeDetailsPage(context).VerifyCohortCanBeApproved();
+        }
+
+        [Then("the user can delete an apprentice in a cohort")]
+        public void ThenTheUserCanDeleteAnApprenticeInACohort()
+        {
+            throw new PendingStepException();
+        }
+
+        [Then("the user can delete a cohort")]
+        public void ThenTheUserCanDeleteACohort()
+        {
+            throw new PendingStepException();
+        }
+
 
 
 

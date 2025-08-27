@@ -118,5 +118,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new CohortApproved(context));
         }
 
+        internal async Task VerifyCohortCanBeApproved()
+        {
+            await approveRadioOption.ClickAsync();
+            await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
+        }
     }
 }
