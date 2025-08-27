@@ -250,15 +250,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Then("the user can delete an apprentice in a cohort")]
-        public void ThenTheUserCanDeleteAnApprenticeInACohort()
+        public async Task ThenTheUserCanDeleteAnApprenticeInACohort()
         {
-            throw new PendingStepException();
+            var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteApprenticeLink("");                
+            var page1 = await page.ConfirmDeletion();
+            await page1.VerifyBanner("Apprentice record deleted");
         }
 
         [Then("the user can delete a cohort")]
-        public void ThenTheUserCanDeleteACohort()
+        public async Task ThenTheUserCanDeleteACohort()
         {
-            throw new PendingStepException();
+            var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteCohortLink();
+            await page.ConfirmDeletion();
         }
 
 
