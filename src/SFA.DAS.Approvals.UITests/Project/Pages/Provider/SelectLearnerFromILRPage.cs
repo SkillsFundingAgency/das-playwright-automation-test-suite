@@ -27,7 +27,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(new Regex("Select (learner|apprentices) from ILR"));
         }
 
-        internal async Task<AddApprenticeDetailsPage> SelectApprenticeFromILRList(Apprenticeship apprenticeship)
+        internal async Task<CheckApprenticeDetailsPage> SelectApprenticeFromILRList(Apprenticeship apprenticeship)
         {
             await SearchULN(apprenticeship.ApprenticeDetails.ULN);
 
@@ -38,7 +38,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
                       .GetByRole(AriaRole.Link)
                       .ClickAsync();
 
-            return await VerifyPageAsync(() => new AddApprenticeDetailsPage(context));
+            return await VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));
         }
 
         internal async Task SearchULN(string uln)
