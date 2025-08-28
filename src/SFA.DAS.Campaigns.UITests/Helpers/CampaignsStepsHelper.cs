@@ -3,31 +3,30 @@ using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
 using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
 using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Influencers;
 
-namespace SFA.DAS.Campaigns.UITests.Helpers
+namespace SFA.DAS.Campaigns.UITests.Helpers;
+
+public class CampaignsStepsHelper(ScenarioContext context)
 {
-    public class CampaignsStepsHelper(ScenarioContext context)
+    public async Task<CampaingnsHomePage> GoToCampaingnsHomePage() => await new CampaingnsHomePage(context).AcceptCookieAndAlert();
+
+    public async Task<ApprenticeHubPage> GoToApprenticeshipHubPage()
     {
-        public async Task<CampaingnsHomePage> GoToCampaingnsHomePage() => await new CampaingnsHomePage(context).AcceptCookieAndAlert();
+        var page = await GoToCampaingnsHomePage();
 
-        public async Task<ApprenticeHubPage> GoToApprenticeshipHubPage()
-        {
-            var page = await GoToCampaingnsHomePage();
+        return await page.NavigateToApprenticeshipHubPage();
+    }
 
-            return await page.NavigateToApprenticeshipHubPage();
-        }
+    public async Task<EmployerHubPage> GoToEmployerHubPage()
+    {
+        var page = await GoToCampaingnsHomePage();
 
-        public async Task<EmployerHubPage> GoToEmployerHubPage()
-        {
-            var page = await GoToCampaingnsHomePage();
+        return await page.NavigateToEmployerHubPage();
+    }
 
-            return await page.NavigateToEmployerHubPage();
-        }
-
-        public async Task<InfluencersHubPage> GoToInfluencersHubPage()
-        {
-            var page = await GoToCampaingnsHomePage();
-            
-            return await page.NavigateToInfluencersHubPage();
-        }
+    public async Task<InfluencersHubPage> GoToInfluencersHubPage()
+    {
+        var page = await GoToCampaingnsHomePage();
+        
+        return await page.NavigateToInfluencersHubPage();
     }
 }
