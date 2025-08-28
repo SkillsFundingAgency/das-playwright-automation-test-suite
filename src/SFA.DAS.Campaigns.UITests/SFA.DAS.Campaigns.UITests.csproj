@@ -25,6 +25,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
+		<ProjectReference Include="..\SFA.DAS.MailosaurAPI.Service\SFA.DAS.MailosaurAPI.Service.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
