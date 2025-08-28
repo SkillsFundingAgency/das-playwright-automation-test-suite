@@ -135,6 +135,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
+        internal async Task FindAvailableLearner()
+        {
+            listOfApprenticeship = new List<Apprenticeship>();
+            var ukprn = objectContext.Get("ukprn");
+            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(EmployerType.Levy, ukprn.ToString());
+            apprenticeship = await learnerDataDbSqlHelper.GetEditableApprenticeDetails(apprenticeship);
+            listOfApprenticeship.Add(apprenticeship);
+            context.Set(listOfApprenticeship);
+        }
+
         private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter)
         {
             Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(employerType);

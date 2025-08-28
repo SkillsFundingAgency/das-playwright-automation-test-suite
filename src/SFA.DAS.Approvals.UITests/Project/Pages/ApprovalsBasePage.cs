@@ -9,11 +9,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages
 {
     public abstract class ApprovalsBasePage(ScenarioContext context) : BasePage(context)
     {
-
-        internal async Task ClickNavBarLinkAsync(string linkName)
+        public async Task ClickOnNavBarLinkAsync(string linkName)
         {
             await page.Locator("#navigation").GetByRole(AriaRole.Link, new() { Name = linkName }).ClickAsync();
         }
+
+        
     }
 
 }

@@ -3,7 +3,9 @@ using Mailosaur.Models;
 using Microsoft.Playwright;
 using Polly;
 using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.FrameworkHelpers;
@@ -21,12 +23,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
     {
         private readonly ScenarioContext context;
         private readonly ObjectContext objectContext;
+        private readonly ApprenticeDataHelper apprenticeDataHelper;
         private List<Apprenticeship> listOfApprenticeship;
 
         public ProviderStepsHelper(ScenarioContext _context)
         {
             context = _context;
             objectContext = context.Get<ObjectContext>();
+            apprenticeDataHelper = new ApprenticeDataHelper(context);
         }
 
         internal async Task<ConfirmEmployerPage> SelectEmployer(ChooseAnEmployerPage chooseAnEmployerPage)
@@ -63,13 +67,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<AddApprenticeDetailsPage> TryAddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
+        internal async Task<CheckApprenticeDetailsPage> TryAddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
             await page.ClickAddButton();
-            return await page.VerifyPageAsync(() => new AddApprenticeDetailsPage(context));
+            return await page.VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));
         }
 
         internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRList(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
@@ -162,12 +166,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await approveApprenticeDetailsPage.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<AddApprenticeDetailsPage> ProviderCreateACohortViaIlrRouteWithInvalidDoB()
+        internal async Task<CheckApprenticeDetailsPage> ProviderCreateACohortViaIlrRouteWithInvalidDoB()
         {
             var page = await GoToSelectApprenticeFromILRPage();
             var page1 = await TryAddFirstApprenticeFromILRList(page);
 
-            return await page1.VerifyPageAsync(() => new AddApprenticeDetailsPage(context));
+            return await page1.VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));
         }
 
         internal async Task<ApprenticeRequests_ProviderPage> ProviderCreateAndApproveACohortViaIlrRoute()
@@ -179,9 +183,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await ProviderApproveCohort(page1);
         }
 
-        internal async Task<SelectLearnerFromILRPage> GoToSelectApprenticeFromILRPage()
+        internal async Task<SelectLearnerFromILRPage> GoToSelectApprenticeFromILRPage(bool login=true)
         {
-            var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            if (login) { await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false); }
+
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
             var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
             var page3 = await page2.SelectOptionCreateANewCohort();
@@ -294,6 +299,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.CohortReference}");
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
+
+
 
     }
 }

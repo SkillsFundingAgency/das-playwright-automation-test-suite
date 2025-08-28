@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Azure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
@@ -10,14 +12,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         public override async Task VerifyPage()
         {
-            var heading = @"^View(\s\d+)?\s(apprentice|apprentices') details$";
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(heading);
+            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("View apprentice details");
         }
 
-
-
-
-
+        internal async Task<RecognitionOfPriorLearningPage> UpdateEmail(string email)
+        {
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Email address" }).FillAsync(email);
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+            return await VerifyPageAsync(() => new RecognitionOfPriorLearningPage(context));
+        }
 
     }
 }

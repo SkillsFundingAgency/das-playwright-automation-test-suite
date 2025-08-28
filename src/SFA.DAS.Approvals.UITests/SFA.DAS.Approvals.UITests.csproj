@@ -57,11 +57,14 @@
 	  <Folder Include="Project\Features\02_PostApprovals\01_OverlappingTrainingDateRequest\" />
 	  <Folder Include="Project\Features\03_EmployerRoles\" />
 	  <Folder Include="Project\Features\01_PreApprovals\07_PortableFlexiJob\" />
+	  <Folder Include="Project\Features\04_ProviderRoles\AccountOwner\" />
+	  <Folder Include="Project\Features\04_ProviderRoles\Contributor\" />
+	  <Folder Include="Project\Features\04_ProviderRoles\ContributorWithApproval\" />
+	  <Folder Include="Project\Features\04_ProviderRoles\Viewer\" />
 	  <Folder Include="Project\Features\05_LimitingStandards\" />
 	  <Folder Include="Project\Features\06_Navigation\" />
 	  <Folder Include="Project\Features\07_FlexiJobApprenticeshipAgency\" />
 	  <Folder Include="Project\Features\PublicSectorReporting\" />
-	  <Folder Include="Project\Features\04_ProviderRoles\" />
 	  <Folder Include="Project\Features\01_PreApprovals\01_LevyFunds\a_NewEmployer\" />
 	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\a_NewEmployer\" />
 	  <Folder Include="Project\Features\01_PreApprovals\04_LTM\" />
