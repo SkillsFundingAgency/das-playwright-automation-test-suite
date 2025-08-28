@@ -264,6 +264,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.ConfirmDeletion();
         }
 
+        [Then("the user cannot start add apprentice journey")]
+        public async Task ThenTheUserCannotStartAddApprenticeJourney()
+        {
+            await new ApprenticeRequests_ProviderPage(context).ClickOnNavBarLinkAsync("Home");
+            await new ProviderHomePage(context).AddNewApprentices();
+            var page = new AccessDenied_ProviderPage(context);
+            await page.VerifyPage();
+            await page.GoBackToHomePage();
+        }
+
 
 
 

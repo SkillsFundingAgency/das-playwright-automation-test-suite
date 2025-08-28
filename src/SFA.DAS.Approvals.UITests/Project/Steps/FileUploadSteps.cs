@@ -100,7 +100,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
             var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToUploadCsvFile();
             return await page2.ClickContinueButton();
-
         }
 
 

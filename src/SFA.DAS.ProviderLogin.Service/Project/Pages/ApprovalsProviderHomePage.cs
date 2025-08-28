@@ -151,7 +151,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
         return await VerifyPageAsync(() => new ProviderViewEmployerRequestsForTrainingPage(context));
     }  
 
-    private async Task AddNewApprentices() => await page.GetByRole(AriaRole.Link, new() { Name = "Add new apprentices" }).ClickAsync();
+    public async Task AddNewApprentices() => await page.GetByRole(AriaRole.Link, new() { Name = "Add new apprentices" }).ClickAsync();
 }
 
 public class ProviderYourFeebackPage(ScenarioContext context) : InterimProviderBasePage(context)
