@@ -119,7 +119,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("apprentice\\/learner record is no longer available on SelectLearnerFromILR page")]
         public async Task ThenApprenticeLearnerRecordIsNoLongerAvailableOnSelectLearnerFromILRPage()
         {
-            //await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
+            await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
         }
 
         [When("Provider tries to add a new apprentice using details from table below")]
