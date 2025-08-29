@@ -1,6 +1,7 @@
 ﻿using Azure;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.FrameworkHelpers;
+using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -24,6 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator AddAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
         private ILocator DeleteThisCohortLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete this cohort" }).First;
         private ILocator approveRadioOption => page.Locator("label:has-text('Yes, approve and notify employer')");
+        private ILocator firstRadioOption => page.Locator("div.govuk-radios__item input[type='radio']").First;
         private ILocator doNotApproveRadioOption => page.Locator("label:has-text('No, save and return to apprentice requests')");
         private ILocator messageToEmployerTextBox => page.Locator(".govuk-textarea").First;
         private ILocator saveAndSubmitButton => page.Locator("button:has-text('Save and submit')");
@@ -94,7 +96,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await AddAnotherApprenticeLink.ClickAsync();
             return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
         }
-       
+
+        internal async Task<AddApprenticeDetails_EntryMothodPage> ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage()
+        {
+            await AddAnotherApprenticeLink.ClickAsync();
+            return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));            
+        }
         internal async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()
         {
             await approveRadioOption.ClickAsync();
@@ -140,6 +147,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task VerifyBanner(string text) => await Assertions.Expect(banner).ToContainTextAsync(text);
 
+        internal async Task SelectFirstRadioButtonAndSubmit(string optionalMsg=null)
+        {
+            await firstRadioOption.CheckAsync();
+            await saveAndSubmitButton.ClickAsync();
+        }
+
+
+        internal async Task<ProviderAccessDeniedPage> TryOpenLink(string linkName)
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = linkName }).Last.ClickAsync();
+            return await VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+        }
 
     }
 }

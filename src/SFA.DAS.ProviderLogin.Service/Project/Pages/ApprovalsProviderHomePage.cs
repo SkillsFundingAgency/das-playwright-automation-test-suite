@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ProviderLogin.Service.Project.Pages;
+﻿using System.Text.RegularExpressions;
+
+namespace SFA.DAS.ProviderLogin.Service.Project.Pages;
 
 public partial class ProviderHomePage : InterimProviderBasePage
 {
@@ -223,6 +225,11 @@ public class ProviderApprenticeRequestsPage(ScenarioContext context) : InterimPr
         var linkId = $"#details_link_{cohortReference}";
         await page.Locator(linkId).ClickAsync();        
     }
+
+    public async Task OpenLastCohortFromTheList()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name= "Details" }).Last.ClickAsync();
+    }
 }
 
 public class ProviderFundingForNonLevyEmployersPage(ScenarioContext context) : InterimProviderBasePage(context)
@@ -285,7 +292,7 @@ public class ProviderAccessDeniedPage(ScenarioContext context) : InterimProvider
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You need a different service role to view this page");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(new Regex(@"You need a different service role to (view this page|perform this action)", RegexOptions.IgnoreCase));
     }
 
     public async Task<ProviderHomePage> GoBackToTheServiceHomePage()
