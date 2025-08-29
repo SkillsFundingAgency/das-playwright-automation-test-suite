@@ -14,21 +14,17 @@ using System.Threading.Tasks;
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
     [Binding]
-    internal class ProviderRolesSteps
+    internal class ProviderRoleBasedSteps
     {
         private readonly ScenarioContext context;
-        private readonly ProviderHomePageStepsHelper providerHomePageStepsHelper;
         private readonly ProviderStepsHelper providerStepsHelper;
         private readonly DbSteps dbSteps;
-        private readonly SldIlrSubmissionSteps sldIlrSubmissionSteps;
 
-        public ProviderRolesSteps(ScenarioContext _context)
+        public ProviderRoleBasedSteps(ScenarioContext _context)
         {
             context = _context;
-            providerHomePageStepsHelper = new ProviderHomePageStepsHelper(context);
             providerStepsHelper = new ProviderStepsHelper(context);
             dbSteps = new DbSteps(context);
-            sldIlrSubmissionSteps = new SldIlrSubmissionSteps(context);
         }
 
         [Then("the user can view apprentice details from items under section: \"(.*)\"")]
@@ -153,6 +149,71 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.VerifyPage();
             await page.GoBackToTheServiceHomePage();
         }
+
+
+        [When("user naviagates to FundingForNonLevyEmployers page")]
+        public async Task WhenUserNaviagatesToFundingForNonLevyEmployersPage()
+        {
+            await new ProviderHomePage(context).GoToManageYourFunding();
+        }
+
+        [Then("the user \"(.*)\" reserve new funding")]
+        public async Task ThenTheUserCanReserveNewFunding(string status)
+        {
+            var page = new FundingForNonLevyEmployersPage(context);
+            await page.ClickOnReserveMoreFundingLink();
+
+            if (status == "can")
+            {
+                await page.VerifyPageAsync(() => new ReserveFundingForNonLevyEmployersPage(context));
+            }
+            else
+            {
+                await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+            }
+
+            await page.NavigateBrowserBack();
+        }
+
+        [Then("the user \"(.*)\" delete existing reservervations")]
+        public async Task ThenTheUserCanDeleteExistingReservervations(string status)
+        {
+            var page = new FundingForNonLevyEmployersPage(context);
+            await page.ClickOnDeleteReservationLink();
+
+            if (status == "can")
+            {
+                await page.VerifyPageAsync(() => new ProviderDeleteReservationPage(context));
+            }
+            else
+            {
+                await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));                
+            }
+            
+            await page.NavigateBrowserBack();
+        }
+
+        [Then("the user \"(.*)\" add apprentices to an existing reservation")]
+        public async Task ThenTheUserCanAddApprenticesToAnExistingReservation(string status)
+        {
+            var page = new FundingForNonLevyEmployersPage(context);
+            await page.ClickOnAddApprenticeLink();
+
+            if (status ==  "can")
+            {
+                await page.VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
+            }
+            else
+            {
+                await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+            }
+
+            await page.NavigateBrowserBack();
+        }
+
+
+
+
 
     }
 }

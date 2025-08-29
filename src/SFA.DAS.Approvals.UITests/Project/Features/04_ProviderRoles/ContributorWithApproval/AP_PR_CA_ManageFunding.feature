@@ -1,9 +1,13 @@
-﻿Feature: AP_PR_CA_ManageFunding
+﻿@approvals
+@pasproviderrole
+Feature: AP_PR_CA_ManageFunding
 
-A short summary of the feature
 
-@tag1
-Scenario: [scenario name]
-	Given [context]
-	When [action]
-	Then [outcome]
+@regression
+@Approvalproviderrole
+Scenario: AP_PR_CA_Provider Roles ContributorWithApproval Manage Funding Reservations
+	Given the provider logs in as a ContributorWithApproval
+	When user naviagates to FundingForNonLevyEmployers page
+	Then the user "can" reserve new funding
+	And the user "can" delete existing reservervations
+	And the user "can" add apprentices to an existing reservation
