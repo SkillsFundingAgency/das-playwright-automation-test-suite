@@ -58,7 +58,6 @@
 	  <Folder Include="Project\Features\03_EmployerRoles\" />
 	  <Folder Include="Project\Features\01_PreApprovals\07_PortableFlexiJob\" />
 	  <Folder Include="Project\Features\04_ProviderRoles\AccountOwner\" />
-	  <Folder Include="Project\Features\04_ProviderRoles\Contributor\" />
 	  <Folder Include="Project\Features\04_ProviderRoles\ContributorWithApproval\" />
 	  <Folder Include="Project\Features\04_ProviderRoles\Viewer\" />
 	  <Folder Include="Project\Features\05_LimitingStandards\" />
