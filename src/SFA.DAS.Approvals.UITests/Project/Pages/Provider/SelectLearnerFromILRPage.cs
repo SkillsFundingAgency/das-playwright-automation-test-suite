@@ -43,11 +43,32 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task SearchULN(string uln)
         {
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or unique learner number (ULN)" }).FillAsync(uln);
-            await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+            
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or unique learner number (ULN)" })
+                      .FillAsync(uln);
+
+            // Apply filters with default year (2025)
+            await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" })
+                      .ClickAsync();
+
+            // Wait for potential results or "no records" message
+            var resultText = await page.Locator("text=apprentice records found").TextContentAsync();
+
+            // Check if zero records found
+            if (resultText != null && resultText.Contains("0 apprentice records found"))
+            {
+                // Select 2024 from "Start year" dropdown
+                await page.Locator("#FilterModel_StartYear")
+                  .SelectOptionAsync("2024");
+
+                // Re-apply the filter
+                await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" })
+                          .ClickAsync();
+            }
         }
 
-        internal async Task ClearSearch() => await page.GetByRole(AriaRole.Link, new() { Name = "Clear search" }).ClickAsync();
+
+        internal async Task ClearSearch() => await page.GetByRole(AriaRole.Link, new() { Name = "Clear search and filters" }).ClickAsync();
 
         internal async Task VerifyNoResultsFound() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("0 apprentice records");
 
