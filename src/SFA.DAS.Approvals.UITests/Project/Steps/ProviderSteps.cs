@@ -75,7 +75,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
             await providerHomePageStepsHelper.GoToProviderHomePage(true);
-            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+            //await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+            await UserNavigatesToManageYourApprenticesPage();
             var page = new ManageYourApprentices_ProviderPage(context);
 
             foreach (var apprentice in listOfApprenticeship)
@@ -101,7 +102,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenProviderTriesToEditLiveApprenticeRecordBySettingAgeOldThanYears()
         {
             await providerHomePageStepsHelper.GoToProviderHomePage(true);
-            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+            //await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+            await UserNavigatesToManageYourApprenticesPage();
         }
 
         [Then("the provider is stopped with an error message")]
@@ -163,7 +165,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-
         [When("user navigates to Apprentice requests page")]
         public async Task WhenUserNavigatesToApprenticeRequestsPage()
         {
@@ -192,6 +193,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
             await page1.SelectCohort(cohortRef);
             var page = await new ApproveApprenticeDetailsPage(context).ProviderApprovesCohortAfterEmployerApproval();
+        }
+
+        [When("user navigates to Manage Your Apprentices page")]
+        public async Task UserNavigatesToManageYourApprenticesPage()
+        {
+            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
         }
 
 

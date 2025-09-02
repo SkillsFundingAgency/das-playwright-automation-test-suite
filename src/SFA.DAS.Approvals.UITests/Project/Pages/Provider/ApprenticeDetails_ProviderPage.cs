@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
+﻿using Azure;
+using SFA.DAS.Approvals.UITests.Project.Pages.Common;
+using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         private readonly ScenarioContext context;
         private readonly string pageTitle;
+
+        #region Locators
+        private ILocator EditApprenticeDetailsLink => page.Locator("#edit-apprentice-link");
+        private ILocator ManageYourApprenticesLinks => page.GetByRole(AriaRole.Link, new() { Name = "Manage your apprentices" });
+        private ILocator Banner(string Header, string Body) => page.GetByLabel(Header).Locator("div").Filter(new() { HasText = Body });
+        private ILocator ReviewChangesLink => page.GetByRole(AriaRole.Link, new() { Name = "Review changes" });
+        private ILocator ViewChangesLink => page.GetByRole(AriaRole.Link, new() { Name = "View changes" });
+        private ILocator ViewDetailsLink => page.GetByRole(AriaRole.Link, new() { Name = "View details" });
+        private ILocator ChangeEmployerLink => page.GetByRole(AriaRole.Link, new() { Name = "Change" });
+
+
+        #endregion
 
         internal ApprenticeDetails_ProviderPage(ScenarioContext context, string pageTitle) : base(context)
         {
@@ -25,17 +39,48 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<EditApprenticeDetails_ProviderPage> ClickOnEditApprenticeDetailsLink()
         {
-            await page.Locator("#edit-apprentice-link").ClickAsync();
+            await EditApprenticeDetailsLink.ClickAsync();
             return await VerifyPageAsync(() => new EditApprenticeDetails_ProviderPage(context));
         }
 
         internal async Task<ManageYourApprentices_ProviderPage> ReturnBackToManageYourApprenticesPage()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Manage your apprentices" }).ClickAsync();
+            await ManageYourApprenticesLinks.ClickAsync();
             return await VerifyPageAsync(() => new ManageYourApprentices_ProviderPage(context));
         }
 
+        internal async Task AssertBanner(string Title, string Body) => await Assertions.Expect(Banner(Title, Body)).ToBeVisibleAsync();
 
+        internal async Task AssertBanner2(string Title, string Body)
+        {
+            await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(Title);
+            await Assertions.Expect(page.Locator("#das-pendingUpdate-div-body-text")).ToContainTextAsync(Body);
+
+        }
+
+        internal async Task<ReviewChangesPage> ClickOnReviewChanges()
+        {
+            await ReviewChangesLink.ClickAsync();
+            return await VerifyPageAsync(() => new ReviewChangesPage(context));
+        }
+
+        internal async Task<ViewChangesPage> ClickOnViewChanges()
+        {
+            await ViewChangesLink.ClickAsync();
+            return await VerifyPageAsync(() => new ViewChangesPage(context));
+        }
+
+        internal async Task<DetailsOfIlrDataMismatchPage> ClickOnViewDetails()
+        {
+            await ViewDetailsLink.ClickAsync();
+            return await VerifyPageAsync(() => new DetailsOfIlrDataMismatchPage(context));
+        }
+
+        internal async Task<ChangeOfEmployerInformationPage> ClickOnChangeEmployerLink()
+        {
+            await ChangeEmployerLink.ClickAsync();
+            return await VerifyPageAsync(() => new ChangeOfEmployerInformationPage(context));
+        }
 
     }
 }
