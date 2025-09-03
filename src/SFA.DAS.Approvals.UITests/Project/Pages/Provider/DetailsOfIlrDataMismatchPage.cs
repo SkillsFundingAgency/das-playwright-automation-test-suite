@@ -16,7 +16,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task SelectILRDataMismatchOptions() => await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        internal async Task ClickOnCancel() => await page.GetByRole(AriaRole.Link, new() { Name = "Cancel" }).ClickAsync();
+        internal async Task ClickOnBackLink() => await page.GetByRole(AriaRole.Link, new() { Name = "Back to apprentice details" }).ClickAsync();
 
     }
 }

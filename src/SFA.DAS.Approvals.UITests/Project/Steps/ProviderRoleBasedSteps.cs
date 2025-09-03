@@ -265,7 +265,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
                 await page.NavigateBrowserBack();
             }
-            await page.ClickOnCancel();
+            await page.ClickOnBackLink();
             await new ApprenticeDetails_ProviderPage(context, ILRDataMisMatchRequestDetails).ReturnBackToManageYourApprenticesPage();
 
         }
@@ -295,7 +295,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
                 await page.NavigateBrowserBack();
             }
-            await page.ClickOnCancel();
+            await page.ClickOnBackLink();
             await new ApprenticeDetails_ProviderPage(context, ILRDataMisMatchAskEmployerToFix).ReturnBackToManageYourApprenticesPage();
 
         }
