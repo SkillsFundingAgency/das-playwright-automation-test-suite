@@ -10,7 +10,7 @@ public class FAAConfigurationSetup(ScenarioContext context)
 {
     private const string FAAApplyUsersConfig = "FAAApplyUsersConfig";
 
-    [BeforeScenario(Order = 2)]
+    [BeforeScenario(Order = 12)]
     public async Task SetUpFAAConfiguration()
     {
         var listOfFAAApplyUsers = new MultiConfigurationSetupHelper(context).SetMultiConfiguration<FAAApplyUsers>(FAAApplyUsersConfig);
