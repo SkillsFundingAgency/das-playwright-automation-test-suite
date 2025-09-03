@@ -35,25 +35,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new UsingFileUploadPage(context));
         }
 
-        internal async Task<SelectLearnerFromILRPage> SelectOptionToAddApprenticesFromILRList_AddAnotherApprenticeRoute()
-        {
-            await SelectOptionToAddApprenticeFromILRAndContinue();
-            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
-        }
-
-        internal async Task<SelectLearnerFromILRPage> SelectOptionToAddApprenticesFromILRList_NonLevyRoute()
-        {
-            await SelectOptionToAddApprenticeFromILRAndContinue();
-            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
-        }
-
         internal async Task<ProviderSelectAReservationPage> SelectOptionToAddApprenticesFromILRList_SelectReservationRoute()
         {
             await SelectOptionToAddApprenticeFromILRAndContinue();
             return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
         }
 
-        private async Task SelectOptionToAddApprenticeFromILRAndContinue()
+        internal async Task SelectOptionToAddApprenticeFromILRAndContinue()
         {
             await optionToSelectApprenticesFromILR.CheckAsync();
             await ContinueButton.ClickAsync();

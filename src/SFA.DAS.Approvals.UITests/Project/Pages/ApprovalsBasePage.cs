@@ -14,7 +14,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages
             await page.Locator("#navigation").GetByRole(AriaRole.Link, new() { Name = linkName }).ClickAsync();
         }
 
-        
+        public async Task NavigateBrowserBack()
+        {
+            await page.GoBackAsync();
+        }
+
     }
 
 }

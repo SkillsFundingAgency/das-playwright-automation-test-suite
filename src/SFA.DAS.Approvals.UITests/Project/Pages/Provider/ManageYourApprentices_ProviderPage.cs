@@ -15,9 +15,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Manage your apprentices");
         }
 
-        internal async Task<ApprenticeDetails_ProviderPage> SelectViewCurrentApprenticeDetails(string ULN, string name)
+        internal async Task<ApprenticeDetails_ProviderPage> SelectViewCurrentApprenticeDetails(string name, string ULN=null)
         {
-            await SearchApprentice(ULN);
+            await SearchApprentice(ULN ?? name);
             await page.GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
             return await VerifyPageAsync(() => new ApprenticeDetails_ProviderPage(context, name));
         }
@@ -58,6 +58,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new ApprenticeDetails_ProviderPage(context, name));
         }
 
+        internal async Task<ManageYourApprentices_ProviderPage> DownloadCsv()
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = "Download all data" }).ClickAsync();
+            return await VerifyPageAsync(() => new ManageYourApprentices_ProviderPage(context));
+        }
 
 
     }

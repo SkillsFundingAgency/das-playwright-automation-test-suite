@@ -116,14 +116,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var page = await new ProviderHomePage(context).GoToManageYourFunding();
-                var page1 = await new FundingForNonLevyEmployersPage(context).ClickOnReserveMoreFundingLink();
-                var page2 = await page1.ClickOnReserveFundingButton();
-                var page3 = await SelectEmployer(page2);
-                var page4 = await page3.ConfirmNonLevyEmployer();
-                var page5 = await page4.ReserveFundsAsync("Abattoir worker", DateTime.Now);
-                var page6 = await page5.ClickConfirmButton();
-                await page6.GetReservationIdFromUrl(apprenticeship);
-                var page7 = await page6.SelectGoToHomePageAndContinue();
+                await new FundingForNonLevyEmployersPage(context).ClickOnReserveMoreFundingLink();
+                var page1 = await new ReserveFundingForNonLevyEmployersPage(context).ClickOnReserveFundingButton();
+                var page2 = await SelectEmployer(page1);
+                var page3 = await page2.ConfirmNonLevyEmployer();
+                var page4 = await page3.ReserveFundsAsync("Abattoir worker", DateTime.Now);
+                var page5 = await page4.ClickConfirmButton();
+                await page5.GetReservationIdFromUrl(apprenticeship);
+                var page6 = await page5.SelectGoToHomePageAndContinue();
                 
             }
         }
@@ -205,7 +205,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task TryEditApprenticeAgeAndValidateError(ApprenticeDetails_ProviderPage apprenticeDetailsPage, DateTime dateOfBirth)
         {
             string expectedErrorMessage = "The apprentice must be younger than 25 years old at the start of their training";
-            var page = await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();
+            await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();
+            var page = new EditApprenticeDetails_ProviderPage(context);
             await page.EditDoB(dateOfBirth);
             await page.ClickUpdateDetailsButton();
             await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
