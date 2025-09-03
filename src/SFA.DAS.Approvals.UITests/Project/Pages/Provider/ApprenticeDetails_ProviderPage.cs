@@ -37,11 +37,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync(pageTitle);
         }
 
-        internal async Task<EditApprenticeDetails_ProviderPage> ClickOnEditApprenticeDetailsLink()
-        {
-            await EditApprenticeDetailsLink.ClickAsync();
-            return await VerifyPageAsync(() => new EditApprenticeDetails_ProviderPage(context));
-        }
+        internal async Task ClickOnEditApprenticeDetailsLink() => await EditApprenticeDetailsLink.ClickAsync();
+
+        internal async Task ClickOnReviewChanges() => await ReviewChangesLink.ClickAsync();
+
+        internal async Task ClickOnViewChanges() => await ViewChangesLink.ClickAsync();
+
+        internal async Task ClickOnViewDetails() => await ViewDetailsLink.ClickAsync();
+
+        internal async Task ClickOnChangeEmployerLink() => await ChangeEmployerLink.ClickAsync();
 
         internal async Task<ManageYourApprentices_ProviderPage> ReturnBackToManageYourApprenticesPage()
         {
@@ -58,29 +62,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         }
 
-        internal async Task<ReviewChangesPage> ClickOnReviewChanges()
-        {
-            await ReviewChangesLink.ClickAsync();
-            return await VerifyPageAsync(() => new ReviewChangesPage(context));
-        }
 
-        internal async Task<ViewChangesPage> ClickOnViewChanges()
-        {
-            await ViewChangesLink.ClickAsync();
-            return await VerifyPageAsync(() => new ViewChangesPage(context));
-        }
 
-        internal async Task<DetailsOfIlrDataMismatchPage> ClickOnViewDetails()
-        {
-            await ViewDetailsLink.ClickAsync();
-            return await VerifyPageAsync(() => new DetailsOfIlrDataMismatchPage(context));
-        }
-
-        internal async Task<ChangeOfEmployerInformationPage> ClickOnChangeEmployerLink()
-        {
-            await ChangeEmployerLink.ClickAsync();
-            return await VerifyPageAsync(() => new ChangeOfEmployerInformationPage(context));
-        }
 
     }
 }

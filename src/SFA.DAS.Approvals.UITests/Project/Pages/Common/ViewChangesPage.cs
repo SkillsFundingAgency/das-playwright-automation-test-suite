@@ -13,12 +13,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Common
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("View changes");
         }
 
-        internal async Task<ViewChangesPage> SelectViewChangesOptions()
-        {
-            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-            return await this.VerifyPageAsync(() => new ViewChangesPage(context));
+        internal async Task SelectViewChangesOptions() => await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        }
         internal async Task ClickOnCancelAndReturn() => await page.GetByRole(AriaRole.Link, new() { Name = "Cancel and return" }).ClickAsync();
     }
 }

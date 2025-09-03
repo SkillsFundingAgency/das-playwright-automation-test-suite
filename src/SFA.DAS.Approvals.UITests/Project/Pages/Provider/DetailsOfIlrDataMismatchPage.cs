@@ -14,11 +14,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Details of ILR data mismatch");
         }
 
-        internal async Task<DetailsOfIlrDataMismatchPage> SelectILRDataMismatchOptions()
-        {
-            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-            return await this.VerifyPageAsync(() => new DetailsOfIlrDataMismatchPage(context));
-        }
+        internal async Task SelectILRDataMismatchOptions() => await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
         internal async Task ClickOnCancel() => await page.GetByRole(AriaRole.Link, new() { Name = "Cancel" }).ClickAsync();
 
     }

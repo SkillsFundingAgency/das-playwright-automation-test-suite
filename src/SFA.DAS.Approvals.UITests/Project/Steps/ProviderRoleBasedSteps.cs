@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+﻿using Azure;
+using Microsoft.Playwright;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Pages;
@@ -237,9 +239,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(ChangesForReviewApprentice);
             await page.AssertBanner("Action required", "The employer has made a change which needs to be reviewed and approved by you.");
-            var page1 = await page.ClickOnReviewChanges();
-            await page1.ClickOnCancelAndReturn();
-            await page.ReturnBackToManageYourApprenticesPage();
+            await page.ClickOnReviewChanges();
         }
 
         [Then("the user can view details of ILR mismatch via view details link in the ILR data mismatch banner")]
@@ -247,82 +247,160 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(ILRDataMisMatchRequestDetails);
             await page.AssertBanner("Action required", $"ILR data mismatch: Payment for {ILRDataMisMatchRequestDetails} can't be made until this is resolved.");
-            var page1 = await page.ClickOnViewDetails();
-            //await page1.ClickOnCancel();
-            //await page.ReturnBackToManageYourApprenticesPage();
+            await page.ClickOnViewDetails();
         }
 
-        [Then("the user can take action on details of ILR mismatch page by selecting any radio buttons on the page")]
-        public async Task ThenTheUserCanTakeActionOnDetailsOfILRMismatchPageBySelectingAnyRadioButtonsOnThePage()
+        [Then("the user \"(.*)\" take action on details of ILR mismatch page by selecting any radio buttons on the page")]
+        public async Task ThenTheUserTakeActionOnDetailsOfILRMismatchPageBySelectingAnyRadioButtonsOnThePage(string status)
         {
-            var page = await new DetailsOfIlrDataMismatchPage(context).SelectILRDataMismatchOptions();
+            var page = new DetailsOfIlrDataMismatchPage(context);
+            await page.SelectILRDataMismatchOptions();
+
+            if (status == "can")
+            {
+                await page.VerifyPageAsync(() => new DetailsOfIlrDataMismatchPage(context));
+            }
+            else
+            {
+                await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+                await page.NavigateBrowserBack();
+            }
             await page.ClickOnCancel();
             await new ApprenticeDetails_ProviderPage(context, ILRDataMisMatchRequestDetails).ReturnBackToManageYourApprenticesPage();
+
         }
+
 
         [Then("the user can view details of ILR mismatch request restart via view details link in the ILR data mismatch banner")]
         public async Task ThenTheUserCanViewDetailsOfILRMismatchRequestRestartViaViewDetailsLinkInTheILRDataMismatchBanner()
         {
             var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(ILRDataMisMatchAskEmployerToFix);
             await page.AssertBanner("Action required", $"ILR data mismatch: Payment for {ILRDataMisMatchAskEmployerToFix} can't be made until this is resolved.");
-            var page1 = await page.ClickOnViewDetails();
-            await page1.ClickOnCancel();
-            await page.ReturnBackToManageYourApprenticesPage();
+            await page.ClickOnViewDetails();
+            
         }
+
+        [Then("the user \"(.*)\" take action on details of ILR mismatch request restart via view details link in the ILR data mismatch banner")]
+        public async Task ThenTheUserTakeActionOnDetailsOfILRMismatchRequestRestartViaViewDetailsLinkInTheILRDataMismatchBanner(string status)
+        {
+            var page = new DetailsOfIlrDataMismatchPage(context);
+            await page.SelectILRDataMismatchOptions();
+
+            if (status == "can")
+            {
+                await page.VerifyPageAsync(() => new DetailsOfIlrDataMismatchPage(context));
+            }
+            else
+            {
+                await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+                await page.NavigateBrowserBack();
+            }
+            await page.ClickOnCancel();
+            await new ApprenticeDetails_ProviderPage(context, ILRDataMisMatchAskEmployerToFix).ReturnBackToManageYourApprenticesPage();
+
+        }
+
 
         [Then("the user can view review changes via review details link in the banner")]
         public async Task ThenTheUserCanViewReviewChangesViaReviewDetailsLinkInTheBanner()
         {
             var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(ChangesForReviewApprentice);
             await page.AssertBanner("Action required", $"The employer has made a change which needs to be reviewed and approved by you.");
-            var page1 = await page.ClickOnReviewChanges();
-            //await page1.ClickOnCancelAndReturn();
-            //await page.ReturnBackToManageYourApprenticesPage();
+            await page.ClickOnReviewChanges();
         }
 
-        [Then("the user can take action on review changes page")]
-        public async Task ThenTheUserCanTakeActionOnReviewChangesPage()
+        [Then("the user \"(.*)\" take action on review changes page")]
+        public async Task ThenTheUserTakeActionOnReviewChangesPage(string status)
         {
-            var page = await new ReviewChangesPage(context).SelectReviewChangesOptions();
+            var page = new ReviewChangesPage(context);
+            await page.SelectReviewChangesOptions();
+
+            if (status == "can")
+            {
+                await page.VerifyPageAsync(() => new ReviewChangesPage(context));               
+            }
+            else
+            {
+                await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+                await page.NavigateBrowserBack();
+            }
             await page.ClickOnCancelAndReturn();
             await new ApprenticeDetails_ProviderPage(context, ChangesForReviewApprentice).ReturnBackToManageYourApprenticesPage();
+
         }
+
 
         [Then("the user can view view changes nonCoE page via view changes link in the banner")]
         public async Task ThenTheUserCanViewViewChangesNonCoEPageViaViewChangesLinkInTheBanner()
         {
             var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(ChangesPendingApprentice);
             await page.AssertBanner2("Changes to this apprenticeship", $"You have made a change which needs to be approved by the employer.");
-            var page1 = await page.ClickOnViewChanges();
-            //await page1.ClickOnCancelAndReturn();
-            //await page.ReturnBackToManageYourApprenticesPage();
+            await page.ClickOnViewChanges();
         }
 
-        [Then("the user can take action on View changes on nonCoE page")]
-        public async Task ThenTheUserCanTakeActionOnViewChangesOnNonCoEPage()
+        [Then("the user \"(.*)\" take action on View changes on nonCoE page")]
+        public async Task ThenTheUserTakeActionOnViewChangesOnNonCoEPage(string status)
         {
-            var page = await new ViewChangesPage(context).SelectViewChangesOptions();
+            var page = new ViewChangesPage(context);
+            await page.SelectViewChangesOptions();
+
+            if (status == "can")
+            {
+                await page.VerifyPageAsync(() => new ViewChangesPage(context));
+            }
+            else
+            {
+                await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+                await page.NavigateBrowserBack();
+            }
             await page.ClickOnCancelAndReturn();
             await new ApprenticeDetails_ProviderPage(context, ChangesPendingApprentice).ReturnBackToManageYourApprenticesPage();
+
         }
 
-        [Then("the user can trigger change of employer journey using change link against the employer field")]
-        public async Task ThenTheUserCanTriggerChangeOfEmployerJourneyUsingChangeLinkAgainstTheEmployerField()
+
+        [Then("the user \"(.*)\" trigger change of employer journey using change link against the employer field")]
+        public async Task ThenTheUserTriggerChangeOfEmployerJourneyUsingChangeLinkAgainstTheEmployerField(string status)
         {
             var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(StoppedApprentice);
-            var page1 = await page.ClickOnChangeEmployerLink();
+            await page.ClickOnChangeEmployerLink();
+            var page1 = new ChangeOfEmployerInformationPage(context);
+            if (status == "can")
+            {
+                await page1.VerifyPageAsync(() => new ChangeOfEmployerInformationPage(context));
+            }
+            else
+            {
+                await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+                await page.NavigateBrowserBack();
+            }
             await page1.ClickOnBackLink();
             await page.ReturnBackToManageYourApprenticesPage();
+
         }
 
-        [Then("the user can edit an existing apprenticeship record by selecting edit apprentice link under manage apprentices")]
-        public async Task ThenTheUserCanEditAnExistingApprenticeshipRecordBySelectingEditApprenticeLinkUnderManageApprentices()
+
+        [Then("the user \"(.*)\" edit an existing apprenticeship record by selecting edit apprentice link under manage apprentices")]
+        public async Task ThenTheUserEditAnExistingApprenticeshipRecordBySelectingEditApprenticeLinkUnderManageApprentices(string status)
         {
             var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(LiveApprentice);
-            var page1 = await page.ClickOnEditApprenticeDetailsLink();
-            await page1.ClickOnCancelAndReturnLink();
+            await page.ClickOnEditApprenticeDetailsLink();
+            var page1 = new EditApprenticeDetails_ProviderPage(context);
+
+            if (status == "can")
+            {
+                await page.VerifyPageAsync(() => new EditApprenticeDetails_ProviderPage(context));
+                await page1.ClickOnCancelAndReturnLink();
+            }
+            else 
+            {
+                await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+                await page.NavigateBrowserBack();
+            }            
             await page.ReturnBackToManageYourApprenticesPage();
+
         }
+
 
 
 
