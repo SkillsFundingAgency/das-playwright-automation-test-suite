@@ -1,20 +1,19 @@
 using SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
-namespace SFA.DAS.FAA.UITests.Project.Tests.StepDefinitions
+namespace SFA.DAS.FAA.UITests.Project.Tests.Steps;
+
+[Binding]
+public class FAARandomSearchStepDefinitions(ScenarioContext context)
 {
-    [Binding]
-    public class FAARandomSearchStepDefinitions(ScenarioContext context)
+    private readonly ScenarioContext _context = context;
+
+    [When(@"the user does a search without populating search fields")]
+    public async Task WhenTheUserDoesASearchWithoutPopulatingSearchFields()
     {
-        private readonly ScenarioContext _context = context;
+        var page = new FAASignedInLandingBasePage(_context);
 
-        [When(@"the user does a search without populating search fields")]
-        public async Task WhenTheUserDoesASearchWithoutPopulatingSearchFields()
-        {
-            var page = new FAASignedInLandingBasePage(_context);
+        await page.VerifyPage();
 
-            await page.VerifyPage();
-
-            await page.SearchAtRandom();
-        }
+        await page.SearchAtRandom();
     }
 }

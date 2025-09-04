@@ -45,29 +45,30 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
 
     public async Task SearchByWhatWhere(string whatText, string whereText)
     {
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "What" }).ClickAsync();
         await page.GetByRole(AriaRole.Textbox, new() { Name = "What" }).FillAsync(whatText);
 
-        await page.GetByRole(AriaRole.Combobox, new() { Name = "Where" }).ClickAsync();
         await page.GetByRole(AriaRole.Combobox, new() { Name = "Where" }).FillAsync(whereText);
+
         await page.GetByRole(AriaRole.Option, new() { Name = whereText, Exact = false }).First.ClickAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
     }
 
-    //public void SearchByWhat(string whatText)
-    //{
-    //    formCompletionHelper.EnterText(What, whatText);
+    public async Task SearchByWhat(string whatText)
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "What" }).FillAsync(whatText);
 
-    //    formCompletionHelper.Click(SearchFAA);
-    //}
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
+    }
 
-    //public void SearchByWhere(string whereText)
-    //{
-    //    formCompletionHelper.EnterText(Where, whereText);
+    public async Task SearchByWhere(string whereText)
+    {
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "Where" }).FillAsync(whereText);
 
-    //    formCompletionHelper.Click(SearchFAA);
-    //}
+        await page.GetByRole(AriaRole.Option, new() { Name = whereText, Exact = false }).First.ClickAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
+    }
 
     public async Task<FAASearchResultPage> SearchAtRandom()
     {
@@ -96,10 +97,10 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
     //    return new FAASearchResultPage(context);
     //}
 
-    //public FAABrowseByInterestsPage ClickBrowseByYourInterests()
-    //{
-    //    formCompletionHelper.ClickLinkByText("Browse by your interests instead");
+    public async Task<FAABrowseByInterestsPage> ClickBrowseByYourInterests()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Browse by your interests" }).ClickAsync();
 
-    //    return new FAABrowseByInterestsPage(context);
-    //}
+        return await VerifyPageAsync(() => new FAABrowseByInterestsPage(context));
+    }
 }
