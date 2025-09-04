@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
+﻿using SFA.DAS.FAA.UITests.Project.Tests.Pages.StubPages;
+
+namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(context)
 {
@@ -41,14 +43,17 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
     //    return new FAA_ApprenticeSummaryPage(context);
     //}
 
-    //public void SearchByWhatWhere(string whatText, string whereText)
-    //{
-    //    formCompletionHelper.EnterText(What, whatText);
+    public async Task SearchByWhatWhere(string whatText, string whereText)
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "What" }).ClickAsync();
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "What" }).FillAsync(whatText);
 
-    //    formCompletionHelper.EnterText(Where, whereText);
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "Where" }).ClickAsync();
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "Where" }).FillAsync(whereText);
+        await page.GetByRole(AriaRole.Option, new() { Name = whereText, Exact = false }).First.ClickAsync();
 
-    //    formCompletionHelper.Click(SearchFAA);
-    //}
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
+    }
 
     //public void SearchByWhat(string whatText)
     //{
@@ -64,12 +69,12 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
     //    formCompletionHelper.Click(SearchFAA);
     //}
 
-    //public FAASearchResultPage SearchAtRandom()
-    //{
-    //    formCompletionHelper.Click(SearchFAA);
+    public async Task<FAASearchResultPage> SearchAtRandom()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
-    //    return new FAASearchResultPage(context);
-    //}
+        return await VerifyPageAsync(() => new FAASearchResultPage(context));
+    }
 
     //public FAASearchResultPage SearchRandomVacancyAndGetVacancyTitle()
     //{
