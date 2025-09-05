@@ -110,12 +110,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
         }
 
-        internal async Task AddEmptyCohort()
+        internal async Task AddEmptyCohort(bool login=true)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var ukprn = listOfApprenticeship.FirstOrDefault().UKPRN;
 
-            await EmployerLogInToEmployerPortal(false);
+            if (login) { await EmployerLogInToEmployerPortal(false); }
             await new InterimApprenticesHomePage(context, false).VerifyPage();
             var page = await new ApprenticesHomePage(context).GoToAddAnApprentice();
             var page1 =  await page.ClickStartNowButton();

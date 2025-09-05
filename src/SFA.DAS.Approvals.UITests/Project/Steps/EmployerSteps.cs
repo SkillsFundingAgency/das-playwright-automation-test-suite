@@ -36,14 +36,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();
         }
 
-        [When(@"Employer approves the apprentice request \(cohort\)")]
-        public async Task WhenEmployerApprovesTheApprenticeRequestCohort()
+
+        [When(@"the Employer approves the apprentice request \(cohort\)")]
+        [Then("the Employer can approve the cohort")]
+        public async Task WhenTheEmployerApprovesTheApprenticeRequestCohort()
         {
             var page = await employerStepsHelper.OpenCohort();
-
             await page.EmployerApproveCohort();
-
         }
+
 
         [When("Employer does not take any action on that cohort for more than 2 weeks")]
         public async Task WhenEmployerDoesNotTakeAnyActionOnThatCohortForMoreThan2Weeks()
@@ -62,12 +63,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             );
         }
 
-
-        [Then("Employer can access live apprentice records under Manager Your Apprentices section")]
-        public async Task ThenEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
+        [Then("the Employer can access live apprentice records under Manager Your Apprentices section")]
+        public void ThenTheEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
         {
-            await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage();
+            throw new PendingStepException();
         }
+
+
 
 
         [When("Employer reviews the above cohort")]
@@ -115,6 +117,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             await employerStepsHelper.AddEmptyCohort();
         }
+
+        [When("the new Employer create a cohort and send to provider to add apprentices")]
+        public async Task WhenTheNewEmployerCreateACohortAndSendToProviderToAddApprentices()
+        {
+            await employerStepsHelper.AddEmptyCohort(false);
+        }
+
+
 
         [Then ("the Employer sees the cohort in Ready to review with status of (.*)")]
         public async Task ThenTheEmployerReviewsCohort(string status)

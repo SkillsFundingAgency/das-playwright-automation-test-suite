@@ -123,12 +123,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
 
         [Given("new learner details are processed in ILR for (\\d+) apprentices")]
+        [Given("the employer has (\\d+) apprentice ready to start training")]
         public async Task ProcessedLearnersInILR(int NoOfApprentices)
         {
-            await ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
+            await ProviderSubmitsAnILRRecord(NoOfApprentices, EmployerType.Levy.ToString());
             await SLDPushDataIntoAS();
         }
-        
+ 
+
+
     }
 
 }

@@ -195,7 +195,7 @@ public class CreateAccountSteps
 
         var user = new LevyUser
         {
-            IdOrUserRef = loggedInAccountUser.IdOrUserRef,
+            IdOrUserRef = loggedInAccountUser.Username,         //account creation use email for both Id and username
             Username = loggedInAccountUser.Username,
             UserCreds = userCreds.FirstOrDefault(),
         };
