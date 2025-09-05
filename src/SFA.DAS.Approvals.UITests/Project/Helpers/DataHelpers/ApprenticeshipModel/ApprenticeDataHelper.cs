@@ -88,7 +88,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             employer.AgreementId = await accountsDbSqlHelper.GetAgreementId(employerUser.Username, employer.EmployerName[..3] + "%");
 
             var aleId = await accountsDbSqlHelper.GetAccountLegalEntityId(employerUser.Username, employer.EmployerName[..3] + "%");
-            employer.AccountLegalEntityId = Convert.ToInt32(aleId);               //Convert.ToInt32(accountsDbSqlHelper.GetAccountLegalEntityId(employerUser.Username, employer.EmployerName[..3] + "%"));
+            employer.AccountLegalEntityId = Convert.ToInt32(aleId);
 
             return employer;
         }
