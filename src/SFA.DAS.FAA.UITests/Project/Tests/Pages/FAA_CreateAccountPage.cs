@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
+﻿using System.Collections.Generic;
+
+namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public class FAA_CreateAccountPage(ScenarioContext context) : FAABasePage(context)
 {
@@ -60,11 +62,7 @@ public class WhatIsYourAddressPage(ScenarioContext context) : FAABasePage(contex
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Find my address" }).ClickAsync();
 
-        var locators = await page.Locator($"{Address} option").AllAsync();
-
-        var alloptions = locators.Select(async l => await l.TextContentAsync());
-
-        var alloptionstexts = await Task.WhenAll(alloptions);
+        var alloptionstexts = await AllTextAsync($"{Address} option");
 
         objectContext.SetDebugInformation($"Available address - {alloptionstexts.ToString(",")}");
 

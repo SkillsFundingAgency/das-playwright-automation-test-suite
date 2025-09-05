@@ -57,6 +57,17 @@ namespace SFA.DAS.Framework
             page = driver.Page;
         }
 
+        protected async Task<IReadOnlyList<string>> AllTextAsync(string locator)
+        {
+            var locators = await page.Locator(locator).AllAsync();
+
+            var alloptions = locators.Select(async l => await l.TextContentAsync());
+
+            var alloptionstexts = await Task.WhenAll(alloptions);
+
+            return alloptionstexts;
+        }
+
         protected async Task Navigate(string url)
         {
             var driver = context.Get<Driver>();
