@@ -1,7 +1,8 @@
 ﻿@approvals
 Feature: AP_E2E_LE_NUA_01_NewUserAccount
 
-A short summary of the feature
+A new non-levy employer creates an employer account and initiate a cohort.
+Provider add apprentice details and employer does the final approval.
 
 @regression
 @e2escenarios

@@ -64,9 +64,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Then("the Employer can access live apprentice records under Manager Your Apprentices section")]
-        public void ThenTheEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
+        public async Task ThenTheEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
         {
-            throw new PendingStepException();
+            await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage();
         }
 
 
