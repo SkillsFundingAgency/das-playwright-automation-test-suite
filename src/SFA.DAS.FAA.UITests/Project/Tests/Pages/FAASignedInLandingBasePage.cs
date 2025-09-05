@@ -14,7 +14,7 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
 
     //private static By Where => By.CssSelector("[id='WhereSearchTerm']");
 
-    //private static By SearchFAA => By.CssSelector(".form button");
+    private static string SearchFAA => (".form button");
     //private static By VacancyName => By.CssSelector("span[itemprop='title']");
 
     //private static By SavedVacancyLink => By.CssSelector(".govuk-link.govuk-link--no-visited-state");
@@ -51,14 +51,14 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
 
         await page.GetByRole(AriaRole.Option, new() { Name = whereText, Exact = false }).First.ClickAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
+        await page.Locator(SearchFAA).ClickAsync();
     }
 
     public async Task SearchByWhat(string whatText)
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "What" }).FillAsync(whatText);
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
+        await page.Locator(SearchFAA).ClickAsync();
     }
 
     public async Task SearchByWhere(string whereText)
@@ -67,19 +67,19 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
 
         await page.GetByRole(AriaRole.Option, new() { Name = whereText, Exact = false }).First.ClickAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
+        await page.Locator(SearchFAA).ClickAsync();
     }
 
     public async Task<FAASearchResultPage> SearchAtRandom()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        await page.Locator(SearchFAA).ClickAsync();
 
         return await VerifyPageAsync(() => new FAASearchResultPage(context));
     }
 
     //public FAASearchResultPage SearchRandomVacancyAndGetVacancyTitle()
     //{
-    //    formCompletionHelper.Click(SearchFAA);
+    //    await page.Locator(SearchFAA).ClickAsync();
 
     //    var vacancyTitle = pageInteractionHelper.GetText(FirstApplicationDisplayed);
 

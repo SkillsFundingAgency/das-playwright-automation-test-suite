@@ -1,9 +1,4 @@
-﻿
-
-using SFA.DAS.Framework;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.FAA.UITests.Project;
+﻿namespace SFA.DAS.FAA.UITests.Project;
 
 [Binding]
 public class FAAConfigurationSetup(ScenarioContext context)
