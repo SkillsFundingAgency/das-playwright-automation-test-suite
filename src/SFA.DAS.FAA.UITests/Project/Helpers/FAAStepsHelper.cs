@@ -1,5 +1,5 @@
-﻿using SFA.DAS.FAA.UITests.Project.Tests.Pages;
-using SFA.DAS.Framework;
+﻿using SFA.DAS.FAA.UITests.Project.Pages.ApplicationOverview;
+using SFA.DAS.FAA.UITests.Project.Tests.Pages;
 using SFA.DAS.Framework.Hooks;
 
 namespace SFA.DAS.FAA.UITests.Project.Helpers;
@@ -145,114 +145,164 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
     //    return applicationFormPage;
     //}
 
-    //public FAA_ApplicationOverviewPage ApplyForAVacancyWithNewAccount(bool qualificationdetails, bool trainingCourse, bool job, bool workExperience, bool interviewSupport, bool disabilityConfident)
-    //{
-    //    var applicationFormPage = GoToFAASearchResultsPageToSelectAVacancyAndApply();
+    public async Task<FAA_ApplicationOverviewPage> ApplyForAVacancyWithNewAccount(bool qualificationdetails, bool trainingCourse, bool job, bool workExperience, bool interviewSupport, bool disabilityConfident)
+    {
+        var applicationFormPage = await GoToFAASearchResultsPageToSelectAVacancyAndApply();
 
-    //    if (qualificationdetails)
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section1_1SchoolCollegeQualifications()
-    //            .SelectYesAndContinue()
-    //            .SelectAQualificationAndContinue()
-    //            .AddQualificationDetailsAndContinue()
-    //            .SelectSectionCompleted()
-    //            .VerifyEducationHistory_1();
-    //    }
-    //    else
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section1_1SchoolCollegeQualifications().SelectNoAndContinue().VerifyEducationHistory_1();
-    //    }
+        if (qualificationdetails)
+        {
+            var page = await applicationFormPage.Access_Section1_1SchoolCollegeQualifications();
 
-    //    if (trainingCourse)
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section1_2TrainingCourse()
-    //            .SelectYesAndContinue()
-    //            .SelectATrainingCourseAndContinue()
-    //            .SelectSectionCompleted()
-    //            .VerifyEducationHistory_2();
-    //    }
-    //    else
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section1_2TrainingCourse()
-    //            .SelectNoAndContinue()
-    //            .VerifyEducationHistory_2();
-    //    }
+            var page1 = await page.SelectYesAndContinue();
 
-    //    if (job)
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section2_1Jobs()
-    //            .SelectYesAndContinue()
-    //            .SelectAJobAndContinue()
-    //            .SelectSectionCompleted()
-    //            .VerifyWorkHistory_1();
-    //    }
-    //    else
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section2_1Jobs()
-    //            .SelectNoAndContinue()
-    //            .VerifyWorkHistory_1();
-    //    }
+            var page2 = await page1.SelectAQualificationAndContinue();
 
-    //    if (workExperience)
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section2_2VolunteeringAndWorkExperience()
-    //            .SelectYesAndContinue()
-    //            .SelectAVolunteeringAndWorkExperience()
-    //            .SelectSectionCompleted()
-    //            .VerifyWorkHistory_2();
-    //    }
-    //    else
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section2_2VolunteeringAndWorkExperience()
-    //            .SelectNoAndContinue()
-    //            .VerifyEducationHistory_2();
-    //    }
+            var page3 = await page2.AddQualificationDetailsAndContinue();
 
-    //    applicationFormPage = applicationFormPage.Access_Section3_1SkillsAndStrengths()
-    //        .SelectYesAndCompleteSection()
-    //        .VerifyApplicationsQuestions_1()
-    //        .Access_Section3_2Interests()
-    //        .SelectYesAndCompleteSection()
-    //        .VerifyApplicationsQuestions_2()
-    //        .RespondToAdditionalQuestion1()
-    //        .SelectYesAndCompleteSection()
-    //        .VerifyApplicationsQuestions_3()
-    //        .RespondToAdditionalQuestion2()
-    //        .SelectYesAndCompleteSection()
-    //        .VerifyApplicationsQuestions_4();
+            applicationFormPage = await page3.SelectSectionCompleted();
 
-    //    if (interviewSupport)
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section4_1Adjustment()
-    //            .SelectYesAndContinue()
-    //            .SelectSectionCompleted()
-    //            .VerifyInterviewAadjustments_1();
-    //    }
-    //    else
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section4_1Adjustment()
-    //            .SelectNoAndContinue()
-    //            .SelectSectionCompleted()
-    //            .VerifyInterviewAadjustments_1();
-    //    }
+            await applicationFormPage.VerifyEducationHistory_1();
+        }
+        else
+        {
+            var page = await applicationFormPage.Access_Section1_1SchoolCollegeQualifications();
 
-    //    if (disabilityConfident)
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section5_1DisabilityConfidence()
-    //            .SelectYesAndContinue()
-    //            .SelectSectionCompleted()
-    //            .VerifyDisabilityConfidence_1();
-    //    }
-    //    else
-    //    {
-    //        applicationFormPage = applicationFormPage.Access_Section5_1DisabilityConfidence()
-    //            .SelectNoAndContinue()
-    //            .SelectSectionCompleted()
-    //            .VerifyDisabilityConfidence_1();
-    //    }
+            applicationFormPage = await page.SelectNoAndContinue();
 
-    //    return applicationFormPage;
-    //}
+            await applicationFormPage.VerifyEducationHistory_1();
+        }
+
+        if (trainingCourse)
+        {
+            var page = await applicationFormPage.Access_Section1_2TrainingCourse();
+
+            var page1 = await page.SelectYesAndContinue();
+
+            var page2 = await page1.SelectATrainingCourseAndContinue();
+
+            applicationFormPage = await page2.SelectSectionCompleted();
+
+            await applicationFormPage.VerifyEducationHistory_2();
+        }
+        else
+        {
+            var page = await applicationFormPage.Access_Section1_2TrainingCourse();
+
+            applicationFormPage = await page.SelectNoAndContinue();
+
+            await applicationFormPage.VerifyEducationHistory_2();
+        }
+
+        if (job)
+        {
+            var page = await applicationFormPage.Access_Section2_1Jobs();
+
+            var page1 = await page.SelectYesAndContinue();
+
+            var page2 = await page1.SelectAJobAndContinue();
+
+            applicationFormPage = await page2.SelectSectionCompleted();
+
+            await applicationFormPage.VerifyWorkHistory_1();
+        }
+        else
+        {
+            var page = await applicationFormPage.Access_Section2_1Jobs();
+
+            applicationFormPage = await page.SelectNoAndContinue();
+
+            await applicationFormPage.VerifyWorkHistory_1();
+        }
+
+        if (workExperience)
+        {
+            var page = await applicationFormPage.Access_Section2_2VolunteeringAndWorkExperience();
+
+            var page1 = await page.SelectYesAndContinue();
+
+            var page2 = await page1.SelectAVolunteeringAndWorkExperience();
+
+            applicationFormPage = await page2.SelectSectionCompleted();
+
+            await applicationFormPage.VerifyWorkHistory_2();
+        }
+        else
+        {
+            var page = await applicationFormPage.Access_Section2_2VolunteeringAndWorkExperience();
+
+            applicationFormPage = await page.SelectNoAndContinue();
+
+            await applicationFormPage.VerifyEducationHistory_2();
+        }
+
+        var page10 = await applicationFormPage.Access_Section3_1SkillsAndStrengths();
+
+        applicationFormPage = await page10.SelectYesAndCompleteSection();
+
+        await applicationFormPage.VerifyApplicationsQuestions_1();
+
+        var page11 = await applicationFormPage.Access_Section3_2Interests();
+
+        applicationFormPage = await page11.SelectYesAndCompleteSection();
+
+        await applicationFormPage.VerifyApplicationsQuestions_2();
+
+        var page12 = await applicationFormPage.RespondToAdditionalQuestion1();
+
+        applicationFormPage = await page12.SelectYesAndCompleteSection();
+
+        await applicationFormPage.VerifyApplicationsQuestions_3();
+
+        var page13 = await applicationFormPage.RespondToAdditionalQuestion2();
+
+        applicationFormPage = await page13.SelectYesAndCompleteSection();
+
+        await applicationFormPage.VerifyApplicationsQuestions_4();
+
+        if (interviewSupport)
+        {
+            var page20 = await applicationFormPage.Access_Section4_1Adjustment();
+
+            var page21 = await page20.SelectYesAndContinue();
+
+            applicationFormPage = await page21.SelectSectionCompleted();
+
+            await applicationFormPage.VerifyInterviewAadjustments_1();
+        }
+        else
+        {
+            var page20 = await applicationFormPage.Access_Section4_1Adjustment();
+
+            var page21 = await page20.SelectNoAndContinue();
+
+            applicationFormPage = await page21.SelectSectionCompleted();
+
+            await applicationFormPage.VerifyInterviewAadjustments_1();
+        }
+
+        if (disabilityConfident)
+        {
+            var page20 = await applicationFormPage.Access_Section5_1DisabilityConfidence();
+
+            var page21 = await page20.SelectYesAndContinue();
+
+            applicationFormPage = await page21.SelectSectionCompleted();
+
+            await applicationFormPage.VerifyDisabilityConfidence_1();
+        }
+        else
+        {
+            var page20 = await applicationFormPage.Access_Section5_1DisabilityConfidence();
+
+            var page21 = await page20.SelectNoAndContinue();
+
+            applicationFormPage = await page21.SelectSectionCompleted();
+
+            await applicationFormPage.VerifyDisabilityConfidence_1();
+        }
+
+        return applicationFormPage;
+    }
 
 
     //public FAA_ApplicationOverviewPage GoToVacancyDetailsPageThenSaveBeforeApplying() => GoToFAAHomePage().SearchByReferenceNumber().SaveAndApplyForVacancy().Apply();
@@ -261,16 +311,16 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
     //public FAA_SubmittedApplicationPage GoToYourApplicationsPageAndWithdrawARandomApplication() => GoToFAAHomePage().GoToApplications().OpenSubmittedlApplicationPage().WithdrawRandomlySelectedApplication();
     //public FAA_SubmittedApplicationPage GoToYourApplicationsPageAndOpenSubmittedApplicationsPage() => GoToFAAHomePage().GoToApplications().OpenSubmittedlApplicationPage();
 
-    //private FAA_ApplicationOverviewPage GoToFAASearchResultsPageToSelectAVacancyAndApply()
-    //{
-    //    var landingPage = new FAASignedInLandingBasePage(context);
+    private async Task<FAA_ApplicationOverviewPage> GoToFAASearchResultsPageToSelectAVacancyAndApply()
+    {
+        var landingPage = new FAASignedInLandingBasePage(context);
 
-    //    var searchResultsPage = landingPage.SearchRandomVacancyAndGetVacancyTitle();
+        var searchResultsPage = await landingPage.SearchRandomVacancyAndGetVacancyTitle();
 
-    //    var apprenticeSummaryPage = searchResultsPage.ClickFirstApprenticeshipThatCanBeAppliedFor();
+        var apprenticeSummaryPage = await searchResultsPage.ClickFirstApprenticeshipThatCanBeAppliedFor();
 
-    //    return apprenticeSummaryPage.Apply();
-    //}
+        return await apprenticeSummaryPage.Apply();
+    }
     //private FAA_ApplicationOverviewPage GoToFAAHomePageAndApply() => GoToFAAHomePage().SearchByReferenceNumber().Apply();
     //private FAA_ApplicationOverviewPage GoToFAAHomePageAndApply(FAAApplyUser user) => GoToFAAHomePage(user).SearchByReferenceNumber().Apply();
     //private FAA_ApplicationOverviewPage GoToFAAHomePageAndApply(FAAApplySecondUser user) => GoToFAAHomePage(user).SearchByReferenceNumber().Apply();

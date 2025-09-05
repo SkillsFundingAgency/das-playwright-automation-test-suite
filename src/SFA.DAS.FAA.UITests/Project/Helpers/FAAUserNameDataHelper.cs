@@ -24,7 +24,7 @@
 
         public string FaaNewUserMobilePhone { get; init; } = $"07{RandomDataGenerator.GenerateRandomNumber(9)}";
 
-        public DateTime FaaNewUserDob { get; init; } = new(RandomDataGenerator.GenerateRandomDobYear(), RandomDataGenerator.GenerateRandomMonth(), RandomDataGenerator.GenerateRandomDateOfMonth());
+        public DateTime FaaNewUserDob { get; init; } = new(RandomDataGenerator.GenerateRandomDobYear(16, 25), RandomDataGenerator.GenerateRandomMonth(), RandomDataGenerator.GenerateRandomDateOfMonth());
 
         public string FaaNewUserPostCode { get; init; } = RandomDataGenerator.RandomPostCode();
     }

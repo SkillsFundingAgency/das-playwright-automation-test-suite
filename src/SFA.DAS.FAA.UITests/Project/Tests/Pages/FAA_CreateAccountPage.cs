@@ -90,7 +90,11 @@ public class WhatIsYourTelephoneNumberPage(ScenarioContext context) : FAABasePag
 
     public async Task<GetRemindersAboutYourUnfinishedApplicationsPage> SubmitApprenticeTelephoneNumber()
     {
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Telephone number" }).FillAsync($"{fAAUserNameDataHelper.FaaNewUserMobilePhone}");
+        var number = fAAUserNameDataHelper.FaaNewUserMobilePhone;
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Telephone number" }).FillAsync($"{number}");
+
+        objectContext.SetDebugInformation($"Telephone number - '{number}'");
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 

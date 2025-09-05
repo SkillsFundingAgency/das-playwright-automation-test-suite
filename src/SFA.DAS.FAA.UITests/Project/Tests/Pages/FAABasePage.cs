@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Framework;
+﻿using SFA.DAS.FAA.UITests.Project.Pages.ApplicationOverview;
 using SFA.DAS.RAA.DataGenerator.Project.Helpers;
 
 namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
@@ -14,16 +14,16 @@ public abstract class FAABasePage(ScenarioContext context) : BasePage(context)
 
     //protected override By ContinueButton => By.CssSelector("#main-content .govuk-button");
 
-    //protected virtual By SubmitSectionButton => By.CssSelector("button.govuk-button[id='submit-button']");
+    protected virtual string SubmitSectionButton => ("button.govuk-button[id='submit-button']");
 
-    //public FAA_ApplicationOverviewPage SelectSectionCompleted()
-    //{
-    //    SelectRadioOptionByForAttribute("IsSectionCompleted");
+    public async Task<FAA_ApplicationOverviewPage> SelectSectionCompleted()
+    {
+        await page.GetByRole(AriaRole.Radio).First.CheckAsync();
 
-    //    formCompletionHelper.Click(SubmitSectionButton);
+        await page.Locator(SubmitSectionButton).ClickAsync();
 
-    //    return new(context);
-    //}
+        return await VerifyPageAsync(() => new FAA_ApplicationOverviewPage(context));
+    }
 
     //protected void GoToVacancyInFAA()
     //{

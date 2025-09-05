@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using SFA.DAS.FAA.UITests.Project.Pages.ApplicationOverview;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
@@ -32,14 +33,12 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
     //    return new FAA_ApplicationOverviewPage(context);
     //}
 
-    //public FAA_ApprenticeSummaryPage ClickFirstApprenticeshipThatCanBeAppliedFor()
-    //{
-    //    var vacancyTitle = pageInteractionHelper.GetText(FirstApplicationDisplayed);
+    public async Task<FAA_ApprenticeSummaryPage> ClickFirstApprenticeshipThatCanBeAppliedFor()
+    {
+        var contextVacancyTitle = objectContext.Get("vacancyTitle");
 
-    //    objectContext.Set("vacancytitle", vacancyTitle);
+        await page.GetByRole(AriaRole.Link, new() { Name = contextVacancyTitle }).ClickAsync();
 
-    //    formCompletionHelper.Click(FirstApplicationDisplayed);
-
-    //    return new FAA_ApprenticeSummaryPage(context);
-    //}
+        return await VerifyPageAsync(() => new FAA_ApprenticeSummaryPage(context));
+    }
 }

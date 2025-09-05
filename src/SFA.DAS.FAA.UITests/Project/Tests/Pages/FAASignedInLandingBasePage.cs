@@ -1,6 +1,4 @@
-﻿using SFA.DAS.FAA.UITests.Project.Tests.Pages.StubPages;
-
-namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(context)
 {
@@ -18,7 +16,7 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
     //private static By VacancyName => By.CssSelector("span[itemprop='title']");
 
     //private static By SavedVacancyLink => By.CssSelector(".govuk-link.govuk-link--no-visited-state");
-    //private static By FirstApplicationDisplayed => By.CssSelector("[id^='VAC'][id$='-vacancy-title']");
+    private static string AllVacancyLocator => ("[id^='VAC'][id$='-vacancy-title']");
 
     //public FAA_ApplicationsPage GoToApplications()
     //{
@@ -77,18 +75,26 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
         return await VerifyPageAsync(() => new FAASearchResultPage(context));
     }
 
-    //public FAASearchResultPage SearchRandomVacancyAndGetVacancyTitle()
-    //{
-    //    await page.Locator(SearchFAA).ClickAsync();
+    public async Task<FAASearchResultPage> SearchRandomVacancyAndGetVacancyTitle()
+    {
+        await page.Locator(SearchFAA).ClickAsync();
 
-    //    var vacancyTitle = pageInteractionHelper.GetText(FirstApplicationDisplayed);
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apprenticeship type , Show" }).ClickAsync();
 
-    //    objectContext.Set("vacancyTitle", vacancyTitle);
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Apprenticeship", Exact = true }).CheckAsync();
 
-    //    var contextVacancyTitle = objectContext.Get("vacancyTitle");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).First.ClickAsync();
 
-    //    return new FAASearchResultPage(context);
-    //}
+        await new FAASearchResultPage(context).VerifySuccessfulResults();
+
+        var allvacancy = await AllTextAsync(AllVacancyLocator);
+
+        var vacancyTitle = RandomDataGenerator.GetRandom(allvacancy);
+
+        objectContext.Set("vacancyTitle", vacancyTitle);
+
+        return await VerifyPageAsync(() => new FAASearchResultPage(context));
+    }
 
     //public FAASearchResultPage SearchAndSaveVacancyByReferenceNumber()
     //{
