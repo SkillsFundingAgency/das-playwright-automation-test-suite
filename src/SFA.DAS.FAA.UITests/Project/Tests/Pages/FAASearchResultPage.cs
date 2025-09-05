@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
+﻿using System.Text.RegularExpressions;
+
+namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBasePage(context)
 {
@@ -11,7 +13,7 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
 
     public async Task VerifySuccessfulResults()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("results found");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(new Regex("results? found"));
     }
 
     public async Task ClickSignout()

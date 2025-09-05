@@ -60,11 +60,23 @@ public class WhatIsYourAddressPage(ScenarioContext context) : FAABasePage(contex
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Find my address" }).ClickAsync();
 
-        var options = await page.Locator(Address).AllTextContentsAsync();
+        var locators = await page.Locator($"{Address} option").AllAsync();
 
-        var allOptions = options.ToList().Where(x => x != "Select address").ToList();
+        var alloptions = locators.Select(async l => await l.TextContentAsync());
+
+        var alloptionstexts = await Task.WhenAll(alloptions);
+
+        objectContext.SetDebugInformation($"Available address - {alloptionstexts.ToString(",")}");
+
+        alloptionstexts = [.. alloptionstexts.ToList().Select(x => x.RemoveMultipleSpace())];
+
+        objectContext.SetDebugInformation($"Available address - {alloptionstexts.ToString(",")}");
+
+        var allOptions = alloptionstexts.Where(x => x != "Select address").ToList();
 
         var option = RandomDataGenerator.GetRandomElementFromListOfElements(allOptions);
+
+        objectContext.SetDebugInformation($"Selection address - {option}");
 
         await page.GetByLabel("Select an address from the").SelectOptionAsync(option);
 
