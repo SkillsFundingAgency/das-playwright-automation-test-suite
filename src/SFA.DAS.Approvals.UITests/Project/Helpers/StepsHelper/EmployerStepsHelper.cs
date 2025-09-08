@@ -33,6 +33,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         {
             await employerHomePageHelper.NavigateToEmployerApprenticeshipService(openInNewTab);
 
+            if (await employerLoginHelper.IsHomePageDisplayed())
+                return new HomePage(context);
+
             var employerType = listOfApprenticeship.FirstOrDefault().EmployerDetails.EmployerType.ToString();
 
             switch (employerType.ToLower())
@@ -110,12 +113,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
         }
 
-        internal async Task AddEmptyCohort(bool login=true)
+        internal async Task AddEmptyCohort()
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var ukprn = listOfApprenticeship.FirstOrDefault().UKPRN;
 
-            if (login) { await EmployerLogInToEmployerPortal(false); }
             await new InterimApprenticesHomePage(context, false).VerifyPage();
             var page = await new ApprenticesHomePage(context).GoToAddAnApprentice();
             var page1 =  await page.ClickStartNowButton();

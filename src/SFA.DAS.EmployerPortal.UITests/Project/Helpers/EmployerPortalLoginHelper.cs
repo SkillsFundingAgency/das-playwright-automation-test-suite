@@ -55,6 +55,8 @@ public class EmployerPortalLoginHelper(ScenarioContext context) : IReLoginHelper
 
     public async Task<bool> IsYourAccountPageDisplayed() => await new CheckYourAccountPage(context).IsPageDisplayed();
 
+    public async Task<bool> IsHomePageDisplayed() => await new HomePage(context).IsPageDisplayed();
+
     public async Task<HomePage> ReLogin()
     {
         var page = await new StubSignInEmployerPage(context).Login(GetLoginCredentials());
