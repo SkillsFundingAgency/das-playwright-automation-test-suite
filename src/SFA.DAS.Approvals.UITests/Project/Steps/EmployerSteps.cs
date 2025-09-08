@@ -49,7 +49,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("Employer does not take any action on that cohort for more than 2 weeks")]
         public async Task WhenEmployerDoesNotTakeAnyActionOnThatCohortForMoreThan2Weeks()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
             await commitmentsDbSqlHelper.UpdateCohortLastUpdatedDate(cohortRef, DateAndTime.Now.AddDays(-15));
 
             //test environments are configured to run web job: "ExpireInactiveCohortsWithEmployerAfter2WeeksSchedule" every 4th minute

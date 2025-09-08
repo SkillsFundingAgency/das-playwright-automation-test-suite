@@ -35,7 +35,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.ApprenticeDetails.DateOfBirth = Convert.ToDateTime(details[3].ToString());
             apprenticeship.TrainingDetails.StandardCode = Convert.ToInt32(details[4]);
             apprenticeship.ReservationID = details[5];
-            apprenticeship.CohortReference = details[6];
+            apprenticeship.Cohort.Reference = details[6];
             apprenticeship.ApprenticeDetails.Email = details[7];
             apprenticeship.TrainingDetails.StartDate = Convert.ToDateTime(details[8]);
             apprenticeship.TrainingDetails.EndDate = Convert.ToDateTime(details[9]);

@@ -1,4 +1,5 @@
 ﻿using Azure;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.EmployerPortal.UITests.Project;
 using System;
@@ -49,8 +50,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(EmailValue).ToHaveValueAsync(apprenticeDetails.Email);
 
             var trainingDetails = apprenticeship.TrainingDetails;
-            await Assertions.Expect(PlannedTrainingStartDateValue).ToContainTextAsync(trainingDetails.StartDate.ToString("MMM yyyy"));
-            await Assertions.Expect(PlannedTrainingEndDateValue).ToContainTextAsync(trainingDetails.EndDate.ToString("MMM yyyy"));
+            await Assertions.Expect(PlannedTrainingStartDateValue).ToContainTextAsync(DateTimeExtension.FormatWithCustomMonth(trainingDetails.StartDate));   //(trainingDetails.StartDate.ToString("MMM yyyy"));
+            await Assertions.Expect(PlannedTrainingEndDateValue).ToContainTextAsync(DateTimeExtension.FormatWithCustomMonth(trainingDetails.EndDate));     //(trainingDetails.EndDate.ToString("MMM yyyy"));
             await Assertions.Expect(TotalPriceValue).ToContainTextAsync(trainingDetails.TotalPrice.ToString("C0"));
             await Assertions.Expect(ReferenceValue).ToHaveValueAsync("");
         }

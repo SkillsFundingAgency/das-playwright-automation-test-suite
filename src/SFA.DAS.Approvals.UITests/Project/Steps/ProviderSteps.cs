@@ -21,6 +21,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     public class ProviderSteps
     {
         private readonly ScenarioContext context;
+        private readonly CommonStepsHelper commonStepsHelper;
         private readonly ProviderHomePageStepsHelper providerHomePageStepsHelper;
         private readonly ProviderStepsHelper providerStepsHelper;
         private readonly DbSteps dbSteps;
@@ -29,6 +30,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public ProviderSteps(ScenarioContext _context)
         {
             context = _context;
+            commonStepsHelper = new CommonStepsHelper(context);
             providerHomePageStepsHelper = new ProviderHomePageStepsHelper(context);
             providerStepsHelper = new ProviderStepsHelper(context);
             dbSteps = new DbSteps(context);
@@ -58,7 +60,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("return the cohort back to the Provider")]
         public async Task ThenReturnTheCohortBackToTheProvider()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
 
             await providerHomePageStepsHelper.GoToProviderHomePage(false);
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
@@ -75,7 +77,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
             await providerHomePageStepsHelper.GoToProviderHomePage(true);
-            //await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
             await UserNavigatesToManageYourApprenticesPage();
             var page = new ManageYourApprentices_ProviderPage(context);
 
@@ -102,7 +103,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenProviderTriesToEditLiveApprenticeRecordBySettingAgeOldThanYears()
         {
             await providerHomePageStepsHelper.GoToProviderHomePage(true);
-            //await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
             await UserNavigatesToManageYourApprenticesPage();
         }
 
@@ -174,17 +174,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("the provider adds apprentices along with RPL details and sends to employer to review")]
         public async Task WhenTheProviderAddsApprenticesAlongWithRPLDetailsAndSendsToEmployerToReview()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
             var page = await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
             await page.ProviderSendCohortForEmployerReview();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for review");
         }
 
         [Then("the provider adds apprentice details, approves the cohort and sends it to the employer for approval")]
         public async Task ThenTheProviderAddsApprenticeDetailsApprovesTheCohortAndSendsItToTheEmployerForApproval()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
             var page = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
@@ -192,6 +193,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page1 = new ApproveApprenticeDetailsPage(context);
             await providerStepsHelper.AddOtherApprenticesFromILRListWithRPL(page1, 0);
             await page1.ProviderApproveCohort();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
         }
 
 
@@ -200,7 +202,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheProviderApprovesCohort()
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
             var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();

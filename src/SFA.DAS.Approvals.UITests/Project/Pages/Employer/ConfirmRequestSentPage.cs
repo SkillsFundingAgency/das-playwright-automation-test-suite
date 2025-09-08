@@ -16,14 +16,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Add apprentice request sent to training provider");
         }
 
-        public async Task SetCohortReference(List<Apprenticeship> listOfApprenticeship)
-        { 
-            var cohortRef = await GetCohortId();
-            await Task.Delay(100);
-            listOfApprenticeship.ForEach(a => a.CohortReference = cohortRef);
-            context.Set(listOfApprenticeship);
-        }
-
         internal async Task<string> GetCohortId() => await cohortReference.InnerTextAsync();
         
 

@@ -13,7 +13,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.FileUploadModel
             var csvLines = new List<string> { CsvHeader };
             foreach (var apprentice in listOfApprenticeship)
             {
-                var line = $"{apprentice.CohortReference},{apprentice.EmployerDetails.AgreementId},{apprentice.ApprenticeDetails.ULN},{apprentice.ApprenticeDetails.LastName}," +
+                var line = $"{apprentice.Cohort.Reference},{apprentice.EmployerDetails.AgreementId},{apprentice.ApprenticeDetails.ULN},{apprentice.ApprenticeDetails.LastName}," +
                            $"{apprentice.ApprenticeDetails.FirstName},{apprentice.ApprenticeDetails.DateOfBirth.ToString("yyyy-MM-dd")},{apprentice.ApprenticeDetails.Email}," +
                            $"{apprentice.TrainingDetails.StandardCode},{apprentice.TrainingDetails.StartDate.ToString("yyyy-MM-dd")},{apprentice.TrainingDetails.EndDate.ToString("yyyy-MM")}," +
                            $"{apprentice.TrainingDetails.TotalPrice},EPA0001,{RandomDataGenerator.GenerateRandomAlphabeticString(6)}," +

@@ -63,7 +63,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await page2.GetCohortId(apprenticeship);
 
-            objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.CohortReference}");
+            objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.Cohort.Reference}");
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
@@ -250,7 +250,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var firstApprentice = listOfApprenticeship.FirstOrDefault();
-            var cohortReference = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var cohortReference = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
            return await chooseAnExistingEmployerPage.ChooseAnExistingEmployer(cohortReference);
         }
 
@@ -297,7 +297,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await page2.GetCohortId(apprenticeship);
 
-            objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.CohortReference}");
+            objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.Cohort.Reference}");
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 

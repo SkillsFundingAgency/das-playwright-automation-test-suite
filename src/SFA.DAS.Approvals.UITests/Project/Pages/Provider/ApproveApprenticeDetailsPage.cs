@@ -51,7 +51,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task VerifyCohort(Apprenticeship apprenticeship)
         {
             await Assertions.Expect(employerName).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
-            await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenticeship.CohortReference);
+            await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenticeship.Cohort.Reference);
             await Assertions.Expect(status).ToHaveTextAsync("New request");
             //await Assertions.Expect(message).ToHaveTextAsync("No message added.");
 
@@ -73,7 +73,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task GetCohortId(Apprenticeship apprenticeship)
         {
             var cohortRef = await cohortReference.InnerTextAsync();
-            apprenticeship.CohortReference = cohortRef;
+            apprenticeship.Cohort.Reference = cohortRef;
 
             await Task.Delay(100);
             context.Set(apprenticeship, "Apprenticeship");

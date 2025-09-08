@@ -34,8 +34,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         internal async Task VerifyCohort(Apprenticeship apprenticeship)
         {
             await Assertions.Expect(organisation).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
-            await Assertions.Expect(reference).ToHaveTextAsync(apprenticeship.CohortReference);
-            await Assertions.Expect(status).ToHaveTextAsync("Ready for approval");
+            await Assertions.Expect(reference).ToHaveTextAsync(apprenticeship.Cohort.Reference);
+            await Assertions.Expect(status).ToHaveTextAsync(apprenticeship.Cohort.Status_Employer);
             await Assertions.Expect(messageFromProvider).ToHaveTextAsync("Please review the details and approve the request.");
         }
 
