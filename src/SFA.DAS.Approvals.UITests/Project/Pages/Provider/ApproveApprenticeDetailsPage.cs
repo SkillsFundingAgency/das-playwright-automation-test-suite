@@ -110,7 +110,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new CohortApprovedAndSentToEmployerPage(context));
         }
 
-        internal async Task<CohortSentToEmployerForReview> ProviderSendCohortForEmployerApproval()
+        internal async Task<CohortSentToEmployerForReview> ProviderSendCohortForEmployerReview()
         {
             await sendToEmployerRadioOption.ClickAsync();
             await messageToEmployerToReviewTextBox.FillAsync("Please review the details and approve the request.");

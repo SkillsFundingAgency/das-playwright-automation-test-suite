@@ -255,11 +255,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         }
 
 
-        internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRListWithRPL(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRListWithRPL(ApproveApprenticeDetailsPage approveApprenticeDetailsPage, int NoOfApprenticesToSkip=1)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
-            foreach (var apprenticeship in listOfApprenticeship.Skip(1))
+            foreach (var apprenticeship in listOfApprenticeship.Skip(NoOfApprenticesToSkip))
             {
                 var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink();
                 var page1 = await page.SelectApprenticeFromILRList(apprenticeship);

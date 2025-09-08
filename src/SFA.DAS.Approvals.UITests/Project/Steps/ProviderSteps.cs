@@ -172,17 +172,28 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }       
 
         [When("the provider adds apprentices along with RPL details and sends to employer to review")]
-        [Then("the provider adds apprentice details, approves the cohort and sends it to the employer for approval")]
         public async Task WhenTheProviderAddsApprenticesAlongWithRPLDetailsAndSendsToEmployerToReview()
         {
             var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
-            //var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
-            //await page1.SelectCohort(cohortRef);
-            var page2 = await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
-            await page2.ProviderSendCohortForEmployerApproval();
+            var page = await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
+            await page.ProviderSendCohortForEmployerReview();
         }
+
+        [Then("the provider adds apprentice details, approves the cohort and sends it to the employer for approval")]
+        public async Task ThenTheProviderAddsApprenticeDetailsApprovesTheCohortAndSendsItToTheEmployerForApproval()
+        {
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            var page = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            await page.SelectCohort(cohortRef);
+            var page1 = new ApproveApprenticeDetailsPage(context);
+            await providerStepsHelper.AddOtherApprenticesFromILRListWithRPL(page1, 0);
+            await page1.ProviderApproveCohort();
+        }
+
 
 
         [Then("the provider approves the cohorts")]
