@@ -1,8 +1,4 @@
-﻿using NUnit.Framework;
-using SFA.DAS.FAA.UITests.Project.Tests.Pages;
-using SFA.DAS.FAA.UITests.Project.Tests.Pages.ApplicationOverview;
-
-namespace SFA.DAS.FAA.UITests.Project.Pages.ApplicationOverview;
+﻿namespace SFA.DAS.FAA.UITests.Project.Pages.ApplicationOverview;
 
 public partial class FAA_ApplicationOverviewPage : FAABasePage
 {

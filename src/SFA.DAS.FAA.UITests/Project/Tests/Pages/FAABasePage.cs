@@ -1,6 +1,4 @@
 ﻿using SFA.DAS.FAA.UITests.Project.Pages.ApplicationOverview;
-using SFA.DAS.RAA.DataGenerator.Project.Helpers;
-
 namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public abstract class FAABasePage(ScenarioContext context) : BasePage(context)

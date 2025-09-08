@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public class FAA_CreateAccountPage(ScenarioContext context) : FAABasePage(context)
 {

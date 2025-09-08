@@ -1,7 +1,4 @@
-﻿using SFA.DAS.FAA.UITests.Project.Pages.ApplicationOverview;
-using SFA.DAS.FAA.UITests.Project.Tests.Pages;
-using SFA.DAS.Framework.Hooks;
-
+﻿
 namespace SFA.DAS.FAA.UITests.Project.Helpers;
 
 public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)

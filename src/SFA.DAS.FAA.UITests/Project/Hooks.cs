@@ -1,6 +1,4 @@
-﻿using SFA.DAS.RAA.DataGenerator.Project.Helpers;
-
-namespace SFA.DAS.FAA.UITests.Project;
+﻿namespace SFA.DAS.FAA.UITests.Project;
 
 [Binding]
 public class Hooks(ScenarioContext context)

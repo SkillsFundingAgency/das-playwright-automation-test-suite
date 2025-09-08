@@ -1,6 +1,4 @@
-﻿using SFA.DAS.FAA.UITests.Project.Pages.ApplicationOverview;
-
-namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public class WhatAreYourSkillsAndStrengthsPage(ScenarioContext context) : FAABasePage(context)
 {

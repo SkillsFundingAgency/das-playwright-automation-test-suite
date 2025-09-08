@@ -1,5 +1,3 @@
-using SFA.DAS.FAA.UITests.Project.Tests.Pages;
-
 namespace SFA.DAS.FAA.UITests.Project.Tests.Steps;
 
 [Binding]

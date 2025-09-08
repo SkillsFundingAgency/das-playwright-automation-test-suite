@@ -1,6 +1,4 @@
-﻿using SFA.DAS.FAA.UITests.Project.Tests.Pages;
-
-namespace SFA.DAS.FAA.UITests.Project.Tests.Steps;
+﻿namespace SFA.DAS.FAA.UITests.Project.Tests.Steps;
 
 [Binding]
 public class FAACreateSteps(ScenarioContext context)

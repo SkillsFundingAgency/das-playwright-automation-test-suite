@@ -1,5 +1,3 @@
-using SFA.DAS.FAA.UITests.Project.Tests.Pages;
-
 namespace SFA.DAS.FAA.UITests.Project.Tests.Steps;
 
 [Binding]
@@ -11,7 +9,7 @@ public class FAAWhatWhereSearchStepDefinitions(ScenarioContext context)
     public async Task WhenTheUserDoesAWhatAndWhereSearch(string whatText, string whereText)
     {
         var page = new FAASignedInLandingBasePage(_context);
-        
+
         await page.SearchByWhatWhere(whatText, whereText);
     }
 

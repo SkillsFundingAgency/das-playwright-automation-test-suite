@@ -1,5 +1,3 @@
-using SFA.DAS.FAA.UITests.Project.Tests.Pages;
-
 namespace SFA.DAS.FAA.UITests.Project.Tests.Steps;
 
 [Binding]
@@ -15,7 +13,7 @@ public class FAABrowseByInterestsSteps(ScenarioContext context)
         var page1 = await page.ClickBrowseByYourInterests();
 
         var page2 = await page1.SelectCategoriesCheckBoxes();
-        
+
         await page2.EnterLocationDetails(locationOption);
     }
 
