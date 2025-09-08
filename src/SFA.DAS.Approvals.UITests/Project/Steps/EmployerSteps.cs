@@ -124,7 +124,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheEmployerReviewsCohort(string status)
         {
              await employerStepsHelper.ReadyForReviewCohort(status);
-
         }
 
         [When ("the Employer approves the cohort and sends to provider")]
@@ -132,7 +131,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = new EmployerApproveApprenticeDetailsPage(context);
             await page.EmployerApproveCohort();
-
         }
 
         [Then ("verify RPL details")]
