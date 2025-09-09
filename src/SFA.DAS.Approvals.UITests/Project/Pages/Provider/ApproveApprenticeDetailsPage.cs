@@ -1,6 +1,7 @@
 ﻿using Azure;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.FrameworkHelpers;
+using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -24,6 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator AddAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
         private ILocator DeleteThisCohortLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete this cohort" }).First;
         private ILocator approveRadioOption => page.Locator("label:has-text('Yes, approve and notify employer')");
+        private ILocator firstRadioOption => page.Locator("div.govuk-radios__item input[type='radio']").First;
         private ILocator doNotApproveRadioOption => page.Locator("label:has-text('No, save and return to apprentice requests')");
         private ILocator messageToEmployerTextBox => page.Locator(".govuk-textarea").First;
         private ILocator saveAndSubmitButton => page.Locator("button:has-text('Save and submit')");
@@ -49,7 +51,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task VerifyCohort(Apprenticeship apprenticeship)
         {
             await Assertions.Expect(employerName).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
-            await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenticeship.CohortReference);
+            await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenticeship.Cohort.Reference);
             await Assertions.Expect(status).ToHaveTextAsync("New request");
             //await Assertions.Expect(message).ToHaveTextAsync("No message added.");
 
@@ -71,7 +73,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task GetCohortId(Apprenticeship apprenticeship)
         {
             var cohortRef = await cohortReference.InnerTextAsync();
-            apprenticeship.CohortReference = cohortRef;
+            apprenticeship.Cohort.Reference = cohortRef;
 
             await Task.Delay(100);
             context.Set(apprenticeship, "Apprenticeship");
@@ -94,7 +96,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await AddAnotherApprenticeLink.ClickAsync();
             return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
         }
-       
+
+        internal async Task<AddApprenticeDetails_EntryMothodPage> ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage()
+        {
+            await AddAnotherApprenticeLink.ClickAsync();
+            return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));            
+        }
         internal async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()
         {
             await approveRadioOption.ClickAsync();
@@ -103,7 +110,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new CohortApprovedAndSentToEmployerPage(context));
         }
 
-        internal async Task<CohortSentToEmployerForReview> ProviderSendCohortForEmployerApproval()
+        internal async Task<CohortSentToEmployerForReview> ProviderSendCohortForEmployerReview()
         {
             await sendToEmployerRadioOption.ClickAsync();
             await messageToEmployerToReviewTextBox.FillAsync("Please review the details and approve the request.");
@@ -140,6 +147,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task VerifyBanner(string text) => await Assertions.Expect(banner).ToContainTextAsync(text);
 
+        internal async Task SelectFirstRadioButtonAndSubmit(string optionalMsg=null)
+        {
+            await firstRadioOption.CheckAsync();
+            await saveAndSubmitButton.ClickAsync();
+        }
+
+
+        internal async Task<ProviderAccessDeniedPage> TryOpenLink(string linkName)
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = linkName }).Last.ClickAsync();
+            return await VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+        }
 
     }
 }

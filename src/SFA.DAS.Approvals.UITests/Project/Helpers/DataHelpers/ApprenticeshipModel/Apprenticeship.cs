@@ -10,6 +10,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
     {
         public Apprenticeship()
         {
+            Cohort = new Cohort();
             EmployerDetails = new Employer();
             ApprenticeDetails = new Apprentice();
             TrainingDetails = new Training();
@@ -18,6 +19,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
         public Apprenticeship(Apprentice apprentice, Training training, RPL rpl)
         {
+            Cohort = new Cohort();
             ApprenticeDetails = apprentice;
             TrainingDetails = training;
             RPLDetails = rpl;
@@ -25,12 +27,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
         public int UKPRN { get; set; }
         public string ReservationID { get; set; }
-        public string CohortReference { get; set; }
+        public Cohort Cohort { get; set; }
         public Employer EmployerDetails { get; set; }
         public Apprentice ApprenticeDetails { get; set; }
         public Training TrainingDetails { get; set; }
         public RPL RPLDetails { get; set; }
 
+    }
+
+    public class Cohort
+    {
+        public string Reference { get; set; }
+        public string Status_Provider { get; set; }
+        public string Status_Employer { get; set; }
     }
 
     public class Employer

@@ -21,6 +21,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     public class ProviderSteps
     {
         private readonly ScenarioContext context;
+        private readonly CommonStepsHelper commonStepsHelper;
         private readonly ProviderHomePageStepsHelper providerHomePageStepsHelper;
         private readonly ProviderStepsHelper providerStepsHelper;
         private readonly DbSteps dbSteps;
@@ -29,6 +30,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public ProviderSteps(ScenarioContext _context)
         {
             context = _context;
+            commonStepsHelper = new CommonStepsHelper(context);
             providerHomePageStepsHelper = new ProviderHomePageStepsHelper(context);
             providerStepsHelper = new ProviderStepsHelper(context);
             dbSteps = new DbSteps(context);
@@ -39,6 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenProviderSendsAnApprenticeRequestCohortToTheEmployerBySelectingSameApprentices()
         {
             await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
+            await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
         }
 
         [When("creates reservations for each learner")]
@@ -53,12 +56,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page = await providerStepsHelper.ProviderAddsFirstApprenitceUsingReservation();
             var page1 = await providerStepsHelper.ProviderAddsOtherApprenticesUsingReservation(page);
             await providerStepsHelper.ProviderApproveCohort(page1);
+            await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
         }
 
         [Then("return the cohort back to the Provider")]
         public async Task ThenReturnTheCohortBackToTheProvider()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
 
             await providerHomePageStepsHelper.GoToProviderHomePage(false);
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
@@ -75,7 +79,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
             await providerHomePageStepsHelper.GoToProviderHomePage(true);
-            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+            await UserNavigatesToManageYourApprenticesPage();
             var page = new ManageYourApprentices_ProviderPage(context);
 
             foreach (var apprentice in listOfApprenticeship)
@@ -101,7 +105,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenProviderTriesToEditLiveApprenticeRecordBySettingAgeOldThanYears()
         {
             await providerHomePageStepsHelper.GoToProviderHomePage(true);
-            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+            await UserNavigatesToManageYourApprenticesPage();
         }
 
         [Then("the provider is stopped with an error message")]
@@ -119,7 +123,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("apprentice\\/learner record is no longer available on SelectLearnerFromILR page")]
         public async Task ThenApprenticeLearnerRecordIsNoLongerAvailableOnSelectLearnerFromILRPage()
         {
-            //await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
+            await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
         }
 
         [When("Provider tries to add a new apprentice using details from table below")]
@@ -167,66 +171,40 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenUserNavigatesToApprenticeRequestsPage()
         {
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
-        }
+        }       
 
-
-        [Then("the user can view apprentice details from items under section: \"(.*)\"")]
-        public async Task ThenTheUserCanViewApprenticeDetailsFromItemsUnderSection(string sectionName)
+        [When("the provider adds apprentices along with RPL details and sends to employer to review")]
+        public async Task WhenTheProviderAddsApprenticesAlongWithRPLDetailsAndSendsToEmployerToReview()
         {
-            var ApprenticeRequests_ProviderPage = new ApprenticeRequests_ProviderPage(context);
-            IPageWithABackLink page;
-
-            switch (sectionName)
-            {
-                case "Ready for review":
-                    await ApprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.ReadyForReview);
-                    page = await ApprenticeRequests_ProviderPage.OpenEditableCohortAsync(null);
-                    break;
-                case "With employers":
-                    await ApprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers);
-                    page = await ApprenticeRequests_ProviderPage.OpenNonEditableCohortAsync(null);
-                    break;
-                case "Drafts":
-                    await ApprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.Drafts);
-                    page = await ApprenticeRequests_ProviderPage.OpenEditableCohortAsync(null);
-                    break;
-                case "With transfer sending employers":
-                    await ApprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithTransferSendingEmployers);
-                    page = await ApprenticeRequests_ProviderPage.OpenNonEditableCohortAsync(null);
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown section name: {sectionName}");
-
-            }
-            await page.ClickOnBackLinkAsync();
-        }
-
-        [When(@"the provider adds (.*) apprentices along with RPL details and sends to employer to review")]
-        public async Task WhenTheProviderAddsApprenticesAndSendsToEmployerToReview(int numberOfApprentices)
-        {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
-            var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
-            await page1.SelectCohort(cohortRef);
-            var page2 = await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
-            await page2.ProviderSendCohortForEmployerApproval();
+            var page = await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
+            await page.ProviderSendCohortForEmployerReview();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for review");
         }
 
-
-        [Then("the user can create a cohort by selecting learners from ILR")]
-        public async Task ThenTheUserCanCreateACohortBySelectingLearnersFromILR()
+        [Then("the provider adds apprentice details, approves the cohort and sends it to the employer for approval")]
+        public async Task ThenTheProviderAddsApprenticeDetailsApprovesTheCohortAndSendsItToTheEmployerForApproval()
         {
-            await dbSteps.FindAvailableLearner();
-            var page = await providerStepsHelper.GoToSelectApprenticeFromILRPage(false);
-            await providerStepsHelper.AddFirstApprenticeFromILRList(page);
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            var page = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            await page.SelectCohort(cohortRef);
+            var page1 = new ApproveApprenticeDetailsPage(context);
+            await providerStepsHelper.AddOtherApprenticesFromILRListWithRPL(page1, 0);
+            await page1.ProviderApproveCohort();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
         }
+
+
 
         [Then("the provider approves the cohorts")]
         public async Task ThenTheProviderApprovesCohort()
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
             var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
@@ -234,36 +212,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page = await new ApproveApprenticeDetailsPage(context).ProviderApprovesCohortAfterEmployerApproval();
         }
 
-        [Then("the user can edit email address of the apprentice before approval")]
-        public async Task ThenTheUserCanEditEmailAddressOfTheApprenticeBeforeApprovalAsync()
+        [When("user navigates to Manage Your Apprentices page")]
+        public async Task UserNavigatesToManageYourApprenticesPage()
         {
-            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
-            var page = await new ApproveApprenticeDetailsPage(context).ClickOnEditApprenticeLink(apprentice.ApprenticeDetails.FullName);
-            var page1 = await page.UpdateEmail(apprentice.ApprenticeDetails.Email + ".uk");
-            var page3 = await page1.SelectNoForRPL();
+            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
         }
-
-        [Then("the user can send a cohort to employer")]
-        public async Task ThenTheUserCanSendACohortToEmployer()
-        {
-            await new ApproveApprenticeDetailsPage(context).VerifyCohortCanBeApproved();
-        }
-
-        [Then("the user can delete an apprentice in a cohort")]
-        public async Task ThenTheUserCanDeleteAnApprenticeInACohort()
-        {
-            var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteApprenticeLink("");                
-            var page1 = await page.ConfirmDeletion();
-            await page1.VerifyBanner("Apprentice record deleted");
-        }
-
-        [Then("the user can delete a cohort")]
-        public async Task ThenTheUserCanDeleteACohort()
-        {
-            var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteCohortLink();
-            await page.ConfirmDeletion();
-        }
-
 
 
 

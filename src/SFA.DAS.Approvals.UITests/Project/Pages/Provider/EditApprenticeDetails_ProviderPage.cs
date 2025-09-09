@@ -29,7 +29,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         {
             await Assertions.Expect(page.GetByLabel("There is a problem")).ToContainTextAsync("There is a problem " + errorMsg);
             await Assertions.Expect(page.Locator("#error-message-" + locatorId)).ToContainTextAsync(errorMsg);
-
         }
+
+        internal async Task ClickOnCancelAndReturnLink() => await page.GetByRole(AriaRole.Link, new() { Name = "Cancel and return" }).ClickAsync();
     }
 }

@@ -4,6 +4,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,7 +120,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             listOfApprenticeship = new List<Apprenticeship>();
 
-            var additionalWhereFilter = @"AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+            var additionalWhereFilter = @"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
+                                            AND c.IsDeleted = 0
+                                            And c.Approvals = 3
+                                            AND c.ChangeOfPartyRequestId is null             
+                                            AND c.PledgeApplicationId is null
+                                            AND a.PaymentStatus = 1
+                                            AND a.HasHadDataLockSuccess = 0
+                                            AND a.PendingUpdateOriginator is null
+                                            AND a.CloneOf is null
+                                            AND a.ContinuationOfId is null
+                                            AND a.DeliveryModel = 0
+                                            AND a.IsOnFlexiPaymentPilot = 0
+                                            AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+
             await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
         }
 
@@ -128,11 +142,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             listOfApprenticeship = new List<Apprenticeship>();
 
-            var additionalWhereFilter = @$"AND a.StartDate < DATEADD(month, {startDateFromNow}, GETDATE()) 
+            var additionalWhereFilter = @$"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
+                                            AND c.IsDeleted = 0
+                                            And c.Approvals = 3
+                                            AND c.ChangeOfPartyRequestId is null             
+                                            AND c.PledgeApplicationId is null
+                                            AND a.PaymentStatus = 1
+                                            AND a.HasHadDataLockSuccess = 0
+                                            AND a.PendingUpdateOriginator is null
+                                            AND a.CloneOf is null
+                                            AND a.ContinuationOfId is null
+                                            AND a.DeliveryModel = 0
+                                            AND a.IsOnFlexiPaymentPilot = 0
+                                            AND a.StartDate < DATEADD(month, {startDateFromNow}, GETDATE()) 
                                             AND a.EndDate > DATEADD(month, {endDateFromNow}, GETDATE())
                                             AND a.TrainingCode < 800";
-            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
 
+            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
         }
 
         internal async Task FindAvailableLearner()
@@ -145,10 +171,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             context.Set(listOfApprenticeship);
         }
 
-        private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter)
+        private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter, string ukprn = null)
         {
-            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(employerType);
-            apprenticeship = await commitmentsDbSqlHelper.GetEditableApprenticeDetails(apprenticeship, additionalWhereFilter);
+            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(employerType, ukprn);
+            apprenticeship = await commitmentsDbSqlHelper.GetApprenticeDetailsFromCommitmentsDb(apprenticeship, additionalWhereFilter);
             listOfApprenticeship.Add(apprenticeship);
             context.Set(listOfApprenticeship);
         }

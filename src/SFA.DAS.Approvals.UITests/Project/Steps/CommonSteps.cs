@@ -52,28 +52,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
                 context.Set(listOfApprenticeship);
             }
-
-            /*
-            if (scenarioAStatus == ScenarioExecutionStatus.OK)
-            {
-                var previousScenarioContext = (ScenarioContext)featureContext["ScenarioContextofPreviousScenario"];
-
-                var x = previousScenarioContext.GetValue<List<Apprenticeship>>();
-
-                foreach (var apprenticeship in x)
-                {
-                    listOfApprenticeship.Add(apprenticeship);
-                }
-                
-                context.Set(listOfApprenticeship);
-            }
-            else
-            {
-                throw new Exception($"Cannot run this test as previous test in the same feature file failed with status: '{scenarioAStatus}'");
-            } 
-            */
-
-        }
+         }
 
         [Then(@"Verify the ""(.*)"" receive ""(.*)"" email")]
         public async Task ThenVerifyTheReceiveEmail(string recipient, string notificationType)

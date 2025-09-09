@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
+﻿using Azure;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using SFA.DAS.EmployerPortal.UITests.Project.Tests.Pages;
 using System;
 
@@ -32,6 +33,22 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     }
 
     public HomePage(ScenarioContext context) : this(context, false) { }
+
+    public async Task<bool> IsPageDisplayed()
+    {
+        try
+        {
+            await VerifyPage();
+            objectContext.SetDebugInformation($"'{await page.Locator("h1").First.TextContentAsync()}' page is displayed");
+            return true;
+        }
+        catch(Exception ex)
+        {
+            objectContext.SetDebugInformation($"CheckPage for Home Page resulted in {ex.Message}");
+            return false;
+        }
+
+    }
 
     public async Task GoToAanHomePage() => await page.GetByRole(AriaRole.Link, new() { Name = "Join the Apprentice" }).ClickAsync();
 
