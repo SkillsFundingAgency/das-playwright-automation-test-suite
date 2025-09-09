@@ -1,12 +1,11 @@
 ﻿@approvals
 Feature: AP_E2E_LE_NUA_02_NewUserAccount
 
-A new non-levy employer creates an employer account and send an empty cohort to the training provider.
-'Cohort > Add another apprentice > Select apprentices from ILR'
-Provider follows 'Cohort > Add another apprentice > Select apprentices from ILR' route to add apprentice details
-Provider send cohort back to employer to review
-Employer approves the cohort
-Provider does the final approval.
+1. A new non-levy employer creates an employer account and send an empty cohort to the training provider.
+2. Provider follows 'Cohort > Add another apprentice > Select apprentices from ILR' route to add apprentice details
+3. Provider send cohort back to employer to review
+4. Employer approves the cohort
+5. Provider does the final approval.
 
 
 @regression
@@ -19,4 +18,3 @@ Scenario: AP_E2E_LE_NUA_02 Create Employer Provider sends cohort to employer for
 	And the provider adds apprentices along with RPL details and sends to employer to review
 	Then the Employer can approve the cohort
 	And the provider approves the cohorts
-	And the Employer can access live apprentice records under Manager Your Apprentices section

@@ -1,9 +1,9 @@
 ﻿@approvals
 Feature: AP_E2E_LE_NUA_01_NewUserAccount
 
-A new non-levy employer creates an employer account and send an empty cohort to the training provider.
-Provider follows 'Add new apprentices -> Select apprentices from ILR -> Add to an existing cohort' route to add apprentice details
-Employer does the final approval.
+1. A new non-levy employer creates an employer account and send an empty cohort to the training provider.
+2. Provider follows 'Add new apprentices -> Select apprentices from ILR -> Add to an existing cohort' route to add apprentice details
+3. Employer does the final approval.
 
 @regression
 @e2escenarios
