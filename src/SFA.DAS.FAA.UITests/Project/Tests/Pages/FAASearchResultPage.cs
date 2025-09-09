@@ -9,6 +9,7 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
     //private static By ApplyNow => By.CssSelector(".das-button--inline-link");
     //private static By FirstApplicationDisplayed => By.CssSelector("[id^='VAC'][id$='-vacancy-title']");
 
+    private static string ClickFirstNHSLinkInResult => ("[id$='-vacancy-title']:first-of-type");
 
     public async Task VerifySuccessfulResults()
     {
@@ -39,4 +40,23 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
 
         return await VerifyPageAsync(() => new FAA_ApprenticeSummaryPage(context));
     }
+
+    public async Task<NHSJobsDetailsPage> GoToNHSJobDetailsPageAndVerifyJobDisplayed()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apprenticeship type , Show" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Apprenticeship", Exact = true }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).First.ClickAsync();
+
+        await page.Locator(ClickFirstNHSLinkInResult).First.ClickAsync();
+
+        return await VerifyPageAsync(() => new NHSJobsDetailsPage(context));
+    }
+}
+
+public class NHSJobsDetailsPage(ScenarioContext context) : FAASignedInLandingBasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("See more details about this apprenticeship on NHS Jobs");
+
 }

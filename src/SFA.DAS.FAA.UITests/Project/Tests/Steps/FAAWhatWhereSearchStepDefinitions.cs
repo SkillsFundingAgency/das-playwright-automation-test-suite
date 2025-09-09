@@ -24,4 +24,11 @@ public class FAAWhatWhereSearchStepDefinitions(ScenarioContext context)
     {
         await new FAASearchResultPage(_context).ClickSignout();
     }
+
+    [Then("the user is able to view NHS job displayed")]
+    public async Task ThenTheUserIsAbleToViewNHSJobDisplayed()
+    {
+        await new FAASearchResultPage(_context).GoToNHSJobDetailsPageAndVerifyJobDisplayed();
+    }
+
 }
