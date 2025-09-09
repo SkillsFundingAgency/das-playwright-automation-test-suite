@@ -41,6 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenProviderSendsAnApprenticeRequestCohortToTheEmployerBySelectingSameApprentices()
         {
             await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
+            await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
         }
 
         [When("creates reservations for each learner")]
@@ -55,6 +56,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page = await providerStepsHelper.ProviderAddsFirstApprenitceUsingReservation();
             var page1 = await providerStepsHelper.ProviderAddsOtherApprenticesUsingReservation(page);
             await providerStepsHelper.ProviderApproveCohort(page1);
+            await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
         }
 
         [Then("return the cohort back to the Provider")]

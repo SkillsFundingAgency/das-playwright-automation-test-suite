@@ -14,6 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     public class SldIlrSubmissionSteps
     {
         private readonly ScenarioContext context;
+        private readonly CommonStepsHelper commonStepsHelper;
         private readonly SLDDataPushHelpers sldDataPushHelpers;
         private ProviderStepsHelper providerStepsHelper;
         private ApprenticeDataHelper apprenticeDataHelper;
@@ -21,6 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public SldIlrSubmissionSteps(ScenarioContext _context)
         {
             context = _context;
+            commonStepsHelper = new CommonStepsHelper(context);
             providerStepsHelper = new ProviderStepsHelper(context);
             sldDataPushHelpers = new(context);
             apprenticeDataHelper = new ApprenticeDataHelper(context);
@@ -100,6 +102,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var warningMsg = "! Warning Check apprentices are eligible for foundation apprenticeships If someone is aged between 22 and 24, to be funded for a foundation apprenticeship they must either: have an Education, Health and Care (EHC) plan be or have been in the care of their local authority be a prisoner or have been in prison";
             await page.ValidateWarningMessageForFoundationCourses(warningMsg);
             await providerStepsHelper.ProviderApproveCohort(page);
+            await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
+
         }
 
         private async Task<ApproveApprenticeDetailsPage> UpdateDobAndReprocessData(int lowerAgeLimit, int upperAgeLimit)
