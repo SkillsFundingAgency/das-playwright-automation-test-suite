@@ -36,19 +36,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();
         }
 
-        [When(@"Employer approves the apprentice request \(cohort\)")]
-        public async Task WhenEmployerApprovesTheApprenticeRequestCohort()
+
+        [When(@"the Employer approves the apprentice request \(cohort\)")]
+        [Then("the Employer can approve the cohort")]
+        public async Task WhenTheEmployerApprovesTheApprenticeRequestCohort()
         {
             var page = await employerStepsHelper.OpenCohort();
-
             await page.EmployerApproveCohort();
-
         }
+
 
         [When("Employer does not take any action on that cohort for more than 2 weeks")]
         public async Task WhenEmployerDoesNotTakeAnyActionOnThatCohortForMoreThan2Weeks()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
             await commitmentsDbSqlHelper.UpdateCohortLastUpdatedDate(cohortRef, DateAndTime.Now.AddDays(-15));
 
             //test environments are configured to run web job: "ExpireInactiveCohortsWithEmployerAfter2WeeksSchedule" every 4th minute
@@ -62,12 +63,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             );
         }
 
-
-        [Then("Employer can access live apprentice records under Manager Your Apprentices section")]
-        public async Task ThenEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
+        [Then("the Employer can access live apprentice records under Manager Your Apprentices section")]
+        public async Task ThenTheEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
         {
             await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage();
         }
+
+
 
 
         [When("Employer reviews the above cohort")]
@@ -111,16 +113,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
 
         [Given(@"Employer create and send an empty cohort to the training provider to add learner details")]
+        [When(@"the employer create and send an empty cohort to the training provider to add learner details")]
         public async Task GivenEmployerCreatesEmptyRequestCohort()
         {
             await employerStepsHelper.AddEmptyCohort();
-        }
+        }    
+
 
         [Then ("the Employer sees the cohort in Ready to review with status of (.*)")]
         public async Task ThenTheEmployerReviewsCohort(string status)
         {
              await employerStepsHelper.ReadyForReviewCohort(status);
-
         }
 
         [When ("the Employer approves the cohort and sends to provider")]
@@ -128,7 +131,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = new EmployerApproveApprenticeDetailsPage(context);
             await page.EmployerApproveCohort();
-
         }
 
         [Then ("verify RPL details")]

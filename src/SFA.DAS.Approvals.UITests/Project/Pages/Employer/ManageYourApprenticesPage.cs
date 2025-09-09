@@ -10,6 +10,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
     internal class ManageYourApprenticesPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
+        #region locators
+        private ILocator statusLocator => page.Locator("tbody.govuk-table__body tr.govuk-table__row:first-of-type td[data-label='Status'] strong");
+        private ILocator searchBox => page.GetByRole(AriaRole.Textbox, new() { Name = "Search by apprentice name" });
+        private ILocator searchButton => page.GetByRole(AriaRole.Button, new() { Name = "Search" });
+        private ILocator apprenticeLink(string apprenticeName) => page.GetByRole(AriaRole.Link, new () { Name = apprenticeName });
+        #endregion
+
         public override async Task VerifyPage()
         {
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Manage your apprentices");
@@ -24,14 +31,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         internal async Task SearchApprentice(string ULN, string name)
         {
-            await SearchApprentice(ULN);
             var apprenticeLink = page.GetByRole(AriaRole.Link, new() { Name = name });
+            
+            if (await searchBox.IsVisibleAsync())       //search box and other filters only become available when ther eare more than 20 apprentices
+            {
+                await SearchApprentice(ULN);
+            }
+                      
 
             if (await apprenticeLink.CountAsync() > 0)
             {
-                var statusLocator = page.Locator("tbody.govuk-table__body tr.govuk-table__row:first-of-type td[data-label='Status'] strong");
                 string status = await statusLocator.InnerTextAsync();
-
                 context.Get<ObjectContext>().SetDebugInformation($"A '{status.ToUpper()}' Apprenticeship record found for ULN: {ULN} and Name: {name} in Employer Portal");
             }
             else
@@ -43,15 +53,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         internal async Task<ApprenticeDetailsPage> OpenFirstItemFromTheList(string apprenticeName)
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = apprenticeName }).ClickAsync();
+            await apprenticeLink(apprenticeName).ClickAsync();
             return await VerifyPageAsync(() => new ApprenticeDetailsPage(context, apprenticeName));
         }
 
         private async Task SearchApprentice(string ULN)
         {
-            var searchBox = page.GetByRole(AriaRole.Textbox, new() { Name = "Search by apprentice name" });
-            var searchButton = page.GetByRole(AriaRole.Button, new() { Name = "Search" });
-
             await searchBox.FillAsync("");
             await searchBox.FillAsync(ULN);
             await searchButton.ClickAsync();

@@ -12,7 +12,7 @@ Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves
 	Then a record is created in LearnerData Db for each learner
 	When Provider sends an apprentice request (cohort) to the employer by selecting same apprentices
 	Then Commitments Db is updated with respective LearnerData Id
-	When Employer approves the apprentice request (cohort)
+	When the Employer approves the apprentice request (cohort)
 	Then LearnerData Db is updated with respective Apprenticeship Id
 	And Apprenticeship record is created in Learning Db
 	Then Provider can access live apprentice records under Manager Your Apprentices section

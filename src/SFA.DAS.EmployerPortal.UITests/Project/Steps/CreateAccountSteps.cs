@@ -185,6 +185,26 @@ public class CreateAccountSteps
     public async Task EmployerCreatesALevyAccountAndSignsTheAgreement() =>
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType.Company);
 
+    [Given("an Employer creates a Levy Account")]
+    public async Task<HomePage> GivenAnEmployerCreatesALevyAccount()
+    {
+        await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType.Company);
+
+        var loggedInAccountUser = ObjectContextExtension.GetLoginCredentials(_objectContext);
+        var userCreds =  await Login.Service.Project.ScenarioContextExtension.GetAccountLegalEntities(_context, [loggedInAccountUser.Username]);        
+
+        var user = new LevyUser
+        {
+            IdOrUserRef = loggedInAccountUser.Username,         //account creation use email for both Id and username
+            Username = loggedInAccountUser.Username,
+            UserCreds = userCreds.FirstOrDefault(),
+        };
+        _context.Set<LevyUser>(user);
+
+        return _homePage;
+    }
+
+
     [When(@"an Employer creates a Levy Account and not Signs the Agreement during registration")]
     public async Task WhenAnEmployerCreatesALevyAccountAndNotSignsTheAgreementDuringRegistration() =>
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsNotSigned(OrgType.Company);

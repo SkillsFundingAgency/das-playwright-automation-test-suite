@@ -17,6 +17,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
     internal class EmployerStepsHelper
     {
         private readonly ScenarioContext context;
+        private readonly CommonStepsHelper commonStepsHelper;
         protected readonly EmployerPortalLoginHelper employerLoginHelper;
         protected readonly EmployerHomePageStepsHelper employerHomePageHelper;
         private List<Apprenticeship> listOfApprenticeship;
@@ -24,6 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         public EmployerStepsHelper(ScenarioContext _context)
         {
             context = _context;
+            commonStepsHelper = new CommonStepsHelper(context);
             employerLoginHelper = new EmployerPortalLoginHelper(context);
             employerHomePageHelper = new EmployerHomePageStepsHelper(context);
             listOfApprenticeship = _context.GetValue<List<Apprenticeship>>();
@@ -32,6 +34,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task<HomePage> EmployerLogInToEmployerPortal(bool openInNewTab = true)
         {
             await employerHomePageHelper.NavigateToEmployerApprenticeshipService(openInNewTab);
+
+            if (await employerLoginHelper.IsHomePageDisplayed())
+                return new HomePage(context);
 
             var employerType = listOfApprenticeship.FirstOrDefault().EmployerDetails.EmployerType.ToString();
 
@@ -63,7 +68,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
 
-            var page1 = await page.OpenApprenticeRequestReadyForReview(apprenticeship.CohortReference);
+            var page1 = await page.OpenApprenticeRequestReadyForReview(apprenticeship.Cohort.Reference);
 
             await page1.VerifyCohort(apprenticeship);
 
@@ -121,15 +126,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page1 =  await page.ClickStartNowButton();
             var page2 =   await page1.SubmitValidUkprn(ukprn);
             var page3 =   await page2.ConfirmTrainingProviderDetails();
-            var page4 = await page3.SelectAddApprencticesByProvider();
-            await page4.SetCohortReference(listOfApprenticeship);
-
+            var page4 = await page3.SelectProviderAddApprencticesAndSend();
+            var cohortRef = await page4.GetCohortId();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
         }
 
         internal async Task ReadyForReviewCohort(string status)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
-            var cohort = listOfApprenticeship.FirstOrDefault().CohortReference;
+            var cohort = listOfApprenticeship.FirstOrDefault().Cohort.Reference;
 
             await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
 

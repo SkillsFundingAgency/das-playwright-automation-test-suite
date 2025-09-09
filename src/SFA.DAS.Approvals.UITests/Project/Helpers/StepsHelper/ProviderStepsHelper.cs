@@ -63,7 +63,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await page2.GetCohortId(apprenticeship);
 
-            objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.CohortReference}");
+            objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.Cohort.Reference}");
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
@@ -250,16 +250,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var firstApprentice = listOfApprenticeship.FirstOrDefault();
-            var cohortReference = context.GetValue<List<Apprenticeship>>().FirstOrDefault().CohortReference;
+            var cohortReference = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
            return await chooseAnExistingEmployerPage.ChooseAnExistingEmployer(cohortReference);
         }
 
 
-        internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRListWithRPL(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRListWithRPL(ApproveApprenticeDetailsPage approveApprenticeDetailsPage, int NoOfApprenticesToSkip=1)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
-            foreach (var apprenticeship in listOfApprenticeship.Skip(1))
+            foreach (var apprenticeship in listOfApprenticeship.Skip(NoOfApprenticesToSkip))
             {
                 var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink();
                 var page1 = await page.SelectApprenticeFromILRList(apprenticeship);
@@ -297,7 +297,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await page2.GetCohortId(apprenticeship);
 
-            objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.CohortReference}");
+            objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.Cohort.Reference}");
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
