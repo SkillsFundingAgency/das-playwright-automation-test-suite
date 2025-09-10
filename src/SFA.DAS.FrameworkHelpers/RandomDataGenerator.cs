@@ -67,13 +67,15 @@ namespace SFA.DAS.FrameworkHelpers
 
         public static int GenerateRandomNumberBetweenTwoValues(int min, int max) => new Random().Next(min, max);
 
-        public static int GenerateRandomDobYear()
+        public static int GenerateRandomDobYear(int minage, int maxage)
         {
-            int yearsToAdd = GenerateRandomNumberBetweenTwoValues(-30, -18);
-            DateTime date = DateTime.Now.AddYears(yearsToAdd);
+            int yearsToAdd = GenerateRandomNumberBetweenTwoValues(minage, maxage);
+            DateTime date = DateTime.Now.AddYears(-yearsToAdd);
             return date.Year;
         }
 
+        public static int GenerateRandomDobYear() => GenerateRandomDobYear(18, 30);
+        
         public static string GenerateRandomUln()
         {
             System.String randomUln = GenerateRandomNumberBetweenTwoValues(10, 99).ToString() + DateTime.Now.ToString("ssffffff");

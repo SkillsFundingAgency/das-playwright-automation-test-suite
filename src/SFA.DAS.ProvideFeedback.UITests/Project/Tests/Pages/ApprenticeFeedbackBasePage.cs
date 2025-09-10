@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Net;
 
 namespace SFA.DAS.ProvideFeedback.UITests.Project.Tests.Pages;
 
@@ -42,22 +43,14 @@ public class ApprenticeFeedbackSelectProviderPage(ScenarioContext context) : App
 
     public async Task VerifyFeedbackStatusAsPending()
     {
-        var locators = await page.Locator(".govuk-tag--blue").AllAsync();
-
-        var tags = locators.Select(async l => await l.TextContentAsync());
-
-        var texts = await Task.WhenAll(tags);
+        var texts = await AllTextAsync(".govuk-tag--blue");
 
         CollectionAssert.Contains(texts, "YOU CAN SUBMIT");
     }
 
     public async Task VerifyFeedbackStatusAsSubmitted()
     {
-        var locators = await page.Locator(".govuk-tag--green").AllAsync();
-
-        var tags = locators.Select(async l => await l.TextContentAsync());
-
-        var texts = await Task.WhenAll(tags);
+        var texts = await AllTextAsync(".govuk-tag--green");
 
         CollectionAssert.Contains(texts, "SUBMITTED");
     }
