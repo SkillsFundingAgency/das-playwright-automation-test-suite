@@ -13,6 +13,11 @@ namespace SFA.DAS.FrameworkHelpers
             await RetryOnException(func, RetryTimeOut.GetTimeSpan([5, 8, 13]), retryfunc);
         }
 
+        public async Task RetryOnDfeSignMFAAuthCode(Func<Task> func)
+        {
+            await RetryOnNUnitException(func, RetryTimeOut.GetTimeSpan([5, 5, 5, 5, 5]));
+        }
+
         public async Task RetryOnEmpInviteFromProvider(Func<Task> func)
         {
             await RetryOnNUnitException(func, RetryTimeOut.GetTimeSpan([60, 60, 60, 45, 45, 45, 45, 45, 45]));

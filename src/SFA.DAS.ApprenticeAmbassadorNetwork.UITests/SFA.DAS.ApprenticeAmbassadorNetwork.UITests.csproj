@@ -26,6 +26,7 @@
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
 		<ProjectReference Include="..\SFA.DAS.ApprenticeLogin.Service\SFA.DAS.ApprenticeLogin.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.DfeAdmin.Service\SFA.DAS.DfeAdmin.Service.csproj" />
+		<ProjectReference Include="..\SFA.DAS.MailosaurAPI.Service\SFA.DAS.MailosaurAPI.Service.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
