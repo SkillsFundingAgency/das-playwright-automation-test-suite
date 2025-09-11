@@ -40,9 +40,11 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
             {
                 await SubmitMFAPassword(username, password);
 
+                var dateTime = DateTime.Now;
+
                 await SubmitMFAIdentity(username);
 
-                await SubmitMFACode(username);
+                await SubmitMFACode(username, dateTime);
 
                 objectContext.SetDebugInformation("****DFE MFA Sign completed****");
             }
@@ -97,12 +99,10 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         await Assertions.Expect(page.Locator("#userDisplayName")).ToContainTextAsync(username);
 
-        
-
         await page.GetByTestId("Email").ClickAsync();
     }
 
-    private async Task SubmitMFACode(string username)
+    private async Task SubmitMFACode(string username, DateTime dateTime)
     {
         await Assertions.Expect(page.Locator("#oneTimeCodeTitle")).ToContainTextAsync("Enter code", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
 
@@ -116,7 +116,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         await retryHelper.RetryOnDfeSignMFAAuthCode(async () =>
         {
-            var codes = await context.Get<MailosaurApiHelper>().GetCodes(username, "Your DfE Sign-in (PREPROD) account verification code", "Account verification code:");
+            var codes = await context.Get<MailosaurApiHelper>().GetCodes(username, "Your DfE Sign-in (PREPROD) account verification code", "Account verification code:", dateTime);
 
             objectContext.SetDebugInformation($"Used codes are ({usedCodes.Select(x => $"'{x}'").ToString(",")})");
 
@@ -137,6 +137,8 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
         var codeerrorlocator = "div[id='undefinedError'][role='alert']";
 
         var codeerror = page.Locator(codeerrorlocator);
+
+        objectContext.SetDebugInformation($"Codes to try ({notusedcodes.Select(x => $"'{x}'").ToString(",")})");
 
         foreach (var notusedcode in notusedcodes)
         {

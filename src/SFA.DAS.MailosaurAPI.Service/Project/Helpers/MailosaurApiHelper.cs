@@ -31,11 +31,9 @@ public class MailosaurApiHelper(ScenarioContext context)
         return link.Href;
     }
 
-    public async Task<List<string>> GetCodes(string email, string subject, string emailText)
+    public async Task<List<string>> GetCodes(string email, string subject, string emailText, DateTime dateTime)
     {
-        var checkemaildateTime = DateTime.Now.AddMinutes(-5);
-
-        SetDebugInformation($"Check list of email received to '{email}' using subject '{subject}' and contains text '{emailText}' after {checkemaildateTime:HH:mm:ss}");
+        SetDebugInformation($"Check list of email received to '{email}' using subject '{subject}' and contains text '{emailText}' after {dateTime:HH:mm:ss}");
 
         var mailosaurAPIUser = GetMailosaurAPIUser(email);
 
@@ -49,7 +47,7 @@ public class MailosaurApiHelper(ScenarioContext context)
             Match = SearchMatchOperator.ANY
         };
 
-        var messagelistresult = await mailosaur.Messages.SearchAsync(mailosaurAPIUser.ServerId, criteria, timeout: 20000, receivedAfter: checkemaildateTime, errorOnTimeout: false);
+        var messagelistresult = await mailosaur.Messages.SearchAsync(mailosaurAPIUser.ServerId, criteria, timeout: 20000, receivedAfter: dateTime, errorOnTimeout: false);
 
         var messageItems = messagelistresult.Items;
 
