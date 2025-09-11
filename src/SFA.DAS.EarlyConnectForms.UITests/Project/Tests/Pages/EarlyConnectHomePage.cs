@@ -1,6 +1,6 @@
 ﻿using Azure;
 using SFA.DAS.EarlyConnectForms.UITests.Project.Helpers;
-using SFA.DAS.MailosaurAPI.Service.Project.Helpers;
+using SFA.DAS.Framework.Helpers;
 
 namespace SFA.DAS.EarlyConnectForms.UITests.Project.Tests.Pages;
 

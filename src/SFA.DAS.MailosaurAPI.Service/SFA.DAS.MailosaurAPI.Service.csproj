@@ -15,4 +15,8 @@
 		<ProjectReference Include="..\SFA.DAS.FrameworkHelpers\SFA.DAS.FrameworkHelpers.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Project\" />
+	</ItemGroup>
+
 </Project>

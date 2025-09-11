@@ -1,12 +1,4 @@
-﻿using Mailosaur;
-using Mailosaur.Models;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.MailosaurAPI.Service.Project.Helpers;
+﻿namespace SFA.DAS.Framework.Helpers;
 
 public class MailosaurApiHelper(ScenarioContext context)
 {
@@ -66,7 +58,7 @@ public class MailosaurApiHelper(ScenarioContext context)
                 var code = message.Html.Codes[0].Value;
 
                 codes.Add(code);
-            }           
+            }
         }
 
         return codes;
@@ -109,7 +101,7 @@ public class MailosaurApiHelper(ScenarioContext context)
 
         var itemList = await mailosaur.Messages.SearchAsync(mailosaurAPIUser.ServerId, criteria, timeout: 20000, receivedAfter: dateTime, errorOnTimeout: false);
         Assert.IsTrue(itemList.Items.Count > 0, $"No emails found for criteria: SentTo={email}, Subject={subject}, Body={emailText} after {dateTime:HH:mm:ss}");
-        
+
         var item = itemList.Items.FirstOrDefault();
         var message = await mailosaur.Messages.GetByIdAsync(item.Id);
         SetDebugInformation($"Email found in the mailbox with ID '{message.Id}' at {message.Received:HH:mm:ss} with body {Environment.NewLine}{message.Text.Body}");
@@ -117,7 +109,7 @@ public class MailosaurApiHelper(ScenarioContext context)
         return message;
     }
 
-    internal async Task DeleteInbox()
+    internal async Task DeleteAdhocInbox()
     {
         var inboxToDelete = context.Get<MailosaurUser>().GetEmailList();
 

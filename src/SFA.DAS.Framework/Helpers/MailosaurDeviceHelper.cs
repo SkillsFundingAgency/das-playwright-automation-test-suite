@@ -1,6 +1,4 @@
-﻿using Mailosaur;
-
-namespace SFA.DAS.MailosaurAPI.Service.Project.Helpers;
+﻿namespace SFA.DAS.Framework.Helpers;
 
 public class MailosaurDeviceHelper(string apiToken)
 {

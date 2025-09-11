@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
-using SFA.DAS.MailosaurAPI.Service.Project.Helpers;
+using SFA.DAS.Framework.Helpers;
 using System.Threading;
 
 namespace SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;

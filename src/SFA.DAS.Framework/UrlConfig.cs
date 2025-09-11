@@ -1,7 +1,4 @@
-﻿using SFA.DAS.ConfigurationBuilder;
-using System;
-
-namespace SFA.DAS.Framework;
+﻿namespace SFA.DAS.Framework;
 
 public static class UrlConfig
 {
