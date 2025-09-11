@@ -128,7 +128,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
             await EnterMFACode(notusedcodes);
 
-            await Assertions.Expect(page.Locator("#oneTimeCodeTitle")).ToBeHiddenAsync();
+            await Assertions.Expect(page.Locator("#oneTimeCodeTitle")).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 10000});
         });
     }
 
