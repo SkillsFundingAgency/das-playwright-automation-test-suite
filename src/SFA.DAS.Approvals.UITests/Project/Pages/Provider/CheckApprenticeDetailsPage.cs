@@ -46,12 +46,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(UlnValue).ToContainTextAsync(apprenticeDetails.ULN.ToString());
             await Assertions.Expect(FirstNameValue).ToContainTextAsync(apprenticeDetails.FirstName);
             await Assertions.Expect(LastNameValue).ToContainTextAsync(apprenticeDetails.LastName);
-            await Assertions.Expect(DateOfBirthValue).ToContainTextAsync(apprenticeDetails.DateOfBirth.ToString("dd MMM yyyy"));
+            await Assertions.Expect(DateOfBirthValue).ToContainTextAsync(DateTimeExtension.FormatWithCustomMonth(apprenticeDetails.DateOfBirth));   //ToContainTextAsync(apprenticeDetails.DateOfBirth.ToString("dd MMM yyyy"));
             await Assertions.Expect(EmailValue).ToHaveValueAsync(apprenticeDetails.Email);
 
             var trainingDetails = apprenticeship.TrainingDetails;
-            await Assertions.Expect(PlannedTrainingStartDateValue).ToContainTextAsync(DateTimeExtension.FormatWithCustomMonth(trainingDetails.StartDate));   //(trainingDetails.StartDate.ToString("MMM yyyy"));
-            await Assertions.Expect(PlannedTrainingEndDateValue).ToContainTextAsync(DateTimeExtension.FormatWithCustomMonth(trainingDetails.EndDate));     //(trainingDetails.EndDate.ToString("MMM yyyy"));
+            await Assertions.Expect(PlannedTrainingStartDateValue).ToContainTextAsync(DateTimeExtension.FormatWithCustomMonth(trainingDetails.StartDate));
+            await Assertions.Expect(PlannedTrainingEndDateValue).ToContainTextAsync(DateTimeExtension.FormatWithCustomMonth(trainingDetails.EndDate));
             await Assertions.Expect(TotalPriceValue).ToContainTextAsync(trainingDetails.TotalPrice.ToString("C0"));
             await Assertions.Expect(ReferenceValue).ToHaveValueAsync("");
         }
