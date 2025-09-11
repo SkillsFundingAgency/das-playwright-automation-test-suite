@@ -61,11 +61,14 @@ public class MailosaurApiHelper(ScenarioContext context)
         {
             var message = await mailosaur.Messages.GetByIdAsync(messageSummary.Id);
 
-            SetDebugInformation($"Message found with ID '{message?.Id}' at {message?.Received:HH:mm:ss} with body {Environment.NewLine}{message.Text.Body}");
+            if (message.Text.Body.ContainsCompareCaseInsensitive(emailText))
+            {
+                SetDebugInformation($"Message found with ID '{message?.Id}' at {message?.Received:HH:mm:ss} with body {Environment.NewLine}{message.Text.Body}");
 
-            var code = message.Html.Codes[0].Value;
+                var code = message.Html.Codes[0].Value;
 
-            codes.Add(code);
+                codes.Add(code);
+            }           
         }
 
         return codes;

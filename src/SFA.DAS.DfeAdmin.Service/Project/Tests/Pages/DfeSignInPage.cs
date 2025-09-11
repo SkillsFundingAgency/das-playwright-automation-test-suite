@@ -116,7 +116,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         await retryHelper.RetryOnDfeSignMFAAuthCode(async () =>
         {
-            var codes = await context.Get<MailosaurApiHelper>().GetCodes(username, "Your DfE Sign-in (TEST) account verification code", "Account verification code:");
+            var codes = await context.Get<MailosaurApiHelper>().GetCodes(username, "Your DfE Sign-in (PREPROD) account verification code", "Account verification code:");
 
             objectContext.SetDebugInformation($"Used codes are ({usedCodes.Select(x => $"'{x}'").ToString(",")})");
 
