@@ -70,6 +70,7 @@ public class InterimYourApprenticeshipAdvertsHomePage(ScenarioContext context, b
 
     public override async Task VerifyPage()
     {
+        await Task.Delay(1000);
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your apprenticeship adverts");
     }
 }
