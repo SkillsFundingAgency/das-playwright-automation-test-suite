@@ -15,7 +15,20 @@ namespace SFA.DAS.FrameworkHelpers
 
         public async Task RetryOnDfeSignMFAAuthCode(Func<Task> func)
         {
-            await RetryOnNUnitException(func, RetryTimeOut.GetTimeSpan([5, 5, 5, 5, 5]));
+            var logging = GetRetryLogging();
+
+            await Policy
+                .Handle<Exception>()
+                .WaitAndRetryAsync(RetryTimeOut.GetTimeSpan([5, 5, 5, 5, 5]), (exception, timeSpan, retryCount, context) =>
+                {
+                    logging.Report(retryCount, timeSpan, exception, _title);
+                })
+                .ExecuteAsync(async () =>
+                {
+                    using var testcontext = new NUnit.Framework.Internal.TestExecutionContext.IsolatedContext();
+
+                    await func.Invoke();
+                });
         }
 
         public async Task RetryOnEmpInviteFromProvider(Func<Task> func)
@@ -52,7 +65,7 @@ namespace SFA.DAS.FrameworkHelpers
                     {
                         logging.Report(retryCount, timeSpan, exception, _title);
 
-                        await retryfunc.Invoke();
+                        await retryfunc?.Invoke();
                     })
                     .ExecuteAsync(async () =>
                     {
