@@ -126,19 +126,40 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
             Assert.That(notusedcodes.Any(), "All email codes are used");
 
-            var code = notusedcodes.First();
+            await EnterMFACode(notusedcodes);
 
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Enter code" }).FillAsync(code);
-
-            await page.GetByRole(AriaRole.Button, new() { Name = "Verify" }).ClickAsync();
-
-            var codeerrorlocator = "div[id='undefinedError'][role='alert']";
-
-            var codeerror = page.Locator(codeerrorlocator);
-
-            Assert.That(await codeerror.IsVisibleAsync() == false, $"code error locator {codeerrorlocator} has been found");
-
-            usedCodes.Add(code);
+            await Assertions.Expect(page.Locator("#oneTimeCodeTitle")).ToBeHiddenAsync();
         });
+    }
+
+    private async Task EnterMFACode(IEnumerable<string> notusedcodes)
+    {
+        var codeerrorlocator = "div[id='undefinedError'][role='alert']";
+
+        var codeerror = page.Locator(codeerrorlocator);
+
+        foreach (var notusedcode in notusedcodes)
+        {
+            try
+            {
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "Enter code" }).FillAsync(notusedcode);
+
+                await page.GetByRole(AriaRole.Button, new() { Name = "Verify" }).ClickAsync();
+
+                objectContext.SetDebugInformation($"Entered code - '{notusedcode}'");
+
+                await Assertions.Expect(codeerror).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 6000});
+
+                usedCodes.Add(notusedcode);
+
+                objectContext.SetDebugInformation($"No code error found - completing Task");
+
+                return;
+            }
+            catch (Exception)
+            {
+                // do nothing, the loop will try the next code
+            }
+        }
     }
 }
