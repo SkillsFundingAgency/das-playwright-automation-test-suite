@@ -6,8 +6,7 @@
     "feature": "en-GB"
   },
   "stepAssemblies": [
-    { "assembly": "SFA.DAS.Framework" },
-    { "assembly": "SFA.DAS.MailosaurAPI.Service" }
+    { "assembly": "SFA.DAS.Framework" }
   ],
   "generator": {
     "allowRowTests": false,

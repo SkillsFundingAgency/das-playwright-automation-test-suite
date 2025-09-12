@@ -1,9 +1,4 @@
-﻿using SFA.DAS.ConfigurationBuilder;
-using SFA.DAS.FrameworkHelpers;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
+﻿
 namespace SFA.DAS.Framework;
 
 public class InsertTprDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.TPRDbConnectionString)
@@ -29,7 +24,7 @@ public class InsertTprDataHelper(ObjectContext objectContext, DbConfig dbConfig)
 
             return Convert.ToString(x);
         }
-        finally 
+        finally
         {
             semaphoreSlim.Release();
         }

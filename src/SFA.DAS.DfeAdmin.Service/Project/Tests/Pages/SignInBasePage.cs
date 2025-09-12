@@ -2,12 +2,8 @@
 
 public abstract class SignInBasePage(ScenarioContext context) : BasePage(context)
 {
-    public async Task EnterValidLoginDetails(string username, string password)
+    public async Task EnterPassword(string username, string password)
     {
-        await page.GetByLabel("Email address").FillAsync(username);
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Next" }).ClickAsync();
-
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Enter your password");
 
         await page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);

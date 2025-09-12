@@ -29,7 +29,6 @@
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.ProviderLogin.Service\SFA.DAS.ProviderLogin.Service.csproj" />
-		<ProjectReference Include="..\SFA.DAS.MailosaurAPI.Service\SFA.DAS.MailosaurAPI.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.API.Framework\SFA.DAS.API.Framework.csproj" />
 	</ItemGroup>
 
