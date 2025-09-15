@@ -55,7 +55,9 @@ public abstract class CheckMultipleHomePage(ScenarioContext context) : BasePage(
     {
         string displayedPage = string.Empty;
 
-        objectContext.SetDebugInformation($"Check that {string.Join(" OR ", PageTitles.Select(x => $"'{x}'"))} is displayed using Page title");
+        objectContext.SetDebugInformation($"Check that {string.Join(" OR ", PageTitles.Select(x => $"'{x}'"))} is displayed using Page title, Identifier '{Identifier}'");
+
+        objectContext.SetDebugInformation($"Navigated to page - {await page.TitleAsync()}");
 
         var list = await page.Locator(Identifier).AllTextContentsAsync();
 
