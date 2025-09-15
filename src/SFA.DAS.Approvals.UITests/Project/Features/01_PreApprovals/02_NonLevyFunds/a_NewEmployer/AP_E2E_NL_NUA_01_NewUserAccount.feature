@@ -6,6 +6,7 @@ A short summary of the feature
 @regression
 @e2escenarios
 @addnonlevyfunds
+@providerpermissions
 Scenario: AP_E2E_NL_NUA_01 Create NonLevy Employer account | Provider adds apprentices and approves | then employer approves cohort
 	Given The User creates "NonLevy" Employer account and sign an agreement
 	And the employer has 1 apprentice ready to start training
