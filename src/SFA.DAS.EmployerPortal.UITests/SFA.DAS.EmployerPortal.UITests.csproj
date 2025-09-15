@@ -42,7 +42,6 @@
 		<ProjectReference Include="..\SFA.DAS.TestDataCleanup\SFA.DAS.TestDataCleanup.csproj" />
 		<ProjectReference Include="..\SFA.DAS.Login.Service\SFA.DAS.Login.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.MongoDb.DataGenerator\SFA.DAS.MongoDb.DataGenerator.csproj" />
-		<ProjectReference Include="..\SFA.DAS.MailosaurAPI.Service\SFA.DAS.MailosaurAPI.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.ProviderLogin.Service\SFA.DAS.ProviderLogin.Service.csproj" />
 	</ItemGroup>
 

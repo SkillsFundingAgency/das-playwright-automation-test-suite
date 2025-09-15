@@ -38,7 +38,4 @@ public class FAAConfigurationSetup(ScenarioContext context)
 
         context.SetFAAConfig(new FAAUserConfig { FAAUserName = faaUser.Username, FAAPassword = faaUser.IdOrUserRef, FAAFirstName = faaUser.FirstName, FAALastName = faaUser.LastName });
     }
-
-    [BeforeScenario(Order = 12)]
-    public void SetUpMailosaurApiHelper() => context.Set(new MailosaurApiHelper(context));
 }

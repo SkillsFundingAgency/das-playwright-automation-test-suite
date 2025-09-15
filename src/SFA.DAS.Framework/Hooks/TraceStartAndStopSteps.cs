@@ -1,11 +1,4 @@
-﻿using NUnit.Framework;
-using SFA.DAS.FrameworkHelpers;
-using System;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
-using SFA.DAS.ConfigurationBuilder;
-
-namespace SFA.DAS.Framework.Hooks;
+﻿namespace SFA.DAS.Framework.Hooks;
 
 [Binding, Scope(Tag = "@donottracelogin")]
 public class TraceStartAndStopSteps(ScenarioContext context)

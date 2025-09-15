@@ -1,24 +1,20 @@
-﻿using SFA.DAS.ConfigurationBuilder;
-using System.Linq;
-using TechTalk.SpecFlow;
+﻿
+namespace SFA.DAS.Framework.Hooks;
 
-namespace SFA.DAS.Framework.Hooks
+[Binding]
+public class ConfigurationHooks(ScenarioContext context)
 {
-    [Binding]
-    public class ConfigurationHooks(ScenarioContext context)
+    [BeforeScenario(Order = 1)]
+    public void SetUpConfiguration()
     {
-        [BeforeScenario(Order = 1)]
-        public void SetUpConfiguration()
-        {
-            var configSection = new ConfigSection(Configurator.GetConfig());
+        var configSection = new ConfigSection(Configurator.GetConfig());
 
-            context.Set(configSection);
+        context.Set(configSection);
 
-            var dbConfig = configSection.GetConfigSection<DbConfig>();
+        var dbConfig = configSection.GetConfigSection<DbConfig>();
 
-            if (!Configurator.IsAdoExecution) dbConfig = new LocalHostDbConfig(configSection.GetConfigSection<DbDevConfig>(), context.ScenarioInfo.Tags.Contains("usesqllogin")).GetLocalHostDbConfig();
+        if (!Configurator.IsAdoExecution) dbConfig = new LocalHostDbConfig(configSection.GetConfigSection<DbDevConfig>(), context.ScenarioInfo.Tags.Contains("usesqllogin")).GetLocalHostDbConfig();
 
-            context.Set(dbConfig);
-        }
+        context.Set(dbConfig);
     }
 }

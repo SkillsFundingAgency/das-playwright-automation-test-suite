@@ -1,7 +1,4 @@
-﻿using Microsoft.Playwright;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.Framework;
+﻿namespace SFA.DAS.Framework;
 
 public class DriverFactory(BrowserType browserType)
 {

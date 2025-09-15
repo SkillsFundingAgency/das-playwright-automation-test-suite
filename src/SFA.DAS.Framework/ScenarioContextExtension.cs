@@ -1,7 +1,4 @@
-﻿using SFA.DAS.FrameworkHelpers;
-using TechTalk.SpecFlow;
-
-namespace SFA.DAS.Framework;
+﻿namespace SFA.DAS.Framework;
 
 public static class ScenarioContextExtension
 {
