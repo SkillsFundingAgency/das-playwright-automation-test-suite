@@ -27,7 +27,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
     public static string EnterPasswordMFAPageIdentifierCss => "div[id='loginHeader']";
 
-    public static string EnterPasswordPageIdentifierCss => "#content";
+    public static string EnterPasswordPageIdentifierCss => "#content h1.govuk-heading-xl";
 
     public static string EnterPasswordMFAPageTitle => "Enter password";
 
