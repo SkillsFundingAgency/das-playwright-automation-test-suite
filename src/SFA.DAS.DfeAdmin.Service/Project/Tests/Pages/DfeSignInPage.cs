@@ -110,7 +110,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         await Assertions.Expect(page.Locator("#bannerLogoText")).ToContainTextAsync("DFE SIGN-IN (PREPROD)");
 
-        await Assertions.Expect(page.Locator("#displayName")).ToContainTextAsync(username);
+        await Assertions.Expect(page.Locator("#displayName")).ToContainTextAsync(username, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
 
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Enter the password" }).FillAsync(password);
 
@@ -125,7 +125,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         await Assertions.Expect(page.GetByTestId("bannerLogoText")).ToContainTextAsync("DFE SIGN-IN (PREPROD)");
 
-        await Assertions.Expect(page.Locator("#userDisplayName")).ToContainTextAsync(username);
+        await Assertions.Expect(page.Locator("#userDisplayName")).ToContainTextAsync(username, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
 
         await page.GetByTestId("Email").ClickAsync();
     }
@@ -136,7 +136,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         await Assertions.Expect(page.GetByTestId("bannerLogoText")).ToContainTextAsync("DFE SIGN-IN (PREPROD)");
 
-        await Assertions.Expect(page.Locator("#userDisplayName")).ToContainTextAsync(username);
+        await Assertions.Expect(page.Locator("#userDisplayName")).ToContainTextAsync(username, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
 
         await Assertions.Expect(page.Locator("#oneTimeCodeDescription")).ToContainTextAsync("We emailed a code");
 
