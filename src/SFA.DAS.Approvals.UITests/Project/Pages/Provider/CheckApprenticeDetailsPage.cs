@@ -46,7 +46,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(UlnValue).ToContainTextAsync(apprenticeDetails.ULN.ToString());
             await Assertions.Expect(FirstNameValue).ToContainTextAsync(apprenticeDetails.FirstName);
             await Assertions.Expect(LastNameValue).ToContainTextAsync(apprenticeDetails.LastName);
-            await Assertions.Expect(DateOfBirthValue).ToContainTextAsync(DateTimeExtension.FormatWithCustomMonth(apprenticeDetails.DateOfBirth));   //ToContainTextAsync(apprenticeDetails.DateOfBirth.ToString("dd MMM yyyy"));
+            await Assertions.Expect(DateOfBirthValue).ToContainTextAsync(DateTimeExtension.FormatWithCustomMonth(apprenticeDetails.DateOfBirth));
             await Assertions.Expect(EmailValue).ToHaveValueAsync(apprenticeDetails.Email);
 
             var trainingDetails = apprenticeship.TrainingDetails;
