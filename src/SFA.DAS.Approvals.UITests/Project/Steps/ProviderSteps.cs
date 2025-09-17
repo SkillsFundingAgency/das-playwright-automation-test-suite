@@ -185,17 +185,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Then("the provider adds apprentice details, approves the cohort and sends it to the employer for approval")]
+        [Then("the provider can add apprentice details and approve the cohort")]
         public async Task ThenTheProviderAddsApprenticeDetailsApprovesTheCohortAndSendsItToTheEmployerForApproval()
         {
             var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
-
-            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
-            var page = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
-            await page.SelectCohort(cohortRef);
-            var page1 = new ApproveApprenticeDetailsPage(context);
-            await providerStepsHelper.AddOtherApprenticesFromILRListWithRPL(page1, 0);
-            await page1.ProviderApproveCohort();
+            
+            var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
+            await providerStepsHelper.AddOtherApprenticesFromILRListWithRPL(page, 0);
+            await page.ProviderApproveCohort();
             await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
+        }
+
+        [Then("provider cannot add apprentices as they do not have permissions to create reservations")]
+        public async Task ThenProviderCannotAddApprenticesAsTheyDoNotHavePermissionsToCreateReservations()
+        {
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
+            var page1 = await page.ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage();
+            var page2 = await page1.SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
+            var page3 = await page2.ClickOnGoToHomepageButton();
         }
 
 
@@ -203,13 +211,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the provider approves the cohorts")]
         public async Task ThenTheProviderApprovesCohort()
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
             var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
 
-            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
-            var page1 = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
-            await page1.SelectCohort(cohortRef);
-            var page = await new ApproveApprenticeDetailsPage(context).ProviderApprovesCohortAfterEmployerApproval();
+            var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
+            await page.ProviderApprovesCohortAfterEmployerApproval();
         }
 
         [When("user navigates to Manage Your Apprentices page")]

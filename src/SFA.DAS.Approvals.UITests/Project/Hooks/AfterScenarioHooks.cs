@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
+﻿using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
+using System;
+
 
 namespace SFA.DAS.Approvals.UITests.Project.Hooks
 {
@@ -31,6 +28,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
                 else
                     _featureContext.Add("ScenarioContextofPreviousScenario", _context);
             }
+        }
+
+        [AfterScenario(Order = 32)]
+        [Scope(Tag = "providerpermissions")]
+        public async Task ClearProviderRelatins()
+        {
+            await new DeleteProviderRelationinDbHelper(_context).DeleteProviderRelation();
         }
     }
 }

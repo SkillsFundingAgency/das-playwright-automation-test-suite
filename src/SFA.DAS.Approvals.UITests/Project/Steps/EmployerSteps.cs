@@ -16,6 +16,8 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using Microsoft.VisualBasic;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -126,12 +128,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
              await employerStepsHelper.ReadyForReviewCohort(status);
         }
 
+
         [When ("the Employer approves the cohort and sends to provider")]
         public async Task ThenTheEmployerApprovesCohort()
         {
             var page = new EmployerApproveApprenticeDetailsPage(context);
             await page.EmployerApproveCohort();
         }
+
 
         [Then ("verify RPL details")]
         public async Task ThenTheEmployerVerifyRPLDetails()
@@ -140,6 +144,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page = new EmployerApproveApprenticeDetailsPage(context);
            await page.VerifyRPLDetails(apprenticeships);
         }
+
+
+        [When("the employer grants provider permissions to add apprentices")]
+        public async Task WhenTheEmployerGrantsProviderPermissionsToAddApprentices()
+        {
+            var providerConfig = context.GetProviderConfig<ProviderConfig>();
+
+            await employerStepsHelper.LogOutThenLogbackIn();
+            await new EmployerPermissionsStepsHelper(context).UpdateProviderPermission(providerConfig, (AddApprenticePermissions.YesAddApprenticeRecords, RecruitApprenticePermissions.NoToRecruitApprentices));
+        }
+
 
     }
 

@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.API.Framework.Configs;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
+using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
 
 namespace SFA.DAS.Approvals.UITests.Project.Hooks
 {
@@ -20,6 +21,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
             context.Set(new LearningDbSqlHelper(_objectcontext, _dbConfig));
 
             context.Set(new LearnerDataDbSqlHelper(_objectcontext, _dbConfig));
+
+            context.Set(new RelationshipsSqlDataHelper(_objectcontext, _dbConfig));
 
         }
 

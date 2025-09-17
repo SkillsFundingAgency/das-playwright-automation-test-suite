@@ -301,7 +301,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-
+        internal async Task<ApproveApprenticeDetailsPage> ProviderOpenTheCohort(string cohortRerefence)
+        {
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+            var page = await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            await page.SelectCohort(cohortRerefence);
+            return new ApproveApprenticeDetailsPage(context);
+        }
 
     }
 }

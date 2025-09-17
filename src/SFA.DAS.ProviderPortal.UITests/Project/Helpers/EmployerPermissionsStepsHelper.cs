@@ -72,7 +72,7 @@ public class EmployerPermissionsStepsHelper(ScenarioContext context)
         }
     }
 
-    internal async Task<HomePage> UpdateProviderPermission(ProviderConfig providerConfig, (AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permissions)
+    public async Task<HomePage> UpdateProviderPermission(ProviderConfig providerConfig, (AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permissions)
     {
         var page = await OpenProviderPermissions();
 

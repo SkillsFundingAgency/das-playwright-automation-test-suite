@@ -143,5 +143,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page2.ValidateCohortStatus(status);
         }
 
+
+        internal async Task LogOutThenLogbackIn()
+        {
+            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
+            await AccountSignOutHelper.SignOut(new HomePage(context));
+            await EmployerLogInToEmployerPortal(false);
+        }
+
     }
 }
