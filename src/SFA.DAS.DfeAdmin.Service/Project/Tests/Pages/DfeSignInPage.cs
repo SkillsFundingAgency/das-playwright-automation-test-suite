@@ -178,7 +178,11 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
                 objectContext.SetDebugInformation($"Entered code - '{notusedcode}'");
 
-                await Assertions.Expect(codeerror).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 6000});
+                await Assertions.Expect(page.GetByTestId("bannerLogoText")).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 10000 });
+
+                await Assertions.Expect(page.Locator("#userDisplayName")).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 10000 });
+
+                await Assertions.Expect(codeerror).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 10000 });
 
                 usedCodes.Add(notusedcode);
 
