@@ -3,6 +3,8 @@ using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
+using System;
+using System.Collections.Generic;
 using static SFA.DAS.EmployerPortal.UITests.Project.Helpers.EnumHelper;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Steps;
@@ -185,21 +187,36 @@ public class CreateAccountSteps
     public async Task EmployerCreatesALevyAccountAndSignsTheAgreement() =>
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType.Company);
 
-    [Given("an Employer creates a Levy Account")]
-    public async Task<HomePage> GivenAnEmployerCreatesALevyAccount()
+    [Given("The User creates \"(.*)\" Employer account and sign an agreement")]
+    public async Task<HomePage> GivenTheUserCreatesEmployerAccountAndSignAnAgreement(string employerType)
     {
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType.Company);
 
         var loggedInAccountUser = ObjectContextExtension.GetLoginCredentials(_objectContext);
-        var userCreds =  await Login.Service.Project.ScenarioContextExtension.GetAccountLegalEntities(_context, [loggedInAccountUser.Username]);        
+        var userCreds = await Login.Service.Project.ScenarioContextExtension.GetAccountLegalEntities(_context, [loggedInAccountUser.Username]);
 
-        var user = new LevyUser
+
+        if (employerType.ToLower() == "nonlevy")
         {
-            IdOrUserRef = loggedInAccountUser.Username,         //account creation use email for both Id and username
-            Username = loggedInAccountUser.Username,
-            UserCreds = userCreds.FirstOrDefault(),
-        };
-        _context.Set<LevyUser>(user);
+            var user = new NonLevyUser
+            {
+                IdOrUserRef = loggedInAccountUser.Username,
+                Username = loggedInAccountUser.Username,
+                UserCreds = userCreds.FirstOrDefault(),
+            };
+            _context.Set<NonLevyUser>(user);
+        }
+        else
+        {
+            var user = new LevyUser
+            {
+                IdOrUserRef = loggedInAccountUser.Username,
+                Username = loggedInAccountUser.Username,
+                UserCreds = userCreds.FirstOrDefault(),
+            };
+            _context.Set<LevyUser>(user);
+        }
+ 
 
         return _homePage;
     }

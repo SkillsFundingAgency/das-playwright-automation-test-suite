@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Polly;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
@@ -130,7 +131,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("the employer has (\\d+) apprentice ready to start training")]
         public async Task ProcessedLearnersInILR(int NoOfApprentices)
         {
-            await ProviderSubmitsAnILRRecord(NoOfApprentices, EmployerType.Levy.ToString());
+            var employerType = context.ScenarioInfo.Title.ToLower().Contains("nonlevy") ? EmployerType.NonLevy : EmployerType.Levy;
+            await ProviderSubmitsAnILRRecord(NoOfApprentices, employerType.ToString());
             await SLDPushDataIntoAS();
         }
  
