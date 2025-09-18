@@ -64,18 +64,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-
         [Then("Provider can Create Cohort")]
         public async Task ThenProviderCanCreateCohort()
         {
-            var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(true);
-            var selectJourneyPage = await providerHomePage.GotoSelectJourneyPage();
-            var providerAddApprenticeDetailsViaSelectJourneyPage = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+            var selectRoutePage = await GoToSelectOptionPage();
 
-            Assert.IsTrue(await providerAddApprenticeDetailsViaSelectJourneyPage.IsAddToAnExistingCohortOptionDisplayed(), "Validate Provider can add apprentice to existing cohorts");
-            Assert.IsTrue(await providerAddApprenticeDetailsViaSelectJourneyPage.IsCreateANewCohortOptionDisplayed(), "Validate Provider can create a new cohort");
+            Assert.IsTrue(await selectRoutePage.IsAddToAnExistingCohortOptionDisplayed(), "Validate Provider can add apprentice to existing cohorts");
+            Assert.IsTrue(await selectRoutePage.IsCreateANewCohortOptionDisplayed(), "Validate Provider can create a new cohort");
 
-            await providerHomePageStepsHelper.GoToProviderHomePage(false);
+            var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(false);
             await providerHomePage.SignsOut();
         }
 
@@ -83,14 +80,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("Provider cannot Create Cohort")]
         public async Task ThenProviderCannotCreateCohort()
         {
-            var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(true);
-            var selectJourneyPage = await providerHomePage.GotoSelectJourneyPage();
-            var providerAddApprenticeDetailsViaSelectJourneyPage = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+            var selectRoutePage = await GoToSelectOptionPage();
 
-            Assert.IsTrue(await providerAddApprenticeDetailsViaSelectJourneyPage.IsAddToAnExistingCohortOptionDisplayed(), "Validate Provider can add apprentice to existing cohorts");
-            Assert.IsFalse(await providerAddApprenticeDetailsViaSelectJourneyPage.IsCreateANewCohortOptionDisplayed(), "Validate Provider cannot create a new cohort");
+            await selectRoutePage.AssertProviderPermissionsMsg();
+            Assert.IsTrue(await selectRoutePage.IsAddToAnExistingCohortOptionDisplayed(), "Validate Provider can add apprentice to existing cohorts");
+            Assert.IsFalse(await selectRoutePage.IsCreateANewCohortOptionDisplayed(), "Validate Provider cannot create a new cohort");
 
         }
+
+        private async Task<AddApprenticeDetails_SelectJourneyPage> GoToSelectOptionPage()
+        {
+            var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(true);
+            var selectJourneyPage = await providerHomePage.GotoSelectJourneyPage();
+            return await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+        }
+
 
     }
 }
