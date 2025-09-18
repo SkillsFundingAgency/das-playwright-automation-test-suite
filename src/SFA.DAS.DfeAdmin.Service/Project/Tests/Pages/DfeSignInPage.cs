@@ -19,7 +19,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
             // Wait for the page to load completely
             await page.WaitForLoadStateAsync(LoadState.Load);
 
-            await Assertions.Expect(page.Locator(Identifier)).ToContainTextAsync("password", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
+            await Assertions.Expect(page.Locator(Identifier)).ToContainTextAsync("password", new LocatorAssertionsToContainTextOptions { Timeout = 15000, UseInnerText = true });
 
             return await ActualDisplayedPage(EnterPasswordMFAPageTitle);
         }
