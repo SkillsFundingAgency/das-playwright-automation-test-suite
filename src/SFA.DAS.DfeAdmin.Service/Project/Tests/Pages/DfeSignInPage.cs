@@ -152,7 +152,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
             var notusedcodes = codes.Except(usedCodes);
 
-            Assert.That(notusedcodes.Any(), "All email codes are used");
+            Assert.That(notusedcodes.Any(), "All email codes are used or no code received");
 
             await EnterMFACode(notusedcodes);
 
