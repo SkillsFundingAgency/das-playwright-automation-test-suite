@@ -1,23 +1,24 @@
-﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
+﻿using Microsoft.VisualBasic;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
+using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using SFA.DAS.Framework;
 using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.Login.Service.Project.Helpers;
+using SFA.DAS.ProviderLogin.Service.Project;
+using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
-using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
-using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
-using Microsoft.VisualBasic;
-using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -65,13 +66,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             );
         }
 
+
         [Then("the Employer can access live apprentice records under Manager Your Apprentices section")]
         public async Task ThenTheEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
         {
             await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage();
         }
-
-
 
 
         [When("Employer reviews the above cohort")]
@@ -100,6 +100,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new InterimApprenticesHomePage(context, false).VerifyPage();
 
         }
+
 
         [Then("the employer is stopped with an error message")]
         public async Task ThenTheEmployerIsStoppedWithAnErrorMessage()
@@ -146,14 +147,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [When("the employer grants provider permissions to add apprentices")]
-        public async Task WhenTheEmployerGrantsProviderPermissionsToAddApprentices()
-        {
-            var providerConfig = context.GetProviderConfig<ProviderConfig>();
 
-            await employerStepsHelper.LogOutThenLogbackIn();
-            await new EmployerPermissionsStepsHelper(context).UpdateProviderPermission(providerConfig, (AddApprenticePermissions.YesAddApprenticeRecords, RecruitApprenticePermissions.NoToRecruitApprentices));
-        }
 
 
     }
