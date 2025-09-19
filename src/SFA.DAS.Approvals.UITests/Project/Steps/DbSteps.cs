@@ -131,7 +131,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                                             AND a.CloneOf is null
                                             AND a.ContinuationOfId is null
                                             AND a.DeliveryModel = 0
-                                            AND a.IsOnFlexiPaymentPilot = 0
                                             AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
 
             await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
@@ -153,7 +152,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                                             AND a.CloneOf is null
                                             AND a.ContinuationOfId is null
                                             AND a.DeliveryModel = 0
-                                            AND a.IsOnFlexiPaymentPilot = 0
                                             AND a.StartDate < DATEADD(month, {startDateFromNow}, GETDATE()) 
                                             AND a.EndDate > DATEADD(month, {endDateFromNow}, GETDATE())
                                             AND a.TrainingCode < 800";

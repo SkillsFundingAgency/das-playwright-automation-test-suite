@@ -58,6 +58,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return new HomePage(context);
         }
 
+
         internal async Task<EmployerApproveApprenticeDetailsPage> OpenCohort()
         {
             await EmployerLogInToEmployerPortal();
