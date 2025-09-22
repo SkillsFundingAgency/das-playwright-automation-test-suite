@@ -2,9 +2,7 @@
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
-using SFA.DAS.ProviderLogin.Service.Project;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
-using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
 using System;
 using System.Collections.Generic;

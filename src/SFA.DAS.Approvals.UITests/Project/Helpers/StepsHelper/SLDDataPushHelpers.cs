@@ -3,7 +3,9 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Polly;
 using SFA.DAS.Approvals.APITests.Project;
 using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
+using SFA.DAS.Approvals.UITests.Project.Helpers.API;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SpecFlow.Internal.Json;
 using System;
 using System.Collections.Generic;
@@ -17,11 +19,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
     {
         private readonly ScenarioContext _context;
         private readonly ApprovalsAPISteps _approvalsAPISteps;
+        private readonly LearnerDataOuterApiHelper _learnerDataOuterApiHelper;
 
         public SLDDataPushHelpers(ScenarioContext context)
         {
             _context = context;
             _approvalsAPISteps = new ApprovalsAPISteps(_context);
+            _learnerDataOuterApiHelper = context.Get<LearnerDataOuterApiHelper>();
         }
 
         public async Task PushDataToAS(List<LearnerDataAPIDataModel> learnersData, int academicYear)
@@ -29,7 +33,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var resource = $"/provider/{learnersData.First().ukprn}/academicyears/{academicYear}/learners";
             var payload = JsonHelper.Serialize(learnersData).ToString();
 
-            await _approvalsAPISteps.SLDPushDataToAS(resource, payload);
+            //await _approvalsAPISteps.SLDPushDataToAS(resource, payload);
+            await _learnerDataOuterApiHelper.PostNewLearners(resource, payload);
         }
 
 

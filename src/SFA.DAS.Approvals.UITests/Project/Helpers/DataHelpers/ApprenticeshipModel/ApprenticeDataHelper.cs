@@ -38,7 +38,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
                 // Create apprenticeship object with above generated details
                 Apprenticeship apprenticeship = new Apprenticeship()
                 {                    
-                    UKPRN = ukprn,       //Ukprn != null ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn),
+                    UKPRN = ukprn,
                     EmployerDetails = employerDetails,
                     ApprenticeDetails = apprenticeDetails,
                     TrainingDetails = training,
