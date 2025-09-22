@@ -19,7 +19,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
             // Wait for the page to load completely
             await page.WaitForLoadStateAsync(LoadState.Load);
 
-            await Assertions.Expect(page.Locator(Identifier)).ToContainTextAsync("password", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
+            await Assertions.Expect(page.Locator(Identifier)).ToContainTextAsync("password", new LocatorAssertionsToContainTextOptions { Timeout = 15000, UseInnerText = true });
 
             return await ActualDisplayedPage(EnterPasswordMFAPageTitle);
         }
@@ -152,7 +152,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
             var notusedcodes = codes.Except(usedCodes);
 
-            Assert.That(notusedcodes.Any(), "All email codes are used");
+            Assert.That(notusedcodes.Any(), "All email codes are used or no code received");
 
             await EnterMFACode(notusedcodes);
 
@@ -178,7 +178,11 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
                 objectContext.SetDebugInformation($"Entered code - '{notusedcode}'");
 
-                await Assertions.Expect(codeerror).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 6000});
+                await Assertions.Expect(page.GetByTestId("bannerLogoText")).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 10000 });
+
+                await Assertions.Expect(page.Locator("#userDisplayName")).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 10000 });
+
+                await Assertions.Expect(codeerror).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 10000 });
 
                 usedCodes.Add(notusedcode);
 
