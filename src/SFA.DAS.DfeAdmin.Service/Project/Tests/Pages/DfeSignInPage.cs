@@ -60,7 +60,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         objectContext.SetDebugInformation($"Entered username - {username}");
 
-        if (await new CheckEnterPasswordMFAOrStandardPage(context).IsEnterPasswordMFADisplayed())
+        if (EnvironmentConfig.IsPPEnvironment && await new CheckEnterPasswordMFAOrStandardPage(context).IsEnterPasswordMFADisplayed())
         {
             await _semaphore.WaitAsync();
 
