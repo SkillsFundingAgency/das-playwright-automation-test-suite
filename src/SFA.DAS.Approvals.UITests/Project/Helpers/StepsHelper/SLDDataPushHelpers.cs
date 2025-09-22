@@ -82,8 +82,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task CheckApprenticeIsAvailableInApprovedLearnersList(Apprenticeship apprenticeship)
         {
             var resource = $"/Learners/providers/{apprenticeship.UKPRN}/academicyears/{apprenticeship.TrainingDetails.AcademicYear}/learners";
-            var result = await _learnerDataOuterApiHelper.GetLearners(resource, apprenticeship.ApprenticeDetails.ULN);
-            string content = result.Content;
+            var learnerKey = await _learnerDataOuterApiHelper.FindLearnerKeyByUlnAsync(resource, apprenticeship.ApprenticeDetails.ULN);
+            var expectedLearningIdKey = apprenticeship.ApprenticeDetails.LearningIdKey.Trim();
+            Assert.AreEqual(learnerKey.Trim(), expectedLearningIdKey, $"LearningIdKey key extracted from db [{expectedLearningIdKey}] differs from api response: [{learnerKey.Trim()}]");
+
         }
 
 
