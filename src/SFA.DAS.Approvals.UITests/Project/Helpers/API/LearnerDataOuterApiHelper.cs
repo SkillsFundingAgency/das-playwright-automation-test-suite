@@ -36,6 +36,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
             return _restResponse;
         }
 
+        public async Task<RestResponse> GetLearners(string resource, string uln)
+        {
+            await _restClient.CreateRestRequest(Method.Get, resource);
+            _restResponse = await Execute(HttpStatusCode.OK);
+            return _restResponse;
+        }
+
         private new async Task<RestResponse> Execute(HttpStatusCode responseCode) => await _restClient.Execute(responseCode);
 
     }

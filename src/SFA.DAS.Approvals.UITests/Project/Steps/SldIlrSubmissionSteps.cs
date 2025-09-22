@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Polly;
+﻿using Polly;
+using SFA.DAS.Approvals.UITests.Project.Helpers.API;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -106,6 +107,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
 
         }
+       
+        [Given("new learner details are processed in ILR for (\\d+) apprentices")]
+        [Given("the employer has (\\d+) apprentice ready to start training")]
+        public async Task ProcessedLearnersInILR(int NoOfApprentices)
+        {
+            var employerType = context.ScenarioInfo.Title.ToLower().Contains("nonlevy") ? EmployerType.NonLevy : EmployerType.Levy;
+            await ProviderSubmitsAnILRRecord(NoOfApprentices, employerType.ToString());
+            await SLDPushDataIntoAS();
+        }
+
+        [Then(@"apprentice\/learner record is available on Learning endpoint for SLD \(so they do not resubmit it\)")]
+        public async Task ThenApprenticeLearnerRecordIsAvailableOnLearningEndpointForSLDSoTheyDoNotResubmitIt()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
+            await sldDataPushHelpers.CheckApprenticeIsAvailableInApprovedLearnersList(listOfApprenticeship.FirstOrDefault());
+            
+        }
 
         private async Task<ApproveApprenticeDetailsPage> UpdateDobAndReprocessData(int lowerAgeLimit, int upperAgeLimit)
         {
@@ -126,16 +145,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-
-        [Given("new learner details are processed in ILR for (\\d+) apprentices")]
-        [Given("the employer has (\\d+) apprentice ready to start training")]
-        public async Task ProcessedLearnersInILR(int NoOfApprentices)
-        {
-            var employerType = context.ScenarioInfo.Title.ToLower().Contains("nonlevy") ? EmployerType.NonLevy : EmployerType.Levy;
-            await ProviderSubmitsAnILRRecord(NoOfApprentices, employerType.ToString());
-            await SLDPushDataIntoAS();
-        }
- 
 
 
     }

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.API;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
@@ -125,6 +126,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
         }
+
 
         [When("Provider tries to add a new apprentice using details from table below")]
         public async Task WhenProviderTriesToAddANewApprenticeUsingDetailsFromTableBelow(Table table)
