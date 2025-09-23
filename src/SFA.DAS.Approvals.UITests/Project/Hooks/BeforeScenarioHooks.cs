@@ -37,7 +37,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
         {
             context.SetRestClient(new Outer_ApprovalsAPIClient(_objectcontext, context.GetOuter_ApiAuthTokenConfig()));
             
-            context.Set(new LearnerDataOuterApiHelper(_context, _outer_ApiAuthTokenConfig));
+            context.Set(new LearnerDataOuterApiClient(_context, _outer_ApiAuthTokenConfig));
 
         }
 

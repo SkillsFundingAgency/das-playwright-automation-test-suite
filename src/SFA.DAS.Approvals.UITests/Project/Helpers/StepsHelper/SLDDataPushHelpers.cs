@@ -19,13 +19,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
     {
         private readonly ScenarioContext _context;
         private readonly ApprovalsAPISteps _approvalsAPISteps;
+        private readonly LearnerDataOuterApiClient _learnerDataOuterApiClient;
         private readonly LearnerDataOuterApiHelper _learnerDataOuterApiHelper;
 
         public SLDDataPushHelpers(ScenarioContext context)
         {
             _context = context;
             _approvalsAPISteps = new ApprovalsAPISteps(_context);
-            _learnerDataOuterApiHelper = context.Get<LearnerDataOuterApiHelper>();
+            _learnerDataOuterApiClient = context.Get<LearnerDataOuterApiClient>();
+            _learnerDataOuterApiHelper = new LearnerDataOuterApiHelper(_context);
         }
 
         public async Task PushDataToAS(List<LearnerDataAPIDataModel> learnersData, int academicYear)
@@ -34,7 +36,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var payload = JsonHelper.Serialize(learnersData).ToString();
 
             //await _approvalsAPISteps.SLDPushDataToAS(resource, payload);
-            await _learnerDataOuterApiHelper.PostNewLearners(resource, payload);
+            await _learnerDataOuterApiClient.PostNewLearners(resource, payload);
         }
 
 
@@ -52,7 +54,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         }
 
 
-        public async Task<LearnerDataAPIDataModel> ConvertToLearnerDataAPIDataModel(Apprenticeship apprenticeship)
+        private async Task<LearnerDataAPIDataModel> ConvertToLearnerDataAPIDataModel(Apprenticeship apprenticeship)
         {
             LearnerDataAPIDataModel learnerData = new LearnerDataAPIDataModel();
 
@@ -82,6 +84,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task CheckApprenticeIsAvailableInApprovedLearnersList(Apprenticeship apprenticeship)
         {
             var resource = $"/Learners/providers/{apprenticeship.UKPRN}/academicyears/{apprenticeship.TrainingDetails.AcademicYear}/learners";
+            //var learnerKey = await _learnerDataOuterApiClient.FindLearnerKeyByUlnAsync(resource, apprenticeship.ApprenticeDetails.ULN);
             var learnerKey = await _learnerDataOuterApiHelper.FindLearnerKeyByUlnAsync(resource, apprenticeship.ApprenticeDetails.ULN);
             var expectedLearningIdKey = apprenticeship.ApprenticeDetails.LearningIdKey.Trim();
             Assert.AreEqual(learnerKey.Trim(), expectedLearningIdKey, $"LearningIdKey key extracted from db [{expectedLearningIdKey}] differs from api response: [{learnerKey.Trim()}]");
