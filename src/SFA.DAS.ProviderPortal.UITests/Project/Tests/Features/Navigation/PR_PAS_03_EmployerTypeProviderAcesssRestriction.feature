@@ -16,5 +16,5 @@ Scenario: PR_PAS_03_ProviderPortalNavigation
 	And user can signout from their account
 
 Examples:
-	| UserRole                |
+	| UserRole                    |
 	| EmployerTypeProviderAccount |
