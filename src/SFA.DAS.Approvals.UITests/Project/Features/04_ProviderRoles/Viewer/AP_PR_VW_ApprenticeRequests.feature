@@ -4,7 +4,7 @@ Feature: AP_PR_VW_ApprenticeRequests
 
 @regression
 @Approvalproviderrole
-Scenario: AP_PR_CA_Provider Roles Viewer Apprentice Requests
+Scenario: AP_PR_VW_Provider Roles Viewer Apprentice Requests
 	Given the provider logs in as a Viewer
 	When user navigates to Apprentice requests page
 	Then the user can view apprentice details from items under section: "Ready for review"
