@@ -53,6 +53,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
 
             //Set config for 'Outer_ApiAuthTokenConfig' in the context:
             Outer_ApiAuthTokenConfig outer_ApiAuthTokenConfig = new() { Apim_SubscriptionKey = subscriptionKey.Apim_SubscriptionKey };
+
             context.Set(outer_ApiAuthTokenConfig);
 
         }
