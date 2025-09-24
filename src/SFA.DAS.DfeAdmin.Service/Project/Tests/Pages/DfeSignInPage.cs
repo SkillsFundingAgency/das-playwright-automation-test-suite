@@ -6,32 +6,33 @@ using System.Threading;
 
 namespace SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
 
+// 24/09/2025 - PLEASE DO NOT REMOVE COMMENTED CODE
 public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 {
-    public class CheckEnterPasswordMFAOrStandardPage(ScenarioContext context) : CheckMultipleHomePage(context)
-    {
-        public override string[] PageIdentifierCss => [EnterPasswordMFAPageIdentifierCss, EnterPasswordPageIdentifierCss];
+    //public class CheckEnterPasswordMFAOrStandardPage(ScenarioContext context) : CheckMultipleHomePage(context)
+    //{
+    //    public override string[] PageIdentifierCss => [EnterPasswordMFAPageIdentifierCss, EnterPasswordPageIdentifierCss];
 
-        public override string[] PageTitles => [EnterPasswordMFAPageTitle, EnterPasswordPageTitle];
+    //    public override string[] PageTitles => [EnterPasswordMFAPageTitle, EnterPasswordPageTitle];
 
-        public async Task<bool> IsEnterPasswordMFADisplayed()
-        {
-            // Wait for the page to load completely
-            await page.WaitForLoadStateAsync(LoadState.Load);
+    //    public async Task<bool> IsEnterPasswordMFADisplayed()
+    //    {
+    //        // Wait for the page to load completely
+    //        await page.WaitForLoadStateAsync(LoadState.Load);
 
-            await Assertions.Expect(page.Locator(Identifier)).ToContainTextAsync("password", new LocatorAssertionsToContainTextOptions { Timeout = 15000, UseInnerText = true });
+    //        await Assertions.Expect(page.Locator(Identifier)).ToContainTextAsync("password", new LocatorAssertionsToContainTextOptions { Timeout = 15000, UseInnerText = true });
 
-            return await ActualDisplayedPage(EnterPasswordMFAPageTitle);
-        }
-    }
+    //        return await ActualDisplayedPage(EnterPasswordMFAPageTitle);
+    //    }
+    //}
 
-    public static string EnterPasswordMFAPageIdentifierCss => "div[id='loginHeader']";
+    //public static string EnterPasswordMFAPageIdentifierCss => "div[id='loginHeader']";
 
-    public static string EnterPasswordPageIdentifierCss => "#content h1.govuk-heading-xl";
+    //public static string EnterPasswordPageIdentifierCss => "#content h1.govuk-heading-xl";
 
-    public static string EnterPasswordMFAPageTitle => "Enter password";
+    //public static string EnterPasswordMFAPageTitle => "Enter password";
 
-    public static string EnterPasswordPageTitle => "Enter your password";
+    //public static string EnterPasswordPageTitle => "Enter your password";
 
     private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
@@ -60,7 +61,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         objectContext.SetDebugInformation($"Entered username - {username}");
 
-        if (EnvironmentConfig.IsPPEnvironment && await new CheckEnterPasswordMFAOrStandardPage(context).IsEnterPasswordMFADisplayed())
+        if (EnvironmentConfig.IsPPEnvironment)// && await new CheckEnterPasswordMFAOrStandardPage(context).IsEnterPasswordMFADisplayed())
         {
             await _semaphore.WaitAsync();
 
