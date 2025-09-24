@@ -38,84 +38,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
         public async Task<RestResponse> PostNewLearners(string resource, string payload)
         {
             await _restClient.CreateRestRequest(Method.Put, resource, payload);
-            _restResponse = await Execute(HttpStatusCode.Accepted);
+            _restResponse = await SendRequestAsync(HttpStatusCode.Accepted);
             return _restResponse;
         }
 
         public async Task<RestResponse> GetLearners(string resource)
         {
             await _restClient.CreateRestRequest(Method.Get, resource);
-            _restResponse = await Execute(HttpStatusCode.OK);
+            _restResponse = await SendRequestAsync(HttpStatusCode.OK);
             return _restResponse;
         }
 
-        /*
-        internal async Task<string?> FindLearnerKeyByUlnAsync(string resource, string targetUln)
-        {
-            int page = 1;
-            const int pageSize = 100;
-
-            _restResponse = await GetLearners($"{resource}?page={page}&pageSize={pageSize}");
-            var content = JsonSerializer.Deserialize<LearnerResponse>(_restResponse.Content!);
-            var totalPages = content?.TotalPages ?? 1;
-
-            for (int i = totalPages; i > 0; i--)
-            {
-                var url = $"{resource}?page={i}&pageSize={pageSize}";
-                _restResponse = await GetLearners(url);
-                content = JsonSerializer.Deserialize<LearnerResponse>(_restResponse.Content!);
-
-                if (content?.Learners != null)
-                {
-                    var match = content.Learners.FirstOrDefault(l => l.Uln == targetUln);
-                    if (match != null)
-                    {
-                        _objectContext.SetDebugInformation($"ULN {targetUln} found on page# {i} with key:[{match.Key}]");
-                        return match.Key;                        
-                    }
-                    else
-                    {
-                        _objectContext.SetDebugInformation($"ULN {targetUln} not found on page# {i}.");
-                    }
-                }
-            }
-
-            return null; // ULN not found
-
-
-        }
-        */
-
-        private new async Task<RestResponse> Execute(HttpStatusCode responseCode) => await _restClient.Execute(responseCode);
+        private async Task<RestResponse> SendRequestAsync(HttpStatusCode responseCode) => await _restClient.Execute(responseCode);
 
     }
-/*
-    internal class LearnerResponse
-    {
-        [JsonPropertyName("learners")]
-        public List<Learner> Learners { get; set; } = new();
-        
-        [JsonPropertyName("total")]
-        public int Total { get; set; }
-
-        [JsonPropertyName("page")]
-        public int Page { get; set; }
-
-        [JsonPropertyName("pageSize")]
-        public int PageSize { get; set; }
-
-        [JsonPropertyName("totalPages")]
-        public int TotalPages { get; set; }
-    }
-
-    internal class Learner
-    {
-        [JsonPropertyName("uln")]
-        public string Uln { get; set; } = string.Empty;
-
-        [JsonPropertyName("key")]
-        public string Key { get; set; } = string.Empty;
-    }
-*/
 
 }
