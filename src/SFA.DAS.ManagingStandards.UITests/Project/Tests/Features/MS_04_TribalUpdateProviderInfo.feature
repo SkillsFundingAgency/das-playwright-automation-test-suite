@@ -1,5 +1,6 @@
 ﻿Feature: MS_04_TribalUpdateProviderInfo
 
+@managingstandards04
 @managingstandards
 @regression
 Scenario: MS_04_TribalUpdateProviderInfo

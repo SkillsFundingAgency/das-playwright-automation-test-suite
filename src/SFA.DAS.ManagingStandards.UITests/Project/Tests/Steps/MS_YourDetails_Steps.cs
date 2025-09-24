@@ -116,9 +116,9 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page1 = await page.AccessWhereYouWillDeliverThisStandard();
 
-        var page2 = await page1.ConfirmAtAnEmployersLocation();
+        var page2 = await page1.ConfirmAtAnEmployersLocation_ManageStandard();
 
-        await page2.YesDeliverAnyWhereInEngland();
+        await page2.YesDeliverAnyWhereInEngland_ManageStandard();
     }
 
     [When(@"the provider is able to change the standard delivered in both not a national provider")]
@@ -150,7 +150,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page1 = await page.AccessWhereYouWillDeliverThisStandard();
 
-        var page2 = await page1.ConfirmAtAnEmployersLocation();
+        var page2 = await page1.ConfirmAtAnEmployersLocation_ManageStandard();
 
         var page3 = await page2.NoDeliverAnyWhereInEngland();
 
