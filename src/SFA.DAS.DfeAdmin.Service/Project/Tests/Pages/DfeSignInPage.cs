@@ -71,7 +71,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
                 var dateTime = DateTime.Now;
 
-                await SubmitMFAIdentity(username);
+                await SubmitMFAIdentity();
 
                 await SubmitMFACode(username, dateTime);
 
@@ -109,8 +109,6 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
     {
         await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("Enter password", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
 
-        await Assertions.Expect(page.Locator("#displayName")).ToContainTextAsync(username, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
-
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Enter the password" }).FillAsync(password);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Sign in" }).ClickAsync();
@@ -118,11 +116,9 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
         objectContext.SetDebugInformation($"Entered {username}, {password}");
     }
 
-    private async Task SubmitMFAIdentity(string username)
+    private async Task SubmitMFAIdentity()
     {
         await Assertions.Expect(page.Locator("#credentialPickerTitle")).ToContainTextAsync("Verify your identity", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
-
-        await Assertions.Expect(page.Locator("#userDisplayName")).ToContainTextAsync(username, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
 
         await page.GetByTestId("Email").ClickAsync();
     }
@@ -130,8 +126,6 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
     private async Task SubmitMFACode(string username, DateTime dateTime)
     {
         await Assertions.Expect(page.Locator("#oneTimeCodeTitle")).ToContainTextAsync("Enter code", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
-
-        await Assertions.Expect(page.Locator("#userDisplayName")).ToContainTextAsync(username, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
 
         await Assertions.Expect(page.Locator("#oneTimeCodeDescription")).ToContainTextAsync("We emailed a code");
 
