@@ -491,7 +491,7 @@ public class YourContactInformationForThisStandardPage(ScenarioContext context) 
 
     public async Task<ManageAStandard_TeacherPage> UpdateContactInformation()
     {
-        await UseExistingContactInformation();
+        await DoNotUseExistingContactInformation();
 
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
