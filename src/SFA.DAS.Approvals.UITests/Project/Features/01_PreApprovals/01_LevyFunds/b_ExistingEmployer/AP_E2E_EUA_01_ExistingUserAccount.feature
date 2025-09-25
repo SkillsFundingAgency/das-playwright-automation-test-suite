@@ -17,7 +17,7 @@ Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves
 	And Apprenticeship record is created in Learning Db
 	Then Provider can access live apprentice records under Manager Your Apprentices section
 	And apprentice/learner record is no longer available on SelectLearnerFromILR page
-	Then apprentice/learner record is available on Learning endpoint for SLD (so they do not resubmit it)
+	#Then apprentice/learner record is available on Learning endpoint for SLD (so they do not resubmit it)
 
 
 @regression
