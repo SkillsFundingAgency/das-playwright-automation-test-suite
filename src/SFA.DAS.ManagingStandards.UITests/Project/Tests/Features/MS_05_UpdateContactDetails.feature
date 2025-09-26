@@ -1,6 +1,5 @@
 Feature: MS_05_UpdateContactInfo
 
-@managingstandards05
 @managingstandards
 @regression
 Scenario: MS_05_UpdateContactInfo
