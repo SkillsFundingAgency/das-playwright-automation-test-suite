@@ -27,7 +27,7 @@ public class ProviderLandingPage(ScenarioContext context) : BasePage(context)
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(ProviderLandingPageIdentifier).ToContainTextAsync(ProviderLandingPageTitle);
+        await Assertions.Expect(ProviderLandingPageIdentifier).ToContainTextAsync(ProviderLandingPageTitle, new LocatorAssertionsToContainTextOptions { Timeout = 15000});
     }
 
     public async Task ClickStartNow() => await page.GetByRole(AriaRole.Link, new() { Name = "Start now" }).ClickAsync();

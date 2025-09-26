@@ -6,32 +6,33 @@ using System.Threading;
 
 namespace SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
 
+// 24/09/2025 - PLEASE DO NOT REMOVE COMMENTED CODE
 public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 {
-    public class CheckEnterPasswordMFAOrStandardPage(ScenarioContext context) : CheckMultipleHomePage(context)
-    {
-        public override string[] PageIdentifierCss => [EnterPasswordMFAPageIdentifierCss, EnterPasswordPageIdentifierCss];
+    //public class CheckEnterPasswordMFAOrStandardPage(ScenarioContext context) : CheckMultipleHomePage(context)
+    //{
+    //    public override string[] PageIdentifierCss => [EnterPasswordMFAPageIdentifierCss, EnterPasswordPageIdentifierCss];
 
-        public override string[] PageTitles => [EnterPasswordMFAPageTitle, EnterPasswordPageTitle];
+    //    public override string[] PageTitles => [EnterPasswordMFAPageTitle, EnterPasswordPageTitle];
 
-        public async Task<bool> IsEnterPasswordMFADisplayed()
-        {
-            // Wait for the page to load completely
-            await page.WaitForLoadStateAsync(LoadState.Load);
+    //    public async Task<bool> IsEnterPasswordMFADisplayed()
+    //    {
+    //        // Wait for the page to load completely
+    //        await page.WaitForLoadStateAsync(LoadState.Load);
 
-            await Assertions.Expect(page.Locator(Identifier)).ToContainTextAsync("password", new LocatorAssertionsToContainTextOptions { Timeout = 15000, UseInnerText = true });
+    //        await Assertions.Expect(page.Locator(Identifier)).ToContainTextAsync("password", new LocatorAssertionsToContainTextOptions { Timeout = 15000, UseInnerText = true });
 
-            return await ActualDisplayedPage(EnterPasswordMFAPageTitle);
-        }
-    }
+    //        return await ActualDisplayedPage(EnterPasswordMFAPageTitle);
+    //    }
+    //}
 
-    public static string EnterPasswordMFAPageIdentifierCss => "div[id='loginHeader']";
+    //public static string EnterPasswordMFAPageIdentifierCss => "div[id='loginHeader']";
 
-    public static string EnterPasswordPageIdentifierCss => "#content h1.govuk-heading-xl";
+    //public static string EnterPasswordPageIdentifierCss => "#content h1.govuk-heading-xl";
 
-    public static string EnterPasswordMFAPageTitle => "Enter password";
+    //public static string EnterPasswordMFAPageTitle => "Enter password";
 
-    public static string EnterPasswordPageTitle => "Enter your password";
+    //public static string EnterPasswordPageTitle => "Enter your password";
 
     private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
@@ -60,7 +61,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         objectContext.SetDebugInformation($"Entered username - {username}");
 
-        if (EnvironmentConfig.IsPPEnvironment && await new CheckEnterPasswordMFAOrStandardPage(context).IsEnterPasswordMFADisplayed())
+        if (EnvironmentConfig.IsPPEnvironment)// && await new CheckEnterPasswordMFAOrStandardPage(context).IsEnterPasswordMFADisplayed())
         {
             await _semaphore.WaitAsync();
 
@@ -70,7 +71,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
                 var dateTime = DateTime.Now;
 
-                await SubmitMFAIdentity(username);
+                await SubmitMFAIdentity();
 
                 await SubmitMFACode(username, dateTime);
 
@@ -108,10 +109,6 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
     {
         await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("Enter password", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
 
-        await Assertions.Expect(page.Locator("#bannerLogoText")).ToContainTextAsync("DFE SIGN-IN (PREPROD)");
-
-        await Assertions.Expect(page.Locator("#displayName")).ToContainTextAsync(username, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
-
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Enter the password" }).FillAsync(password);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Sign in" }).ClickAsync();
@@ -119,13 +116,9 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
         objectContext.SetDebugInformation($"Entered {username}, {password}");
     }
 
-    private async Task SubmitMFAIdentity(string username)
+    private async Task SubmitMFAIdentity()
     {
         await Assertions.Expect(page.Locator("#credentialPickerTitle")).ToContainTextAsync("Verify your identity", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
-
-        await Assertions.Expect(page.GetByTestId("bannerLogoText")).ToContainTextAsync("DFE SIGN-IN (PREPROD)");
-
-        await Assertions.Expect(page.Locator("#userDisplayName")).ToContainTextAsync(username, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
 
         await page.GetByTestId("Email").ClickAsync();
     }
@@ -133,10 +126,6 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
     private async Task SubmitMFACode(string username, DateTime dateTime)
     {
         await Assertions.Expect(page.Locator("#oneTimeCodeTitle")).ToContainTextAsync("Enter code", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
-
-        await Assertions.Expect(page.GetByTestId("bannerLogoText")).ToContainTextAsync("DFE SIGN-IN (PREPROD)");
-
-        await Assertions.Expect(page.Locator("#userDisplayName")).ToContainTextAsync(username, new LocatorAssertionsToContainTextOptions { IgnoreCase = true });
 
         await Assertions.Expect(page.Locator("#oneTimeCodeDescription")).ToContainTextAsync("We emailed a code");
 

@@ -1,5 +1,4 @@
-﻿using Azure;
-using SFA.DAS.ProviderLogin.Service.Project.Pages;
+﻿using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using SFA.DAS.ProviderPortal.UITests.Project.Pages;
 namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
 
@@ -89,7 +88,7 @@ public class ProviderRolesSteps(ScenarioContext context)
             var page1 = await page.GotoSelectJourneyPageGoesToAccessDenied();
 
             providerHomePage = await page1.GoBackToTheServiceHomePage();
-        }      
+        }
     }
 
     [Then(@"user can view Add An Employer page as defined in the table below (.*)")]
