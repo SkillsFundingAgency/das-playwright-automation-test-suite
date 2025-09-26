@@ -27,7 +27,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
 
         internal async Task<Apprenticeship> GetApprenticeDetailsFromCommitmentsDb(Apprenticeship apprenticeship, string additionalWhereFilter = null)
         {
-            var details = await GetApprenticeDetails(apprenticeship.UKPRN, apprenticeship.EmployerDetails.AccountLegalEntityId, additionalWhereFilter);
+            var details = await GetApprenticeDetails(apprenticeship.ProviderDetails.Ukprn, apprenticeship.EmployerDetails.AccountLegalEntityId, additionalWhereFilter);
 
             apprenticeship.ApprenticeDetails.ULN = details[0].ToString();
             apprenticeship.ApprenticeDetails.FirstName = details[1].ToString();
