@@ -13,7 +13,8 @@ public class ManagingStandardsDataHelpers
 
     public const string UpdatedLocationName = "Test Demo Automation Venue";
     public string UpdatedVenueName { get; init; } = UpdatedLocationName;
-    public string EmailAddress { get; init; } = "ManagingStandardstest.demo@digital.education.gov.uk";
+    public string EmailAddress { get; init; } = "ManagingStandardstest.demo@l38cxwya.mailosaur.net";
+    public string UpdatedEmailAddress { get; init; } = "UpdatedManagingStandardstest.demo@l38cxwya.mailosaur.net";
     public string VenueName { get; init; } = LocationName;
     public string Standard_ActuaryLevel7 { get; init; } = "Actuary (level 7)";
     public string Standard_CraftPlastererlevel { get; init; } = "Craft plasterer (level 3)";
@@ -25,5 +26,6 @@ public class ManagingStandardsDataHelpers
     public string ContactNumber { get; init; } = RandomDataGenerator.GenerateRandomNumber(12);
     public static StandardsTestData StandardsTestData => new() { LarsCode = "281", StandardName = "Podiatrist (level 6)", Venue = LocationName };
     public string UpdateProviderDescriptionText { get; init; } = RandomDataGenerator.GenerateRandomAlphanumericString(20);
+   
 }
 
