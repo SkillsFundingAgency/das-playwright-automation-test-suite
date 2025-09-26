@@ -1,31 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Polly;
+﻿using Polly;
+using SFA.DAS.Approvals.UITests.Project.Helpers.API;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
     [Binding]
-    public class SldIlrSubmissionSteps
+    public class LearnerDataOuterApiSteps
     {
         private readonly ScenarioContext context;
         private readonly CommonStepsHelper commonStepsHelper;
-        private readonly SLDDataPushHelpers sldDataPushHelpers;
+        private readonly LearnerDataOuterApiHelper learnerDataOuterApiHelper;
         private ProviderStepsHelper providerStepsHelper;
         private ApprenticeDataHelper apprenticeDataHelper;
 
-        public SldIlrSubmissionSteps(ScenarioContext _context)
+        public LearnerDataOuterApiSteps(ScenarioContext _context)
         {
             context = _context;
             commonStepsHelper = new CommonStepsHelper(context);
             providerStepsHelper = new ProviderStepsHelper(context);
-            sldDataPushHelpers = new(context);
+            learnerDataOuterApiHelper = new LearnerDataOuterApiHelper(context);
             apprenticeDataHelper = new ApprenticeDataHelper(context);
         }
 
@@ -62,9 +63,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
 
-            var listOflearnerData = await sldDataPushHelpers.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
+            var listOflearnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
 
-            await sldDataPushHelpers.PushDataToAS(listOflearnerData, academicYear);
+            await learnerDataOuterApiHelper.PushNewLearnersDataToAS(listOflearnerData, academicYear);
         }
 
         [Given(@"Provider sends an apprentice request \(cohort\) to an employer")]
@@ -106,6 +107,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
 
         }
+       
+        [Given("new learner details are processed in ILR for (\\d+) apprentices")]
+        [Given("the employer has (\\d+) apprentice ready to start training")]
+        public async Task ProcessedLearnersInILR(int NoOfApprentices)
+        {
+            var employerType = context.ScenarioInfo.Title.ToLower().Contains("nonlevy") ? EmployerType.NonLevy : EmployerType.Levy;
+            await ProviderSubmitsAnILRRecord(NoOfApprentices, employerType.ToString());
+            await SLDPushDataIntoAS();
+        }
+
+        [Then(@"apprentice\/learner record is available on Learning endpoint for SLD \(so they do not resubmit it\)")]
+        public async Task ThenApprenticeLearnerRecordIsAvailableOnLearningEndpointForSLDSoTheyDoNotResubmitIt()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
+            await learnerDataOuterApiHelper.CheckApprenticeIsAvailableInApprovedLearnersList(listOfApprenticeship.FirstOrDefault());
+            
+        }
 
         private async Task<ApproveApprenticeDetailsPage> UpdateDobAndReprocessData(int lowerAgeLimit, int upperAgeLimit)
         {
@@ -126,16 +145,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-
-        [Given("new learner details are processed in ILR for (\\d+) apprentices")]
-        [Given("the employer has (\\d+) apprentice ready to start training")]
-        public async Task ProcessedLearnersInILR(int NoOfApprentices)
-        {
-            var employerType = context.ScenarioInfo.Title.ToLower().Contains("nonlevy") ? EmployerType.NonLevy : EmployerType.Levy;
-            await ProviderSubmitsAnILRRecord(NoOfApprentices, employerType.ToString());
-            await SLDPushDataIntoAS();
-        }
- 
 
 
     }

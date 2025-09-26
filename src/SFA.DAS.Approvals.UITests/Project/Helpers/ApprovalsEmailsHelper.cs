@@ -59,7 +59,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
                 case ("Confirm apprenticeship details", "apprentice"):
                     rcvrEmail = apprenticeEmail;
                     subject = "You need to confirm your apprenticeship details";
-                    body = $"Hello {apprenticeName}, Congratulations on becoming an apprentice.";
+                    body = $"Congratulations on becoming an apprentice.";
                     break;
 
                 default:

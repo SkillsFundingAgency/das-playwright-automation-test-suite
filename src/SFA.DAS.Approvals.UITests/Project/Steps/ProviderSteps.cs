@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.API;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
@@ -25,7 +26,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private readonly ProviderHomePageStepsHelper providerHomePageStepsHelper;
         private readonly ProviderStepsHelper providerStepsHelper;
         private readonly DbSteps dbSteps;
-        private readonly SldIlrSubmissionSteps sldIlrSubmissionSteps;
+        private readonly LearnerDataOuterApiSteps learnerDataOuterApiSteps;
 
         public ProviderSteps(ScenarioContext _context)
         {
@@ -34,7 +35,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             providerHomePageStepsHelper = new ProviderHomePageStepsHelper(context);
             providerStepsHelper = new ProviderStepsHelper(context);
             dbSteps = new DbSteps(context);
-            sldIlrSubmissionSteps = new SldIlrSubmissionSteps(context);
+            learnerDataOuterApiSteps = new LearnerDataOuterApiSteps(context);
         }
 
         [When(@"Provider sends an apprentice request \(cohort\) to the employer by selecting same apprentices")]
@@ -126,6 +127,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerStepsHelper.ProviderVerifyLearnerNotAvailableForSelection();
         }
 
+
         [When("Provider tries to add a new apprentice using details from table below")]
         public async Task WhenProviderTriesToAddANewApprenticeUsingDetailsFromTableBelow(Table table)
         {
@@ -145,7 +147,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 context.Set(listOfApprenticeship);
 
                 // Push data on SLD end point  
-                await new SldIlrSubmissionSteps(context).SLDPushDataIntoAS();
+                await new LearnerDataOuterApiSteps(context).SLDPushDataIntoAS();
 
                 // Try to add above apprentice and validate error message  
                 var page = await providerStepsHelper.GoToSelectApprenticeFromILRPage();

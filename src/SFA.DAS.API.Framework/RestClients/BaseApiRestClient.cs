@@ -44,6 +44,8 @@ public abstract class BaseApiRestClient
         AddPayload(payload);
     }
 
+    public async Task CreateRestRequest(Method method, string resource) => await AddRestRequest(method, resource);
+
     public async Task<RestResponse> Execute(HttpStatusCode expectedResponse) => await Execute(expectedResponse, string.Empty);
 
     public async Task<RestResponse> Execute(HttpStatusCode expectedResponse, string resourceContent) => await new ApiAssertHelper(objectContext).ExecuteAndAssertResponse(expectedResponse, resourceContent, restClient, restRequest);
