@@ -12,6 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
         {
             Cohort = new Cohort();
             EmployerDetails = new Employer();
+            ProviderDetails = new Provider();
             ApprenticeDetails = new Apprentice();
             TrainingDetails = new Training();
             RPLDetails = new RPL();
@@ -25,10 +26,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             RPLDetails = rpl;
         }
 
-        public int UKPRN { get; set; }
         public string ReservationID { get; set; }
         public Cohort Cohort { get; set; }
         public Employer EmployerDetails { get; set; }
+        public Provider ProviderDetails { get; set; }
         public Apprentice ApprenticeDetails { get; set; }
         public Training TrainingDetails { get; set; }
         public RPL RPLDetails { get; set; }
@@ -48,6 +49,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
         public int AccountLegalEntityId { get; set; }
         public string EmployerName { get; set; }
         public EmployerType EmployerType { get; set; }
+        public string Email { get; set; }
+    }
+
+    public class Provider
+    {
+        public string ProviderName { get; set; }
+        public int Ukprn { get; set; }
         public string Email { get; set; }
     }
 

@@ -119,7 +119,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task AddEmptyCohort()
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
-            var ukprn = listOfApprenticeship.FirstOrDefault().UKPRN;
+            var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
 
             await EmployerLogInToEmployerPortal(false);
             await new InterimApprenticesHomePage(context, false).VerifyPage();
