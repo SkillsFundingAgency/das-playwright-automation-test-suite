@@ -25,8 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
             providerConfig = (providerConfig == null) ? context.GetProviderConfig<ProviderConfig>() : providerConfig;
             var providerDetails = await GetProviderDetails(providerConfig);
-
-            //var ukprn = Ukprn != null ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);
+            
 
             for (int i = 0; i < NumberOfApprenticeships; i++)
             {

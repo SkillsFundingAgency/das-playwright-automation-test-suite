@@ -25,7 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
             var employerEmail = apprentice.EmployerDetails.Email;
             var apprenticeName = $"{apprentice.ApprenticeDetails.FirstName}";
             var apprenticeEmail = apprentice.ApprenticeDetails.Email;
-            var providerEmail = apprentice.ProviderDetails.Email; //"das-automation@l38cxwya.mailosaur.net";
+            var providerEmail = apprentice.ProviderDetails.Email;
             var cohortReference = apprentice.Cohort.Reference;
             var mailosaurApiHelper = context.Get<MailosaurApiHelper>();
 
