@@ -24,4 +24,17 @@ public class MS_ContactDetails_Steps(ScenarioContext context)
 
         await page6.ReturnToManagingStandardsDashboard();
     }
+
+    [Then("the provider is able to update phone number only")]
+    public async Task ThenTheProviderIsAbleToUpdatePhoneNumberOnly()
+    {
+        throw new PendingStepException();
+    }
+
+    [Then("the provider is able to update email only")]
+    public async Task ThenTheProviderIsAbleToUpdateEmailOnly()
+    {
+        throw new PendingStepException();
+    }
+
 }
