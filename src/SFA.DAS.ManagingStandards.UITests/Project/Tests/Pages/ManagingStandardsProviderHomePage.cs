@@ -778,6 +778,14 @@ public class UpdateStandardsWithNewContactDetailsPage(ScenarioContext context) :
 
         return await VerifyPageAsync(() => new CheckDetailsPage(context));
     }
+    public async Task<CheckDetailsPage> YesUpdateExistingStandards()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Select All" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new CheckDetailsPage(context));
+    }
 }
 
 public class CheckDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
