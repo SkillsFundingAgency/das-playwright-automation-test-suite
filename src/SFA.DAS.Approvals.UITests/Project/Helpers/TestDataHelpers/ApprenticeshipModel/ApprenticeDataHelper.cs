@@ -1,8 +1,5 @@
-﻿using Dynamitey;
-using MongoDB.Driver.Linq;
-using Polly;
+﻿using System;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
-using System;
 
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel
@@ -12,7 +9,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
         public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(
             EmployerType EmployerType,
             int NumberOfApprenticeships,
-            string Ukprn = null,
+            ProviderConfig providerConfig = null,
             List<Apprenticeship>? apprenticeships = null,
             IApprenticeFactory? apprenticeFactory = null,
             ITrainingFactory? trainingFactory = null,
@@ -25,7 +22,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
             apprenticeships = (apprenticeships == null) ? new List<Apprenticeship>() : apprenticeships;
             var employerDetails = await GetEmployerDetails(EmployerType);
-            var ukprn = Ukprn != null ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);
+
+            providerConfig = (providerConfig == null) ? context.GetProviderConfig<ProviderConfig>() : providerConfig;
+            var providerDetails = await GetProviderDetails(providerConfig);
+            
 
             for (int i = 0; i < NumberOfApprenticeships; i++)
             {
@@ -37,9 +37,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
                 // Create apprenticeship object with above generated details
                 Apprenticeship apprenticeship = new Apprenticeship()
-                {                    
-                    UKPRN = ukprn,
+                {              
                     EmployerDetails = employerDetails,
+                    ProviderDetails = providerDetails,
                     ApprenticeDetails = apprenticeDetails,
                     TrainingDetails = training,
                     RPLDetails = rpl,
@@ -53,15 +53,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             return apprenticeships;
         }
 
-        internal async Task<Apprenticeship> CreateEmptyCohortAsync(EmployerType EmployerType, string Ukprn = null)
+        internal async Task<Apprenticeship> CreateEmptyCohortAsync(EmployerType EmployerType, ProviderConfig providerConfig = null)
         {
             var employerDetails = await GetEmployerDetails(EmployerType);
-            var ukprn = Ukprn != null ? Convert.ToInt32(Ukprn) : Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);
+            var providerDetails = await GetProviderDetails(providerConfig);
 
             Apprenticeship apprenticeship = new Apprenticeship()
-            {
-                UKPRN = ukprn,
+            {                
                 EmployerDetails = employerDetails,
+                ProviderDetails = providerDetails,
             };
 
             return apprenticeship;
@@ -91,6 +91,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             employer.AccountLegalEntityId = Convert.ToInt32(aleId);
 
             return employer;
+        }
+
+        private Task<Provider> GetProviderDetails(ProviderConfig providerConfig)
+        {            
+            Provider provider = new Provider()
+            { 
+                ProviderName = providerConfig.Name,
+                Ukprn = Convert.ToInt32(providerConfig.Ukprn),
+                Email = providerConfig.Username
+            };
+
+            return Task.FromResult(provider);
+
         }
 
     }

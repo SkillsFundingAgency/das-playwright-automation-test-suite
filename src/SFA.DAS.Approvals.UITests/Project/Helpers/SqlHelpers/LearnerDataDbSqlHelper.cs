@@ -28,11 +28,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
 
         internal async Task<Apprenticeship> GetEditableApprenticeDetails(Apprenticeship apprenticeship)
         {
-            var details = await GetLearnerReadyToAdd(apprenticeship.UKPRN);
+            var details = await GetLearnerReadyToAdd(apprenticeship.ProviderDetails.Ukprn);
 
             apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(details[0]);
             apprenticeship.ApprenticeDetails.ULN = details[1].ToString();
-            apprenticeship.UKPRN = Convert.ToInt32(details[2]);
+            apprenticeship.ProviderDetails.Ukprn = Convert.ToInt32(details[2]);
             apprenticeship.ApprenticeDetails.FirstName = details[3].ToString();
             apprenticeship.ApprenticeDetails.LastName = details[4].ToString();
             apprenticeship.ApprenticeDetails.Email = details[5];
