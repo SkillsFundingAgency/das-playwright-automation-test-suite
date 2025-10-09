@@ -67,11 +67,4 @@ public class MS_ContactDetails_Steps(ScenarioContext context)
 
     }
 
-    [Then("the provider is able to update contact details to all the standards")]
-    public void ThenTheProviderIsAbleToUpdateContactDetailsToAllTheStandards()
-    {
-        throw new PendingStepException();
-    }
-
-
 }
