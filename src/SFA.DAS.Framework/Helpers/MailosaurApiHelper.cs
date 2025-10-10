@@ -33,10 +33,11 @@ public class MailosaurApiHelper(ScenarioContext context)
 
         var criteria = new SearchCriteria()
         {
+            SentFrom = context.Get<ConfigSection>().GetConfigSection<string>("DfeMfaEmailSentFrom"),
             SentTo = email,
             Subject = subject,
             Body = emailText,
-            Match = SearchMatchOperator.ANY
+            Match = SearchMatchOperator.ALL
         };
 
         var messagelistresult = await mailosaur.Messages.SearchAsync(mailosaurAPIUser.ServerId, criteria, timeout: 20000, receivedAfter: dateTime, errorOnTimeout: false);
