@@ -69,7 +69,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
             {
                 await SubmitMFAPassword(username, password);
 
-                var dateTime = DateTime.Now;
+                var dateTime = DateTime.Now.AddSeconds(-30);
 
                 await SubmitMFAIdentity();
 

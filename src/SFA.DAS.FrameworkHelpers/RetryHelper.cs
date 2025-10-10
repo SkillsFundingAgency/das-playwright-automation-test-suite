@@ -19,7 +19,7 @@ namespace SFA.DAS.FrameworkHelpers
 
             await Policy
                 .Handle<Exception>()
-                .WaitAndRetryAsync(RetryTimeOut.GetTimeSpan([5, 5, 5, 5, 5]), (exception, timeSpan, retryCount, context) =>
+                .WaitAndRetryAsync(RetryTimeOut.GetTimeSpan([10, 10, 10, 10, 10]), (exception, timeSpan, retryCount, context) =>
                 {
                     logging.Report(retryCount, timeSpan, exception, _title);
                 })
