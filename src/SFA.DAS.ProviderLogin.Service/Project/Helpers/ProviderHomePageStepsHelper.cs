@@ -18,7 +18,7 @@ public class ProviderHomePageStepsHelper(ScenarioContext context)
 
         if (newTab) await OpenInNewTab();
 
-        objectContext.SetDebugInformation($"Navigated to {Provider_BaseUrl}");
+        objectContext.SetDebugInformation($"Navigated to {Provider_BaseUrl} to login as provider '{login.Ukprn}'");
 
         await driver.Page.GotoAsync(Provider_BaseUrl);
 

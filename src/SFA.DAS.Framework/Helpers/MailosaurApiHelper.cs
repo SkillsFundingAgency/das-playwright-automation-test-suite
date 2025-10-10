@@ -25,7 +25,10 @@ public class MailosaurApiHelper(ScenarioContext context)
 
     public async Task<List<string>> GetCodes(string email, string subject, string emailText, DateTime dateTime)
     {
-        SetDebugInformation($"Check list of email received to '{email}' using subject '{subject}' and contains text '{emailText}' after {dateTime:HH:mm:ss}");
+
+        string sentfrom = context.Get<ConfigSection>().GetConfigSection<string>("DfeMfaEmailSentFrom");
+
+        SetDebugInformation($"Check list of email received from '{sentfrom}' to '{email}' using subject '{subject}' and contains text '{emailText}' after {dateTime:HH:mm:ss}");
 
         var mailosaurAPIUser = GetMailosaurAPIUser(email);
 
@@ -33,10 +36,11 @@ public class MailosaurApiHelper(ScenarioContext context)
 
         var criteria = new SearchCriteria()
         {
+            SentFrom = sentfrom,
             SentTo = email,
             Subject = subject,
             Body = emailText,
-            Match = SearchMatchOperator.ANY
+            Match = SearchMatchOperator.ALL
         };
 
         var messagelistresult = await mailosaur.Messages.SearchAsync(mailosaurAPIUser.ServerId, criteria, timeout: 20000, receivedAfter: dateTime, errorOnTimeout: false);
