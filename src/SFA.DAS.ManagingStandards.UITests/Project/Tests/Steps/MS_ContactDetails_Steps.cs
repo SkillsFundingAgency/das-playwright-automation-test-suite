@@ -51,19 +51,17 @@ public class MS_ContactDetails_Steps(ScenarioContext context)
     {
         var page = new ManagingStandardsProviderHomePage(context);
 
-        var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
+        var page1 = await page.AccessContactDetails();
 
-        var page2 = await page1.AccessContactDetails();
+        var page2 = await page1.ChangeContactDetails();
 
-        var page3 = await page2.ChangeContactDetails();
+        var page3 = await page2.ChangeEmailOnly();
 
-        var page4 = await page3.ChangeEmailOnly();
+        var page4 = await page3.NoDontUpdateExistingStandards();
 
-        var page5 = await page4.NoDontUpdateExistingStandards();
+        var page5 = await page4.ConfirmUpdateContactDetailsAndContinue();
 
-        var page6 = await page5.ConfirmUpdateContactDetailsAndContinue();
-
-        await page6.ReturnToManagingStandardsDashboard();
+        await page5.ReturnToManagingStandardsDashboard();
 
     }
 
