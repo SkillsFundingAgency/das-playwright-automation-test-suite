@@ -76,9 +76,11 @@ public class MS_ContactDetails_Steps(ScenarioContext context)
 
         var page4 = await page3.YesUpdateExistingStandards();
 
-        var page5 = await page4.ConfirmUpdateContactDetailsAndContinue();
+        var page5 = await page4.YesUpdateAllStandardsContactDetails();
 
-        await page5.ReturnToManagingStandardsDashboard();
+        var page6 = await page5.ConfirmUpdateContactDetailsAndContinue();
+
+        await page6.ReturnToManagingStandardsDashboard();
     }
 
 }
