@@ -1,8 +1,10 @@
 ﻿using Polly;
+using Polly.Retry;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
         private readonly LearningDbSqlHelper learningDbSqlHelper;
         private readonly LearnerDataDbSqlHelper learnerDataDbSqlHelper;
+        private readonly ApprenticeDataHelper apprenticeDataHelper;
         private List<Apprenticeship> listOfApprenticeship;
 
 
@@ -31,58 +34,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();
             learningDbSqlHelper = context.Get<LearningDbSqlHelper>();
             learnerDataDbSqlHelper = context.Get<LearnerDataDbSqlHelper>();
-        }
-
-        [Given("A live apprentice record exists for an apprentice on Foundation level course")]
-        public async Task GivenALiveApprenticeRecordExistsForAnApprenticeOnFoundationLevelCourse()
-        {
-            listOfApprenticeship = new List<Apprenticeship>();
-
-            //GET Apprenticeship details from the database
-            var ukprn = Convert.ToInt32(context.GetProviderConfig<ProviderConfig>().Ukprn);
-            EasAccountUser employerUser = context.GetUser<LevyUser>();
-
-            var accountLegalEntityId = Convert.ToInt32(await context.Get<AccountsDbSqlHelper>().GetAccountLegalEntityId(employerUser.Username, employerUser.OrganisationName[..3] + "%"));
-            var details = await commitmentsDbSqlHelper.GetEditableApprenticeDetails(ukprn, accountLegalEntityId);
-
-            var uln = details[0].ToString();
-            var firstName = details[1].ToString();
-            var LastName = details[2].ToString();
-            var dob = Convert.ToDateTime(details[3].ToString());
-
-            //SET Apprenticeship details in the context
-            Apprenticeship apprenticeship = new Apprenticeship();
-
-            apprenticeship.UKPRN = ukprn;
-            apprenticeship.EmployerDetails.EmployerType = EmployerType.Levy;
-            apprenticeship.EmployerDetails.Email = employerUser.Username;
-            apprenticeship.EmployerDetails.EmployerName = employerUser.OrganisationName;
-            apprenticeship.ApprenticeDetails.ULN = uln;
-            apprenticeship.ApprenticeDetails.FirstName = firstName;
-            apprenticeship.ApprenticeDetails.LastName = LastName;
-            apprenticeship.ApprenticeDetails.DateOfBirth = dob;
-
-            listOfApprenticeship.Add(apprenticeship);
-            context.Set(listOfApprenticeship);
-
+            accountsDbSqlHelper = context.Get<AccountsDbSqlHelper>();
+            apprenticeDataHelper = new ApprenticeDataHelper(context);
         }
 
         [Then("a record is created in LearnerData Db for each learner")]
         public async Task ThenARecordIsCreatedInLearnerDataDbForEachLearner()
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
-
-            var retryPolicy = Policy
-                .HandleResult<string>(result => string.IsNullOrEmpty(result)) // Retry if result is null or empty
-                .WaitAndRetryAsync(
-                    retryCount: 5,
-                    sleepDurationProvider: attempt => TimeSpan.FromSeconds(1),
-                    onRetry: (result, timeSpan, retryCount, context) =>
-                    {
-                        objectContext.SetDebugInformation(
-                            $"Retry {retryCount} - learner not found in learnerData db. Waiting {timeSpan.TotalSeconds}s before next attempt.");
-                    });
-
+            var retryPolicy = DbRetryPolicy("LearnerDataId", "LearnerData db");
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
@@ -122,13 +82,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenLearnerDataDbIsUpdatedWithRespectiveApprenticeshipId()
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var retryPolicy = DbRetryPolicy("ApprenticeshipId", "LearnerData db");
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
                 var learnerDataId = apprenticeship.ApprenticeDetails.LearnerDataId;
                 var apprenticeshipIdExpected = apprenticeship.ApprenticeDetails.ApprenticeshipId;
-                var apprenticeshipIdActual = await learnerDataDbSqlHelper.GetApprenticeshipIdLinkedWithLearnerData(learnerDataId);
+                var apprenticeshipIdActual = await retryPolicy.ExecuteAsync(() => learnerDataDbSqlHelper.GetApprenticeshipIdLinkedWithLearnerData(learnerDataId));
                 Assert.AreEqual(apprenticeshipIdExpected.ToString(), apprenticeshipIdActual, $"[Id] from LearnerData db ({apprenticeshipIdActual}) does not match with [LearnerDataId] in Apprenticeship > Commitments db ({apprenticeshipIdExpected})");
             }
 
@@ -139,12 +100,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenApprenticeshipRecordIsCreatedInLearningDb()
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var retryPolicy = DbRetryPolicy("ApprenticeshipRecord", "Learning db");
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
                 var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
-                var result = await learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln);
+                var result = await retryPolicy.ExecuteAsync(() => learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln));
                 Assert.IsNotEmpty(result, $"Apprenticeship record not found in Learning Db for ApprenticeshipId: {apprenticeshipId}");
                 apprenticeship.ApprenticeDetails.LearningIdKey = result;
                 await Task.Delay(100);
@@ -153,6 +115,82 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
         }
 
+        [Given("A live apprentice record exists for an apprentice on Foundation level course")]
+        public async Task GivenALiveApprenticeRecordExistsForAnApprenticeOnFoundationLevelCourse()
+        {
+            listOfApprenticeship = new List<Apprenticeship>();
+
+            var additionalWhereFilter = @"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
+                                            AND c.IsDeleted = 0
+                                            And c.Approvals = 3
+                                            AND c.ChangeOfPartyRequestId is null             
+                                            AND c.PledgeApplicationId is null
+                                            AND a.PaymentStatus = 1
+                                            AND a.HasHadDataLockSuccess = 0
+                                            AND a.PendingUpdateOriginator is null
+                                            AND a.CloneOf is null
+                                            AND a.ContinuationOfId is null
+                                            AND a.DeliveryModel = 0
+                                            AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+
+            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
+        }
+
+        [Given(@"a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date")]
+        public async Task GivenALiveApprenticeRecordExistsWithStartdateOfMonthsAndEndDateOfMonthsFromCurrentDate(int startDateFromNow, int endDateFromNow)
+        {
+            listOfApprenticeship = new List<Apprenticeship>();
+
+            var additionalWhereFilter = @$"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
+                                            AND c.IsDeleted = 0
+                                            And c.Approvals = 3
+                                            AND c.ChangeOfPartyRequestId is null             
+                                            AND c.PledgeApplicationId is null
+                                            AND a.PaymentStatus = 1
+                                            AND a.HasHadDataLockSuccess = 0
+                                            AND a.PendingUpdateOriginator is null
+                                            AND a.CloneOf is null
+                                            AND a.ContinuationOfId is null
+                                            AND a.DeliveryModel = 0
+                                            AND a.StartDate < DATEADD(month, {startDateFromNow}, GETDATE()) 
+                                            AND a.EndDate > DATEADD(month, {endDateFromNow}, GETDATE())
+                                            AND a.TrainingCode < 800";
+
+            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
+        }
+
+        internal async Task FindAvailableLearner()
+        {
+            listOfApprenticeship = new List<Apprenticeship>();
+            var providerConfig = context.GetProviderConfig<ProviderConfig>();
+            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(EmployerType.Levy, providerConfig);
+            apprenticeship = await learnerDataDbSqlHelper.GetEditableApprenticeDetails(apprenticeship);
+            listOfApprenticeship.Add(apprenticeship);
+            context.Set(listOfApprenticeship);
+        }
+
+        private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter, string ukprn = null)
+        {
+            var providerConfig = context.GetProviderConfig<ProviderConfig>();
+            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(employerType, providerConfig);
+            apprenticeship = await commitmentsDbSqlHelper.GetApprenticeDetailsFromCommitmentsDb(apprenticeship, additionalWhereFilter);
+            listOfApprenticeship.Add(apprenticeship);
+            context.Set(listOfApprenticeship);
+        }
+
+        private AsyncRetryPolicy<string> DbRetryPolicy(string value, string dbName)
+        {
+            return Policy
+                .HandleResult<string>(result => string.IsNullOrEmpty(result)) // Retry if result is null or empty  
+                .WaitAndRetryAsync(
+                    retryCount: 5,
+                    sleepDurationProvider: attempt => TimeSpan.FromSeconds(1),
+                    onRetry: (result, timeSpan, retryCount, context) =>
+                    {
+                        objectContext.SetDebugInformation(
+                            $"Retry {retryCount} - {value} not found in {dbName}. Waiting {timeSpan.TotalSeconds}s before next attempt.");
+                    });
+        }
 
     }
 }

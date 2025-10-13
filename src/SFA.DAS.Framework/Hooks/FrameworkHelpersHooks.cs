@@ -1,7 +1,4 @@
-﻿using SFA.DAS.FrameworkHelpers;
-using TechTalk.SpecFlow;
-
-namespace SFA.DAS.Framework.Hooks;
+﻿namespace SFA.DAS.Framework.Hooks;
 
 [Binding]
 public class FrameworkHelpersHooks

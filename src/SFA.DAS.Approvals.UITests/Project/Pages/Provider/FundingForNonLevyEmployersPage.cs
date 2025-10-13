@@ -10,18 +10,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
     internal class FundingForNonLevyEmployersPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
+        #region locators
+        private ILocator ReserveMoreFundingLink => page.GetByRole(AriaRole.Link, new() { Name = "Reserve more funding" });
+        private ILocator AddApprenticeLink => page.GetByRole(AriaRole.Link, new() { Name = "Add apprentice" }).First;
+        private ILocator DeleteLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).First;
+        private ILocator NextPageLink => page.GetByRole(AriaRole.Link, new() { Name = "Next" }).First;
+        #endregion
+
         public override async Task VerifyPage()
         {
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Funding for non-levy employers");
         }
 
-        internal async Task<ReserveFundingForNonLevyEmployersPage> ClickOnReserveMoreFundingLink()
-        {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Reserve more funding" }).ClickAsync();
-            return await VerifyPageAsync(() => new ReserveFundingForNonLevyEmployersPage(context));
-        }
+        internal async Task ClickOnReserveMoreFundingLink() => await ReserveMoreFundingLink.ClickAsync();
 
-        internal async Task<AddApprenticeDetails_EntryMothodPage> SelectReservationToAddApprentice(Apprenticeship apprenticeship )
+
+        internal async Task<SelectLearnerFromILRPage> SelectReservationToAddApprentice(Apprenticeship apprenticeship )
         {
             var rsrvStartDate = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
             var rsrvEndDate = apprenticeship.TrainingDetails.StartDate.AddMonths(2).ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
@@ -39,7 +43,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             if (await reservationLink.IsVisibleAsync())
             {
                 await reservationLink.First.ClickAsync();
-                return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));
+                return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
             }
 
             // 🔁 If not, loop through pagination
@@ -63,9 +67,40 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             }
 
 
-            return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));
+            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
+        internal async Task ClickOnAddApprenticeLink()
+        {
+            await SearchForAnyReservation();
+            await AddApprenticeLink.ClickAsync();
+        }
+
+        internal async Task ClickOnDeleteReservationLink()
+        {
+            await SearchForAnyReservation();
+            await DeleteLink.ClickAsync();
+        }
+
+        private async Task SearchForAnyReservation()
+        {
+            do
+            {
+                if (await DeleteLink.IsVisibleAsync())
+                    break;
+
+                if (await NextPageLink.IsVisibleAsync())
+                {
+                    await NextPageLink.ClickAsync();
+                }
+                else
+                {
+                    throw new Exception("No reservations found to use");
+                }
+            }
+            while (true);
+
+        }
 
     }
 }

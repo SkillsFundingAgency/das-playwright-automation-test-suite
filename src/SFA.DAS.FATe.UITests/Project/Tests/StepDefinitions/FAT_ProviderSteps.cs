@@ -31,17 +31,19 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 
             var page5 = await page4.YesStandardIsCorrectAndContinue();
 
-            var page6 = await page5.Add_ContactInformation();
+            var page6 = await page5.YesUseExistingContactDetails();
 
-            var page7 = await page6.ConfirmAtOneofYourTrainingLocations_AddStandard();
+            var page7 = await page6.Add_ContactInformation();
 
-            var page8 = await page7.AccessSeeANewTrainingVenue_AddStandard();
+            var page8 = await page7.ConfirmAtOneofYourTrainingLocations_AddStandard();
 
-            var page9 = await page8.ChooseTheVenueDeliveryAndContinue();
+            var page9 = await page8.AccessSeeANewTrainingVenue_AddStandard();
 
-            var page10 = await page9.Save_NewTrainingVenue_Continue(StandardName);
+            var page10 = await page9.ChooseTheVenueDeliveryAndContinue();
 
-            await page10.Save_NewStandard_Continue();
+            var page11 = await page10.Save_NewTrainingVenue_Continue(StandardName);
+
+            await page11.Save_NewStandard_Continue();
         }
 
         [When("the provider deletes the Craft Plasterer course from the standards list")]

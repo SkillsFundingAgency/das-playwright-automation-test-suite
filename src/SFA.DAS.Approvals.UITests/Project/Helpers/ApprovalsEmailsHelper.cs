@@ -1,6 +1,6 @@
 ﻿using Polly;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using SFA.DAS.MailosaurAPI.Service.Project.Helpers;
+using SFA.DAS.Framework.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +25,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
             var employerEmail = apprentice.EmployerDetails.Email;
             var apprenticeName = $"{apprentice.ApprenticeDetails.FirstName}";
             var apprenticeEmail = apprentice.ApprenticeDetails.Email;
-            var providerEmail = "das-automation@l38cxwya.mailosaur.net";
-            var cohortReference = apprentice.CohortReference;
+            var providerEmail = apprentice.ProviderDetails.Email;
+            var cohortReference = apprentice.Cohort.Reference;
             var mailosaurApiHelper = context.Get<MailosaurApiHelper>();
 
             string rcvrEmail = null;
@@ -59,7 +59,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
                 case ("Confirm apprenticeship details", "apprentice"):
                     rcvrEmail = apprenticeEmail;
                     subject = "You need to confirm your apprenticeship details";
-                    body = $"Hello {apprenticeName}, Congratulations on becoming an apprentice.";
+                    body = $"Congratulations on becoming an apprentice.";
                     break;
 
                 default:

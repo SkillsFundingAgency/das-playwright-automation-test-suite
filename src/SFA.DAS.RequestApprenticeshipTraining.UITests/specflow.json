@@ -9,7 +9,6 @@
     { "assembly": "SFA.DAS.Framework" },
     { "assembly": "SFA.DAS.ProviderLogin.Service" },
     { "assembly": "SFA.DAS.FATe.UITests" },
-    { "assembly": "SFA.DAS.MailosaurAPI.Service" },
     { "assembly": "SFA.DAS.Login.Service" },
     { "assembly": "SFA.DAS.EmployerPortal.UITests" }
 

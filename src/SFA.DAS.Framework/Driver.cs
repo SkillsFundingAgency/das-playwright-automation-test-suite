@@ -1,8 +1,4 @@
-﻿using Microsoft.Playwright;
-using SFA.DAS.FrameworkHelpers;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.Framework;
+﻿namespace SFA.DAS.Framework;
 
 public class Driver(IBrowserContext browserContext, IPage page, ObjectContext objectContext)
 {

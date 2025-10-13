@@ -162,6 +162,16 @@ public class FAAApplyUser : FAAPortalUser
 
 }
 
+public abstract class FAAPortalSecondUser : FAAPortalUser
+{
+
+}
+
+public class FAAApplySecondUser : FAAPortalUser
+{
+
+}
+
 #region ApprenticeAccount
 
 public class CocApprenticeUser : ApprenticeUser { }

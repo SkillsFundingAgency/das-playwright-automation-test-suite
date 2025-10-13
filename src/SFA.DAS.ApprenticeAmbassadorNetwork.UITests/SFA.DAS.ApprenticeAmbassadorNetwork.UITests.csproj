@@ -24,6 +24,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
+		<ProjectReference Include="..\SFA.DAS.ApprenticeLogin.Service\SFA.DAS.ApprenticeLogin.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.DfeAdmin.Service\SFA.DAS.DfeAdmin.Service.csproj" />
 	</ItemGroup>
 

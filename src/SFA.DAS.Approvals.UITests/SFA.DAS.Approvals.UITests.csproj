@@ -29,8 +29,8 @@
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.ProviderLogin.Service\SFA.DAS.ProviderLogin.Service.csproj" />
-		<ProjectReference Include="..\SFA.DAS.MailosaurAPI.Service\SFA.DAS.MailosaurAPI.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.API.Framework\SFA.DAS.API.Framework.csproj" />
+		<ProjectReference Include="..\SFA.DAS.ProviderPortal.UITests\SFA.DAS.ProviderPortal.UITests.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,6 +48,27 @@
 		<None Update="specflow.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Project\Features\01_PreApprovals\06_FlexiJobApprenticeshipAgency\" />
+	  <Folder Include="Project\Features\01_PreApprovals\05_FileUpload\" />
+	  <Folder Include="Project\Features\01_PreApprovals\09_ProviderPermissions\" />
+	  <Folder Include="Project\Features\02_PostApprovals\01_OverlappingTrainingDateRequest\" />
+	  <Folder Include="Project\Features\03_EmployerRoles\" />
+	  <Folder Include="Project\Features\01_PreApprovals\07_PortableFlexiJob\" />
+	  <Folder Include="Project\Features\04_ProviderRoles\AccountOwner\" />
+	  <Folder Include="Project\Features\04_ProviderRoles\ContributorWithApproval\" />
+    <Folder Include="Project\Features\04_ProviderRoles\Contributor\" />
+	  <Folder Include="Project\Features\04_ProviderRoles\Viewer\" />
+	  <Folder Include="Project\Features\05_LimitingStandards\" />
+	  <Folder Include="Project\Features\06_Navigation\" />
+	  <Folder Include="Project\Features\07_FlexiJobApprenticeshipAgency\" />
+	  <Folder Include="Project\Features\PublicSectorReporting\" />
+	  <Folder Include="Project\Features\01_PreApprovals\01_LevyFunds\a_NewEmployer\" />
+	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\a_NewEmployer\" />
+	  <Folder Include="Project\Features\01_PreApprovals\04_LTM\" />
+	  <Folder Include="Project\Features\01_PreApprovals\03_TransfersConnection\" />
 	</ItemGroup>
 
 </Project>

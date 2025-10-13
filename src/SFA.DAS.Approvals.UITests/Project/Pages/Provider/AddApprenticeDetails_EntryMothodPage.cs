@@ -12,7 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
 
         #region locators
-        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=Select apprentices from ILR"); 
+        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=/Select (learners|apprentices) from ILR/"); 
         private ILocator optionToUploadACsvFile => page.Locator("text=Upload a CSV file");
         private ILocator ContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         #endregion
@@ -35,25 +35,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new UsingFileUploadPage(context));
         }
 
-        internal async Task<SelectLearnerFromILRPage> SelectOptionToAddApprenticesFromILRList_AddAnotherApprenticeRoute()
-        {
-            await SelectOptionToAddApprenticeFromILRAndContinue();
-            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
-        }
-
-        internal async Task<SelectLearnerFromILRPage> SelectOptionToAddApprenticesFromILRList_NonLevyRoute()
-        {
-            await SelectOptionToAddApprenticeFromILRAndContinue();
-            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
-        }
-
         internal async Task<ProviderSelectAReservationPage> SelectOptionToAddApprenticesFromILRList_SelectReservationRoute()
         {
             await SelectOptionToAddApprenticeFromILRAndContinue();
             return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
         }
 
-        private async Task SelectOptionToAddApprenticeFromILRAndContinue()
+        internal async Task<YouNeedPermissionToDoThisPage> SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute()
+        {
+            await SelectOptionToAddApprenticeFromILRAndContinue();
+            return await VerifyPageAsync(() => new YouNeedPermissionToDoThisPage(context));
+        }
+
+        internal async Task SelectOptionToAddApprenticeFromILRAndContinue()
         {
             await optionToSelectApprenticesFromILR.CheckAsync();
             await ContinueButton.ClickAsync();

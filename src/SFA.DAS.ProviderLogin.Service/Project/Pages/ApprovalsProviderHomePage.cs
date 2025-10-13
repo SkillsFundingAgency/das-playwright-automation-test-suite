@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ProviderLogin.Service.Project.Pages;
+﻿using System.Text.RegularExpressions;
+
+namespace SFA.DAS.ProviderLogin.Service.Project.Pages;
 
 public partial class ProviderHomePage : InterimProviderBasePage
 {
@@ -149,10 +151,9 @@ public partial class ProviderHomePage : InterimProviderBasePage
         await page.GetByRole(AriaRole.Link, new() { Name = "View employer requests for" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderViewEmployerRequestsForTrainingPage(context));
-    }
+    }  
 
-  
-    private async Task AddNewApprentices() => await page.GetByRole(AriaRole.Link, new() { Name = "Add new apprentices" }).ClickAsync();
+    public async Task AddNewApprentices() => await page.GetByRole(AriaRole.Link, new() { Name = "Add new apprentices" }).ClickAsync();
 }
 
 public class ProviderYourFeebackPage(ScenarioContext context) : InterimProviderBasePage(context)
@@ -218,6 +219,17 @@ public class ProviderApprenticeRequestsPage(ScenarioContext context) : InterimPr
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
     }
+
+    public async Task SelectCohort(string cohortReference)
+    {
+        var linkId = $"#details_link_{cohortReference}";
+        await page.Locator(linkId).ClickAsync();        
+    }
+
+    public async Task OpenLastCohortFromTheList()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name= "Details" }).Last.ClickAsync();
+    }
 }
 
 public class ProviderFundingForNonLevyEmployersPage(ScenarioContext context) : InterimProviderBasePage(context)
@@ -280,7 +292,7 @@ public class ProviderAccessDeniedPage(ScenarioContext context) : InterimProvider
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You need a different service role to view this page");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(new Regex(@"You need a different service role to (view this page|perform this action)", RegexOptions.IgnoreCase));
     }
 
     public async Task<ProviderHomePage> GoBackToTheServiceHomePage()
@@ -393,5 +405,6 @@ public class ProviderNotificationSettingsPage(ScenarioContext context) : Interim
         await page.GetByRole(AriaRole.Link, new() { Name = "Cancel" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderHomePage(context));
-    }
+    } 
+
 }

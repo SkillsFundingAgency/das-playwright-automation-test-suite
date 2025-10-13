@@ -14,7 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         protected readonly ScenarioContext context;
         protected readonly FeatureContext featureContext;
         private readonly ApprovalsEmailsHelper approvalsEmailsHelper;
-        private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
+        private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;        
         private List<Apprenticeship> listOfApprenticeship;
 
         public CommonSteps(ScenarioContext context, FeatureContext featureContext)
@@ -22,7 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             this.context = context;
             this.featureContext = featureContext;
             approvalsEmailsHelper = new ApprovalsEmailsHelper(context);
-            commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();
+            commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();            
             listOfApprenticeship = new List<Apprenticeship>();
         }
 
@@ -31,7 +31,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task GivenPreviousTestHasBeenCompletedSuccessfully()
         {
             await Task.CompletedTask;
-
+            
             if (!featureContext.ContainsKey("ResultOfPreviousScenario"))
             {
                 throw new Exception("Result of previous scenario is missing. Please run the test at Feature level!");
@@ -39,7 +39,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             var scenarioAStatus = (ScenarioExecutionStatus)featureContext["ResultOfPreviousScenario"];
 
-            if (scenarioAStatus == ScenarioExecutionStatus.OK)
+            Assume.That(scenarioAStatus == ScenarioExecutionStatus.OK, ($"Cannot run this test as previous test in the same feature file failed with status: '{scenarioAStatus}'"));
             {
                 var previousScenarioContext = (ScenarioContext)featureContext["ScenarioContextofPreviousScenario"];
 
@@ -49,15 +49,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 {
                     listOfApprenticeship.Add(apprenticeship);
                 }
-                
+
                 context.Set(listOfApprenticeship);
             }
-            else
-            {
-                throw new Exception($"Cannot run this test as previous test in the same feature file failed with status: '{scenarioAStatus}'");
-            }           
-
-        }
+         }
 
         [Then(@"Verify the ""(.*)"" receive ""(.*)"" email")]
         public async Task ThenVerifyTheReceiveEmail(string recipient, string notificationType)
@@ -71,6 +66,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await approvalsEmailsHelper.VerifyEmailAsync(recipient, notificationType);
         }
 
+        
 
     }
 }

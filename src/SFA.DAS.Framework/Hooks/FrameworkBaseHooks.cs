@@ -1,8 +1,4 @@
-﻿using SFA.DAS.FrameworkHelpers;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
-
-namespace SFA.DAS.Framework.Hooks;
+﻿namespace SFA.DAS.Framework.Hooks;
 
 public abstract class FrameworkBaseHooks(ScenarioContext context)
 {

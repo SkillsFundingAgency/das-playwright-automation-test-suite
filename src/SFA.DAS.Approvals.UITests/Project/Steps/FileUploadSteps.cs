@@ -3,6 +3,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.FileUploadModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.Approvals.UITests.Project.Pages;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
@@ -49,7 +50,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
             var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourses());
-            var apprenticeDetails = new ApprenticeFactory(ageLimit + 1);            
+            var apprenticeDetails = new ApprenticeFactory(ageLimit + 1);
             ICsvFileFactory csvFileFactory = new CsvFileFactory();
 
             listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(EmployerType.Levy, 1, null, listOfApprenticeship, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
@@ -61,11 +62,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("Provider uploads the csv file")]
         public async Task WhenProviderUploadsTheCsvFile()
         {
-            var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
-            var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
-            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToUploadCsvFile();
-            var page3 = await page2.ClickContinueButton();
-            await page3.UploadFile(fileUploadHelper.CsvFileLocation());
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            var page = await StartBulkUploadJourney();
+            await page.UploadFile(fileUploadHelper.CsvFileLocation());
         }
 
         [Then("system does not allow to upload the file and displays an error message")]
@@ -74,7 +73,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
 
             var errorMessage = "The apprentice's date of birth must show that they are not older than 25 years old at the start of their training";
-            var rowNumber = 3;            
+            var rowNumber = 3;
             string errornousRow = listOfApprenticeship
                                         .Select(a =>
                                                         rowNumber + " " +
@@ -87,6 +86,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             await new UploadCsvFilePage(context).ValidateErrorMessage(errornousRow);
         }
+
+        [Then("the user can bulk upload apprentices")]
+        internal async Task ThenTheUserCanBulkUploadApprentices()
+        {
+            await new ApprenticeRequests_ProviderPage(context).ClickOnNavBarLinkAsync("Home");
+            var page = await StartBulkUploadJourney();
+            await page.ClickOnNavBarLinkAsync("Home");
+        }
+
+        private async Task<UploadCsvFilePage> StartBulkUploadJourney()
+        {            
+            var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
+            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToUploadCsvFile();
+            return await page2.ClickContinueButton();
+        }
+
 
     }
 }

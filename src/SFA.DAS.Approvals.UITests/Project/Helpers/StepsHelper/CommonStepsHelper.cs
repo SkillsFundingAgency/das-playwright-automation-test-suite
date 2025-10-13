@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,34 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             }
 
             throw new TimeoutException($"Status did not update to '{expectedStatus}' within {maxWaitTime.TotalMinutes} minutes.");
+        }
+
+        internal async Task<bool> VerifyText(ILocator locator, string expected)
+        {
+            var actual = (await locator.TextContentAsync()).Trim();
+
+            if(actual.Contains(expected.Trim(), StringComparison.OrdinalIgnoreCase)) { return true; }
+
+            throw new Exception(MessageHelper.GetExceptionMessage("Text", expected, actual));
+        }
+
+        public async Task SetCohortDetails(string cohortRef, string cohortReferenceForProvider, string cohortReferenceForEmployer)
+        {
+            await Task.Run(() =>
+            {
+                var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+
+                if (!string.IsNullOrWhiteSpace(cohortRef))
+                    listOfApprenticeship.ForEach(a => a.Cohort.Reference = cohortRef);
+
+                if (!string.IsNullOrWhiteSpace(cohortReferenceForProvider))
+                    listOfApprenticeship.ForEach(a => a.Cohort.Status_Provider = cohortReferenceForProvider);
+
+                if (!string.IsNullOrWhiteSpace(cohortReferenceForEmployer))
+                    listOfApprenticeship.ForEach(a => a.Cohort.Status_Employer = cohortReferenceForEmployer);
+
+                context.Set(listOfApprenticeship);
+            });
         }
     }
 }

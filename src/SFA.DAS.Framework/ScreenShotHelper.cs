@@ -1,11 +1,4 @@
-﻿using Microsoft.Playwright;
-using NUnit.Framework;
-using SFA.DAS.ConfigurationBuilder;
-using SFA.DAS.FrameworkHelpers;
-using System;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.Framework;
+﻿namespace SFA.DAS.Framework;
 
 public class ScreenShotHelper(IPage page, ObjectContext objectContext)
 {
@@ -22,11 +15,11 @@ public class ScreenShotHelper(IPage page, ObjectContext objectContext)
 
     public async Task ScreenshotAsync(bool isTestComplete = false)
     {
-       string scenarioTitle = isTestComplete ? "TestCompletedOnThisPage" : $"{screenShotTitleGenerator.GetPrefix()}";
+        string scenarioTitle = isTestComplete ? "TestCompletedOnThisPage" : $"{screenShotTitleGenerator.GetPrefix()}";
 
-       (string screenshotPath, string imageName) = new WindowsFileHelper().GetFileDetails(objectContext.GetDirectory(), $"{DateTime.Now:HH-mm-ss}_{scenarioTitle}.png".RemoveSpace());
+        (string screenshotPath, string imageName) = new WindowsFileHelper().GetFileDetails(objectContext.GetDirectory(), $"{DateTime.Now:HH-mm-ss}_{scenarioTitle}.png".RemoveSpace());
 
-       await ScreenshotAsync(screenshotPath, imageName);
+        await ScreenshotAsync(screenshotPath, imageName);
     }
 
     private async Task ScreenshotAsync(string screenshotPath, string imageName)

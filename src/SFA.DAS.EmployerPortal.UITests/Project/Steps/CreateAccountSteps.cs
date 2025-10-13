@@ -3,6 +3,8 @@ using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
+using System;
+using System.Collections.Generic;
 using static SFA.DAS.EmployerPortal.UITests.Project.Helpers.EnumHelper;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Steps;
@@ -184,6 +186,41 @@ public class CreateAccountSteps
     [When(@"an Employer creates a Levy Account and Signs the Agreement")]
     public async Task EmployerCreatesALevyAccountAndSignsTheAgreement() =>
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType.Company);
+
+    [Given("The User creates \"(.*)\" Employer account and sign an agreement")]
+    public async Task<HomePage> GivenTheUserCreatesEmployerAccountAndSignAnAgreement(string employerType)
+    {
+        await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType.Company);
+
+        var loggedInAccountUser = ObjectContextExtension.GetLoginCredentials(_objectContext);
+        var userCreds = await Login.Service.Project.ScenarioContextExtension.GetAccountLegalEntities(_context, [loggedInAccountUser.Username]);
+
+
+        if (employerType.ToLower() == "nonlevy")
+        {
+            var user = new NonLevyUser
+            {
+                IdOrUserRef = loggedInAccountUser.Username,
+                Username = loggedInAccountUser.Username,
+                UserCreds = userCreds.FirstOrDefault(),
+            };
+            _context.Set<NonLevyUser>(user);
+        }
+        else
+        {
+            var user = new LevyUser
+            {
+                IdOrUserRef = loggedInAccountUser.Username,
+                Username = loggedInAccountUser.Username,
+                UserCreds = userCreds.FirstOrDefault(),
+            };
+            _context.Set<LevyUser>(user);
+        }
+ 
+
+        return _homePage;
+    }
+
 
     [When(@"an Employer creates a Levy Account and not Signs the Agreement during registration")]
     public async Task WhenAnEmployerCreatesALevyAccountAndNotSignsTheAgreementDuringRegistration() =>

@@ -1,8 +1,4 @@
-﻿using SFA.DAS.FrameworkHelpers;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
-
-namespace SFA.DAS.Framework;
+﻿namespace SFA.DAS.Framework;
 
 [Binding]
 public class AfterStepHooks(ScenarioContext context)

@@ -1,8 +1,4 @@
-﻿using Microsoft.Playwright;
-using System;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.Framework;
+﻿namespace SFA.DAS.Framework;
 
 public class InitializeDriver
 {
