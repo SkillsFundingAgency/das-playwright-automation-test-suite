@@ -14,6 +14,4 @@ public class Hooks(ScenarioContext context) : FrameworkBaseHooks(context)
 
     [BeforeScenario(Order = 22)]
     public async Task Navigate() => await Navigate(UrlConfig.QFAST_BaseUrl);
-
-    
 }
