@@ -866,7 +866,7 @@ public class ContactDetailsSavedPage(ScenarioContext context) : ManagingStandard
 
     public async Task VerifyUpdatedContactDetails(string? expectedEmail = null, string? expectedPhone = null)
     {
-        var confirmationText = page.Locator("p.govuk-body");
+        var confirmationText = page.GetByText("You have updated your contact details", new() { Exact = false });
 
         if (!string.IsNullOrEmpty(expectedEmail))
         {
