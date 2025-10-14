@@ -108,6 +108,7 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 
         return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }
+
     public async Task<ManageTheStandardsYouDeliverPage> VerifyOrangeMoreDetailsNeededTagForStandardAsync(string standardName, bool shouldExist = true)
     {
         var locator = page.Locator($@"
@@ -335,6 +336,21 @@ public class ManageAStandard_TeacherPage(ScenarioContext context, string standar
 
         return await VerifyPageAsync(() => new YourContactInformationForThisStandardPage(context));
 
+    }
+    public async Task VerifyUpdatedContactDetailsVisibleInStandard(string? expectedEmail = null, string? expectedPhone = null)
+    {
+        var emailCell = page.Locator("table.govuk-table tr:has-text('Email address') td");
+        var phoneCell = page.Locator("table.govuk-table tr:has-text('Telephone number') td");
+
+        if (!string.IsNullOrEmpty(expectedEmail))
+        {
+            await Assertions.Expect(emailCell).ToContainTextAsync(expectedEmail);
+        }
+
+        if (!string.IsNullOrEmpty(expectedPhone))
+        {
+            await Assertions.Expect(phoneCell).ToContainTextAsync(expectedPhone);
+        }
     }
 }
 
@@ -741,11 +757,25 @@ public class SaveContactDetailsPage(ScenarioContext context) : ManagingStandards
 
         return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
     }
+    public async Task<UpdateStandardsWithNewContactDetailsPage> ChangeEmailAndPhonenumberContactDetails_Latest()
+    {
+        var email = page.Locator("#EmailAddress");
+        await email.ClearAsync();
+        await email.FillAsync(managingStandardsDataHelpers.EmailAddress);
+
+        var phone = page.Locator("#PhoneNumber");
+        await phone.ClearAsync();
+        await phone.FillAsync(managingStandardsDataHelpers.NewlyUpdatedContactNumber);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
+    }
     public async Task<UpdateStandardsWithNewContactDetailsPage> ChangePhonenumberOnly()
     {
         var phone = page.Locator("#PhoneNumber");
         await phone.ClearAsync();
-        await phone.FillAsync(managingStandardsDataHelpers.ContactNumber);
+        await phone.FillAsync(managingStandardsDataHelpers.UpdatedContactNumber);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
@@ -832,5 +862,20 @@ public class ContactDetailsSavedPage(ScenarioContext context) : ManagingStandard
         await page.GetByRole(AriaRole.Link, new() { Name = "Manage your standards" }).ClickAsync();
 
         return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
+    }
+
+    public async Task VerifyUpdatedContactDetails(string? expectedEmail = null, string? expectedPhone = null)
+    {
+        var confirmationText = page.Locator("p.govuk-body");
+
+        if (!string.IsNullOrEmpty(expectedEmail))
+        {
+            await Assertions.Expect(confirmationText).ToContainTextAsync(expectedEmail);
+        }
+
+        if (!string.IsNullOrEmpty(expectedPhone))
+        {
+            await Assertions.Expect(confirmationText).ToContainTextAsync(expectedPhone);
+        }
     }
 }
