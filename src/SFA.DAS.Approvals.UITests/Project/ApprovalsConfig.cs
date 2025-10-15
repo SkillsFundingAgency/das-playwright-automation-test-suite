@@ -8,6 +8,10 @@
     public class OuterApiAuthTokenConfig
     {
         public string Apim_SubscriptionKey { get; set; }
+    }
 
+    public class AzureServiceBusConfig
+    {
+        public string SharedServiceBusFqdn { get; set; }
     }
 }
