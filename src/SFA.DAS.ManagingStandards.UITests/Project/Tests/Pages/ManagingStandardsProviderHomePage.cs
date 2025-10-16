@@ -741,6 +741,26 @@ public class SaveContactDetailsPage(ScenarioContext context) : ManagingStandards
 
         return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
     }
+    public async Task<UpdateStandardsWithNewContactDetailsPage> ChangePhonenumberOnly()
+    {
+        var phone = page.Locator("#PhoneNumber");
+        await phone.ClearAsync();
+        await phone.FillAsync(managingStandardsDataHelpers.ContactNumber);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
+    }
+    public async Task<UpdateStandardsWithNewContactDetailsPage> ChangeEmailOnly()
+    {
+        var email = page.Locator("#EmailAddress");
+        await email.ClearAsync();
+        await email.FillAsync(managingStandardsDataHelpers.NewlyUpdatedEmailAddress);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
+    }
 }
 
 public class UpdateStandardsWithNewContactDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
@@ -758,6 +778,31 @@ public class UpdateStandardsWithNewContactDetailsPage(ScenarioContext context) :
 
         return await VerifyPageAsync(() => new CheckDetailsPage(context));
     }
+    public async Task<UpdateContactDetailsStandardPage> YesUpdateExistingStandards()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I want to choose which standards to update with these details" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new UpdateContactDetailsStandardPage(context));
+    }
+}
+
+public class UpdateContactDetailsStandardPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select the standards you want these contact details to apply to");
+    }
+
+    public async Task<CheckDetailsPage> YesUpdateAllStandardsContactDetails()
+    {
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Select all" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new CheckDetailsPage(context));
+    }
 }
 
 public class CheckDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
@@ -767,7 +812,7 @@ public class CheckDetailsPage(ScenarioContext context) : ManagingStandardsBasePa
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Check details");
     }
 
-    public async Task<ContactDetailsSavedPage> ConfirmUpdateBothEmailAndPhonenumberContactDetailsAndContinue()
+    public async Task<ContactDetailsSavedPage> ConfirmUpdateContactDetailsAndContinue()
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
