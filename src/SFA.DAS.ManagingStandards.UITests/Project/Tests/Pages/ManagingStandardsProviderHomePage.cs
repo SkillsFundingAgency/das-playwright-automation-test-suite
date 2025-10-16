@@ -586,7 +586,7 @@ public class TrainingVenuesPage(ScenarioContext context) : ManagingStandardsBase
 
     public async Task<ManageAStandard_TeacherPage> NavigateBackToStandardPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
