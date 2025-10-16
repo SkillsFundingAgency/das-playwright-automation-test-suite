@@ -1,7 +1,7 @@
-﻿using SFA.DAS.DfeAdmin.Service.Project.Helpers;
-using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
-using SFA.DAS.Login.Service.Project;
+﻿using SFA.DAS.Login.Service.Project;
+
 namespace SFA.DAS.QFAST.UITests.Project;
+
 [Binding]
 public class QfastConfigurationSetup(ScenarioContext context)
 {
@@ -13,7 +13,6 @@ public class QfastConfigurationSetup(ScenarioContext context)
         context.SetNonEasLoginUser(new List<NonEasAccountUser>
         {
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new QfastDfeAdminUser()),
-            
         });
 
         await Task.CompletedTask;
