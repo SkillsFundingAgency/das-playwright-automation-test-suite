@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Azure;
+using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign;
+using SFA.DAS.QFAST.UITests.Project.Tests.Pages;
+
+
 
 namespace SFA.DAS.QFAST.UITests.Project.Helpers
 {
-    public class QfastHelpers(ScenarioContext context){
-        public async Task NavigateToQFASTPortal()
+    public class QfastHelpers(ScenarioContext context)
+    {
+        protected readonly ScenarioContext context = context;
+    
+        public async Task<QfastHomePage> GoToQfastAdminHomePage()
         {
-            var driver = context.Get<Driver>();
+            await new DfeAdminLoginStepsHelper(context).LoginToQfastAsAdmin();
 
-            var url = UrlConfig.QFAST_BaseUrl;
-
-            context.Get<ObjectContext>().SetDebugInformation(url);
-
-            await driver.Page.GotoAsync(url);
+            return await VerifyPageHelper.VerifyPageAsync(() => new QfastHomePage(context));
         }
-
     }
 }
+    
