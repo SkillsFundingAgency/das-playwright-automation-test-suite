@@ -1,6 +1,6 @@
-﻿using NServiceBus;
+﻿using Azure.Identity;
+using NServiceBus;
 using SFA.DAS.NServiceBus.Configuration;
-using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using System;
 
@@ -8,7 +8,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
 {
     public class ServiceBusHelper : IAsyncDisposable
     {
-        private const string _endpointName = "sfa-das-approvals-ui-tests-queue";
         private IEndpointInstance _endpointInstance;
         public bool IsRunning { get; private set; }
 
@@ -16,11 +15,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
         {
             if (IsRunning) return;
 
-            var endpointConfiguration = new EndpointConfiguration(_endpointName)
-                .UseMessageConventions()
-                .UseNewtonsoftJsonSerializer();
-
-            endpointConfiguration.UseAzureServiceBusTransport(connectionString);
+            var endpointConfiguration = UseAzureServiceBusSendOnly(connectionString);
 
             _endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
             IsRunning = true;
@@ -36,5 +31,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
         public async ValueTask DisposeAsync() => await Stop();
 
         public async Task Publish(object message) => await _endpointInstance.Publish(message);
+
+        public static EndpointConfiguration UseAzureServiceBusSendOnly(
+            string connectionString)
+        {
+            var config = new EndpointConfiguration("SendOnly")
+                .UseMessageConventions()
+                .UseNewtonsoftJsonSerializer();
+
+            config.SendOnly();
+
+            var transport = config.UseTransport<AzureServiceBusTransport>();
+            transport.ConnectionString(connectionString);
+            transport.Transactions(TransportTransactionMode.None);
+
+            return config;
+        }
     }
 }

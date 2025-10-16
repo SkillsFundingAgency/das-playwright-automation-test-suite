@@ -12,6 +12,6 @@
 
     public class AzureServiceBusConfig
     {
-        public string SharedServiceBusFqdn { get; set; }
+        public string ServiceBusConnectionString { get; set; }
     }
 }

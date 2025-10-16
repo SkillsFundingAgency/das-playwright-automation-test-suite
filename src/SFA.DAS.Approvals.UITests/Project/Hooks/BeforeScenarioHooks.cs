@@ -56,7 +56,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
 
             var config = context.Get<AzureServiceBusConfig>();
             var serviceBusHelper = new ServiceBusHelper();
-            await serviceBusHelper.Start(config.SharedServiceBusFqdn);
+            await serviceBusHelper.Start(config.ServiceBusConnectionString);
 
             GlobalTestContext.ServiceBus = serviceBusHelper;
         }
