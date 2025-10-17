@@ -8,4 +8,5 @@ Scenario: MS_05_UpdateContactInfo
 	And the provider is able to update phone number only
 	And the provider is able to update email only
 	And the provider is able to update contact details to all the standards
+	And the updated contact details are visible in the standard information section
 	

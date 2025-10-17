@@ -24,7 +24,9 @@ public class ManagingStandardsDataHelpers
     public string Website { get; init; } = "www.company.co.uk";
     public string UpdatedWebsite { get; init; } = "www.123company.co.uk";
     public string ContactWebsite { get; init; } = "www.companycontact.co.uk";
-    public string ContactNumber { get; init; } = RandomDataGenerator.GenerateRandomNumber(12);
+    public string ContactNumber { get; init; } = "12345678910";
+    public string UpdatedContactNumber { get; init; } = "0999999399333";
+    public string NewlyUpdatedContactNumber { get; init; } = "98989843434334";
     public static StandardsTestData StandardsTestData => new() { LarsCode = "281", StandardName = "Podiatrist (level 6)", Venue = LocationName };
     public string UpdateProviderDescriptionText { get; init; } = RandomDataGenerator.GenerateRandomAlphanumericString(20);
    
