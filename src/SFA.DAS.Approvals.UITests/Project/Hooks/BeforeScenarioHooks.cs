@@ -1,12 +1,9 @@
 ﻿using SFA.DAS.API.Framework;
 using SFA.DAS.API.Framework.Configs;
 using SFA.DAS.Approvals.APITests.Project;
-using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.API;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
-using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
-using System;
 
 namespace SFA.DAS.Approvals.UITests.Project.Hooks
 {
@@ -54,7 +51,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
             if (GlobalTestContext.ServiceBus is { IsRunning: true })
                 return;
 
-            var config = context.Get<AzureServiceBusConfig>();
+            var config = context.Get<NServiceBusConfig>();
             var serviceBusHelper = new ServiceBusHelper();
             await serviceBusHelper.Start(config.ServiceBusConnectionString);
 

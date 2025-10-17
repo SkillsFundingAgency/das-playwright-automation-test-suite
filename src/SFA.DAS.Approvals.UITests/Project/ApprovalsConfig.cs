@@ -9,9 +9,4 @@
     {
         public string Apim_SubscriptionKey { get; set; }
     }
-
-    public class AzureServiceBusConfig
-    {
-        public string ServiceBusConnectionString { get; set; }
-    }
 }

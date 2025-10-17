@@ -21,7 +21,7 @@
                 _configSection.GetConfigSection<EmployerConnectedToPortableFlexiJobProvider>()
             ]);
 
-            context.Set(_configSection.GetConfigSection<AzureServiceBusConfig>());
+            context.Set(_configSection.GetConfigSection<NServiceBusConfig>());
         }
 
         [BeforeScenario(Order = 2)]

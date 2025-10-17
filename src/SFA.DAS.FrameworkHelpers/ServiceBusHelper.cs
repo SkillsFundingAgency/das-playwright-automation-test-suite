@@ -1,10 +1,9 @@
-﻿using Azure.Identity;
-using NServiceBus;
+﻿using NServiceBus;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
-using System;
+using System.Threading.Tasks;
 
-namespace SFA.DAS.Approvals.UITests.Project.Helpers
+namespace SFA.DAS.FrameworkHelpers
 {
     public class ServiceBusHelper : IAsyncDisposable
     {
