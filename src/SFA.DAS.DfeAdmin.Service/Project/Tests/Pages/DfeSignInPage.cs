@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
 using SFA.DAS.Framework.Helpers;
-using SFA.DAS.Login.Service.Project.Helpers;
 using System.Threading;
 
 namespace SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
@@ -34,7 +33,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
     //public static string EnterPasswordPageTitle => "Enter your password";
 
-    private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+    static readonly SemaphoreSlim _semaphore = new(1, 1);
 
     static readonly List<string> usedCodes = [];
 
@@ -63,15 +62,15 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         if (EnvironmentConfig.IsPPEnvironment)// && await new CheckEnterPasswordMFAOrStandardPage(context).IsEnterPasswordMFADisplayed())
         {
-            await _semaphore.WaitAsync();
-
             try
             {
+                await _semaphore.WaitAsync();
+
                 await SubmitMFAPassword(username, password);
 
-                var dateTime = DateTime.Now.AddSeconds(-30);
-
                 await SubmitMFAIdentity();
+
+                var dateTime = DateTime.Now.AddSeconds(-5);
 
                 await SubmitMFACode(username, dateTime);
 
@@ -80,6 +79,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
             catch (Exception)
             {
                 objectContext.SetDebugInformation("Exception thrown in DFE MFA sign");
+
                 throw;
             }
             finally
@@ -145,7 +145,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
             await EnterMFACode(notusedcodes);
 
-            await Assertions.Expect(page.Locator("#oneTimeCodeTitle")).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 10000});
+            await Assertions.Expect(page.Locator("#oneTimeCodeTitle")).ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = 10000 });
         });
     }
 
