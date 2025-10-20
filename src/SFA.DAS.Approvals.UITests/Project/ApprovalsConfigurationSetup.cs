@@ -1,4 +1,11 @@
-﻿namespace SFA.DAS.Approvals.UITests.Project
+﻿using SFA.DAS.API.Framework.Configs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SFA.DAS.Approvals.UITests.Project
 {
     [Binding]
     public class ApprovalsConfigurationSetup(ScenarioContext context)
@@ -8,20 +15,18 @@
         [BeforeScenario(Order = 20)]
         public async Task SetUpApprovalsConfiguration()
         {
-            //if (NoNeedToSetUpConfiguration()) return;
+        //if (NoNeedToSetUpConfiguration()) return;
 
-            context.SetApprovalsConfig(_configSection.GetConfigSection<ApprovalsConfig>());
+        context.SetApprovalsConfig(_configSection.GetConfigSection<ApprovalsConfig>());
 
-            await context.SetEasLoginUser(
-            [
-                _configSection.GetConfigSection<ProviderPermissionLevyUser>(),
-                _configSection.GetConfigSection<EmployerWithMultipleAccountsUser>(),
-                _configSection.GetConfigSection<FlexiJobUser>(),
-                _configSection.GetConfigSection<NonLevyUserAtMaxReservationLimit>(),
-                _configSection.GetConfigSection<EmployerConnectedToPortableFlexiJobProvider>()
-            ]);
-
-            context.Set(_configSection.GetConfigSection<NServiceBusConfig>());
+        await context.SetEasLoginUser(
+        [
+            _configSection.GetConfigSection<ProviderPermissionLevyUser>(),
+            _configSection.GetConfigSection<EmployerWithMultipleAccountsUser>(),
+            _configSection.GetConfigSection<FlexiJobUser>(),
+            _configSection.GetConfigSection<NonLevyUserAtMaxReservationLimit>(),
+            _configSection.GetConfigSection<EmployerConnectedToPortableFlexiJobProvider>()
+        ]);
         }
 
         [BeforeScenario(Order = 2)]
