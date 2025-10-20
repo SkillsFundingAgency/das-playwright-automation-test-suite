@@ -20,7 +20,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         private ILocator doNotApproveRadioOption => page.Locator("label:has-text('No, request changes from training provider')");
         private ILocator messageToEmployerTextBox => page.Locator(".govuk-textarea").First;
         private ILocator SubmitButton => page.Locator("button:has-text('Submit')");
-       // private ILocator saveAndSubmitButton => page.Locator("button:has-text('Save and submit')");
         private ILocator editLink => page.Locator(".edit-apprentice");
         private ILocator editLink2 => page.Locator("table tr").Nth(1).Locator(".edit-apprentice");
         #endregion
