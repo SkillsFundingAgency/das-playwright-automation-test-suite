@@ -185,7 +185,7 @@ public class SelectAStandardPage(ScenarioContext context) : ManagingStandardsBas
 
     public async Task<AddAstandardPage> SelectAStandardAndContinue(string standardName)
     {
-        await page.GetByRole(AriaRole.Combobox, new() { Name = "To add a standard, start" }).FillAsync(standardName);
+        await page.Locator("#SelectedLarsCode").FillAsync(standardName);
 
         await page.GetByRole(AriaRole.Option, new() { Name = standardName }).ClickAsync();
 
