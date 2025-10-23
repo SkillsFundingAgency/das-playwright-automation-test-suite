@@ -8,7 +8,7 @@ public abstract class SignInBasePage(ScenarioContext context) : BasePage(context
 
         await page.GetByLabel("Password", new() { Exact = true }).FillAsync(password);
 
-        objectContext.SetDebugInformation($"Entered {password}");
+        objectContext.SetDebugInformation($"Entered password - '{password}'");
     }
 
     protected virtual async Task ClickSignInButton() => await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();

@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
 using SFA.DAS.Framework.Helpers;
+using System;
 using System.Threading;
 
 namespace SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
@@ -110,7 +111,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Next" }).ClickAsync();
 
-        objectContext.SetDebugInformation($"Entered username - {username}");
+        objectContext.SetDebugInformation($"Entered username - '{username}'");
     }
 
 
@@ -130,6 +131,8 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
         await Assertions.Expect(page.Locator("#credentialPickerTitle")).ToContainTextAsync("Verify your identity", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
 
         await page.GetByTestId("Email").ClickAsync();
+
+        objectContext.SetDebugInformation($"Clicked verify your identity email link");
     }
 
     private async Task SubmitMFACode(string username, DateTime dateTime)
