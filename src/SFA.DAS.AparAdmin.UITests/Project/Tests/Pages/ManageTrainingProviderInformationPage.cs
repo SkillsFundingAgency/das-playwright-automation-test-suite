@@ -1,10 +1,12 @@
-﻿namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
+﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.AddJourney;
+
+namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 
 public class ManageTrainingProviderInformationPage(ScenarioContext context) : BasePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Staff dashboard");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training provider information");
     }
 
     public async Task<SearchforATrainingProviderPage> ClickSearchForATrainingProvider()
@@ -22,10 +24,10 @@ public class ManageTrainingProviderInformationPage(ScenarioContext context) : Ba
         return await VerifyPageAsync(() => new UKPRNAllowListPage(context));
     }
 
-    public async Task<SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.AddJourney.UKPRNPage> ClickAddNewTrainingProvider()
+    public async Task<UKPRNPage> ClickAddNewTrainingProvider()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Add a new training provider" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.AddJourney.UKPRNPage(context));
+        return await VerifyPageAsync(() => new UKPRNPage(context));
     }
 }
