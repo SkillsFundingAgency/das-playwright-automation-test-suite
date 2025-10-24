@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Steps
 {
-    internal class FindAndUpdateExistingProvider
+    internal class FindAndUpdateExistingProviderSteps
     {
     }
 }

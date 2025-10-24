@@ -17,4 +17,9 @@ public class SearchforATrainingProviderPage : BasePage
 
         return await VerifyPageAsync(() => new SearchforATrainingProviderPage(context));
     }
+    public async Task<ManageTrainingProviderInformationPage> GoBackToManageTrainingProvider()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back" }).ClickAsync();
+        return await VerifyPageAsync(() => new ManageTrainingProviderInformationPage(context));
+    }
 }

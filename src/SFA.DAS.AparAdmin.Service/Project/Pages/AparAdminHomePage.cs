@@ -13,7 +13,6 @@ public class AparAdminHomePage(ScenarioContext context) : BasePage(context)
     {
         await page.GetByRole(AriaRole.Link, new() { Name = " Download training provider data}" }).ClickAsync();
     }
-
     public async Task ClickDownloadapplicationData()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = " Download application data}" }).ClickAsync();
