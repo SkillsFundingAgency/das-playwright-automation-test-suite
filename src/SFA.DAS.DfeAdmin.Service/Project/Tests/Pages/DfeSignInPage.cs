@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
 using SFA.DAS.Framework.Helpers;
+using System;
 using System.Threading;
 
 namespace SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
@@ -52,25 +53,19 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
     protected async Task SubmitValidLoginDetails(string username, string password)
     {
-        await VerifyPage();
-
-        await page.GetByLabel("Email address").FillAsync(username);
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Next" }).ClickAsync();
-
-        objectContext.SetDebugInformation($"Entered username - {username}");
-
         if (EnvironmentConfig.IsPPEnvironment)// && await new CheckEnterPasswordMFAOrStandardPage(context).IsEnterPasswordMFADisplayed())
         {
             try
             {
                 await _semaphore.WaitAsync();
 
-                await SubmitMFAPassword(username, password);
+                await SubmitUsername(username);
+
+                await SubmitMFAPassword(password);
 
                 await SubmitMFAIdentity();
 
-                var dateTime = DateTime.Now.AddSeconds(-5);
+                var dateTime = DateTime.Now.AddSeconds(-6);
 
                 await SubmitMFACode(username, dateTime);
 
@@ -89,7 +84,10 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
         }
         else
         {
-            await EnterPassword(username, password);
+
+            await SubmitUsername(username);
+
+            await EnterPassword(password);
 
             try
             {
@@ -105,7 +103,19 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
         await Assertions.Expect(page.Locator("body")).Not.ToContainTextAsync(DfePageTitle, new() { Timeout = 300000 });
     }
 
-    private async Task SubmitMFAPassword(string username, string password)
+    private async Task SubmitUsername(string username)
+    {
+        await VerifyPage();
+
+        await page.GetByLabel("Email address").FillAsync(username);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Next" }).ClickAsync();
+
+        objectContext.SetDebugInformation($"Entered username - '{username}'");
+    }
+
+
+    private async Task SubmitMFAPassword(string password)
     {
         await Assertions.Expect(page.GetByRole(AriaRole.Heading)).ToContainTextAsync("Enter password", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
 
@@ -113,7 +123,7 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Sign in" }).ClickAsync();
 
-        objectContext.SetDebugInformation($"Entered {username}, {password}");
+        objectContext.SetDebugInformation($"Entered {password}");
     }
 
     private async Task SubmitMFAIdentity()
@@ -121,6 +131,8 @@ public class DfeSignInPage(ScenarioContext context) : SignInBasePage(context)
         await Assertions.Expect(page.Locator("#credentialPickerTitle")).ToContainTextAsync("Verify your identity", new LocatorAssertionsToContainTextOptions { Timeout = 15000 });
 
         await page.GetByTestId("Email").ClickAsync();
+
+        objectContext.SetDebugInformation($"Clicked verify your identity email link");
     }
 
     private async Task SubmitMFACode(string username, DateTime dateTime)
