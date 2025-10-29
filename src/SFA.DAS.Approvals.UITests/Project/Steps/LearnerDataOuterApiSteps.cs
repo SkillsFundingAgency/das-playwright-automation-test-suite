@@ -65,7 +65,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             var listOflearnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
 
-            await learnerDataOuterApiHelper.PushNewLearnersDataToAS(listOflearnerData, academicYear);
+            //await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(listOflearnerData, academicYear);
+            await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(listOflearnerData, academicYear); 
         }
 
         [Given(@"Provider sends an apprentice request \(cohort\) to an employer")]
