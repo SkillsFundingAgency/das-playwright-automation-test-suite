@@ -13,6 +13,9 @@ public class QfastConfigurationSetup(ScenarioContext context)
         context.SetNonEasLoginUser(new List<NonEasAccountUser>
         {
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new QfastDfeAdminUser()),
+            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new QfastAOUser()),
+            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new QfastIFATEUser()),
+            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new QfastOFQUALUser()),
         });
 
         await Task.CompletedTask;
