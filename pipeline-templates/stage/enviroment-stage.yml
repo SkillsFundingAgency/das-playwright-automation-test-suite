@@ -71,12 +71,16 @@ stages:
       - ${{ if ne(parameters.PreProdSpecificVariableGroup, '') }}:
           - group: ${{ parameters.PreProdSpecificVariableGroup }}
     jobs:
-      - template: ../job/deploy.yml
-        parameters:
-          EnvironmentName: ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
-            'PP-AUTOMATION'
-          ${{ else }}:
-            'PP'
-          Environment: PP
-          ServiceConnection: SFA-DIG-PreProd-ARM
-          projectName: ${{ parameters.projectName }}
+      - ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+        - template: ../job/deploy.yml
+          parameters:
+            Environment: 'PP-AUTOMATION'
+            ServiceConnection: SFA-DIG-PreProd-ARM
+            projectName: ${{ parameters.projectName }}
+      
+      - ${{ else }}:
+        - template: ../job/deploy.yml
+          parameters:
+            Environment: 'PP'
+            ServiceConnection: SFA-DIG-PreProd-ARM
+            projectName: ${{ parameters.projectName }}
