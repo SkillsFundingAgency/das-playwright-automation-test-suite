@@ -1,11 +1,11 @@
 trigger: none
 pr: none
 schedules:
-- cron: '22 16 * * *'
+- cron: '0 3 * * 1-5'
   displayName: ScheduledRun
   branches:
     include:
-    - DASD-13528
+    - master
   always: true
 
 variables:
