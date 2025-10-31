@@ -73,6 +73,10 @@ stages:
     jobs:
       - template: ../job/deploy.yml
         parameters:
+          EnvironmentName: ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+            'PP-AUTOMATION'
+          ${{ else }}:
+            'PP'
           Environment: PP
           ServiceConnection: SFA-DIG-PreProd-ARM
           projectName: ${{ parameters.projectName }}
