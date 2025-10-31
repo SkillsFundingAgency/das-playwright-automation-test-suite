@@ -1,9 +1,9 @@
-﻿@approvals
+﻿#@approvals
 Feature: AP_E2E_EUA_03_EditingCohort
 
 It is to verify a cohort can be edited by re-submitting ILR file
 
-@regression
+#@regression
 @e2escenarios
 Scenario: AP_E2E_EUA_03_Editing a cohort via ILR
 	Given Provider sends an apprentice request (cohort) to an employer
