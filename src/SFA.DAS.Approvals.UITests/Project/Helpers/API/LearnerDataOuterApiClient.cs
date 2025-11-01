@@ -22,6 +22,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
             _restClient = _context.GetRestClient<Outer_ApprovalsAPIClient>();
         }
 
+        public async Task<RestResponse> PostNewLearners(string resource, string payload)
+        {
+            await _restClient.CreateRestRequest(Method.Put, resource, payload);
+            _restResponse = await SendRequestAsync(HttpStatusCode.Accepted);
+            return _restResponse;
+        }
+
         public async Task<RestResponse> GetLearners(string resource)
         {
             await _restClient.CreateRestRequest(Method.Get, resource);

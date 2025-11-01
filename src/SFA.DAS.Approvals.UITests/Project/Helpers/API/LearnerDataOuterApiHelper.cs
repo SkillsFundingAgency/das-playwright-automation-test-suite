@@ -21,7 +21,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
             learnerDataOuterApiClient = context.Get<LearnerDataOuterApiClient>();
         }
 
-        public async Task PushNewLearnersDataToAS(List<LearnerDataAPIDataModel> learnersData, int academicYear)
+        public async Task PushNewLearnersDataToAsViaNServiceBus(List<LearnerDataAPIDataModel> learnersData, int academicYear)
         {
             var serviceBusHelper = GlobalTestContext.ServiceBus;
 
@@ -52,6 +52,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
 
                 await serviceBusHelper.Publish(learnerDataEvent);
             }
+        }
+
+        public async Task PushNewLearnersDataToASViaAPI(List<LearnerDataAPIDataModel> learnersData, int academicYear)
+        {
+            var resource = $"/provider/{learnersData.First().ukprn}/academicyears/{academicYear}/learners";
+            var payload = JsonHelper.Serialize(learnersData).ToString();
+            await learnerDataOuterApiClient.PostNewLearners(resource, payload);
         }
 
         public async Task CheckApprenticeIsAvailableInApprovedLearnersList(Apprenticeship apprenticeship)
