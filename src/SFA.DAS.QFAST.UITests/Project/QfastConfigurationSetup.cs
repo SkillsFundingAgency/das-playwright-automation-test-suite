@@ -16,6 +16,9 @@ public class QfastConfigurationSetup(ScenarioContext context)
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new QfastAOUser()),
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new QfastIFATEUser()),
             SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new QfastOFQUALUser()),
+            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new QfastDataImporter()),
+            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new QfastReviewer()),
+            SetDfeAdminCredsHelper.SetDfeAdminCreds(dfeAdminUsers, new QfastFormEditor()),
         });
 
         await Task.CompletedTask;

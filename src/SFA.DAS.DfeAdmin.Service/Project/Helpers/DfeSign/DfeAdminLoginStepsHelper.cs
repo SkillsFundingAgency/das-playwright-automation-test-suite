@@ -30,6 +30,9 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context)
     public async Task LoginToQfastAsAOUser() => await SubmitValidLoginDetails(context.GetUser<QfastAOUser>());
     public async Task LoginToQfastAsIFATEUser() => await SubmitValidLoginDetails(context.GetUser<QfastIFATEUser>());
     public async Task LoginToQfastAsOFQUALUser() => await SubmitValidLoginDetails(context.GetUser<QfastOFQUALUser>());
+    public async Task LoginToQfastAsDataImporterUser() => await SubmitValidLoginDetails(context.GetUser<QfastDataImporter>());
+    public async Task LoginToQfastAsReviewerUser() => await SubmitValidLoginDetails(context.GetUser<QfastReviewer>());
+    public async Task LoginToQfastAsFormEditorUser() => await SubmitValidLoginDetails(context.GetUser<QfastFormEditor>());
 
     public async Task LoginToAsAdmin() => await SubmitValidLoginDetails(new ASAdminLandingPage(context), GetAsAdminUser());
 

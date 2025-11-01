@@ -31,4 +31,22 @@ public class QfastHelpers(ScenarioContext context)
 
         return await VerifyPageHelper.VerifyPageAsync(() => new OFQUAL_Page(context));
     }
+    public async Task<Admin_Page> GoToQfastDataImporterHomePage()
+    {
+        await new DfeAdminLoginStepsHelper(context).LoginToQfastAsDataImporterUser();
+
+        return await VerifyPageHelper.VerifyPageAsync(() => new Admin_Page(context));
+    }
+    public async Task<Admin_Page> GoToQfastReviewerHomePage()
+    {
+        await new DfeAdminLoginStepsHelper(context).LoginToQfastAsReviewerUser();
+
+        return await VerifyPageHelper.VerifyPageAsync(() => new Admin_Page(context));
+    }
+    public async Task<Admin_Page> GoToQfastFormEditorHomePage()
+    {
+        await new DfeAdminLoginStepsHelper(context).LoginToQfastAsFormEditorUser();
+
+        return await VerifyPageHelper.VerifyPageAsync(() => new Admin_Page(context));
+    }
 }
