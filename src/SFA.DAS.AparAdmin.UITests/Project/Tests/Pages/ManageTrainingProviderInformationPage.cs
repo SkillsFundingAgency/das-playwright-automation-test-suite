@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.AddJourney;
+using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 
@@ -12,22 +13,18 @@ public class ManageTrainingProviderInformationPage(ScenarioContext context) : Ba
     public async Task<SearchforATrainingProviderPage> ClickSearchForATrainingProvider()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Search for a training provider" }).ClickAsync();
-
-        // Fix typo: 'SearchforATrainingProvidersPag' -> 'SearchforATrainingProvidersPage'
         return await VerifyPageAsync(() => new SearchforATrainingProviderPage(context));
     }
 
     public async Task<UKPRNAllowListPage> ClickAddUkprnToAllowList()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Add a UKPRN to the allow list" }).ClickAsync();
-
         return await VerifyPageAsync(() => new UKPRNAllowListPage(context));
     }
 
     public async Task<UKPRNPage> ClickAddNewTrainingProvider()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Add a new training provider" }).ClickAsync();
-
         return await VerifyPageAsync(() => new UKPRNPage(context));
     }
 }

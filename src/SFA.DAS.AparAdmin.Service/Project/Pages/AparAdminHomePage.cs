@@ -11,11 +11,11 @@ public class AparAdminHomePage(ScenarioContext context) : BasePage(context)
     }
     public async Task ClickDownloadProviderData()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = " Download training provider data}" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Download training provider data}" }).ClickAsync();
     }
     public async Task ClickDownloadapplicationData()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = " Download application data}" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Download application data}" }).ClickAsync();
     }
 }
    

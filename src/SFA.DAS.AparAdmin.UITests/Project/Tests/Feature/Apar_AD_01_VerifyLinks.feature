@@ -1,4 +1,4 @@
-﻿Feature: Apar_AD_01
+﻿Feature: Apar_AD_01_VerifyLinks
 
 @apar
 @oldaparpadmin

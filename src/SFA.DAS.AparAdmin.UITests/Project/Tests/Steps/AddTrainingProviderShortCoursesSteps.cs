@@ -1,26 +1,66 @@
 ﻿using SFA.DAS.AparAdmin.UITests.Project.Helpers;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
+using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate;
+using System;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Steps;
 
-[Binding]
-public class AddTrainingProviderShortCoursesSteps(ScenarioContext context)
+
+[Binding, Scope(Tag = "apar")]
+public class AddTrainingProviderShortCoursesSteps
 {
+    private readonly ScenarioContext _context;
 
-    [Then(@"the user verifies links available in Manage Training Provider page")]
-    public async Task ThenTheUserVerifiesLinksAvailableInManageTrainingProviderPage()
+    public AddTrainingProviderShortCoursesSteps(ScenarioContext context)
     {
-        var page = new AparAdminHomePage(context);
-        await page.ClickAddOrSearchForProvider();
+        _context = context;
+    }
 
-        var managePage = new ManageTrainingProviderInformationPage(context);
+    [Given(@"the user verifies links available in Manage Training Provider page")]
+    public async Task GivenTheUserVerifiesLinksAvailableInManageTrainingProviderPage()
+    {
+        var manageTrainingProviderPage = await OpenManageTrainingProviderPage();
+        var searchPage = await manageTrainingProviderPage.ClickSearchForATrainingProvider();
+        var returnedManagePage = await searchPage.GoBackToManageTrainingProvider();
+        //var page3 = await page2.ClickAddUkprnToAllowList();
+        //var page4 = await page3.GoBackToManageTrainingProvider();
+        //var page5 = await page3.ClickAddNewTrainingProvider();
+        //await page5.GoBackToManageTrainingProvider();
+    }
 
-        var page1 = await managePage.ClickSearchForATrainingProvider();
-        var page2 = await page1.GoBackToManageTrainingProvider();
-        var page3 = await page2.ClickAddUkprnToAllowList();
-        var page4 = await page3.GoBackToManageTrainingProvider();
-        var page5 = await page4.ClickAddNewTrainingProvider();
-        await page5.GoBackToManageTrainingProvider();
+    [Given("the user navigates to training providers page")]
+    public async Task GivenTheUserNavigatesToTrainingProvidersPage()
+    {
+        const string ukprn = "10056801";
+        const string providerSearchText = "METRO BANK PLC UKPRN: 10056801";
+
+        var manageTrainingProviderPage = await OpenManageTrainingProviderPage();
+        var searchPage = await manageTrainingProviderPage.ClickSearchForATrainingProvider();
+        var providerDetailsPage = await searchPage.EnterProviderDetailAndSearch(ukprn, providerSearchText);
+    }
+
+
+    [Given(@"the user updated the training provider route status to\s*""?(.*)""?")]
+    public async Task GivenTheUserUpdatedTheTrainingProviderRouteStatusTo(string status)
+    {
+        const string providerName = "METRO BANK PLC";
+
+        var providerDetailsPage = new ProviderDetailsPage(_context);
+        var statusChangePage = await providerDetailsPage.ClickChangeStatusOfProvider();
+        var successPage = await statusChangePage.ChangeOrganisationStatus(status);
+
+        var expectedStatus = (status ?? string.Empty).ToLowerInvariant();
+        await successPage.VerifyOrganisationStatus(providerName, expectedStatus);
+
+        await successPage.GoBackToProviderDetailsPage();
+    }
+
+    private async Task<ManageTrainingProviderInformationPage> OpenManageTrainingProviderPage()
+    {
+        var home = new AparAdminHomePage(_context);
+        await home.ClickAddOrSearchForProvider();
+        return await new ManageTrainingProviderInformationPage(_context)
+            .VerifyPageAsync(() => new ManageTrainingProviderInformationPage(_context));
     }
 }
 
