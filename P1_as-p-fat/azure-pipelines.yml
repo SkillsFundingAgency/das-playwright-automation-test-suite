@@ -16,13 +16,11 @@ variables:
   - group: "Release Automation Suite Variables"
   - group: "Release Automation Suite Variables (Db)"
   - group: "Provider Release Automation Suite Variables"
-  - group: "RELEASE P1_as-fat"
+  - group: "PREPROD Automation Suite Variables (Db)"
   - name: Deploy
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
   - name: projectName
     value: "SFA.DAS.FATe.UITests"
-  - name: PreProdSpecificVariableGroup
-    value: "PREPROD P1_as-fat"
 
 resources:
   repositories:
