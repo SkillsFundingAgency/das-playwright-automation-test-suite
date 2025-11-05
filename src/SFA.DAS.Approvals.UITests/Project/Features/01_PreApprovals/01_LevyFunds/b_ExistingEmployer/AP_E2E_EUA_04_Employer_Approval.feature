@@ -2,6 +2,8 @@
 @linkedScenarios
 Feature: AP_E2E_EUA_04_Employer_Approval
 
+This test focuses on verifying cohort statuses as they move b/w employer and provider
+Its different than previous tests as employer create cohort in it
 
 @regression
 @e2escenarios
