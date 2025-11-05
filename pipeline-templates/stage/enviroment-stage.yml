@@ -68,6 +68,7 @@ stages:
       - group: "PreProd Management Resources"
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
+      - group: "PREPROD Automation Suite Variables (Db)"
       - ${{ if ne(parameters.PreProdSpecificVariableGroup, '') }}:
           - group: ${{ parameters.PreProdSpecificVariableGroup }}
     jobs:
