@@ -2,7 +2,10 @@
 @linkedScenarios
 Feature: AP_E2E_EUA_01_ExistingUserAccount
 
-A short summary of the feature
+A brief end-to-end journey for Non-Levy employers
+It starts by pushing data into outer api or event in the N-Service bus, that mimicks SLD pushing ILR data into AS.
+Then it continues with provider creating a cohort from that data and sending it to employer for approval.
+Finally, employer approves that cohort and apprentice record is created in Learning Db.
 
 @regression
 @e2escenarios
