@@ -5,14 +5,16 @@
         public override async Task VerifyPage()
         {
             await Assertions.Expect(page.Locator("h1"))
-                .ToContainTextAsync("Organisation details");
+                .ToContainTextAsync("Details for");
         }
 
-        public async Task<StatusChangePage> GoToStatusChange()
+        public async Task<StatusChangePage> ClickChangeStatusOfProvider()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Change", Exact = false })
-                      .Locator("xpath=preceding::text()[contains(., 'Status')]")
-                      .ClickAsync();
+            var changeLink = page.Locator("//tr[th[normalize-space()='Status']]//a[normalize-space()='Change']");
+
+            await Assertions.Expect(changeLink).ToBeVisibleAsync();
+            await changeLink.ClickAsync();
+
             return await VerifyPageAsync(() => new StatusChangePage(context));
         }
 
