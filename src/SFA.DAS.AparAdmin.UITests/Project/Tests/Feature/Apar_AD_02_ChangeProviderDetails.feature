@@ -1,7 +1,8 @@
 ﻿Feature: Apar_AD_02_ChangeProviderDetails
 
 @apar
-@oldaparpadmin
+@rpadaparproviderdetails
+@oldroatpadmin
 @regression
 Scenario: Apar_AD_02_UpdateStatus
 	Given the provider logs into old apar admin portal

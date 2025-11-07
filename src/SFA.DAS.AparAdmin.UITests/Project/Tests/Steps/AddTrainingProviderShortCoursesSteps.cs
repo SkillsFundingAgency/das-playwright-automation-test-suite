@@ -47,12 +47,31 @@ public class AddTrainingProviderShortCoursesSteps
 
         var providerDetailsPage = new ProviderDetailsPage(_context);
         var statusChangePage = await providerDetailsPage.ClickChangeStatusOfProvider();
-        var successPage = await statusChangePage.ChangeOrganisationStatus(status);
+
+        var resultPage = await statusChangePage.ChangeOrganisationStatus(status);
 
         var expectedStatus = (status ?? string.Empty).ToLowerInvariant();
-        await successPage.VerifyOrganisationStatus(providerName, expectedStatus);
 
-        await successPage.GoBackToProviderDetailsPage();
+        if (expectedStatus == "removed")
+        {
+            var removedPage = resultPage as RemovedReasonsPage
+                ?? throw new Exception("Expected RemovedReasonsPage after selecting 'removed'");
+
+            var successPage = await removedPage.ConfirmRemovalReasonAndContinue("14");
+
+            await successPage.VerifyOrganisationStatus(providerName, expectedStatus);
+            var providerPage = await successPage.GoBackToProviderDetailsPage();
+            await providerPage.VerifyProviderStatus(expectedStatus);
+        }
+        else
+        {
+            var successPage = resultPage as SuccessPage
+                ?? throw new Exception("Expected SuccessPage after status change");
+
+            await successPage.VerifyOrganisationStatus(providerName, expectedStatus);
+            var providerPage = await successPage.GoBackToProviderDetailsPage();
+            await providerPage.VerifyProviderStatus(expectedStatus);
+        }
     }
 
     private async Task<ManageTrainingProviderInformationPage> OpenManageTrainingProviderPage()
