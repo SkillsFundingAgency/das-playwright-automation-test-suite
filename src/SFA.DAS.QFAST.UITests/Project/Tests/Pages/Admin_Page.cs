@@ -5,6 +5,11 @@ namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 public class Admin_Page(ScenarioContext context) : BasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What do you want to do?");
+    public async Task AcceptCookieAndAlert()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Accept additional cookies" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Hide cookie message" }).ClickAsync();
+    }
     public async Task ValidateOptionsAsync(IEnumerable<string> expectedOptions)
     {
         if (expectedOptions is null || !expectedOptions.Any())
@@ -20,6 +25,14 @@ public class Admin_Page(ScenarioContext context) : BasePage(context)
         }
         await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Continue" })).ToBeVisibleAsync();
     }
+
+    public async Task SelectOptions(string option)
+    {
+        var optionLocator = page.Locator($"label.govuk-radios__label:has-text(\"{option}\")");
+        await optionLocator.ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+    }
+
 }
 
 
