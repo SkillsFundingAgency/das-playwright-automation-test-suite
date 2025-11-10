@@ -233,7 +233,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await learnerDataOuterApiSteps.SLDPushDataIntoAS();
 
             var page = await new ProviderStepsHelper(context).ProviderCreateAndApproveACohortViaIlrRoute();
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.GetValue<List<Apprenticeship >>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
             await page.NavigateToBingoBox(ApprenticeRequests.WithEmployers);
             await page.VerifyCohortExistsAsync(cohortRef);
@@ -247,11 +247,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await learnerDataOuterApiSteps.SLDPushDataIntoAS();
 
             var page = await providerStepsHelper.ProviderCreateADraftCohortViaIlrRoute();
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
             await page.NavigateToBingoBox(ApprenticeRequests.Drafts);
             await page.VerifyCohortExistsAsync(cohortRef);
         }
+
+        [Then("provider cannot approve the cohort")]
+        public async Task ThenProviderCannotApproveTheCohort()
+        {
+            var page = new ApproveApprenticeDetailsPage(context);
+            await page.CanCohortBeApproved(false);
+        }
+
 
 
 

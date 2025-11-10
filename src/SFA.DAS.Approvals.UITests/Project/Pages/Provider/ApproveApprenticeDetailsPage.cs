@@ -17,8 +17,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         #region locators
         private ILocator banner => page.Locator("#main-content");
-        private ILocator informationBannerTitle => page.Locator("#govuk-notification-banner-title");
-        private ILocator informationBannerContent => page.Locator(".govuk-notification-banner__content");
         private ILocator employerName => page.Locator("dt:has-text('Employer') + dd");
         private ILocator cohortReference => page.Locator("dt:has-text('Cohort reference') + dd");
         private ILocator status => page.Locator("dt:has-text('Status') + dd");
@@ -132,10 +130,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new CohortApproved(context));
         }
 
-        internal async Task VerifyCohortCanBeApproved()
+        internal async Task CanCohortBeApproved(bool flag)
         {
-            await approveRadioOption.ClickAsync();
-            await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
+            if (flag)
+            {
+                await Assertions.Expect(approveRadioOption).ToBeEnabledAsync();
+                await approveRadioOption.ClickAsync();
+                await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
+            }
+            else
+            {
+                await Assertions.Expect(approveRadioOption).ToBeDisabledAsync();
+            }
+                
         }
 
         internal async Task<ConfirmApprenticeDeletionPage> ClickOnDeleteApprenticeLink(string name)
@@ -158,13 +165,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task VerifyBanner(string text) => await Assertions.Expect(banner).ToContainTextAsync(text);
 
-        internal async Task VerifyBanner(string title, string content)
-        {
-            //wait for banner to be visible
-            
-            await Assertions.Expect(informationBannerTitle).ToContainTextAsync(title);
-            await Assertions.Expect(informationBannerContent).ToContainTextAsync(content);
-        }
+        internal async Task VerifyBanner(string title, string content) => await Assertions.Expect(page.GetByLabel(title)).ToContainTextAsync(content);
 
         internal async Task SelectFirstRadioButtonAndSubmit(string optionalMsg=null)
         {

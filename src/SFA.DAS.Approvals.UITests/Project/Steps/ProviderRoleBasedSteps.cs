@@ -89,7 +89,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user can send a cohort to employer")]
         public async Task ThenTheUserCanSendACohortToEmployer()
         {
-            await new ApproveApprenticeDetailsPage(context).VerifyCohortCanBeApproved();
+            await new ApproveApprenticeDetailsPage(context).CanCohortBeApproved(true);
         }
 
         [Then("the user can delete an apprentice in a cohort")]
