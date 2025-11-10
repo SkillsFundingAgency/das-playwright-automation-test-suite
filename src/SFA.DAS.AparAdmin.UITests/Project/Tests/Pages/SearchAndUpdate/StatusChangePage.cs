@@ -9,7 +9,7 @@ public class StatusChangePage(ScenarioContext context) : BasePage(context)
             .ToContainTextAsync("Update the status for this provider");
     }
 
-    public async Task<SuccessPage> ChangeOrganisationStatus(string status)
+    public async Task<BasePage> ChangeOrganisationStatus(string status)
     {
         var normalized = (status ?? string.Empty).Trim().ToLowerInvariant();
 
@@ -27,6 +27,9 @@ public class StatusChangePage(ScenarioContext context) : BasePage(context)
 
         var continueButton = page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         await continueButton.ClickAsync();
+
+        if (value == "0")
+            return await VerifyPageAsync(() => new RemovedReasonsPage(context));
 
         return await VerifyPageAsync(() => new SuccessPage(context));
     }

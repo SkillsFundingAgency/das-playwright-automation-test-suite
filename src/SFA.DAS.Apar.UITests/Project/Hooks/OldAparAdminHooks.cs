@@ -16,4 +16,11 @@ public class OldAparAdminHooks(ScenarioContext context) : AparBaseHooks(context)
     {
         if (_tags.Any(x => x == "deletetrainingprovider")) await DeleteTrainingProvider();
     }
+
+    [BeforeScenario(Order = 34)]
+    public async Task ResetProviderDetails()
+    {
+        if (_tags.Any(x => x == "rpadaparproviderdetails"))
+            await ResetTrainingProvider();
+    }
 }
