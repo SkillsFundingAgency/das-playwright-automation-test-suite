@@ -1,5 +1,6 @@
 ﻿using Polly;
 using Polly.Retry;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
@@ -41,7 +42,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("a record is created in LearnerData Db for each learner")]
         public async Task ThenARecordIsCreatedInLearnerDataDbForEachLearner()
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var retryPolicy = DbRetryPolicy("LearnerDataId", "LearnerData db");
 
             foreach (var apprenticeship in listOfApprenticeship)
@@ -61,7 +62,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("Commitments Db is updated with respective LearnerData Id")]
         public async Task ThenCommitmentsDbIsUpdatedWithRespectiveLearnerDataId()
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
@@ -81,7 +82,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("LearnerData Db is updated with respective Apprenticeship Id")]
         public async Task ThenLearnerDataDbIsUpdatedWithRespectiveApprenticeshipId()
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var retryPolicy = DbRetryPolicy("ApprenticeshipId", "LearnerData db");
 
             foreach (var apprenticeship in listOfApprenticeship)
@@ -99,7 +100,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("Apprenticeship record is created in Learning Db")]
         public async Task ThenApprenticeshipRecordIsCreatedInLearningDb()
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var retryPolicy = DbRetryPolicy("ApprenticeshipRecord", "Learning db");
 
             foreach (var apprenticeship in listOfApprenticeship)
@@ -166,7 +167,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(EmployerType.Levy, providerConfig);
             apprenticeship = await learnerDataDbSqlHelper.GetEditableApprenticeDetails(apprenticeship);
             listOfApprenticeship.Add(apprenticeship);
-            context.Set(listOfApprenticeship);
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
         }
 
         private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter, string ukprn = null)
@@ -175,7 +176,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(employerType, providerConfig);
             apprenticeship = await commitmentsDbSqlHelper.GetApprenticeDetailsFromCommitmentsDb(apprenticeship, additionalWhereFilter);
             listOfApprenticeship.Add(apprenticeship);
-            context.Set(listOfApprenticeship);
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
         }
 
         private AsyncRetryPolicy<string> DbRetryPolicy(string value, string dbName)

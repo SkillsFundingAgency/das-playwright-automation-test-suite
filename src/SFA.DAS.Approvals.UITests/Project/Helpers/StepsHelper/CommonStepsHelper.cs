@@ -56,7 +56,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         {
             await Task.Run(() =>
             {
-                var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+                var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
                 if (!string.IsNullOrWhiteSpace(cohortRef))
                     listOfApprenticeship.ForEach(a => a.Cohort.Reference = cohortRef);
@@ -67,7 +67,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 if (!string.IsNullOrWhiteSpace(cohortReferenceForEmployer))
                     listOfApprenticeship.ForEach(a => a.Cohort.Status_Employer = cohortReferenceForEmployer);
 
-                context.Set(listOfApprenticeship);
+                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
             });
         }
     }

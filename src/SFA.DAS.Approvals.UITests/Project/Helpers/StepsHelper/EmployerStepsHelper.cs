@@ -28,7 +28,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             commonStepsHelper = new CommonStepsHelper(context);
             employerLoginHelper = new EmployerPortalLoginHelper(context);
             employerHomePageHelper = new EmployerHomePageStepsHelper(context);
-            listOfApprenticeship = _context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = _context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
         }
 
         internal async Task<HomePage> EmployerLogInToEmployerPortal(bool openInNewTab = true)
@@ -79,7 +79,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task CheckApprenticeOnManageYourApprenticesPage(bool login = false)
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             await (login ? EmployerLogInToEmployerPortal() : employerHomePageHelper.NavigateToEmployerApprenticeshipService(true));
 
@@ -118,7 +118,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task AddEmptyCohort()
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
 
             await EmployerLogInToEmployerPortal(false);
@@ -134,7 +134,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task ReadyForReviewCohort(string status)
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var cohort = listOfApprenticeship.FirstOrDefault().Cohort.Reference;
 
             await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
