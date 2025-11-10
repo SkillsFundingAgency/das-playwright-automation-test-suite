@@ -63,6 +63,7 @@ public abstract class AparBaseHooks : FrameworkBaseHooks
     protected async Task AllowListProviders(string ukprn = null) => await _roatpApplyAndQnASqlDbHelper.AllowListProviders(ukprn);
 
     protected async Task DeleteTrainingProvider() => await _adminClearDownDataHelpers.DeleteTrainingProvider(GetUkprn());
+    protected async Task ResetTrainingProvider() => await _adminClearDownDataHelpers.ResetProviderDetails(GetUkprn());
 
     protected async Task GetRoatpAppplyData() => await SetDetails(_roatpApplyUkprnDataHelpers.GetRoatpAppplyData(GetTag("rp")));
 
