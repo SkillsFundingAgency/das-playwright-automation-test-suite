@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.API;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.API;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
@@ -63,7 +64,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("return the cohort back to the Provider")]
         public async Task ThenReturnTheCohortBackToTheProvider()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
             await providerHomePageStepsHelper.GoToProviderHomePage(false);
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
@@ -77,7 +78,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("Provider can access live apprentice records under Manager Your Apprentices section")]
         internal async Task<ManageYourApprentices_ProviderPage> ThenProviderAccessLiveApprenticeRecords()
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             await providerHomePageStepsHelper.GoToProviderHomePage(true);
             await UserNavigatesToManageYourApprenticesPage();
@@ -112,7 +113,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the provider is stopped with an error message")]
         public async Task ThenTheProviderIsStoppedWithAnErrorMessage()
         {
-            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
+            var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var uln = apprentice.ApprenticeDetails.ULN.ToString();
             var name = apprentice.ApprenticeDetails.FullName;
             var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
@@ -131,7 +132,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("Provider tries to add a new apprentice using details from table below")]
         public async Task WhenProviderTriesToAddANewApprenticeUsingDetailsFromTableBelow(Table table)
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprentice = listOfApprenticeship.FirstOrDefault();
             var originalStartDate = apprentice.TrainingDetails.StartDate;
             var originalEndDate = apprentice.TrainingDetails.EndDate;
@@ -144,7 +145,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 apprentice.TrainingDetails.EndDate = originalEndDate.AddMonths(Convert.ToInt32(item.NewEndDate));
 
                 listOfApprenticeship[0] = apprentice;
-                context.Set(listOfApprenticeship);
+                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
 
                 // Push data on SLD end point  
                 await new LearnerDataOuterApiSteps(context).SLDPushDataIntoAS();
@@ -178,7 +179,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("the provider adds apprentices along with RPL details and sends to employer to review")]
         public async Task WhenTheProviderAddsApprenticesAlongWithRPLDetailsAndSendsToEmployerToReview()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
             var page = await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
@@ -190,7 +191,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the provider can add apprentice details and approve the cohort")]
         public async Task ThenTheProviderAddsApprenticeDetailsApprovesTheCohortAndSendsItToTheEmployerForApproval()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
             
             var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
             await providerStepsHelper.AddOtherApprenticesFromILRListWithRPL(page, 0);
@@ -201,7 +202,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("provider cannot add apprentices as they do not have permissions to create reservations")]
         public async Task ThenProviderCannotAddApprenticesAsTheyDoNotHavePermissionsToCreateReservations()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
             var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
             var page1 = await page.ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage();
             var page2 = await page1.SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
@@ -213,7 +214,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the provider approves the cohorts")]
         public async Task ThenTheProviderApprovesCohort()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
             var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
             await page.ProviderApprovesCohortAfterEmployerApproval();

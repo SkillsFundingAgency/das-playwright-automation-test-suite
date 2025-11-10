@@ -1,4 +1,5 @@
 ﻿using Polly;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.API;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
@@ -52,14 +53,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateApprenticeshipAsync(employerType, NoOfApprentices);
 
-            context.Set(listOfApprenticeship);
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
         }
 
 
         [Given("SLD push its data into AS")]
         public async Task SLDPushDataIntoAS()
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);      //context.GetValue<List<Apprenticeship>>();
 
             var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
 
@@ -67,6 +68,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(listOflearnerData, academicYear);
             //await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(listOflearnerData, academicYear); 
+        }
+
+        [Given(@"Provider sends an apprentice request \(cohort\) to an employer")]
+        public async Task GivenProviderSendsAnApprenticeRequestCohortToAnEmployer()
+        {
+            await ProviderSubmitsAnILRRecord(1, EmployerType.Levy.ToString());
+            await SLDPushDataIntoAS();
+
+            var page = await new ProviderStepsHelper(context).ProviderCreateAndApproveACohortViaIlrRoute();
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
+
+            await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers);
+            await page.VerifyCohortExistsAsync(cohortRef);
+
         }
 
         [Given("Provider adds an apprentice aged (.*) years using Foundation level standard")]
@@ -80,7 +95,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var apprenticeDetails = new ApprenticeFactory(age+1);
 
             var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(employerType, 1, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
-            context.Set(listOfApprenticeship);
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
             await SLDPushDataIntoAS();
         }
 
@@ -107,7 +122,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then(@"apprentice\/learner record is available on Learning endpoint for SLD \(so they do not resubmit it\)")]
         public async Task ThenApprenticeLearnerRecordIsAvailableOnLearningEndpointForSLDSoTheyDoNotResubmitIt()
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
             await learnerDataOuterApiHelper.CheckApprenticeIsAvailableInApprovedLearnersList(listOfApprenticeship.FirstOrDefault());
             
@@ -132,7 +147,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private async Task<ApproveApprenticeDetailsPage> UpdateDobAndReprocessData(int lowerAgeLimit, int upperAgeLimit)
         {
             var currentDate = DateTime.Now;
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             foreach (var apprentice in listOfApprenticeship)
             {

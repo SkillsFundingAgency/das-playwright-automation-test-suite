@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Microsoft.Playwright;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
@@ -79,7 +80,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user can edit email address of the apprentice before approval")]
         public async Task ThenTheUserCanEditEmailAddressOfTheApprenticeBeforeApprovalAsync()
         {
-            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
+            var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var page = await new ApproveApprenticeDetailsPage(context).ClickOnEditApprenticeLink(apprentice.ApprenticeDetails.FullName);
             var page1 = await page.UpdateEmail(apprentice.ApprenticeDetails.Email + ".uk");
             var page3 = await page1.SelectNoForRPL();

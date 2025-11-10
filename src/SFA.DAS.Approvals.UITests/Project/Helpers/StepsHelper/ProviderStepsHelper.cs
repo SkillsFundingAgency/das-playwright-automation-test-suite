@@ -35,15 +35,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<ConfirmEmployerPage> SelectEmployer(ChooseAnEmployerPage chooseAnEmployerPage)
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var firstApprentice = listOfApprenticeship.FirstOrDefault();
-            var agreementId = context.GetValue<List<Apprenticeship>>().FirstOrDefault().EmployerDetails.AgreementId;
+            var agreementId = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().EmployerDetails.AgreementId;
             return await chooseAnEmployerPage.ChooseAnEmployer(agreementId);
         }
 
         internal async Task<ApproveApprenticeDetailsPage> AddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
             await page.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
@@ -69,7 +69,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<CheckApprenticeDetailsPage> TryAddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
             await page.ClickAddButton();
@@ -78,7 +78,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRList(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             foreach (var apprenticeship in listOfApprenticeship.Skip(1))
             {
@@ -96,8 +96,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<ApprenticeRequests_ProviderPage> ProviderApproveCohort(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
-            
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 await approveApprenticeDetailsPage.VerifyCohort(apprenticeship);
@@ -116,7 +116,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task ProviderReserveFunds()
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
@@ -135,7 +135,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<ApproveApprenticeDetailsPage> ProviderAddsFirstApprenitceUsingReservation()
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await new ProviderHomePage(context).GoToManageYourFunding();
             var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
@@ -150,7 +150,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<ApproveApprenticeDetailsPage> ProviderAddsOtherApprenticesUsingReservation(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             if (listOfApprenticeship.Count > 1)
             {
@@ -262,16 +262,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<ApproveApprenticeDetailsPage> SelectanExistingEmployer(ChooseACohortPage chooseAnExistingEmployerPage)
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var firstApprentice = listOfApprenticeship.FirstOrDefault();
-            var cohortReference = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortReference = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
            return await chooseAnExistingEmployerPage.ChooseAnExistingEmployer(cohortReference);
         }
 
 
         internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRListWithRPL(ApproveApprenticeDetailsPage approveApprenticeDetailsPage, int NoOfApprenticesToSkip=1)
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             foreach (var apprenticeship in listOfApprenticeship.Skip(NoOfApprenticesToSkip))
             {
@@ -290,7 +290,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<ApproveApprenticeDetailsPage> AddFirstApprenticeFromILRListWithRPLDetails(SelectLearnerFromILRPage selectApprenticeFromILRPage)
         {
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
             await page.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
