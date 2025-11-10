@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 
 public class Admin_Page(ScenarioContext context) : BasePage(context)
 {
@@ -32,7 +30,4 @@ public class Admin_Page(ScenarioContext context) : BasePage(context)
         await optionLocator.ClickAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
     }
-
 }
-
-

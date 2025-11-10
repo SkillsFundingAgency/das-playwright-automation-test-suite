@@ -1,10 +1,9 @@
 ﻿
 
-namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages
+namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages;
+
+public class NewQualifications_Page(ScenarioContext context) : BasePage(context)
 {
-    public class NewQualifications_Page(ScenarioContext context) : BasePage(context)
-    {
-        public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "New Qualifications" })).ToBeVisibleAsync();
-    }
-    
+    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "New Qualifications" })).ToBeVisibleAsync();
 }
+
