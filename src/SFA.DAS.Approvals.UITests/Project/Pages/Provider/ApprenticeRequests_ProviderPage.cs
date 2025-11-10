@@ -15,7 +15,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
         }
 
-        internal async Task NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests apprenticeRequests)
+        internal async Task NavigateToBingoBox(ApprenticeRequests apprenticeRequests)
         {
             switch (apprenticeRequests)
             {

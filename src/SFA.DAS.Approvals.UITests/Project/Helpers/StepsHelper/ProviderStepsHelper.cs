@@ -109,6 +109,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         }
 
+        internal async Task<ApprenticeRequests_ProviderPage> ProviderSavesTheCohort(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        {
+            return await approveApprenticeDetailsPage.ClickOnSaveAndExitLink();
+        }
+
         internal async Task ProviderReserveFunds()
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
@@ -181,6 +186,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await AddOtherApprenticesFromILRList(page1);
 
             return await ProviderApproveCohort(page1);
+        }
+
+        internal async Task<ApprenticeRequests_ProviderPage> ProviderCreateADraftCohortViaIlrRoute()
+        {
+            var page = await GoToSelectApprenticeFromILRPage();
+            var page1 = await AddFirstApprenticeFromILRList(page);
+            await AddOtherApprenticesFromILRList(page1);
+
+            return await ProviderSavesTheCohort(page1);
         }
 
         internal async Task<SelectLearnerFromILRPage> GoToSelectApprenticeFromILRPage(bool login=true)

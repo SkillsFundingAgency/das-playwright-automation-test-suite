@@ -1,5 +1,4 @@
 ﻿@approvals
-@linkedScenarios
 Feature: AP_E2E_EUA_04_Employer_Approval
 
 This test focuses on verifying cohort statuses as they move b/w employer and provider

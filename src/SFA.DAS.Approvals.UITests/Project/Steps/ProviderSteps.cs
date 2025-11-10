@@ -69,7 +69,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
 
             var page = new ApprenticeRequests_ProviderPage(context);
-            await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.ReadyForReview);
+            await page.NavigateToBingoBox(ApprenticeRequests.ReadyForReview);
             await page.VerifyCohortExistsAsync(cohortRef);
 
         }
@@ -223,6 +223,33 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task UserNavigatesToManageYourApprenticesPage()
         {
             await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+        }
+
+        [Given(@"Provider sends an apprentice request \(cohort\) to an employer")]
+        public async Task GivenProviderSendsAnApprenticeRequestCohortToAnEmployer()
+        {
+            await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(1, EmployerType.Levy.ToString());
+            await learnerDataOuterApiSteps.SLDPushDataIntoAS();
+
+            var page = await new ProviderStepsHelper(context).ProviderCreateAndApproveACohortViaIlrRoute();
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+
+            await page.NavigateToBingoBox(ApprenticeRequests.WithEmployers);
+            await page.VerifyCohortExistsAsync(cohortRef);
+
+        }
+
+        [Given("a cohort created via ILR exists in \'Drafts\' section")]
+        public async Task GivenACohortCreatedViaILRExistsInDraftsSection()
+        {
+            await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
+            await learnerDataOuterApiSteps.SLDPushDataIntoAS();
+
+            var page = await providerStepsHelper.ProviderCreateADraftCohortViaIlrRoute();
+            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+
+            await page.NavigateToBingoBox(ApprenticeRequests.Drafts);
+            await page.VerifyCohortExistsAsync(cohortRef);
         }
 
 

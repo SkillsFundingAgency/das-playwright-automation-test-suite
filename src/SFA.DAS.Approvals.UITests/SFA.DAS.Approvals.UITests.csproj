@@ -54,7 +54,6 @@
 	  <Folder Include="Project\Features\01_PreApprovals\06_FlexiJobApprenticeshipAgency\" />
 	  <Folder Include="Project\Features\01_PreApprovals\05_FileUpload\" />
 	  <Folder Include="Project\Features\01_PreApprovals\09_ProviderPermissions\" />
-	  <Folder Include="Project\Features\01_PreApprovals\10_UpdatingCohorts\" />
 	  <Folder Include="Project\Features\02_PostApprovals\01_OverlappingTrainingDateRequest\" />
 	  <Folder Include="Project\Features\03_EmployerRoles\" />
 	  <Folder Include="Project\Features\01_PreApprovals\07_PortableFlexiJob\" />

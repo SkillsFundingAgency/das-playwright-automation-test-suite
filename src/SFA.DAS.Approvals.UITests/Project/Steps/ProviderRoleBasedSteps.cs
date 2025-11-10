@@ -45,19 +45,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             switch (sectionName)
             {
                 case "Ready for review":
-                    await apprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.ReadyForReview);
+                    await apprenticeRequests_ProviderPage.NavigateToBingoBox(ApprenticeRequests.ReadyForReview);
                     page = await apprenticeRequests_ProviderPage.OpenEditableCohortAsync(null);
                     break;
                 case "With employers":
-                    await apprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers);
+                    await apprenticeRequests_ProviderPage.NavigateToBingoBox(ApprenticeRequests.WithEmployers);
                     page = await apprenticeRequests_ProviderPage.OpenNonEditableCohortAsync(null);
                     break;
                 case "Drafts":
-                    await apprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.Drafts);
+                    await apprenticeRequests_ProviderPage.NavigateToBingoBox(ApprenticeRequests.Drafts);
                     page = await apprenticeRequests_ProviderPage.OpenEditableCohortAsync(null);
                     break;
                 case "With transfer sending employers":
-                    await apprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithTransferSendingEmployers);
+                    await apprenticeRequests_ProviderPage.NavigateToBingoBox(ApprenticeRequests.WithTransferSendingEmployers);
                     page = await apprenticeRequests_ProviderPage.OpenNonEditableCohortAsync(null);
                     break;
                 default:

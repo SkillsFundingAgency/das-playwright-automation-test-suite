@@ -69,20 +69,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             //await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(listOflearnerData, academicYear); 
         }
 
-        [Given(@"Provider sends an apprentice request \(cohort\) to an employer")]
-        public async Task GivenProviderSendsAnApprenticeRequestCohortToAnEmployer()
-        {
-            await ProviderSubmitsAnILRRecord(1, EmployerType.Levy.ToString());
-            await SLDPushDataIntoAS();
-
-            var page = await new ProviderStepsHelper(context).ProviderCreateAndApproveACohortViaIlrRoute();
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
-
-            await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers);
-            await page.VerifyCohortExistsAsync(cohortRef);
-
-        }
-
         [Given("Provider adds an apprentice aged (.*) years using Foundation level standard")]
         public async Task GivenProviderAddsAnApprenticeAgedYearsUsingFoundationLevelStandard(int age)
         {
@@ -126,6 +112,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await learnerDataOuterApiHelper.CheckApprenticeIsAvailableInApprovedLearnersList(listOfApprenticeship.FirstOrDefault());
             
         }
+
+        [When("Provider resubmits ILR file with changes to apprentice details")]
+        public async Task WhenProviderResubmitsILRFileWithChangesToApprenticeDetails()
+        {
+            string dateTimeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            //var listOfOrignalApprenticeship = listOfApprenticeship;
+            //context["listOfOrignalApprenticeship"] = listOfOrignalApprenticeship;
+            context.Set<List<Apprenticeship>>(listOfApprenticeship, "listOfOrignalApprenticeship");
+            listOfApprenticeship.FirstOrDefault().ApprenticeDetails.LastName += "_UpdatedAt_" + dateTimeStamp;
+            context["listOfApprenticeship"] = listOfApprenticeship;
+
+            await SLDPushDataIntoAS();
+        }
+
 
         private async Task<ApproveApprenticeDetailsPage> UpdateDobAndReprocessData(int lowerAgeLimit, int upperAgeLimit)
         {

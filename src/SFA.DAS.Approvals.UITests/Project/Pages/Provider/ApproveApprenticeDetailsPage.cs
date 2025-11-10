@@ -1,5 +1,6 @@
 ﻿using Azure;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
@@ -15,6 +17,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         #region locators
         private ILocator banner => page.Locator("#main-content");
+        private ILocator informationBannerTitle => page.Locator("#govuk-notification-banner-title");
+        private ILocator informationBannerContent => page.Locator(".govuk-notification-banner__content");
         private ILocator employerName => page.Locator("dt:has-text('Employer') + dd");
         private ILocator cohortReference => page.Locator("dt:has-text('Cohort reference') + dd");
         private ILocator status => page.Locator("dt:has-text('Status') + dd");
@@ -102,6 +106,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await AddAnotherApprenticeLink.ClickAsync();
             return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));            
         }
+        
         internal async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()
         {
             await approveRadioOption.ClickAsync();
@@ -145,7 +150,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new ConfirmCohortDeletionPage(context));
         }
 
+        internal async Task<ApprenticeRequests_ProviderPage> ClickOnSaveAndExitLink()
+        {
+            await saveAndexitLink.ClickAsync();
+            return await VerifyPageAsync(() => new ApprenticeRequests_ProviderPage(context));
+        }
+
         internal async Task VerifyBanner(string text) => await Assertions.Expect(banner).ToContainTextAsync(text);
+
+        internal async Task VerifyBanner(string title, string content)
+        {
+            //wait for banner to be visible
+            
+            await Assertions.Expect(informationBannerTitle).ToContainTextAsync(title);
+            await Assertions.Expect(informationBannerContent).ToContainTextAsync(content);
+        }
 
         internal async Task SelectFirstRadioButtonAndSubmit(string optionalMsg=null)
         {
