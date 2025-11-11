@@ -7,4 +7,9 @@ public class UKPRNPage(ScenarioContext context) : BasePage(context)
         await Assertions.Expect(page.Locator("h1"))
             .ToContainTextAsync("What is the provider's UKPRN?");
     }
+    public async Task<ManageTrainingProviderInformationPage> GoBackToManageTrainingProvider()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back" }).ClickAsync();
+        return await VerifyPageAsync(() => new ManageTrainingProviderInformationPage(context));
+    }
 }
