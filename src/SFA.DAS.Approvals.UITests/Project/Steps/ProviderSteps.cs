@@ -241,9 +241,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Given("a cohort created via ILR exists in \'With Employer\' section")]
-        public async Task GivenACohortCreatedViaILRExistsInWithEmployerSection(string p0)
+        public async Task GivenACohortCreatedViaILRExistsInWithEmployerSection()
         {
-            throw new PendingStepException();
+            //check db if an existing cohorts can be used
+
+            //else create new test data
+            await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
+            await learnerDataOuterApiSteps.SLDPushDataIntoAS();
+
+            var page = await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
+            var cohortRef = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
+
+            await page.NavigateToBingoBox(ApprenticeRequests.WithEmployers);
+            await page.VerifyCohortExistsAsync(cohortRef);
         }
 
 
@@ -260,6 +270,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.VerifyCohortExistsAsync(cohortRef);
         }
 
+        [Then("cohort is sent back to the provider")]
+        public async Task ThenCohortIsSentBackToTheProvider()
+        {
+            var cohortRef = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
+
+            await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            var page = new ApprenticeRequests_ProviderPage(context);
+            
+            await page.NavigateToBingoBox(ApprenticeRequests.ReadyForReview);
+            await page.VerifyCohortExistsAsync(cohortRef);
+        }
 
 
 

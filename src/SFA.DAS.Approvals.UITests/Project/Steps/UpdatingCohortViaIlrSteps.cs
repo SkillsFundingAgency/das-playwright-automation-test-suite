@@ -49,12 +49,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             await providerHomePageStepsHelper.GoToProviderHomePage(false);
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            var page = new ApprenticeRequests_ProviderPage(context);
 
-            ApprenticeRequests_ProviderPage apprenticeRequests = new ApprenticeRequests_ProviderPage(context);
-            await apprenticeRequests.NavigateToBingoBox(ApprenticeRequests.Drafts);
-            var page = await apprenticeRequests.OpenEditableCohortAsync(cohortRef);
+            if(context.ScenarioInfo.Title.Contains("Drafts"))
+                await page.NavigateToBingoBox(ApprenticeRequests.Drafts);
+            else
+                await page.NavigateToBingoBox(ApprenticeRequests.ReadyForReview);
 
-            await page.VerifyBanner(bannerTitle, bannerMessage);
+            var page2 = await page.OpenEditableCohortAsync(cohortRef);
+            await page2.VerifyBanner(bannerTitle, bannerMessage);
         }
 
         [Then("Provider cannot approve the cohort")]
