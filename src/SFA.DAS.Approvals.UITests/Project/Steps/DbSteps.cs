@@ -58,7 +58,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-
         [Then("Commitments Db is updated with respective LearnerData Id")]
         public async Task ThenCommitmentsDbIsUpdatedWithRespectiveLearnerDataId()
         {
@@ -95,7 +94,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
 
         }
-
 
         [Then("Apprenticeship record is created in Learning Db")]
         public async Task ThenApprenticeshipRecordIsCreatedInLearningDb()

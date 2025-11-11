@@ -51,6 +51,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
                 };
 
                 await serviceBusHelper.Publish(learnerDataEvent);
+                objectContext.SetDebugInformation($"Publishing LearnerDataEvent to N-Service Bus for following learner: {@learnerDataEvent}");
             }
         }
 

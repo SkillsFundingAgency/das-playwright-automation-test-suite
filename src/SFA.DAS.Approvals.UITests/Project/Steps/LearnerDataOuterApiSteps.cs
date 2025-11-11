@@ -55,10 +55,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateApprenticeshipAsync(employerType, NoOfApprentices);
 
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+
+            await SLDPushDataIntoAS(listOfApprenticeship);
         }
 
-
-        [Given("SLD push its data into AS")]
         public async Task SLDPushDataIntoAS(List<Apprenticeship> listOfApprenticeship = null)
         {
             listOfApprenticeship ??= context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);

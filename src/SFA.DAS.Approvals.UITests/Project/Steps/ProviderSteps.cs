@@ -240,6 +240,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
+        [Given("a cohort created via ILR exists in \'With Employer\' section")]
+        public async Task GivenACohortCreatedViaILRExistsInWithEmployerSection(string p0)
+        {
+            throw new PendingStepException();
+        }
+
+
         [Given("a cohort created via ILR exists in \'Drafts\' section")]
         public async Task GivenACohortCreatedViaILRExistsInDraftsSection()
         {
