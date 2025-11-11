@@ -1,13 +1,16 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using Dynamitey;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,6 +56,48 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             await page.VerifyBanner(bannerTitle, bannerMessage);
         }
+
+        [Then("Provider cannot approve the cohort")]
+        public async Task ThenProviderCannotApproveTheCohort()
+        {
+            var page = new ApproveApprenticeDetailsPage(context);
+            await page.CanCohortBeApproved(false);
+        }
+
+        [When("Provider reviews and accepts the changes")]
+        public async Task WhenProviderReviewsAndAcceptsTheChanges()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var listOfUpdatedApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfUpdatedApprenticeship);
+            
+            var page = new ApproveApprenticeDetailsPage(context);
+            await page.ClickOnLink(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.FullName);
+            
+            var page2 = new ViewApprenticeDetails_ProviderPage(context);
+            await page2.VerifyBanner("Important", "Apprentice details have been changed in the ILR. To continue you need to update now");
+            await page2.ClickOnButton("update now");
+            await page2.VerifyBanner("Success", "Learner data has been successfully updated.");
+            await page2.VerifyApprenticeshipDetails(listOfUpdatedApprenticeship.FirstOrDefault());
+            await page2.ClickOnButton("Continue");
+
+            var page3 = new RecognitionOfPriorLearningPage(context);
+            await page3.SelectNoForRPL();
+
+            //update the original apprenticeship list with the updated details for further steps:
+            listOfApprenticeship.Clear();
+            listOfApprenticeship = listOfUpdatedApprenticeship.CloneApprenticeships();
+            context.Set<List<Apprenticeship>>(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+            listOfUpdatedApprenticeship.Clear();
+        }
+
+        [Then("Provider can approve the cohort")]
+        public async Task ThenProviderCanApproveTheCohort()
+        {
+            var page = new ApproveApprenticeDetailsPage(context);
+            await page.CanCohortBeApproved(true);
+            await providerStepsHelper.ProviderApproveCohort(page);
+        }
+
 
 
     }

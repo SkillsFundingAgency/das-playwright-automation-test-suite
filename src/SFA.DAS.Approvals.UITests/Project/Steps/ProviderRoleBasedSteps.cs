@@ -81,7 +81,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheUserCanEditEmailAddressOfTheApprenticeBeforeApprovalAsync()
         {
             var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
-            var page = await new ApproveApprenticeDetailsPage(context).ClickOnEditApprenticeLink(apprentice.ApprenticeDetails.FullName);
+            var page = await new ApproveApprenticeDetailsPage(context).ClickOnViewApprenticeLink(apprentice.ApprenticeDetails.FullName);
             var page1 = await page.UpdateEmail(apprentice.ApprenticeDetails.Email + ".uk");
             var page3 = await page1.SelectNoForRPL();
         }

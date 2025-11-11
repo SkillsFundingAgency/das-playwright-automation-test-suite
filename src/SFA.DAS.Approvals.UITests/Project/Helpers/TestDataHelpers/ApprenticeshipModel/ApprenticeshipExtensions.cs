@@ -57,6 +57,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers.Apprenticesh
                     IsFlexiJob = a.TrainingDetails.IsFlexiJob,
                     PlannedOTJTrainingHours = a.TrainingDetails.PlannedOTJTrainingHours,
                     StandardCode = a.TrainingDetails.StandardCode,
+                    CourseTitle = a.TrainingDetails.CourseTitle,
                     ConsumerReference = a.TrainingDetails.ConsumerReference
                 },
                 RPLDetails = new RPL

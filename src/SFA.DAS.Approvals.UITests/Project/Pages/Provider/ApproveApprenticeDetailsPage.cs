@@ -22,7 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator status => page.Locator("dt:has-text('Status') + dd");
         private ILocator message => page.Locator("h2:has-text('Message') + div.govuk-inset-text");
         private ILocator row(string ULN) => page.Locator($"table tbody tr:has-text('{ULN}')");
-        private ILocator editLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"View{name}" }).First;
+        private ILocator viewLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"View{name}" }).First;
         private ILocator deleteLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"Delete{name}" }).First;
         private ILocator AddAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
         private ILocator DeleteThisCohortLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete this cohort" }).First;
@@ -81,9 +81,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             context.Set(apprenticeship, "Apprenticeship");
         }
 
-        internal async Task<ViewApprenticeDetails_ProviderPage> ClickOnEditApprenticeLink(string name)
+        internal async Task<ViewApprenticeDetails_ProviderPage> ClickOnViewApprenticeLink(string name)
         {
-            await editLink("  " + name).ClickAsync();
+            await viewLink("  " + name).ClickAsync();
             return await VerifyPageAsync(() => new ViewApprenticeDetails_ProviderPage(context));
         }
 
@@ -134,15 +134,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         {
             if (flag)
             {
-                await Assertions.Expect(approveRadioOption).ToBeEnabledAsync();
                 await approveRadioOption.ClickAsync();
                 await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
             }
             else
             {
-                await Assertions.Expect(approveRadioOption).ToBeDisabledAsync();
+                await Assertions.Expect(approveRadioOption).ToHaveCountAsync(0);
             }
-                
+
         }
 
         internal async Task<ConfirmApprenticeDeletionPage> ClickOnDeleteApprenticeLink(string name)
@@ -173,8 +172,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await saveAndSubmitButton.ClickAsync();
         }
 
-
-        internal async Task<ProviderAccessDeniedPage> TryOpenLink(string linkName)
+       internal async Task<ProviderAccessDeniedPage> TryOpenLink(string linkName)
         {
             await page.GetByRole(AriaRole.Link, new() { Name = linkName }).Last.ClickAsync();
             return await VerifyPageAsync(() => new ProviderAccessDeniedPage(context));

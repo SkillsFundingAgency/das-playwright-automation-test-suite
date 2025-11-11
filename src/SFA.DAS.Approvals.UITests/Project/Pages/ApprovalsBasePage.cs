@@ -19,6 +19,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages
             await page.GoBackAsync();
         }
 
+        internal async Task ClickOnLink(string linkText) => await page.GetByRole(AriaRole.Link, new() { Name = $"{linkText}", Exact = true }).ClickAsync();
+
+        internal async Task ClickOnButton(string linkText) => await page.GetByRole(AriaRole.Button, new() { Name = $"{linkText}"}).ClickAsync();
+
     }
 
 }

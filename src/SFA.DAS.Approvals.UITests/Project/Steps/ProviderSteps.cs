@@ -253,12 +253,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.VerifyCohortExistsAsync(cohortRef);
         }
 
-        [Then("provider cannot approve the cohort")]
-        public async Task ThenProviderCannotApproveTheCohort()
-        {
-            var page = new ApproveApprenticeDetailsPage(context);
-            await page.CanCohortBeApproved(false);
-        }
+
 
 
 

@@ -1,10 +1,16 @@
-﻿Feature: AP_UC_01_UpdateCohortViaILR
+﻿@approvals
+Feature: AP_UC_01_UpdateCohortViaILR
 
-A short summary of the feature
+Cohorts created via ILR are read only (except email and RPL fields)
+Only way to update an unapproved cohort is to re-submit ILR file
+Below test verify the same journey whilst cohort is in different states: Draft, ReadyForReview, WithEmployer, WithTransferSender
 
-@tag1
+@regression
+@e2escenarios
 Scenario: AP_UC_01_Update cohort via ILR
 	Given a cohort created via ILR exists in 'Drafts' section
 	When Provider resubmits ILR file with changes to apprentice details
 	Then a banner is displayed on the cohort for provider to accept changes
-	And provider cannot approve the cohort
+	And Provider cannot approve the cohort
+	When Provider reviews and accepts the changes
+	Then Provider can approve the cohort

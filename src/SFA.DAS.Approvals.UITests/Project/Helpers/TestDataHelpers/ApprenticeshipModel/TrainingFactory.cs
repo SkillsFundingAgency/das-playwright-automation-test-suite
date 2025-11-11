@@ -48,6 +48,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             training.IsFlexiJob = false;
             training.PlannedOTJTrainingHours = 1200;
             training.StandardCode = course.StandardCode;
+            training.CourseTitle = course.Title;
             training.ConsumerReference = "CR123456";
 
             await Task.Delay(100);
