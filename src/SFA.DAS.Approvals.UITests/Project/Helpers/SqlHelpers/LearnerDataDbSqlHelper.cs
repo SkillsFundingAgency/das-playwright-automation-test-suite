@@ -28,7 +28,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
 
         internal async Task<Apprenticeship> GetEditableApprenticeDetails(Apprenticeship apprenticeship)
         {
-            var details = await GetLearnerReadyToAdd(apprenticeship.ProviderDetails.Ukprn);
+            var additionalWhereFilter = "AND ApprenticeshipId is null";
+            return await GetLearnerReadyToAdd(apprenticeship, additionalWhereFilter);
+        }
+
+        internal async Task<Apprenticeship> GetLearnerDetailsFromLearnerDataId(Apprenticeship apprenticeship, int learnerDataId)
+        {
+            var additionalWhereFilter = $"AND Id = {learnerDataId}";
+            return await GetLearnerReadyToAdd(apprenticeship, additionalWhereFilter);
+        }
+        private async Task<Apprenticeship> GetLearnerReadyToAdd(Apprenticeship apprenticeship, string additionalWhereFilter = null)
+        {
+            string query = @$"SELECT Id, ULN, UKPRN, Firstname, Lastname, Email, Dob, AcademicYear, StartDate, PlannedEndDate, 
+                                PercentageLearningToBeDelivered, EpaoPrice, TrainingPrice, StandardCode, 
+                                IsFlexiJob, PlannedOTJTrainingHours, ConsumerReference, ApprenticeshipId
+                            FROM LearnerData
+                            WHERE UKPRN = {apprenticeship.ProviderDetails.Ukprn}                             
+                            {additionalWhereFilter}";
+            
+            var details = await GetData(query);
 
             apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(details[0]);
             apprenticeship.ApprenticeDetails.ULN = details[1].ToString();
@@ -50,16 +68,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.TrainingDetails.ConsumerReference = details[16];
 
             return apprenticeship;
-        }
-        private async Task<List<string>> GetLearnerReadyToAdd(int Ukprn)
-        {
-            string query = @$"SELECT Id, ULN, UKPRN, Firstname, Lastname, Email, Dob, AcademicYear, StartDate, PlannedEndDate, 
-                                PercentageLearningToBeDelivered, EpaoPrice, TrainingPrice, StandardCode, 
-                                IsFlexiJob, PlannedOTJTrainingHours, ConsumerReference, ApprenticeshipId
-                            FROM LearnerData
-                            WHERE UKPRN = 10022856 
-                            AND ApprenticeshipId is null";
-            return await GetData(query);
         }
 
 

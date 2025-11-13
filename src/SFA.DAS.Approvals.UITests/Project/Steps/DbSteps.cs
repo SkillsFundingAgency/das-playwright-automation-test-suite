@@ -168,6 +168,37 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
         }
 
+        internal async Task<Apprenticeship> FindUnapprovedCohortReference(Apprenticeship apprenticeship, ApprenticeRequests status)
+        {
+            int withParty = 1; //With Employer
+            int ukprn = apprenticeship.ProviderDetails.Ukprn;
+            int accountLegalEntityId = apprenticeship.EmployerDetails.AccountLegalEntityId;
+
+            switch (status)
+            {
+                case ApprenticeRequests.ReadyForReview:
+                    break;
+                case ApprenticeRequests.WithEmployers:
+                    break;
+                case ApprenticeRequests.Drafts:
+                    break;
+                case ApprenticeRequests.WithTransferSendingEmployers:
+                    break;
+                default:
+                    break;
+            }
+
+            var details = await commitmentsDbSqlHelper.GetCohortRefAndLearnerDataIdFromCommitmentsDb(ukprn, accountLegalEntityId, withParty);
+            
+            if (details == null || details[0] == "")
+                return apprenticeship;
+
+            apprenticeship.Cohort.Reference = details[0].ToString();
+            var learnerDataId = Convert.ToInt32(details[1]);
+            apprenticeship = await learnerDataDbSqlHelper.GetLearnerDetailsFromLearnerDataId(apprenticeship, learnerDataId);
+            return apprenticeship;
+        }
+
         private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter, string ukprn = null)
         {
             var providerConfig = context.GetProviderConfig<ProviderConfig>();

@@ -244,14 +244,28 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task GivenACohortCreatedViaILRExistsInWithEmployerSection()
         {
             //check db if an existing cohorts can be used
+            var listOfApprenticeship = new List<Apprenticeship>();
+            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.Levy);
+            apprenticeship = await dbSteps.FindUnapprovedCohortReference(apprenticeship, ApprenticeRequests.WithEmployers);
 
-            //else create new test data
-            await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
-            await learnerDataOuterApiSteps.SLDPushDataIntoAS();
+            if (apprenticeship.Cohort.Reference == null)
+            {
+                context.Get<ObjectContext>().SetDebugInformation($"No unapproved cohort found in Commitments Db for Ukprn: {apprenticeship.ProviderDetails.Ukprn} and AccountLegalEntityId: {apprenticeship.EmployerDetails.AccountLegalEntityId}. Hence creating data using UI journey ...");
+                await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
+                await learnerDataOuterApiSteps.SLDPushDataIntoAS();
+                await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
+            }
+            else
+            {
+                listOfApprenticeship.Add(apprenticeship);
+                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+                await providerHomePageStepsHelper.GoToProviderHomePage(false);
+            }
 
-            var page = await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
             var cohortRef = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
+            await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            var page = new ApprenticeRequests_ProviderPage(context);
             await page.NavigateToBingoBox(ApprenticeRequests.WithEmployers);
             await page.VerifyCohortExistsAsync(cohortRef);
         }
@@ -274,11 +288,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenCohortIsSentBackToTheProvider()
         {
             var cohortRef = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
-
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
             var page = new ApprenticeRequests_ProviderPage(context);
-            
-            await page.NavigateToBingoBox(ApprenticeRequests.ReadyForReview);
             await page.VerifyCohortExistsAsync(cohortRef);
         }
 
