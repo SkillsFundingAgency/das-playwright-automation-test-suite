@@ -11,7 +11,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprenticeship training");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Funding restrictions");
         }
 
         internal async Task<CheckYourInformationPage> ReserveFundsAsync(string courseName, DateTime reservationStartDate)
