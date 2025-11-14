@@ -10,7 +10,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Check your information");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Confirm your reservation");
         }
 
         internal async Task<YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage> ClickConfirmButton()
