@@ -22,13 +22,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
-        internal async Task<ApprenticeshipTrainingPage> ConfirmNonLevyEmployer()
+        internal async Task<FundingRestrictionsPage> ConfirmNonLevyEmployer()
         {
             await page.Locator("#confirm-yes").ClickAsync();
 
             await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
-            return await VerifyPageAsync(() => new ApprenticeshipTrainingPage(context));
+            return await VerifyPageAsync(() => new FundingRestrictionsPage(context));
         }
     }
 }

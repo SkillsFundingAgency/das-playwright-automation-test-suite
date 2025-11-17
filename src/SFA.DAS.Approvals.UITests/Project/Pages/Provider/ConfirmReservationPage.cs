@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class CheckYourInformationPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class ConfirmReservationPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {
