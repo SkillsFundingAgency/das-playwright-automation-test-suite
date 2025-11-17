@@ -21,7 +21,7 @@ public class CreateQuestion_Page(ScenarioContext context) : BasePage(context)
     {
         await page.Locator("#Title").FillAsync(_qfastDataHelpers.SecondQuestionTitle);
         await page.GetByLabel("Long text").ClickAsync();
-        await page.GetByLabel("Mandatory").ClickAsync();
+        await page.GetByLabel("Optional").ClickAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         return await VerifyPageAsync(() => new EditQuestion_Page(context));
     }
@@ -30,7 +30,7 @@ public class CreateQuestion_Page(ScenarioContext context) : BasePage(context)
     {
         await page.Locator("#Title").FillAsync(_qfastDataHelpers.ThirdQuestionTitle);
         await page.GetByLabel("Number").ClickAsync();
-        await page.GetByLabel("Mandatory").ClickAsync();
+        await page.GetByLabel("Optional").ClickAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         return await VerifyPageAsync(() => new EditQuestion_Page(context));
     }
@@ -57,7 +57,7 @@ public class CreateQuestion_Page(ScenarioContext context) : BasePage(context)
     {
         await page.Locator("#Title").FillAsync(_qfastDataHelpers.SixthQuestionTitle);
         await page.GetByLabel("User selects one or more options from a list of options").ClickAsync();
-        await page.GetByLabel("Mandatory").ClickAsync();
+        await page.GetByLabel("Optional").ClickAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         return await VerifyPageAsync(() => new EditQuestion_Page(context));
     }
