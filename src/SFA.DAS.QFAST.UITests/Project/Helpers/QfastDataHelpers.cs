@@ -1,5 +1,4 @@
 ﻿namespace SFA.DAS.QFAST.UITests.Project.Helpers;
-
 public class QfastDataHelpers
 {
     public QfastDataHelpers()
