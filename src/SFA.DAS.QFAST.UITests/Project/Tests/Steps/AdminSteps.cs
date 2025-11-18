@@ -122,9 +122,9 @@ public class AdminSteps(ScenarioContext context)
     }
 
     [When("I Sign out from the portal")]
-    public void WhenILogOutFromThePortal()
+    public async Task WhenILogOutFromThePortal()
     {
-      _qfastAdminPage.ClickLogOut().GetAwaiter().GetResult();
+        await _qfastAdminPage.ClickLogOut();
     }
 
 }
