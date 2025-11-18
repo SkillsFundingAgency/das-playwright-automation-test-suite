@@ -6,8 +6,10 @@ using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+using SFA.DAS.Approvals.UITests.Project.Steps;
 using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
@@ -24,6 +26,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         private readonly ScenarioContext context;
         private readonly ObjectContext objectContext;
         private readonly ApprenticeDataHelper apprenticeDataHelper;
+        private readonly LearnerDataOuterApiSteps learnerDataOuterApiSteps;
+        private readonly EmployerStepsHelper employerStepsHelper;
         private List<Apprenticeship> listOfApprenticeship;
 
         public ProviderStepsHelper(ScenarioContext _context)
@@ -31,6 +35,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             context = _context;
             objectContext = context.Get<ObjectContext>();
             apprenticeDataHelper = new ApprenticeDataHelper(context);
+            learnerDataOuterApiSteps = new LearnerDataOuterApiSteps(context);
+            employerStepsHelper = new EmployerStepsHelper(context);
         }
 
         internal async Task<ConfirmEmployerPage> SelectEmployer(ChooseAnEmployerPage chooseAnEmployerPage)
@@ -323,7 +329,31 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return new ApproveApprenticeDetailsPage(context);
         }
 
+        internal async Task CreateCohort(ApprenticeRequests status)
+        {
+            await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
+            await learnerDataOuterApiSteps.SLDPushDataIntoAS();
 
+            switch (status)
+            {
+                case ApprenticeRequests.ReadyForReview:
+                    await employerStepsHelper.AddEmptyCohort();
+                    //await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
+                    var page = await ProviderAddApprencticesFromIlrRoute();
+                    //await page.ProviderSavesTheCohort();
+                    break;
+                case ApprenticeRequests.WithEmployers:
+                    await ProviderCreateAndApproveACohortViaIlrRoute();
+                    break;
+                case ApprenticeRequests.Drafts:
+                    await ProviderCreateADraftCohortViaIlrRoute();
+                    break;
+                case ApprenticeRequests.WithTransferSendingEmployers:
+                    break;
+                default:
+                    break;
+            }
+        }
 
     }
 

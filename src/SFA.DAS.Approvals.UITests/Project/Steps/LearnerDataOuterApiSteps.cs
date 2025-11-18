@@ -27,7 +27,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             context = _context;
             commonStepsHelper = new CommonStepsHelper(context);
-            providerStepsHelper = new ProviderStepsHelper(context);
+            //providerStepsHelper = new ProviderStepsHelper(context);
             learnerDataOuterApiHelper = new LearnerDataOuterApiHelper(context);
             apprenticeDataHelper = new ApprenticeDataHelper(context);
         }

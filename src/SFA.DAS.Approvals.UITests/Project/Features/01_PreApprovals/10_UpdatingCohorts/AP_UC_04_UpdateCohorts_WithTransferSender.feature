@@ -7,7 +7,7 @@ If a cohort is with Transfer-Sender for final approval and a change arrive, then
 
 @tag1
 Scenario: AP_UC_04_UpdateCohorts_WithTransferSender
-	Given a cohort created via ILR exists in 'With transfer sender' section
+	Given a cohort created via ILR exists in WithTransferSendingEmployers section
 	When Provider resubmits ILR file with changes to apprentice details
 	Then cohort is sent back to the provider
 	And a banner is displayed on the cohort for provider to accept changes
