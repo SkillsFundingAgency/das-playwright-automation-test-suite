@@ -25,10 +25,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return result.FirstOrDefault() ?? string.Empty;
         }
 
-        internal async Task<List<string>> GetCohortRefAndLearnerDataIdFromCommitmentsDb(int ukprn, int accountLegalEntityId, int withParty)
+        internal async Task<List<string>> GetCohortRefAndLearnerDataIdFromCommitmentsDb(int ukprn, int accountLegalEntityId, int withParty, int isDraft)
         {
             string query =
-                @$"SELECT TOP(1) c.Reference, a.LearnerDataId
+                @$"SELECT TOP(1) c.Reference, a.LearnerDataId, a.FirstName, a.LastName
                     FROM [dbo].[Commitment] c
                     INNER JOIN [dbo].[Apprenticeship] a
                     ON c.id = a.CommitmentId
@@ -37,6 +37,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
                     --and count(a.id) <2
                     And a.LearnerDataId is not null
                     --And c.TransferSenderId is not null
+                    And c.IsDraft = {isDraft}   
                     And c.IsFullApprovalProcessed = 0
                     And c.IsDeleted = 0
                     And c.Approvals = 0

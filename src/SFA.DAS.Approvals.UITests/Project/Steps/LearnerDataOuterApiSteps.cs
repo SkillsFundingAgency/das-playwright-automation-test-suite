@@ -118,9 +118,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("Provider resubmits ILR file with changes to apprentice details")]
         public async Task WhenProviderResubmitsILRFileWithChangesToApprenticeDetails()
         {
-            string dateTimeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            //string dateTimeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            var updatedSuffix = "_UpdatedAt_" + DateTime.Now.ToString("yyyyMMddHHmmss");
             var listOfUpdatedApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).CloneApprenticeships();
-            listOfUpdatedApprenticeship.FirstOrDefault().ApprenticeDetails.LastName += "_UpdatedAt_" + dateTimeStamp;
+            //listOfUpdatedApprenticeship.FirstOrDefault().ApprenticeDetails.LastName += "_UpdatedAt_" + dateTimeStamp;
+
+            var lastName = listOfUpdatedApprenticeship.FirstOrDefault().ApprenticeDetails.LastName;
+            listOfUpdatedApprenticeship.FirstOrDefault().ApprenticeDetails.LastName = lastName.Contains('_')
+                                                                                        ? lastName[..lastName.IndexOf('_')] + updatedSuffix
+                                                                                        : lastName + updatedSuffix;
+
 
             await SLDPushDataIntoAS(listOfUpdatedApprenticeship);
             context.Set<List<Apprenticeship>>(listOfUpdatedApprenticeship, ScenarioKeys.ListOfUpdatedApprenticeship);

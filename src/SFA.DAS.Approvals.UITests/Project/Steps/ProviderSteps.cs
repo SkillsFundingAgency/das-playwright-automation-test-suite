@@ -242,9 +242,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
 
         [Given(@"a cohort created via ILR exists in (.*) section")]
-        [Given(@"a cohort created via ILR exists in /'(.*)/' section")]
-        [Given(@"a cohort created via ILR exists in '(.*)' section")]
-        //[Given(@"a cohort created via ILR exists in the ""(.*)"" section")]
         public async Task GivenACohortCreatedViaILRExistsInSection(ApprenticeRequests cohortStatus)
         {
             context.GetValue<ObjectContext>().SetDebugInformation($"Cohort created in section: {cohortStatus}");
@@ -252,13 +249,30 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             //check db if an existing cohorts can be used
             var listOfApprenticeship = new List<Apprenticeship>();
             Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.Levy);
-            apprenticeship = await dbSteps.FindUnapprovedCohortReference(apprenticeship, ApprenticeRequests.WithEmployers);
+            apprenticeship = await dbSteps.FindUnapprovedCohortReference(apprenticeship, cohortStatus);
 
             if (apprenticeship.Cohort.Reference == null)
             {
                 context.Get<ObjectContext>().SetDebugInformation($"No unapproved cohort found in Commitments Db for Ukprn: {apprenticeship.ProviderDetails.Ukprn} and AccountLegalEntityId: {apprenticeship.EmployerDetails.AccountLegalEntityId}. Hence creating data using UI journey ...");
                 await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
                 await learnerDataOuterApiSteps.SLDPushDataIntoAS();
+                switch (cohortStatus)
+                {
+                    case ApprenticeRequests.ReadyForReview:
+                        //to be implemented now
+                        break;
+                    case ApprenticeRequests.WithEmployers:
+                        await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
+                        break;
+                    case ApprenticeRequests.Drafts:
+                        await providerStepsHelper.ProviderCreateADraftCohortViaIlrRoute();
+                        break;
+                    case ApprenticeRequests.WithTransferSendingEmployers:
+                        //to be implemented later
+                        break;
+                    default:
+                        break;
+                }
                 await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
             }
             else
@@ -272,38 +286,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
             var page = new ApprenticeRequests_ProviderPage(context);
-            await page.NavigateToBingoBox(ApprenticeRequests.WithEmployers);
-            await page.VerifyCohortExistsAsync(cohortRef);
-        }
-
-
-        //[Given("a cohort created via ILR exists in \'WithEmployers\' section")]
-        public async Task GivenACohortCreatedViaILRExistsInWithEmployersSection()
-        {
-            //check db if an existing cohorts can be used
-            var listOfApprenticeship = new List<Apprenticeship>();
-            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.Levy);
-            apprenticeship = await dbSteps.FindUnapprovedCohortReference(apprenticeship, ApprenticeRequests.WithEmployers);
-
-            if (apprenticeship.Cohort.Reference == null)
-            {
-                context.Get<ObjectContext>().SetDebugInformation($"No unapproved cohort found in Commitments Db for Ukprn: {apprenticeship.ProviderDetails.Ukprn} and AccountLegalEntityId: {apprenticeship.EmployerDetails.AccountLegalEntityId}. Hence creating data using UI journey ...");
-                await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
-                await learnerDataOuterApiSteps.SLDPushDataIntoAS();
-                await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
-            }
-            else
-            {
-                listOfApprenticeship.Add(apprenticeship);
-                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
-                await providerHomePageStepsHelper.GoToProviderHomePage(false);
-            }
-
-            var cohortRef = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
-
-            await new ProviderHomePage(context).GoToApprenticeRequestsPage();
-            var page = new ApprenticeRequests_ProviderPage(context);
-            await page.NavigateToBingoBox(ApprenticeRequests.WithEmployers);
+            await page.NavigateToBingoBox(cohortStatus);
             await page.VerifyCohortExistsAsync(cohortRef);
         }
 
