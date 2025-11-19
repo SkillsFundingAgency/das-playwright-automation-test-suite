@@ -37,6 +37,8 @@ public class RAADataHelper
 
     public static string TrainingTitle => "Abattoir Worker, Level 2 (GCSE)";
 
+    public static string FoundationTrainingTitle => "Building service engineering foundation apprenticeship, Level 2 (GCSE)";
+
     public static string EmployerAddress => AvailableAddress.RandomOrDefault();
 
     public static string Provider => AvailableProviders.RandomOrDefault();

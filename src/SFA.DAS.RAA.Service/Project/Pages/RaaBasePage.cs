@@ -1,0 +1,52 @@
+﻿namespace SFA.DAS.RAA.Service.Project.Pages;
+
+public abstract class RaaBasePage : BasePage
+{
+    protected readonly VacancyTitleDatahelper vacancyTitleDataHelper;
+
+    protected readonly RAADataHelper rAADataHelper;
+
+    protected readonly AdvertDataHelper advertDataHelper;
+    protected readonly bool isRaaEmployer;
+
+    //protected override By ContinueButton => By.CssSelector(".save-button");
+
+    //protected override By PageHeader => By.CssSelector($"{PageHeaderSelector}, .govuk-label--xl");
+
+    //protected virtual By SaveAndContinueButton => By.ClassName("govuk-button");
+
+    //private static By CancelLink => By.LinkText("Cancel");
+
+    //protected static By MultipleCandidateFeedback => By.CssSelector("#provider-multiple-candidate-feedback");
+    //protected static By CandidateFeedback => By.CssSelector("#CandidateFeedback");
+
+    public RaaBasePage(ScenarioContext context) : base(context)
+    {
+        isRaaEmployer = tags.Contains("raaemployer");
+
+        vacancyTitleDataHelper = context.GetValue<VacancyTitleDatahelper>();
+
+        rAADataHelper = context.GetValue<RAADataHelper>();
+
+        advertDataHelper = context.GetValue<AdvertDataHelper>();
+    }
+    protected bool IsFoundationAdvert => context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
+    //private static By FoundationTag => By.CssSelector(".govuk-tag--pink");
+    public void CheckFoundationTag()
+    {
+        //var expectedFoundationTag = "Foundation";
+        //var actualFoundationTag = pageInteractionHelper.GetText(FoundationTag).Trim();
+        //pageInteractionHelper.VerifyText(actualFoundationTag, expectedFoundationTag);
+    }
+
+    //protected virtual void SaveAndContinue() => formCompletionHelper.ClickButtonByText(SaveAndContinueButton, "Save and continue");
+
+    //protected void VerifyPanelTitle(string text) => pageInteractionHelper.VerifyText(PanelTitle, text);
+
+    protected async Task SelectRadioOptionByForAttribute(string value)
+    {
+        await page.Locator($"label[for='{value}']").ClickAsync();
+    }
+
+    //public void EmployerCancelAdvert() => formCompletionHelper.Click(CancelLink);
+}

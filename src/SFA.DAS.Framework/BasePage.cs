@@ -48,6 +48,19 @@ public abstract class BasePage
         page = driver.Page;
     }
 
+    protected async Task VerifyAnySections(string locator, string taskName, string status)
+    {
+        var items = await AllTextAsync(locator);
+
+        items = [.. items.ToList().Select(x => x.RemoveMultipleSpace().TrimStart().TrimEnd())];
+
+        objectContext.SetDebugInformation($"{items.ToString(Environment.NewLine)}");
+
+        var item = items.ToList().FirstOrDefault(x => x.ContainsCompareCaseInsensitive(taskName));
+
+        StringAssert.Contains(status, item);
+    }
+
     protected async Task<IReadOnlyList<string>> AllTextAsync(string locator)
     {
         var locators = await page.Locator(locator).AllAsync();
