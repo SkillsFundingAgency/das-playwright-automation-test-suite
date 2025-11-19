@@ -18,16 +18,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     public class LearnerDataOuterApiSteps
     {
         private readonly ScenarioContext context;
-        private readonly CommonStepsHelper commonStepsHelper;
         private readonly LearnerDataOuterApiHelper learnerDataOuterApiHelper;
-        private ProviderStepsHelper providerStepsHelper;
         private ApprenticeDataHelper apprenticeDataHelper;
 
         public LearnerDataOuterApiSteps(ScenarioContext _context)
         {
             context = _context;
-            commonStepsHelper = new CommonStepsHelper(context);
-            //providerStepsHelper = new ProviderStepsHelper(context);
             learnerDataOuterApiHelper = new LearnerDataOuterApiHelper(context);
             apprenticeDataHelper = new ApprenticeDataHelper(context);
         }
@@ -85,18 +81,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
             await SLDPushDataIntoAS();
         }
-
-        [Then("system allows to approve apprentice details with a warning if their age is in range of (.*) - (.*) years")]
-        public async Task ThenSystemAllowsToapproveApprenticeDetailsWithAWarningIfTheirAgeIsInRangeOf_Years(int lowerAgeLimit, int upperAgeLimit)
-        {
-            var page = await UpdateDobAndReprocessData(lowerAgeLimit, upperAgeLimit);
-            var warningMsg = "! Warning Check apprentices are eligible for foundation apprenticeships If someone is aged between 22 and 24, to be funded for a foundation apprenticeship they must either: have an Education, Health and Care (EHC) plan be or have been in the care of their local authority be a prisoner or have been in prison";
-            await page.ValidateWarningMessageForFoundationCourses(warningMsg);
-            await providerStepsHelper.ProviderApproveCohort(page);
-            await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
-
-        }
-       
+     
         [Given("new learner details are processed in ILR for (\\d+) apprentices")]
         [Given("the employer has (\\d+) apprentice ready to start training")]
         public async Task ProcessedLearnersInILR(int NoOfApprentices)
@@ -132,27 +117,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await SLDPushDataIntoAS(listOfUpdatedApprenticeship);
             context.Set<List<Apprenticeship>>(listOfUpdatedApprenticeship, ScenarioKeys.ListOfUpdatedApprenticeship);
         }
-
-
-        private async Task<ApproveApprenticeDetailsPage> UpdateDobAndReprocessData(int lowerAgeLimit, int upperAgeLimit)
-        {
-            var currentDate = DateTime.Now;
-            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-
-            foreach (var apprentice in listOfApprenticeship)
-            {
-                var newDoB = RandomDataGenerator.GenerateRandomDate(currentDate.AddYears(-upperAgeLimit), currentDate.AddYears(-lowerAgeLimit));
-                apprentice.ApprenticeDetails.DateOfBirth = newDoB;
-            }
-            context["listOfApprenticeship"] = listOfApprenticeship;
-
-            await SLDPushDataIntoAS();
-
-            var page = await providerStepsHelper.GoToSelectApprenticeFromILRPage();
-            return await providerStepsHelper.AddFirstApprenticeFromILRList(page);
-
-        }
-
 
 
     }

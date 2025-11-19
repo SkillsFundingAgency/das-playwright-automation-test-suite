@@ -265,7 +265,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page5.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
-
         internal async Task<ApproveApprenticeDetailsPage> SelectanExistingEmployer(ChooseACohortPage chooseAnExistingEmployerPage)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -273,7 +272,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var cohortReference = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
            return await chooseAnExistingEmployerPage.ChooseAnExistingEmployer(cohortReference);
         }
-
 
         internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRListWithRPL(ApproveApprenticeDetailsPage approveApprenticeDetailsPage, int NoOfApprenticesToSkip=1)
         {
@@ -355,6 +353,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             }
         }
 
+        internal async Task<ApproveApprenticeDetailsPage> UpdateDobAndReprocessData(int lowerAgeLimit, int upperAgeLimit)
+        {
+            var currentDate = DateTime.Now;
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+
+            foreach (var apprentice in listOfApprenticeship)
+            {
+                var newDoB = RandomDataGenerator.GenerateRandomDate(currentDate.AddYears(-upperAgeLimit), currentDate.AddYears(-lowerAgeLimit));
+                apprentice.ApprenticeDetails.DateOfBirth = newDoB;
+            }
+            context["listOfApprenticeship"] = listOfApprenticeship;
+
+            await learnerDataOuterApiSteps.SLDPushDataIntoAS();
+
+            var page = await GoToSelectApprenticeFromILRPage();
+            return await AddFirstApprenticeFromILRList(page);
+
+        }
     }
 
 }

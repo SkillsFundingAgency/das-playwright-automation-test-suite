@@ -273,7 +273,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     default:
                         break;
                 }
-                await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
             }
             else
             {
@@ -312,6 +311,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
             var page = new ApprenticeRequests_ProviderPage(context);
             await page.VerifyCohortExistsAsync(cohortRef);
+        }
+
+
+        [Then("system allows to approve apprentice details with a warning if their age is in range of (.*) - (.*) years")]
+        public async Task ThenSystemAllowsToapproveApprenticeDetailsWithAWarningIfTheirAgeIsInRangeOf_Years(int lowerAgeLimit, int upperAgeLimit)
+        {
+            var page = await providerStepsHelper.UpdateDobAndReprocessData(lowerAgeLimit, upperAgeLimit);
+            var warningMsg = "! Warning Check apprentices are eligible for foundation apprenticeships If someone is aged between 22 and 24, to be funded for a foundation apprenticeship they must either: have an Education, Health and Care (EHC) plan be or have been in the care of their local authority be a prisoner or have been in prison";
+            await page.ValidateWarningMessageForFoundationCourses(warningMsg);
+            await providerStepsHelper.ProviderApproveCohort(page);
+            await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
+
         }
 
 
