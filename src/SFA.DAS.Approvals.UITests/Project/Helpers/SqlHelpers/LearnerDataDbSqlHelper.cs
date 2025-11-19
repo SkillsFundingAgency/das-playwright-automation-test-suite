@@ -54,8 +54,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(details[0]);
             apprenticeship.ApprenticeDetails.ULN = details[1].ToString();
             apprenticeship.ProviderDetails.Ukprn = Convert.ToInt32(details[2]);
-            //apprenticeship.ApprenticeDetails.FirstName = details[3].ToString();
-            //apprenticeship.ApprenticeDetails.LastName = details[4].ToString();
+            apprenticeship.ApprenticeDetails.FirstName ??= details[3].ToString();
+            apprenticeship.ApprenticeDetails.LastName ??= details[4].ToString();
             apprenticeship.ApprenticeDetails.Email = details[5];
             apprenticeship.ApprenticeDetails.DateOfBirth = Convert.ToDateTime(details[6].ToString());
             apprenticeship.TrainingDetails.AcademicYear = Convert.ToInt32(details[7]);
