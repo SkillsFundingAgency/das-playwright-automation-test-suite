@@ -60,7 +60,7 @@ public class AdminSteps(ScenarioContext context)
                 await _qfastHelpers.GoToQfastAdminHomePage();
                 break;
         }
-        await _qfastAdminPage.AcceptCookieAndAlert();
+        //await _qfastAdminPage.AcceptCookieAndAlert();
     }
 
     [Given(@"I validate opitons on the page with the following expected options")]
@@ -120,4 +120,11 @@ public class AdminSteps(ScenarioContext context)
         await _viewFormsPage.ClickCreateNewFormButton();
         await _createNewFormPage.CreateForm();
     }
+
+    [When("I Sign out from the portal")]
+    public async Task WhenILogOutFromThePortal()
+    {
+        await _qfastAdminPage.ClickLogOut();
+    }
+
 }

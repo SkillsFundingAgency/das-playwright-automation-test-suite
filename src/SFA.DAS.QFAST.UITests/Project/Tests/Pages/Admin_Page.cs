@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages;
+﻿using SFA.DAS.DfeAdmin.Service.Project.Tests.LandingPage;
+
+namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 
 public class Admin_Page(ScenarioContext context) : BasePage(context)
 {
@@ -23,11 +25,16 @@ public class Admin_Page(ScenarioContext context) : BasePage(context)
         }
         await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Continue" })).ToBeVisibleAsync();
     }
-
     public async Task SelectOptions(string option)
     {
         var optionLocator = page.Locator($"label.govuk-radios__label:has-text(\"{option}\")");
         await optionLocator.ClickAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
     }
+    public async Task<CheckDfeSignInPage> ClickLogOut()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
+        return await VerifyPageAsync(() => new CheckDfeSignInPage(context)); 
+    }
+
 }
