@@ -18,7 +18,7 @@ stages:
           BuildConfiguration: ${{ parameters. BuildConfiguration }}
           ${{ each project in parameters.projectName }} :
             projectsToBuild: |
-              src/${{ parameters.projectName }}/*.csproj
+              src/${{ project }}/*.csproj
 
   - stage: Deploy_TEST
     dependsOn: Build
