@@ -87,7 +87,7 @@ jobs:
               ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
               azurePowerShellVersion: LatestVersion
 
-          - task: VSTest@2
+          - task: VSTest@3
             displayName: 'VsTest - Test Execution'
             inputs:
               testAssemblyVer2: ${{ parameters.TestAssembly }}              
