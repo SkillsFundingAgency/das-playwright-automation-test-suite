@@ -119,6 +119,6 @@ public partial class CreateAnApprenticeshipAdvertOrVacancyPage(ScenarioContext c
     {
         objectContext.SetDebugInformation($"Navigating to task - '{taskName}' under section '{sectionName}' ");
 
-        await page.GetByRole(AriaRole.Link, new() { Name = taskName }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = taskName, Exact = true }).ClickAsync();
     }
 }

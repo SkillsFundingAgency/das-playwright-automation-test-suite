@@ -137,7 +137,7 @@ public class EmployerDescriptionPage(ScenarioContext context) : RaaBasePage(cont
 
     public async Task<ContactDetailsPage> EnterEmployerDescriptionAndGoToContactDetailsPage(bool _, bool optionalFields)
     {
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Tell us about your" }).FillAsync(rAADataHelper.EmployerDescription);
+        await IFrameFillAsync("EmployerDescription_ifr", rAADataHelper.EmployerDescription);
 
         if (optionalFields)
         {

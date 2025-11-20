@@ -36,12 +36,14 @@ public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBase
 
                 await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
+                await SelectSingleLocation();
+
                 break;
 
             case "different":
                 await DifferentLocation();
 
-                return new CreateAnApprenticeshipAdvertOrVacancyPage(context);
+                return await VerifyPageAsync(() => new CreateAnApprenticeshipAdvertOrVacancyPage(context));
 
             case "all location types":
 
@@ -49,7 +51,7 @@ public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBase
 
                 await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
-                await SelectRandomRadioOption();
+                await SelectSingleLocation();
 
                 await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
@@ -79,8 +81,21 @@ public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBase
         return await VerifyPageAsync(() => new CreateAnApprenticeshipAdvertOrVacancyPage(context));
     }
 
+    private async Task SelectSingleLocation()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a location");
+
+        var radioElements = await page.Locator(".govuk-radios__input").AllAsync();
+
+        var radioElement = RandomDataGenerator.GetRandom(radioElements);
+
+        await radioElement.ClickAsync();
+    }
+
     private async Task SelectMultipleLocations()
     {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add more than one location");
+
         var detailsElements = await page.Locator("details.govuk-details").AllAsync();
 
         if (detailsElements != null && detailsElements.Any())
@@ -125,7 +140,7 @@ public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBase
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Recruit across all of England");
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Add more information about" }).FillAsync(RandomDataGenerator.GenerateRandomAlphabeticString(100));
+        await IFrameFillAsync("AdditionalInformation_ifr", RandomDataGenerator.GenerateRandomAlphabeticString(100));
     }
 
     public async Task<ImportantDatesPage> ChooseAddress(bool isEmployerAddress)
@@ -146,19 +161,27 @@ public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBase
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a location");
+
         await page.GetByRole(AriaRole.Link, new() { Name = "Add a new location" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a new location");
 
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Postcode" }).FillAsync(RAADataHelper.EmployerAddress);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Find address" }).ClickAsync();
 
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select an address");
+
         var locations = await page.Locator("#SelectedLocation option").AllTextContentsAsync();
 
-        var location = RandomDataGenerator.GetRandom(locations);
+        var location = RandomDataGenerator.GetRandom(locations.Where(x => !x.ContainsCompareCaseInsensitive("Select your address")).ToList());
 
-        await page.GetByLabel("addresses found").SelectOptionAsync(new[] { location });
+        await page.Locator("#SelectedLocation").SelectOptionAsync(new[] { location });
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a location");
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
     }

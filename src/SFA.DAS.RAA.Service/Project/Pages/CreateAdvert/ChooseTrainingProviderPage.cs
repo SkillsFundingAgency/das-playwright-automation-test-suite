@@ -23,7 +23,7 @@ public class ChooseTrainingProviderPage(ScenarioContext context) : RaaBasePage(c
 
         await page.GetByRole(AriaRole.Combobox, new() { Name = "Training provider name or" }).FillAsync(RAADataHelper.Provider);
 
-        await page.GetByRole(AriaRole.Option, new() { Name = RAADataHelper.Provider }).ClickAsync();
+        await page.GetByRole(AriaRole.Option, new() { Name = RAADataHelper.Provider, Exact = false }).ClickAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
@@ -55,7 +55,7 @@ public class SummaryOfTheApprenticeshipPage(ScenarioContext context) : RaaBasePa
 
     public async Task<WhatWillTheApprenticeDoAtWorkPage> EnterShortDescription()
     {
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Apprenticeship summary" }).FillAsync(RAADataHelper.RandomAlphabeticString(60));
+        await IFrameFillAsync("ShortDescription_ifr", RAADataHelper.RandomAlphabeticString(60));
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
@@ -72,7 +72,7 @@ public class WhatWillTheApprenticeDoAtWorkPage(ScenarioContext context) : RaaBas
 
     public async Task<DescriptionPage> EnterShortDescriptionOfWhatApprenticeWillDo()
     {
-        await page.Locator("iframe[title=\"Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help\"]").ContentFrame.Locator("#tinymce").FillAsync(rAADataHelper.VacancyShortDescription);
+        await IFrameFillAsync("VacancyDescription_ifr", rAADataHelper.VacancyShortDescription);
         
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 

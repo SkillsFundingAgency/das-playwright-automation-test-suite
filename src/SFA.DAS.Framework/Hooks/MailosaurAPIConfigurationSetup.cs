@@ -9,8 +9,6 @@ public class MailosaurAPIConfigurationSetup(ScenarioContext context)
 
     private MailosaurApiHelper mailosaurApiHelper;
 
-    private readonly TryCatchExceptionHelper _tryCatch = context.Get<TryCatchExceptionHelper>();
-
     [BeforeScenario(Order = 5)]
     public void SetUpMailosaurAPIConfiguration()
     {
@@ -27,6 +25,6 @@ public class MailosaurAPIConfigurationSetup(ScenarioContext context)
     [AfterScenario(Order = 29)]
     public async Task DeleteMessages()
     {
-        if (context.TestError == null) await _tryCatch.AfterScenarioException(async () => await mailosaurApiHelper.DeleteAdhocInbox());
+        if (context.TestError == null) await context.Get<TryCatchExceptionHelper>().AfterScenarioException(mailosaurApiHelper.DeleteAdhocInbox);
     }
 }

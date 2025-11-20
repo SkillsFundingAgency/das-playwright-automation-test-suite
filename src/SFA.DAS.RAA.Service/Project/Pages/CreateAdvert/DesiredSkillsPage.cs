@@ -96,7 +96,7 @@ public class FutureProspectsPage(ScenarioContext context) : RaaBasePage(context)
 
     public async Task<ThingsToConsiderPage> EnterFutureProspect()
     {
-        await page.Locator("iframe[title=\"Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help\"]").ContentFrame.Locator("#tinymce").FillAsync(rAADataHelper.VacancyOutcome);
+        await IFrameFillAsync("FutureProspects_ifr", rAADataHelper.VacancyOutcome);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 

@@ -48,5 +48,14 @@ public abstract class RaaBasePage : BasePage
         await page.Locator($"label[for='{value}']").ClickAsync();
     }
 
+    protected async Task IFrameFillAsync(string locatoriD, string text)
+    {
+        ILocator locator = page.Locator($"iframe[id='{locatoriD}']");
+
+        await Assertions.Expect(locator).ToBeVisibleAsync();
+
+        await locator.ContentFrame.Locator(".mce-content-body").FillAsync(text);
+    }
+
     //public void EmployerCancelAdvert() => formCompletionHelper.Click(CancelLink);
 }

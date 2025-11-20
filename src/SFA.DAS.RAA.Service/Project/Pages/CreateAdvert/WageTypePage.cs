@@ -119,9 +119,9 @@ public class ExtraInformationAboutPayPage(ScenarioContext context) : RaaBasePage
 
     public async Task<SubmitNoOfPositionsPage> SubmitExtraInformationAboutPay()
     {
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Information about pay" }).FillAsync(rAADataHelper.OptionalMessage);
+        await IFrameFillAsync("WageAdditionalInformation_ifr", rAADataHelper.OptionalMessage);
 
-        //await page.GetByRole(AriaRole.Textbox, new() { Name = "Company benefits" }).FillAsync(rAADataHelper.OptionalMessage);
+        await IFrameFillAsync("CompanyBenefitsInformation_ifr", rAADataHelper.OptionalMessage);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
