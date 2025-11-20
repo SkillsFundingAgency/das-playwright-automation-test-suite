@@ -327,32 +327,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return new ApproveApprenticeDetailsPage(context);
         }
 
-        internal async Task CreateCohort(ApprenticeRequests status)
-        {
-            await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
-            await learnerDataOuterApiSteps.SLDPushDataIntoAS();
-
-            switch (status)
-            {
-                case ApprenticeRequests.ReadyForReview:
-                    await employerStepsHelper.AddEmptyCohort();
-                    //await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
-                    var page = await ProviderAddApprencticesFromIlrRoute();
-                    //await page.ProviderSavesTheCohort();
-                    break;
-                case ApprenticeRequests.WithEmployers:
-                    await ProviderCreateAndApproveACohortViaIlrRoute();
-                    break;
-                case ApprenticeRequests.Drafts:
-                    await ProviderCreateADraftCohortViaIlrRoute();
-                    break;
-                case ApprenticeRequests.WithTransferSendingEmployers:
-                    break;
-                default:
-                    break;
-            }
-        }
-
         internal async Task<ApproveApprenticeDetailsPage> UpdateDobAndReprocessData(int lowerAgeLimit, int upperAgeLimit)
         {
             var currentDate = DateTime.Now;
