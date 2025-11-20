@@ -100,13 +100,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return approveApprenticeDetailsPage;
         }
 
-        internal async Task<ApprenticeRequests_ProviderPage> ProviderApproveCohort(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        internal async Task<ApprenticeRequests_ProviderPage> ProviderApproveCohort(ApproveApprenticeDetailsPage approveApprenticeDetailsPage, string cohortStatus= "New request")
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
-                await approveApprenticeDetailsPage.VerifyCohort(apprenticeship);
+                await approveApprenticeDetailsPage.VerifyCohort(apprenticeship, cohortStatus);
             }
 
             var page = await approveApprenticeDetailsPage.ProviderApproveCohort();

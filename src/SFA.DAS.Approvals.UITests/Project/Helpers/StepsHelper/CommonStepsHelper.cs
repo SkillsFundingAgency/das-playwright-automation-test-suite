@@ -52,7 +52,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             throw new Exception(MessageHelper.GetExceptionMessage("Text", expected, actual));
         }
 
-        public async Task SetCohortDetails(string cohortRef, string cohortReferenceForProvider, string cohortReferenceForEmployer)
+        public async Task SetCohortDetails(string cohortRef, string cohortStatusForProvider, string cohortStatusForEmployer)
         {
             await Task.Run(() =>
             {
@@ -61,11 +61,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 if (!string.IsNullOrWhiteSpace(cohortRef))
                     listOfApprenticeship.ForEach(a => a.Cohort.Reference = cohortRef);
 
-                if (!string.IsNullOrWhiteSpace(cohortReferenceForProvider))
-                    listOfApprenticeship.ForEach(a => a.Cohort.Status_Provider = cohortReferenceForProvider);
+                if (!string.IsNullOrWhiteSpace(cohortStatusForProvider))
+                    listOfApprenticeship.ForEach(a => a.Cohort.Status_Provider = cohortStatusForProvider);
 
-                if (!string.IsNullOrWhiteSpace(cohortReferenceForEmployer))
-                    listOfApprenticeship.ForEach(a => a.Cohort.Status_Employer = cohortReferenceForEmployer);
+                if (!string.IsNullOrWhiteSpace(cohortStatusForEmployer))
+                    listOfApprenticeship.ForEach(a => a.Cohort.Status_Employer = cohortStatusForEmployer);
 
                 context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
             });
