@@ -7,8 +7,8 @@ If a cohort is with employer and change arrive, then it should be returned back 
 
 @regression
 @e2escenarios
-Scenario: AP_UC_02_Update existing cohort - With Employer
-	Given a cohort created via ILR exists in 'With Employer' section
+Scenario: AP_UC_02_Update existing cohort_With Employer
+	Given a cohort created via ILR exists in WithEmployers section
 	When Provider resubmits ILR file with changes to apprentice details
 	Then cohort is sent back to the provider
 	And a banner is displayed on the cohort for provider to accept changes

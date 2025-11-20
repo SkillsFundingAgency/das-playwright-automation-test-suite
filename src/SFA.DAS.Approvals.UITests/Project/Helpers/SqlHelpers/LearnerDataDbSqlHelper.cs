@@ -1,5 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,8 +32,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return await GetLearnerReadyToAdd(apprenticeship, additionalWhereFilter);
         }
 
-        internal async Task<Apprenticeship> GetLearnerDetailsFromLearnerDataId(Apprenticeship apprenticeship, int learnerDataId)
+        internal async Task<Apprenticeship> GetLearnerDetailsFromLearnerDataId(Apprenticeship apprenticeship)
         {
+            int learnerDataId = apprenticeship.ApprenticeDetails.LearnerDataId;
             var additionalWhereFilter = $"AND Id = {learnerDataId}";
             return await GetLearnerReadyToAdd(apprenticeship, additionalWhereFilter);
         }
@@ -51,8 +52,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(details[0]);
             apprenticeship.ApprenticeDetails.ULN = details[1].ToString();
             apprenticeship.ProviderDetails.Ukprn = Convert.ToInt32(details[2]);
-            apprenticeship.ApprenticeDetails.FirstName = details[3].ToString();
-            apprenticeship.ApprenticeDetails.LastName = details[4].ToString();
+            apprenticeship.ApprenticeDetails.FirstName ??= details[3].ToString();
+            apprenticeship.ApprenticeDetails.LastName ??= details[4].ToString();
             apprenticeship.ApprenticeDetails.Email = details[5];
             apprenticeship.ApprenticeDetails.DateOfBirth = Convert.ToDateTime(details[6].ToString());
             apprenticeship.TrainingDetails.AcademicYear = Convert.ToInt32(details[7]);
@@ -66,6 +67,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.TrainingDetails.IsFlexiJob = Convert.ToBoolean(details[14]);
             apprenticeship.TrainingDetails.PlannedOTJTrainingHours = Convert.ToInt32(details[15]);
             apprenticeship.TrainingDetails.ConsumerReference = details[16];
+
+            var courseTitle = await new CoursesDataHelper().GetCourse(apprenticeship.TrainingDetails.StandardCode);
+            apprenticeship.TrainingDetails.CourseTitle = courseTitle.Title;
 
             return apprenticeship;
         }

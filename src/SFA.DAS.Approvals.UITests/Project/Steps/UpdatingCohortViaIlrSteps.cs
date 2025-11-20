@@ -17,6 +17,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private readonly ScenarioContext context;
         private readonly CommonStepsHelper commonStepsHelper;
         private readonly ProviderHomePageStepsHelper providerHomePageStepsHelper;
+        private readonly EmployerStepsHelper employerStepsHelper;
         private readonly ProviderStepsHelper providerStepsHelper;
         private readonly DbSteps dbSteps;
         private readonly LearnerDataOuterApiSteps learnerDataOuterApiSteps;
@@ -25,11 +26,63 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             context = _context;
             commonStepsHelper = new CommonStepsHelper(context);
+            employerStepsHelper = new EmployerStepsHelper(context);
             providerHomePageStepsHelper = new ProviderHomePageStepsHelper(context);
             providerStepsHelper = new ProviderStepsHelper(context);
             dbSteps = new DbSteps(context);
             learnerDataOuterApiSteps = new LearnerDataOuterApiSteps(context);
         }
+
+
+        [Given(@"a cohort created via ILR exists in (.*) section")]
+        public async Task GivenACohortCreatedViaILRExistsInSection(ApprenticeRequests cohortStatus)
+        {
+            context.GetValue<ObjectContext>().SetDebugInformation($"Cohort created in section: {cohortStatus}");
+
+            //check db if an existing cohorts can be used
+            var listOfApprenticeship = new List<Apprenticeship>();
+            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.Levy);
+            apprenticeship = await dbSteps.FindUnapprovedCohortReference(apprenticeship, cohortStatus);
+
+            if (apprenticeship.Cohort.Reference == null)
+            {
+                context.Get<ObjectContext>().SetDebugInformation($"No unapproved cohort found in Commitments Db for Ukprn: {apprenticeship.ProviderDetails.Ukprn} and AccountLegalEntityId: {apprenticeship.EmployerDetails.AccountLegalEntityId}. Hence creating data using UI journey ...");
+                await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
+                await learnerDataOuterApiSteps.SLDPushDataIntoAS();
+                switch (cohortStatus)
+                {
+                    case ApprenticeRequests.ReadyForReview:
+                        await employerStepsHelper.AddEmptyCohort();
+                        await providerHomePageStepsHelper.GoToProviderHomePage(true);
+                        var page = await providerStepsHelper.ProviderAddApprencticesFromIlrRoute();
+                        await page.ClickOnSaveAndExitLink();
+                        break;
+                    case ApprenticeRequests.WithEmployers:
+                        await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
+                        break;
+                    case ApprenticeRequests.Drafts:
+                        await providerStepsHelper.ProviderCreateADraftCohortViaIlrRoute();
+                        break;
+                    case ApprenticeRequests.WithTransferSendingEmployers:
+                        //to be implemented later
+                        break;                   
+                }
+            }
+            else
+            {
+                listOfApprenticeship.Add(apprenticeship);
+                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+                await providerHomePageStepsHelper.GoToProviderHomePage(false);
+            }
+
+            var cohortRef = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
+
+            await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            var page1 = new ApprenticeRequests_ProviderPage(context);
+            await page1.NavigateToBingoBox(cohortStatus);
+            await page1.VerifyCohortExistsAsync(cohortRef);
+        }
+
 
 
         [Then("a banner is displayed on the cohort for provider to accept changes")]
@@ -93,7 +146,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = new ApproveApprenticeDetailsPage(context);
             await page.CanCohortBeApproved(true);
-            await providerStepsHelper.ProviderApproveCohort(page);
+            string cohortStats = context.ScenarioInfo.Title.Contains("Drafts") ? "New request" : "Ready for review";
+            await providerStepsHelper.ProviderApproveCohort(page, cohortStats);
         }
 
 

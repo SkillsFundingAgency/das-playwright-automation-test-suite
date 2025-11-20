@@ -1,5 +1,7 @@
 ﻿using Azure;
+using Polly;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,7 +16,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         #region Locators
         private ILocator Employer => page.Locator("#employer-value");
-        private ILocator Course => page.Locator("#course-value");
+        private ILocator Course => page.Locator("#course-value").First;
         private ILocator ULN => page.Locator("#uln-value");
         private ILocator FirstName => page.Locator("#firstname-value");
         private ILocator LastName => page.Locator("#lastname-value");
@@ -42,7 +44,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             var expectedDOB = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("d MMM yyyy", CultureInfo.InvariantCulture);
             var expectedTrainingStartDate = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy", CultureInfo.InvariantCulture); 
             var expectedTrainingEndDate = apprenticeship.TrainingDetails.EndDate.ToString("MMM yyyy", CultureInfo.InvariantCulture);
-            var expectedPrice = apprenticeship.TrainingDetails.TotalPrice.ToString("C0");
+            var expectedPrice = apprenticeship.TrainingDetails.TotalPrice.ToString("C0");            
+
 
             await Assertions.Expect(Employer).ToContainTextAsync(apprenticeship.EmployerDetails.EmployerName);
             await Assertions.Expect(Course).ToContainTextAsync(apprenticeship.TrainingDetails.CourseTitle);

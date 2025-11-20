@@ -240,49 +240,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        [Given("a cohort created via ILR exists in \'With Employer\' section")]
-        public async Task GivenACohortCreatedViaILRExistsInWithEmployerSection()
-        {
-            //check db if an existing cohorts can be used
-            var listOfApprenticeship = new List<Apprenticeship>();
-            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.Levy);
-            apprenticeship = await dbSteps.FindUnapprovedCohortReference(apprenticeship, ApprenticeRequests.WithEmployers);
-
-            if (apprenticeship.Cohort.Reference == null)
-            {
-                context.Get<ObjectContext>().SetDebugInformation($"No unapproved cohort found in Commitments Db for Ukprn: {apprenticeship.ProviderDetails.Ukprn} and AccountLegalEntityId: {apprenticeship.EmployerDetails.AccountLegalEntityId}. Hence creating data using UI journey ...");
-                await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
-                await learnerDataOuterApiSteps.SLDPushDataIntoAS();
-                await providerStepsHelper.ProviderCreateAndApproveACohortViaIlrRoute();
-            }
-            else
-            {
-                listOfApprenticeship.Add(apprenticeship);
-                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
-                await providerHomePageStepsHelper.GoToProviderHomePage(false);
-            }
-
-            var cohortRef = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
-
-            await new ProviderHomePage(context).GoToApprenticeRequestsPage();
-            var page = new ApprenticeRequests_ProviderPage(context);
-            await page.NavigateToBingoBox(ApprenticeRequests.WithEmployers);
-            await page.VerifyCohortExistsAsync(cohortRef);
-        }
-
-
-        [Given("a cohort created via ILR exists in \'Drafts\' section")]
-        public async Task GivenACohortCreatedViaILRExistsInDraftsSection()
-        {
-            await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(2, EmployerType.Levy.ToString());
-            await learnerDataOuterApiSteps.SLDPushDataIntoAS();
-
-            var page = await providerStepsHelper.ProviderCreateADraftCohortViaIlrRoute();
-            var cohortRef = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
-
-            await page.NavigateToBingoBox(ApprenticeRequests.Drafts);
-            await page.VerifyCohortExistsAsync(cohortRef);
-        }
 
         [Then("cohort is sent back to the provider")]
         public async Task ThenCohortIsSentBackToTheProvider()
@@ -291,6 +248,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
             var page = new ApprenticeRequests_ProviderPage(context);
             await page.VerifyCohortExistsAsync(cohortRef);
+        }
+
+
+        [Then("system allows to approve apprentice details with a warning if their age is in range of (.*) - (.*) years")]
+        public async Task ThenSystemAllowsToapproveApprenticeDetailsWithAWarningIfTheirAgeIsInRangeOf_Years(int lowerAgeLimit, int upperAgeLimit)
+        {
+            var page = await providerStepsHelper.UpdateDobAndReprocessData(lowerAgeLimit, upperAgeLimit);
+            var warningMsg = "! Warning Check apprentices are eligible for foundation apprenticeships If someone is aged between 22 and 24, to be funded for a foundation apprenticeship they must either: have an Education, Health and Care (EHC) plan be or have been in the care of their local authority be a prisoner or have been in prison";
+            await page.ValidateWarningMessageForFoundationCourses(warningMsg);
+            await providerStepsHelper.ProviderApproveCohort(page);
+            await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
+
         }
 
 

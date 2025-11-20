@@ -50,11 +50,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
 
-        internal async Task VerifyCohort(Apprenticeship apprenticeship)
+        internal async Task VerifyCohort(Apprenticeship apprenticeship, string cohortStatus)
         {
             await Assertions.Expect(employerName).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenticeship.Cohort.Reference);
-            await Assertions.Expect(status).ToHaveTextAsync("New request");
+            await Assertions.Expect(status).ToHaveTextAsync(cohortStatus);
             //await Assertions.Expect(message).ToHaveTextAsync("No message added.");
 
             var expectedName = apprenticeship.ApprenticeDetails.FullName;

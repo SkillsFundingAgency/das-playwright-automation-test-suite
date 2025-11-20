@@ -170,32 +170,31 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         internal async Task<Apprenticeship> FindUnapprovedCohortReference(Apprenticeship apprenticeship, ApprenticeRequests status)
         {
-            int withParty = 1; //With Employer
-            int ukprn = apprenticeship.ProviderDetails.Ukprn;
-            int accountLegalEntityId = apprenticeship.EmployerDetails.AccountLegalEntityId;
-
-            switch (status)
+            (int withParty, int isDraft) = status switch
             {
-                case ApprenticeRequests.ReadyForReview:
-                    break;
-                case ApprenticeRequests.WithEmployers:
-                    break;
-                case ApprenticeRequests.Drafts:
-                    break;
-                case ApprenticeRequests.WithTransferSendingEmployers:
-                    break;
-                default:
-                    break;
-            }
+                ApprenticeRequests.ReadyForReview => (2, 0),
+                ApprenticeRequests.WithEmployers => (1, 0),
+                ApprenticeRequests.Drafts => (2, 1),
+                ApprenticeRequests.WithTransferSendingEmployers => (4, 0),
+                _ => (1, 0)
+            };
 
-            var details = await commitmentsDbSqlHelper.GetCohortRefAndLearnerDataIdFromCommitmentsDb(ukprn, accountLegalEntityId, withParty);
-            
+            var details = await commitmentsDbSqlHelper.GetCohortRefAndLearnerDataIdFromCommitmentsDb(
+                apprenticeship.ProviderDetails.Ukprn,
+                apprenticeship.EmployerDetails.AccountLegalEntityId,
+                withParty,
+                isDraft);
+
+            //if no matching cohort found in the database, return as is
             if (details == null || details[0] == "")
                 return apprenticeship;
 
             apprenticeship.Cohort.Reference = details[0].ToString();
-            var learnerDataId = Convert.ToInt32(details[1]);
-            apprenticeship = await learnerDataDbSqlHelper.GetLearnerDetailsFromLearnerDataId(apprenticeship, learnerDataId);
+            apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(details[1]);
+            apprenticeship.ApprenticeDetails.FirstName = details[2].ToString();
+            apprenticeship.ApprenticeDetails.LastName = details[3].ToString();
+            
+            apprenticeship = await learnerDataDbSqlHelper.GetLearnerDetailsFromLearnerDataId(apprenticeship);
             return apprenticeship;
         }
 

@@ -28,11 +28,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             commonStepsHelper = new CommonStepsHelper(context);
             employerLoginHelper = new EmployerPortalLoginHelper(context);
             employerHomePageHelper = new EmployerHomePageStepsHelper(context);
-            listOfApprenticeship = _context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
         }
 
         internal async Task<HomePage> EmployerLogInToEmployerPortal(bool openInNewTab = true)
         {
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+
             await employerHomePageHelper.NavigateToEmployerApprenticeshipService(openInNewTab);
 
             if (await employerLoginHelper.IsHomePageDisplayed())
@@ -61,6 +62,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<EmployerApproveApprenticeDetailsPage> OpenCohort()
         {
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+
             await EmployerLogInToEmployerPortal();
 
             await new InterimApprenticesHomePage(context, false).VerifyPage();

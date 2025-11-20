@@ -8,7 +8,7 @@ Below test verify the same journey whilst cohort is "Draft"
 @regression
 @e2escenarios
 Scenario: AP_UC_03_UpdateCohorts_Drafts
-	Given a cohort created via ILR exists in 'Drafts' section
+	Given a cohort created via ILR exists in Drafts section
 	When Provider resubmits ILR file with changes to apprentice details
 	Then a banner is displayed on the cohort for provider to accept changes
 	And Provider cannot approve the cohort
