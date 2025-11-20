@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Microsoft.Playwright;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
@@ -45,19 +46,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             switch (sectionName)
             {
                 case "Ready for review":
-                    await apprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.ReadyForReview);
+                    await apprenticeRequests_ProviderPage.NavigateToBingoBox(ApprenticeRequests.ReadyForReview);
                     page = await apprenticeRequests_ProviderPage.OpenEditableCohortAsync(null);
                     break;
                 case "With employers":
-                    await apprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithEmployers);
+                    await apprenticeRequests_ProviderPage.NavigateToBingoBox(ApprenticeRequests.WithEmployers);
                     page = await apprenticeRequests_ProviderPage.OpenNonEditableCohortAsync(null);
                     break;
                 case "Drafts":
-                    await apprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.Drafts);
+                    await apprenticeRequests_ProviderPage.NavigateToBingoBox(ApprenticeRequests.Drafts);
                     page = await apprenticeRequests_ProviderPage.OpenEditableCohortAsync(null);
                     break;
                 case "With transfer sending employers":
-                    await apprenticeRequests_ProviderPage.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.WithTransferSendingEmployers);
+                    await apprenticeRequests_ProviderPage.NavigateToBingoBox(ApprenticeRequests.WithTransferSendingEmployers);
                     page = await apprenticeRequests_ProviderPage.OpenNonEditableCohortAsync(null);
                     break;
                 default:
@@ -79,8 +80,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user can edit email address of the apprentice before approval")]
         public async Task ThenTheUserCanEditEmailAddressOfTheApprenticeBeforeApprovalAsync()
         {
-            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
-            var page = await new ApproveApprenticeDetailsPage(context).ClickOnEditApprenticeLink(apprentice.ApprenticeDetails.FullName);
+            var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var page = await new ApproveApprenticeDetailsPage(context).ClickOnViewApprenticeLink(apprentice.ApprenticeDetails.FullName);
             var page1 = await page.UpdateEmail(apprentice.ApprenticeDetails.Email + ".uk");
             var page3 = await page1.SelectNoForRPL();
         }
@@ -88,7 +89,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user can send a cohort to employer")]
         public async Task ThenTheUserCanSendACohortToEmployer()
         {
-            await new ApproveApprenticeDetailsPage(context).VerifyCohortCanBeApproved();
+            await new ApproveApprenticeDetailsPage(context).CanCohortBeApproved(true);
         }
 
         [Then("the user can delete an apprentice in a cohort")]

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.API;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.API;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
@@ -63,13 +64,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("return the cohort back to the Provider")]
         public async Task ThenReturnTheCohortBackToTheProvider()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
             await providerHomePageStepsHelper.GoToProviderHomePage(false);
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
 
             var page = new ApprenticeRequests_ProviderPage(context);
-            await page.NavigateToBingoBoxAndVerifyCohortExists(ApprenticeRequests.ReadyForReview);
+            await page.NavigateToBingoBox(ApprenticeRequests.ReadyForReview);
             await page.VerifyCohortExistsAsync(cohortRef);
 
         }
@@ -77,7 +78,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("Provider can access live apprentice records under Manager Your Apprentices section")]
         internal async Task<ManageYourApprentices_ProviderPage> ThenProviderAccessLiveApprenticeRecords()
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             await providerHomePageStepsHelper.GoToProviderHomePage(true);
             await UserNavigatesToManageYourApprenticesPage();
@@ -112,7 +113,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the provider is stopped with an error message")]
         public async Task ThenTheProviderIsStoppedWithAnErrorMessage()
         {
-            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
+            var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var uln = apprentice.ApprenticeDetails.ULN.ToString();
             var name = apprentice.ApprenticeDetails.FullName;
             var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
@@ -131,7 +132,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("Provider tries to add a new apprentice using details from table below")]
         public async Task WhenProviderTriesToAddANewApprenticeUsingDetailsFromTableBelow(Table table)
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprentice = listOfApprenticeship.FirstOrDefault();
             var originalStartDate = apprentice.TrainingDetails.StartDate;
             var originalEndDate = apprentice.TrainingDetails.EndDate;
@@ -144,7 +145,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 apprentice.TrainingDetails.EndDate = originalEndDate.AddMonths(Convert.ToInt32(item.NewEndDate));
 
                 listOfApprenticeship[0] = apprentice;
-                context.Set(listOfApprenticeship);
+                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
 
                 // Push data on SLD end point  
                 await new LearnerDataOuterApiSteps(context).SLDPushDataIntoAS();
@@ -178,7 +179,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("the provider adds apprentices along with RPL details and sends to employer to review")]
         public async Task WhenTheProviderAddsApprenticesAlongWithRPLDetailsAndSendsToEmployerToReview()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
             var page = await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
@@ -190,7 +191,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the provider can add apprentice details and approve the cohort")]
         public async Task ThenTheProviderAddsApprenticeDetailsApprovesTheCohortAndSendsItToTheEmployerForApproval()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
             
             var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
             await providerStepsHelper.AddOtherApprenticesFromILRListWithRPL(page, 0);
@@ -201,7 +202,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("provider cannot add apprentices as they do not have permissions to create reservations")]
         public async Task ThenProviderCannotAddApprenticesAsTheyDoNotHavePermissionsToCreateReservations()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
             var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
             var page1 = await page.ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage();
             var page2 = await page1.SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
@@ -213,7 +214,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the provider approves the cohorts")]
         public async Task ThenTheProviderApprovesCohort()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
             var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
             await page.ProviderApprovesCohortAfterEmployerApproval();
@@ -224,6 +225,44 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
         }
+
+        [Given(@"Provider sends an apprentice request \(cohort\) to an employer")]
+        public async Task GivenProviderSendsAnApprenticeRequestCohortToAnEmployer()
+        {
+            await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(1, EmployerType.Levy.ToString());
+            await learnerDataOuterApiSteps.SLDPushDataIntoAS();
+
+            var page = await new ProviderStepsHelper(context).ProviderCreateAndApproveACohortViaIlrRoute();
+            var cohortRef = context.GetValue<List<Apprenticeship >>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
+
+            await page.NavigateToBingoBox(ApprenticeRequests.WithEmployers);
+            await page.VerifyCohortExistsAsync(cohortRef);
+
+        }
+
+
+        [Then("cohort is sent back to the provider")]
+        public async Task ThenCohortIsSentBackToTheProvider()
+        {
+            var cohortRef = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
+            await new ProviderHomePage(context).GoToApprenticeRequestsPage();
+            var page = new ApprenticeRequests_ProviderPage(context);
+            await page.VerifyCohortExistsAsync(cohortRef);
+        }
+
+
+        [Then("system allows to approve apprentice details with a warning if their age is in range of (.*) - (.*) years")]
+        public async Task ThenSystemAllowsToapproveApprenticeDetailsWithAWarningIfTheirAgeIsInRangeOf_Years(int lowerAgeLimit, int upperAgeLimit)
+        {
+            var page = await providerStepsHelper.UpdateDobAndReprocessData(lowerAgeLimit, upperAgeLimit);
+            var warningMsg = "! Warning Check apprentices are eligible for foundation apprenticeships If someone is aged between 22 and 24, to be funded for a foundation apprenticeship they must either: have an Education, Health and Care (EHC) plan be or have been in the care of their local authority be a prisoner or have been in prison";
+            await page.ValidateWarningMessageForFoundationCourses(warningMsg);
+            await providerStepsHelper.ProviderApproveCohort(page);
+            await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
+
+        }
+
+
 
 
 

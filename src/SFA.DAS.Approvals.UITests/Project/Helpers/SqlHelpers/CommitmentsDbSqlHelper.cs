@@ -25,6 +25,35 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return result.FirstOrDefault() ?? string.Empty;
         }
 
+        internal async Task<List<string>> GetCohortRefAndLearnerDataIdFromCommitmentsDb(int ukprn, int accountLegalEntityId, int withParty, int isDraft)
+        {
+            string query =
+                @$"SELECT TOP(1) c.Reference, a.LearnerDataId, a.FirstName, a.LastName
+                    FROM [dbo].[Commitment] c
+                    INNER JOIN [dbo].[Apprenticeship] a
+                    ON c.id = a.CommitmentId
+                    Where ProviderId = {ukprn}                
+                    AND c.AccountLegalEntityId = {accountLegalEntityId}
+                    --and count(a.id) <2
+                    And a.LearnerDataId is not null
+                    --And c.TransferSenderId is not null
+                    And c.IsDraft = {isDraft}   
+                    And c.IsFullApprovalProcessed = 0
+                    And c.IsDeleted = 0
+                    And c.Approvals = 0
+                    And c.WithParty = {withParty}
+                    AND c.CreatedOn < DATEADD(DAY, -1, GETDATE())
+                    AND c.ChangeOfPartyRequestId is null             
+                    AND c.PledgeApplicationId is null
+                    AND a.PaymentStatus = 0
+                    AND a.CloneOf is null
+                    AND a.ContinuationOfId is null
+                    AND a.DeliveryModel = 0
+                    Order by c.CreatedOn DESC";
+
+            return await GetData(query);
+        }
+
         internal async Task<Apprenticeship> GetApprenticeDetailsFromCommitmentsDb(Apprenticeship apprenticeship, string additionalWhereFilter = null)
         {
             var details = await GetApprenticeDetails(apprenticeship.ProviderDetails.Ukprn, apprenticeship.EmployerDetails.AccountLegalEntityId, additionalWhereFilter);

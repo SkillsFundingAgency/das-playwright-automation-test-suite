@@ -1,5 +1,6 @@
 ﻿using Azure;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
@@ -20,7 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator status => page.Locator("dt:has-text('Status') + dd");
         private ILocator message => page.Locator("h2:has-text('Message') + div.govuk-inset-text");
         private ILocator row(string ULN) => page.Locator($"table tbody tr:has-text('{ULN}')");
-        private ILocator editLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"View{name}" }).First;
+        private ILocator viewLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"View{name}" }).First;
         private ILocator deleteLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"Delete{name}" }).First;
         private ILocator AddAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
         private ILocator DeleteThisCohortLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete this cohort" }).First;
@@ -48,11 +50,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
 
-        internal async Task VerifyCohort(Apprenticeship apprenticeship)
+        internal async Task VerifyCohort(Apprenticeship apprenticeship, string cohortStatus)
         {
             await Assertions.Expect(employerName).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenticeship.Cohort.Reference);
-            await Assertions.Expect(status).ToHaveTextAsync("New request");
+            await Assertions.Expect(status).ToHaveTextAsync(cohortStatus);
             //await Assertions.Expect(message).ToHaveTextAsync("No message added.");
 
             var expectedName = apprenticeship.ApprenticeDetails.FullName;
@@ -79,9 +81,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             context.Set(apprenticeship, "Apprenticeship");
         }
 
-        internal async Task<ViewApprenticeDetails_ProviderPage> ClickOnEditApprenticeLink(string name)
+        internal async Task<ViewApprenticeDetails_ProviderPage> ClickOnViewApprenticeLink(string name)
         {
-            await editLink("  " + name).ClickAsync();
+            await viewLink("  " + name).ClickAsync();
             return await VerifyPageAsync(() => new ViewApprenticeDetails_ProviderPage(context));
         }
 
@@ -102,6 +104,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await AddAnotherApprenticeLink.ClickAsync();
             return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));            
         }
+        
         internal async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()
         {
             await approveRadioOption.ClickAsync();
@@ -127,10 +130,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new CohortApproved(context));
         }
 
-        internal async Task VerifyCohortCanBeApproved()
+        internal async Task CanCohortBeApproved(bool flag)
         {
-            await approveRadioOption.ClickAsync();
-            await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
+            if (flag)
+            {
+                await approveRadioOption.ClickAsync();
+                await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
+            }
+            else
+            {
+                await Assertions.Expect(approveRadioOption).ToHaveCountAsync(0);
+            }
+
         }
 
         internal async Task<ConfirmApprenticeDeletionPage> ClickOnDeleteApprenticeLink(string name)
@@ -145,7 +156,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new ConfirmCohortDeletionPage(context));
         }
 
+        internal async Task<ApprenticeRequests_ProviderPage> ClickOnSaveAndExitLink()
+        {
+            await saveAndexitLink.ClickAsync();
+            return await VerifyPageAsync(() => new ApprenticeRequests_ProviderPage(context));
+        }
+
         internal async Task VerifyBanner(string text) => await Assertions.Expect(banner).ToContainTextAsync(text);
+
+        internal async Task VerifyBanner(string title, string content) => await Assertions.Expect(page.GetByLabel(title)).ToContainTextAsync(content);
 
         internal async Task SelectFirstRadioButtonAndSubmit(string optionalMsg=null)
         {
@@ -153,8 +172,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await saveAndSubmitButton.ClickAsync();
         }
 
-
-        internal async Task<ProviderAccessDeniedPage> TryOpenLink(string linkName)
+       internal async Task<ProviderAccessDeniedPage> TryOpenLink(string linkName)
         {
             await page.GetByRole(AriaRole.Link, new() { Name = linkName }).Last.ClickAsync();
             return await VerifyPageAsync(() => new ProviderAccessDeniedPage(context));

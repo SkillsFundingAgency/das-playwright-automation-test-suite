@@ -86,6 +86,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
         public bool IsFlexiJob { get; set; }
         public int PlannedOTJTrainingHours { get; set; }
         public int StandardCode { get; set; }
+        public string CourseTitle { get; set; }
         public string ConsumerReference { get; set; }
     }
 

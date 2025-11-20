@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
+using SFA.DAS.ProviderLogin.Service.Project;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("Provider logs into Provider-Portal")]
         public async Task GivenTheProviderLogsIntoPortal() => await _providerHomePageStepsHelper.GoToProviderHomePage(false);
 
-        
+
         [Given(@"the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer)")]
         [When(@"the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer)")]
-        public async Task GivenTheProviderLogsInAs(ProviderConfig config) => await _providerHomePageStepsHelper.GoToProviderHomePage(config, false);
+        public async Task GivenTheProviderLogsInAs(ProviderConfig config)
+        {
+            context.SetProviderConfig(config);
+            await _providerHomePageStepsHelper.GoToProviderHomePage(config, false);
+        }
 
         [StepArgumentTransformation(@"(Contributor|ContributorWithApproval|AccountOwner|Viewer)")]
         public ProviderConfig GetProviderUserRole(string providerUserRoles)

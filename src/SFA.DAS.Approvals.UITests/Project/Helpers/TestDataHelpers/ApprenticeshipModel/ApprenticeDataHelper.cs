@@ -56,6 +56,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
         internal async Task<Apprenticeship> CreateEmptyCohortAsync(EmployerType EmployerType, ProviderConfig providerConfig = null)
         {
+            providerConfig = (providerConfig == null) ? context.GetProviderConfig<ProviderConfig>() : providerConfig;
+
             var employerDetails = await GetEmployerDetails(EmployerType);
             var providerDetails = await GetProviderDetails(providerConfig);
 
