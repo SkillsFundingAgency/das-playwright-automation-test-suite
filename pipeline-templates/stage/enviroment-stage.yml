@@ -1,6 +1,6 @@
 parameters:
   - name: projectName
-    type: string
+    type: object
   - name: BuildConfiguration
     type: string
   - name: deploy
@@ -16,8 +16,9 @@ stages:
       - template: ../job/code-build.yml
         parameters:
           BuildConfiguration: ${{ parameters. BuildConfiguration }}
-          projectsToBuild: |
-            src/${{ parameters.projectName }}/*.csproj
+          ${{ each project in parameters.projectName }} :
+            projectsToBuild: |
+              src/${{ parameters.projectName }}/*.csproj
 
   - stage: Deploy_TEST
     dependsOn: Build
