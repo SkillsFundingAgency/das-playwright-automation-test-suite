@@ -8,6 +8,9 @@ parameters:
     default: '**\**\SFA.DAS*tests*.dll'
   - name: projectName
     type: string
+  - name: additionalProjectName
+    type: string
+    default: ''
 
 jobs:
 - deployment: Deploy_AutomationTests
@@ -62,8 +65,12 @@ jobs:
             displayName: 'Install Playwright Browsers'
             inputs:
               targetType: 'filePath'
-              ${{ each project in parameters.projectName }} :
-                filePath: '$(System.DefaultWorkingDirectory)/drop/tests/${{ project }}/playwright.ps1'
+              ${{ if eq(parameters.additionalProjectName, '') }} :
+                filePath: '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.projectName }}/playwright.ps1'
+              ${{ else }} :
+                filePath: |
+                  '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.projectName }}/playwright.ps1'
+                  '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.additionalProjectsToBuild }}/playwright.ps1'
               arguments: install
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1

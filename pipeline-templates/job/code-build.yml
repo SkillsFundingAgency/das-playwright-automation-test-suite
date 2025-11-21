@@ -1,8 +1,11 @@
 parameters:
   - name: BuildConfiguration
     type: string
-  - name: projectName
+  - name: projectsToBuild
     type: string
+  - name: additionalProjectsToBuild
+    type: string
+    default: ''
 
 jobs:
 - job: CodeBuild
@@ -14,30 +17,40 @@ jobs:
   variables:
     - group: BUILD Management Resources
   steps:
-    - pwsh: |
-        $items = "${{ parameters.projectName }}".Split('`r`n')
-        $projectsToBuild = $items | ForEach-Object { "src/$_/*.csproj" }
-        Write-Host "##vso[task.setvariable variable=projectsToBuild;isOutput=true]$($projectsToBuild -join '`r`n')"
-      displayName: Create directory list
 
     - task: DotNetCoreCLI@2
       displayName: dotnet build
       inputs:
         arguments: '--configuration $(BuildConfiguration)'
-        projects: $(projectsToBuild)
+        ${{ if eq(parameters.additionalProjectName, '') }} :
+          projects: ${{ parameters.projectsToBuild }}
+        ${{ else }} :
+          projects: |
+            ${{ parameters.projectsToBuild }}
+            ${{ parameters.additionalProjectsToBuild }}
 
     - task: DotNetCoreCLI@2
       displayName: dotnet unit test
       inputs:
         command: 'test'
         arguments: '--filter "TestCategory=Unittests" --logger trx;logfilename=UnittestResults.trx'
-        projects: $(projectsToBuild)
+        ${{ if eq(parameters.additionalProjectName, '') }} :
+          projects: ${{ parameters.projectsToBuild }}
+        ${{ else }} :
+          projects: |
+            ${{ parameters.projectsToBuild }}
+            ${{ parameters.additionalProjectsToBuild }}
 
     - task: DotNetCoreCLI@2
       displayName: 'dotnet pack'
       inputs:
         command: 'pack'
-        projects: $(projectsToBuild)
+        ${{ if eq(parameters.additionalProjectName, '') }} :
+          projects: ${{ parameters.projectsToBuild }}
+        ${{ else }} :
+          projects: |
+            ${{ parameters.projectsToBuild }}
+            ${{ parameters.additionalProjectsToBuild }}
         packDirectory: '$(build.artifactstagingdirectory)/publish'
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
@@ -47,7 +60,12 @@ jobs:
         command: publish
         publishWebProjects: false
         zipAfterPublish: false
-        projects: $(projectsToBuild)
+        ${{ if eq(parameters.additionalProjectName, '') }} :
+          projects: ${{ parameters.projectsToBuild }}
+        ${{ else }} :
+          projects: |
+            ${{ parameters.projectsToBuild }}
+            ${{ parameters.additionalProjectsToBuild }}
         arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
 
     - task: CopyFiles@2

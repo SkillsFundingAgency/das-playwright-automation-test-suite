@@ -19,9 +19,9 @@ variables:
   - name: Deploy
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
   - name: projectName
-    value: |
-      "SFA.DAS.Apar.UITests"
-      "SFA.DAS.AparAdmin.UITests"
+    value: "SFA.DAS.Apar.UITests"
+  - name: additnitionalProjectName
+    value: "SFA.DAS.AparAdmin.UITests"
 
 resources:
   repositories:
@@ -43,6 +43,7 @@ pool:
 stages:
   - template: ../pipeline-templates/stage/enviroment-stage.yml
     parameters:
-      projectName: $(projectName)
+      projectName: ${{ variables.projectName }}
+      additionalProjectName: ${{ variables.additionalProjectName }}
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
