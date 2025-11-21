@@ -8,6 +8,9 @@ parameters:
     default: '**\**\SFA.DAS*tests*.dll'
   - name: projectName
     type: string
+  - name: additionalprojectName
+    type: string
+    default: ''
 
 jobs:
 - deployment: Deploy_AutomationTests

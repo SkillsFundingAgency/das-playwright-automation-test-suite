@@ -3,6 +3,9 @@ parameters:
     type: string
   - name: projectsToBuild
     type: string
+  - name: additionalprojectsToBuild
+    type: string
+    default: ''
 
 jobs:
 - job: CodeBuild
@@ -18,21 +21,37 @@ jobs:
     - task: DotNetCoreCLI@2
       displayName: dotnet build
       inputs:
-        projects: ${{ parameters.projectsToBuild }}
         arguments: '--configuration $(BuildConfiguration)'
+        ${{ if eq(parameters.project, '') }} :
+          projects: ${{ parameters.projectsToBuild }}
+        ${{ else }} :
+          projects: |
+            ${{ parameters.projectsToBuild }}
+            ${{ parameters.additionalProjectsToBuild }}
+
 
     - task: DotNetCoreCLI@2
       displayName: dotnet unit test
       inputs:
         command: 'test'
         arguments: '--filter "TestCategory=Unittests" --logger trx;logfilename=UnittestResults.trx'
-        projects: ${{ parameters.projectsToBuild }}
+        ${{ if eq(parameters.project, '') }} :
+          projects: ${{ parameters.projectsToBuild }}
+        ${{ else }} :
+          projects: |
+            ${{ parameters.projectsToBuild }}
+            ${{ parameters.additionalProjectsToBuild }}
 
     - task: DotNetCoreCLI@2
       displayName: 'dotnet pack'
       inputs:
         command: 'pack'
-        projects: ${{ parameters.projectsToBuild }}
+        ${{ if eq(parameters.project, '') }} :
+          projects: ${{ parameters.projectsToBuild }}
+        ${{ else }} :
+          projects: |
+            ${{ parameters.projectsToBuild }}
+            ${{ parameters.additionalProjectsToBuild }}
         packDirectory: '$(build.artifactstagingdirectory)/publish'
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
@@ -42,7 +61,12 @@ jobs:
         command: publish
         publishWebProjects: false
         zipAfterPublish: false
-        projects: ${{ parameters.projectsToBuild }}
+        ${{ if eq(parameters.project, '') }} :
+          projects: ${{ parameters.projectsToBuild }}
+        ${{ else }} :
+          projects: |
+            ${{ parameters.projectsToBuild }}
+            ${{ parameters.additionalProjectsToBuild }}
         arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
 
     - task: CopyFiles@2
