@@ -8,9 +8,6 @@ parameters:
     default: '**\**\SFA.DAS*tests*.dll'
   - name: projectName
     type: string
-  - name: additionalprojectName
-    type: string
-    default: ''
 
 jobs:
 - deployment: Deploy_AutomationTests
@@ -65,7 +62,7 @@ jobs:
             displayName: 'Install Playwright Browsers'
             inputs:
               targetType: 'filePath'
-              ${{ each project in split(parameters.projectName, ',') }} :
+              ${{ each project in parameters.projectName }} :
                 filePath: '$(System.DefaultWorkingDirectory)/drop/tests/${{ project }}/playwright.ps1'
               arguments: install
 

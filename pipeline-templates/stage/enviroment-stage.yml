@@ -1,9 +1,6 @@
 parameters:
   - name: projectName
     type: string
-  - name: additionalProjectName
-    type: string
-    default: ''
   - name: BuildConfiguration
     type: string
   - name: deploy
@@ -20,8 +17,6 @@ stages:
         parameters:
           BuildConfiguration: ${{ parameters.BuildConfiguration }}
           projectName: ${{ parameters.projectName }}
-          # projectsToBuild: src/${{ parameters.projectName }}/*.csproj
-          # additionalprojectsToBuild: src/${{ parameters.additionalProjectName }}/*.csproj
 
   - stage: Deploy_TEST
     dependsOn: Build
