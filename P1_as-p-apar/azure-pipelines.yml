@@ -19,7 +19,7 @@ variables:
   - name: Deploy
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
   - name: projectName
-    value: >-
+    value: |
       "SFA.DAS.Apar.UITests"
       "SFA.DAS.AparAdmin.UITests"
 
