@@ -18,10 +18,8 @@ stages:
     jobs:
       - template: ../job/code-build.yml
         parameters:
-          BuildConfiguration: ${{ parameters. BuildConfiguration }}
-          projectsToBuild: |
-            ${{ each project in split(parameters.projectName, ',') }} :
-              src/${{ project }}/*.csproj
+          BuildConfiguration: ${{ parameters.BuildConfiguration }}
+          projectName: ${{ parameters.projectName }}
           # projectsToBuild: src/${{ parameters.projectName }}/*.csproj
           # additionalprojectsToBuild: src/${{ parameters.additionalProjectName }}/*.csproj
 
