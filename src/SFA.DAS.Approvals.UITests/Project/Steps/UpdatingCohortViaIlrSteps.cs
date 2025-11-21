@@ -37,8 +37,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given(@"a cohort created via ILR exists in (.*) section")]
         public async Task GivenACohortCreatedViaILRExistsInSection(ApprenticeRequests cohortStatus)
         {
-            context.GetValue<ObjectContext>().SetDebugInformation($"Cohort created in section: {cohortStatus}");
-
             //check db if an existing cohorts can be used
             var listOfApprenticeship = new List<Apprenticeship>();
             Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.Levy);
@@ -73,10 +71,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 listOfApprenticeship.Add(apprenticeship);
                 context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
                 await providerHomePageStepsHelper.GoToProviderHomePage(false);
+                context.GetValue<ObjectContext>().SetDebugInformation($"Cohort found in the database with status: {cohortStatus}");
             }
 
             var cohortRef = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
-
+            context.GetValue<ObjectContext>().SetDebugInformation($"Cohort Reference is: {cohortRef}");
             await new ProviderHomePage(context).GoToApprenticeRequestsPage();
             var page1 = new ApprenticeRequests_ProviderPage(context);
             await page1.NavigateToBingoBox(cohortStatus);
