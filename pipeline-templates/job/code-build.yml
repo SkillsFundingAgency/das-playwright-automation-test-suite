@@ -3,9 +3,6 @@ parameters:
     type: string
   - name: projectName
     type: string
-  - name: additionalprojectsToBuild
-    type: string
-    default: ''
 
 jobs:
 - job: CodeBuild
@@ -27,35 +24,20 @@ jobs:
       displayName: dotnet build
       inputs:
         arguments: '--configuration $(BuildConfiguration)'
-        ${{ if eq(parameters.projectName, '') }} :
-          projects: $(projectsToBuild)
-        ${{ else }} :
-          projects: |
-            ${{ parameters.projectsToBuild }}
-            ${{ parameters.additionalProjectsToBuild }}
+        projects: $(projectsToBuild)
 
     - task: DotNetCoreCLI@2
       displayName: dotnet unit test
       inputs:
         command: 'test'
         arguments: '--filter "TestCategory=Unittests" --logger trx;logfilename=UnittestResults.trx'
-        ${{ if eq(parameters.projectName, '') }} :
-          projects: $(projectsToBuild)
-        ${{ else }} :
-          projects: |
-            ${{ parameters.projectsToBuild }}
-            ${{ parameters.additionalProjectsToBuild }}
+        projects: $(projectsToBuild)
 
     - task: DotNetCoreCLI@2
       displayName: 'dotnet pack'
       inputs:
         command: 'pack'
-        ${{ if eq(parameters.projectName, '') }} :
-          projects: $(projectsToBuild)
-        ${{ else }} :
-          projects: |
-            ${{ parameters.projectsToBuild }}
-            ${{ parameters.additionalProjectsToBuild }}
+        projects: $(projectsToBuild)
         packDirectory: '$(build.artifactstagingdirectory)/publish'
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
@@ -65,12 +47,7 @@ jobs:
         command: publish
         publishWebProjects: false
         zipAfterPublish: false
-        ${{ if eq(parameters.projectName, '') }} :
-          projects: $(projectsToBuild)
-        ${{ else }} :
-          projects: |
-            ${{ parameters.projectsToBuild }}
-            ${{ parameters.additionalProjectsToBuild }}
+        projects: $(projectsToBuild)
         arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
 
     - task: CopyFiles@2
