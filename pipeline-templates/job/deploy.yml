@@ -70,7 +70,7 @@ jobs:
               ${{ else }} :
                 filePath: |
                   '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.projectName }}/playwright.ps1'
-                  '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.additionalProjectsToBuild }}/playwright.ps1'
+                  '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.additionalProjectName }}/playwright.ps1'
               arguments: install
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
