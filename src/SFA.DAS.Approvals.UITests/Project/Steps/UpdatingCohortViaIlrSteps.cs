@@ -119,7 +119,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var listOfUpdatedApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfUpdatedApprenticeship);
-            
+            var standardCode = listOfUpdatedApprenticeship.FirstOrDefault().TrainingDetails.StandardCode;
+
             var page = new ApproveApprenticeDetailsPage(context);
             await page.ClickOnLink(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.FullName);
             
@@ -130,8 +131,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page2.VerifyApprenticeshipDetails(listOfUpdatedApprenticeship.FirstOrDefault());
             await page2.ClickOnButton("Continue");
 
-            var page3 = new RecognitionOfPriorLearningPage(context);
-            await page3.SelectNoForRPL();
+            if (standardCode <= 804 || standardCode >= 812)
+            {
+                var page3 = new RecognitionOfPriorLearningPage(context);
+                await page3.SelectNoForRPL();
+            }
 
             //update the original apprenticeship list with the updated details for further steps:
             listOfApprenticeship.Clear();
