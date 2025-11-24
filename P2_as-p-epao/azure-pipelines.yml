@@ -44,6 +44,6 @@ stages:
   - template: ../pipeline-templates/stage/enviroment-stage.yml
     parameters:
       projectName: ${{ variables.projectName }}
-      additionalProjectName: ${{ variables.additionalProjectName }}
+      # additionalProjectName: ${{ variables.additionalProjectName }}
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
