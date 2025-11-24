@@ -35,7 +35,6 @@ stages:
           Environment: TEST
           ServiceConnection: SFA-DAS-DevTest-ARM
           projectName: ${{ parameters.projectName }}
-          additionalProjectName: ${{ parameters.additionalProjectName }}
 
   - stage: Deploy_TEST2
     dependsOn: Build
