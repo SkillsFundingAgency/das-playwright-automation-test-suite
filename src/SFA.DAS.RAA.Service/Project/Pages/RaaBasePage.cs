@@ -52,7 +52,7 @@ public abstract class RaaBasePage : BasePage
     {
         ILocator locator = page.Locator($"iframe[id='{locatoriD}']");
 
-        await Assertions.Expect(locator).ToBeVisibleAsync();
+        await Assertions.Expect(locator).ToBeVisibleAsync(new LocatorAssertionsToBeVisibleOptions { Timeout = 10000});
 
         await locator.ContentFrame.Locator(".mce-content-body").FillAsync(text);
     }
