@@ -147,10 +147,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
             }
 
             return null; // ULN not found
-
-
         }
-
 
     }
 
@@ -172,13 +169,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
         public int PlannedOTJTrainingHours { get; set; }
         public int StandardCode { get; set; }
         public string ConsumerReference { get; set; }
-
-        public override string ToString()
-        {
-            return $"ULN={ULN}, UKPRN={UKPRN}, Name={FirstName} {LastName}, LearnerEmail={LearnerEmail}, DateOfBirth={DateOfBirth:yyyy-MM-dd}, Start={StartDate:yyyy-MM-dd}, End={PlannedEndDate:yyyy-MM-dd}, TrainingPrice={TrainingPrice}, EPAOPrice={EPAOPrice}, AgreementId={AgreementId}, FlexiJob={IsFlexiJob}, StandardCode={StandardCode}, ConsumerRef={ConsumerReference}, OTJHours={PlannedOTJTrainingHours}";
-        }
-
-
     }
 
     internal class LearnerResponse
