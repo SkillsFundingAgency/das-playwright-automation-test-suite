@@ -13,8 +13,8 @@ jobs:
 - deployment: Deploy_AutomationTests
   displayName: 'Deploy Automation Tests to ${{ parameters.Environment }}'
   environment: ${{ parameters.Environment }}
-  pool:
-    vmImage: 'windows-latest'
+  variables:
+    projectName: $[ stageDependencies.Build.CodeBuild.outputs['buildProjectPaths.projectName'] ]
   strategy:
     runOnce:
       deploy:
@@ -62,7 +62,7 @@ jobs:
             displayName: 'Install Playwright Browsers'
             inputs:
               targetType: 'filePath'
-              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.projectName }}/playwright.ps1'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
             displayName: 'Set Screen Resolution'

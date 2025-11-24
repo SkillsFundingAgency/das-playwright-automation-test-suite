@@ -19,8 +19,7 @@ stages:
       - template: ../job/code-build.yml
         parameters:
           BuildConfiguration: ${{ parameters. BuildConfiguration }}
-          projectsToBuild: src/${{ parameters.projectName }}/*.csproj
-          additionalprojectsToBuild: src/${{ parameters.additionalProjectName }}/*.csproj
+          projectName: ${{ parameters.projectName }}
 
   - stage: Deploy_TEST
     dependsOn: Build
