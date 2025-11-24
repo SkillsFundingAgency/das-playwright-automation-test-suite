@@ -65,7 +65,13 @@ jobs:
             displayName: 'Install Playwright Browsers'
             inputs:
               targetType: 'filePath'
-              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.projectName }}/playwright.ps1'
+              ${{ if eq(parameters.additionalProjectName, '') }} :
+                filePath: '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.projectName }}/playwright.ps1'
+              ${{ else }} :
+                filePath: |
+                  '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.projectName }}/playwright.ps1'
+                  '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.additionalProjectsToBuild }}/playwright.ps1'
+              arguments: install
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
             displayName: 'Set Screen Resolution'
