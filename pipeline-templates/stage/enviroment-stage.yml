@@ -50,7 +50,6 @@ stages:
           Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
           projectName: ${{ parameters.projectName }}
-          additionalProjectName: ${{ parameters.additionalProjectName }}
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -65,7 +64,6 @@ stages:
           Environment: DEMO
           ServiceConnection: SFA-DAS-DevTest-ARM
           projectName: ${{ parameters.projectName }}
-          additionalProjectName: ${{ parameters.additionalProjectName }}
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -84,7 +82,6 @@ stages:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: SFA-DIG-PreProd-ARM
             projectName: ${{ parameters.projectName }}
-            additionalProjectName: ${{ parameters.additionalProjectName }}
       
       - ${{ else }}:
         - template: ../job/deploy.yml
@@ -92,4 +89,3 @@ stages:
             Environment: 'PP'
             ServiceConnection: SFA-DIG-PreProd-ARM
             projectName: ${{ parameters.projectName }}
-            additionalProjectName: ${{ parameters.additionalProjectName }}
