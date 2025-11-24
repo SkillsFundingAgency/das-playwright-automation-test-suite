@@ -20,7 +20,7 @@ variables:
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
   - name: projectName
     value: "SFA.DAS.Apar.UITests"
-  - name: additnitionalProjectName
+  - name: additionalProjectName
     value: "SFA.DAS.AparAdmin.UITests"
 
 resources:
