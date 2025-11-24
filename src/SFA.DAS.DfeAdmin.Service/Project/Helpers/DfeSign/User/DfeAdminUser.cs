@@ -93,3 +93,15 @@ public class QfastOFQUALUser : DfeAdminUser
 {
     public QfastOFQUALUser() : base("qfastofqualuser") { }
 }
+public class QfastDataImporter : DfeAdminUser
+{
+    public QfastDataImporter() : base("qfastdataimporter") { }
+}
+public class QfastReviewer : DfeAdminUser
+{
+    public QfastReviewer() : base("qfastreviewer") { }
+}
+public class QfastFormEditor : DfeAdminUser
+{
+    public QfastFormEditor() : base("qfastformeditor") { }
+}

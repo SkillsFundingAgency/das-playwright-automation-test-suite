@@ -27,7 +27,7 @@ public abstract class Inner_BaseApiRestClient(ObjectContext objectContext, Inner
         return new OAuth2AuthorizationRequestHeaderAuthenticator(accessToken, tokenType);
     }
 
-    public async Task<(string tokenType, string accessToken)> GetAADAuthToken() => await new Inner_ApiAuthUsingMI(config).GetAuthToken(AppServiceName);
+    public async Task<(string tokenType, string accessToken)> GetAADAuthToken() => await new Inner_ApiAuthUsingMI(config).GetAuthToken(EnvironmentConfig.ReplaceEnvironmentName(AppServiceName));
 
     public async Task<(string tokenType, string accessToken)> GetOAuthToken() => await new Inner_ApiAuthUsingOAuth(config, objectContext).GetAuthToken(AppServiceName);
 }

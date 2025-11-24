@@ -23,7 +23,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             Training training = new Training();
 
             CoursesDataHelper coursesDataHelper = new CoursesDataHelper();
-            var course = courseSelector == null ? await coursesDataHelper.GetRandomCourse() : await courseSelector(coursesDataHelper);
+            var course = courseSelector == null ? await coursesDataHelper.GetCourse(null) : await courseSelector(coursesDataHelper);
 
             if (course.ApprenticeshipType == "FoundationApprenticeship")
             {
@@ -48,6 +48,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             training.IsFlexiJob = false;
             training.PlannedOTJTrainingHours = 1200;
             training.StandardCode = course.StandardCode;
+            training.CourseTitle = course.Title;
             training.ConsumerReference = "CR123456";
 
             await Task.Delay(100);

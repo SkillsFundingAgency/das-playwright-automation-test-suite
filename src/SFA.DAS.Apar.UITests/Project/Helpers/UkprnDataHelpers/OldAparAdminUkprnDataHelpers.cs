@@ -33,5 +33,10 @@ public class OldAparAdminUkprnDataHelpers : AparUkprnBaseDataHelpers
                     new(providernamekey, "OLMEC"),
                new(ukprnkey, "10033872"),
            ]);
+        _data.Add("rpadaparproviderdetails",
+          [
+                   new(providernamekey, "METRO BANK PLC"),
+               new(ukprnkey, "10056801"),
+           ]);
     }
 }

@@ -43,14 +43,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             {
                 var previousScenarioContext = (ScenarioContext)featureContext["ScenarioContextofPreviousScenario"];
 
-                var x = previousScenarioContext.GetValue<List<Apprenticeship>>();
+                var x = previousScenarioContext.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
                 foreach (var apprenticeship in x)
                 {
                     listOfApprenticeship.Add(apprenticeship);
                 }
 
-                context.Set(listOfApprenticeship);
+                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
             }
          }
 

@@ -1,5 +1,4 @@
 ﻿@approvals
-@linkedScenarios
 Feature: AP_E2E_EUA_02_ReturnCohortBackToProviderAfter2Weeks
 
 This test verify that a cohort sent to the employer 14 days ago, should automatically be returned back to the Provider

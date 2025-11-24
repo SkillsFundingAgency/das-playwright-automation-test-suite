@@ -4,7 +4,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 
 internal class CoursesDataHelper()
 {
-    internal async Task<Courses> GetRandomCourse()
+    internal async Task<Courses> GetCourse(int? courseCode = null)
     {
         var courses = new List<Courses>
         {
@@ -60,8 +60,18 @@ internal class CoursesDataHelper()
         };
 
         await Task.Delay(100);
+        
+        if (courseCode.HasValue)
+        {
+            var matchedCourse = courses.FirstOrDefault(c => c.StandardCode == courseCode.Value);
+            if (matchedCourse is not null)
+                return matchedCourse;
+        }
+
         var random = new Random();
         return courses[random.Next(courses.Count)];
+
+            
     }
 
     internal async Task<Courses> GetRandomFoundationCourses()

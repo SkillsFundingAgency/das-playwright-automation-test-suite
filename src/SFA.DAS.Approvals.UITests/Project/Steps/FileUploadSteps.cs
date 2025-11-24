@@ -1,4 +1,5 @@
 ﻿using Azure;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.FileUploadModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
@@ -40,14 +41,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(EmployerType.NonLevy, 1, null, listOfApprenticeship);
             listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(EmployerType.Levy, 1, null, listOfApprenticeship, trainingFactory: foundationTrainingDetails);
-            context.Set(listOfApprenticeship);
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
 
         }
 
         [Given("one of the apprentice on Foundation course is above (.*) years")]
         public async Task GivenOneOfTheApprenticeOnFoundationCourseIsAboveYears(int ageLimit)
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourses());
             var apprenticeDetails = new ApprenticeFactory(ageLimit + 1);
@@ -70,7 +71,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("system does not allow to upload the file and displays an error message")]
         public async Task ThenSystemDoesNotAllowToUploadTheFileAndDisplaysAnErrorMessage()
         {
-            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             var errorMessage = "The apprentice's date of birth must show that they are not older than 25 years old at the start of their training";
             var rowNumber = 3;

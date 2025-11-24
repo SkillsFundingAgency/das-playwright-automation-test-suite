@@ -36,6 +36,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
             await page.GetByRole(AriaRole.Row, new PageGetByRoleOptions { Name = tableRow })
                       .GetByRole(AriaRole.Link)
+                      .First
                       .ClickAsync();
 
             return await VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));

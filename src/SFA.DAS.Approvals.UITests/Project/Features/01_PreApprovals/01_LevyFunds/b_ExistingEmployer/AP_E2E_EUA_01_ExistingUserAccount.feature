@@ -11,7 +11,6 @@ Finally, employer approves that cohort and apprentice record is created in Learn
 @e2escenarios
 Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves it
 	Given Provider successfully submits 1 ILR record containing a learner record for a "Levy" Employer
-	And SLD push its data into AS
 	Then a record is created in LearnerData Db for each learner
 	When Provider sends an apprentice request (cohort) to the employer by selecting same apprentices
 	Then Commitments Db is updated with respective LearnerData Id

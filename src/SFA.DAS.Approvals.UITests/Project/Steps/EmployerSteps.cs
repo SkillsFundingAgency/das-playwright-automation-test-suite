@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
@@ -52,7 +53,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("Employer does not take any action on that cohort for more than 2 weeks")]
         public async Task WhenEmployerDoesNotTakeAnyActionOnThatCohortForMoreThan2Weeks()
         {
-            var cohortRef = context.GetValue<List<Apprenticeship>>().FirstOrDefault().Cohort.Reference;
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
             await commitmentsDbSqlHelper.UpdateCohortLastUpdatedDate(cohortRef, DateAndTime.Now.AddDays(-15));
 
             //test environments are configured to run web job: "ExpireInactiveCohortsWithEmployerAfter2WeeksSchedule" every 4th minute
@@ -105,7 +106,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the employer is stopped with an error message")]
         public async Task ThenTheEmployerIsStoppedWithAnErrorMessage()
         {
-            var apprentice = context.GetValue<List<Apprenticeship>>().FirstOrDefault();
+            var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var uln = apprentice.ApprenticeDetails.ULN.ToString();
             var name = apprentice.ApprenticeDetails.FullName;
             var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
@@ -141,7 +142,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then ("verify RPL details")]
         public async Task ThenTheEmployerVerifyRPLDetails()
         {
-           var apprenticeships = context.GetValue<List<Apprenticeship>>();
+           var apprenticeships = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var page = new EmployerApproveApprenticeDetailsPage(context);
            await page.VerifyRPLDetails(apprenticeships);
         }

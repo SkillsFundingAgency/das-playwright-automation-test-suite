@@ -7,4 +7,9 @@ public class UKPRNAllowListPage(ScenarioContext context) : BasePage(context)
         await Assertions.Expect(page.Locator("h1"))
             .ToContainTextAsync("Success");
     }
+    public async Task<ManageTrainingProviderInformationPage> GoBackToManageTrainingProvider()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back" }).ClickAsync();
+        return await VerifyPageAsync(() => new ManageTrainingProviderInformationPage(context));
+    }
 }

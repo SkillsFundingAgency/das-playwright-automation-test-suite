@@ -16,7 +16,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
         internal ApprovalsEmailsHelper(ScenarioContext context)
         {
             this.context = context;
-            listOfApprenticeship = context.GetValue<List<Apprenticeship>>();
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
         }
 
         internal async Task VerifyEmailAsync(string recipient, string notificationType)
