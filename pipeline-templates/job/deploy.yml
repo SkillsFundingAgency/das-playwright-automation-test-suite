@@ -6,8 +6,6 @@ parameters:
   - name: TestAssembly
     type: string
     default: '**\**\SFA.DAS*tests*.dll'
-  - name: projectName
-    type: string
 
 jobs:
 - deployment: Deploy_AutomationTests
