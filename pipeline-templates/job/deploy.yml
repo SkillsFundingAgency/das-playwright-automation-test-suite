@@ -61,6 +61,7 @@ jobs:
             inputs:
               targetType: 'filePath'
               filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
+              arguments: install
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
             displayName: 'Set Screen Resolution'
