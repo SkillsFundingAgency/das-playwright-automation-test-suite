@@ -1,4 +1,6 @@
 parameters:
+  - name: projectName
+    type: string
   - name: ServiceConnection
     type: string
   - name: Environment
@@ -11,8 +13,6 @@ jobs:
 - deployment: Deploy_AutomationTests
   displayName: 'Deploy Automation Tests to ${{ parameters.Environment }}'
   environment: ${{ parameters.Environment }}
-  variables:
-    projectName: $[ stageDependencies.Build.CodeBuild.outputs['buildProjectPaths.projectName'] ]
   strategy:
     runOnce:
       deploy:
@@ -22,8 +22,6 @@ jobs:
 
           - checkout: das-platform-automation
             displayName: 'Checkout das-platform-automation'
-
-          - powershell: Write-Host $(projectName)
 
           - task: DownloadBuildArtifacts@0
             displayName: 'Download build artifacts'
@@ -62,7 +60,7 @@ jobs:
             displayName: 'Install Playwright Browsers'
             inputs:
               targetType: 'filePath'
-              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.projectName }}/playwright.ps1'
               arguments: install
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
