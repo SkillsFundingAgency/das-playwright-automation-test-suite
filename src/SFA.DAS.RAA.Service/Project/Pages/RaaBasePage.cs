@@ -15,8 +15,6 @@ public abstract class RaaBasePage : BasePage
 
     //protected virtual By SaveAndContinueButton => By.ClassName("govuk-button");
 
-    //private static By CancelLink => By.LinkText("Cancel");
-
     //protected static By MultipleCandidateFeedback => By.CssSelector("#provider-multiple-candidate-feedback");
     //protected static By CandidateFeedback => By.CssSelector("#CandidateFeedback");
 
@@ -57,5 +55,5 @@ public abstract class RaaBasePage : BasePage
         await locator.ContentFrame.Locator(".mce-content-body").FillAsync(text);
     }
 
-    //public void EmployerCancelAdvert() => formCompletionHelper.Click(CancelLink);
+    public async Task EmployerCancelAdvert() => await page.GetByRole(AriaRole.Link, new() { Name = "Cancel" }).ClickAsync();
 }

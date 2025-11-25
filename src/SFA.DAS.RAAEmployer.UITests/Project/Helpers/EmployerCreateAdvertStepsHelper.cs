@@ -1,26 +1,76 @@
 using SFA.DAS.RAA.Service.Project.Helpers;
+using SFA.DAS.RAA.Service.Project.Pages;
 using SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
+using System.Threading.Tasks;
 //using DoYouNeedToCreateAnAdvertPage = SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages.DynamicHomePageEmployer.DoYouNeedToCreateAnAdvertPage;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers;
 
-//public class EmployerCreateDraftAdvertStepsHelper(ScenarioContext context) : EmployerCreateAdvertStepsHelper(context)
-//{
-//    protected bool IsFoundationAdvert => context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
+public class EmployerCreateDraftAdvertStepsHelper(ScenarioContext context) : EmployerCreateAdvertStepsHelper(context)
+{
+    protected bool IsFoundationAdvert => context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
 
-//    internal VacancyReferencePage SubmitDraftAdvert(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage) =>
-//        CheckAndSubmitAdvert(CompleteAboutTheEmployer(createAdvertPage).EnterAdditionalQuestionsForApplicants().CompleteAllAdditionalQuestionsForApplicants(IsFoundationAdvert, true, true));
+    internal async Task<VacancyReferencePage> SubmitDraftAdvert(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage) 
+    {
+        var page = await CompleteAboutTheEmployer(createAdvertPage);
 
-//    internal CreateAnApprenticeshipAdvertOrVacancyPage CompleteDraftAdvert(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage) =>
-//        CompleteAboutTheEmployer(createAdvertPage).EnterAdditionalQuestionsForApplicants().CompleteAllAdditionalQuestionsForApplicants(IsFoundationAdvert, true, true).CheckYourAnswers().PreviewAdvert().DeleteVacancy().NoDeleteVacancy();
+        var page1 = await page.EnterAdditionalQuestionsForApplicants();
 
-//    internal EmployerVacancySearchResultPage CompleteDeleteOfDraftVacancy() => new CreateAnApprenticeshipAdvertOrVacancyPage(context).CheckYourAnswers().PreviewAdvert().DeleteVacancy().YesDeleteAdvert();
+        var page2 = await page1.CompleteAllAdditionalQuestionsForApplicants(IsFoundationAdvert, true, true);
 
-//    internal CreateAnApprenticeshipAdvertOrVacancyPage CreateDraftAdvert() => CreateDraftAdvert(CreateAnApprenticeshipAdvertOrVacancy(), false);
+        return await CheckAndSubmitAdvert(page2);
+    }
+        
+    internal async Task<CreateAnApprenticeshipAdvertOrVacancyPage> CompleteDraftAdvert(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage)
+    {
+        var page = await CompleteAboutTheEmployer(createAdvertPage);
 
-//    internal YourApprenticeshipAdvertsHomePage CancelAdvert() { EnterAdvertTitleMultiOrg(CreateAnApprenticeshipAdvertOrVacancy()).EmployerCancelAdvert(); return new YourApprenticeshipAdvertsHomePage(context); }
-//}
+        var page1 = await page.EnterAdditionalQuestionsForApplicants();
+
+        var page2 = await page1.CompleteAllAdditionalQuestionsForApplicants(IsFoundationAdvert, true, true);
+
+        var page3 = await page2.CheckYourAnswers();
+
+        var page4 = await page3.PreviewAdvert();
+
+        var page5 = await page4.DeleteVacancy();
+        
+        return await page5.NoDeleteVacancy();
+    }
+
+
+    internal async Task CompleteDeleteOfDraftVacancy()
+    {
+        var page = new CreateAnApprenticeshipAdvertOrVacancyPage(context);
+
+        await page.VerifyPage();
+
+        var page1 = await page.CheckYourAnswers();
+
+        var page2 = await page1.PreviewAdvert();
+
+        var page3 = await page2.DeleteVacancy();
+        
+        await page3.YesDeleteAdvert();
+    }
+
+    internal async Task<CreateAnApprenticeshipAdvertOrVacancyPage> CreateDraftAdvert()
+    {
+        return await CreateDraftAdvert(await CreateAnApprenticeshipAdvertOrVacancy(), false);
+    }
+
+    internal async Task<YourApprenticeshipAdvertsHomePage> CancelAdvert() 
+    {
+        var page = await CreateAnApprenticeshipAdvertOrVacancy();
+
+        var page1 = await EnterAdvertTitleMultiOrg(page);
+        
+        await page1.EmployerCancelAdvert();
+
+        return await VerifyPageHelper.VerifyPageAsync(() => new YourApprenticeshipAdvertsHomePage(context));
+    }
+}
 
 //public class EmployerCreateAdvertPrefStepsHelper(ScenarioContext context, RAAEmployerUser rAAEmployerUser) : EmployerCreateAdvertStepsHelper(context)
 //{
@@ -102,26 +152,26 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
     //    await page1.VerifyDisabilityConfident();
     //}
 
-    //internal async Task<VacancyReferencePage> CloneAnAdvert()
-    //{
-    //    var page = await GoToRecruitmentHomePage();
+    internal async Task<VacancyReferencePage> CloneAnAdvert()
+    {
+        var page = await GoToRecruitmentHomePage();
 
-    //    var page1 = await page.SelectLiveAdvert();
+        var page1 = await page.SelectLiveAdvert();
 
-    //    var page2 = await page1.CloneAdvert();
+        var page2 = await page1.CloneAdvert();
 
-    //    var page3 = await page2.SelectYes();
+        var page3 = await page2.SelectYes();
 
-    //    var page4 = await page3.UpdateTitle();
+        var page4 = await page3.UpdateTitle();
 
-    //    var page5 = await page4.UpdateVacancyTitleAndGoToCheckYourAnswersPage();
+        var page5 = await page4.UpdateVacancyTitleAndGoToCheckYourAnswersPage();
 
-    //    var page6 = await page5.UpdateAdditionalQuestion();
+        var page6 = await page5.UpdateAdditionalQuestion();
 
-    //    var page7 = await page6.UpdateAllAdditionalQuestionsAndGoToCheckYourAnswersPage(true, true);
+        var page7 = await page6.UpdateAllAdditionalQuestionsAndGoToCheckYourAnswersPage(true, true);
 
-    //    return await SubmitAndSetVacancyReference(page7);
-    //}
+        return await SubmitAndSetVacancyReference(page7);
+    }
 
     internal async Task<VacancyReferencePage> CreateANewAdvert_WageType(string wageType) => await CreateANewAdvert(string.Empty, "employer", false, wageType);
 

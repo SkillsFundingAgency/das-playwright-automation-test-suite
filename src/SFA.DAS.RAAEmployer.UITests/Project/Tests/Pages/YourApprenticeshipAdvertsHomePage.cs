@@ -1,12 +1,14 @@
 ﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
+using SFA.DAS.RAA.Service.Project.Helpers;
+using SFA.DAS.RAA.Service.Project.Pages;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
 
 public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool navigate = false, bool gotourl = false) : InterimYourApprenticeshipAdvertsHomePage(context, navigate, gotourl)
 {
 
-//    private readonly SearchVacancyPageHelper _searchVacancyPageHelper = new(context);
-    
+    private readonly SearchVacancyPageHelper _searchVacancyPageHelper = new(context);
+
 
     //protected override By AcceptCookieButton => By.CssSelector("#btn-cookie-accept");
     //private static By CreateAnAdvertButton => By.LinkText("Create an advert");
@@ -22,10 +24,11 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
     //    return new YourApprenticeshipAdvertsHomePage(context);
     //}
 
-    //public EmployerVacancySearchResultPage GoToYourAdvertFromDraftAdverts()
+    //public async Task<EmployerVacancySearchResultPage> GoToYourAdvertFromDraftAdverts()
     //{
-    //    formCompletionHelper.ClickLinkByText("Draft adverts");
-    //    return new EmployerVacancySearchResultPage(context);
+    //    await page.GetByRole(AriaRole.Link, new() { Name = "Draft adverts" }).ClickAsync();
+
+    //    return await VerifyPageAsync(() => new EmployerVacancySearchResultPage(context));
     //}
 
     public async Task<CreateAnAdvertHomePage> CreateAnApprenticeshipAdvert()
@@ -41,7 +44,7 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
         return await VerifyPageAsync(() => new CreateAnAdvertHomePage(context));
     }
 
-    //public ManageRecruitPage SelectLiveAdvert() => _searchVacancyPageHelper.SelectLiveAdvert();
+    public async Task<ManageRecruitPage> SelectLiveAdvert() => await _searchVacancyPageHelper.SelectLiveAdvert();
 
     //public EmployerVacancySearchResultPage SearchAdvertByReferenceNumber() => _searchVacancyPageHelper.SearchEmployerVacancy();
 
