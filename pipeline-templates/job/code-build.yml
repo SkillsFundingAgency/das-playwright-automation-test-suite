@@ -16,7 +16,7 @@ jobs:
         $projects = @(${{ parameters.projectName }})
         $first = $projects[0]
         $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
-        $joined = ($paths -join "`n")
+        $joined = ($paths -join ";")
         Write-Host "joined: $joined"
         Write-Host "first: $first"
         Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
