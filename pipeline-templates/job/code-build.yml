@@ -15,48 +15,41 @@ jobs:
     - powershell: |
         $projects = @(${{ parameters.projectName }})
         $first = $projects[0]
-        $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
-        $joined = ($paths -join ";")
-        Write-Host "joined: $joined"
         Write-Host "first: $first"
-        Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
         Write-Host "##vso[task.setvariable variable=projectName;isOutput=true]$first"
       name: buildProjectPaths
       displayName: Build Project File Path
 
-    - task: DotNetCoreCLI@2
-      displayName: dotnet build
-      inputs:
-        arguments: '--configuration $(BuildConfiguration)'
-        projects: |
-          $(projectsToBuild)
+    - ${{ each project in parameters.projectName }}:
+      - task: DotNetCoreCLI@2
+        displayName: dotnet build
+        inputs:
+          arguments: '--configuration $(BuildConfiguration)'
+          projects: src/${{ project }}/*.csproj
 
-    - task: DotNetCoreCLI@2
-      displayName: dotnet unit test
-      inputs:
-        command: 'test'
-        arguments: '--filter "TestCategory=Unittests" --logger trx;logfilename=UnittestResults.trx'
-        projects: |
-          $(projectsToBuild)
+      - task: DotNetCoreCLI@2
+        displayName: dotnet unit test
+        inputs:
+          command: 'test'
+          arguments: '--filter "TestCategory=Unittests" --logger trx;logfilename=UnittestResults.trx'
+          projects: src/${{ project }}/*.csproj
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet pack'
-      inputs:
-        command: 'pack'
-        projects: |
-          $(projectsToBuild)
-        packDirectory: '$(build.artifactstagingdirectory)/publish'
-        arguments: '--configuration $(BuildConfiguration) --no-restore'
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet pack'
+        inputs:
+          command: 'pack'
+          projects: src/${{ project }}/*.csproj
+          packDirectory: '$(build.artifactstagingdirectory)/publish'
+          arguments: '--configuration $(BuildConfiguration) --no-restore'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet publish'
-      inputs:
-        command: publish
-        publishWebProjects: false
-        zipAfterPublish: false
-        projects: |
-          $(projectsToBuild)
-        arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet publish'
+        inputs:
+          command: publish
+          publishWebProjects: false
+          zipAfterPublish: false
+          projects: src/${{ project }}/*.csproj
+          arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
 
     - task: CopyFiles@2
       displayName: 'Copy plain files to: $(build.artifactstagingdirectory)/tests/files'
