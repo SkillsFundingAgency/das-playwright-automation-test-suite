@@ -7,7 +7,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project
     {
         private readonly ConfigSection _configSection = context.Get<ConfigSection>();
 
-        [BeforeScenario(Order = 2)]
+        [BeforeScenario(Order = 12)]
         public async Task SetUpRAAEmployerProjectConfiguration()
         {
             await context.SetEasLoginUser(

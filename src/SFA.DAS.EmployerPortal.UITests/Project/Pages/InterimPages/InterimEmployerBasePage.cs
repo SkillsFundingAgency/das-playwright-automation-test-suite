@@ -70,8 +70,7 @@ public class InterimYourApprenticeshipAdvertsHomePage(ScenarioContext context, b
 
     public override async Task VerifyPage()
     {
-        await Task.Delay(1000);
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your apprenticeship adverts");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your apprenticeship adverts", new LocatorAssertionsToContainTextOptions { Timeout = 10000});
     }
 }
 
@@ -81,7 +80,6 @@ public class InterimApprenticesHomePage(ScenarioContext context, bool gotourl) :
 
     public override async Task VerifyPage()
     {
-        await Task.Delay(1000);
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentices");
     }
 }
@@ -95,7 +93,6 @@ public class InterimFinanceHomePage(ScenarioContext context, bool navigate, bool
 
     public override async Task VerifyPage()
     {
-        await Task.Delay(1000); 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Finance");
     }
 }
