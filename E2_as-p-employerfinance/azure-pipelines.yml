@@ -1,5 +1,12 @@
 trigger: none
 pr: none
+schedules:
+- cron: '0 3 * * 1-5'
+  displayName: ScheduledRun
+  branches:
+    include:
+    - master
+  always: true
 
 variables:
   - name: BuildConfiguration
@@ -11,6 +18,8 @@ variables:
   - group: "Provider Release Automation Suite Variables"
   - name: Deploy
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
+  - name: projectName
+    value: "SFA.DAS.EmployerFinance.UITests"
 
 resources:
   repositories:
@@ -30,8 +39,9 @@ pool:
   vmImage: 'windows-latest'
 
 stages:
-  - template: ./pipeline-templates/stage/enviroment-stage.yml
+  - template: ../pipeline-templates/stage/enviroment-stage.yml
     parameters:
       projectName: $(projectName)
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
+      
