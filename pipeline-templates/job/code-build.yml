@@ -7,15 +7,13 @@ parameters:
 jobs:
 - job: CodeBuild
   displayName: Code Build
-  pool:
-    vmImage: 'windows-latest'
   workspace:
     clean: all
   variables:
     - group: BUILD Management Resources
   steps:
     - powershell: |
-        $projects = ConvertFrom-Json '${{ parameters.projectName }}'
+        $projects = ${{ parameters.projectName }}
         $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
         $joined = ($paths -join "`n")
         Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
