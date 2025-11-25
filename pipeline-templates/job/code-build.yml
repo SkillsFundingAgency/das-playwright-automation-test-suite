@@ -19,7 +19,6 @@ jobs:
         $joined = @($paths -join "%0D%0A")
         Write-Host "joined: $joined"
         Write-Host "first: $first"
-        foreach 
         Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
         Write-Host "##vso[task.setvariable variable=projectName;isOutput=true]$first"
       name: buildProjectPaths
