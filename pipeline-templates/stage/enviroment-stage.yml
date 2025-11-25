@@ -19,7 +19,7 @@ stages:
       - template: ../job/code-build.yml
         parameters:
           BuildConfiguration: ${{ parameters. BuildConfiguration }}
-          projectName: ${{ parameters.projectName }}
+          projectName: '[${{ parameters.projectName }}]'
 
   - stage: Deploy_TEST
     dependsOn: Build
@@ -33,7 +33,6 @@ stages:
         parameters:
           Environment: TEST
           ServiceConnection: SFA-DAS-DevTest-ARM
-          projectName: ${{ parameters.projectName }}
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -47,7 +46,6 @@ stages:
         parameters:
           Environment: TEST2
           ServiceConnection: SFA-DAS-DevTest-ARM
-          projectName: ${{ parameters.projectName }}
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -61,7 +59,6 @@ stages:
         parameters:
           Environment: DEMO
           ServiceConnection: SFA-DAS-DevTest-ARM
-          projectName: ${{ parameters.projectName }}
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -79,11 +76,9 @@ stages:
           parameters:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: SFA-DIG-PreProd-ARM
-            projectName: ${{ parameters.projectName }}
       
       - ${{ else }}:
         - template: ../job/deploy.yml
           parameters:
             Environment: 'PP'
             ServiceConnection: SFA-DIG-PreProd-ARM
-            projectName: ${{ parameters.projectName }}
