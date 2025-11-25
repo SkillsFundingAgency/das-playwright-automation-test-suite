@@ -15,7 +15,7 @@ jobs:
     - powershell: |
         $projects = @(${{ parameters.projectName }})
         $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
-        $joined = ($paths -join "`n")
+        $joined = @($paths -join "`n")
         Write-Host "joined: $joined"
         $first = $projects[0]
         Write-Host "first: $first"
