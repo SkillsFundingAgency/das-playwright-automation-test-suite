@@ -19,7 +19,7 @@ stages:
       - template: ../job/code-build.yml
         parameters:
           BuildConfiguration: ${{ parameters. BuildConfiguration }}
-          projectName: '[${{ parameters.projectName }}]'
+          projectName: '["${{ parameters.projectName }}"]'
 
   - stage: Deploy_TEST
     dependsOn: Build
