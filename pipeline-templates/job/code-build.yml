@@ -13,7 +13,7 @@ jobs:
     - group: BUILD Management Resources
   steps:
     - powershell: |
-        $projects = "${{ parameters.projectName }}" -split "`r?`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
+        $projects = '${{ parameters.projectName }}' -split "`r?`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
         $first = $projects[0]
         $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
         $joined = @($paths -join "%0D%0A")
