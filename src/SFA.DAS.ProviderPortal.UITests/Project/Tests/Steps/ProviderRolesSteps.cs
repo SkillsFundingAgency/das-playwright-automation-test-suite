@@ -1,6 +1,6 @@
-﻿using Azure;
-using SFA.DAS.ProviderLogin.Service.Project.Pages;
+﻿using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using SFA.DAS.ProviderPortal.UITests.Project.Pages;
+
 namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
 
 [Binding]
