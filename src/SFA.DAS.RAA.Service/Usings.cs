@@ -1,0 +1,10 @@
+﻿global using SFA.DAS.ConfigurationBuilder;
+global using SFA.DAS.Framework;
+global using SFA.DAS.FrameworkHelpers;
+global using SFA.DAS.RAA.DataGenerator.Project.Config;
+global using SFA.DAS.RAA.DataGenerator.Project.Helpers;
+global using System.Collections.Generic;
+global using System.Linq;
+global using TechTalk.SpecFlow;
+global using System.Threading.Tasks;
+global using Microsoft.Playwright;

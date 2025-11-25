@@ -164,15 +164,7 @@ public partial class FAA_ApplicationOverviewPage : FAABasePage
     {
         objectContext.SetDebugInformation($"verifying status is '{status}' for task - '{taskName}', section '{sectionName}' ");
 
-        var items = await AllTextAsync(".govuk-task-list__item");
-
-        items = [.. items.ToList().Select(x => x.RemoveMultipleSpace().TrimStart().TrimEnd())];
-
-        objectContext.SetDebugInformation($"{items.ToString(Environment.NewLine)}");
-
-        var item = items.ToList().FirstOrDefault(x => x.ContainsCompareCaseInsensitive(taskName));
-
-        StringAssert.Contains(status, item);
+        await VerifyAnySections(".govuk-task-list__item", taskName, status);
     }
 
     public async Task<string> GetAdditionalQuestion1TitleText()
