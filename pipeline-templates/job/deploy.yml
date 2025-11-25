@@ -23,6 +23,8 @@ jobs:
           - checkout: das-platform-automation
             displayName: 'Checkout das-platform-automation'
 
+          - powershell: Write-Host $(projectName)
+
           - task: DownloadBuildArtifacts@0
             displayName: 'Download build artifacts'
             inputs:
