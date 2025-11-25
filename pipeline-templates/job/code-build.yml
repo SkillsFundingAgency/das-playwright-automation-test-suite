@@ -13,11 +13,13 @@ jobs:
     - group: BUILD Management Resources
   steps:
     - powershell: |
-        $projects = ${{ parameters.projectName }} -split "`r?`n"
+        $projects = ${{ parameters.projectName }}
         $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
         $joined = ($paths -join "`n")
+        Write-Host "joined: $joined"
+        $first = @($projects)[0]
+        Write-Host "first: $first"
         Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
-        $first = $projects[0]
         Write-Host "##vso[task.setvariable variable=projectName;isOutput=true]$first"
       name: buildProjectPaths
       displayName: Build Project File Path
