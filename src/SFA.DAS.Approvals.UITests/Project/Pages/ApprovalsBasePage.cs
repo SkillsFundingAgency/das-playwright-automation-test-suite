@@ -11,7 +11,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages
     {
         public async Task ClickOnNavBarLinkAsync(string linkName)
         {
-            await page.Locator("#navigation").GetByRole(AriaRole.Link, new() { Name = linkName }).ClickAsync();
+            //  await page.Locator("#navigation").GetByRole(AriaRole.Link, new() { Name = linkName }).ClickAsync();
+            await page
+          .Locator("nav[aria-label='Menu'], #navigation")  // Both selectors combined
+          .GetByRole(AriaRole.Link, new() { Name = linkName })
+          .ClickAsync();
         }
 
         public async Task NavigateBrowserBack()
