@@ -91,9 +91,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user can bulk upload apprentices")]
         internal async Task ThenTheUserCanBulkUploadApprentices()
         {
-            await new ApprenticeRequests_ProviderPage(context).ClickOnNavBarLinkAsync("Home");
+            await new ApprenticeRequests_ProviderPage(context).NavToHomePage();
             var page = await StartBulkUploadJourney();
-            await page.ClickOnNavBarLinkAsync("Home");
+            await page.NavToHomePage();
         }
 
         private async Task<UploadCsvFilePage> StartBulkUploadJourney()
