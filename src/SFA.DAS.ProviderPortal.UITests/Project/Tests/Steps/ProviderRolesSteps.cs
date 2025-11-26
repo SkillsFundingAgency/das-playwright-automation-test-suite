@@ -13,6 +13,18 @@ public class ProviderRolesSteps(ScenarioContext context)
     {
         providerHomePage = new ProviderHomePage(context);
 
+        await providerHomePage.GotoAddNewEmployerStartPage();
+
+        var page1 = await providerHomePage.GoToProviderNotificationSettingsPage();
+
+        providerHomePage = await page1.ClickCancel();
+    }
+
+    [Then("user can access Notification Settings page as viewer")]
+    public async Task ThenUserCanAccessNotificationSettingsPageAsViewer()
+    {
+        providerHomePage = new ProviderHomePage(context);
+
         await providerHomePage.ClickAddAnEmployerLink();
 
         var page1 = await providerHomePage.GoToProviderNotificationSettingsPage();
