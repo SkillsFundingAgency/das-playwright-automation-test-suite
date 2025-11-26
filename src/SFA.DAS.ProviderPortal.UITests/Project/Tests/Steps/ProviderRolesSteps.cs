@@ -13,7 +13,7 @@ public class ProviderRolesSteps(ScenarioContext context)
     {
         providerHomePage = new ProviderHomePage(context);
 
-        await providerHomePage.GotoAddNewEmployerStartPage();
+        await providerHomePage.ClickAddAnEmployerLink();
 
         var page1 = await providerHomePage.GoToProviderNotificationSettingsPage();
 
