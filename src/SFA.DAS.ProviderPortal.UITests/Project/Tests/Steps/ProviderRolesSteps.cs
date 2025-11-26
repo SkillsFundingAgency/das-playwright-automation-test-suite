@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using SFA.DAS.ProviderPortal.UITests.Project.Pages;
+
 namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
 
 [Binding]
@@ -12,7 +13,7 @@ public class ProviderRolesSteps(ScenarioContext context)
     {
         providerHomePage = new ProviderHomePage(context);
 
-        await providerHomePage.ClickAddAnEmployerLink();
+        await providerHomePage.GotoAddNewEmployerStartPage();
 
         var page1 = await providerHomePage.GoToProviderNotificationSettingsPage();
 
