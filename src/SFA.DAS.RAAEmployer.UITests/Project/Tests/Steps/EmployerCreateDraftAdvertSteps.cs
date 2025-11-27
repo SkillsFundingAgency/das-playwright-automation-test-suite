@@ -36,10 +36,8 @@ public class EmployerCreateDraftAdvertSteps(ScenarioContext context)
 
     private async Task<CreateAnApprenticeshipAdvertOrVacancyPage> GoToYourAdvertFromDraftAdverts()
     {
-        //var page = await _yourApprenticeshipAdvertsHomePage.GoToYourAdvertFromDraftAdverts();
+        var page = await _yourApprenticeshipAdvertsHomePage.GoToYourAdvertFromDraftAdverts();
 
-        //return await page.CreateAnApprenticeshipAdvertPage();
-
-        return new CreateAnApprenticeshipAdvertOrVacancyPage(context);
+        return await page.CreateAnApprenticeshipAdvertPage();
     }
 }

@@ -24,12 +24,12 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
     //    return new YourApprenticeshipAdvertsHomePage(context);
     //}
 
-    //public async Task<EmployerVacancySearchResultPage> GoToYourAdvertFromDraftAdverts()
-    //{
-    //    await page.GetByRole(AriaRole.Link, new() { Name = "Draft adverts" }).ClickAsync();
+    public async Task<EmployerVacancySearchResultPage> GoToYourAdvertFromDraftAdverts()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Draft adverts" }).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new EmployerVacancySearchResultPage(context));
-    //}
+        return await VerifyPageAsync(() => new EmployerVacancySearchResultPage(context));
+    }
 
     public async Task<CreateAnAdvertHomePage> CreateAnApprenticeshipAdvert()
     {
