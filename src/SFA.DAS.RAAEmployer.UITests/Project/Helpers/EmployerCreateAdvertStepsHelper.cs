@@ -141,16 +141,16 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
     //    return await page1.GoToCreateAnApprenticeshipAdvertPage();
     //}
 
-    //internal async Task CreateOfflineVacancy()
-    //{
-    //    await CreateANewAdvert(true);
+    internal async Task CreateOfflineVacancy()
+    {
+        await CreateANewAdvert(true);
 
-    //    var page = await SearchVacancyByVacancyReference();
+        var page = await SearchVacancyByVacancyReference();
 
-    //    var page1 = await page.NavigateToViewAdvertPage();
+        var page1 = await page.NavigateToViewAdvertPage();
 
-    //    await page1.VerifyDisabilityConfident();
-    //}
+        await page1.VerifyDisabilityConfident();
+    }
 
     internal async Task<VacancyReferencePage> CloneAnAdvert()
     {
@@ -204,12 +204,12 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
     }
 
 
-    //private async Task<EmployerVacancySearchResultPage> SearchVacancyByVacancyReference()
-    //{
-    //    var page = await rAAEmployerLoginHelper.NavigateToRecruitmentHomePage();
+    private async Task<EmployerVacancySearchResultPage> SearchVacancyByVacancyReference()
+    {
+        var page = await rAAEmployerLoginHelper.NavigateToRecruitmentHomePage();
 
-    //    return await page.SearchAdvertByReferenceNumber();
-    //}
+        return await page.SearchAdvertByReferenceNumber();
+    }
 
     protected override async Task<CreateAnApprenticeshipAdvertOrVacancyPage> AboutTheEmployer(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage, string employername, bool disabilityConfidence, bool isApplicationMethodFAA)
     {

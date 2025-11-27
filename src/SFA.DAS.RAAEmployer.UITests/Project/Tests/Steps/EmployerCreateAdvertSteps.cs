@@ -31,8 +31,8 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
     [When(@"Employer selects '(National Minimum Wage|National Minimum Wage For Apprentices|Fixed Wage Type|Set As Competitive)' in the first part of the journey")]
     public async Task EmployerSelectsInTheFirstPartOfTheJourney(string wageType) => await _employerCreateVacancyStepsHelper.CreateANewAdvert_WageType(wageType);
 
-    //[Given(@"the Employer creates an offline advert with disability confidence")]
-    //public async Task TheEmployerCreatesAnOfflineAdvertWithDisabilityConfidence() => await _employerCreateVacancyStepsHelper.CreateOfflineVacancy();
+    [Given(@"the Employer creates an offline advert with disability confidence")]
+    public async Task TheEmployerCreatesAnOfflineAdvertWithDisabilityConfidence() => await _employerCreateVacancyStepsHelper.CreateOfflineVacancy();
 
     [Given(@"the Employer clones and creates an advert")]
     public async Task TheEmployerClonesAndCreatesAnAdvert() => await _employerCreateVacancyStepsHelper.CloneAnAdvert();

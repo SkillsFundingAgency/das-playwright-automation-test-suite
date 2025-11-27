@@ -28,13 +28,12 @@ public abstract class RaaBasePage : BasePage
 
         advertDataHelper = context.GetValue<AdvertDataHelper>();
     }
+    
     protected bool IsFoundationAdvert => context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
-    //private static By FoundationTag => By.CssSelector(".govuk-tag--pink");
-    public void CheckFoundationTag()
+    
+    public async Task CheckFoundationTag()
     {
-        //var expectedFoundationTag = "Foundation";
-        //var actualFoundationTag = pageInteractionHelper.GetText(FoundationTag).Trim();
-        //pageInteractionHelper.VerifyText(actualFoundationTag, expectedFoundationTag);
+        await Assertions.Expect(page.Locator(".govuk-tag--pink")).ToContainTextAsync("Foundation");
     }
 
     //protected virtual void SaveAndContinue() => formCompletionHelper.ClickButtonByText(SaveAndContinueButton, "Save and continue");

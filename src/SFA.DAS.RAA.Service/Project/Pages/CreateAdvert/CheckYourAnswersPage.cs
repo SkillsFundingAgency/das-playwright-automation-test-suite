@@ -29,7 +29,7 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
     {
         if (IsFoundationAdvert)
         {
-            CheckFoundationTag();
+            await CheckFoundationTag();
         }
         await page.GetByRole(AriaRole.Button, new() { Name = "Submit advert" }).ClickAsync();
 

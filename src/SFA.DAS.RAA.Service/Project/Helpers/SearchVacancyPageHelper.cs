@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Framework;
-using SFA.DAS.FrameworkHelpers;
-using SFA.DAS.RAA.DataGenerator.Project;
+﻿using SFA.DAS.RAA.DataGenerator.Project;
 using SFA.DAS.RAA.Service.Project.Pages;
 
 namespace SFA.DAS.RAA.Service.Project.Helpers;
@@ -38,7 +36,7 @@ public class SearchVacancyPageHelper(ScenarioContext context)
         var locator = RandomDataGenerator.GetRandom(locators);
 
         await locator.ClickAsync();
-        
+
         return await VerifyPageHelper.VerifyPageAsync(() => new ManageRecruitPage(context));
     }
 
@@ -60,17 +58,21 @@ public class SearchVacancyPageHelper(ScenarioContext context)
     //    return await VerifyPageHelper.VerifyPageAsync(() => new VacancyCompletedAllSectionsPage(context));
     //}
 
-    //public async Task<EmployerVacancySearchResultPage> SearchEmployerVacancy()
-    //{
-    //    await SearchVacancy();
-    //    return await VerifyPageHelper.VerifyPageAsync(() => new EmployerVacancySearchResultPage(context));
-    //}
+    public async Task<EmployerVacancySearchResultPage> SearchEmployerVacancy()
+    {
+        await SearchVacancy();
 
-    //internal async Task SearchVacancy()
-    //{
-    //    var vacRef = _objectContext.GetVacancyReference();
-    //    _formCompletionHelper.EnterText(SearchInput, vacRef);
-    //    _formCompletionHelper.Click(SearchButton);
-    //    _pageInteractionHelper.WaitforURLToChange($"searchTerm={vacRef}");
-    //}
+        return await VerifyPageHelper.VerifyPageAsync(() => new EmployerVacancySearchResultPage(context));
+    }
+
+    internal async Task SearchVacancy()
+    {
+        var vacRef = _objectContext.GetVacancyReference();
+
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "Search by advert title or" }).FillAsync(vacRef);
+        
+        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+        await page.WaitForURLAsync($"**/searchTerm={vacRef}");
+    }
 }

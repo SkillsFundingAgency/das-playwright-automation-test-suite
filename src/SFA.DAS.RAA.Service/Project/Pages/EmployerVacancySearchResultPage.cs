@@ -44,12 +44,13 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
     //    return await VerifyPageAsync(() => new VacancyCompletedAllSectionsPage(context));
     //}
-    //public ManageRecruitPage GoToVacancyManagePage()
-    //{
-    //    formCompletionHelper.ClickElement(VacancyActionSelector);
 
-    //    return await VerifyPageAsync(() => new ManageRecruitPage(context));
-    //}
+    public async Task<ManageRecruitPage> GoToVacancyManagePage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage", Exact = true }).First.ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageRecruitPage(context));
+    }
 }
 
 public class EmployerVacancySearchResultPage(ScenarioContext context) : VacancySearchResultPage(context)
@@ -59,10 +60,6 @@ public class EmployerVacancySearchResultPage(ScenarioContext context) : VacancyS
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your adverts");
     }
 
-    //protected override By PageHeader => By.CssSelector(".govuk-heading-xl");
-    //private static By Applicant => By.CssSelector("a[data-label='application_review']");
-    //private static By ApplicantStatus => By.CssSelector("td[data-label='Status'] > strong");
-
     public async Task<CreateAnApprenticeshipAdvertOrVacancyPage> CreateAnApprenticeshipAdvertPage()
     {
         await DraftVacancy();
@@ -70,33 +67,40 @@ public class EmployerVacancySearchResultPage(ScenarioContext context) : VacancyS
         return await VerifyPageAsync(() => new CreateAnApprenticeshipAdvertOrVacancyPage(context));
     }
 
-    //public ManageApplicantPage NavigateToManageApplicant()
-    //{
-    //    GoToVacancyManagePage();
-    //    if (IsFoundationAdvert)
-    //    {
-    //        CheckFoundationTag();
-    //    }
-    //    formCompletionHelper.Click(Applicant);
-    //    return await VerifyPageAsync(() => new ManageApplicantPage(context));
-    //}
-    //public async Task CheckApplicantStatus(string status)
-    //{
-    //    GoToVacancyManagePage();
-    //    if (IsFoundationAdvert)
-    //    {
-    //        CheckFoundationTag();
-    //    }
-    //    pageInteractionHelper.CheckText(ApplicantStatus, status);
-    //}
-    //public ViewVacancyPage NavigateToViewAdvertPage()
-    //{
-    //    GoToVacancyManagePage();
-        
-    //    string linkTest = isRaaEmployer ? "View advert" : "View vacancy";
-        
-    //    formCompletionHelper.ClickLinkByText(linkTest);
+    public async Task<ManageApplicantPage> NavigateToManageApplicant()
+    {
+        await GoToVacancyManagePage();
 
-    //    return await VerifyPageAsync(() => new ViewVacancyPage(context));
-    //}
+        if (IsFoundationAdvert)
+        {
+            await CheckFoundationTag();
+        }
+
+        await page.Locator("a[data-label='application_review']").ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageApplicantPage(context));
+    }
+
+    public async Task CheckApplicantStatus(string status)
+    {
+        await GoToVacancyManagePage();
+
+        if (IsFoundationAdvert)
+        {
+            await CheckFoundationTag();
+        }
+
+        await Assertions.Expect(page.Locator("td[data-label='Status'] > strong")).ToContainTextAsync(status);
+    }
+
+    public async Task<ViewVacancyPage> NavigateToViewAdvertPage()
+    {
+        await GoToVacancyManagePage();
+
+        string linkTest = isRaaEmployer ? "View advert" : "View vacancy";
+
+        await page.GetByRole(AriaRole.Link, new() { Name = linkTest, Exact = true }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ViewVacancyPage(context));
+    }
 }
