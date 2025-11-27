@@ -1,4 +1,4 @@
-﻿Feature: EmpFin_Api_07_GetTransferAllowance
+﻿Feature: Fin_IA_EA_01_GetTransferAllowance
 
 @api
 @employerfinanceapi
