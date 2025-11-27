@@ -1,4 +1,4 @@
-﻿Feature: EmpFin_Api_04_GetTransactionSummary
+﻿Feature: Fin_IA_AT_01_GetTransactionSummary
 
 @api
 @employerfinanceapi
