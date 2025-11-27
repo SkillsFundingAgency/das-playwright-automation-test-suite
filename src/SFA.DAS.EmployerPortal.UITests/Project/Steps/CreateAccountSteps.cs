@@ -3,8 +3,6 @@ using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
-using System;
-using System.Collections.Generic;
 using static SFA.DAS.EmployerPortal.UITests.Project.Helpers.EnumHelper;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Steps;
@@ -216,7 +214,7 @@ public class CreateAccountSteps
             };
             _context.Set<LevyUser>(user);
         }
- 
+
 
         return _homePage;
     }

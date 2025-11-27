@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using SFA.DAS.RAA.Service.Project.Helpers;
 using SFA.DAS.RAA.Service.Project.Pages;
 
@@ -9,11 +10,10 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
 
     private readonly SearchVacancyPageHelper _searchVacancyPageHelper = new(context);
 
-
     //protected override By AcceptCookieButton => By.CssSelector("#btn-cookie-accept");
     //private static By CreateAnAdvertButton => By.LinkText("Create an advert");
-    //private static By SettingsLink => By.LinkText("Settings");
-    //private static By AdvertNotificationLink => By.LinkText("Manage your advert notifications");
+
+
     //private static By RecruitmentAPIsLink => By.LinkText("Recruitment APIs");
     //private static By ManageYourEmailsLink => By.LinkText("Manage your emails");
     //private static By ReturnToDashboardLink => By.LinkText("Return to dashboard");
@@ -21,6 +21,7 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
     //public YourApprenticeshipAdvertsHomePage ClickReturnToDashboard()
     //{
     //    formCompletionHelper.Click(ReturnToDashboardLink);
+
     //    return new YourApprenticeshipAdvertsHomePage(context);
     //}
 
@@ -50,14 +51,12 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
 
     //public EmployerVacancySearchResultPage SearchYourAdverts() => _searchVacancyPageHelper.SearchEmployerVacancy();
 
-    //public ManageYourAdvertEmailsPage GoToAdvertNotificationsPage()
-    //{
-    //    NavigateToSettings();
-    //    formCompletionHelper.ClickElement(AdvertNotificationLink);
-    //    return new ManageYourAdvertEmailsPage(context);
-    //}
+    public async Task<ManageYourAdvertEmailsPage> GoToAdvertNotificationsPage()
+    {
+        await NavigateToSettings("Manage your advert");
 
-    //private void NavigateToSettings() => formCompletionHelper.ClickElement(() => pageInteractionHelper.FindElement(SettingsLink));
+        return await VerifyPageAsync(() => new ManageYourAdvertEmailsPage(context));
+    }
 
     //public GetStartedWithRecruitmentAPIsPage ClickRecruitmentAPILink()
     //{
@@ -65,11 +64,17 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
     //    return new GetStartedWithRecruitmentAPIsPage(context);
     //}
 
-
-
     //public ManageYourEmailsPage ClickMangeYourEmailsLink()
     //{
     //    formCompletionHelper.Click(ManageYourEmailsLink);
     //    return new ManageYourEmailsPage(context);
     //}
+}
+
+public class ManageYourAdvertEmailsPage(ScenarioContext context) : EmployerPortalBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your advert notifications");
+    }
 }
