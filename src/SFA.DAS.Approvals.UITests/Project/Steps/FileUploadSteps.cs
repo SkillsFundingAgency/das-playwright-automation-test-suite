@@ -36,7 +36,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("Provider have few apprentices to add using CSV file upload")]
         public async Task GivenProviderHaveFewApprenticesToAddUsingCSVFileUpload()
         {
-            var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourses());
+            var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
             List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
 
             listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(EmployerType.NonLevy, 1, null, listOfApprenticeship);
@@ -50,7 +50,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
-            var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourses());
+            var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
             var apprenticeDetails = new ApprenticeFactory(ageLimit + 1);
             ICsvFileFactory csvFileFactory = new CsvFileFactory();
 
