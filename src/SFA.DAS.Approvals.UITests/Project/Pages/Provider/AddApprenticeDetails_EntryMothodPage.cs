@@ -51,6 +51,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         {
             await optionToSelectApprenticesFromILR.CheckAsync();
             await ContinueButton.ClickAsync();
+            await new BeforeContinuePage(context).ContinueToChooseACohort();
         }
 
     }
