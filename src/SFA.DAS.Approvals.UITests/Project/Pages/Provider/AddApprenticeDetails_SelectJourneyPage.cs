@@ -19,7 +19,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         
         public override async Task VerifyPage()
         {
-            await new BeforeContinuePage(context).ContinueToChooseACohort();
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
         }
 
