@@ -1,58 +1,65 @@
-using System.Net;
 using RestSharp;
-using TechTalk.SpecFlow;
+using SFA.DAS.API.Framework;
+using SFA.DAS.Finance.APITests.Project.Helpers;
 using SFA.DAS.FrameworkHelpers;
-using SFA.DAS.API.Framework.RestClients;
+using System.Net;
+using System.Threading.Tasks;
+using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers
 {
     public class Outer_EmployerFinanceApiHelper
     {
+        private readonly Outer_EmployerFinanceApiRestClient _outerEmployerFinanceApiRestClient;
+        private readonly Outer_EmployerFinanceHealthApiRestClient _outerEmployerFinanceHealthApiRestClient;
         private readonly ObjectContext _objectContext;
+        protected readonly FrameworkHelpers.RetryHelper _assertHelper;
 
-        public Outer_EmployerFinanceApiHelper(ScenarioContext context)
+        internal Outer_EmployerFinanceApiHelper(ScenarioContext context)
         {
             _objectContext = context.Get<ObjectContext>();
+            _assertHelper = context.Get<FrameworkHelpers.RetryHelper>();
+            _outerEmployerFinanceApiRestClient = new Outer_EmployerFinanceApiRestClient(_objectContext, context.GetOuter_ApiAuthTokenConfig());
+            _outerEmployerFinanceHealthApiRestClient = new Outer_EmployerFinanceHealthApiRestClient(_objectContext);
         }
 
-        public RestResponse Ping()
-        {
-            return new Outer_EmployerFinanceHealthApiRestClient(_objectContext).Ping(HttpStatusCode.OK).GetAwaiter().GetResult();
-        }
+        public Task<RestResponse> Ping() => _outerEmployerFinanceHealthApiRestClient.Ping(HttpStatusCode.OK);
+
+        public Task<RestResponse> CheckHealth() => _outerEmployerFinanceHealthApiRestClient.CheckHealth(HttpStatusCode.OK);
 
         public RestResponse GetAccountMinimumSignedAgreementVersion(long accountId)
         {
-            return new Outer_EmployerFinanceApiRestClient(_objectContext, null).GetAccountMinimumSignedAgreementVersion(accountId, HttpStatusCode.OK);
+            return _outerEmployerFinanceApiRestClient.GetAccountMinimumSignedAgreementVersion(accountId, HttpStatusCode.OK);
         }
 
         public RestResponse GetAccountUserWhichCanReceiveNotifications(long accountId)
         {
-            return new Outer_EmployerFinanceApiRestClient(_objectContext, null).GetAccountUserWhichCanReceiveNotifications(accountId, HttpStatusCode.OK);
+            return _outerEmployerFinanceApiRestClient.GetAccountUserWhichCanReceiveNotifications(accountId, HttpStatusCode.OK);
         }
 
         public RestResponse GetPledges(long accountId)
         {
-            return new Outer_EmployerFinanceApiRestClient(_objectContext, null).GetPledges(accountId, HttpStatusCode.OK);
+            return _outerEmployerFinanceApiRestClient.GetPledges(accountId, HttpStatusCode.OK);
         }
 
         public RestResponse GetTrainingCoursesFrameworks()
         {
-            return new Outer_EmployerFinanceApiRestClient(_objectContext, null).GetTrainingCoursesFrameworks(HttpStatusCode.OK);
+            return _outerEmployerFinanceApiRestClient.GetTrainingCoursesFrameworks(HttpStatusCode.OK);
         }
 
         public RestResponse GetTrainingCoursesStandards()
         {
-            return new Outer_EmployerFinanceApiRestClient(_objectContext, null).GetTrainingCoursesStandards(HttpStatusCode.OK);
+            return _outerEmployerFinanceApiRestClient.GetTrainingCoursesStandards(HttpStatusCode.OK);
         }
 
         public RestResponse GetTransfersCounts(long accountId)
         {
-            return new Outer_EmployerFinanceApiRestClient(_objectContext, null).GetTransfersCounts(accountId, HttpStatusCode.OK);
+            return _outerEmployerFinanceApiRestClient.GetTransfersCounts(accountId, HttpStatusCode.OK);
         }
 
         public RestResponse GetTransfersFinancialBreakdown(long accountId)
         {
-            return new Outer_EmployerFinanceApiRestClient(_objectContext, null).GetTransfersFinancialBreakdown(accountId, HttpStatusCode.OK);
+            return _outerEmployerFinanceApiRestClient.GetTransfersFinancialBreakdown(accountId, HttpStatusCode.OK);
         }
     }
 }

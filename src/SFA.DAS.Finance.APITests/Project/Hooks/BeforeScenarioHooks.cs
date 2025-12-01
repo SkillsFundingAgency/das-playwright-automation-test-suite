@@ -1,10 +1,6 @@
-﻿using SFA.DAS.API.Framework;
-using SFA.DAS.API.Framework.Configs;
-using SFA.DAS.ConfigurationBuilder;
+﻿using SFA.DAS.ConfigurationBuilder;
 using SFA.DAS.Finance.APITests.Project.Helpers;
 using SFA.DAS.Finance.APITests.Project.Helpers.SqlDbHelpers;
-using SFA.DAS.FrameworkHelpers;
-using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Finance.APITests.Project.Hooks
 {
