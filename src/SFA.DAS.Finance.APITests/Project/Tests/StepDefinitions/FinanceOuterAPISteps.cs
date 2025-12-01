@@ -1,4 +1,6 @@
 using SFA.DAS.Finance.APITests.Project.Helpers;
+using SFA.DAS.Finance.APITests.Project.Helpers.SqlDbHelpers;
+
 
 namespace SFA.DAS.Finance.APITests.Project.Tests.StepDefinitions
 {
@@ -7,19 +9,20 @@ namespace SFA.DAS.Finance.APITests.Project.Tests.StepDefinitions
     {
         private readonly ObjectContext _objectContext;
         private readonly Outer_EmployerFinanceApiHelper _employerFinanceOuterApiHelper;
+        private readonly EmployerFinanceSqlHelper _employerFinanceSqlDbHelper;
+        private readonly EmployerAccountsSqlHelper _employerAccountsSqlDbHelper;
 
         public FinanceOuterAPISteps(ScenarioContext context)
         {
-            _employerFinanceOuterApiHelper = new Outer_EmployerFinanceApiHelper(context);
             _objectContext = context.Get<ObjectContext>();
+            _employerFinanceOuterApiHelper = new Outer_EmployerFinanceApiHelper(context);
+            _employerFinanceSqlDbHelper = context.Get<EmployerFinanceSqlHelper>();
+            _employerAccountsSqlDbHelper = context.Get<EmployerAccountsSqlHelper>();
+            var accountid = _employerFinanceSqlDbHelper.SetAccountId();
+            _employerAccountsSqlDbHelper.SetHashedAccountId(accountid);
+            _employerFinanceSqlDbHelper.SetEmpRef();
         }
 
-        [Then(@"endpoint /TrainingCourses/standards can be accessed")]
-        public void ThenEndpointApiPeriodEndsCanBeAccessed()
-        {
-            // TODO: Implement this step
-            //_employerFinanceOuterApiHelper.ExecuteEndpoint("/service/keepalive", HttpStatusCode.NoContent);
-        }
 
         [Then(@"the employer finance outer api is reachable")]
         public void ThenTheApprenticeCommitmentsApiIsReachable() => _employerFinanceOuterApiHelper.Ping();
