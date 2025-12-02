@@ -4,5 +4,5 @@
 @employerfinanceapi
 @regression
 @innerapi
-Scenario: GetTransactions
-	Then endpoint api/accounts/{hashedAccountId}/levy/GetLevyForPeriod can be accessed
+Scenario: Fin_IA_AT_02 GetTransactions
+	Then endpoint api/accounts/{hashedAccountId}/transactions/GetTransactions can be accessed

@@ -4,5 +4,5 @@
 @employerfinanceapi
 @regression
 @innerapi
-Scenario: GetTransferAllowance
+Scenario: Fin_IA_EA_01 GetTransferAllowance
 	Then endpoint api/accounts/{hashedAccountId}/transferAllowance can be accessed
