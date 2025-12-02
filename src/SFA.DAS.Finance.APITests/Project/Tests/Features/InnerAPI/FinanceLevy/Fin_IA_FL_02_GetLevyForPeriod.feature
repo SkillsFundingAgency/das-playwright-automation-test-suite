@@ -1,8 +1,9 @@
-﻿Feature: EmpFin_Api_03_GetLevyForPeriod
+﻿Feature: Fin_IA_FL_02_GetLevyForPeriod
 
 @api
 @employerfinanceapi
 @regression
 @innerapi
-Scenario: GetLevyForPeriod
-	Then endpoint api/accounts/{hashedAccountId}/transactions/GetTransactions can be accessed
+Scenario: Fin_IA_FL_02 GetLevyForPeriod
+	Then endpoint api/accounts/{hashedAccountId}/levy/GetLevyForPeriod can be accessed
+

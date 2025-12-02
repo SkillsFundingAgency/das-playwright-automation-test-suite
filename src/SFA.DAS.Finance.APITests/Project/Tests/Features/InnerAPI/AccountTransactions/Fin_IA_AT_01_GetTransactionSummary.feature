@@ -4,5 +4,5 @@
 @employerfinanceapi
 @regression
 @innerapi
-Scenario: GetTransactionSummary
+Scenario: Fin_IA_AT_01 GetTransactionSummary
 	Then endpoint api/accounts/{accountId}/transactions can be accessed

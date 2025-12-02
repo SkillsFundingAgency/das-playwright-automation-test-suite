@@ -1,8 +1,8 @@
-﻿Feature: EmpFin_Api_01_HealthCheck
+﻿Feature: Fin_IA_P_01_HealthCheck
 
 @api
 @employerfinanceapi
 @regression
 @innerapi
-Scenario: ApiHealthCheck
+Scenario: Fin_IA_P_01 ApiHealthCheck
 	Then endpoint das-employer-finance-api /ping can be accessed

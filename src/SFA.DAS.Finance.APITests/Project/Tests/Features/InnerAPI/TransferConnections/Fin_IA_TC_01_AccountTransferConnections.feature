@@ -1,9 +1,8 @@
-﻿Feature: EmpFin_Api_10_AccountTransferConnections
+﻿Feature: Fin_IA_TC_01_AccountTransferConnections
 
 @api
-@employeraccountsapi
+@employerfinanceapi
 @regression
 @innerapi
-Scenario: EmpFin_Api_10_AccountTransferConnections
+Scenario: Fin_IA_TC_01 AccountTransferConnections
 	Then endpoint /api/accounts/{hashedAccountId}/transfers/connections can be accessed
-	And endpoint /api/accounts/internal/{accountId}/transfers/connections can be accessed

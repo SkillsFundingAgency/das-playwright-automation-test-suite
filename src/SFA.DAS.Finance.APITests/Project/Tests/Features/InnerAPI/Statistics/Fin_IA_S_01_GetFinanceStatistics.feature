@@ -1,8 +1,8 @@
-﻿Feature: EmpFin_Api_06_GetFinanceStatistics
+﻿Feature: Fin_IA_S_01_GetFinanceStatistics
 
 @api
 @employerfinanceapi
 @regression
 @innerapi
-Scenario: GetFinanceStatistics
+Scenario: Fin_IA_S_01 GetFinanceStatistics
 	Then endpoint GetFinanceStatistics can be accessed
