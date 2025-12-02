@@ -23,6 +23,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         }
 
+        internal async Task ClearCacheAndReload()
+        { 
+            await page.Context.ClearCookiesAsync();
+            await page.EvaluateAsync("() => { localStorage.clear(); sessionStorage.clear(); }");
+            await page.ReloadAsync();
+
+        }
+
+        internal async Task<bool> EmployerExistsInTheList(string agreementId) => await page.GetByRole(AriaRole.Row, new() { Name = agreementId }).IsVisibleAsync();
 
     }
+
 }

@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
@@ -51,6 +52,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
+        [Given(@"a (.*) Employer grant create cohort permission to a provider")]
+        public async Task GivenAEmployerGrantCreateCohortPermissionToAProvider(EmployerType employerType)
+        {
+            var providerConfig = context.GetProviderPermissionConfig<ProviderPermissionsConfig>();
+            context.SetProviderConfig(providerConfig);
+            EasAccountUser employerUser = (employerType == EmployerType.Levy) ? context.GetUser<ProviderPermissionLevyUser>() : context.GetUser<NonLevyUser>();
+
+            await new EmployerPortalLoginHelper(context).Login(employerUser, true);
+            await new DeleteProviderRelationinDbHelper(context).DeleteProviderRelation();
+            await employerPermissionsStepsHelper.SetAllProviderPermissions(providerConfig);
+        }
+
+
 
         [When("Employer revoke create cohort permission to a provider")]
         public async Task WhenEmployerRevokeCreateCohortPermissionToAProvider()
@@ -74,6 +88,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerHomePage.SignsOut();
         }
 
+        [Then(@"the Provider (.*) create Reservations")]
+        public async Task ThenTheProviderCanCreateReservations(string val)
+        {
+            if (val.Equals("cannot"))
+            {
+                await Task.Delay(10000); // Adding delay to avoid permissions-synching issue
+                Assert.IsFalse(await SearchEmployerToReserveNewFunding(), "Validate Employer name is not available for Provider to create new reservations");
+            }                
+            else
+            {
+                Assert.IsTrue(await SearchEmployerToReserveNewFunding(), "Validate Provider can search employer in create new reservations journey");
+                var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(false);
+                await providerHomePage.SignsOut();
+            }                
+            
+        }
+
+
 
         [Then("Provider cannot Create Cohort")]
         public async Task ThenProviderCannotCreateCohort()
@@ -91,6 +123,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(true);
             var selectJourneyPage = await providerHomePage.GotoSelectJourneyPage();
             return await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+        }
+
+        private async Task<bool> SearchEmployerToReserveNewFunding()
+        {
+            var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(true);
+            var reserveFundingForNonLevyEmployersPage = await providerHomePage.GoToProviderGetFunding();
+            await reserveFundingForNonLevyEmployersPage.ClickOnReserveFundingButton();
+            
+            var agreementId = context.GetUser<NonLevyUser>().UserCreds.AccountDetails[0].AleAgreementid;
+            var chooseAnEmployerPage = new  ChooseAnEmployerPage(context);            
+            return await chooseAnEmployerPage.EmployerExistsInTheList(agreementId);
+            await chooseAnEmployerPage.ClearCacheAndReload();
         }
 
 
