@@ -49,7 +49,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
             await Assertions.Expect(Employer).ToContainTextAsync(apprenticeship.EmployerDetails.EmployerName);
             await Assertions.Expect(Course).ToContainTextAsync(apprenticeship.TrainingDetails.CourseTitle);
-            await Assertions.Expect(ULN).ToContainTextAsync(apprenticeship.ApprenticeDetails.ULN);
+            await Assertions.Expect(ULN).ToContainTextAsync(apprenticeship.ApprenticeDetails.ULN.ToString());
             await Assertions.Expect(FirstName).ToContainTextAsync(apprenticeship.ApprenticeDetails.FirstName);
             await Assertions.Expect(LastName).ToContainTextAsync(apprenticeship.ApprenticeDetails.LastName);
             await Assertions.Expect(DoB).ToContainTextAsync(expectedDOB);

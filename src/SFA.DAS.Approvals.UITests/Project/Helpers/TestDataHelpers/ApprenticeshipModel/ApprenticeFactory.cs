@@ -18,7 +18,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
         {
             Apprentice apprentice = new Apprentice();
 
-            apprentice.ULN = RandomDataGenerator.GenerateRandomUln();
+            apprentice.ULN = long.Parse(RandomDataGenerator.GenerateRandomUln());
             apprentice.FirstName = RandomDataGenerator.GenerateRandomAlphabeticString(6);
             apprentice.LastName = RandomDataGenerator.GenerateRandomAlphabeticString(9);
             apprentice.Email = $"{apprentice.FirstName}.{apprentice.LastName}@l38cxwya.mailosaur.net";

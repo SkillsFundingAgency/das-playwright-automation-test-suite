@@ -63,7 +63,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
     public class Apprentice
     {
-        public string ULN { get; set; }
+        public long ULN { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FullName => FirstName + " " + LastName;

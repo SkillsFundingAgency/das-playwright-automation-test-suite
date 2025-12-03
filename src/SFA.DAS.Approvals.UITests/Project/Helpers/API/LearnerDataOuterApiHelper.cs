@@ -29,7 +29,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
 
             var learnerDataEvent = new LearnerDataEvent
             {
-                ULN = long.Parse(apprenticeship.ApprenticeDetails.ULN),
+                ULN = apprenticeship.ApprenticeDetails.ULN,
                 UKPRN = Ukprn,
                 FirstName = apprenticeship.ApprenticeDetails.FirstName,
                 LastName = apprenticeship.ApprenticeDetails.LastName,
@@ -66,7 +66,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
         public async Task CheckApprenticeIsAvailableInApprovedLearnersList(Apprenticeship apprenticeship)
         {
             var resource = $"/Learners/providers/{apprenticeship.ProviderDetails.Ukprn}/academicyears/{apprenticeship.TrainingDetails.AcademicYear}/learners";
-            var learnerKey = await GetLearnerKeyByUlnAsync(resource, apprenticeship.ApprenticeDetails.ULN);
+            var learnerKey = await GetLearnerKeyByUlnAsync(resource, apprenticeship.ApprenticeDetails.ULN.ToString());
             var expectedLearningIdKey = apprenticeship.ApprenticeDetails.LearningIdKey.Trim();
             Assert.AreEqual(learnerKey.Trim(), expectedLearningIdKey, $"LearningIdKey key extracted from db [{expectedLearningIdKey}] differs from api response: [{learnerKey.Trim()}]");
 
@@ -107,7 +107,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
                     FirstName = apprenticeship.ApprenticeDetails.FirstName,
                     LastName = apprenticeship.ApprenticeDetails.LastName,
                     Email = apprenticeship.ApprenticeDetails.Email,
-                    Uln = long.Parse(apprenticeship.ApprenticeDetails.ULN),
+                    Uln = apprenticeship.ApprenticeDetails.ULN,
                     LearnerRef = apprenticeship.ProviderDetails.Ukprn.ToString(),
                     Dob = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("yyyy-MM-dd"),
                     HasEhcp = false

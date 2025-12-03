@@ -12,7 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
     {
         private readonly DbConfig _dbConfig = dbConfig;
 
-        internal async Task<string> GetLearnerDataId(string ULN)
+        internal async Task<string> GetLearnerDataId(long ULN)
         {          
             string query = $"SELECT Id FROM LearnerData WHERE ULN = '{ULN}'";
             var result = await GetData(query);
@@ -50,7 +50,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             var details = await GetData(query);
 
             apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(details[0]);
-            apprenticeship.ApprenticeDetails.ULN = details[1].ToString();
+            apprenticeship.ApprenticeDetails.ULN = long.Parse(details[1]);
             apprenticeship.ProviderDetails.Ukprn = Convert.ToInt32(details[2]);
             apprenticeship.ApprenticeDetails.FirstName ??= details[3].ToString();
             apprenticeship.ApprenticeDetails.LastName ??= details[4].ToString();
