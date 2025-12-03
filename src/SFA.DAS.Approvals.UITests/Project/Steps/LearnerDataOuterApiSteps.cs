@@ -62,10 +62,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
 
             foreach (var apprenticeship in listOfApprenticeship)
-            {
-                var learnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(apprenticeship);
-                //await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(listOflearnerData, ukprn);
-                await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(learnerData, ukprn);
+            {                
+                await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(apprenticeship, ukprn);
+
+                //var learnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(apprenticeship);
+                //await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(learnerData, ukprn);
             }
             
         }

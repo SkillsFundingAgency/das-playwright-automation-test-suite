@@ -22,44 +22,40 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
             learnerDataOuterApiClient = context.Get<LearnerDataOuterApiClient>();
         }
 
-        /*
-        public async Task PushNewLearnersDataToAsViaNServiceBus(List<LearnerDataAPIDataModel> learnersData, int Ukprn)
+
+        public async Task PushNewLearnersDataToAsViaNServiceBus(Apprenticeship apprenticeship, int Ukprn)
         {
             var serviceBusHelper = GlobalTestContext.ServiceBus;
 
-            foreach (var learner in learnersData)
+            var learnerDataEvent = new LearnerDataEvent
             {
-                var learnerDataEvent = new LearnerDataEvent
-                {
-                    ULN = long.Parse(learner.ULN),
-                    UKPRN = long.Parse(learner.UKPRN),
-                    FirstName = learner.FirstName,
-                    LastName = learner.LastName,
-                    Email = learner.LearnerEmail,
-                    DoB = DateTime.Parse(learner.DateOfBirth),
-                    StartDate = DateTime.Parse(learner.StartDate),
-                    PlannedEndDate = DateTime.Parse(learner.PlannedEndDate),
-                    PercentageLearningToBeDelivered = learner.PercentageLearningToBeDelivered,
-                    EpaoPrice = learner.EPAOPrice,
-                    TrainingPrice = learner.TrainingPrice,
-                    AgreementId = learner.AgreementId,
-                    IsFlexiJob = learner.IsFlexiJob,
-                    StandardCode = learner.StandardCode,
-                    CorrelationId = Guid.NewGuid(),
-                    ReceivedDate = DateTime.UtcNow,
-                    ConsumerReference = learner.ConsumerReference,
-                    PlannedOTJTrainingHours = learner.PlannedOTJTrainingHours,
-                    AcademicYear = academicYear
-                };
+                ULN = long.Parse(apprenticeship.ApprenticeDetails.ULN),
+                UKPRN = Ukprn,
+                FirstName = apprenticeship.ApprenticeDetails.FirstName,
+                LastName = apprenticeship.ApprenticeDetails.LastName,
+                Email = apprenticeship.ApprenticeDetails.Email,
+                DoB = apprenticeship.ApprenticeDetails.DateOfBirth,
+                StartDate = apprenticeship.TrainingDetails.StartDate,
+                PlannedEndDate = apprenticeship.TrainingDetails.EndDate,
+                PercentageLearningToBeDelivered = apprenticeship.TrainingDetails.PercentageLearningToBeDelivered,
+                EpaoPrice = apprenticeship.TrainingDetails.EpaoPrice,
+                TrainingPrice = apprenticeship.TrainingDetails.TrainingPrice,
+                AgreementId = apprenticeship.EmployerDetails.AgreementId,
+                IsFlexiJob = apprenticeship.TrainingDetails.IsFlexiJob,
+                StandardCode = apprenticeship.TrainingDetails.StandardCode,
+                CorrelationId = Guid.NewGuid(),
+                ReceivedDate = DateTime.UtcNow,
+                ConsumerReference = apprenticeship.TrainingDetails.ConsumerReference,
+                PlannedOTJTrainingHours = apprenticeship.TrainingDetails.PlannedOTJTrainingHours,
+                AcademicYear = apprenticeship.TrainingDetails.AcademicYear
+            };
 
-                await serviceBusHelper.Publish(learnerDataEvent);
-                objectContext.SetDebugInformation($"Publishing LearnerDataEvent to N-Service Bus for following learner:");
-                objectContext.SetDebugInformation(JsonSerializer.Serialize(learnerDataEvent, new JsonSerializerOptions { WriteIndented = true }));
+            await serviceBusHelper.Publish(learnerDataEvent);
+            objectContext.SetDebugInformation($"Publishing LearnerDataEvent to N-Service Bus for following learner:");
+            objectContext.SetDebugInformation(JsonSerializer.Serialize(learnerDataEvent, new JsonSerializerOptions { WriteIndented = true }));
 
-
-            }
         }
-        */
+
         public async Task PushNewLearnersDataToASViaAPI(LearnerDataAPIDataModel learnersData, int Ukprn)
         {
             var resource = $"/providers/{Ukprn}/learners";
