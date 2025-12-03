@@ -17,7 +17,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<ApprenticeDetails_ProviderPage> SelectViewCurrentApprenticeDetails(string name, long? ULN=null)
         {
-            await SearchApprentice(ULN.ToString() ?? name);
+            _ = ULN == null ? SearchApprentice(name) : SearchApprentice(ULN.ToString());
             await page.GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
             return await VerifyPageAsync(() => new ApprenticeDetails_ProviderPage(context, name));
         }
