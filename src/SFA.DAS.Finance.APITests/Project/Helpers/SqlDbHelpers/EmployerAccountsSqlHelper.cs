@@ -1,7 +1,4 @@
-﻿using System;
-using SFA.DAS.ConfigurationBuilder;
-using SFA.DAS.FrameworkHelpers;
-using SFA.DAS.Finance.APITests.Project;
+﻿using SFA.DAS.ConfigurationBuilder;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers.SqlDbHelpers
 {

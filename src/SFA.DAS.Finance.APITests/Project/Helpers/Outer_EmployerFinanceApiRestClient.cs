@@ -1,8 +1,5 @@
 ﻿using System.Net;
 using RestSharp;
-using SFA.DAS.API.Framework.Configs;
-using SFA.DAS.FrameworkHelpers;
-using SFA.DAS.API.Framework.RestClients;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers
 {

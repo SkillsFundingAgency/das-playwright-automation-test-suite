@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.ConfigurationBuilder;
-using SFA.DAS.FrameworkHelpers;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers.SqlDbHelpers
 {

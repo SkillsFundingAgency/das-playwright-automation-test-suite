@@ -1,6 +1,4 @@
-﻿using SFA.DAS.FrameworkHelpers;
-
-namespace SFA.DAS.Finance.APITests.Project
+﻿namespace SFA.DAS.Finance.APITests.Project
 {
     public static class ObjectContextExtension
     {

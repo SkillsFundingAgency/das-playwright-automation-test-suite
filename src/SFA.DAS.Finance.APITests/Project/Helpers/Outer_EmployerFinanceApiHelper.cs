@@ -1,10 +1,6 @@
 using RestSharp;
-using SFA.DAS.API.Framework;
-using SFA.DAS.Finance.APITests.Project.Helpers;
-using SFA.DAS.FrameworkHelpers;
 using System.Net;
 using System.Threading.Tasks;
-using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers
 {
