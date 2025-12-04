@@ -182,7 +182,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
-            var page = await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
+            var page = await new ProviderStepsHelper(context).ProviderFirstTimeAddApprencticesFromIlrRoute();
             await page.ProviderSendCohortForEmployerReview();
             await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for review");
         }
