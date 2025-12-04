@@ -130,7 +130,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheUserCannotAddAnotherApprenticeToACohort()
         {
             var page = await new ApproveApprenticeDetailsPage(context).ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage();
-            await page.SelectOptionToAddApprenticeFromILRAndContinue();
+            await page.SelectOptionToAddApprenticeFromILRAndContinue_ExistingCohort();
             var page1 = new ProviderAccessDeniedPage(context);
             await page1.VerifyPage();
             await page1.NavigateBrowserBack();
