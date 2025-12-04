@@ -1,4 +1,5 @@
-﻿using SFA.DAS.AparAdmin.UITests.Project.Helpers;
+﻿using Gherkin;
+using SFA.DAS.AparAdmin.UITests.Project.Helpers;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate;
 using System;
@@ -72,6 +73,67 @@ public class AddTrainingProviderShortCoursesSteps
             var providerPage = await successPage.GoBackToProviderDetailsPage();
             await providerPage.VerifyProviderStatus(expectedStatus);
         }
+    }
+
+    [Given(@"the user updated the training provider type to\s*""?(.*)""?")]
+    public async Task GivenTheUserUpdatedTheTrainingProviderTypeTo(string providerType)
+    {
+        var providerDetailsPage = new ProviderDetailsPage(_context);
+
+        var providerRoutePage = await providerDetailsPage.ClickChangeTypeOfProvider();
+        await providerRoutePage.SelectProviderType(providerType);
+
+        // Optional: handle extra pages if provider type changed from Supporting → Main/Employer
+        var h1Text = await providerRoutePage.GetHeadingTextAsync();
+        if (h1Text.Contains("Do they offer apprenticeships?", StringComparison.OrdinalIgnoreCase))
+        {
+            var offerPage = new OfferApprenticeshipsPage(_context);
+            var unitsPage = await offerPage.YesOfferApprenticeships();
+            await unitsPage.YesOfferApprenticeshipsUnits();
+        }
+        await providerDetailsPage.VerifyProviderRouteType(providerType);
+    }
+
+    [Given(@"the user updated the training provider Organisation type to (.*)")]
+    public async Task GivenTheUserUpdatedTheTrainingProviderOrganisationTypeTo(string orgType)
+    {
+        var providerDetailsPage = new ProviderDetailsPage(_context);
+
+        var typeOfOrgPage = await providerDetailsPage.ClickChangeTypeOfOrganisation();
+        providerDetailsPage = await typeOfOrgPage.YesChangeTypeofOrganisation(orgType);
+        await providerDetailsPage.VerifyOrganisationType(orgType);
+    }
+
+    [Given(@"the user updated the training provider apprenticeship units to (Yes|No)")]
+    public async Task GivenTheUserUpdatedTheTrainingProviderApprenticeshipUnitsTo(string answer)
+    {
+        var providerDetailsPage = new ProviderDetailsPage(_context);
+        var apprenticeshipUnitsPage = await providerDetailsPage.ClickOffersApprenticeshipUnits();
+
+        if (answer.Equals("Yes", StringComparison.OrdinalIgnoreCase))
+        {
+            providerDetailsPage = await apprenticeshipUnitsPage.YesOfferApprenticeshipsUnits();
+        }
+        else
+        {
+            providerDetailsPage = await apprenticeshipUnitsPage.NoDoNotOfferApprenticeshipsUnits();
+        }
+        await providerDetailsPage.VerifyApprenticeshipUnits(answer);
+    }
+
+    [Given("the user cannot update the training provider type to (.*) without offering apprenticehsips or apprenticeship units")]
+    public async Task GivenTheUserCannotUpdateTheTrainingProviderTypeToMainProviderWithoutOfferingApprenticehsipsOrApprenticeshipUnits(string providerType)
+    {
+        var providerDetailsPage = new ProviderDetailsPage(_context);
+
+        var providerRoutePage = await providerDetailsPage.ClickChangeTypeOfProvider();
+        await providerRoutePage.SelectProviderType(providerType);
+
+        var offerPage = new OfferApprenticeshipsPage(_context);
+        var unitsPage = await offerPage.NoDoNotOfferApprenticeships();
+        await unitsPage.TrainingProviderMustOfferEitherApprenticeshipsOrApprenticeshipUnits();
+        await unitsPage.YesOfferApprenticeshipsUnits();
+
     }
 
     private async Task<ManageTrainingProviderInformationPage> OpenManageTrainingProviderPage()
