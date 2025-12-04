@@ -28,6 +28,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
         }
 
+        internal async Task<AddApprenticeDetails_SelectJourneyPage> SelectOptionToApprenticesFromILRForExistingCohort()
+        {
+            await SelectOptionToAddApprenticeFromILRAndContinue_ExistingCohort();
+            return await VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
+        }
+
         internal async Task<UsingFileUploadPage> SelectOptionToUploadCsvFile()
         {
             await optionToUploadACsvFile.CheckAsync();
@@ -48,6 +54,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         }
 
         internal async Task SelectOptionToAddApprenticeFromILRAndContinue()
+        {
+            await optionToSelectApprenticesFromILR.CheckAsync();
+            await ContinueButton.ClickAsync();
+        }
+
+        internal async Task SelectOptionToAddApprenticeFromILRAndContinue_ExistingCohort()
         {
             await optionToSelectApprenticesFromILR.CheckAsync();
             await ContinueButton.ClickAsync();
