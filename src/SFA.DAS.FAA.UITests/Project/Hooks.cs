@@ -21,8 +21,6 @@ public class Hooks(ScenarioContext context)
 
         context.Set(new FAADataHelper());
 
-        context.Set(new VacancyReferenceHelper(_objectContext));
-
         if (context.ScenarioInfo.Tags.Contains("faaapplytestdataprep")) context.Set(new AdvertDataHelper());
     }
 }

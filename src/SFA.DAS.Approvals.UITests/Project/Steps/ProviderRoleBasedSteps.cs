@@ -110,7 +110,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user cannot start add apprentice journey")]
         public async Task ThenTheUserCannotStartAddApprenticeJourney()
         {
-            await new ApprenticeRequests_ProviderPage(context).ClickOnNavBarLinkAsync("Home");
+            await new ApprenticeRequests_ProviderPage(context).NavToHomePage();
             await new ProviderHomePage(context).AddNewApprentices();
             var page = new ProviderAccessDeniedPage(context);
             await page.VerifyPage();

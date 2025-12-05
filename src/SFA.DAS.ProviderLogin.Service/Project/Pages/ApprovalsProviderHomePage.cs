@@ -24,7 +24,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "More" }).ClickAsync();
 
-        await page.Locator("a.das-navigation__link", new PageLocatorOptions { HasTextString = "View employers and manage permissions" }).ClickAsync();
+        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "View employers and manage" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderEmployersAndPermissionsPage(context));
     }
@@ -92,7 +92,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
 
     public async Task<ProviderApprenticeRequestsPage> GoToApprenticeRequestsPage()
     {
-        await page.Locator("#navigation").GetByRole(AriaRole.Link, new() { Name = "Apprentice requests" }).ClickAsync();
+        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Apprentice requests" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderApprenticeRequestsPage(context));
     }

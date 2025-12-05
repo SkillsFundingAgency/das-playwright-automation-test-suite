@@ -100,7 +100,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDoB();
             await page.VerfiyErrorMessage("DateOfBirth", "The apprentice must be 24 years or under at the start of their training");
-            await page.ClickOnNavBarLinkAsync("Home");
+            await page.NavToHomePage();
         }
 
         [When("Provider tries to edit live apprentice record by setting age old than 24 years")]

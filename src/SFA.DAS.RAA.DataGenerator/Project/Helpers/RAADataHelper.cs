@@ -37,6 +37,8 @@ public class RAADataHelper
 
     public static string TrainingTitle => "Abattoir Worker, Level 2 (GCSE)";
 
+    public static string FoundationTrainingTitle => "Building service engineering foundation apprenticeship, Level 2 (GCSE)";
+
     public static string EmployerAddress => AvailableAddress.RandomOrDefault();
 
     public static string Provider => AvailableProviders.RandomOrDefault();
@@ -103,7 +105,7 @@ public class RAADataHelper
 
     private static string WebsiteUrl(string url) => $"www.{url}.com";
 
-    private static List<string> AvailableProviders => ["BALTIC TRAINING SERVICES LIMITED 10019026"];
+    private static List<string> AvailableProviders => ["10019026"];
 
     private static List<string> AvailableAddress => ["SW1H 9NA", "SW1A 2AA", "SE1 8UG", "E14 4PU", "SW1A 1AA", "SW1P 3BT"];
 }

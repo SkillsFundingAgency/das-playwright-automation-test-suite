@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using SFA.DAS.ProviderPortal.UITests.Project.Pages;
+
 namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
 
 [Binding]
@@ -9,6 +10,18 @@ public class ProviderRolesSteps(ScenarioContext context)
 
     [Then(@"user can access Notification Settings page")]
     public async Task UserCanAccessNotificationSettingsPage()
+    {
+        providerHomePage = new ProviderHomePage(context);
+
+        await providerHomePage.GotoAddNewEmployerStartPage();
+
+        var page1 = await providerHomePage.GoToProviderNotificationSettingsPage();
+
+        providerHomePage = await page1.ClickCancel();
+    }
+
+    [Then("user can access Notification Settings page as viewer")]
+    public async Task ThenUserCanAccessNotificationSettingsPageAsViewer()
     {
         providerHomePage = new ProviderHomePage(context);
 

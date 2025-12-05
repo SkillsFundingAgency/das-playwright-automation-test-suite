@@ -29,35 +29,39 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
             {
                 var learnerDataEvent = new LearnerDataEvent
                 {
-                    ULN = long.Parse(learner.uln),
-                    UKPRN = long.Parse(learner.ukprn),
-                    FirstName = learner.firstname,
-                    LastName = learner.lastname,
-                    Email = learner.learnerEmail,
-                    DoB = DateTime.Parse(learner.dateOfBirth),
-                    StartDate = DateTime.Parse(learner.startDate),
-                    PlannedEndDate = DateTime.Parse(learner.plannedEndDate),
-                    PercentageLearningToBeDelivered = learner.percentageLearningToBeDelivered,
-                    EpaoPrice = learner.epaoPrice,
-                    TrainingPrice = learner.trainingPrice,
-                    AgreementId = learner.agreementId,
-                    IsFlexiJob = learner.isFlexiJob,
-                    StandardCode = learner.standardCode,
+                    ULN = long.Parse(learner.ULN),
+                    UKPRN = long.Parse(learner.UKPRN),
+                    FirstName = learner.FirstName,
+                    LastName = learner.LastName,
+                    Email = learner.LearnerEmail,
+                    DoB = DateTime.Parse(learner.DateOfBirth),
+                    StartDate = DateTime.Parse(learner.StartDate),
+                    PlannedEndDate = DateTime.Parse(learner.PlannedEndDate),
+                    PercentageLearningToBeDelivered = learner.PercentageLearningToBeDelivered,
+                    EpaoPrice = learner.EPAOPrice,
+                    TrainingPrice = learner.TrainingPrice,
+                    AgreementId = learner.AgreementId,
+                    IsFlexiJob = learner.IsFlexiJob,
+                    StandardCode = learner.StandardCode,
                     CorrelationId = Guid.NewGuid(),
                     ReceivedDate = DateTime.UtcNow,
-                    ConsumerReference = learner.consumerReference,
-                    PlannedOTJTrainingHours = learner.plannedOTJTrainingHours,
+                    ConsumerReference = learner.ConsumerReference,
+                    PlannedOTJTrainingHours = learner.PlannedOTJTrainingHours,
                     AcademicYear = academicYear
                 };
 
                 await serviceBusHelper.Publish(learnerDataEvent);
-                objectContext.SetDebugInformation($"Publishing LearnerDataEvent to N-Service Bus for following learner: {@learnerDataEvent}");
+                objectContext.SetDebugInformation($"Publishing LearnerDataEvent to N-Service Bus for following learner:");
+                objectContext.SetDebugInformation(JsonSerializer.Serialize(learnerDataEvent, new JsonSerializerOptions { WriteIndented = true })
+);
+
+
             }
         }
 
         public async Task PushNewLearnersDataToASViaAPI(List<LearnerDataAPIDataModel> learnersData, int academicYear)
         {
-            var resource = $"/provider/{learnersData.First().ukprn}/academicyears/{academicYear}/learners";
+            var resource = $"/provider/{learnersData.First().UKPRN}/academicyears/{academicYear}/learners";
             var payload = JsonHelper.Serialize(learnersData).ToString();
             await learnerDataOuterApiClient.PostNewLearners(resource, payload);
         }
@@ -89,22 +93,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
         {
             LearnerDataAPIDataModel learnerData = new LearnerDataAPIDataModel();
 
-            learnerData.ukprn = apprenticeship.ProviderDetails.Ukprn.ToString();
-            learnerData.uln = apprenticeship.ApprenticeDetails.ULN;
-            learnerData.firstname = apprenticeship.ApprenticeDetails.FirstName;
-            learnerData.lastname = apprenticeship.ApprenticeDetails.LastName;
-            learnerData.learnerEmail = apprenticeship.ApprenticeDetails.Email;
-            learnerData.dateOfBirth = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("yyyy-MM-dd");
-            learnerData.startDate = apprenticeship.TrainingDetails.StartDate.ToString("yyyy-MM-dd");
-            learnerData.plannedEndDate = apprenticeship.TrainingDetails.EndDate.ToString("yyyy-MM-dd");
-            learnerData.percentageLearningToBeDelivered = apprenticeship.TrainingDetails.PercentageLearningToBeDelivered;
-            learnerData.epaoPrice = apprenticeship.TrainingDetails.EpaoPrice;
-            learnerData.trainingPrice = apprenticeship.TrainingDetails.TrainingPrice;
-            learnerData.agreementId = apprenticeship.EmployerDetails.AgreementId;
-            learnerData.isFlexiJob = apprenticeship.TrainingDetails.IsFlexiJob;
-            learnerData.plannedOTJTrainingHours = apprenticeship.TrainingDetails.PlannedOTJTrainingHours;
-            learnerData.standardCode = apprenticeship.TrainingDetails.StandardCode;
-            learnerData.consumerReference = apprenticeship.TrainingDetails.ConsumerReference;
+            learnerData.UKPRN = apprenticeship.ProviderDetails.Ukprn.ToString();
+            learnerData.ULN = apprenticeship.ApprenticeDetails.ULN;
+            learnerData.FirstName = apprenticeship.ApprenticeDetails.FirstName;
+            learnerData.LastName = apprenticeship.ApprenticeDetails.LastName;
+            learnerData.LearnerEmail = apprenticeship.ApprenticeDetails.Email;
+            learnerData.DateOfBirth = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("yyyy-MM-dd");
+            learnerData.StartDate = apprenticeship.TrainingDetails.StartDate.ToString("yyyy-MM-dd");
+            learnerData.PlannedEndDate = apprenticeship.TrainingDetails.EndDate.ToString("yyyy-MM-dd");
+            learnerData.PercentageLearningToBeDelivered = apprenticeship.TrainingDetails.PercentageLearningToBeDelivered;
+            learnerData.EPAOPrice = apprenticeship.TrainingDetails.EpaoPrice;
+            learnerData.TrainingPrice = apprenticeship.TrainingDetails.TrainingPrice;
+            learnerData.AgreementId = apprenticeship.EmployerDetails.AgreementId;
+            learnerData.IsFlexiJob = apprenticeship.TrainingDetails.IsFlexiJob;
+            learnerData.PlannedOTJTrainingHours = apprenticeship.TrainingDetails.PlannedOTJTrainingHours;
+            learnerData.StandardCode = apprenticeship.TrainingDetails.StandardCode;
+            learnerData.ConsumerReference = apprenticeship.TrainingDetails.ConsumerReference;
 
             await Task.Delay(100);
             return learnerData;
@@ -143,33 +147,28 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
             }
 
             return null; // ULN not found
-
-
         }
-
 
     }
 
     public class LearnerDataAPIDataModel
     {
-        public string uln { get; set; }
-        public string ukprn { get; set; }
-        public string firstname { get; set; }
-        public string lastname { get; set; }
-        public string learnerEmail { get; set; }
-        public string dateOfBirth { get; set; }
-        public string startDate { get; set; }
-        public string plannedEndDate { get; set; }
-        public int percentageLearningToBeDelivered { get; set; }
-        public int epaoPrice { get; set; }
-        public int trainingPrice { get; set; }
-        public string agreementId { get; set; }
-        public bool isFlexiJob { get; set; }
-        public int plannedOTJTrainingHours { get; set; }
-        public int standardCode { get; set; }
-        public string consumerReference { get; set; }
-
-
+        public string ULN { get; set; }
+        public string UKPRN { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string LearnerEmail { get; set; }
+        public string DateOfBirth { get; set; }
+        public string StartDate { get; set; }
+        public string PlannedEndDate { get; set; }
+        public int PercentageLearningToBeDelivered { get; set; }
+        public int EPAOPrice { get; set; }
+        public int TrainingPrice { get; set; }
+        public string AgreementId { get; set; }
+        public bool IsFlexiJob { get; set; }
+        public int PlannedOTJTrainingHours { get; set; }
+        public int StandardCode { get; set; }
+        public string ConsumerReference { get; set; }
     }
 
     internal class LearnerResponse
