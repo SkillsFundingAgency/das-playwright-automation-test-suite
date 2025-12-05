@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerFinance.APITests.Project.Hooks
+﻿namespace SFA.DAS.Finance.APITests.Project.Hooks;
+
+[Binding]
+public class AfterScenarioHooks
 {
-    [Binding]
-    public class AfterScenarioHooks
-    {
-    }
 }

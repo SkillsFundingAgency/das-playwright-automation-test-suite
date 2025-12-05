@@ -1,14 +1,13 @@
-﻿namespace SFA.DAS.EmployerFinance.APITests.Project.Models
-{
-    public class TransactionSummary
-    {
-        public int Year { get; set; }
-        public int Month { get; set; }
-    }
+﻿namespace SFA.DAS.Finance.APITests.Project.Models;
 
-    public class LevyDeclaration
-    {
-        public string PayrollYear { get; set; }
-        public short? PayrollMonth { get; set; }
-    }
+public class TransactionSummary
+{
+    public int Year { get; set; }
+    public int Month { get; set; }
+}
+
+public class LevyDeclaration
+{
+    public string PayrollYear { get; set; }
+    public short? PayrollMonth { get; set; }
 }

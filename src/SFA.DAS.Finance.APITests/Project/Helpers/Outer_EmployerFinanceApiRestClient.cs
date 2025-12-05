@@ -1,45 +1,41 @@
-﻿using System.Net;
-using RestSharp;
+﻿namespace SFA.DAS.Finance.APITests.Project.Helpers;
 
-namespace SFA.DAS.Finance.APITests.Project.Helpers
+public class Outer_EmployerFinanceApiRestClient(ObjectContext objectContext, Outer_ApiAuthTokenConfig config) : Outer_BaseApiRestClient(objectContext, config)
 {
-    public class Outer_EmployerFinanceApiRestClient(ObjectContext objectContext, Outer_ApiAuthTokenConfig config) : Outer_BaseApiRestClient(objectContext, config)
+    protected override string ApiName => "/employerfinance";
+
+    public async Task<RestResponse> GetAccountMinimumSignedAgreementVersion(long accountId, HttpStatusCode expectedResponse)
     {
-        protected override string ApiName => "/employerfinance";
+        return await Execute($"/Accounts/{accountId}/minimum-signed-agreement-version", expectedResponse);
+    }
 
-        public RestResponse GetAccountMinimumSignedAgreementVersion(long accountId, HttpStatusCode expectedResponse)
-        {
-            return Execute($"/Accounts/{accountId}/minimum-signed-agreement-version", expectedResponse).GetAwaiter().GetResult();
-        }
+    public async Task<RestResponse> GetAccountUserWhichCanReceiveNotifications(long accountId, HttpStatusCode expectedResponse)
+    {
+        return await Execute($"/Accounts/{accountId}/users/which-receive-notifications", expectedResponse);
+    }
 
-        public RestResponse GetAccountUserWhichCanReceiveNotifications(long accountId, HttpStatusCode expectedResponse)
-        {
-            return Execute($"/Accounts/{accountId}/users/which-receive-notifications", expectedResponse).GetAwaiter().GetResult();
-        }
+    public async Task<RestResponse> GetPledges(long accountId, HttpStatusCode expectedResponse)
+    {
+        return await Execute($"/Pledges?accountId={accountId}", expectedResponse);
+    }
 
-        public RestResponse GetPledges(long accountId, HttpStatusCode expectedResponse)
-        {
-            return Execute($"/Pledges?accountId={accountId}", expectedResponse).GetAwaiter().GetResult();
-        }
+    public async Task<RestResponse> GetTrainingCoursesFrameworks(HttpStatusCode expectedResponse)
+    {
+        return await Execute($"/TrainingCourses/frameworks", expectedResponse);
+    }
 
-        public RestResponse GetTrainingCoursesFrameworks(HttpStatusCode expectedResponse)
-        {
-            return Execute($"/TrainingCourses/frameworks", expectedResponse).GetAwaiter().GetResult();
-        }
+    public async Task<RestResponse> GetTrainingCoursesStandards(HttpStatusCode expectedResponse)
+    {
+        return await Execute($"/TrainingCourses/standards", expectedResponse);
+    }
 
-        public RestResponse GetTrainingCoursesStandards(HttpStatusCode expectedResponse)
-        {
-            return Execute($"/TrainingCourses/standards", expectedResponse).GetAwaiter().GetResult();
-        }
+    public async Task<RestResponse> GetTransfersCounts(long accountId, HttpStatusCode expectedResponse)
+    {
+        return await Execute($"/Transfers/{accountId}/counts", expectedResponse);
+    }
 
-        public RestResponse GetTransfersCounts(long accountId, HttpStatusCode expectedResponse)
-        {
-            return Execute($"/Transfers/{accountId}/counts", expectedResponse).GetAwaiter().GetResult();
-        }
-
-        public RestResponse GetTransfersFinancialBreakdown(long accountId, HttpStatusCode expectedResponse)
-        {
-            return Execute($"/Transfers/{accountId}/financial-breakdown", expectedResponse).GetAwaiter().GetResult();
-        }
+    public async Task<RestResponse> GetTransfersFinancialBreakdown(long accountId, HttpStatusCode expectedResponse)
+    {
+        return await Execute($"/Transfers/{accountId}/financial-breakdown", expectedResponse);
     }
 }

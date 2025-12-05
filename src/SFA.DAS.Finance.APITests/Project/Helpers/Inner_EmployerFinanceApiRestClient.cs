@@ -1,22 +1,19 @@
-﻿using System.Net;
-using RestSharp;
+﻿using RestSharp;
+namespace SFA.DAS.Finance.APITests.Project.Helpers;
 
-namespace SFA.DAS.Finance.APITests.Project.Helpers
+public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inner_ApiFrameworkConfig config) : Inner_BaseApiRestClient(objectContext, config)
 {
-    public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inner_ApiFrameworkConfig config) : Inner_BaseApiRestClient(objectContext, config)
+    protected override string ApiBaseUrl => UrlConfig.InnerApiUrlConfig.Inner_EmployerFinanceApiBaseUrl;
+
+    protected override string AppServiceName => $"{config.config.EmployerFinanceAppServiceName}-ar";
+
+    public async Task<RestResponse> ExecuteEndpoint(string endpoint, HttpStatusCode expectedResponse)
     {
-        protected override string ApiBaseUrl => UrlConfig.InnerApiUrlConfig.Inner_EmployerFinanceApiBaseUrl;
+        return await Execute(Method.Get, endpoint, string.Empty, expectedResponse);
+    }
 
-        protected override string AppServiceName => $"{config.config.EmployerFinanceAppServiceName}-ar";
-
-        public void ExecuteEndpoint(string endpoint, HttpStatusCode expectedResponse)
-        {
-            Execute(Method.Get, endpoint, string.Empty, expectedResponse).GetAwaiter().GetResult();
-        }
-
-        public RestResponse ExecuteEndpoint(string endpoint)
-        {
-            return Execute(Method.Get, endpoint, string.Empty, HttpStatusCode.OK).GetAwaiter().GetResult();
-        }
+    public async Task<RestResponse> ExecuteEndpoint(string endpoint)
+    {
+        return await ExecuteEndpoint(endpoint, HttpStatusCode.OK);
     }
 }
