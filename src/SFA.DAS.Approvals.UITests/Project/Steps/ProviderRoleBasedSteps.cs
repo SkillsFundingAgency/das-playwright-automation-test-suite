@@ -130,11 +130,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheUserCannotAddAnotherApprenticeToACohort()
         {
             var page = await new ApproveApprenticeDetailsPage(context).ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage();
-            await page.SelectOptionToAddApprenticeFromILRAndContinue_ExistingCohort();
-            var page1 = new ProviderAccessDeniedPage(context);
-            await page1.VerifyPage();
-            await page1.NavigateBrowserBack();
-            await page.NavigateBrowserBack();
+            await page.SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
+            var page2 = new ProviderAccessDeniedPage(context);
+            await page2.NavigateBrowserBack();
+            await page.NavigateBrowserBack();       //navigate 2 pages back
         }
 
         [Then("the user cannot delete an apprentice in an existing cohort")]

@@ -182,7 +182,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(true);
-            var page = await new ProviderStepsHelper(context).ProviderFirstTimeAddApprencticesFromIlrRoute();
+            var page = await new ProviderStepsHelper(context).ProviderAddApprencticesFromIlrRoute();
             await page.ProviderSendCohortForEmployerReview();
             await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for review");
         }
@@ -205,7 +205,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
             var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
             var page1 = await page.ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage();
-            var page2 = await page1.SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
+            await page1.SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
+            var page2 = new YouNeedPermissionToDoThisPage(context);
             var page3 = await page2.ClickOnGoToHomepageButton();
         }
 

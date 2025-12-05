@@ -253,26 +253,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
            return await AddOtherApprenticesFromILRListWithRPL(page1);
         }
 
-        internal async Task<ApproveApprenticeDetailsPage> ProviderFirstTimeAddApprencticesFromIlrRoute()
-        {
-            var page = await GoToSelectApprenticeFromILRPageForNewCohort();
-            var page1 = await AddFirstApprenticeFromILRListWithRPLDetails(page);
-            return await AddOtherApprenticesFromILRListWithRPL(page1);
-        }
-
         internal async Task<SelectLearnerFromILRPage> GoToSelectApprenticeFromILRPageForExistingCohort()
-        {
-            var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
-            var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
-            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILRForExistingCohort();
-            var page3 = await page2.SelectOptionUseExistingCohort();
-            var page4 = await SelectanExistingEmployer(page3);
-            var page5 = await page4.ClickOnAddAnotherApprenticeLink();
-
-            return await page5.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
-        }
-
-        internal async Task<SelectLearnerFromILRPage> GoToSelectApprenticeFromILRPageForNewCohort()
         {
             var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();

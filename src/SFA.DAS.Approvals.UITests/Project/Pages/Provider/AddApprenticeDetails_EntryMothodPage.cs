@@ -24,13 +24,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<AddApprenticeDetails_SelectJourneyPage> SelectOptionToApprenticesFromILR()
         {
-            await SelectOptionToAddApprenticeFromILRAndContinue();
-            return await VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
-        }
-
-        internal async Task<AddApprenticeDetails_SelectJourneyPage> SelectOptionToApprenticesFromILRForExistingCohort()
-        {
-            await SelectOptionToAddApprenticeFromILRAndContinue_ExistingCohort();
+            var page = await SelectOptionToAddApprenticeFromILRAndContinue();
+            await page.ClickOnContinueButton();
             return await VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
         }
 
@@ -43,27 +38,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<ProviderSelectAReservationPage> SelectOptionToAddApprenticesFromILRList_SelectReservationRoute()
         {
-            await SelectOptionToAddApprenticeFromILRAndContinue();
+            var page = await SelectOptionToAddApprenticeFromILRAndContinue();
+            await page.ClickOnContinueButton();
             return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
         }
 
-        internal async Task<YouNeedPermissionToDoThisPage> SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute()
-        {
-            await SelectOptionToAddApprenticeFromILRAndContinue_ExistingCohort();
-            return await VerifyPageAsync(() => new YouNeedPermissionToDoThisPage(context));
-        }
-
-        internal async Task SelectOptionToAddApprenticeFromILRAndContinue()
+        internal async Task SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute()
         {
             await optionToSelectApprenticesFromILR.CheckAsync();
             await ContinueButton.ClickAsync();
-            await new BeforeContinuePage(context).ContinueToChooseACohort();
         }
 
-        internal async Task SelectOptionToAddApprenticeFromILRAndContinue_ExistingCohort()
+        internal async Task<BeforeContinuePage> SelectOptionToAddApprenticeFromILRAndContinue()
         {
             await optionToSelectApprenticesFromILR.CheckAsync();
             await ContinueButton.ClickAsync();
+            return await VerifyPageAsync(() => new BeforeContinuePage(context));
         }
 
     }
