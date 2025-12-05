@@ -36,5 +36,6 @@
         public string TMDbConnectionString { get; set; }
         public string TPRDbConnectionString { get; set; }
         public string UsersDbConnectionString { get; set; }
+        public string QfastDbConnectionString { get; set; }
     }
 }
