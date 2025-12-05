@@ -1,4 +1,3 @@
-using Polly;
 using RestSharp;
 using System.Net;
 using System.Threading.Tasks;
@@ -11,7 +10,7 @@ public class ApprovalsAPISteps
     private readonly ScenarioContext _context;
     private readonly Outer_ApprovalsAPIClient _restClient;
     private RestResponse _restResponse = null;
-    
+
     public ApprovalsAPISteps(ScenarioContext context)
     {
         _context = context;
@@ -49,7 +48,7 @@ public class ApprovalsAPISteps
         return _restResponse;
     }
 
-    
+
 
     private async Task<RestResponse> Execute(HttpStatusCode responseCode) => await _restClient.Execute(responseCode);
 }

@@ -1,0 +1,15 @@
+﻿namespace SFA.DAS.Finance.APITests.Project.Helpers.SqlDbHelpers;
+
+public class EmployerAccountsSqlHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AccountsDbConnectionString)
+{
+    public string SetHashedAccountId(string accountId)
+    {
+        var query = $"SELECT HashedId FROM [employer_account].[Account] WHERE id = '{accountId}' ";
+        var id = GetDataAsString(query).GetAwaiter().GetResult();
+
+        // use extension on ObjectContext from project namespace
+        objectContext.SetHashedAccountId(id);
+
+        return id;
+    }
+}
