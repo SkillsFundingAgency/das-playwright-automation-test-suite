@@ -1,6 +1,4 @@
-﻿using Gherkin;
-using SFA.DAS.AparAdmin.UITests.Project.Helpers;
-using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
+﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate;
 using System;
 

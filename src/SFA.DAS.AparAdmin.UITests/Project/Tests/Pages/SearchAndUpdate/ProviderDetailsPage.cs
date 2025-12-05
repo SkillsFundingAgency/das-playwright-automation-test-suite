@@ -1,6 +1,4 @@
-﻿using Azure;
-using Gherkin;
-using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.AddJourney;
+﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.AddJourney;
 using System;
 using System.Collections.Generic;
 
