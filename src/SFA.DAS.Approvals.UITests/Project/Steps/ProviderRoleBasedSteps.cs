@@ -131,9 +131,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = await new ApproveApprenticeDetailsPage(context).ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage();
             await page.SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
-            var page2 = new ProviderAccessDeniedPage(context);
-            await page2.NavigateBrowserBack();
-            await page.NavigateBrowserBack();       //navigate 2 pages back
+            var page1 = new ProviderAccessDeniedPage(context);
+            await page1.VerifyPage();
+            await page1.NavigateBrowserBack();
+            await page.NavigateBrowserBack();
         }
 
         [Then("the user cannot delete an apprentice in an existing cohort")]
