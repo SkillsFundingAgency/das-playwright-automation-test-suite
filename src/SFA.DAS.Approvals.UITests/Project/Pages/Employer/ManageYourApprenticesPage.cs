@@ -22,14 +22,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Manage your apprentices");
         }
 
-        internal async Task<ApprenticeDetails_ProviderPage> SelectViewCurrentApprenticeDetails(string ULN, string name)
+        internal async Task<ApprenticeDetails_ProviderPage> SelectViewCurrentApprenticeDetails(long ULN, string name)
         {
             await SearchApprentice(ULN);
             await page.GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
             return await VerifyPageAsync(() => new ApprenticeDetails_ProviderPage(context, name));
         }
 
-        internal async Task SearchApprentice(string ULN, string name)
+        internal async Task SearchApprentice(long ULN, string name)
         {
             var apprenticeLink = page.GetByRole(AriaRole.Link, new() { Name = name });
             
@@ -57,10 +57,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new ApprenticeDetailsPage(context, apprenticeName));
         }
 
-        private async Task SearchApprentice(string ULN)
+        private async Task SearchApprentice(long ULN)
         {
             await searchBox.FillAsync("");
-            await searchBox.FillAsync(ULN);
+            await searchBox.FillAsync(ULN.ToString());
             await searchButton.ClickAsync();
         }
 
