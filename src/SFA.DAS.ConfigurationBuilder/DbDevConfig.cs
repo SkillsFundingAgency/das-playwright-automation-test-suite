@@ -39,5 +39,6 @@
         public string TMDbName { get; set; }
         public string TPRDbName { get; set; }
         public string UsersDbName { get; set; }
+        public string QfastDbName { get; set; }
     }
 }
