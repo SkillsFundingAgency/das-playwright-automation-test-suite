@@ -7,6 +7,10 @@ public static class GetSqlConnectionHelper
 {
     internal static async Task<SqlConnection> GetSqlConnection(string connectionString)
     {
+        if (connectionString.Contains("Authentication=", StringComparison.OrdinalIgnoreCase)) 
+        {
+            return SqlConnectionString = connectionString
+        }
         var tenantidkey = "TENANTID=";
 
         string accessToken;
