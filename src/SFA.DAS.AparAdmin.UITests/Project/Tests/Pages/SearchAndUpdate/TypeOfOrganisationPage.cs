@@ -7,18 +7,11 @@ public class TypeOfOrganisationPage(ScenarioContext context) : BasePage(context)
         await Assertions.Expect(page.Locator("h1"))
             .ToContainTextAsync("Choose the type of organisation for");
     }
-
-    public async Task<SuccessPage> YesChangeTypeofOrganisation()
+    public async Task<ProviderDetailsPage> YesChangeTypeofOrganisation(string orgtype)
     {
-        await page.GetByLabel("Yes").CheckAsync();
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-        return await VerifyPageAsync(() => new SuccessPage(context));
-    }
-
-    public async Task<ProviderDetailsPage> YesDoNotChangeTypeofOrganisation()
-    {
-        await page.GetByLabel("No").CheckAsync();
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Radio, new() { Name = orgtype }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
         return await VerifyPageAsync(() => new ProviderDetailsPage(context));
     }
+
 }
