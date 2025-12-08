@@ -6,16 +6,24 @@ namespace SFA.DAS.Finance.APITests.Project.Hooks;
 [Binding]
 public class BeforeScenarioHooks(ScenarioContext context)
 {
-    private readonly DbConfig _dbConfig = context.Get<DbConfig>();
-    private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
 
     [BeforeScenario(Order = 45)]
-    public void SetUpHelpers()
+    public async Task SetUpHelpers()
     {
-        context.Set(new EmployerFinanceSqlHelper(context.Get<ObjectContext>(), _dbConfig));
+        var dbConfig = context.Get<DbConfig>();
 
-        context.Set(new EmployerAccountsSqlHelper(context.Get<ObjectContext>(), _dbConfig));
+        var objectContext = context.Get<ObjectContext>();
+        
+        context.SetRestClient(new Inner_EmployerFinanceApiRestClient(objectContext, context.Get<Inner_ApiFrameworkConfig>()));
 
-        context.SetRestClient(new Inner_EmployerFinanceApiRestClient(_objectContext, context.Get<Inner_ApiFrameworkConfig>()));
+        var employerFinanceSqlDbHelper = new EmployerFinanceSqlHelper(context.Get<ObjectContext>(), dbConfig);
+
+        var employerAccountsSqlDbHelper = new EmployerAccountsSqlHelper(context.Get<ObjectContext>(), dbConfig);
+
+        var accountid = await employerFinanceSqlDbHelper.SetAccountId();
+
+        await employerAccountsSqlDbHelper.SetHashedAccountId(accountid);
+
+        await employerFinanceSqlDbHelper.SetEmpRef();
     }
 }

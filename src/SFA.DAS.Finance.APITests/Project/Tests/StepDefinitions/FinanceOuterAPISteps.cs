@@ -1,28 +1,13 @@
 using SFA.DAS.Finance.APITests.Project.Helpers;
-using SFA.DAS.Finance.APITests.Project.Helpers.SqlDbHelpers;
 
 
 namespace SFA.DAS.Finance.APITests.Project.Tests.StepDefinitions;
 
 [Binding]
-public class FinanceOuterAPISteps
+public class FinanceOuterAPISteps(ScenarioContext context)
 {
-    private readonly ObjectContext _objectContext;
-    private readonly Outer_EmployerFinanceApiHelper _employerFinanceOuterApiHelper;
-    private readonly EmployerFinanceSqlHelper _employerFinanceSqlDbHelper;
-    private readonly EmployerAccountsSqlHelper _employerAccountsSqlDbHelper;
-
-    public FinanceOuterAPISteps(ScenarioContext context)
-    {
-        _objectContext = context.Get<ObjectContext>();
-        _employerFinanceOuterApiHelper = new Outer_EmployerFinanceApiHelper(context);
-        _employerFinanceSqlDbHelper = context.Get<EmployerFinanceSqlHelper>();
-        _employerAccountsSqlDbHelper = context.Get<EmployerAccountsSqlHelper>();
-        var accountid = _employerFinanceSqlDbHelper.SetAccountId();
-        _employerAccountsSqlDbHelper.SetHashedAccountId(accountid);
-        _employerFinanceSqlDbHelper.SetEmpRef();
-    }
-
+    private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
+    private readonly Outer_EmployerFinanceApiHelper _employerFinanceOuterApiHelper = new(context);
 
     [Then(@"the employer finance outer api is reachable")]
     public async Task ThenTheApprenticeCommitmentsApiIsReachable() => await _employerFinanceOuterApiHelper.Ping();

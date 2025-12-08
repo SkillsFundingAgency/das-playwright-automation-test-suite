@@ -1,28 +1,15 @@
 ﻿using Newtonsoft.Json;
 using SFA.DAS.Finance.APITests.Project.Helpers;
-using SFA.DAS.Finance.APITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.Finance.APITests.Project.Models;
 
 namespace SFA.DAS.Finance.APITests.Project.Tests.StepDefinitions;
 
 [Binding]
-public class FinanceInnerAPISteps
+public class FinanceInnerAPISteps(ScenarioContext context)
 {
-    private readonly Inner_EmployerFinanceApiRestClient _innerApiRestClient;
-    private readonly EmployerFinanceSqlHelper _employerFinanceSqlDbHelper;
-    private readonly EmployerAccountsSqlHelper _employerAccountsSqlDbHelper;
-    private readonly ObjectContext _objectContext;
+    private readonly Inner_EmployerFinanceApiRestClient _innerApiRestClient = context.GetRestClient<Inner_EmployerFinanceApiRestClient>();
 
-    public FinanceInnerAPISteps(ScenarioContext context)
-    {
-        _innerApiRestClient = context.GetRestClient<Inner_EmployerFinanceApiRestClient>();
-        _employerFinanceSqlDbHelper = context.Get<EmployerFinanceSqlHelper>();
-        _employerAccountsSqlDbHelper = context.Get<EmployerAccountsSqlHelper>();
-        _objectContext = context.Get<ObjectContext>();
-        var accountid = _employerFinanceSqlDbHelper.SetAccountId();
-        _employerAccountsSqlDbHelper.SetHashedAccountId(accountid);
-        _employerFinanceSqlDbHelper.SetEmpRef();
-    }
+    private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
 
     [Then(@"endpoint das-employer-finance-api /ping can be accessed")]
     public async Task ThenEndpointDas_Employer_Finance_ApiPingCanBeAccessed()

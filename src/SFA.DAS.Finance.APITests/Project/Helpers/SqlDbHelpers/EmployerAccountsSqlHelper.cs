@@ -2,10 +2,11 @@
 
 public class EmployerAccountsSqlHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AccountsDbConnectionString)
 {
-    public string SetHashedAccountId(string accountId)
+    public async Task<string> SetHashedAccountId(string accountId)
     {
         var query = $"SELECT HashedId FROM [employer_account].[Account] WHERE id = '{accountId}' ";
-        var id = GetDataAsString(query).Result;
+
+        var id = await GetDataAsString(query);
 
         // use extension on ObjectContext from project namespace
         objectContext.SetHashedAccountId(id);

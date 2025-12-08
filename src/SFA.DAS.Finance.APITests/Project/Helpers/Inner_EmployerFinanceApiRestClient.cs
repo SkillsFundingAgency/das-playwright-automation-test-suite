@@ -1,5 +1,4 @@
-﻿using RestSharp;
-namespace SFA.DAS.Finance.APITests.Project.Helpers;
+﻿namespace SFA.DAS.Finance.APITests.Project.Helpers;
 
 public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inner_ApiFrameworkConfig config) : Inner_BaseApiRestClient(objectContext, config)
 {
