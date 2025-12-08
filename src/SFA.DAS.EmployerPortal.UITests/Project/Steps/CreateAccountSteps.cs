@@ -194,7 +194,7 @@ public class CreateAccountSteps
         var userCreds = await Login.Service.Project.ScenarioContextExtension.GetAccountLegalEntities(_context, [loggedInAccountUser.Username]);
 
 
-        if (employerType.ToLower() == "nonlevy")
+        if (employerType.Equals("nonlevy", StringComparison.CurrentCultureIgnoreCase))
         {
             var user = new NonLevyUser
             {

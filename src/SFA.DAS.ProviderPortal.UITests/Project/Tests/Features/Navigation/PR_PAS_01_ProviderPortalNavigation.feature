@@ -5,7 +5,7 @@
 @pasproviderrole
 Scenario: PR_PAS_01a_ProviderPortalNavigation - Viewer
 	Given the provider logs in as a Viewer
-	Then user can access Notification Settings page
+	Then user can access Notification Settings page as viewer
 	And user can access Orgs And Agreements page
 	And user can access Help page
 	And user can access Feedback page

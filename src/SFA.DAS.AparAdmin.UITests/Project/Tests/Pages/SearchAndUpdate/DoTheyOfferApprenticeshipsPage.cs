@@ -7,18 +7,16 @@ public class OfferApprenticeshipsPage(ScenarioContext context) : BasePage(contex
         await Assertions.Expect(page.Locator("h1"))
             .ToContainTextAsync("Do they offer apprenticeships?");
     }
-
-    public async Task<SuccessPage> YesOfferApprenticeships()
+    public async Task<DoTheyOfferApprenticeshipUnitsPage> YesOfferApprenticeships()
     {
         await page.GetByLabel("Yes").CheckAsync();
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-        return await VerifyPageAsync(() => new SuccessPage(context));
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+        return await VerifyPageAsync(() => new DoTheyOfferApprenticeshipUnitsPage(context));
     }
-
-    public async Task<ProviderDetailsPage> NoDoNotOfferApprenticeships()
+    public async Task<DoTheyOfferApprenticeshipUnitsPage> NoDoNotOfferApprenticeships()
     {
         await page.GetByLabel("No").CheckAsync();
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-        return await VerifyPageAsync(() => new ProviderDetailsPage(context));
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+        return await VerifyPageAsync(() => new DoTheyOfferApprenticeshipUnitsPage(context));
     }
 }
