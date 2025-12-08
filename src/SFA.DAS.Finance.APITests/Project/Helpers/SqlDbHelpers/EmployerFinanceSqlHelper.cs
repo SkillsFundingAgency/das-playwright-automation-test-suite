@@ -4,7 +4,7 @@ public class EmployerFinanceSqlHelper(ObjectContext objectContext, DbConfig dbCo
 {
     public string SetAccountId()
     {
-        var accountId = GetDataAsString($"SELECT top (1) AccountId FROM [employer_financial].[LevyDeclaration] order by Id desc").GetAwaiter().GetResult();
+        var accountId = GetDataAsString($"SELECT top (1) AccountId FROM [employer_financial].[LevyDeclaration] order by Id desc").Result;
 
         if (string.IsNullOrWhiteSpace(accountId))
         {
@@ -27,7 +27,7 @@ public class EmployerFinanceSqlHelper(ObjectContext objectContext, DbConfig dbCo
             return;
         }
 
-        var empRef = GetDataAsString($"Select top (1) EmpRef from [employer_financial].[AccountPaye] Where [AccountId] = {accountIdLong}").GetAwaiter().GetResult();
+        var empRef = GetDataAsString($"Select top (1) EmpRef from [employer_financial].[AccountPaye] Where [AccountId] = {accountIdLong}").Result;
         if (string.IsNullOrWhiteSpace(empRef)) return;
         objectContext.SetEmpRef(empRef);
     }

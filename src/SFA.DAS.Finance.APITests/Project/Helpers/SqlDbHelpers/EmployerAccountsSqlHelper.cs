@@ -5,7 +5,7 @@ public class EmployerAccountsSqlHelper(ObjectContext objectContext, DbConfig dbC
     public string SetHashedAccountId(string accountId)
     {
         var query = $"SELECT HashedId FROM [employer_account].[Account] WHERE id = '{accountId}' ";
-        var id = GetDataAsString(query).GetAwaiter().GetResult();
+        var id = GetDataAsString(query).Result;
 
         // use extension on ObjectContext from project namespace
         objectContext.SetHashedAccountId(id);
