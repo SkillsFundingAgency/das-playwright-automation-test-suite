@@ -4,7 +4,7 @@
     {
         private readonly DbConfig _dbConfig = dbConfig;
 
-        internal async Task<string> CheckIfApprenticeshipRecordCreatedInLearningDb(int ApprenticeshipId, string ULN)
+        internal async Task<string> CheckIfApprenticeshipRecordCreatedInLearningDb(int ApprenticeshipId, long ULN)
         {
             string query = $"SELECT [Key] FROM [dbo].[Learning] WHERE ApprovalsApprenticeshipId = {ApprenticeshipId} AND Uln = {ULN}";
             var result = await GetData(query);
