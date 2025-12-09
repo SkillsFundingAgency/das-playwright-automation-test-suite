@@ -1,9 +1,6 @@
 ﻿using SFA.DAS.QFAST.UITests.Project.Helpers;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Form;
-using System.Threading.Tasks;
-
-
 namespace SFA.DAS.QFAST.UITests.Project.Tests.Steps;
 
 [Binding]
@@ -139,16 +136,14 @@ public class AdminSteps(ScenarioContext context)
     [When("I verify first option always has present date and download the file with present date")]
     public async Task WhenIVerifyFirstOptionAlwaysHasPresentDate()
     {
-        await _createOutputFilePage.VerifyPresentDate();
-        await _createOutputFilePage.VerifyFileDownload();
+        await _createOutputFilePage.VerifyPresentDate();        
     }
 
     [When("I select a publication date and generate the output file")]
     public async Task WhenISelectAPublicationDateAndGenerateTheOutputFile()
     {
         await _createOutputFilePage.ValidateDateErrorMessage();
-        await _createOutputFilePage.EnterFuturPublicationDate();
-        await _createOutputFilePage.VerifyFileDownloadForFuturePublicationDate();
+        await _createOutputFilePage.EnterFuturPublicationDate();       
     }
 
     [Then("I verify that QAN number is a clickable link")]

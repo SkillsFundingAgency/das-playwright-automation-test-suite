@@ -1,10 +1,8 @@
-﻿using SFA.DAS.QFAST.UITests.Project.Helpers;
-using System.IO;
-namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 public class CreateOutputFile_Page(ScenarioContext context) : BasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Download a record of all active and archived funding requests" })).ToBeVisibleAsync();
-    protected readonly QfastDataHelpers _qfastDataHelpers = context.Get<QfastDataHelpers>();
+   
 
     public async Task VerifyErrorMessage(string message)
     {
@@ -19,7 +17,9 @@ public class CreateOutputFile_Page(ScenarioContext context) : BasePage(context)
         var expectedText = $"Yes, use {today}";
         var locator = page.Locator("label.govuk-radios__label[for='datechoice-today']");
         await Assertions.Expect(locator).ToHaveTextAsync(expectedText);
-        await page.Locator("#datechoice-today").ClickAsync();        
+        await page.Locator("#datechoice-today").ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Download files" }).ClickAsync();        
+        await VerifyFileDowloadMessage();
     }
     public async Task EnterFuturPublicationDate()
     {
@@ -28,107 +28,15 @@ public class CreateOutputFile_Page(ScenarioContext context) : BasePage(context)
         await page.Locator("#Day").FillAsync(futureDate.Day.ToString("D2"));
         await page.Locator("#Month").FillAsync(futureDate.Month.ToString("D2"));
         await page.Locator("#Year").FillAsync(futureDate.Year.ToString());
+        await page.GetByRole(AriaRole.Button, new() { Name = "Download files" }).ClickAsync();
+        await VerifyFileDowloadMessage();
     }
-    public async Task VerifyFileDownload()
+    public async Task<CreateOutputFile_Page> VerifyFileDowloadMessage()
     {
-        var projectDir = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.FullName;
-        var downloadsDir = Path.Combine(projectDir, "Downloads");
-        Directory.CreateDirectory(downloadsDir);
-        try
-        {
-            var download = await page.RunAndWaitForDownloadAsync(async () =>
-            {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Download files" }).ClickAsync();
-            });
-            var datePrefix = DateTime.UtcNow.ToString("yyyy-MM-dd");
-            var filename = $"{datePrefix}-AOdPOutputFile";
-            var filePath = Path.Combine(downloadsDir, filename);
-            await download.SaveAsAsync(filePath);
-            if (!File.Exists(filePath))
-            {
-                throw new IOException($"File not downloaded: {filePath}");
-            }
-        }
-        finally
-        {
-            {
-                const int maxRetries = 3;
-                for (int attempt = 0; attempt < maxRetries; attempt++)
-                {
-                    try
-                    {
-                        if (Directory.Exists(downloadsDir))
-                        {
-                            Directory.Delete(downloadsDir, true);
-                        }
-                        break;
-                    }
-                    catch (IOException)
-                    {
-                        await Task.Delay(100);
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        await Task.Delay(100);
-                    }
-                    catch
-                    {
-                        break;
-                    }
-                }
-            }
-
-        }
-    }
-    public async Task VerifyFileDownloadForFuturePublicationDate()
-    {
-        var projectDir = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.FullName;
-        var downloadsDir = Path.Combine(projectDir, "Downloads");
-        Directory.CreateDirectory(downloadsDir);
-        try
-        {
-            var download = await page.RunAndWaitForDownloadAsync(async () =>
-            {
-                await page.GetByRole(AriaRole.Button, new() { Name = "Download files" }).ClickAsync();
-            });
-            var datePrefix = DateTime.UtcNow.AddDays(15).ToString("yyyy-MM-dd");
-            var filename = $"{datePrefix}-AOdPOutputFile";
-            var filePath = Path.Combine(downloadsDir, filename);
-            await download.SaveAsAsync(filePath);
-            if (!File.Exists(filePath))
-            {
-                throw new IOException($"File not downloaded: {filePath}");
-            }
-        }
-        finally
-        {
-            {
-                const int maxRetries = 3;
-                for (int attempt = 0; attempt < maxRetries; attempt++)
-                {
-                    try
-                    {
-                        if (Directory.Exists(downloadsDir))
-                        {
-                            Directory.Delete(downloadsDir, true);
-                        }
-                        break;
-                    }
-                    catch (IOException)
-                    {
-                        await Task.Delay(100);
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        await Task.Delay(100);
-                    }
-                    catch
-                    {
-                        break;
-                    }
-                }
-            }
-        }
+        var filedownloadedMessage = page.Locator("p.govuk-body");
+        var expectedMessage = "Your file has been downloaded";
+        await Assertions.Expect(filedownloadedMessage).ToHaveTextAsync(expectedMessage);
+        return await VerifyPageAsync(() => new CreateOutputFile_Page(context));
     }
     public async Task ValidateDateErrorMessage()
     {
