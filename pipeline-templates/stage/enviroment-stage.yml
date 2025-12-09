@@ -24,7 +24,8 @@ stages:
     displayName: Deploy to TEST
     variables:
       - group: "TEST DevTest Shared Resources"
-      - group: "TEST Automation Suite Variables"
+      - group: "TEST Automation Suite Variables
+      - group: "TEST Automation Suite Variables (Db)"
     jobs:
       - template: ../job/deploy.yml
         parameters:
@@ -73,7 +74,7 @@ stages:
           parameters:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: SFA-DIG-PreProd-ARM
-      
+
       - ${{ else }}:
         - template: ../job/deploy.yml
           parameters:
