@@ -53,10 +53,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new FundingRestrictionsPage(context));
         }
 
-        internal async Task SelectOptionToAddApprenticeFromILRAndContinue()
+        internal async Task<BeforeContinuePage> SelectOptionToAddApprenticeFromILRAndContinue()
         {
             await optionToSelectApprenticesFromILR.CheckAsync();
             await ContinueButton.ClickAsync();
+            return await VerifyPageAsync(() => new BeforeContinuePage(context));
         }
 
     }
