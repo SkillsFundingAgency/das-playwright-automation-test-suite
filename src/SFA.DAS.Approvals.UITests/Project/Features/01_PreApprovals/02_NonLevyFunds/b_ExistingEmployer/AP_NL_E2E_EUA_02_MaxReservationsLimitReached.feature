@@ -1,7 +1,8 @@
 ﻿@approvals
 Feature: AP_NL_E2E_EUA_02_MaxReservationsLimitReached
 
-This feature validates funding retrictions when non-levy employer account has reached its max reservation limit.
+This feature validates funding retrictions when non-levy employer account has reached 
+its max reservation limit.
 
 @regression
 @e2escenarios

@@ -1,7 +1,7 @@
 ﻿@approvals
 Feature: AP_PP_01_ProviderPermission
 
-This test verifies that an employer can grant and revoke 'create cohort permissions' to a provider
+This test verifies that an employer can grant and revoke 'cohort creation' permissions to a provider
 
 @regression
 @providerpermissions

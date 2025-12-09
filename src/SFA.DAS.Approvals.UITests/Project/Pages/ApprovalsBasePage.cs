@@ -4,13 +4,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages;
 
 public abstract class ApprovalsBasePage(ScenarioContext context) : BasePage(context)
 {
-    internal async Task<EmployerHomePage> NavToHomePage()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
-        return await VerifyPageAsync(() => new EmployerHomePage(context));
-    }
+    internal async Task NavToHomePage() => await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
 
-    public async Task NavigateBrowserBack() => await page.GoBackAsync();
+    internal async Task NavigateBrowserBack() => await page.GoBackAsync();
 
     internal async Task ClickOnLink(string linkText) => await page.GetByRole(AriaRole.Link, new() { Name = $"{linkText}", Exact = true }).ClickAsync();
 
