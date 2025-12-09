@@ -49,7 +49,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await ContinueButton.ClickAsync();
         }
 
-        internal async Task SelectOptionToAddApprenticeFromILRAndContinue()
+        internal async Task<BeforeContinuePage> SelectOptionToAddApprenticeFromILRAndContinue()
         {
             await optionToSelectApprenticesFromILR.CheckAsync();
             await ContinueButton.ClickAsync();
