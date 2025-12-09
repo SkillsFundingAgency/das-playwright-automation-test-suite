@@ -9,7 +9,7 @@ public static class GetSqlConnectionHelper
     {
         if (connectionString.Contains("Authentication=", StringComparison.OrdinalIgnoreCase))
         {
-            return SqlConnectionString = connectionString;
+            return new SqlConnection(connectionString);
         }
         var tenantidkey = "TENANTID=";
 
