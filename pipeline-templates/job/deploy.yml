@@ -98,7 +98,7 @@ jobs:
           # - task: VSTest@3
           #   displayName: 'VsTest - Test Execution'
           #   inputs:
-          #     testAssemblyVer2: ${{ parameters.TestAssembly }}              
+          #     testAssemblyVer2: ${{ parameters.TestAssembly }}
           #     testRunTitle: 'Test Run - ${{ parameters.Environment }}'
           #     searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
           #     testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
@@ -112,6 +112,7 @@ jobs:
 
           - task: AzureCLI@2
             displayName: 'Test Execution'
+            addSpnToEnvironment: true
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               scriptType: ps
@@ -122,7 +123,7 @@ jobs:
                 Write-Host "Searching for test DLL in: $searchFolder"
                 # Match the classic pipeline: run the ProvideFeedback UI tests DLL
                 $testDllPath = Get-ChildItem -Path $searchFolder -Filter "SFA.DAS.ProvideFeedback.UITests.dll" -Recurse -ErrorAction Stop | Select-Object -First 1 -ExpandProperty FullName
-                
+
                 if (-not $testDllPath) {
                     Write-Error "Test DLL not found: SFA.DAS.ProvideFeedback.UITests.dll"
                     exit 1
@@ -151,7 +152,6 @@ jobs:
                   --settings $runSettings `
                   --logger "trx;LogFileName=test_results.trx" `
                   --results-directory "$(Agent.TempDirectory)/TestResults"
-            addSpnToEnvironment: true
             continueOnError: true
 
           - task: AzurePowerShell@5
