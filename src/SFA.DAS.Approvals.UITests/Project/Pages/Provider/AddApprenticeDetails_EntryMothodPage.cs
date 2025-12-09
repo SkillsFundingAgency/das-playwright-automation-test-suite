@@ -24,7 +24,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<AddApprenticeDetails_SelectJourneyPage> SelectOptionToApprenticesFromILR()
         {
-            await SelectOptionToAddApprenticeFromILRAndContinue();
+            var page = await SelectOptionToAddApprenticeFromILRAndContinue();
+            await page.ClickOnContinueButton();
             return await VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
         }
 
@@ -37,23 +38,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<ProviderSelectAReservationPage> SelectOptionToAddApprenticesFromILRList_SelectReservationRoute()
         {
-            await SelectOptionToAddApprenticeFromILRAndContinue();
+            var page = await SelectOptionToAddApprenticeFromILRAndContinue();
+            await page.ClickOnContinueButton();
             return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
         }
 
-        internal async Task<YouNeedPermissionToDoThisPage> SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute()
+        internal async Task SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute()
         {
-            await SelectOptionToAddApprenticeFromILRAndContinue();
-            return await VerifyPageAsync(() => new YouNeedPermissionToDoThisPage(context));
+            await optionToSelectApprenticesFromILR.CheckAsync();
+            await ContinueButton.ClickAsync();
         }
 
-        internal async Task<FundingRestrictionsPage> SelectOptionToAddApprenticesFromILRList_FundingRestrictionsRoute()
-        {
-            await SelectOptionToAddApprenticeFromILRAndContinue();
-            return await VerifyPageAsync(() => new FundingRestrictionsPage(context));
-        }
-
-        internal async Task<BeforeContinuePage> SelectOptionToAddApprenticeFromILRAndContinue()
+        internal async Task SelectOptionToAddApprenticeFromILRAndContinue()
         {
             await optionToSelectApprenticesFromILR.CheckAsync();
             await ContinueButton.ClickAsync();
