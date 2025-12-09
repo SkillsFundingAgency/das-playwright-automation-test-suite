@@ -1,0 +1,12 @@
+[
+  {
+    "id": 0,
+    "periodEndId": "1819-R01",
+    "calendarPeriodMonth": 5,
+    "calendarPeriodYear": 2018,
+    "accountDataValidAt": "2018-05-04T00:00:00",
+    "commitmentDataValidAt": "2018-05-04T09:07:34.457",
+    "completionDateTime": "2018-05-04T10:50:27.76",
+    "paymentsForPeriod": "https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=1617-R10"
+  }
+]
