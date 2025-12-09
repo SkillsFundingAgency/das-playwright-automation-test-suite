@@ -3,6 +3,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
@@ -143,10 +144,44 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheEmployerVerifyRPLDetails()
         {
            var apprenticeships = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-            var page = new EmployerApproveApprenticeDetailsPage(context);
+           var page = new EmployerApproveApprenticeDetailsPage(context);
            await page.VerifyRPLDetails(apprenticeships);
         }
 
+        [Given("the Employer logins using an existing NonLevy Account which has reached it max reservations limit")]
+        public async Task GivenTheEmployerLoginsUsingAnExistingNonLevyAccountWhichHasReachedItMaxReservationsLimit()
+        {
+            var listOfApprenticeship = new List<Apprenticeship>();
+            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.NonLevyUserAtMaxReservationLimit);
+            apprenticeship = await new DbSteps(context).FindUnapprovedCohortReference(apprenticeship, ApprenticeRequests.WithEmployers);
+            listOfApprenticeship.Add(apprenticeship);
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);           
+        }
+
+        [When("the Employer tries to add another apprentice to an existing cohort")]
+        public async Task WhenTheEmployerTriesToAddAnotherApprenticeToAnExistingCohort()
+        {
+            await employerStepsHelper.OpenCohort(false);
+            
+        }
+
+        [Then("the Employer is blocked with a shutter page for existing cohort")]
+        public async Task ThenTheEmployerIsBlockedWithAShutterPageForExistingCohort()
+        {
+            await new EmployerApproveApprenticeDetailsPage(context).TryClickAddAnotherApprenticeLink();
+        }
+
+        [When("the Employer tries to create reservation")]
+        public async Task WhenTheEmployerTriesToCreateReservation()
+        {
+            await employerStepsHelper.EmployerNavigateToReservationsPage();
+        }
+
+        [Then("the Employer is blocked with a shutter page")]
+        public async Task ThenTheEmployerIsBlockedWithAShutterPage()
+        {
+            await new YourFundingReservationsPage(context).TryClickOnReserveMoreFundingLink();
+        }
 
 
 

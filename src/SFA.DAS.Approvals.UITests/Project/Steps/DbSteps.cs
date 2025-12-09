@@ -170,20 +170,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         internal async Task<Apprenticeship> FindUnapprovedCohortReference(Apprenticeship apprenticeship, ApprenticeRequests status)
         {
-            (int withParty, int isDraft) = status switch
+            (int withParty, int isDraft, int approvals) = status switch
             {
-                ApprenticeRequests.ReadyForReview => (2, 0),
-                ApprenticeRequests.WithEmployers => (1, 0),
-                ApprenticeRequests.Drafts => (2, 1),
-                ApprenticeRequests.WithTransferSendingEmployers => (4, 0),
-                _ => (1, 0)
+                ApprenticeRequests.ReadyForReview => (2, 0, 0),
+                ApprenticeRequests.WithEmployers => (1, 0, 2),
+                ApprenticeRequests.Drafts => (2, 1, 0),
+                ApprenticeRequests.WithTransferSendingEmployers => (4, 0, 0),
+                _ => (1, 0, 0)
             };
 
             var details = await commitmentsDbSqlHelper.GetCohortRefAndLearnerDataIdFromCommitmentsDb(
                 apprenticeship.ProviderDetails.Ukprn,
                 apprenticeship.EmployerDetails.AccountLegalEntityId,
                 withParty,
-                isDraft);
+                isDraft,
+                approvals);
 
             //if no matching cohort found in the database, return as is
             if (details == null || details[0] == "")

@@ -25,7 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return result.FirstOrDefault() ?? string.Empty;
         }
 
-        internal async Task<List<string>> GetCohortRefAndLearnerDataIdFromCommitmentsDb(int ukprn, int accountLegalEntityId, int withParty, int isDraft)
+        internal async Task<List<string>> GetCohortRefAndLearnerDataIdFromCommitmentsDb(int ukprn, int accountLegalEntityId, int withParty, int isDraft, int approvals)
         {
             string query =
                 @$"SELECT TOP(1) c.Reference, a.LearnerDataId, a.FirstName, a.LastName
@@ -40,7 +40,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
                     And c.IsDraft = {isDraft}   
                     And c.IsFullApprovalProcessed = 0
                     And c.IsDeleted = 0
-                    And c.Approvals = 0
+                    And c.Approvals = {approvals}
                     And c.WithParty = {withParty}
                     AND c.CreatedOn < DATEADD(DAY, -1, GETDATE())
                     AND c.ChangeOfPartyRequestId is null             

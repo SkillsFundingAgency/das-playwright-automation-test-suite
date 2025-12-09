@@ -50,7 +50,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                     await employerLoginHelper.Login(context.GetUser<NonLevyUser>());
                     break;
                 case "nonlevyuseratmaxreservationlimit":
-                    //await employerLoginHelper.Login(context.GetUser<NonLevyUserAtMaxReservationLimit>());
+                    await employerLoginHelper.Login(context.GetUser<NonLevyUserAtMaxReservationLimit>(), false);                    
                     break;
                 default:
                     throw new ArgumentException($"Unknown employer type: {employerType}");
@@ -59,8 +59,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return new HomePage(context);
         }
 
-
-        internal async Task<EmployerApproveApprenticeDetailsPage> OpenCohort()
+        internal async Task<EmployerApproveApprenticeDetailsPage> OpenCohort(bool validateCohortDetails = true)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
@@ -74,11 +73,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             var page1 = await page.OpenApprenticeRequestReadyForReview(apprenticeship.Cohort.Reference);
 
-            await page1.VerifyCohort(apprenticeship);
+            if (validateCohortDetails)
+                await page1.VerifyCohort(apprenticeship);
 
             return page1;
         }
-
 
         internal async Task CheckApprenticeOnManageYourApprenticesPage(bool login = false)
         {
@@ -147,13 +146,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page2.ValidateCohortStatus(status);
         }
 
-
         internal async Task LogOutThenLogbackIn()
         {
             await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
             await AccountSignOutHelper.SignOut(new HomePage(context));
             await EmployerLogInToEmployerPortal(false);
         }
+
+        internal async Task EmployerNavigateToReservationsPage()
+        {
+            await employerHomePageHelper.GotoEmployerHomePage(false);
+            await new EmployerHomePage(context).ClickOnYourFundingReservationsLink();
+        }
+
 
     }
 }
