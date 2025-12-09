@@ -263,6 +263,42 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
+        [When("the Provider tries to add another apprentice to an existing cohort")]
+        public async Task WhenTheProviderTriesToAddAnotherApprenticeToAnExistingCohort()
+        {
+            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.NonLevyUserAtMaxReservationLimit);
+            apprenticeship = await new DbSteps(context).FindUnapprovedCohortReference(apprenticeship, ApprenticeRequests.ReadyForReview);
+            
+            await providerStepsHelper.ProviderOpenTheCohort(apprenticeship.Cohort.Reference);
+        }
+
+        [Then("the Provider is blocked with a shutter page for existing cohort")]
+        public async Task ThenTheProviderIsBlockedWithAShutterPageForExistingCohort()
+        {
+            var page = new ApproveApprenticeDetailsPage(context);
+            var page1 = await page.ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage();
+            var page2 = await page1.SelectOptionToAddApprenticesFromILRList_FundingRestrictionsRoute();
+            await page2.ClickOnReturnToAccountButton();
+        }
+
+        [When("the Provider with suitable permissions tries to create reservation on behalf of this employer")]
+        public async Task WhenTheProviderWithSuitablePermissionsTriesToCreateReservationOnBehalfOfThisEmployer()
+        {
+            var agreementId = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().EmployerDetails.AgreementId;
+            
+            await new ProviderHomePage(context).ClickFundingLink();
+            var page = new ReserveFundingForNonLevyEmployersPage(context);
+            var page1 = await page.ClickOnReserveFundingButton();
+            var page2 = await page1.ChooseAnEmployer(agreementId);
+            await page2.ConfirmNonLevyEmployerWithFundingRestrictions();
+        }
+
+        [Then("the Provider is blocked with a shutter page")]
+        public async Task ThenTheProviderIsBlockedWithAShutterPage()
+        {
+            await new FundingRestrictionsPage(context).ClickOnReturnToAccountButton();
+        }
+
 
 
 

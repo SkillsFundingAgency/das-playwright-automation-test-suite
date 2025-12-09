@@ -153,10 +153,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await EmployerLogInToEmployerPortal(false);
         }
 
-        internal async Task EmployerNavigateToReservationsPage()
+        internal async Task<YourFundingReservationsPage> EmployerNavigateToReservationsPage()
         {
             await employerHomePageHelper.GotoEmployerHomePage(false);
-            await new EmployerHomePage(context).ClickOnYourFundingReservationsLink();
+            return await new EmployerHomePage(context).ClickOnYourFundingReservationsLink();
         }
 
 

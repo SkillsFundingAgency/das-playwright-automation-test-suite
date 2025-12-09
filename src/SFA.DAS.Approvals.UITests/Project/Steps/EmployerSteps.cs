@@ -180,7 +180,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the Employer is blocked with a shutter page")]
         public async Task ThenTheEmployerIsBlockedWithAShutterPage()
         {
-            await new YourFundingReservationsPage(context).TryClickOnReserveMoreFundingLink();
+            var page = new YourFundingReservationsPage(context);
+            await page.TryClickOnReserveMoreFundingLink();
         }
 
 

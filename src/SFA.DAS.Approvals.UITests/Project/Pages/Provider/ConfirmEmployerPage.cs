@@ -30,5 +30,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
             return await VerifyPageAsync(() => new ApprenticeshipTrainingPage(context));
         }
+
+        internal async Task<FundingRestrictionsPage> ConfirmNonLevyEmployerWithFundingRestrictions()
+        {
+            await page.Locator("#confirm-yes").ClickAsync();
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new FundingRestrictionsPage(context));
+        }
+
+
+
+
     }
 }
