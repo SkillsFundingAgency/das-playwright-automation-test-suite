@@ -56,15 +56,16 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
         return await VerifyPageAsync(() => new ManageYourAdvertEmailsPage(context));
     }
 
-    //public GetStartedWithRecruitmentAPIsPage ClickRecruitmentAPILink()
-    //{
-    //    formCompletionHelper.Click(RecruitmentAPIsLink);
-    //    return new GetStartedWithRecruitmentAPIsPage(context);
-    //}
+    public async Task<GetStartedWithRecruitmentAPIsPage> ClickRecruitmentAPILink()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Recruitment APIs" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new GetStartedWithRecruitmentAPIsPage(context));
+    }
 
     //public ManageYourEmailsPage ClickMangeYourEmailsLink()
     //{
-    //    formCompletionHelper.Click(ManageYourEmailsLink);
+    //    await page.GetByRole(AriaRole.Link, new() { Name = "Manage your emails" }).ClickAsync();
     //    return new ManageYourEmailsPage(context);
     //}
 }
