@@ -24,7 +24,7 @@ stages:
     displayName: Deploy to TEST
     variables:
       - group: "TEST DevTest Shared Resources"
-      - group: "TEST Automation Suite Variables
+      - group: "TEST Automation Suite Variables"
       - group: "TEST Automation Suite Variables (Db)"
     jobs:
       - template: ../job/deploy.yml
