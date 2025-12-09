@@ -112,9 +112,9 @@ jobs:
 
           - task: AzureCLI@2
             displayName: 'Test Execution'
-            addSpnToEnvironment: true
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
+              addSpnToEnvironment: true
               scriptType: ps
               scriptLocation: inlineScript
               inlineScript: |
