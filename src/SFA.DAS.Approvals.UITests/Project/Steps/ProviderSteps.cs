@@ -282,11 +282,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page2.ClickOnReturnToAccountButton();
         }
 
-        [When("the Provider with suitable permissions tries to create reservation on behalf of this employer")]
-        public async Task WhenTheProviderWithSuitablePermissionsTriesToCreateReservationOnBehalfOfThisEmployer()
+
+        [Then("the Provider is blocked to create new reservations")]
+        public async Task ThenTheProviderIsBlockedToCreateNewReservations()
         {
             var agreementId = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().EmployerDetails.AgreementId;
-            
+
             await new ProviderHomePage(context).ClickFundingLink();
             var page = new ReserveFundingForNonLevyEmployersPage(context);
             var page1 = await page.ClickOnReserveFundingButton();
@@ -294,11 +295,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page2.ConfirmNonLevyEmployerWithFundingRestrictions();
         }
 
-        [Then("the Provider is blocked with a shutter page")]
-        public async Task ThenTheProviderIsBlockedWithAShutterPage()
-        {
-            await new FundingRestrictionsPage(context).ClickOnReturnToAccountButton();
-        }
 
 
 

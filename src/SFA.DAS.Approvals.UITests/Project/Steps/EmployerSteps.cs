@@ -171,18 +171,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new EmployerApproveApprenticeDetailsPage(context).TryClickAddAnotherApprenticeLink();
         }
 
-        [When("the Employer tries to create reservation")]
-        public async Task WhenTheEmployerTriesToCreateReservation()
+
+        [Then("the employer is blocked to create new reservations")]
+        public async Task ThenTheEmployerIsBlockedToCreateNewReservations()
         {
-            await employerStepsHelper.EmployerNavigateToReservationsPage();
+            await employerStepsHelper.EmployerTriesToCreateReservation();
         }
 
-        [Then("the Employer is blocked with a shutter page")]
-        public async Task ThenTheEmployerIsBlockedWithAShutterPage()
-        {
-            var page = new YourFundingReservationsPage(context);
-            await page.TryClickOnReserveMoreFundingLink();
-        }
 
 
 
