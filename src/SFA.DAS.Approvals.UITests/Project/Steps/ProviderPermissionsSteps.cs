@@ -5,11 +5,7 @@ using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -39,43 +35,36 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Given("Employer grant create cohort permission to a provider")]
-        public async Task GivenEmployerGrantCreateCohortPermissionToAProvider()
+        [When(@"a (.*) Employer (.*) create cohort permission to a provider")]
+        [Given(@"a (.*) Employer (.*) create cohort permission to a provider")]
+        public async Task WhenALevyEmployerGrantCreateCohortPermissionToAProvider(EmployerType employerType, string permission)
         {
+            EasAccountUser employerUser = context.GetUser<ProviderPermissionLevyUser>();
+            bool isLevy = true;
             var providerConfig = context.GetProviderPermissionConfig<ProviderPermissionsConfig>();
             context.SetProviderConfig(providerConfig);
-            var employerUser = context.GetUser<ProviderPermissionLevyUser>();
-
-            await new EmployerPortalLoginHelper(context).Login(employerUser, true);
-            await new DeleteProviderRelationinDbHelper(context).DeleteProviderRelation();
-            await employerPermissionsStepsHelper.SetAllProviderPermissions(providerConfig);
-
-        }
-
-        [Given(@"a (.*) Employer grant create cohort permission to a provider")]
-        public async Task GivenAEmployerGrantCreateCohortPermissionToAProvider(EmployerType employerType)
-        {
-            var providerConfig = context.GetProviderPermissionConfig<ProviderPermissionsConfig>();
-            context.SetProviderConfig(providerConfig);
-            EasAccountUser employerUser = (employerType == EmployerType.Levy) ? context.GetUser<ProviderPermissionLevyUser>() : context.GetUser<NonLevyUser>();
-
-            await new EmployerPortalLoginHelper(context).Login(employerUser, true);
-            await new DeleteProviderRelationinDbHelper(context).DeleteProviderRelation();
-            await employerPermissionsStepsHelper.SetAllProviderPermissions(providerConfig);
-        }
-
-
-
-        [When("Employer revoke create cohort permission to a provider")]
-        public async Task WhenEmployerRevokeCreateCohortPermissionToAProvider()
-        {
-            var providerConfig = context.GetProviderConfig<ProviderConfig>();
+            
+            if (employerType == EmployerType.NonLevy)
+            {
+                employerUser = context.GetUser<NonLevyUser>();
+                isLevy = false;
+            }
 
             await new EmployerHomePageStepsHelper(context).NavigateToEmployerApprenticeshipService(true);
-            await employerPermissionsStepsHelper.RemoveAllProviderPermission(providerConfig);
+            await new EmployerPortalLoginHelper(context).Login(employerUser, isLevy);
+
+            if (permission.Equals("grant"))
+            {
+                await new DeleteProviderRelationinDbHelper(context).DeleteProviderRelation();
+                await employerPermissionsStepsHelper.SetAllProviderPermissions(providerConfig);
+            }
+            else
+            {
+                await employerPermissionsStepsHelper.RemoveAllProviderPermission(providerConfig);
+            }
+
         }
-
-
+    
         [Then("Provider can Create Cohort")]
         public async Task ThenProviderCanCreateCohort()
         {
@@ -84,21 +73,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             Assert.IsTrue(await selectRoutePage.IsAddToAnExistingCohortOptionDisplayed(), "Validate Provider can add apprentice to existing cohorts");
             Assert.IsTrue(await selectRoutePage.IsCreateANewCohortOptionDisplayed(), "Validate Provider can create a new cohort");
 
-            var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(false);
+            await selectRoutePage.ClearCacheAndReload();
+            var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(false);            
             await providerHomePage.SignsOut();
         }
 
         [Then(@"the Provider (.*) create Reservations")]
         public async Task ThenTheProviderCanCreateReservations(string val)
         {
-            if (val.Equals("cannot"))
+            if (val == "cannot")
             {
-                await Task.Delay(10000); // Adding delay to avoid permissions-synching issue
                 Assert.IsFalse(await SearchEmployerToReserveNewFunding(), "Validate Employer name is not available for Provider to create new reservations");
             }                
             else
             {
                 Assert.IsTrue(await SearchEmployerToReserveNewFunding(), "Validate Provider can search employer in create new reservations journey");
+                await new ChooseAnEmployerPage(context).ClearCacheAndReload();
                 var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(false);
                 await providerHomePage.SignsOut();
             }                
@@ -134,7 +124,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var agreementId = context.GetUser<NonLevyUser>().UserCreds.AccountDetails[0].AleAgreementid;
             var chooseAnEmployerPage = new  ChooseAnEmployerPage(context);            
             return await chooseAnEmployerPage.EmployerExistsInTheList(agreementId);
-            await chooseAnEmployerPage.ClearCacheAndReload();
         }
 
 

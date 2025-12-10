@@ -12,4 +12,10 @@ public abstract class ApprovalsBasePage(ScenarioContext context) : BasePage(cont
 
     internal async Task ClickOnButton(string linkText) => await page.GetByRole(AriaRole.Button, new() { Name = $"{linkText}" }).ClickAsync();
 
+    internal async Task ClearCacheAndReload()
+    {
+        await page.Context.ClearCookiesAsync();
+        await page.EvaluateAsync("() => { localStorage.clear(); sessionStorage.clear(); }");
+        await page.ReloadAsync();
+    }
 }
