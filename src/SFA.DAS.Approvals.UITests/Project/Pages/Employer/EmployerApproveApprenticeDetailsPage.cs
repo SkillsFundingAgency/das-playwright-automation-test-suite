@@ -67,7 +67,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         {
             await addAnotherApprenticeLink.ClickAsync();
             var page = await VerifyPageAsync(() => new YouCannotCreateAnotherFundingReservationPage(context));
-            return await page.ClickOnApprenticeRequestsLink();
+            await page.ClickOnApprenticeRequestsLink();
+            return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
         }
     }
 }
