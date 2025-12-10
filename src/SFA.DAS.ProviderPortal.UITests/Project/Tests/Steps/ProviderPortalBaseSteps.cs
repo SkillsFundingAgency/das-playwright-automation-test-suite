@@ -1,16 +1,15 @@
 ﻿
 using SFA.DAS.EmployerPortal.UITests.Project;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
+using SFA.DAS.Framework.Hooks;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
 using SFA.DAS.ProviderPortal.UITests.Project.Pages;
 
 namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
 
-public abstract class ProviderPortalBaseSteps(ScenarioContext context)
+public abstract class ProviderPortalBaseSteps(ScenarioContext context) : FrameworkBaseHooks(context)
 {
-    protected readonly ScenarioContext context = context;
-
     protected readonly EmployerPortalLoginHelper _employerLoginHelper = new(context);
 
     protected readonly EmployerHomePageStepsHelper _employerHomePageHelper = new(context);
@@ -62,7 +61,7 @@ public abstract class ProviderPortalBaseSteps(ScenarioContext context)
             Assert.AreEqual(expected, actual, $"Waiting for Invite status to be '{expected}' for requestid - '{eprDataHelper.LatestRequestId}', email - {eprDataHelper.EmployerEmail}");
         });
 
-        await context.Get<Driver>().Page.GotoAsync(UrlConfig.Relations_Employer_Invite(eprDataHelper.LatestRequestId));
+        await Navigate(UrlConfig.Relations_Employer_Invite(eprDataHelper.LatestRequestId));
     }
 
     protected async Task ProviderUpdatePermission((AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permisssion)

@@ -1,6 +1,4 @@
-﻿using Azure;
-
-namespace SFA.DAS.RAA.Service.Project.Pages;
+﻿namespace SFA.DAS.RAA.Service.Project.Pages;
 
 public class GetStartedWithRecruitmentAPIsPage(ScenarioContext context) : RaaBasePage(context)
 {

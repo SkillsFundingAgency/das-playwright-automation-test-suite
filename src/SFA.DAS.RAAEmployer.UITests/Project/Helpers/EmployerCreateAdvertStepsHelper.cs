@@ -9,8 +9,6 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers;
 
 public class EmployerCreateDraftAdvertStepsHelper(ScenarioContext context) : EmployerCreateAdvertStepsHelper(context)
 {
-    protected bool IsFoundationAdvert => context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
-
     internal async Task<VacancyReferencePage> SubmitDraftAdvert(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage) 
     {
         var page = await CompleteAboutTheEmployer(createAdvertPage);

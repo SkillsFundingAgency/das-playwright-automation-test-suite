@@ -1,22 +1,14 @@
 ﻿using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign;
 using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
+using SFA.DAS.Framework.Hooks;
 using SFA.DAS.Login.Service.Project;
 using SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.SupportTools.UITests.Project.Helpers;
 
-public class StepsHelper(ScenarioContext context)
+public class StepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
 {
-    public async Task NavigateToSupportTools()
-    {
-        var driver = context.Get<Driver>();
-
-        var url = UrlConfig.SupportTools_BaseUrl;
-
-        context.Get<ObjectContext>().SetDebugInformation(url);
-
-        await driver.Page.GotoAsync(url);
-    }
+    public async Task NavigateToSupportTools() => await Navigate(UrlConfig.SupportTools_BaseUrl);
 
     public async Task<ToolSupportHomePage> ReLoginToSupportSCPTools()
     {

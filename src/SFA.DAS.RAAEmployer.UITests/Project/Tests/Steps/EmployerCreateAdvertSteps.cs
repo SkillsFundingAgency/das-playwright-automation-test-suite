@@ -19,8 +19,8 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
         await _employerCreateVacancyStepsHelper.CreateANewAdvert(RAAConst.Anonymous);
     }
 
-    [When(@"the Employer creates first submitted advert")]
-    public async Task TheEmployerCreatesFirstSubmittedAdvert() => await  _employerCreateVacancyStepsHelper.CreateFirstAdvertAndSubmit(_createAnApprenticeshipAdvertPage);
+    //[When(@"the Employer creates first submitted advert")]
+    //public async Task TheEmployerCreatesFirstSubmittedAdvert() => await  _employerCreateVacancyStepsHelper.CreateFirstAdvertAndSubmit(_createAnApprenticeshipAdvertPage);
 
     //[Given(@"the employer continue to add advert in the Recruitment")]
     //public async Task TheEmployerContinueToAddAdvertInTheRecruitment()

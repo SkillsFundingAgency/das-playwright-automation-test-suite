@@ -11,16 +11,19 @@ public abstract class VerifyDetailsBasePage(ScenarioContext context) : RaaBasePa
 
     //protected virtual By DisabilityConfident { get; }
 
-    //protected void VerifyEmployerName()
-    //{
-    //    var empName = objectContext.GetEmployerNameAsShownInTheAdvert();
-    //    VerifyElement(EmployerName, empName);
-    //    VerifyElement(EmployerNameInAboutTheEmployerSection, empName);
-    //}
+    protected async Task VerifyEmployerName()
+    {
+        var empName = objectContext.GetEmployerNameAsShownInTheAdvert();
 
-    //protected void VerifyDisabilityConfident() => VerifyElement(DisabilityConfident);
+        await Assertions.Expect(page.Locator("form")).ToContainTextAsync(empName);
 
-    //public void RAAQASignOut() => formCompletionHelper.ClickElement(By.CssSelector("#navigation a[data-automation='sign-out']"));
+        await Assertions.Expect(page.Locator("#EmployerName")).ToContainTextAsync(empName);
+
+    }
+
+    public async Task VerifyDisabilityConfident() => await Assertions.Expect(page.GetByRole(AriaRole.Img, new() { Name = "A logo confirming that the" })).ToBeVisibleAsync();
+
+    public async Task RAAQASignOut() => await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
 }
 
 public class ViewVacancyPage(ScenarioContext context) : VerifyDetailsBasePage(context)
@@ -51,7 +54,7 @@ public class ViewVacancyPage(ScenarioContext context) : VerifyDetailsBasePage(co
 
     private async Task VerifyWageAmount(string wageType) => await Assertions.Expect(page.Locator("dl")).ToContainTextAsync(GetWageAmount(wageType));
 
-    public async Task VerifyDisabilityConfident()
+    public async new Task VerifyDisabilityConfident()
     {
         await Assertions.Expect(page.GetByRole(AriaRole.Img, new() { Name = "Disability Confident" })).ToBeVisibleAsync();
     }

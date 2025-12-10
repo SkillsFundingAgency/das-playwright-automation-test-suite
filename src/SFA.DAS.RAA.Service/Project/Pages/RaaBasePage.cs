@@ -7,6 +7,7 @@ public abstract class RaaBasePage : BasePage
     protected readonly RAADataHelper rAADataHelper;
 
     protected readonly AdvertDataHelper advertDataHelper;
+
     protected readonly bool isRaaEmployer;
 
     //protected override By ContinueButton => By.CssSelector(".save-button");

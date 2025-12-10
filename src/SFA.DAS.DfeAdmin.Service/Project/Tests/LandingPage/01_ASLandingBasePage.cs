@@ -1,4 +1,5 @@
-﻿using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
+﻿using Azure;
+using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
 using SFA.DAS.Login.Service.Project.Helpers;
 
 namespace SFA.DAS.DfeAdmin.Service.Project.Tests.LandingPage;
@@ -15,5 +16,12 @@ public abstract class ASLandingCheckBasePage(ScenarioContext context) : CheckPag
     protected override ILocator PageLocator => page.Locator("h1");
 
     public abstract Task ClickStartNowButton();
+}
+
+public class ASVacancyQaLandingPage(ScenarioContext context) : ASLandingCheckBasePage(context)
+{
+    protected override string PageTitle => "Apprenticeship service vacancy QA";
+
+    public override async Task ClickStartNowButton() => await page.GetByRole(AriaRole.Link, new() { Name = "Start now" }).ClickAsync();
 }
 

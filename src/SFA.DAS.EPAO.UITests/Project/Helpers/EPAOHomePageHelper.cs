@@ -3,20 +3,19 @@ using SFA.DAS.EPAO.UITests.Project.Tests.Pages;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 using SFA.DAS.Framework;
+using SFA.DAS.Framework.Hooks;
 
 namespace SFA.DAS.EPAO.UITests.Project.Helpers;
 
-public class EPAOHomePageHelper
+public class EPAOHomePageHelper : FrameworkBaseHooks
 {
-    private readonly ScenarioContext _context;
     private readonly EPAOApplySqlDataHelper _ePAOSqlDataHelper;
     private readonly DfeAdminLoginStepsHelper _dfeAdminLoginStepsHelper;
 
-    public EPAOHomePageHelper(ScenarioContext context)
+    public EPAOHomePageHelper(ScenarioContext context) : base(context)
     {
-        _context = context;
         _ePAOSqlDataHelper = context.Get<EPAOApplySqlDataHelper>();
-        _dfeAdminLoginStepsHelper = new DfeAdminLoginStepsHelper(_context);
+        _dfeAdminLoginStepsHelper = new DfeAdminLoginStepsHelper(this.context);
     }
 
     public async Task<StaffDashboardPage> LoginToEpaoAdminHomePage(bool openInNewTab)
@@ -27,7 +26,7 @@ public class EPAOHomePageHelper
 
         await _dfeAdminLoginStepsHelper.CheckAndLoginToAsAdmin();
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new StaffDashboardPage(_context));
+        return await VerifyPageHelper.VerifyPageAsync(() => new StaffDashboardPage(context));
     }
 
     public async Task<AS_LandingPage> GoToEpaoAssessmentLandingPage(bool openInNewTab = false)
@@ -36,17 +35,17 @@ public class EPAOHomePageHelper
 
         await OpenUrl(url, openInNewTab);
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new AS_LandingPage(_context));
+        return await VerifyPageHelper.VerifyPageAsync(() => new AS_LandingPage(context));
     }
 
     public async Task<AP_PR1_SearchForYourOrganisationPage> LoginInAsApplyUser(GovSignUser loginUser)
     {
         await StubSign(loginUser);
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new AP_PR1_SearchForYourOrganisationPage(_context));
+        return await VerifyPageHelper.VerifyPageAsync(() => new AP_PR1_SearchForYourOrganisationPage(context));
     }
 
-    public async Task<AS_LoggedInHomePage> LoginInAsNonApplyUser(GovSignUser loginUser) { await StubSign(loginUser); return new AS_LoggedInHomePage(_context); }
+    public async Task<AS_LoggedInHomePage> LoginInAsNonApplyUser(GovSignUser loginUser) { await StubSign(loginUser); return new AS_LoggedInHomePage(context); }
 
     public async Task<AS_LoggedInHomePage> LoginInAsStandardApplyUser(GovSignUser loginUser, string standardcode, string organisationId)
     {
@@ -57,13 +56,9 @@ public class EPAOHomePageHelper
 
     private async Task OpenUrl(string url, bool openInNewTab)
     {
-        if (openInNewTab) { await OpenInNewTab(); }
+        if (openInNewTab) { await OpenNewTab(); }
 
-        var driver = _context.Get<Driver>();
-
-        _context.Get<ObjectContext>().SetDebugInformation(url);
-
-        await driver.Page.GotoAsync(url);
+        await Navigate(url);
     }
 
     public async Task<AS_LoggedInHomePage> StageTwoEPAOStandardCancelUser(GovSignUser loginUser) => await LoginInAsNonApplyUser(loginUser);
@@ -78,17 +73,8 @@ public class EPAOHomePageHelper
 
         await page2.Continue();
 
-        _context.Get<EPAOAdminDataHelper>().LoginEmailAddress = loginUser.Username;
+        context.Get<EPAOAdminDataHelper>().LoginEmailAddress = loginUser.Username;
 
-        _context.Set(new EPAOAssessorPortalLoggedInUser { Username = loginUser.Username, IdOrUserRef = loginUser.IdOrUserRef });
-    }
-
-    private async Task OpenInNewTab()
-    {
-        var driver = _context.Get<Driver>();
-
-        var page = await driver.BrowserContext.NewPageAsync();
-
-        driver.Page = page;
+        context.Set(new EPAOAssessorPortalLoggedInUser { Username = loginUser.Username, IdOrUserRef = loginUser.IdOrUserRef });
     }
 }
