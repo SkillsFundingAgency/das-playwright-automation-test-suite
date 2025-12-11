@@ -1,0 +1,82 @@
+parameters:
+  - name: projectName
+    type: string
+  - name: BuildConfiguration
+    type: string
+  - name: deploy
+    type: string
+  - name: PreProdSpecificVariableGroup
+    type: string
+    default: ''
+
+stages:
+  - stage: Build
+    displayName: Build Stage
+    jobs:
+      - template: ../job/code-build.yml
+        parameters:
+          BuildConfiguration: ${{ parameters.BuildConfiguration }}
+          projectName: ${{ parameters.projectName }}
+
+  - stage: Deploy_TEST
+    dependsOn: Build
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'Schedule'))
+    displayName: Deploy to TEST
+    variables:
+      - group: "TEST DevTest Shared Resources"
+      - group: "TEST Automation Suite Variables"
+      - group: "TEST Automation Suite Variables (Db)"
+    jobs:
+      - template: ../job/deploy.yml
+        parameters:
+          Environment: TEST
+          ServiceConnection: SFA-DAS-DevTest-ARM
+
+  - stage: Deploy_TEST2
+    dependsOn: Build
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'Schedule'))
+    displayName: Deploy to TEST2
+    variables:
+      - group: "TEST2 DevTest Shared Resources"
+      - group: "TEST2 Automation Suite Variables"
+    jobs:
+      - template: ../job/deploy.yml
+        parameters:
+          Environment: TEST2
+          ServiceConnection: SFA-DAS-DevTest-ARM
+
+  - stage: Deploy_DEMO
+    dependsOn: Build
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'Schedule'))
+    displayName: Deploy to DEMO
+    variables:
+      - group: "DEMO DevTest Shared Resources"
+      - group: "DEMO Automation Suite Variables"
+    jobs:
+      - template: ../job/deploy.yml
+        parameters:
+          Environment: DEMO
+          ServiceConnection: SFA-DAS-DevTest-ARM
+
+  - stage: Deploy_PP
+    dependsOn: Build
+    displayName: Deploy to PP
+    variables:
+      - group: "PreProd Management Resources"
+      - group: "PreProd Shared Resources"
+      - group: "PreProd Automation Suite Variables"
+      - group: "PREPROD Automation Suite Variables (Db)"
+      - ${{ if ne(parameters.PreProdSpecificVariableGroup, '') }}:
+          - group: ${{ parameters.PreProdSpecificVariableGroup }}
+    jobs:
+      - ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+        - template: ../job/deploy.yml
+          parameters:
+            Environment: 'PP_AUTOMATION'
+            ServiceConnection: SFA-DIG-PreProd-ARM
+
+      - ${{ else }}:
+        - template: ../job/deploy.yml
+          parameters:
+            Environment: 'PP'
+            ServiceConnection: SFA-DIG-PreProd-ARM
