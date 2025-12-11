@@ -5,11 +5,7 @@ parameters:
     type: string
   - name: TestAssembly
     type: string
-<<<<<<< HEAD:pipeline-templates/job/deploy.yml
     default: '**\**\SFA.DAS*tests*.dll'
-=======
-  - name: projectName
->>>>>>> 8bc4d8f (parameterised projects to build):deploy.yml
 
 jobs:
 - deployment: Deploy_AutomationTests
@@ -64,11 +60,7 @@ jobs:
             displayName: 'Install Playwright Browsers'
             inputs:
               targetType: 'filePath'
-<<<<<<< HEAD:pipeline-templates/job/deploy.yml
               filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
-=======
-              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/${{ parameters.projectName }}/playwright.ps1'
->>>>>>> 8bc4d8f (parameterised projects to build):deploy.yml
               arguments: install
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
