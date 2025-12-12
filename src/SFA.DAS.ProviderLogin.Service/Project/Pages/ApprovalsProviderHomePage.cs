@@ -6,6 +6,8 @@ public partial class ProviderHomePage : InterimProviderBasePage
 {
     public async Task<ProviderLandingPage> SignsOut()
     {
+        await page.EvaluateAsync("() => { localStorage.clear(); sessionStorage.clear(); }");
+
         await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderLandingPage(context));
@@ -246,6 +248,8 @@ public class ProviderReserveFundingForNonLevyEmployersPage(ScenarioContext conte
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Reserve funding for non-levy employers");
     }
+
+    public async Task ClickOnReserveFundingButton() => await page.GetByRole(AriaRole.Button, new() { Name = "Reserve funding" }).ClickAsync();
 
     //private static By ReserveFundingButton => By.LinkText("Reserve funding");
 
