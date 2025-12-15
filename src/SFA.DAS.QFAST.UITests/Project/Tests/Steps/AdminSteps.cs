@@ -1,8 +1,6 @@
 ﻿using SFA.DAS.QFAST.UITests.Project.Helpers;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Form;
-
-
 namespace SFA.DAS.QFAST.UITests.Project.Tests.Steps;
 
 [Binding]
@@ -12,6 +10,8 @@ public class AdminSteps(ScenarioContext context)
     private readonly Admin_Page _qfastAdminPage = new(context);
     private readonly ViewForms_Page _viewFormsPage = new(context);
     private readonly CreateNewForm_Page _createNewFormPage = new(context);
+    private readonly CreateOutputFile_Page _createOutputFilePage = new(context);
+    private readonly NewQualifications_Page _newQualificationsPage = new(context);
 
     [Given(@"the (.*) user log in to the portal")]
     public async Task GivenTheAdminUserLogInToThePortal(string user)
@@ -127,4 +127,34 @@ public class AdminSteps(ScenarioContext context)
         await _qfastAdminPage.ClickLogOut();
     }
 
+    [When("I verify error message (.*) when date is not selected")]
+    public async Task WhenIVerifyErrorMessageWhenDateIsNotSelected(string message)
+    {
+        await _createOutputFilePage.VerifyErrorMessage(message);
+    }
+
+    [When("I verify first option always has present date and download the file with present date")]
+    public async Task WhenIVerifyFirstOptionAlwaysHasPresentDate()
+    {
+        await _createOutputFilePage.VerifyPresentDate();        
+    }
+
+    [When("I select a publication date and generate the output file")]
+    public async Task WhenISelectAPublicationDateAndGenerateTheOutputFile()
+    {
+        await _createOutputFilePage.ValidateDateErrorMessage();
+        await _createOutputFilePage.EnterFuturPublicationDate();       
+    }
+
+    [Then("I verify that QAN number is a clickable link")]
+    public async Task ThenIVerifyThatQANNumberIsAClickableLink()
+    {
+        await _newQualificationsPage.VerifyQANnumberIsLink();
+    }    
+
+    [Then("I verify that the QAN number link opens the correct page in a new tab")]
+    public async Task ThenIVerifyThatTheQANNumberLinkOpensTheCorrectPageInANewTab()
+    {
+        await _newQualificationsPage.VerifyClickingOnLinkOpensNewTab();
+    }
 }
