@@ -1,19 +1,12 @@
-﻿using Azure;
-using Microsoft.Playwright;
-using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages;
 using SFA.DAS.Approvals.UITests.Project.Pages.Common;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
-using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {

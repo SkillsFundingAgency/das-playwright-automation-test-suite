@@ -1,5 +1,4 @@
-﻿using Polly;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using System.IO;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.FileUploadModel

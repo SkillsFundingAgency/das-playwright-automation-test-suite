@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.FileUploadModel
 {

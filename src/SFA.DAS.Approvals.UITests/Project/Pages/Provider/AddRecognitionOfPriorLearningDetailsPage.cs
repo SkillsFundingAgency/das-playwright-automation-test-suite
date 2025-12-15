@@ -1,10 +1,4 @@
-﻿using Polly;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {

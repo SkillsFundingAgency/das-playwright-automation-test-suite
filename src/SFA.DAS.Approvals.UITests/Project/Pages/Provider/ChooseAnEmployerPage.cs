@@ -23,6 +23,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         }
 
+        internal async Task<bool> EmployerExistsInTheList(string agreementId) => await page.GetByRole(AriaRole.Row, new() { Name = agreementId }).IsVisibleAsync();
 
     }
+
 }

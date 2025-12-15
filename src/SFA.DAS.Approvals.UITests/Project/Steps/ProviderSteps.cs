@@ -1,20 +1,11 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
-using SFA.DAS.Approvals.UITests.Project.Helpers.API;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
-using SFA.DAS.Approvals.UITests.Project.Pages;
-using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
-using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TechTalk.SpecFlow.Assist;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
@@ -261,6 +252,38 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerStepsHelper.ProviderApproveCohort(page);
             await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
 
+        }
+
+
+        [When("the Provider tries to add another apprentice to an existing cohort")]
+        public async Task WhenTheProviderTriesToAddAnotherApprenticeToAnExistingCohort()
+        {
+            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.NonLevyUserAtMaxReservationLimit);
+            apprenticeship = await new DbSteps(context).FindUnapprovedCohortReference(apprenticeship, ApprenticeRequests.ReadyForReview);
+            
+            await providerStepsHelper.ProviderOpenTheCohort(apprenticeship.Cohort.Reference);
+        }
+
+        [Then("the Provider is blocked with a shutter page for existing cohort")]
+        public async Task ThenTheProviderIsBlockedWithAShutterPageForExistingCohort()
+        {
+            var page = new ApproveApprenticeDetailsPage(context);
+            var page1 = await page.ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage();
+            var page2 = await page1.SelectOptionToAddApprenticesFromILRList_FundingRestrictionsRoute();
+            await page2.ClickOnReturnToAccountButton();
+        }
+
+
+        [Then("the Provider is blocked to create new reservations")]
+        public async Task ThenTheProviderIsBlockedToCreateNewReservations()
+        {
+            var agreementId = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().EmployerDetails.AgreementId;
+
+            await new ProviderHomePage(context).ClickFundingLink();
+            var page = new ReserveFundingForNonLevyEmployersPage(context);
+            var page1 = await page.ClickOnReserveFundingButton();
+            var page2 = await page1.ChooseAnEmployer(agreementId);
+            await page2.ConfirmNonLevyEmployerWithFundingRestrictions();
         }
 
 

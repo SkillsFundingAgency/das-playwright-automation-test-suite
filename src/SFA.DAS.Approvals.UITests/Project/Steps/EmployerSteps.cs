@@ -3,23 +3,10 @@ using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
-using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
-using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
-using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
-using SFA.DAS.Framework;
-using SFA.DAS.FrameworkHelpers;
-using SFA.DAS.Login.Service.Project.Helpers;
-using SFA.DAS.ProviderLogin.Service.Project;
-using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -143,8 +130,38 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheEmployerVerifyRPLDetails()
         {
            var apprenticeships = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-            var page = new EmployerApproveApprenticeDetailsPage(context);
+           var page = new EmployerApproveApprenticeDetailsPage(context);
            await page.VerifyRPLDetails(apprenticeships);
+        }
+
+        [Given("the Employer logins using an existing NonLevy Account which has reached it max reservations limit")]
+        public async Task GivenTheEmployerLoginsUsingAnExistingNonLevyAccountWhichHasReachedItMaxReservationsLimit()
+        {
+            var listOfApprenticeship = new List<Apprenticeship>();
+            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.NonLevyUserAtMaxReservationLimit);
+            apprenticeship = await new DbSteps(context).FindUnapprovedCohortReference(apprenticeship, ApprenticeRequests.WithEmployers);
+            listOfApprenticeship.Add(apprenticeship);
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);           
+        }
+
+        [When("the Employer tries to add another apprentice to an existing cohort")]
+        public async Task WhenTheEmployerTriesToAddAnotherApprenticeToAnExistingCohort()
+        {
+            await employerStepsHelper.OpenCohort(false);
+            
+        }
+
+        [Then("the Employer is blocked with a shutter page for existing cohort")]
+        public async Task ThenTheEmployerIsBlockedWithAShutterPageForExistingCohort()
+        {
+            await new EmployerApproveApprenticeDetailsPage(context).TryClickAddAnotherApprenticeLink();
+        }
+
+
+        [Then("the employer is blocked to create new reservations")]
+        public async Task ThenTheEmployerIsBlockedToCreateNewReservations()
+        {
+            await employerStepsHelper.EmployerTriesToCreateReservation();
         }
 
 

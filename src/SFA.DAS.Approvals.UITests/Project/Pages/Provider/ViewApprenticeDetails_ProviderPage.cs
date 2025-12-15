@@ -1,14 +1,5 @@
-﻿using Azure;
-using Polly;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
-using System;
-using System.Collections.Generic;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
