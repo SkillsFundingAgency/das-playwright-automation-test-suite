@@ -1,16 +1,9 @@
-﻿using Azure;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
-using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static SFA.DAS.EmployerPortal.UITests.Project.Pages.HomePage;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 {

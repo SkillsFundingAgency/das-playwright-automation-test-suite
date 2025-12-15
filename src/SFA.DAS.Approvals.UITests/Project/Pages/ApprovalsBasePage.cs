@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
-
 namespace SFA.DAS.Approvals.UITests.Project.Pages;
 
 public abstract class ApprovalsBasePage(ScenarioContext context) : BasePage(context)

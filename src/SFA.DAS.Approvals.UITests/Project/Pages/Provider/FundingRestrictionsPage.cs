@@ -1,10 +1,4 @@
-﻿using Azure;
-using SFA.DAS.ProviderLogin.Service.Project.Pages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SFA.DAS.ProviderLogin.Service.Project.Pages;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {

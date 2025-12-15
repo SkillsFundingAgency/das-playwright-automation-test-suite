@@ -1,14 +1,7 @@
-﻿using Azure;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
-using SFA.DAS.FrameworkHelpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
-using System;
-using System.Diagnostics;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
