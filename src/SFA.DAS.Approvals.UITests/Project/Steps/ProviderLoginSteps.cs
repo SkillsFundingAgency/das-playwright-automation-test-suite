@@ -1,11 +1,6 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
-using SFA.DAS.ProviderLogin.Service.Project;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {

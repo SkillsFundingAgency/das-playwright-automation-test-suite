@@ -1,13 +1,4 @@
-﻿using Azure;
-using SFA.DAS.Approvals.UITests.Project.Pages.Common;
-using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
+﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
     internal class ApprenticeDetails_ProviderPage : ApprovalsBasePage
     {

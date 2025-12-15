@@ -15,5 +15,6 @@ internal class ChooseAnEmployerPage(ScenarioContext context) : ApprovalsBasePage
 
     }
 
+    internal async Task<bool> EmployerExistsInTheList(string agreementId) => await page.GetByRole(AriaRole.Row, new() { Name = agreementId }).IsVisibleAsync();
 
 }
