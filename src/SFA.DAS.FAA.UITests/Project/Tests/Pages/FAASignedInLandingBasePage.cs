@@ -18,28 +18,28 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
     //private static By SavedVacancyLink => By.CssSelector(".govuk-link.govuk-link--no-visited-state");
     private static string AllVacancyLocator => ("[id^='VAC'][id$='-vacancy-title']");
 
-    //public FAA_ApplicationsPage GoToApplications()
-    //{
-    //    formCompletionHelper.Click(ApplicationsHeader);
+    public async Task<FAA_ApplicationsPage> GoToApplications()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Your applications" }).ClickAsync();
 
-    //    return new(context);
-    //}
+        return await VerifyPageAsync(() => new FAA_ApplicationsPage(context));
+    }
 
     //public FAASearchApprenticeLandingPage GoToSearch()
     //{
-    //    formCompletionHelper.Click(SearchHeader);
+    //    await page.GetByRole(AriaRole.Link, new() { Name = "Search" }).ClickAsync();
 
     //    return new(context);
     //}
 
-    //public FAA_ApprenticeSummaryPage SearchByReferenceNumber()
-    //{
-    //    SearchUsingVacancyTitle();
+    public async Task<FAA_ApprenticeSummaryPage> SearchByReferenceNumber()
+    {
+        await SearchUsingVacancyTitle();
 
-    //    GoToVacancyInFAA();
+        await GoToVacancyInFAA();
 
-    //    return new FAA_ApprenticeSummaryPage(context);
-    //}
+        return await VerifyPageAsync(() => new FAA_ApprenticeSummaryPage(context));
+    }
 
     public async Task SearchByWhatWhere(string whatText, string whereText)
     {
@@ -96,12 +96,12 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
         return await VerifyPageAsync(() => new FAASearchResultPage(context));
     }
 
-    //public FAASearchResultPage SearchAndSaveVacancyByReferenceNumber()
-    //{
-    //    SearchUsingVacancyTitle();
+    public async Task<FAASearchResultPage> SearchAndSaveVacancyByReferenceNumber()
+    {
+        await SearchUsingVacancyTitle();
 
-    //    return new FAASearchResultPage(context);
-    //}
+        return await VerifyPageAsync(() => new FAASearchResultPage(context));
+    }
 
     public async Task<FAABrowseByInterestsPage> ClickBrowseByYourInterests()
     {
