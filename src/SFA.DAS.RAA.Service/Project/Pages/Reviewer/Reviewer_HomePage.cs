@@ -79,7 +79,7 @@ public abstract class ApproveVacancyBasePage(ScenarioContext context) : VerifyDe
 
         foreach (var error in errors) await error.UncheckAsync();
 
-        await Submit();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Approve" }).ClickAsync();
 
         return await VerifyPageAsync(() => new QAReviewsPage(context));
     }
@@ -90,12 +90,10 @@ public abstract class ApproveVacancyBasePage(ScenarioContext context) : VerifyDe
 
         await page.Locator(ReviewerComment).FillAsync("Refered - Title requires edit");
 
-        await Submit();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Refer" }).ClickAsync();
 
         await page.GetByRole(AriaRole.Link, new() { Name = "Apprenticeship service vacancy QA" }).ClickAsync();
     }
-
-    private async Task Submit() => await page.GetByRole(AriaRole.Button, new() { Name = "Approve" }).ClickAsync();
 }
 
 public class QAReviewsPage(ScenarioContext context) : VerifyDetailsBasePage(context)
