@@ -73,7 +73,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenDisplayTheWarningMessageForFoundationCourses()
         {
             var page = new EmployerApproveApprenticeDetailsPage(context);
-            var warningMsg = "! Warning Check apprentices are eligible for foundation apprenticeships If someone is aged between 22 and 24, to be funded for a foundation apprenticeship they must either: have an Education, Health and Care (EHC) plan be or have been in the care of their local authority be a prisoner or have been in prison";
+            var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
             
             await page.ValidateWarningMessageForFoundationCourses(warningMsg);
             
