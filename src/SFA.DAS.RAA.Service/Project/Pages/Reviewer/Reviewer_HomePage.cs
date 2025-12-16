@@ -21,9 +21,19 @@ public class Reviewer_HomePage(ScenarioContext context) : BasePage(context)
     {
         var vacref = objectContext.GetVacancyReference();
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Search vacancies" }).FillAsync(vacref);
+        var reviewlocator = page.GetByRole(AriaRole.Link, new() { Name = "Review" });
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        for (int i = 0; i < 5; i++)
+        {
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search vacancies" }).FillAsync(vacref);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+            if (await reviewlocator.IsEnabledAsync() && await reviewlocator.IsVisibleAsync())
+            {
+                break;
+            }
+        }
 
         await page.GetByRole(AriaRole.Row, new() { Name = vacref }).GetByRole(AriaRole.Link, new() { Name = "Review" }).ClickAsync();
 
