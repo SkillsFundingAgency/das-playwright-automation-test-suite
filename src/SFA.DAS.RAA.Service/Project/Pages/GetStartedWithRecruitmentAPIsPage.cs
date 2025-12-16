@@ -60,7 +60,7 @@ public class KeyforApiPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Key for API");
+        await Assertions.Expect(page.Locator("h1").Last).ToContainTextAsync("Key for API");
     }
 
     public async Task VerifyApikeyRenewed() => await Assertions.Expect(page.Locator("#renew-confirmation-banner")).ToContainTextAsync("Key renewed");
