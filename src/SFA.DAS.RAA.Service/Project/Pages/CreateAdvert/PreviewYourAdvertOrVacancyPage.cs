@@ -1,6 +1,4 @@
-﻿using Azure;
-
-namespace SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
+﻿namespace SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 
 public class PreviewYourAdvertOrVacancyPage(ScenarioContext context) : RaaBasePage(context)
 {
@@ -14,13 +12,12 @@ public class PreviewYourAdvertOrVacancyPage(ScenarioContext context) : RaaBasePa
     private static string Submit => (".govuk-button[data-automation='submit-button']");
     private static string DeleteVacancyButton => ("a[data-automation='delete-button']");
 
-    public async Task<DeleteVacancyQuestionPage> DeleteVacancy()
+    public async Task<CheckYourAnswersPage> ReturnToPreviousPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Delete advert" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Return to previous page to submit" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new DeleteVacancyQuestionPage(context));
+        return await VerifyPageAsync(() => new CheckYourAnswersPage(context));
     }
-
 
     //public async Task<ResubmittedVacancyReferencePage> ResubmitVacancy()
     //{
@@ -42,7 +39,7 @@ public class DeleteVacancyQuestionPage(ScenarioContext context) : RaaBasePage(co
 
         await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(SubTitle);
     }
-    
+
     public async Task YesDeleteAdvert()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, delete this advert now" }).CheckAsync();

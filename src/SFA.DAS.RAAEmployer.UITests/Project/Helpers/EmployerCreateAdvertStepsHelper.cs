@@ -32,9 +32,11 @@ public class EmployerCreateDraftAdvertStepsHelper(ScenarioContext context) : Emp
 
         var page4 = await page3.PreviewAdvert();
 
-        var page5 = await page4.DeleteVacancy();
-        
-        return await page5.NoDeleteVacancy();
+        var page5 = await page4.ReturnToPreviousPage();
+
+        var page6 = await page5.DeleteVacancy();
+
+        return await page6.NoDeleteVacancy();
     }
 
 
@@ -48,9 +50,11 @@ public class EmployerCreateDraftAdvertStepsHelper(ScenarioContext context) : Emp
 
         var page2 = await page1.PreviewAdvert();
 
-        var page3 = await page2.DeleteVacancy();
+        var page3 = await page2.ReturnToPreviousPage();
+
+        var page4 = await page3.DeleteVacancy();
         
-        await page3.YesDeleteAdvert();
+        await page4.YesDeleteAdvert();
     }
 
     internal async Task<CreateAnApprenticeshipAdvertOrVacancyPage> CreateDraftAdvert()
