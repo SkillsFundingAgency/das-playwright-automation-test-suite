@@ -247,7 +247,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenSystemAllowsToapproveApprenticeDetailsWithAWarningIfTheirAgeIsInRangeOf_Years(int lowerAgeLimit, int upperAgeLimit)
         {
             var page = await providerStepsHelper.UpdateDobAndReprocessData(lowerAgeLimit, upperAgeLimit);
-            var warningMsg = "! One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
+            var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
             await page.ValidateWarningMessageForFoundationCourses(warningMsg);
             await providerStepsHelper.ProviderApproveCohort(page);
             await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
