@@ -33,7 +33,7 @@ public class SearchVacancyPageHelper(ScenarioContext context)
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your adverts");
 
-        var locators = await page.GetByRole(AriaRole.Row, new() { Name = "VAC" }).GetByRole(AriaRole.Link).AllAsync();
+        var locators = await page.GetByRole(AriaRole.Row, new() { Name = "VAC" }).Filter(new LocatorFilterOptions { HasNotTextString = "Foundation" }).GetByRole(AriaRole.Link).AllAsync();
 
         var locator = RandomDataGenerator.GetRandom(locators);
 
