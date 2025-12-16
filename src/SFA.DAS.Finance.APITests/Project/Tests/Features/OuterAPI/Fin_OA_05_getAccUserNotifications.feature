@@ -1,3 +1,4 @@
+
 Feature: Fin_OA_05_getAccUserNotifications
 
 @api
@@ -6,4 +7,8 @@ Feature: Fin_OA_05_getAccUserNotifications
 @outerapi
 Scenario: Fin_OA_05 getAccUserNotifications
 
-	Then endpoint /Accounts/{accountId}/users/which-receive-notifications can be accessed
+    Given send an api request GET /Accounts/{{accountId}}/users/which-receive-notifications
+
+    Then Verify the getUserNotifications api response with records fetch from DB
+        | query |
+        | GetUsersWhichReceiveNotifications.sql |

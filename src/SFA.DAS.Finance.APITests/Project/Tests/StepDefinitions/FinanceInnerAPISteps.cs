@@ -34,9 +34,28 @@ public class FinanceInnerAPISteps(ScenarioContext context)
     public async Task ThenEndpointApiAccountsHashedAccountIdLevyGetLevyForPeriodEndpointCanBeAccessed()
     {
         var hashedAccountId = GetHashedAccountId();
+        if (string.IsNullOrWhiteSpace(hashedAccountId))
+        {
+            Assert.Fail("hashedAccountId was not set in the test context; check DB setup or BeforeScenario hooks.");
+            return;
+        }
+
         var response = await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy");
+        if (response == null || string.IsNullOrWhiteSpace(response.Content))
+        {
+            Assert.Fail($"Levy endpoint returned no content for hashedAccountId '{hashedAccountId}'.");
+            return;
+        }
+
         var result = JsonConvert.DeserializeObject<ICollection<LevyDeclaration>>(response.Content);
-        await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy/{result.FirstOrDefault().PayrollYear}/{result.FirstOrDefault().PayrollMonth}", HttpStatusCode.OK);
+        if (result == null || !result.Any() || result.FirstOrDefault() == null)
+        {
+            Assert.Fail($"Levy endpoint returned an empty or invalid collection for hashedAccountId '{hashedAccountId}'. Content: {response.Content}");
+            return;
+        }
+
+        var first = result.First();
+        await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy/{first.PayrollYear}/{first.PayrollMonth}", HttpStatusCode.OK);
 
     }
 
