@@ -1,5 +1,7 @@
-﻿using SFA.DAS.RAA.DataGenerator.Project;
+﻿using Azure;
+using SFA.DAS.RAA.DataGenerator.Project;
 using SFA.DAS.RAA.Service.Project.Pages;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.RAA.Service.Project.Helpers;
 
@@ -73,6 +75,6 @@ public class SearchVacancyPageHelper(ScenarioContext context)
         
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
-        await page.WaitForURLAsync($"**searchTerm={vacRef}", new PageWaitForURLOptions { WaitUntil = WaitUntilState.DOMContentLoaded, Timeout = 20000});
+        await Assertions.Expect(page).ToHaveURLAsync(new Regex($"searchTerm={vacRef}"), new PageAssertionsToHaveURLOptions { IgnoreCase = true, Timeout = 20000 });
     }
 }
