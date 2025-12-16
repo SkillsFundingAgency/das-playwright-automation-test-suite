@@ -6,11 +6,9 @@ public class Driver(IBrowserContext browserContext, IPage page, ObjectContext ob
 
     public IPage Page = page;
 
-    private readonly ScreenShotHelper screenShotHelper = new(page, objectContext);
+    private readonly ScreenShotHelper screenShotHelper = new(objectContext);
 
-    public void SetPage(IPage _page) => Page = _page;
-
-    public async Task ScreenshotAsync(bool isTestComplete) => await screenShotHelper.ScreenshotAsync(isTestComplete);
+    public async Task ScreenshotAsync(bool isTestComplete) => await screenShotHelper.ScreenshotAsync(Page, isTestComplete);
 
     public async Task SelectRowFromTable(string byLinkText, string byKey, ILocator nextPage)
     {
