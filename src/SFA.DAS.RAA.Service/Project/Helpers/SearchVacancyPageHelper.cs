@@ -73,6 +73,6 @@ public class SearchVacancyPageHelper(ScenarioContext context)
         
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
-        await page.WaitForURLAsync($"**/searchTerm={vacRef}");
+        await page.WaitForURLAsync($"**searchTerm={vacRef}", new PageWaitForURLOptions { WaitUntil = WaitUntilState.DOMContentLoaded, Timeout = 20000});
     }
 }
