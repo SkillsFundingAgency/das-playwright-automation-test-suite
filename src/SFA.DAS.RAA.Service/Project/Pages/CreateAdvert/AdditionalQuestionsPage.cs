@@ -42,12 +42,12 @@ public class AdditionalQuestionsPage(ScenarioContext context) : RaaBasePage(cont
     {
         if (enterQuestion1)
         {
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Question 3 (optional)" }).FillAsync(advertDataHelper.AdditionalQuestion1);
+            await page.Locator("[id='AdditionalQuestion1']").FillAsync(advertDataHelper.AdditionalQuestion1);
         }
 
         if (enterQuestion2)
         {
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Question 4 (optional)" }).FillAsync(advertDataHelper.AdditionalQuestion2);
+            await page.Locator("[id='AdditionalQuestion2']").FillAsync(advertDataHelper.AdditionalQuestion2);
         }
     }
 
