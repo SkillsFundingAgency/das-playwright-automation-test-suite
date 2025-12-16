@@ -36,10 +36,6 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
     {
         await AcceptAllCookiesIfVisible();
 
-        page.SetDefaultNavigationTimeout(10000);
-
-        page.SetDefaultTimeout(15000);
-
         await page.GetByRole(AriaRole.Link, new() { Name = "Create an advert" }).ClickAsync();
 
         return await VerifyPageAsync(() => new CreateAnAdvertHomePage(context));
