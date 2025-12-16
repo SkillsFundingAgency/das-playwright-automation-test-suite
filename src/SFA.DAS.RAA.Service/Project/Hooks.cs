@@ -25,11 +25,11 @@ public class Hooks(ScenarioContext context)
 
         context.Set(new RAAProviderPermissionsSqlDbHelper(objectContext, dbConfig));
 
-        var page = context.Get<Driver>().Page;
+        var browserContext = context.Get<Driver>().BrowserContext;
 
-        page.SetDefaultNavigationTimeout(10000);
+        browserContext.SetDefaultNavigationTimeout(10000);
 
-        page.SetDefaultTimeout(15000);
+        browserContext.SetDefaultTimeout(15000);
 
         await Task.CompletedTask;
     }
