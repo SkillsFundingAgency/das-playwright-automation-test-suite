@@ -33,7 +33,7 @@ public class CreateOutputFile_Page(ScenarioContext context) : BasePage(context)
     }
     public async Task<CreateOutputFile_Page> VerifyFileDowloadMessage()
     {
-        var filedownloadedMessage = page.Locator("p.govuk-body");
+        var filedownloadedMessage = page.Locator(".govuk-notification-banner__content").Locator("p.govuk-body");
         var expectedMessage = "Your file has been downloaded";
         await Assertions.Expect(filedownloadedMessage).ToHaveTextAsync(expectedMessage);
         return await VerifyPageAsync(() => new CreateOutputFile_Page(context));
