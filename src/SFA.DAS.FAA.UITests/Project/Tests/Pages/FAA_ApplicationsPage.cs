@@ -30,9 +30,7 @@ public class FAA_ApplicationsPage(ScenarioContext context) : FAABasePage(context
 
     public async Task ViewApplication()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = vacancyTitleDataHelper.VacancyTitle}).ClickAsync();
-
-        await page.GetByRole(AriaRole.Link, new() { Name = $"View application   for {vacancyTitleDataHelper.VacancyTitle}" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = $"View application   for {vacancyTitleDataHelper.VacancyTitle}" }).ClickAsync();
 
         if (IsFoundationAdvert)
         {

@@ -129,7 +129,7 @@ public class DisabilityConfidentSchemePage(ScenarioContext context) : FAABasePag
 
 public class WhereDoYouWantToApplyForPage(ScenarioContext context) : FAABasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Where do you want to apply for?");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Where do you want to apply for");
 
     public async Task<WhereDoYouWantToApplyForPage> SelectLocationsAndContinue()
     {
