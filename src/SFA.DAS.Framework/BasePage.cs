@@ -74,7 +74,7 @@ public abstract class BasePage : FrameworkBaseHooks
     {
         var nextPage = func.Invoke();
 
-        await nextPage.VerifyPage();
+        await retryHelper.RetryOnVerifyPage(nextPage.VerifyPage);
 
         objectContext.SetDebugInformation($"Navigated to page with Title: '{await page.TitleAsync()}'");
 
