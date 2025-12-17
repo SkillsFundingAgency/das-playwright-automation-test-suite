@@ -14,6 +14,11 @@ public class ReviewerSteps(ScenarioContext context)
     [Then(@"the Reviewer Approves the vacancy")]
     public async Task TheReviewerApprovesTheVacancy() => await _reviewerStepsHelper.VerifyEmployerNameAndApprove();
 
+    [Given(@"the Reviewer sign out")]
+    [When(@"the Reviewer sign out")]
+    [Then(@"the Reviewer sign out")]
+    public async Task TheReviewerSignOut() => await _reviewerStepsHelper.RAAQASignOut();
+
     [Given(@"the Reviewer Refer the vacancy")]
     public async Task GivenTheReviewerReferTheVacancy() => await _reviewerStepsHelper.Refer();
 

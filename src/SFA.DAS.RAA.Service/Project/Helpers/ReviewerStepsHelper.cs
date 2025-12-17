@@ -8,6 +8,8 @@ namespace SFA.DAS.RAA.Service.Project.Helpers;
 
 public class ReviewerStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
 {
+    private VerifyDetailsBasePage verifyDetailsBasePage;
+
     public async Task<Reviewer_HomePage> GoToReviewerHomePage()
     {
         await OpenNewTab();
@@ -25,18 +27,15 @@ public class ReviewerStepsHelper(ScenarioContext context) : FrameworkBaseHooks(c
 
         await page.VerifyEmployerName();
 
-        var page1 = await page.Approve();
+        verifyDetailsBasePage = await page.Approve();
 
-        await RAAQASignOut(page1);
     }
 
     public async Task Refer()
     {
-        var page = await ReviewVacancy();
+        var verifyDetailsBasePage = await ReviewVacancy();
 
-        await page.ReferTitle();
-
-        await RAAQASignOut(page);
+        await verifyDetailsBasePage.ReferTitle();
     }
 
     public async Task VerifyDisabilityConfidenceAndApprove()
@@ -45,9 +44,7 @@ public class ReviewerStepsHelper(ScenarioContext context) : FrameworkBaseHooks(c
 
         await page.VerifyDisabilityConfident();
 
-        var page1 = await page.Approve();
-
-        await RAAQASignOut(page1);
+        verifyDetailsBasePage = await page.Approve();
     }
 
     private async Task<Reviewer_VacancyPreviewPage> ReviewVacancy()
@@ -57,9 +54,9 @@ public class ReviewerStepsHelper(ScenarioContext context) : FrameworkBaseHooks(c
         return await page.ReviewVacancy();
     }
 
-    private async Task RAAQASignOut(VerifyDetailsBasePage basePage)
+    public async Task RAAQASignOut()
     {
-        await basePage.RAAQASignOut();
+        await verifyDetailsBasePage.RAAQASignOut();
 
         await new ASVacancyQaLandingPage(context).VerifyPage();
     }

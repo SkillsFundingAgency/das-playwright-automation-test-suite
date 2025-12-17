@@ -15,6 +15,7 @@
 #And the Employer approves the advert
 #Then the 'provider' receives 'employer approved vacancy' email notification
 #And the Reviewer Approves the vacancy
+#And the Reviewer sign out
 #Then the Provider should see the advert with status: 'Live'
 #When the Applicant can apply for a Vacancy in FAA
 #Then the 'employer' receives 'shared application' email notification

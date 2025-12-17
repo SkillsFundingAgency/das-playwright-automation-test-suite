@@ -23,7 +23,22 @@ public abstract class VerifyDetailsBasePage(ScenarioContext context) : RaaBasePa
 
     public async Task VerifyDisabilityConfident() => await Assertions.Expect(page.GetByRole(AriaRole.Img, new() { Name = "A logo confirming that the" })).ToBeVisibleAsync();
 
-    public async Task RAAQASignOut() => await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
+    public async Task RAAQASignOut()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
+
+        var signOutFrame = page.GetByRole(AriaRole.Heading);
+
+        if (await signOutFrame.IsVisibleAsync())
+        {
+            var text = await signOutFrame.TextContentAsync();
+
+            if (text.ContainsCompareCaseInsensitive("Pick an account"))
+            {
+                await page.Locator("[aria-label*='Sign out']").ClickAsync();
+            }
+        }
+    }
 }
 
 public class ViewVacancyPage(ScenarioContext context) : VerifyDetailsBasePage(context)

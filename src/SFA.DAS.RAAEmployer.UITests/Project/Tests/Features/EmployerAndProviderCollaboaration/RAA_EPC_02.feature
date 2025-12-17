@@ -12,4 +12,5 @@
 #When Provider re-submits the advert
 #And the Employer approves the advert
 #And the Reviewer Approves the vacancy
+#And the Reviewer sign out
 #Then the Provider should see the advert with status: 'Live'
