@@ -9,7 +9,7 @@ public class FAA_ApplicationsPage(ScenarioContext context) : FAABasePage(context
 
     public async Task<FAA_SuccessfulApplicationPage> OpenSuccessfulApplicationPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Successful", Exact = true }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Successful" }).Filter( new LocatorFilterOptions { HasNotTextString = "Un"}).ClickAsync();
 
         return await VerifyPageAsync(() => new FAA_SuccessfulApplicationPage(context));
     }
