@@ -26,20 +26,21 @@ public class WageTypePage(ScenarioContext context) : RaaBasePage(context)
 
         return await VerifyPageAsync(() => new ExtraInformationAboutPayPage(context));
     }
+
     private async Task ChooseWage(string wageType)
     {
         if (wageType == RAAConst.NationalMinWages) await EnterNationalMinWages();
 
-        else if (wageType == RAAConst.FixedWageType) await EnterNationalMinWages();
+        else if (wageType == RAAConst.FixedWageType) await EnterFixedWageType();
         else if (wageType == RAAConst.SetAsCompetitive)
         {
-            await EnterNationalMinWages();
-            await EnterNationalMinWages();
+            await EnterSetAsCompetitive();
+            await ExtraInformationAboutWage();
         }
 
         else if (wageType == RAAConst.NationalMinWagesForApprentices)
         {
-            await EnterNationalMinWages();
+            await EnterNationalMinimumWageForApprentices();
         }
         else
         {
@@ -74,6 +75,8 @@ public class WageTypePage(ScenarioContext context) : RaaBasePage(context)
     public async Task<CompetitiveWagePage> ExtraInformationAboutWage()
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Set as competitive");
 
         await SubmitYes();
 

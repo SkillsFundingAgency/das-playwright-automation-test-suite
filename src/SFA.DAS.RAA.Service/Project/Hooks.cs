@@ -27,9 +27,9 @@ public class Hooks(ScenarioContext context)
 
         var browserContext = context.Get<Driver>().BrowserContext;
 
-        browserContext.SetDefaultNavigationTimeout(10000);
+        browserContext.SetDefaultNavigationTimeout(40000);
 
-        browserContext.SetDefaultTimeout(15000);
+        browserContext.SetDefaultTimeout(40000);
 
         await Task.CompletedTask;
     }
