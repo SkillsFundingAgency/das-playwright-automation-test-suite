@@ -147,7 +147,26 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers
                 // ignore if progress logging fails
             }
 
-            var result = await GetData(sql);
+            // Decide which DB connection to use. Some SQL files (e.g., finance-related)
+            // reference the employer_financial schema which exists on the Finance DB.
+            // Prefer Finance DB when the SQL references that schema or the file name
+            // strongly indicates finance data (getTransactions.sql).
+            string execConnection = null;
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(_dbConfig?.FinanceDbConnectionString) &&
+                    (sql.IndexOf("employer_financial", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                     string.Equals(sqlFileName, "getTransactions.sql", StringComparison.OrdinalIgnoreCase)))
+                {
+                    execConnection = _dbConfig.FinanceDbConnectionString;
+                }
+            }
+            catch
+            {
+                execConnection = null;
+            }
+
+            var result = execConnection == null ? await GetData(sql) : await GetData(sql, execConnection);
 
             return result;
         }

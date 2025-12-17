@@ -1,15 +1,24 @@
 ﻿using Newtonsoft.Json;
 using SFA.DAS.Finance.APITests.Project.Helpers;
 using SFA.DAS.Finance.APITests.Project.Models;
+using TechTalk.SpecFlow;
+using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
 
 namespace SFA.DAS.Finance.APITests.Project.Tests.StepDefinitions;
 
 [Binding]
-public class FinanceInnerAPISteps(ScenarioContext context)
+public class FinanceInnerAPISteps
 {
-    private readonly Inner_EmployerFinanceApiRestClient _innerApiRestClient = context.GetRestClient<Inner_EmployerFinanceApiRestClient>();
+    private readonly ScenarioContext _scenarioContext;
+    private readonly Inner_EmployerFinanceApiRestClient _innerApiRestClient;
+    private readonly ObjectContext _objectContext;
 
-    private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
+    public FinanceInnerAPISteps(ScenarioContext context)
+    {
+        _scenarioContext = context;
+        _innerApiRestClient = context.GetRestClient<Inner_EmployerFinanceApiRestClient>();
+        _objectContext = context.Get<ObjectContext>();
+    }
 
     [Then(@"endpoint das-employer-finance-api /ping can be accessed")]
     public async Task ThenEndpointDas_Employer_Finance_ApiPingCanBeAccessed()
@@ -64,6 +73,45 @@ public class FinanceInnerAPISteps(ScenarioContext context)
     {
         var hashedAccountId = GetHashedAccountId();
         await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions", HttpStatusCode.OK);
+    }
+
+    [When(@"send an api request GET api/accounts/\{hashedAccountId\}/transactions")]
+    public async Task WhenSendAnApiRequestGETApiAccountsAccountIdTransactions()
+    {
+        var hashedAccountId = GetHashedAccountId();
+        var response = await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions");
+        try
+        {
+            _objectContext.Replace("finance_lastResponse", response.Content);
+        }
+        catch
+        {
+            // ignore if replacing context fails
+        }
+    }
+
+    [Then(@"Verify the transactions api response with records fetch from DB")]
+    public async Task ThenVerifyTransactionsApiResponseWithRecordsFetchFromDB(Table table)
+    {
+        Assert.IsTrue(table.Rows.Count > 0 && table.Rows[0].ContainsKey("query"), "Expecting a table with a single column 'query' and a file name.");
+        var queryFile = table.Rows[0]["query"].Trim();
+
+        var accountId = GetAccountId();
+        Assert.IsFalse(string.IsNullOrEmpty(accountId), "finance_accountId was not set in the test setup.");
+
+        // Execute the transactions endpoint and capture the response to compare with SQL
+        var hashedAccountId = GetHashedAccountId();
+        var response = await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions");
+        var apiContent = response?.Content ?? string.Empty;
+        Assert.IsNotEmpty(apiContent, "API response content is empty.");
+
+        var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+        Assert.IsNotNull(accountsHelper, "AccountsSqlDataHelper not registered in ScenarioContext; ensure FinanceBeforeScenarioHooks ran.");
+
+        var replacements = new Dictionary<string, string> { { "AccountId", accountId } };
+        var propertyOrder = new[] { "year", "month", "amount" };
+
+        await AssertHelper.AssertApiResponseMatchesSql(accountsHelper, apiContent, queryFile, propertyOrder, replacements);
     }
 
     [Then(@"endpoint api/accounts/\{hashedAccountId}/transactions/GetTransactions can be accessed")]
