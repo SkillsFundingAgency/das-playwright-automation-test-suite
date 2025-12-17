@@ -8,10 +8,10 @@
             await page.GetByRole(AriaRole.Link, new() { Name = "Test Page" }).ClickAsync();
             return await VerifyPageAsync(() => new TestPage_Page(context));
         }
-        public async Task<ApplicationOverview_Page> ClickBackToViewApplication()
+        public async Task<Application_Overview_Page> ClickBackToViewApplication()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Back to view application" }).ClickAsync();
-            return await VerifyPageAsync(() => new ApplicationOverview_Page(context));
+            return await VerifyPageAsync(() => new Application_Overview_Page(context));
         }
     }
 }
