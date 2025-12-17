@@ -3,14 +3,8 @@ using Polly.Retry;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
-using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -170,20 +164,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         internal async Task<Apprenticeship> FindUnapprovedCohortReference(Apprenticeship apprenticeship, ApprenticeRequests status)
         {
-            (int withParty, int isDraft) = status switch
+            (int withParty, int isDraft, int approvals) = status switch
             {
-                ApprenticeRequests.ReadyForReview => (2, 0),
-                ApprenticeRequests.WithEmployers => (1, 0),
-                ApprenticeRequests.Drafts => (2, 1),
-                ApprenticeRequests.WithTransferSendingEmployers => (4, 0),
-                _ => (1, 0)
+                ApprenticeRequests.ReadyForReview => (2, 0, 0),
+                ApprenticeRequests.WithEmployers => (1, 0, 2),
+                ApprenticeRequests.Drafts => (2, 1, 0),
+                ApprenticeRequests.WithTransferSendingEmployers => (4, 0, 0),
+                _ => (1, 0, 0)
             };
 
             var details = await commitmentsDbSqlHelper.GetCohortRefAndLearnerDataIdFromCommitmentsDb(
                 apprenticeship.ProviderDetails.Ukprn,
                 apprenticeship.EmployerDetails.AccountLegalEntityId,
                 withParty,
-                isDraft);
+                isDraft,
+                approvals);
 
             //if no matching cohort found in the database, return as is
             if (details == null || details[0] == "")
