@@ -93,7 +93,7 @@ public class InterimFinanceHomePage(ScenarioContext context, bool navigate, bool
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Finance");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Funding and payments");
     }
 }
 

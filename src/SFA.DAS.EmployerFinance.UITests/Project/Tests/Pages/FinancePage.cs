@@ -17,16 +17,16 @@ public class HomePageFinancesSection(ScenarioContext context) : HomePage(context
     {
         await VerifyPage();
 
-        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Your finances", Exact = true })).ToBeVisibleAsync();
+        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Funding and payments", Exact = true })).ToBeVisibleAsync();
 
-        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Your funding reservations", Exact = true })).ToBeVisibleAsync();
+        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Funding reservations", Exact = true })).ToBeVisibleAsync();
     }
 
     public async Task VerifyYourFinancesSectionLinksForALevyUser()
     {
         await VerifyPage();
 
-        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Your finances", Exact = true })).ToBeVisibleAsync();
+        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Funding and payments", Exact = true })).ToBeVisibleAsync();
     }
 }
 
@@ -35,7 +35,7 @@ public class HomePageFinancesSection_YourFinance(ScenarioContext context) : Home
 {
     public async Task<FinancePage> NavigateToFinancePage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Your finances" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Funding and payments" }).ClickAsync();
 
         return await VerifyPageAsync(() => new FinancePage(context));
     }
@@ -46,7 +46,7 @@ public class FinancePage(ScenarioContext context) : HomePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Finance");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Funding and payments");
     }
 
     public async Task IsViewTransactionsLinkPresent()
@@ -87,16 +87,22 @@ public class FinancePage(ScenarioContext context) : HomePage(context)
 
     public static string ExpectedFundsSpentLabelConstant()
     {
-        DateTime dt = DateTime.Now;
-        int previousYear = dt.Year - 1;
-        return $"Funds spent since {dt:MMM} {previousYear}";
+        DateTime dt = DateTime.Now.AddMonths(-1);
+        return $"Levy declared in {dt:MMMM yyyy}";
     }
 
-    public async Task GetCurrentFundsLabel() => await Assertions.Expect(page.Locator("#lbl-current-funds")).ToContainTextAsync("Current funds");
+    public static string ExpectedFundsPaidLabelConstant()
+    {
+        DateTime dt = DateTime.Now.AddMonths(-1);
+        return $"Paid from the levy in {dt:MMMM yyyy}";
+    }
 
-    public async Task GetFundsSpentLabel() => await Assertions.Expect(page.Locator("#lbl-current-spent-funds")).ToContainTextAsync(ExpectedFundsSpentLabelConstant());
 
-    public async Task GetEstimatedPlannedSpendingText() => await Assertions.Expect(page.Locator("#lbl-estimated-future-funding")).ToContainTextAsync("Estimated total funding for the next 12 months (based on funds entering your Apprenticeship service account, including the 10% top up)");
+    public async Task GetCurrentFundsLabel() => await Assertions.Expect(page.Locator("#lbl-total-levy-funds-label")).ToContainTextAsync("Total levy");
+
+    public async Task GetFundsSpentLabel() => await Assertions.Expect(page.Locator("#lbl-last-month-levy-label")).ToContainTextAsync(ExpectedFundsSpentLabelConstant());
+
+    public async Task GetEstimatedPlannedSpendingText() => await Assertions.Expect(page.Locator("#lbl-last-month-payments-label")).ToContainTextAsync(ExpectedFundsPaidLabelConstant());
 }
 
 public abstract class EmployerFinanceBasePage(ScenarioContext context) : BasePage(context)
