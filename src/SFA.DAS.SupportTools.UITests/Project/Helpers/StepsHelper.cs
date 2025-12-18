@@ -19,7 +19,7 @@ public class StepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
             await new DfeAdminLoginStepsHelper(context).CheckAndLoginToSupportTool(context.GetUser<SupportToolScpUser>());
         }
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new ToolSupportHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new ToolSupportHomePage(context));
     }
 
     public async Task<ToolSupportHomePage> ValidUserLogsinToSupportSCPTools() => await LoginToSupportTools(context.GetUser<SupportToolScpUser>());
@@ -30,14 +30,14 @@ public class StepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
     {
         await new DfeAdminLoginStepsHelper(context).LoginToSupportTool(loginUser);
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new ToolSupportHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new ToolSupportHomePage(context));
     }
 
     private async Task<SearchHomePage> LoginToSupportToolsAsEmployerSupportOnly(DfeAdminUser loginUser)
     {
         await new DfeAdminLoginStepsHelper(context).LoginToSupportTool(loginUser);
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new SearchHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new SearchHomePage(context));
     }
 
     public async Task<SupportConsoleBasePage> Tier1LoginToSupportTool() => await LoginToSupportToolsAsEmployerSupportOnly(context.GetUser<SupportToolTier1User>());

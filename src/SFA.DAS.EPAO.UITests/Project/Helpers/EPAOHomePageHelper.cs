@@ -26,7 +26,7 @@ public class EPAOHomePageHelper : FrameworkBaseHooks
 
         await _dfeAdminLoginStepsHelper.CheckAndLoginToAsAdmin();
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new StaffDashboardPage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new StaffDashboardPage(context));
     }
 
     public async Task<AS_LandingPage> GoToEpaoAssessmentLandingPage(bool openInNewTab = false)
@@ -35,14 +35,14 @@ public class EPAOHomePageHelper : FrameworkBaseHooks
 
         await OpenUrl(url, openInNewTab);
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new AS_LandingPage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new AS_LandingPage(context));
     }
 
     public async Task<AP_PR1_SearchForYourOrganisationPage> LoginInAsApplyUser(GovSignUser loginUser)
     {
         await StubSign(loginUser);
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new AP_PR1_SearchForYourOrganisationPage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new AP_PR1_SearchForYourOrganisationPage(context));
     }
 
     public async Task<AS_LoggedInHomePage> LoginInAsNonApplyUser(GovSignUser loginUser) { await StubSign(loginUser); return new AS_LoggedInHomePage(context); }

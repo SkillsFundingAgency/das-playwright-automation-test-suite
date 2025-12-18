@@ -34,7 +34,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
 
         internal async Task<YourApprenticeshipAdvertsHomePage> NavigateToRecruitmentHomePage()
         {
-            return await VerifyPageHelper.VerifyPageAsync(() => new YourApprenticeshipAdvertsHomePage(context, true));
+            return await VerifyPageHelper.VerifyPageAsync(context, () => new YourApprenticeshipAdvertsHomePage(context, true));
         }
     }
 }

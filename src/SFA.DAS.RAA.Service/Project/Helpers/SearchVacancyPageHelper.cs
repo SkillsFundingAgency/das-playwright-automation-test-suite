@@ -39,7 +39,7 @@ public class SearchVacancyPageHelper(ScenarioContext context)
 
         await locator.ClickAsync();
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new ManageRecruitPage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new ManageRecruitPage(context));
     }
 
     //public async Task<ProviderVacancySearchResultPage> SearchVacancyByVacancyReference()
@@ -64,7 +64,7 @@ public class SearchVacancyPageHelper(ScenarioContext context)
     {
         await SearchVacancy();
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new EmployerVacancySearchResultPage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new EmployerVacancySearchResultPage(context));
     }
 
     internal async Task SearchVacancy()

@@ -20,7 +20,7 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
             await page1.Continue();
         }
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new FAASignedInLandingBasePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new FAASignedInLandingBasePage(context));
     }
 
     public async Task<FAASignedInLandingBasePage> SubmitNewUserDetails()
@@ -40,7 +40,7 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
             await page1.Continue();
         }
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new FAASignedInLandingBasePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new FAASignedInLandingBasePage(context));
     }
 
 

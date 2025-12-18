@@ -109,7 +109,7 @@ public class EPAOWithdrawalHelper(ScenarioContext context)
         await page7.AcceptAndSubmitWithHowWillYouSuportQuestion();
     }
 
-    public async Task VerifyStandardSubmitted() => await VerifyPageHelper.VerifyPageAsync(() => new AS_WithdrawalApplicationSubmittedPage(context));
+    public async Task VerifyStandardSubmitted() => await VerifyPageHelper.VerifyPageAsync(context, () => new AS_WithdrawalApplicationSubmittedPage(context));
 
     public async Task VerifyTheInProgressStatus()
     {

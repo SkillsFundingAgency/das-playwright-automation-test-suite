@@ -1,14 +1,15 @@
 ﻿using SFA.DAS.Framework.Hooks;
+using SFA.DAS.FrameworkHelpers;
 
 namespace SFA.DAS.Framework;
 
 public static class VerifyPageHelper
 {
-    public static async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
+    public static async Task<T> VerifyPageAsync<T>(ScenarioContext context, Func<T> func) where T : BasePage
     {
         var nextPage = func.Invoke();
 
-        await nextPage.VerifyPage();
+        await context.Get<RetryHelper>().RetryOnVerifyPage(nextPage.VerifyPage);
 
         return nextPage;
     }

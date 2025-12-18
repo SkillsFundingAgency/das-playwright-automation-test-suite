@@ -1,4 +1,5 @@
 ﻿
+using Polly;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.AparAdmin.Service.Project.Helpers;
@@ -11,6 +12,6 @@ public class AparAdminStepsHelper(ScenarioContext context)
     {
         await new DfeAdminLoginStepsHelper(context).NavigateAndLoginToASAdmin();
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new AparAdminHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context ,() => new AparAdminHomePage(context));
     }
 }

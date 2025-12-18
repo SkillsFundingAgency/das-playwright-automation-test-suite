@@ -80,32 +80,32 @@ public class AdminSteps(ScenarioContext context)
         {
             case "Create a submission form":
                 await _qfastAdminPage.SelectOptions(option);
-                await VerifyPageHelper.VerifyPageAsync(() => new ViewForms_Page(context));
+                await VerifyPageHelper.VerifyPageAsync(context, () => new ViewForms_Page(context));
                 break;
 
             case "Review funding requests":
                 await _qfastAdminPage.SelectOptions(option);
-                await VerifyPageHelper.VerifyPageAsync(() => new RequestForFundign_Page(context));
+                await VerifyPageHelper.VerifyPageAsync(context, () => new RequestForFundign_Page(context));
                 break;
 
             case "Review newly regulated qualifications":
                 await _qfastAdminPage.SelectOptions(option);
-                await VerifyPageHelper.VerifyPageAsync(() => new NewQualifications_Page(context));
+                await VerifyPageHelper.VerifyPageAsync(context, () => new NewQualifications_Page(context));
                 break;
 
             case "Review regulated qualifications with changes":
                 await _qfastAdminPage.SelectOptions(option);
-                await VerifyPageHelper.VerifyPageAsync(() => new ChangedQualifications_Page(context));
+                await VerifyPageHelper.VerifyPageAsync(context, () => new ChangedQualifications_Page(context));
                 break;
 
             case "Import data":
                 await _qfastAdminPage.SelectOptions(option);
-                await VerifyPageHelper.VerifyPageAsync(() => new ImportQualifications_Page(context));
+                await VerifyPageHelper.VerifyPageAsync(context, () => new ImportQualifications_Page(context));
                 break;
 
             case "Create an output file":
                 await _qfastAdminPage.SelectOptions(option);
-                await VerifyPageHelper.VerifyPageAsync(() => new CreateOutputFile_Page(context));
+                await VerifyPageHelper.VerifyPageAsync(context, () => new CreateOutputFile_Page(context));
                 break;
 
 

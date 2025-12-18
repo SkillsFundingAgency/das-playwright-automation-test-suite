@@ -70,7 +70,7 @@ public class EmployerCreateDraftAdvertStepsHelper(ScenarioContext context) : Emp
         
         await page1.EmployerCancelAdvert();
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new YourApprenticeshipAdvertsHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new YourApprenticeshipAdvertsHomePage(context));
     }
 }
 

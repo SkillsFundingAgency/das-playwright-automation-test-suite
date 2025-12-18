@@ -111,7 +111,7 @@ public class CreateAccountSteps
     {
         _selectYourOrganisationPage = await _searchForYourOrganisationPage.SearchForAnOrganisation(_employerPortalDataHelper.InvalidCompanyNumber);
 
-        return _selectYourOrganisationPage = await VerifyPageHelper.VerifyPageAsync(() => new SelectYourOrganisationPage(_context));
+        return _selectYourOrganisationPage = await VerifyPageHelper.VerifyPageAsync(_context, () => new SelectYourOrganisationPage(_context));
     }
 
     [Then(@"the '(.*)' message is shown")]
@@ -250,7 +250,7 @@ public class CreateAccountSteps
     [Then(@"'Start adding apprentices now' task link is displayed under Tasks pane")]
     public async Task ThenTaskLinkIsDisplayedUnderTasksPane()
     {
-        var page = await VerifyPageHelper.VerifyPageAsync(() => new TasksHomePage(_context));
+        var page = await VerifyPageHelper.VerifyPageAsync(_context, () => new TasksHomePage(_context));
 
         await page.VerifyStartAddingApprenticesNowTaskLink();
     }
