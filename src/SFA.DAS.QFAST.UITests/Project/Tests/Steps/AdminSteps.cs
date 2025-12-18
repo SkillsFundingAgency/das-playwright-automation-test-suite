@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.QFAST.UITests.Project.Helpers;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages;
+using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Application;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Form;
 namespace SFA.DAS.QFAST.UITests.Project.Tests.Steps;
 
@@ -11,7 +12,10 @@ public class AdminSteps(ScenarioContext context)
     private readonly ViewForms_Page _viewFormsPage = new(context);
     private readonly CreateNewForm_Page _createNewFormPage = new(context);
     private readonly CreateOutputFile_Page _createOutputFilePage = new(context);
-    private readonly NewQualifications_Page _newQualificationsPage = new(context);
+    private readonly NewQualifications_Page _newQualificationsPage = new(context);    
+    private readonly Application_Details_Page application_Details_Page = new(context);
+    private readonly Application_Messages_Page application_Messages_Page = new(context);
+    private readonly StartApplication_Page startApplicationPage = new(context);
 
     [Given(@"the (.*) user log in to the portal")]
     public async Task GivenTheAdminUserLogInToThePortal(string user)
@@ -156,5 +160,44 @@ public class AdminSteps(ScenarioContext context)
     public async Task ThenIVerifyThatTheQANNumberLinkOpensTheCorrectPageInANewTab()
     {
         await _newQualificationsPage.VerifyClickingOnLinkOpensNewTab();
+    }
+
+    [When("I change the funding application status to (.*) for (.*) application")]
+    public async Task WhenIChangeTheFundingApplicationStatusToOnHold(string MessageType, string application)
+    {
+        await application_Details_Page.SelectApplicationAsQfauOfqualAndIfateUser(application);
+        await application_Details_Page.ShareApplicaitonWithOfqualUser();
+        await application_Details_Page.ShareApplicaitonWithIfatelUser();
+        await application_Details_Page.ClickOnViewMessagesLink();
+        await application_Messages_Page.SelectMessageType(MessageType);
+        await application_Messages_Page.ClickOnPreviewButton();
+        await application_Messages_Page.ClickOnConfirmMessageButton();
+        await application_Messages_Page.ClickBackLinkOnApplicationMessagePage();
+        await application_Details_Page.ClickBackLinkOnApplicationDetailsPage();        
+    }
+
+    [Then("I validate as an (.+) application status is (.+) for (.+)")]
+    public async Task ThenIValidateApplicationStatusIsWithdrawnAsAnAOUser(string user,string status, string application)
+    {
+        var User = (user ?? string.Empty).Trim().ToLowerInvariant();
+        switch (User)
+        {
+            case "admin":
+                await application_Details_Page.SelectApplicationAsQfauOfqualAndIfateUser(application);
+                await startApplicationPage.ValidateStatus(status);
+                break;
+            case "ao user":
+                await startApplicationPage.SelectApplicationAsAOUser(application);
+                await startApplicationPage.ValidateStatus(status);
+                break;
+            case "ofqual":
+                await application_Details_Page.SelectApplicationAsQfauOfqualAndIfateUser(application);
+                await startApplicationPage.ValidateStatus(status);
+                break;
+            case "ifate":
+                await application_Details_Page.SelectApplicationAsQfauOfqualAndIfateUser(application);
+                await startApplicationPage.ValidateStatus(status);
+                break;
+        }
     }
 }
