@@ -5,53 +5,74 @@ using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
 namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.Steps;
 
 [Binding]
-public class Navigationsteps
+public class Navigationsteps(ScenarioContext context)
 {
-    private readonly ScenarioContext _context;
-    private readonly RAAEmployerLoginStepsHelper _rAAEmployerLoginHelper;
-
-    public Navigationsteps(ScenarioContext context)
-    {
-        _context = context;
-        _rAAEmployerLoginHelper = new RAAEmployerLoginStepsHelper(_context);
-    }
 
     [Given(@"the Employer navigates to 'Recruit' Page")]
     [When(@"the Employer navigates to 'Recruit' Page")]
-    public async Task WhenTheEmployerNavigatesToPage() => await _rAAEmployerLoginHelper.GoToRecruitmentHomePage();
+    public async Task WhenTheEmployerNavigatesToPage() => await new RAAEmployerLoginStepsHelper(context).GoToRecruitmentHomePage();
 
     [Then(@"the employer can navigate to finance page")]
     public async Task ThenTheEmployerCanNavigateToFinancePage()
     {
-        await new InterimYourApprenticeshipAdvertsHomePage(_context, true).VerifyPage();
+        await VerifyPageHelper.VerifyPageAsync(context, () => new InterimYourApprenticeshipAdvertsHomePage(context, true));
 
-        await new InterimFinanceHomePage(_context, true).VerifyPage();
+        await VerifyPageHelper.VerifyPageAsync(context, () => new InterimFinanceHomePage(context, true));
     }
 
     [Then(@"the employer can navigate to apprentice page")]
     public async Task ThenTheEmployerCanNavigateToApprenticePage()
     {
-        await new InterimYourApprenticeshipAdvertsHomePage(_context, true).VerifyPage();
+        await VerifyPageHelper.VerifyPageAsync(context, () => new InterimYourApprenticeshipAdvertsHomePage(context, true));
 
-        await new InterimApprenticesHomePage(_context, false).VerifyPage();
+        await VerifyPageHelper.VerifyPageAsync(context, () => new InterimApprenticesHomePage(context, true));
     }
 
     [Then(@"the employer can navigate to your team page")]
-    public async Task ThenTheEmployerCanNavigateToYourTeamPage() => await new InterimYourApprenticeshipAdvertsHomePage(_context, true, true).GotoYourTeamPage();
+    public async Task ThenTheEmployerCanNavigateToYourTeamPage()
+    {
+        var page = await VerifyPageHelper.VerifyPageAsync(context, () => new InterimYourApprenticeshipAdvertsHomePage(context, true, true));
+
+        await page.GotoYourTeamPage();
+    }
 
     [Then(@"the employer can navigate to account settings page")]
-    public async Task ThenTheEmployerCanNavigateToAccountSettingsPage() => await new InterimYourApprenticeshipAdvertsHomePage(_context, true, true).GoToYourAccountsPage();
+    public async Task ThenTheEmployerCanNavigateToAccountSettingsPage()
+    {
+        var page = await VerifyPageHelper.VerifyPageAsync(context, () => new InterimYourApprenticeshipAdvertsHomePage(context, true, true));
+
+        await page.GoToYourAccountsPage();
+    }
 
     [Then(@"the employer can navigate to rename account settings page")]
-    public async Task ThenTheEmployerCanNavigateToRenameAccountSettingsPage() => await new InterimYourApprenticeshipAdvertsHomePage(_context, true, true).GoToRenameAccountPage();
+    public async Task ThenTheEmployerCanNavigateToRenameAccountSettingsPage()
+    {
+        var page = await VerifyPageHelper.VerifyPageAsync(context, () => new InterimYourApprenticeshipAdvertsHomePage(context, true, true));
+
+        await page.GoToRenameAccountPage();
+    }
 
     [Then(@"the employer can navigate to notification settings page")]
-    public async Task ThenTheEmployerCanNavigateToNotificationSettingsPage() => await new InterimYourApprenticeshipAdvertsHomePage(_context, true, true).GoToNotificationSettingsPage();
+    public async Task ThenTheEmployerCanNavigateToNotificationSettingsPage()
+    {
+        var page = await VerifyPageHelper.VerifyPageAsync(context, () => new InterimYourApprenticeshipAdvertsHomePage(context, true, true));
+
+        await page.GoToNotificationSettingsPage();
+    }
 
     [Then(@"the employer can navigate to advert notifications page via settings dropdwon")]
-    public async Task ThenTheEmployerCanNavigateToAdvertNotificationsPageViaSettingsDropdwon() => await new YourApprenticeshipAdvertsHomePage(_context, true, true).GoToAdvertNotificationsPage();
+    public async Task ThenTheEmployerCanNavigateToAdvertNotificationsPageViaSettingsDropdwon()
+    {
+        var page = await VerifyPageHelper.VerifyPageAsync(context, () => new YourApprenticeshipAdvertsHomePage(context, true, true));
+
+        await page.GoToAdvertNotificationsPage();
+    }
 
     [Then(@"the employer can navigate to help settings page")]
-    public async Task ThenTheEmployerCanNavigateToHelpSettingsPage() => await new InterimYourApprenticeshipAdvertsHomePage(_context, true, true).GoToHelpPage();
+    public async Task ThenTheEmployerCanNavigateToHelpSettingsPage()
+    {
+        var page = await VerifyPageHelper.VerifyPageAsync(context, () => new InterimYourApprenticeshipAdvertsHomePage(context, true, true));
 
+        await page.GoToHelpPage();
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.Framework.Hooks;
-using SFA.DAS.FrameworkHelpers;
 
 namespace SFA.DAS.Framework;
 

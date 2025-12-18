@@ -63,7 +63,14 @@ public class ExistingAccountSteps
     }
 
     [Then(@"the employer can navigate to home page")]
-    public async Task ThenTheEmployerCanNavigateToHomePage() => _homePage = await new HomePage(_context, true).GoToHomePage();
+    public async Task ThenTheEmployerCanNavigateToHomePage()
+    {
+        _homePage = new HomePage(_context, true);
+
+        await _homePage.VerifyPage();
+
+        await _homePage.GoToHomePage();
+    }
 
     [Then(@"the user can not add an organisation")]
     public async Task ThenTheUserCanNotAddAnOrganisation()
