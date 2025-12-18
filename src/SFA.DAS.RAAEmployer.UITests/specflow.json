@@ -10,6 +10,7 @@
     { "assembly": "SFA.DAS.EmployerPortal.UITests" },
     { "assembly": "SFA.DAS.RAA.Service" },
     { "assembly": "SFA.DAS.FAA.UITests" },
+    { "assembly": "SFA.DAS.ProviderLogin.Service" },
     { "assembly": "SFA.DAS.DfeAdmin.Service" }
   ],
   "generator": {

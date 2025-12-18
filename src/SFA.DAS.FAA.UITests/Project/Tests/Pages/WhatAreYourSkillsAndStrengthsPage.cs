@@ -129,7 +129,9 @@ public class DisabilityConfidentSchemePage(ScenarioContext context) : FAABasePag
 
 public class WhereDoYouWantToApplyForPage(ScenarioContext context) : FAABasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Where do you want to apply for");
+    private string Pagetitle = "Where do you want to apply for";
+
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(Pagetitle);
 
     public async Task<WhereDoYouWantToApplyForPage> SelectLocationsAndContinue()
     {
@@ -137,10 +139,23 @@ public class WhereDoYouWantToApplyForPage(ScenarioContext context) : FAABasePage
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new WhereDoYouWantToApplyForPage(context));
+        return await VerifyPageAsync(() =>
+        {
+            var page = new WhereDoYouWantToApplyForPage(context)
+            {
+                Pagetitle = "Where you want to apply for"
+            };
+
+            return page;
+        });
     }
 
-    protected async Task SelectFirstTwoLocations()
+    public new async Task<FAA_ApplicationOverviewPage> SelectSectionCompleted()
+    {
+        return await base.SelectSectionCompleted();
+    }
+
+    private async Task SelectFirstTwoLocations()
     {
         var multipleLocationsCheckboxes = await page.GetByRole(AriaRole.Checkbox).AllAsync();
 

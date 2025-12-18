@@ -19,9 +19,11 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
     {
         string GetProviderEmail()
         {
-            var providerConfig = context.GetProviderConfig<ProviderConfig>();
 
-            return providerConfig.Username;
+            return RAADataHelper.ProviderEmail;
+            //var providerConfig = context.GetProviderConfig<ProviderConfig>();
+
+            //return providerConfig.Username;
         }
         string GetEmployerEmail() => objectContext.GetRegisteredEmail();
 

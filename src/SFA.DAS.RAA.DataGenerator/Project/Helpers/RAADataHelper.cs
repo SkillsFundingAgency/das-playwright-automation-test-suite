@@ -43,6 +43,8 @@ public class RAADataHelper
 
     public static string Provider => AvailableProviders.RandomOrDefault();
 
+    public static string ProviderEmail { get; set; }
+
     public string EmployerName { get; }
 
     public string EmployerDescription { get; }

@@ -11,6 +11,11 @@ public class ProviderConfig : NonEasAccountUser
     public override string ToString() => $"{base.ToString()}, Ukprn:'{Ukprn}', ProviderName: '{Name}'";
 }
 
+public class ProviderUsedByRaaEmployer : ProviderConfig
+{
+
+}
+
 public class DeleteCohortProviderConfig : ProviderConfig
 {
     public string NoOfCohortToDelete { get; set; }
