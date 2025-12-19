@@ -1,12 +1,10 @@
 ﻿using SFA.DAS.QFAST.UITests.Project.Helpers;
-using static System.Net.Mime.MediaTypeNames;
 namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages.Application;
-
 public class AO_Page(ScenarioContext context) : BasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("a.govuk-button:has-text(\"Start new application\")")).ToBeVisibleAsync();
     protected readonly QfastDataHelpers qfastDataHelpers = context.Get<QfastDataHelpers>();
-    protected readonly ApplicationOverview_Page applicationOverview_Page = new(context);
+    protected readonly Application_Overview_Page applicationOverview_Page = new(context);
     protected readonly TestPage_Page testPage_Page = new(context);
     protected readonly TestSection_Page testSection_Page = new(context);
     public async Task SubmitApplication()
@@ -34,10 +32,11 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
     }
     public async Task<StartApplication_Page> StartApplication(string formTitle)
     {
-        var heading = page.Locator($"//h2[contains(., '{formTitle}')]");
-        if (!await heading.IsVisibleAsync())
+        var headings = page.Locator("h2", new() { HasTextString = formTitle });
+        if (await headings.CountAsync() == 0)
             throw new InvalidOperationException($"Form '{formTitle}' not found.");
-        var startButton = page.Locator($"//h2[contains(., '{formTitle}')]/following::a[contains(., 'Start application')][1]");        
+        var heading = page.Locator("h2", new() { HasTextString = formTitle }).First;
+        var startButton = heading.Locator("xpath=following-sibling::a[.//text()[normalize-space()='Start application']][1]");
         await startButton.ClickAsync();
         return await VerifyPageAsync(() => new StartApplication_Page(context));
     }
@@ -50,12 +49,12 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await Assertions.Expect(descriptionError).ToContainTextAsync("The Owner field is required.");
         return await VerifyPageAsync(() => new StartApplication_Page(context));
     }
-    public async Task<ApplicationOverview_Page> EnterApplicationDetailsAndSubmit()
+    public async Task<Application_Overview_Page> EnterApplicationDetailsAndSubmit()
     {
         await page.GetByLabel("Qualification title").FillAsync(qfastDataHelpers.QualificationTitle);
         await page.GetByLabel("Application owner").FillAsync(qfastDataHelpers.ApplicationOwner);
         await page.GetByLabel("Qualification number (optional)").FillAsync(qfastDataHelpers.QualificationNumber);
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
-        return await VerifyPageAsync(() => new ApplicationOverview_Page(context));
-    }    
+        return await VerifyPageAsync(() => new Application_Overview_Page(context));
+    }
 }
