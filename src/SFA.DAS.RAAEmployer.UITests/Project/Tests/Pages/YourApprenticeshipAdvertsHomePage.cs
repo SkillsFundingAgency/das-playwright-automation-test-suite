@@ -1,8 +1,4 @@
-﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
-using SFA.DAS.RAA.Service.Project.Helpers;
-using SFA.DAS.RAA.Service.Project.Pages;
-
+﻿
 namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
 
 public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool navigate = false, bool gotourl = false) : InterimYourApprenticeshipAdvertsHomePage(context, navigate, gotourl)
@@ -10,17 +6,9 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
 
     private readonly SearchVacancyPageHelper _searchVacancyPageHelper = new(context);
 
-    //protected override By AcceptCookieButton => By.CssSelector("#btn-cookie-accept");
-    //private static By CreateAnAdvertButton => By.LinkText("Create an advert");
-
-
-    //private static By RecruitmentAPIsLink => By.LinkText("Recruitment APIs");
-    //private static By ManageYourEmailsLink => By.LinkText("Manage your emails");
-    //private static By ReturnToDashboardLink => By.LinkText("Return to dashboard");
-
     //public YourApprenticeshipAdvertsHomePage ClickReturnToDashboard()
     //{
-    //    formCompletionHelper.Click(ReturnToDashboardLink);
+    //    await page.GetByRole(AriaRole.Link, new() { Name = "Return to dashboard" }).ClickAsync();
 
     //    return new YourApprenticeshipAdvertsHomePage(context);
     //}

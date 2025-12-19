@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 
 public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBasePage(context)

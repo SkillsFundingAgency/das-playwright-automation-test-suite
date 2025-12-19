@@ -1,15 +1,10 @@
-using SFA.DAS.RAA.Service.Project.Helpers;
-using SFA.DAS.RAA.Service.Project.Pages;
-using SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
-using System.Threading.Tasks;
-//using DoYouNeedToCreateAnAdvertPage = SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages.DynamicHomePageEmployer.DoYouNeedToCreateAnAdvertPage;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers;
 
 public class EmployerCreateDraftAdvertStepsHelper(ScenarioContext context) : EmployerCreateAdvertStepsHelper(context)
 {
-    internal async Task<VacancyReferencePage> SubmitDraftAdvert(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage) 
+    internal async Task<VacancyReferencePage> SubmitDraftAdvert(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage)
     {
         var page = await CompleteAboutTheEmployer(createAdvertPage);
 
@@ -19,7 +14,7 @@ public class EmployerCreateDraftAdvertStepsHelper(ScenarioContext context) : Emp
 
         return await CheckAndSubmitAdvert(page2);
     }
-        
+
     internal async Task<CreateAnApprenticeshipAdvertOrVacancyPage> CompleteDraftAdvert(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage)
     {
         var page = await CompleteAboutTheEmployer(createAdvertPage);
@@ -53,7 +48,7 @@ public class EmployerCreateDraftAdvertStepsHelper(ScenarioContext context) : Emp
         var page3 = await page2.ReturnToPreviousPage();
 
         var page4 = await page3.DeleteVacancy();
-        
+
         await page4.YesDeleteAdvert();
     }
 
@@ -62,12 +57,12 @@ public class EmployerCreateDraftAdvertStepsHelper(ScenarioContext context) : Emp
         return await CreateDraftAdvert(await CreateAnApprenticeshipAdvertOrVacancy(), false);
     }
 
-    internal async Task<YourApprenticeshipAdvertsHomePage> CancelAdvert() 
+    internal async Task<YourApprenticeshipAdvertsHomePage> CancelAdvert()
     {
         var page = await CreateAnApprenticeshipAdvertOrVacancy();
 
         var page1 = await EnterAdvertTitleMultiOrg(page);
-        
+
         await page1.EmployerCancelAdvert();
 
         return await VerifyPageHelper.VerifyPageAsync(context, () => new YourApprenticeshipAdvertsHomePage(context));

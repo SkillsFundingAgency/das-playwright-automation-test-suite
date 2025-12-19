@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Login.Service.Project.Helpers;
-
-namespace SFA.DAS.RAAEmployer.UITests.Project;
+﻿namespace SFA.DAS.RAAEmployer.UITests.Project;
 
 [Binding]
 public class RAAEmployerConfigurationSetup(ScenarioContext context)

@@ -1,7 +1,4 @@
-﻿using Azure;
-using SFA.DAS.RAA.DataGenerator.Project;
-using SFA.DAS.RAA.Service.Project.Pages;
-using System.Text.RegularExpressions;
+﻿using SFA.DAS.RAA.Service.Project.Pages;
 
 namespace SFA.DAS.RAA.Service.Project.Helpers;
 
@@ -72,7 +69,7 @@ public class SearchVacancyPageHelper(ScenarioContext context)
         var vacRef = _objectContext.GetVacancyReference();
 
         await page.GetByRole(AriaRole.Combobox, new() { Name = "Search by advert title or" }).FillAsync(vacRef);
-        
+
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
         await Assertions.Expect(page).ToHaveURLAsync(new Regex($"searchTerm={vacRef}"), new PageAssertionsToHaveURLOptions { IgnoreCase = true, Timeout = 20000 });

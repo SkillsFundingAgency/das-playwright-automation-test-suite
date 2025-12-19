@@ -1,6 +1,4 @@
-﻿using SFA.DAS.RAA.DataGenerator.Project;
-using SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
-using System;
+﻿using SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 
 namespace SFA.DAS.RAA.Service.Project.Pages;
 
@@ -67,7 +65,7 @@ public class ManageCloseVacancyPage(ScenarioContext context) : RaaBasePage(conte
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? $"Advert VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed." 
+        string PageTitle = isRaaEmployer ? $"Advert VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed."
             : $"Vacancy VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed.";
 
         await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);

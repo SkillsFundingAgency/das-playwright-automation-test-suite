@@ -1,7 +1,4 @@
-﻿using SFA.DAS.RAA.Service.Project.Helpers;
-using SFA.DAS.RAA.Service.Project.Pages;
-
-namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers;
+﻿namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers;
 
 public class EmployerStepsHelper(ScenarioContext context)
 {
@@ -23,7 +20,7 @@ public class EmployerStepsHelper(ScenarioContext context)
         var page1 = await page.GoToVacancyManagePage();
 
         var page2 = await page1.EditAdvert();
-        
+
         await page2.EnterVacancyDates();
     }
 
@@ -34,7 +31,7 @@ public class EmployerStepsHelper(ScenarioContext context)
         var page1 = await page.GoToVacancyManagePage();
 
         var page2 = await page1.CloseAdvert();
-        
+
         await page2.YesCloseThisVacancy();
     }
 
@@ -59,7 +56,7 @@ public class EmployerStepsHelper(ScenarioContext context)
     private async Task<EmployerVacancySearchResultPage> SearchVacancyByVacancyReference()
     {
         var page = await _rAAEmployerLoginHelper.NavigateToRecruitmentHomePage();
-        
+
         return await page.SearchAdvertByReferenceNumber();
     }
 }

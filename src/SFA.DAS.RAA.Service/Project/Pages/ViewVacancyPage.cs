@@ -1,7 +1,4 @@
-﻿using SFA.DAS.RAA.DataGenerator.Project;
-using SFA.DAS.RAA.Service.Project.Helpers;
-
-namespace SFA.DAS.RAA.Service.Project.Pages;
+﻿namespace SFA.DAS.RAA.Service.Project.Pages;
 
 public abstract class VerifyDetailsBasePage(ScenarioContext context) : RaaBasePage(context)
 {
@@ -69,7 +66,7 @@ public class ViewVacancyPage(ScenarioContext context) : VerifyDetailsBasePage(co
 
     private async Task VerifyWageAmount(string wageType) => await Assertions.Expect(page.Locator("dl")).ToContainTextAsync(GetWageAmount(wageType));
 
-    public async new Task VerifyDisabilityConfident()
+    public new async Task VerifyDisabilityConfident()
     {
         await Assertions.Expect(page.GetByRole(AriaRole.Img, new() { Name = "Disability Confident" })).ToBeVisibleAsync();
     }

@@ -1,6 +1,4 @@
-﻿using SFA.DAS.RAA.DataGenerator.Project;
-
-namespace SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
+﻿namespace SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 
 public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context)
 {

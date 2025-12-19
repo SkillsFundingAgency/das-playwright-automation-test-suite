@@ -1,6 +1,4 @@
-﻿using SFA.DAS.RAA.Service.Project.Helpers;
-
-namespace SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
+﻿namespace SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 
 public class WageTypePage(ScenarioContext context) : RaaBasePage(context)
 {

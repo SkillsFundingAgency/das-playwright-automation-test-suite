@@ -1,7 +1,4 @@
-﻿
-using SFA.DAS.RAA.Service.Project.Helpers;
-
-namespace SFA.DAS.RAA.Service.Project.Steps;
+﻿namespace SFA.DAS.RAA.Service.Project.Steps;
 
 [Binding]
 public class ReviewerSteps(ScenarioContext context)
