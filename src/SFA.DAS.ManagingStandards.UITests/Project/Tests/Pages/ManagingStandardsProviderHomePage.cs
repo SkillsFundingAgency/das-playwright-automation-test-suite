@@ -29,7 +29,7 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
 
     public async Task<TrainingVenuesPage> AccessTrainingLocations()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Training venues" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Training venues", Exact = true }).ClickAsync();
 
         return await VerifyPageAsync(() => new TrainingVenuesPage(context));
     }
@@ -43,7 +43,7 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
 
     public async Task<ManageTheStandardsYouDeliverPage> AccessStandards()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Training" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Training", Exact = true }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }
