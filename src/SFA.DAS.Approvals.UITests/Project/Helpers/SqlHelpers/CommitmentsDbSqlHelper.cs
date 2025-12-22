@@ -95,5 +95,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return result.FirstOrDefault() ?? string.Empty;
 
         }
+
+        internal async Task SetPaymentStatus(int apprenticeshipId, int pymtStatus)
+        { 
+            string query = $"UPDATE [dbo].[Apprenticeship] SET PaymentStatus = {pymtStatus} WHERE Id = {apprenticeshipId}";
+            await ExecuteSqlCommand(query);
+        }
+
+
     }
 }

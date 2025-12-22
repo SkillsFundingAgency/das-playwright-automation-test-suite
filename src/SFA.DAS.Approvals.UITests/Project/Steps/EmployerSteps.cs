@@ -174,7 +174,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var page = await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage(true);
             var page1 = await page.OpenFirstItemFromTheList(apprenticeship.ApprenticeDetails.FullName);
-            await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Completed);
+            await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Completed, "Completion payment month", DateTime.Now);
+            await page1.AssertRecordIsReadOnlyExceptEndDate();
         }
 
 
