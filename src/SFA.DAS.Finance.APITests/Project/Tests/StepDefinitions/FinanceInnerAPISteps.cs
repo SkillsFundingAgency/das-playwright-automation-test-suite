@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Net;
 using NUnit.Framework;
 using SFA.DAS.Finance.APITests.Project.Helpers;
 using SFA.DAS.Finance.APITests.Project.Models;
