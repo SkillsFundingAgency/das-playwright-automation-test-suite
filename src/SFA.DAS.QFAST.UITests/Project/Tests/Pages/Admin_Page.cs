@@ -1,7 +1,5 @@
 ﻿using SFA.DAS.DfeAdmin.Service.Project.Tests.LandingPage;
-
 namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages;
-
 public class Admin_Page(ScenarioContext context) : BasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What do you want to do?");
@@ -36,5 +34,4 @@ public class Admin_Page(ScenarioContext context) : BasePage(context)
         await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
         return await VerifyPageAsync(() => new CheckDfeSignInPage(context)); 
     }
-
 }
