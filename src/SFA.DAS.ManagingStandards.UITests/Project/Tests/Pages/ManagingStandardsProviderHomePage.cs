@@ -9,7 +9,7 @@ public class ManagingStandardsProviderHomePage(ScenarioContext context) : Provid
 {
     public new async Task<YourStandardsAndTrainingVenuesPage> NavigateToYourStandardsAndTrainingVenuesPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Your standards and training venues" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your training and venues"}).ClickAsync();
 
         return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
     }
