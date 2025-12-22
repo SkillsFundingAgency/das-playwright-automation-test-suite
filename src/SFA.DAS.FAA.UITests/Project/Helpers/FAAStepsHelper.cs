@@ -1,7 +1,4 @@
-﻿
-using System.Threading.Tasks;
-
-namespace SFA.DAS.FAA.UITests.Project.Helpers;
+﻿namespace SFA.DAS.FAA.UITests.Project.Helpers;
 
 public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
 {
@@ -22,6 +19,14 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
 
         return await VerifyPageHelper.VerifyPageAsync(context, () => new FAASignedInLandingBasePage(context));
     }
+
+    public async Task IneligibleUserApplyForAVacancy(FAAApplyUser user)
+    {
+        var page = await GoToFAAHomePage(user);
+
+        await page.SearchForFoundationCourseAndApply();
+    }
+
 
     public async Task<FAASignedInLandingBasePage> SubmitNewUserDetails()
     {
@@ -49,7 +54,7 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
         var user = context.GetUser<FAAApplyUser>();
 
         var page = await GoToFAAHomePage(user);
-        
+
         var page1 = await page.GoToApplications();
 
         if (IsSucessful) { var page2 = await page1.OpenSuccessfulApplicationPage(); await page2.ViewApplication(); }
@@ -359,7 +364,7 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
         var page1 = await page.SearchByReferenceNumber();
 
         var page2 = await page1.SaveAndApplyForVacancy();
-        
+
         return await page2.Apply();
     }
 
@@ -408,7 +413,7 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
     }
 
     private async Task<FAA_ApplicationOverviewPage> GoToFAAHomePageAndApply() => await GoToFAAHomePageAndApply(context.GetUser<FAAApplyUser>());
-    
+
     private async Task<FAA_ApplicationOverviewPage> GoToFAAHomePageAndApply(FAAPortalUser user)
     {
         var page = await GoToFAAHomePage(user);

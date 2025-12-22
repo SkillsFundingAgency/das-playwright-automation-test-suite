@@ -25,22 +25,4 @@ public class FAASteps(ScenarioContext context)
 
     [Then("the Applicant can view submitted applications page")]
     public async Task ThenTheApplicantCanViewSubmittedApplicationsPage() => await _faaStepsHelper.GoToYourApplicationsPageAndOpenSubmittedApplicationsPage();
-
-    [Then("the apprentice attempts to delete their account they are notified of application withdrawal")]
-    public async Task WhenTheApprenticeAttemptsToDeleteTheirAccountTheyAreNotifiedOfApplicationWithdrawal()
-    {
-        var page = new SettingPage(context);
-
-        await page.VerifyPage();
-
-        var page1 = await page.DeleteMyAccount();
-
-        var page2 = await page1.ContinueToDeleteMyAccounWithApplication();
-
-        var page3 = await page2.WithdrawBeforeDeletingMyAccount();
-
-        var page4 = await page3.ConfirmDeleteMyAccount();
-        
-        await page4.VerifyNotification();
-    }
 }
