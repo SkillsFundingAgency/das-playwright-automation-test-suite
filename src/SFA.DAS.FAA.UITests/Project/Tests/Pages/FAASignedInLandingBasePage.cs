@@ -41,6 +41,27 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
         return await VerifyPageAsync(() => new FAA_ApprenticeSummaryPage(context));
     }
 
+    public async Task SearchForFoundationCourseAndApply()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Search" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Search apprenticeships", new LocatorAssertionsToContainTextOptions { Timeout = 10000});
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apprenticeship type , Show" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Foundation apprenticeship" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).Nth(1).ClickAsync();
+
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "Foundation" }).GetByRole(AriaRole.Link, new() { Name = "apprenticeship" }).First.ClickAsync();
+
+        await CheckFoundationTag();
+
+        await Assertions.Expect(page.Locator("#summary")).ToContainTextAsync("You cannot apply for a foundation apprenticeship if you’re 25 or over.");
+    }
+
     public async Task SearchByWhatWhere(string whatText, string whereText)
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "What" }).FillAsync(whatText);

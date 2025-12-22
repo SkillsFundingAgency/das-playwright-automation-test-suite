@@ -46,13 +46,14 @@ public class FAAApplySteps(ScenarioContext context)
         await page1.SubmitApplication();
     }
 
-    //[When(@"the ineligible applicant can not apply for a foundation vacancy in FAA")]
-    //[Then(@"the ineligible applicant can not apply for a foundation vacancy in FAA")]
-    //public async Task TheIneligibleApplicantCanNotApplyForAFoundationVacancyInFAA()
-    //{
-    //    var user = context.GetUser<FAAApplyUser>();
-    //    _faaStepsHelper.IneligibleUserApplyForAVacancy(user);
-    //}
+    [Then("the ineligible applicant can not apply for a foundation vacancy in FAA")]
+    public async Task ThenTheIneligibleApplicantCanNotApplyForAFoundationVacancyInFAA()
+    {
+        var user = context.GetUser<FAAApplyUser>();
+
+        await _faaStepsHelper.IneligibleUserApplyForAVacancy(user);
+    }
+
 
     [When("the apprentice has submitted their first application")]
     public async Task GivenTheApprenticeHasSubmittedTheirFirstApplication()
