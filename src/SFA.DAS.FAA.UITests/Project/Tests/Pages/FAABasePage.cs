@@ -1,4 +1,5 @@
-﻿using SFA.DAS.FAA.UITests.Project.Pages.ApplicationOverview;
+﻿using SFA.DAS.RAA.DataGenerator.Project;
+
 namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public abstract class FAABasePage(ScenarioContext context) : BasePage(context)
@@ -10,9 +11,16 @@ public abstract class FAABasePage(ScenarioContext context) : BasePage(context)
     protected readonly VacancyTitleDatahelper vacancyTitleDataHelper = context.Get<VacancyTitleDatahelper>();
     #endregion
 
+    protected bool IsFoundationAdvert => context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
+
     //protected override By ContinueButton => By.CssSelector("#main-content .govuk-button");
 
     protected virtual string SubmitSectionButton => ("button.govuk-button[id='submit-button']");
+
+    public async Task CheckFoundationTag()
+    {
+        await Assertions.Expect(page.Locator(".govuk-tag--pink")).ToContainTextAsync("Foundation");
+    }
 
     public async Task<FAA_ApplicationOverviewPage> SelectSectionCompleted()
     {
@@ -23,21 +31,21 @@ public abstract class FAABasePage(ScenarioContext context) : BasePage(context)
         return await VerifyPageAsync(() => new FAA_ApplicationOverviewPage(context));
     }
 
-    //protected void GoToVacancyInFAA()
-    //{
-    //    var vacancyRef = objectContext.GetVacancyReference();
+    protected async Task GoToVacancyInFAA()
+    {
+        var vacancyRef = objectContext.GetVacancyReference();
 
-    //    var uri = new Uri(new Uri(UrlConfig.FAA_BaseUrl), $"apprenticeship/VAC{vacancyRef}");
+        var uri = new Uri(new Uri(UrlConfig.FAA_BaseUrl), $"apprenticeship/VAC{vacancyRef}");
 
-    //    tabHelper.GoToUrl(uri.AbsoluteUri);
-    //}
+        await Navigate(uri.AbsoluteUri);
+    }
 
-    //protected FAASearchResultPage SearchUsingVacancyTitle()
-    //{
-    //    var uri = new Uri(new Uri(UrlConfig.FAA_BaseUrl), $"apprenticeships?SearchTerm={vacancyTitleDataHelper.VacancyTitle}");
+    protected async Task<FAASearchResultPage> SearchUsingVacancyTitle()
+    {
+        var uri = new Uri(new Uri(UrlConfig.FAA_BaseUrl), $"apprenticeships?SearchTerm={vacancyTitleDataHelper.VacancyTitle}");
 
-    //    tabHelper.GoToUrl(uri.AbsoluteUri);
+        await Navigate(uri.AbsoluteUri);
 
-    //    return new(context);
-    //}
+        return await VerifyPageAsync(() => new FAASearchResultPage(context));
+    }
 }

@@ -1,5 +1,4 @@
-﻿using SFA.DAS.RAA.DataGenerator.Project;
-using SFA.DAS.RAA.Service.Project.Helpers;
+﻿
 
 namespace SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 
@@ -102,7 +101,7 @@ public abstract class EmployerNameBasePage : RaaBasePage
         await page.GetByRole(AriaRole.Radio, new() { Name = "I do not want an employer" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Brief description of what the" }).FillAsync(rAADataHelper.EmployerDescription);
-        
+
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Reason for being anonymous" }).FillAsync(rAADataHelper.EmployerReason);
 
         await SetLegalEntityAsEmployerName();
@@ -115,9 +114,9 @@ public abstract class EmployerNameBasePage : RaaBasePage
     private async Task<EmployerDescriptionPage> GoToEmployerDescriptionPage(string employerNameAsShownInTheAdvert)
     {
         SetEmployerName(_employerName);
-        
+
         objectContext.SetEmployerNameAsShownInTheAdvert(employerNameAsShownInTheAdvert);
-        
+
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new EmployerDescriptionPage(context));
@@ -149,7 +148,7 @@ public class EmployerDescriptionPage(ScenarioContext context) : RaaBasePage(cont
         {
             await page.GetByRole(AriaRole.Checkbox, new() { Name = "This employer has signed up" }).CheckAsync();
         }
-        
+
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ContactDetailsPage(context));
@@ -232,7 +231,7 @@ public class ApplicationProcessPage(ScenarioContext context) : RaaBasePage(conte
         await page.GetByRole(AriaRole.Radio, new() { Name = "Through a different website" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Application website link" }).FillAsync(rAADataHelper.EmployerWebsiteUrl);
-        
+
         await page.GetByRole(AriaRole.Textbox, new() { Name = "How to apply (optional)" }).FillAsync(rAADataHelper.OptionalMessage);
     }
 

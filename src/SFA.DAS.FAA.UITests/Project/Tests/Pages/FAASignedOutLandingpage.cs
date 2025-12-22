@@ -4,7 +4,7 @@ namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public class FAASignedOutLandingpage(ScenarioContext context) : FAABasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(FAASignedOutPageIdentifier).ToContainTextAsync("GOV.UK One Login Sign in or create an account");
+    public override async Task VerifyPage() => await Assertions.Expect(FAASignedOutPageIdentifier).ToContainTextAsync(FAASignedOutPageTitle);
 
     public ILocator FAASignedOutPageIdentifier => page.GetByRole(AriaRole.Banner);
 

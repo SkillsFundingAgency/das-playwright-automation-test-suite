@@ -3,8 +3,6 @@ using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
-using System;
-using System.Collections.Generic;
 using static SFA.DAS.EmployerPortal.UITests.Project.Helpers.EnumHelper;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Steps;
@@ -113,7 +111,7 @@ public class CreateAccountSteps
     {
         _selectYourOrganisationPage = await _searchForYourOrganisationPage.SearchForAnOrganisation(_employerPortalDataHelper.InvalidCompanyNumber);
 
-        return _selectYourOrganisationPage = await VerifyPageHelper.VerifyPageAsync(() => new SelectYourOrganisationPage(_context));
+        return _selectYourOrganisationPage = await VerifyPageHelper.VerifyPageAsync(_context, () => new SelectYourOrganisationPage(_context));
     }
 
     [Then(@"the '(.*)' message is shown")]
@@ -216,7 +214,7 @@ public class CreateAccountSteps
             };
             _context.Set<LevyUser>(user);
         }
- 
+
 
         return _homePage;
     }
@@ -252,7 +250,7 @@ public class CreateAccountSteps
     [Then(@"'Start adding apprentices now' task link is displayed under Tasks pane")]
     public async Task ThenTaskLinkIsDisplayedUnderTasksPane()
     {
-        var page = await VerifyPageHelper.VerifyPageAsync(() => new TasksHomePage(_context));
+        var page = await VerifyPageHelper.VerifyPageAsync(_context, () => new TasksHomePage(_context));
 
         await page.VerifyStartAddingApprenticesNowTaskLink();
     }

@@ -1,21 +1,22 @@
-﻿using System;
-
-namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 
 public abstract class NavigateBase : BasePage
 {
     protected NavigateBase(ScenarioContext context, string url) : base(context)
     {
-        // if (!(string.IsNullOrEmpty(url))) tabHelper.GoToUrl(url);
+         if (!(string.IsNullOrEmpty(url))) NavigateTo(url);
+    }
+
+    private async void NavigateTo(string url)
+    {
+        objectContext.SetDebugInformation($"Navigated to '{url}' via NavigateBase");
+
+        await Navigate(url);
     }
 }
 
 public abstract class Navigate : NavigateBase
 {
-    //protected static By GlobalNavLink => By.CssSelector("#global-nav-links li a, #navigation li a, .das-navigation__link");
-
-    //private static By MoreLink => By.LinkText("More");
-
     protected abstract string Linktext { get; }
 
     protected Navigate(ScenarioContext context, bool navigate) : this(context, navigate, string.Empty) { }
@@ -23,17 +24,6 @@ public abstract class Navigate : NavigateBase
     protected Navigate(ScenarioContext context, bool navigate, string url) : base(context, url) => NavigateTo(navigate);
 
     protected Navigate(ScenarioContext context, Action navigate, string url) : base(context, url) => NavigateTo(navigate);
-
-    //protected void RetryClickOnException(By parentElement, Func<IWebElement> childElement)
-    //{
-    //    formCompletionHelper.RetryClickOnException(() =>
-    //    {
-    //        if (pageInteractionHelper.IsElementDisplayedAfterPageLoad(parentElement))
-    //            formCompletionHelper.ClickElement(parentElement);
-
-    //        return childElement();
-    //    });
-    //}
 
     private static void NavigateTo(Action navigate) => navigate.Invoke();
 
@@ -52,7 +42,6 @@ public abstract class Navigate : NavigateBase
         await page.GetByRole(AriaRole.Menuitem, new() { Name = name }).ClickAsync();
     }
 }
-
 
 public class InterimCreateAnAdvertHomePage(ScenarioContext context) : InterimYourApprenticeshipAdvertsHomePage(context, true)
 {
@@ -97,18 +86,8 @@ public class InterimFinanceHomePage(ScenarioContext context, bool navigate, bool
     }
 }
 
-
-
 public abstract class InterimEmployerBasePage : Navigate
 {
-    //#region Locators
-    //private static By SettingsLink => By.LinkText("Settings");
-    //private static By YourAccountsLink => By.LinkText("Your accounts");
-    //private static By HelpLink => By.LinkText("Help");
-    //private static By RenameAccountLink => By.LinkText("Rename account");
-    //private static By NotificationSettingsLink => By.PartialLinkText("Notification");
-    //#endregion
-
     protected InterimEmployerBasePage(ScenarioContext context, bool navigate) : this(context, navigate, false) { }
 
     protected InterimEmployerBasePage(ScenarioContext context, bool navigate, bool gotourl) : base(context, navigate, GoToUrl(gotourl))
@@ -117,7 +96,7 @@ public abstract class InterimEmployerBasePage : Navigate
 
     protected InterimEmployerBasePage(ScenarioContext context, Action navigate, bool gotourl) : base(context, navigate, GoToUrl(gotourl))
     {
-
+        // Action to navigate is used in Public sector reporting and manage funding reservations
     }
 
     private static string GoToUrl(bool gotourl) => gotourl ? UrlConfig.EmployerApprenticeshipService_BaseUrl : string.Empty;
@@ -201,7 +180,7 @@ public abstract class InterimEmployerBasePage : Navigate
         return await VerifyPageAsync(() => new PAYESchemesPage(context));
     }
 
-    private async Task NavigateToSettings(string name)
+    protected async Task NavigateToSettings(string name)
     {
         await page.GetByRole(AriaRole.Menuitem, new() { Name = "Settings" }).ClickAsync();
 
