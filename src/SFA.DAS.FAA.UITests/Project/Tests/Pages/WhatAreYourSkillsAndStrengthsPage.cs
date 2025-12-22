@@ -152,7 +152,11 @@ public class WhereDoYouWantToApplyForPage(ScenarioContext context) : FAABasePage
 
     public new async Task<FAA_ApplicationOverviewPage> SelectSectionCompleted()
     {
-        return await base.SelectSectionCompleted();
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I've completed this" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new FAA_ApplicationOverviewPage(context));
     }
 
     private async Task SelectFirstTwoLocations()
