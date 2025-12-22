@@ -4,10 +4,9 @@ Feature: Fin_OA_04_getAccountUsersByUserId
 @employerfinanceapi
 @regression
 @outerapi
-Scenario: Fin_OA_04 getAccountUsersByUserId
 
-	Given send an api request GET /AccountUsers/{{UserRef}}/accounts?email={{email}}
+Scenario: Fin_OA_04 getAccountUsersByUserId_linkedAccounts
 
-	Then Verify the getAccountUsersByUserId api response with records fetch from DB
-		| query |
-		| getAccountUsersByUserId.sql |
+	Given get the user with linked accounts
+	When endpoint request GET /AccountUsers/{{UserRef}}/accounts is called
+	Then account details should retrun for given user

@@ -14,7 +14,7 @@ public class BeforeScenarioHooks(ScenarioContext context)
         var dbConfig = context.Get<DbConfig>();
 
         var objectContext = context.Get<ObjectContext>();
-        
+
         var accountsHelper = new AccountsSqlDataHelper(objectContext, dbConfig);
         context.Set(accountsHelper);
         context.SetRestClient(new Inner_EmployerFinanceApiRestClient(objectContext, context.Get<Inner_ApiFrameworkConfig>()));

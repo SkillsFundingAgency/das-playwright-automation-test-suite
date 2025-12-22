@@ -1,12 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using NUnit.Framework;
-using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
-using SFA.DAS.Finance.APITests.Project.Helpers;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers
 {
@@ -100,11 +94,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 var propName = props[i];
                 if (ignoreSet.Contains(propName))
                 {
-                    try
-                    {
-                        LogHelper.LogAssertionResult(propName, sqlResult.ElementAtOrDefault(i) ?? string.Empty, string.Empty, true, accountsHelper, string.Empty, sqlFileName, sqlRow);
-                    }
-                    catch { }
 
                     continue;
                 }
@@ -158,14 +147,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 // non-failing info entry and continue with remaining comparisons.
                 if (actualToken == null || string.IsNullOrEmpty(actualRaw))
                 {
-                    try
-                    {
-                        LogHelper.LogAssertionResult(propName, expectedRaw, actualRaw, true, accountsHelper, string.Empty, sqlFileName, sqlRow);
-                    }
-                    catch
-                    {
-                        // swallow logging errors
-                    }
 
                     continue;
                 }
@@ -175,12 +156,7 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 {
                     if (!boolEqual)
                     {
-                        LogHelper.LogAssertionResult(propName, expectedRaw, actualRaw, false, accountsHelper, string.Empty, sqlFileName, sqlRow);
                         Assert.IsTrue(boolEqual, $"{propName} mismatch: expected '{expectedRaw}' but was '{actualRaw}'");
-                    }
-                    else
-                    {
-                        LogHelper.LogAssertionResult(propName, expectedRaw, actualRaw, true, accountsHelper, string.Empty, sqlFileName, sqlRow);
                     }
 
                     continue;
@@ -190,12 +166,10 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 {
                     if (!numberEqual)
                     {
-                        LogHelper.LogAssertionResult(propName, expectedRaw, actualRaw, false, accountsHelper, string.Empty, sqlFileName, sqlRow);
                         Assert.IsTrue(numberEqual, $"{propName} numeric mismatch: expected '{expectedRaw}' but was '{actualRaw}'");
                     }
                     else
                     {
-                        LogHelper.LogAssertionResult(propName, expectedRaw, actualRaw, true, accountsHelper, string.Empty, sqlFileName, sqlRow);
                     }
 
                     continue;
@@ -206,11 +180,9 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 var actualTrim = actualRaw?.Trim();
                 if (string.Equals(expectedTrim, actualTrim, StringComparison.Ordinal))
                 {
-                    LogHelper.LogAssertionResult(propName, expectedRaw, actualRaw, true, accountsHelper, string.Empty, sqlFileName, sqlRow);
                 }
                 else
                 {
-                    LogHelper.LogAssertionResult(propName, expectedRaw, actualRaw, false, accountsHelper, string.Empty, sqlFileName, sqlRow);
                     Assert.AreEqual(expectedTrim, actualTrim, $"{propName} mismatch: expected '{expectedRaw}' but was '{actualRaw}'");
                 }
             }

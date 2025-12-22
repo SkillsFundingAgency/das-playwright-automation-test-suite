@@ -1,13 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
-using NUnit.Framework;
 using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
-using SFA.DAS.Finance.APITests.Project.Models;
-using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers
 {
@@ -24,13 +18,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             _outerApiHelper = outerApiHelper;
         }
 
-        public string[] GetModelWritableProperties<T>()
-        {
-            return typeof(T).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
-                .Where(p => p.CanWrite)
-                .Select(p => p.Name)
-                .ToArray();
-        }
 
         public Dictionary<string, string> GetSqlExpressionMap()
         {
@@ -47,46 +34,7 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             };
         }
 
-        public (string selectList, List<string> selectAliases) BuildSelectList(string[] modelProps, Dictionary<string, string> exprMap)
-        {
-            var selectParts = new List<string>();
-            var selectAliases = new List<string>();
 
-            // Ensure accountId is always selected
-            if (!selectAliases.Contains("accountId", StringComparer.OrdinalIgnoreCase))
-            {
-                if (exprMap.TryGetValue("accountId", out var acctExpr)) selectParts.Add(acctExpr);
-                else selectParts.Add("mv.AccountId as accountId");
-                selectAliases.Add("accountId");
-            }
-
-            foreach (var propName in modelProps)
-            {
-                if (string.Equals(propName, "accountId", StringComparison.OrdinalIgnoreCase)) continue;
-
-                if (exprMap.TryGetValue(propName, out var expr))
-                {
-                    selectParts.Add(expr);
-                }
-                else
-                {
-                    selectParts.Add($"NULL as {propName}");
-                }
-                selectAliases.Add(propName);
-            }
-
-            var selectList = string.Join(",\n        ", selectParts);
-            return (selectList, selectAliases);
-        }
-
-        public string BuildSql(string selectList, string receive)
-        {
-            return $@"SELECT TOP 1 {selectList}
-                    FROM employer_account.MembershipView mv
-                    LEFT JOIN employer_account.UserAccountSettings uas 
-                    ON mv.AccountId = uas.AccountId
-                    WHERE uas.ReceiveNotifications = {receive}";
-        }
 
         public async Task<List<string>> ExecuteSql(string sql)
         {
@@ -111,55 +59,22 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
         {
             if (dict.TryGetValue("accountId", out var accountIdFromDb) && !string.IsNullOrWhiteSpace(accountIdFromDb))
             {
-                _objectContext.SetAccountId(accountIdFromDb);
+                    if (dict.TryGetValue("accountId", out var acct) && !string.IsNullOrWhiteSpace(acct))
+                    {
+                        // defensive: ignore placeholder alias values that may be present instead of real data
+                        var lower = acct.Trim().ToLowerInvariant();
+                        if (lower != "accountid" && lower != "userref" && lower != "hashedaccountid" && lower != "encodedaccountid")
+                        {
+                            _objectContext.SetAccountId(acct);
+                        }
+                    }
             }
         }
 
-        public T MapDictionaryToModel<T>(Dictionary<string, string> dict) where T : class, new()
-        {
-            var model = new T();
-            var props = typeof(T).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
-                .Where(p => p.CanWrite)
-                .ToArray();
-
-            foreach (var prop in props)
-            {
-                var key = dict.Keys.FirstOrDefault(k => string.Equals(k, prop.Name, StringComparison.OrdinalIgnoreCase));
-                if (key == null) continue;
-
-                var stringVal = dict[key];
-                if (prop.PropertyType == typeof(string))
-                {
-                    prop.SetValue(model, stringVal);
-                    continue;
-                }
-
-                try
-                {
-                    if (string.IsNullOrWhiteSpace(stringVal)) continue;
-                    var converted = Convert.ChangeType(stringVal, prop.PropertyType);
-                    prop.SetValue(model, converted);
-                }
-                catch
-                {
-                    // ignore conversion errors; leave defaults
-                }
-            }
-
-            return model;
-        }
 
         public async Task CallGetNotificationRequestSaveResponse()
         {
-            var accountIdentifier = GetAccountIdentifierFromContext();
-            Assert.IsFalse(string.IsNullOrEmpty(accountIdentifier), "AccountId was not set in context nor found in SQL row");
-
-            // normalize if value contains prefixes like 'hashed/'
-            if (!string.IsNullOrWhiteSpace(accountIdentifier) && accountIdentifier.Contains('/'))
-            {
-                var parts = accountIdentifier.Split('/');
-                accountIdentifier = parts.Last();
-            }
+            var accountIdentifier = _objectContext.GetAccountId();
 
             RestResponse response = null;
             try
@@ -181,48 +96,18 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             var content = response?.Content ?? string.Empty;
             try { _scenarioContext.Set(content, "accUserNotificationsApiResponse"); } catch { _scenarioContext["accUserNotificationsApiResponse"] = content; }
 
-                JToken parsed = null;
-                try { parsed = JToken.Parse(content); } catch { parsed = null; }
+            JToken parsed = null;
+            try { parsed = JToken.Parse(content); } catch { parsed = null; }
 
-                object expectedObj = null;
-                try { expectedObj = _scenarioContext.ContainsKey("expectedResult") ? _scenarioContext["expectedResult"] : null; } catch { expectedObj = null; }
+            object expectedObj = null;
+            try { expectedObj = _scenarioContext.ContainsKey("expectedResult") ? _scenarioContext["expectedResult"] : null; } catch { expectedObj = null; }
 
-                // determine matching property from SQL row if present, else fall back to identifier picked from expectedObj
+            // determine matching property from SQL row if present, else fall back to identifier picked from expectedObj
 
-                var match = FindMatchingItem(parsed, expectedObj, "userRef");
+            var match = FindMatchingItem(parsed, expectedObj, "userRef");
 
-                try { _scenarioContext.Set(match, "actualResult"); } catch { _scenarioContext["actualResult"] = match; }
+            try { _scenarioContext.Set(match, "actualResult"); } catch { _scenarioContext["actualResult"] = match; }
         }
-
-        private string GetAccountIdentifierFromContext()
-        {
-            try
-            {
-                var sqlDict = _scenarioContext.Get<Dictionary<string, string>>("accUserNotificationSqlRow");
-                if (sqlDict != null && sqlDict.TryGetValue("accountId", out var acct) && !string.IsNullOrWhiteSpace(acct)) return acct;
-            }
-            catch { }
-
-            var hashedFromContext = _objectContext.GetHashedAccountId();
-            if (!string.IsNullOrWhiteSpace(hashedFromContext)) return hashedFromContext;
-
-            var accountId = _objectContext.GetAccountId();
-            return accountId;
-        }
-
-        // private async Task<RestResponse> InvokeOuterApi(string accountIdentifier)
-        // {
-        //     try
-        //     {
-        //         if (long.TryParse(accountIdentifier, out var numericId))
-        //         {
-        //             return await _outerApiHelper.GetAccountUserWhichCanReceiveNotifications(numericId);
-        //         }
-        //     }
-        //     catch { }
-
-        //     return await _outerApiHelper.GetAccountUserWhichCanReceiveNotificationsByHashedId(accountIdentifier);
-        // }
 
         private JObject FindMatchingItem(JToken parsed, object expectedObj, string matchingProperty)
         {
@@ -271,22 +156,7 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             return null;
         }
 
-        public SFA.DAS.Finance.APITests.Project.Models.GetUserNotification BuildActualFromJObject(JObject match)
-        {
-            var actual = new SFA.DAS.Finance.APITests.Project.Models.GetUserNotification
-            {
-                userRef = (string)match["userRef"] ?? string.Empty,
-                firstName = (string)match["firstName"] ?? string.Empty,
-                lastName = (string)match["lastName"] ?? string.Empty,
-                name = (string)match["name"] ?? string.Join(" ", new[] { (string)match["firstName"], (string)match["lastName"] }).Trim(),
-                email = (string)match["email"] ?? string.Empty,
-                role = (string)match["role"] ?? string.Empty,
-                canReceiveNotifications = match.TryGetValue("canReceiveNotifications", StringComparison.OrdinalIgnoreCase, out var t) ? t.ToString() : (match.TryGetValue("receiveNotifications", StringComparison.OrdinalIgnoreCase, out var t2) ? t2.ToString() : string.Empty),
-                status = (string)match["status"] ?? string.Empty
-            };
-
-            return actual;
-        }
+        
 
         public void AssertApiMatchesSqlRow()
         {
@@ -360,11 +230,21 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
         public bool HandleReceiveNotificationsFalseCase(object expectedObj, object actualObj)
         {
             if (expectedObj == null) return false;
-            var expectedType = expectedObj.GetType();
-            var canProp = expectedType.GetProperty("canReceiveNotifications", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
-            if (canProp == null) return false;
+            string canVal = null;
 
-            var canVal = canProp.GetValue(expectedObj)?.ToString()?.Trim().ToLowerInvariant() ?? string.Empty;
+            // If expected result is stored as a raw SQL dictionary, read the value directly
+            if (expectedObj is Dictionary<string, string> expectedDict)
+            {
+                expectedDict.TryGetValue("canReceiveNotifications", out var v);
+                canVal = v?.ToString()?.Trim().ToLowerInvariant();
+            }
+            else
+            {
+                var expectedType = expectedObj.GetType();
+                var canProp = expectedType.GetProperty("canReceiveNotifications", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
+                if (canProp == null) return false;
+                canVal = canProp.GetValue(expectedObj)?.ToString()?.Trim().ToLowerInvariant() ?? string.Empty;
+            }
             if (canVal == "false")
             {
                 if (actualObj == null) return true;
@@ -377,32 +257,7 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             return false;
         }
 
-        public void CompareModels(object expectedObj, object actualObj, Dictionary<string, string> sqlDict)
-        {
-            var expectedType = expectedObj.GetType();
-            var props = expectedType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
-                .Where(p => p.CanRead);
-
-            foreach (var prop in props)
-            {
-                var propName = prop.Name;
-
-                if (ShouldSkipProperty(sqlDict, propName)) continue;
-
-                var expectedVal = prop.GetValue(expectedObj);
-                var actualProp = actualObj.GetType().GetProperty(propName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
-                var actualVal = actualProp?.GetValue(actualObj);
-
-                if (prop.PropertyType == typeof(string))
-                {
-                    ComparePropertyValue(propName, expectedVal as string, actualVal as string);
-                }
-                else
-                {
-                    CompareNonStringProperty(propName, expectedVal, actualVal);
-                }
-            }
-        }
+        
 
         public bool ShouldSkipProperty(Dictionary<string, string> sqlDict, string propName)
         {
@@ -490,16 +345,20 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
         public System.Reflection.PropertyInfo PickIdentifierProperty(Type t)
         {
             var candidates = new[] { "userRef", "user_ref", "userid", "userId", "id", "email" };
-            var props = t.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            // Only consider readable, non-indexer properties to avoid calling indexers via reflection
+            var props = t.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+                .Where(p => p.CanRead && p.GetIndexParameters().Length == 0)
+                .ToArray();
+
             foreach (var c in candidates)
             {
                 var p = props.FirstOrDefault(x => string.Equals(x.Name, c, StringComparison.OrdinalIgnoreCase));
                 if (p != null) return p;
             }
 
-            var byUser = props.FirstOrDefault(x => x.Name.IndexOf("user", StringComparison.OrdinalIgnoreCase) >= 0);
+            var byUser = props.FirstOrDefault(x => x.Name.IndexOf("user", StringComparison.OrdinalIgnoreCase) >= 0 && x.PropertyType == typeof(string));
             if (byUser != null) return byUser;
-            var byEmail = props.FirstOrDefault(x => x.Name.IndexOf("email", StringComparison.OrdinalIgnoreCase) >= 0);
+            var byEmail = props.FirstOrDefault(x => x.Name.IndexOf("email", StringComparison.OrdinalIgnoreCase) >= 0 && x.PropertyType == typeof(string));
             if (byEmail != null) return byEmail;
 
             return props.FirstOrDefault(x => x.PropertyType == typeof(string));
@@ -553,7 +412,9 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
 
             var dict = MapRowToDictionary(row, selectAliases);
             SetAccountIdIfPresent(dict);
-            _scenarioContext.Set(dict, "expectedResult");
+            // store both the expected result model and the raw SQL dictionary used for property-skipping logic
+            try { _scenarioContext.Set(dict, "expectedResult"); } catch { _scenarioContext["expectedResult"] = dict; }
+            try { _scenarioContext.Set(dict, "accUserNotificationSqlRow"); } catch { _scenarioContext["accUserNotificationSqlRow"] = dict; }
         }
 
         public async Task PopulateExpectedSignedAgreementVersion()

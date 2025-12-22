@@ -94,7 +94,7 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers
 
             return result;
         }
-        public async Task<List<string>> ExecuteSqlFileWithReplacements(string sqlFileName, IDictionary<string,string> replacements)
+        public async Task<List<string>> ExecuteSqlFileWithReplacements(string sqlFileName, IDictionary<string, string> replacements)
         {
             if (string.IsNullOrWhiteSpace(sqlFileName)) throw new ArgumentException("sqlFileName must be provided", nameof(sqlFileName));
 

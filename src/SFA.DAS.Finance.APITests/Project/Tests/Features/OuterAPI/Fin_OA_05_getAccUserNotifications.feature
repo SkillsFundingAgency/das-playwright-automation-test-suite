@@ -5,10 +5,13 @@ Feature: Fin_OA_05_getAccUserNotifications
 @employerfinanceapi
 @regression
 @outerapi
-Scenario: Fin_OA_05 getAccUserNotifications
+Scenario Outline: Fin_OA_05 getAccUserNotifications
 
-    Given send an api request GET /Accounts/{{accountId}}/users/which-receive-notifications
+Given an employer account <receive> receive notifications
+When endpoint /Accounts/{accountId}/users/which-receive-notifications is called
+Then the response body should contain valid account details
 
-    Then Verify the getUserNotifications api response with records fetch from DB
-        | query |
-        | GetUsersWhichReceiveNotifications.sql |
+Examples:
+	| receive |
+	| can     |
+	| cannot  |

@@ -19,7 +19,7 @@ public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inn
     public async Task<RestResponse> PostPeriodEnds(string payloadContent)
     {
         await CreateRestRequest(Method.Post, "/api/period-ends", payloadContent);
-        var response =  await Execute(HttpStatusCode.OK);
+        var response = await Execute(HttpStatusCode.OK);
         return response;
-    }   
+    }
 }

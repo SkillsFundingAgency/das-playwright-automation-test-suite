@@ -1,10 +1,7 @@
 using System;
 using System.IO;
-using SFA.DAS.FrameworkHelpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using RestSharp;
-using System.Net;
 using SFA.DAS.Finance.APITests.Project.Helpers;
 using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
 
