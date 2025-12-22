@@ -1,7 +1,5 @@
-﻿using Azure;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using SFA.DAS.EmployerPortal.UITests.Project.Tests.Pages;
-using System;
 
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
@@ -42,7 +40,7 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
             objectContext.SetDebugInformation($"'{await page.Locator("h1").First.TextContentAsync()}' page is displayed");
             return true;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             objectContext.SetDebugInformation($"CheckPage for Home Page resulted in {ex.Message}");
             return false;
@@ -116,10 +114,10 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     public async Task VerifyTransfersToAcceptMessageShown(int numberOfChanges)
     {
         var messageText = numberOfChanges == 1 ? "1 transfer to accept" : $"{numberOfChanges} transfers to accept";
-        
+
         await VerifyTaskList(messageText);
     }
-    
+
     public async Task VerifyTransferRequestReceivedMessageShown()
     {
         await VerifyTaskList("Transfer request received");
@@ -127,14 +125,14 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     public async Task<UseTransferFundsPage> ClickViewTransfersAvailableToAddApprentice()
     {
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfer available to add apprentice" }).GetByRole(AriaRole.Link).ClickAsync();
-        
-        return await VerifyPageAsync(() => new UseTransferFundsPage(context));    
+
+        return await VerifyPageAsync(() => new UseTransferFundsPage(context));
     }
 
     public async Task<MyTransferApplicationsPage> ClickViewMultipleTransfersAvailableToAddApprenticeLink()
     {
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfers available to add an apprentice" }).GetByRole(AriaRole.Link).ClickAsync();
-        
+
         return await VerifyPageAsync(() => new MyTransferApplicationsPage(context));
     }
 
@@ -148,8 +146,8 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     public async Task<MyTransferApplicationsPage> ClickViewMultipleTransfersToAccept()
     {
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfers to accept" }).GetByRole(AriaRole.Link).ClickAsync();
-        
-        return await VerifyPageAsync(() => new MyTransferApplicationsPage(context));   
+
+        return await VerifyPageAsync(() => new MyTransferApplicationsPage(context));
     }
 
     public async Task VerifyTransferConnectionRequestsMessageShown(int numberOfChanges)

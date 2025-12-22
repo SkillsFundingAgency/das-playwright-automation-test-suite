@@ -1,8 +1,4 @@
-﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages;
-using SFA.DAS.RAA.Service.Project.Pages;
-using SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
-
-namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
 
 public class CreateAnAdvertHomePage(ScenarioContext context) : RaaBasePage(context)
 {

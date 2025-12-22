@@ -29,6 +29,6 @@ public class CommitmentsPendingChangingSteps : CommitmentsCohortDetailsBaseSteps
         await page.PendingChangesAreDisplayed();
     }
 
-    private async Task<UlnDetailsPageWithPendingChanges> GetUlnDetailsPage() => await VerifyPageHelper.VerifyPageAsync(() => new UlnDetailsPageWithPendingChanges(_context, cohortDetails));
+    private async Task<UlnDetailsPageWithPendingChanges> GetUlnDetailsPage() => await VerifyPageHelper.VerifyPageAsync(_context, () => new UlnDetailsPageWithPendingChanges(_context, cohortDetails));
 }
 

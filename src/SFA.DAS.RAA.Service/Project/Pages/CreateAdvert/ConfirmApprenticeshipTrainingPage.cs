@@ -13,7 +13,7 @@ public class ConfirmApprenticeshipTrainingPage(ScenarioContext context) : RaaBas
     {
         if (isFoundationAdvert)
         {
-            CheckFoundationTag();
+            await CheckFoundationTag();
         }
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();

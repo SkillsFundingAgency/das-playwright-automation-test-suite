@@ -68,7 +68,7 @@ public class ProviderCreateAccountSteps(ScenarioContext context) : ProviderPorta
 
         await page.Continue();
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new CreateYourApprenticeshipServiceAccount(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new CreateYourApprenticeshipServiceAccount(context));
     }
 
 

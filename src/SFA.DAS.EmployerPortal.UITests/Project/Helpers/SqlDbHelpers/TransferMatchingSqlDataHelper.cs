@@ -1,5 +1,4 @@
-﻿using System;
-namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers.SqlDbHelpers;
 
 public class TransferMatchingSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.TMDbConnectionString)
 {

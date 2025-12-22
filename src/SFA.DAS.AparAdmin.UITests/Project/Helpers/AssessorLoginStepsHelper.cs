@@ -10,13 +10,13 @@ public class AssessorLoginStepsHelper(ScenarioContext context)
     {
         await _dfeAdminLoginStepsHelper.LoginToAsAssessor1();
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new AparAssessorApplicationsHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new AparAssessorApplicationsHomePage(context));
     }
 
     public async Task<AparAssessorApplicationsHomePage> Assessor2Login()
     {
         await _dfeAdminLoginStepsHelper.LoginToAsAssessor2();
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new AparAssessorApplicationsHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new AparAssessorApplicationsHomePage(context));
     }
 }

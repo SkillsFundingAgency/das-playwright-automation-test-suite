@@ -1,8 +1,8 @@
 ﻿namespace SFA.DAS.ProviderLogin.Service.Project.Helpers;
 
-internal static class SetProviderCredsHelper
+public static class SetProviderCredsHelper
 {
-    internal static T SetProviderCreds<T>(FrameworkList<DfeProviderUsers> dfeProviderList, List<ProviderDetails> dfeProviderDetailsList, T t) where T : ProviderConfig
+    public static T SetProviderCreds<T>(FrameworkList<DfeProviderUsers> dfeProviderList, List<ProviderDetails> dfeProviderDetailsList, T t) where T : ProviderConfig
     {
         if (string.IsNullOrEmpty(t.Ukprn)) return t;
 

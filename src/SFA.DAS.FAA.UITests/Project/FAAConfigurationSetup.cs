@@ -4,12 +4,13 @@
 public class FAAConfigurationSetup(ScenarioContext context)
 {
     private const string FAAApplyUsersConfig = "FAAApplyUsersConfig";
+    private const string FAAFoundationUsersConfig = "FAAFoundationUsersConfig";
 
     [BeforeScenario(Order = 12)]
     public async Task SetUpFAAConfiguration()
     {
         var listOfFAAApplyUsers = new MultiConfigurationSetupHelper(context).SetMultiConfiguration<FAAApplyUsers>(FAAApplyUsersConfig);
-
+        
         var fAAApplyUsers = RandomDataGenerator.GetRandomElementFromListOfElements(listOfFAAApplyUsers);
 
         var userList = fAAApplyUsers.ListofUser.ToList();
@@ -22,9 +23,8 @@ public class FAAConfigurationSetup(ScenarioContext context)
         } while (secondIndex == firstIndex);
 
         var selectedUser1 = userList[firstIndex];
-        var selectedUser2 = userList[secondIndex];
 
-        //var selectedUser = RandomDataGenerator.GetRandomElementFromListOfElements(fAAApplyUsers.ListofUser);
+        var selectedUser2 = userList[secondIndex];
 
         var faaApplyUser = new FAAApplyUser { Username = $"{selectedUser1}@{fAAApplyUsers.Domain}" };
 
@@ -37,5 +37,19 @@ public class FAAConfigurationSetup(ScenarioContext context)
         var faaUser = context.GetUser<FAAApplyUser>();
 
         context.SetFAAConfig(new FAAUserConfig { FAAUserName = faaUser.Username, FAAPassword = faaUser.IdOrUserRef, FAAFirstName = faaUser.FirstName, FAALastName = faaUser.LastName });
+
+        var listOfFAAFoundationUsers = new MultiConfigurationSetupHelper(context).SetMultiConfiguration<FAAApplyUsers>(FAAFoundationUsersConfig);
+
+        var fAAFoundationUsers = RandomDataGenerator.GetRandomElementFromListOfElements(listOfFAAFoundationUsers);
+
+        var foundationUserList = fAAFoundationUsers.ListofUser.ToList();
+
+        int index = random.Next(foundationUserList.Count);
+
+        var selectedFoundationUser = foundationUserList[index];
+
+        var FAAApplyFoundationUser = new FAAFoundationUser { Username = $"{selectedFoundationUser}@{fAAFoundationUsers.Domain}" };
+
+        await context.SetFAAPortaluser([FAAApplyFoundationUser]);
     }
 }

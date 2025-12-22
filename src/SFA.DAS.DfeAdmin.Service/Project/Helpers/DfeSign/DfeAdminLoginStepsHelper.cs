@@ -1,23 +1,17 @@
 ﻿using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.LandingPage;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
+using SFA.DAS.Framework.Hooks;
 using SFA.DAS.Login.Service.Project;
 
 namespace SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign;
 
-public class DfeAdminLoginStepsHelper(ScenarioContext context)
+public class DfeAdminLoginStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
 {
-
     #region Login
     public async Task NavigateAndLoginToASAdmin()
     {
-        var driver = context.Get<Driver>();
-
-        var url = UrlConfig.Admin_BaseUrl;
-
-        context.Get<ObjectContext>().SetDebugInformation(url);
-
-        await driver.Page.GotoAsync(url);
+        await Navigate(UrlConfig.Admin_BaseUrl);
 
         await LoginToAsAdmin();
     }
@@ -54,16 +48,11 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context)
 
     #region CheckAndLoginToASVacancyQa
 
-    //public void CheckAndLoginToASVacancyQa()
-    //{
-    //    if (new CheckASVacancyQaLandingPage(context).IsPageDisplayed()) new ASVacancyQaLandingPage(context).ClickStartNowButton();
-
-    //    if (new CheckDfeSignInOrReviewHomePage(context).IsDfeSignPageDisplayed()) SubmitValidLoginDetails(context.GetUser<VacancyQaUser>());
-    //}
+    public async Task CheckAndLoginToASVacancyQa() => await CheckAndLoginTo(new ASVacancyQaLandingPage(context), context.GetUser<VacancyQaUser>());
 
     #endregion
 
-    
+
     private async Task CheckAndLoginTo(ASLandingCheckBasePage landingPage, DfeAdminUser dfeAdminUser)
     {
         if (await landingPage.IsPageDisplayed()) await landingPage.ClickStartNowButton();

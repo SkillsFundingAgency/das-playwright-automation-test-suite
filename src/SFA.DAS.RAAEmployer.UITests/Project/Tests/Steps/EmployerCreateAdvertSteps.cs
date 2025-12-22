@@ -19,8 +19,8 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
         await _employerCreateVacancyStepsHelper.CreateANewAdvert(RAAConst.Anonymous);
     }
 
-    [When(@"the Employer creates first submitted advert")]
-    public async Task TheEmployerCreatesFirstSubmittedAdvert() => await  _employerCreateVacancyStepsHelper.CreateFirstAdvertAndSubmit(_createAnApprenticeshipAdvertPage);
+    //[When(@"the Employer creates first submitted advert")]
+    //public async Task TheEmployerCreatesFirstSubmittedAdvert() => await  _employerCreateVacancyStepsHelper.CreateFirstAdvertAndSubmit(_createAnApprenticeshipAdvertPage);
 
     //[Given(@"the employer continue to add advert in the Recruitment")]
     //public async Task TheEmployerContinueToAddAdvertInTheRecruitment()
@@ -31,11 +31,11 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
     [When(@"Employer selects '(National Minimum Wage|National Minimum Wage For Apprentices|Fixed Wage Type|Set As Competitive)' in the first part of the journey")]
     public async Task EmployerSelectsInTheFirstPartOfTheJourney(string wageType) => await _employerCreateVacancyStepsHelper.CreateANewAdvert_WageType(wageType);
 
-    //[Given(@"the Employer creates an offline advert with disability confidence")]
-    //public async Task TheEmployerCreatesAnOfflineAdvertWithDisabilityConfidence() => await _employerCreateVacancyStepsHelper.CreateOfflineVacancy();
+    [Given(@"the Employer creates an offline advert with disability confidence")]
+    public async Task TheEmployerCreatesAnOfflineAdvertWithDisabilityConfidence() => await _employerCreateVacancyStepsHelper.CreateOfflineVacancy();
 
-    //[Given(@"the Employer clones and creates an advert")]
-    //public async Task TheEmployerClonesAndCreatesAnAdvert() => await _employerCreateVacancyStepsHelper.CloneAnAdvert();
+    [Given(@"the Employer clones and creates an advert")]
+    public async Task TheEmployerClonesAndCreatesAnAdvert() => await _employerCreateVacancyStepsHelper.CloneAnAdvert();
 
     [Given(@"the Employer creates an advert by selecting different work location")]
     public async Task TheEmployerCreatesAnAdvertBySelectingDifferentWorkLocation() => await _employerCreateVacancyStepsHelper.CreateANewAdvert(RAAConst.LegalEntityName, "different");

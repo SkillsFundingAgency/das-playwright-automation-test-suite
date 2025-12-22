@@ -58,7 +58,7 @@ public class CreateAccountTaskListSteps
     [Then(@"user can resume employer registration journey")]
     public async Task UserCanResumeEmployerRegistrationJourney()
     {
-        _createYourEmployerAccountPage = await VerifyPageHelper.VerifyPageAsync(() => new CreateYourEmployerAccountPage(_context));
+        _createYourEmployerAccountPage = await VerifyPageHelper.VerifyPageAsync(_context, () => new CreateYourEmployerAccountPage(_context));
     }
 
     [Given(@"user logs into stub")]

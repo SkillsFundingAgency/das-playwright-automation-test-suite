@@ -1,10 +1,11 @@
 ﻿using SFA.DAS.FATe.UITests.Project.Tests.Pages;
+using SFA.DAS.Framework.Hooks;
 
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 {
     [Binding, Scope(Tag = "fate")]
-    public class E2ESteps
+    public class E2ESteps : FrameworkBaseHooks
     {
         private readonly FATeStepsHelper _stepsHelper;
         private readonly SearchForTrainingProviderPage _searchForTrainingProviderPage;
@@ -16,11 +17,9 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         private readonly TrainingProvidersPage _trainingProvidersPage;
         private readonly ApprenticeshipTrainingCourseDetailsPage _apprenticeshipTrainingCourseDetailsPage;
         private readonly string providerName;
-        private readonly ScenarioContext context;
         
-        public E2ESteps(ScenarioContext context)
+        public E2ESteps(ScenarioContext context) : base(context) 
         {
-            this.context = context;
             _stepsHelper = new FATeStepsHelper(context);
             _fATeHomePage = new FATeHomePage(context);
             _search_TrainingCourses_ApprenticeworkLocationPage = new Search_TrainingCourses_ApprenticeworkLocationPage(context);
@@ -128,8 +127,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         [When("the provider is listed on the FAT training providers page")]
         public async Task WhenTheProviderIsListedOnTheFATTrainingProvidersPage()
         {
-            var driver = context.Get<Driver>();
-            await driver.Page.GotoAsync(UrlConfig.FAT_BaseUrl);
+            await Navigate(UrlConfig.FAT_BaseUrl);
             await _fATeHomePage.ClickStartNow();
             await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
             await _fATeHomePage.EnterCourseJobOrStandard("Craft plasterer");
@@ -137,15 +135,15 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Craft plasterer (level 3)");
             await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
             await _trainingProvidersPage.VerifyProviderListed("REMIT GROUP LIMITED", true);
-            await driver.Page.GotoAsync(UrlConfig.Provider_BaseUrl);
+
+            await Navigate(UrlConfig.Provider_BaseUrl);
             await _fATeHomePage.StartNow();
         }
 
         [When("the provider is not listed on the FAT training providers page")]
         public async Task WhenTheProviderIsNotListedOnTheFATTrainingProvidersPage()
         {
-            var driver = context.Get<Driver>();
-            await driver.Page.GotoAsync(UrlConfig.FAT_BaseUrl);
+            await Navigate(UrlConfig.FAT_BaseUrl);
             await _fATeHomePage.ClickStartNow();
             await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
             await _fATeHomePage.EnterCourseJobOrStandard("Craft plasterer");
