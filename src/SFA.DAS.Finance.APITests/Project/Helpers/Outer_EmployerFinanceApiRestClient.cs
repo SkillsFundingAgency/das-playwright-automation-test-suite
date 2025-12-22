@@ -32,6 +32,11 @@
             return await Execute($"/AccountUsers/{userRef}/accounts?email={email}", expectedResponse);
         }
 
+        public async Task<RestResponse> GetAccountUserAccountsByUserRef(string userRef, HttpStatusCode expectedResponse)
+        {
+            return await Execute($"/AccountUsers/{userRef}/accounts", expectedResponse);
+        }
+
         public async Task<RestResponse> GetPledges(long accountId, HttpStatusCode expectedResponse)
         {
             return await Execute($"/Pledges?accountId={accountId}", expectedResponse);

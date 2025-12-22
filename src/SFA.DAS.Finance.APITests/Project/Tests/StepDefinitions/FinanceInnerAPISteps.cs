@@ -1,7 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
+using NUnit.Framework;
 using SFA.DAS.Finance.APITests.Project.Helpers;
 using SFA.DAS.Finance.APITests.Project.Models;
-using TechTalk.SpecFlow;
 using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
 
 namespace SFA.DAS.Finance.APITests.Project.Tests.StepDefinitions;
@@ -11,13 +14,17 @@ public class FinanceInnerAPISteps
 {
     private readonly ScenarioContext _scenarioContext;
     private readonly Inner_EmployerFinanceApiRestClient _innerApiRestClient;
+    private readonly Outer_EmployerFinanceApiHelper _outerApiHelper;
     private readonly ObjectContext _objectContext;
+    private readonly StepHelper _stepHelper;
 
     public FinanceInnerAPISteps(ScenarioContext context)
     {
         _scenarioContext = context;
         _innerApiRestClient = context.GetRestClient<Inner_EmployerFinanceApiRestClient>();
+        _outerApiHelper = new Outer_EmployerFinanceApiHelper(context);
         _objectContext = context.Get<ObjectContext>();
+            _stepHelper = new StepHelper(_scenarioContext, _objectContext, _outerApiHelper);
     }
 
     [Then(@"endpoint das-employer-finance-api /ping can be accessed")]

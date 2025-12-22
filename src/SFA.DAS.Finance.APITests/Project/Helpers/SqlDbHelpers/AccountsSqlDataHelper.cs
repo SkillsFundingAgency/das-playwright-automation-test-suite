@@ -170,5 +170,13 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers
 
             return result;
         }
+
+        // Public wrapper to execute an arbitrary SQL string from test step definitions.
+        public async Task<List<string>> ExecuteSql(string sql)
+        {
+            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentException("sql must be provided", nameof(sql));
+
+            return await GetData(sql);
+        }
     }
 }

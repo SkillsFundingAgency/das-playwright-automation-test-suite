@@ -22,7 +22,8 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             string apiResponseJson,
             string sqlFileName,
             IEnumerable<string> propertyOrder,
-            IDictionary<string, string> replacements = null)
+            IDictionary<string, string> replacements = null,
+            IEnumerable<string> ignoreProperties = null)
         {
             if (accountsHelper == null) throw new ArgumentNullException(nameof(accountsHelper));
             if (string.IsNullOrWhiteSpace(apiResponseJson)) Assert.Fail("apiResponseJson must be provided");
@@ -91,10 +92,23 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 return;
             }
 
+            var ignoreSet = (ignoreProperties ?? Enumerable.Empty<string>()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
             // Compare each property in the provided order against the SQL result columns (by index)
             for (int i = 0; i < props.Count; i++)
             {
                 var propName = props[i];
+                if (ignoreSet.Contains(propName))
+                {
+                    try
+                    {
+                        LogHelper.LogAssertionResult(propName, sqlResult.ElementAtOrDefault(i) ?? string.Empty, string.Empty, true, accountsHelper, string.Empty, sqlFileName, sqlRow);
+                    }
+                    catch { }
+
+                    continue;
+                }
+
                 var expectedRaw = sqlResult[i] ?? string.Empty;
 
                 // Try to find the API property in a case-insensitive way

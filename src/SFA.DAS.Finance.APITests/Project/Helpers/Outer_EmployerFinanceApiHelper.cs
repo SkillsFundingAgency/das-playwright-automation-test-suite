@@ -35,6 +35,11 @@ public class Outer_EmployerFinanceApiHelper
         return await _outerEmployerFinanceApiRestClient.GetAccountUserByUserRefAndEmail(userRef, email, HttpStatusCode.OK);
     }
 
+    public async Task<RestResponse> GetAccountUserAccountsByUserRef(string userRef)
+    {
+        return await _outerEmployerFinanceApiRestClient.GetAccountUserAccountsByUserRef(userRef, HttpStatusCode.OK);
+    }
+
     public async Task<RestResponse> GetAccountUserWhichCanReceiveNotificationsByHashedId(string hashedAccountId)
     {
         return await _outerEmployerFinanceApiRestClient.GetAccountUserWhichCanReceiveNotificationsByHashedId(hashedAccountId, HttpStatusCode.OK);
