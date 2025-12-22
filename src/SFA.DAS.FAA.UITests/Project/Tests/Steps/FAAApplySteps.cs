@@ -54,17 +54,6 @@ public class FAAApplySteps(ScenarioContext context)
         await _faaStepsHelper.IneligibleUserApplyForAVacancy(user);
     }
 
-
-    [When("the apprentice has submitted their first application")]
-    public async Task GivenTheApprenticeHasSubmittedTheirFirstApplication()
-    {
-        var page = await _faaStepsHelper.ApplyForAVacancyWithNewAccount(true, true, true, true, true, true);
-
-        var page1 = await page.PreviewApplication();
-        
-        await page1.SubmitApplication();
-    }
-
     [When(@"the Applicant can apply for a Vacancy in FAA with ""(.*)"" additional questions")]
     public async Task TheApplicantCanApplyForAVacancyInFAA(string numberOfQuestions)
     {
