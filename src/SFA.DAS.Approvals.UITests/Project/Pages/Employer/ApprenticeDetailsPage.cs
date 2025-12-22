@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
+
+namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
     internal class ApprenticeDetailsPage : ApprovalsBasePage
     {
@@ -26,6 +28,12 @@
         { 
             await page.Locator("#edit-apprentice-link").ClickAsync();
             return await VerifyPageAsync(() => new EditApprenticeDetailsPage(context));
+        }
+
+        internal async Task<ApprenticeDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status)
+        {
+            await Assertions.Expect(page.Locator(".govuk-tag")).ToContainTextAsync(status.ToString());
+            return this;
         }
 
     }
