@@ -7,10 +7,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
     {
         private readonly ScenarioContext context;
         private readonly string pageTitle;
-        //status
-        //training provider
-        //apprenticedetails
-        //planned training end date
 
         #region Locators
         private ILocator BackPageLink => page.GetByRole(AriaRole.Link, new() { Name = "Back to manage your apprentices" });
@@ -18,8 +14,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         private ILocator ChangeProviderLink => page.GetByRole(AriaRole.Link, new() { Name = "Change   training provider" });
         private ILocator EditApprenticeDetailsLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit   apprentice details" });
         private ILocator EditPlannedTrainingEndDateLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit   end date" });
-
         private ILocator ApprenticeStatusTag => page.Locator(".govuk-tag");
+        private ILocator StatusDateTitle => page.Locator("table:nth-of-type(1) tr:nth-of-type(2) th").First;
+        private ILocator StatusDateValue => page.Locator("table:nth-of-type(1) tr:nth-of-type(2) td").First;
         #endregion
 
 
@@ -49,8 +46,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         internal async Task<ApprenticeDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status, string rowName, DateTime date)
         {
             await Assertions.Expect(ApprenticeStatusTag).ToContainTextAsync(status.ToString());
-            await Assertions.Expect(page.Locator("table:nth-of-type(1) tr:nth-of-type(2) th").First).ToContainTextAsync(rowName);
-            await Assertions.Expect(page.Locator("table:nth-of-type(1) tr:nth-of-type(2) td").First).ToContainTextAsync(date.ToString("MMMM yyyy"));
+            await Assertions.Expect(StatusDateTitle).ToContainTextAsync(rowName);
+            await Assertions.Expect(StatusDateValue).ToContainTextAsync(date.ToString("MMMM yyyy"));
             return this;
         }
 
