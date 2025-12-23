@@ -54,20 +54,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
         {
             var details = await GetApprenticeDetails(apprenticeship.ProviderDetails.Ukprn, apprenticeship.EmployerDetails.AccountLegalEntityId, additionalWhereFilter);
 
-            apprenticeship.ApprenticeDetails.ULN = details[0].ToString();
-            apprenticeship.ApprenticeDetails.FirstName = details[1].ToString();
-            apprenticeship.ApprenticeDetails.LastName = details[2].ToString();
-            apprenticeship.ApprenticeDetails.DateOfBirth = Convert.ToDateTime(details[3].ToString());
-            apprenticeship.TrainingDetails.StandardCode = Convert.ToInt32(details[4]);
-            apprenticeship.ReservationID = details[5];
-            apprenticeship.Cohort.Reference = details[6];
-            apprenticeship.ApprenticeDetails.Email = details[7];
-            apprenticeship.TrainingDetails.StartDate = Convert.ToDateTime(details[8]);
-            apprenticeship.TrainingDetails.EndDate = Convert.ToDateTime(details[9]);
-            apprenticeship.TrainingDetails.TotalPrice = Convert.ToInt32(details[10]);
-            apprenticeship.TrainingDetails.TrainingPrice = Convert.ToInt32(details[10]);
+            apprenticeship.ApprenticeDetails.ApprenticeshipId = Convert.ToInt32(details[0]);
+            apprenticeship.ApprenticeDetails.ULN = details[1].ToString();
+            apprenticeship.ApprenticeDetails.FirstName = details[2].ToString();
+            apprenticeship.ApprenticeDetails.LastName = details[3].ToString();
+            apprenticeship.ApprenticeDetails.DateOfBirth = Convert.ToDateTime(details[4].ToString());
+            apprenticeship.TrainingDetails.StandardCode = Convert.ToInt32(details[5]);
+            apprenticeship.ReservationID = details[6];
+            apprenticeship.Cohort.Reference = details[7];
+            apprenticeship.ApprenticeDetails.Email = details[8];
+            apprenticeship.TrainingDetails.StartDate = Convert.ToDateTime(details[9]);
+            apprenticeship.TrainingDetails.EndDate = Convert.ToDateTime(details[10]);
+            apprenticeship.TrainingDetails.TotalPrice = Convert.ToInt32(details[11]);
+            apprenticeship.TrainingDetails.TrainingPrice = Convert.ToInt32(details[11]);
             apprenticeship.TrainingDetails.AcademicYear = AcademicYearDatesHelper.GetCurrentAcademicYear();
-            apprenticeship.TrainingDetails.ConsumerReference = details[11];
+            apprenticeship.TrainingDetails.ConsumerReference = details[12];
 
             return apprenticeship;
         }
@@ -75,7 +76,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
         private async Task<List<string>> GetApprenticeDetails(int ukprn, int accountLegalEntityId, string additionalWhereFilter = null )
         {
             string query =
-                @$"SELECT TOP(1) a.ULN, a.FirstName, a.LastName, a.DateOfBirth, a.TrainingCode, a.ReservationId, c.Reference, a.Email, a.StartDate, a.EndDate, a.Cost, a.ProviderRef
+                @$"SELECT TOP(1) a.Id, a.ULN, a.FirstName, a.LastName, a.DateOfBirth, a.TrainingCode, a.ReservationId, c.Reference, a.Email, a.StartDate, a.EndDate, a.Cost, a.ProviderRef
                     FROM [dbo].[Commitment] c
                     INNER JOIN [dbo].[Apprenticeship] a
                     ON c.id = a.CommitmentId
@@ -94,5 +95,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return result.FirstOrDefault() ?? string.Empty;
 
         }
+
+        internal async Task SetPaymentStatus(int apprenticeshipId, int pymtStatus)
+        { 
+            string query = $"UPDATE [dbo].[Apprenticeship] SET PaymentStatus = {pymtStatus} WHERE Id = {apprenticeshipId}";
+            await ExecuteSqlCommand(query);
+        }
+
+
     }
 }

@@ -32,8 +32,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
             List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
 
-            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(EmployerType.NonLevy, 1, null, listOfApprenticeship);
-            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(EmployerType.Levy, 1, null, listOfApprenticeship, trainingFactory: foundationTrainingDetails);
+            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.NonLevy, 1, null, listOfApprenticeship);
+            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship, trainingFactory: foundationTrainingDetails);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
 
         }
@@ -47,7 +47,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var apprenticeDetails = new ApprenticeFactory(ageLimit + 1);
             ICsvFileFactory csvFileFactory = new CsvFileFactory();
 
-            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipAsync(EmployerType.Levy, 1, null, listOfApprenticeship, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
+            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
             await csvFileFactory.CreateCsvFile(listOfApprenticeship, fileUploadHelper.CsvFileLocation());
 
             context["listOfApprenticeship"] = listOfApprenticeship;

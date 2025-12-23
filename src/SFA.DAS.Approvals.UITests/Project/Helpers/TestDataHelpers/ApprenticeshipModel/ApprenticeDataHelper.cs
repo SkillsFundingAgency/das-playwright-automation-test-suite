@@ -7,7 +7,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 {
     internal class ApprenticeDataHelper(ScenarioContext context)
     {
-        public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(
+        public async Task<List<Apprenticeship>> CreateApprenticeshipObject(
             EmployerType EmployerType,
             int NumberOfApprenticeships,
             ProviderConfig providerConfig = null,

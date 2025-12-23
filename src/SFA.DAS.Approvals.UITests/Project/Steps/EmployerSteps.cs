@@ -134,6 +134,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
            await page.VerifyRPLDetails(apprenticeships);
         }
 
+        
         [Given("the Employer logins using an existing NonLevy Account which has reached it max reservations limit")]
         public async Task GivenTheEmployerLoginsUsingAnExistingNonLevyAccountWhichHasReachedItMaxReservationsLimit()
         {
@@ -144,6 +145,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);           
         }
 
+        
         [When("the Employer tries to add another apprentice to an existing cohort")]
         public async Task WhenTheEmployerTriesToAddAnotherApprenticeToAnExistingCohort()
         {
@@ -151,6 +153,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             
         }
 
+        
         [Then("the Employer is blocked with a shutter page for existing cohort")]
         public async Task ThenTheEmployerIsBlockedWithAShutterPageForExistingCohort()
         {
@@ -165,7 +168,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-
+        [Then("the apprenticeship is marked as Completed")]
+        public async Task ThenTheApprenticeshipIsMarkedAsCompleted()
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var page = await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage(true);
+            var page1 = await page.OpenFirstItemFromTheList(apprenticeship.ApprenticeDetails.FullName);
+            await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Completed, "Completion payment month", DateTime.Now);
+            await page1.AssertRecordIsReadOnlyExceptEndDate();
+        }
 
 
     }
