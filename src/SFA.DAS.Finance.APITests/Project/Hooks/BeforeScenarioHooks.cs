@@ -21,8 +21,6 @@ public class BeforeScenarioHooks(ScenarioContext context)
 
         var employerFinanceSqlDbHelper = new EmployerFinanceSqlHelper(context.Get<ObjectContext>(), dbConfig);
 
-        var employerAccountsSqlDbHelper = new EmployerAccountsSqlHelper(context.Get<ObjectContext>(), dbConfig);
-
         // Prefer account details from the Accounts helper membership view (more relevant test data)
         var membershipResult = await accountsHelper.GetTestAccountDetailsFromDB();
 
@@ -53,7 +51,7 @@ public class BeforeScenarioHooks(ScenarioContext context)
             }
             else
             {
-                await employerAccountsSqlDbHelper.SetHashedAccountId(accountIdFromMembership);
+                await employerFinanceSqlDbHelper.SetHashedAccountId(accountIdFromMembership);
                 // try to retrieve from objectContext after setting
                 var setHash = objectContext.GetHashedAccountId();
                 if (!string.IsNullOrWhiteSpace(setHash)) context.Set(setHash, "hashedAccountId");
@@ -66,7 +64,7 @@ public class BeforeScenarioHooks(ScenarioContext context)
         {
             // Fallback to existing behaviour
             var accountid = await employerFinanceSqlDbHelper.SetAccountId();
-            await employerAccountsSqlDbHelper.SetHashedAccountId(accountid);
+            await employerFinanceSqlDbHelper.SetHashedAccountId(accountid);
 
             // populate ScenarioContext keys from fallback values
             context.Set(accountid, "accountId");

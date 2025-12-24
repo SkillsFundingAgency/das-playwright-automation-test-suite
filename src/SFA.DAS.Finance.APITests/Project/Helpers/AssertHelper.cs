@@ -19,23 +19,51 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             IDictionary<string, string> replacements = null,
             IEnumerable<string> ignoreProperties = null)
         {
+            ValidateParameters(accountsHelper, apiResponseJson, sqlFileName, propertyOrder);
+
+            var props = propertyOrder.ToList();
+
+            var sqlResult = await GetSqlResult(accountsHelper, sqlFileName, replacements, props.Count);
+
+            var apiRecord = ParseApiRecord(apiResponseJson, replacements, props, sqlResult);
+
+            var ignoreSet = (ignoreProperties ?? Enumerable.Empty<string>()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            for (int i = 0; i < props.Count; i++)
+            {
+                var propName = props[i];
+                if (ignoreSet.Contains(propName)) continue;
+
+                var expectedRaw = sqlResult[i] ?? string.Empty;
+
+                var actualToken = GetActualToken(apiRecord, propName);
+
+                var actualRaw = actualToken?.ToString() ?? string.Empty;
+
+                if (actualToken == null || string.IsNullOrEmpty(actualRaw)) continue;
+
+                CompareValues(expectedRaw, actualRaw, propName);
+            }
+        }
+
+        private static void ValidateParameters(AccountsSqlDataHelper accountsHelper, string apiResponseJson, string sqlFileName, IEnumerable<string> propertyOrder)
+        {
             if (accountsHelper == null) throw new ArgumentNullException(nameof(accountsHelper));
             if (string.IsNullOrWhiteSpace(apiResponseJson)) Assert.Fail("apiResponseJson must be provided");
             if (string.IsNullOrWhiteSpace(sqlFileName)) Assert.Fail("sqlFileName must be provided");
             if (propertyOrder == null || !propertyOrder.Any()) Assert.Fail("propertyOrder must contain at least one property name");
+        }
 
-            // Execute SQL with replacements
+        private static async Task<System.Collections.Generic.List<string>> GetSqlResult(AccountsSqlDataHelper accountsHelper, string sqlFileName, IDictionary<string, string> replacements, int expectedColumnCount)
+        {
             var sqlResult = await accountsHelper.ExecuteSqlFileWithReplacements(sqlFileName, replacements);
             Assert.IsNotNull(sqlResult, "SQL query returned no results");
-            Assert.IsTrue(sqlResult.Count >= propertyOrder.Count(), "SQL result did not return expected number of columns");
+            Assert.IsTrue(sqlResult.Count >= expectedColumnCount, "SQL result did not return expected number of columns");
+            return sqlResult;
+        }
 
-            // Prepare property list before parsing API response
-            var props = propertyOrder.ToList();
-
-            // Prepare a joined representation of the SQL row for logging
-            var sqlRow = string.Join(", ", sqlResult ?? new System.Collections.Generic.List<string>());
-
-            // Parse API response - support array, object, or primitive
+        private static JObject ParseApiRecord(string apiResponseJson, IDictionary<string, string> replacements, System.Collections.Generic.List<string> props, System.Collections.Generic.List<string> sqlResult)
+        {
             JToken apiToken;
             try
             {
@@ -44,7 +72,7 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             catch (Exception ex)
             {
                 Assert.Fail($"API response is not valid JSON: {ex.Message}");
-                return;
+                return null;
             }
 
             JObject apiRecord = null;
@@ -54,7 +82,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 var apiArray = (JArray)apiToken;
                 Assert.IsTrue(apiArray.Count > 0, "API response contains no elements to compare");
 
-                // If replacements include a userRef or userId, try to find the matching API record, otherwise use the first entry
                 if (replacements != null)
                 {
                     if (replacements.TryGetValue("userRef", out var userRef) && !string.IsNullOrWhiteSpace(userRef))
@@ -75,7 +102,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             }
             else
             {
-                // Primitive/token value (e.g., a single number or string). We'll compare directly if only one property expected.
                 var primitiveValue = apiToken.ToString();
 
                 if (props.Count() != 1)
@@ -83,108 +109,74 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
 
                 var expected = sqlResult[0] ?? string.Empty;
                 Assert.AreEqual(expected, primitiveValue, $"{props.First()} mismatch");
+                return null;
+            }
+
+            return apiRecord;
+        }
+
+        private static JToken GetActualToken(JObject apiRecord, string propName)
+        {
+            if (apiRecord == null) return null;
+
+            JToken actualToken = null;
+            var prop = apiRecord.Properties().FirstOrDefault(p => string.Equals(p.Name, propName, StringComparison.OrdinalIgnoreCase));
+            if (prop != null)
+            {
+                actualToken = prop.Value;
+            }
+            else
+            {
+                actualToken = apiRecord.SelectToken(propName) ?? apiRecord[propName];
+
+                if (actualToken == null && string.Equals(propName, "userRef", StringComparison.OrdinalIgnoreCase))
+                {
+                    actualToken = apiRecord.SelectToken("employerUserId") ?? apiRecord["employerUserId"];
+                }
+
+                if (actualToken == null)
+                {
+                    try
+                    {
+                        var ua = apiRecord.SelectToken("userAccounts");
+                        if (ua != null && ua.Type == JTokenType.Array)
+                        {
+                            var first = ua.First as JObject;
+                            if (first != null)
+                            {
+                                actualToken = first.SelectToken(propName) ?? first[propName];
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // ignore
+                    }
+                }
+            }
+
+            return actualToken;
+        }
+
+        private static void CompareValues(string expectedRaw, string actualRaw, string propName)
+        {
+            if (TryCompareAsBool(expectedRaw, actualRaw, out var boolEqual))
+            {
+                if (!boolEqual) Assert.IsTrue(boolEqual, $"{propName} mismatch: expected '{expectedRaw}' but was '{actualRaw}'");
                 return;
             }
 
-            var ignoreSet = (ignoreProperties ?? Enumerable.Empty<string>()).ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-            // Compare each property in the provided order against the SQL result columns (by index)
-            for (int i = 0; i < props.Count; i++)
+            if (TryCompareAsNumber(expectedRaw, actualRaw, out var numberEqual))
             {
-                var propName = props[i];
-                if (ignoreSet.Contains(propName))
-                {
+                if (!numberEqual) Assert.IsTrue(numberEqual, $"{propName} numeric mismatch: expected '{expectedRaw}' but was '{actualRaw}'");
+                return;
+            }
 
-                    continue;
-                }
-
-                var expectedRaw = sqlResult[i] ?? string.Empty;
-
-                // Try to find the API property in a case-insensitive way
-                JToken actualToken = null;
-                var prop = apiRecord.Properties().FirstOrDefault(p => string.Equals(p.Name, propName, StringComparison.OrdinalIgnoreCase));
-                if (prop != null)
-                {
-                    actualToken = prop.Value;
-                }
-                else
-                {
-                    // Fallback: try SelectToken (supports json path), then direct index
-                    actualToken = apiRecord.SelectToken(propName) ?? apiRecord[propName];
-
-                    // Special-case mappings: some API responses use alternate property names
-                    if (actualToken == null && string.Equals(propName, "userRef", StringComparison.OrdinalIgnoreCase))
-                    {
-                        actualToken = apiRecord.SelectToken("employerUserId") ?? apiRecord["employerUserId"];
-                    }
-                    // If still not found, some responses return nested info under userAccounts[0]
-                    if (actualToken == null)
-                    {
-                        try
-                        {
-                            var ua = apiRecord.SelectToken("userAccounts");
-                            if (ua != null && ua.Type == JTokenType.Array)
-                            {
-                                var first = ua.First as JObject;
-                                if (first != null)
-                                {
-                                    actualToken = first.SelectToken(propName) ?? first[propName];
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            // ignore any JSON path issues
-                        }
-                    }
-                }
-
-                var actualRaw = actualToken?.ToString() ?? string.Empty;
-
-                // If the API does not include this property at all, skip hard-failing the assertion.
-                // This allows SQL files that contain additional columns (e.g., numeric UserId)
-                // to be compared without failing when the API omits that column. Log as a
-                // non-failing info entry and continue with remaining comparisons.
-                if (actualToken == null || string.IsNullOrEmpty(actualRaw))
-                {
-
-                    continue;
-                }
-
-                // Generic type-aware comparison: boolean -> numeric -> string
-                if (TryCompareAsBool(expectedRaw, actualRaw, out var boolEqual))
-                {
-                    if (!boolEqual)
-                    {
-                        Assert.IsTrue(boolEqual, $"{propName} mismatch: expected '{expectedRaw}' but was '{actualRaw}'");
-                    }
-
-                    continue;
-                }
-
-                if (TryCompareAsNumber(expectedRaw, actualRaw, out var numberEqual))
-                {
-                    if (!numberEqual)
-                    {
-                        Assert.IsTrue(numberEqual, $"{propName} numeric mismatch: expected '{expectedRaw}' but was '{actualRaw}'");
-                    }
-                    else
-                    {
-                    }
-
-                    continue;
-                }
-
-                // Default: string comparison (trim both sides)
-                var expectedTrim = expectedRaw?.Trim();
-                var actualTrim = actualRaw?.Trim();
-                if (string.Equals(expectedTrim, actualTrim, StringComparison.Ordinal))
-                {
-                }
-                else
-                {
-                    Assert.AreEqual(expectedTrim, actualTrim, $"{propName} mismatch: expected '{expectedRaw}' but was '{actualRaw}'");
-                }
+            var expectedTrim = expectedRaw?.Trim();
+            var actualTrim = actualRaw?.Trim();
+            if (!string.Equals(expectedTrim, actualTrim, StringComparison.Ordinal))
+            {
+                Assert.AreEqual(expectedTrim, actualTrim, $"{propName} mismatch: expected '{expectedRaw}' but was '{actualRaw}'");
             }
         }
 

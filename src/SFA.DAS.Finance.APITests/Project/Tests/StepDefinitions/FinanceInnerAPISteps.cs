@@ -71,7 +71,7 @@ public class FinanceInnerAPISteps
 
     }
 
-    [Then(@"endpoint api/accounts/\{accountId}/transactions can be accessed")]
+    [Then(@"endpoint \/api/accounts/\{accountId}/transactions can be accessed")]
     public async Task ThenEndpointApiAccountsAccountIdTransactionsEndpointCanBeAccessed()
     {
         var hashedAccountId = GetHashedAccountId();
@@ -115,6 +115,13 @@ public class FinanceInnerAPISteps
         var propertyOrder = new[] { "year", "month", "amount" };
 
         await AssertHelper.AssertApiResponseMatchesSql(accountsHelper, apiContent, queryFile, propertyOrder, replacements);
+    }
+
+    [Then(@"endpoint api/accounts/\{accountId}/transactions can be accessed")]
+    public async Task ThenEndpointApiAccountsAccountIdTransactionsEndpointCanBeAccessed1()
+    {
+        var hashedAccountId = GetHashedAccountId();
+        await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions", HttpStatusCode.OK);
     }
 
     [Then(@"endpoint api/accounts/\{hashedAccountId}/transactions/GetTransactions can be accessed")]

@@ -19,23 +19,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
         }
 
 
-        public Dictionary<string, string> GetSqlExpressionMap()
-        {
-            return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                ["accountId"] = "mv.AccountId",
-                ["userRef"] = "mv.UserRef as userRef",
-                ["firstName"] = "mv.FirstName as firstName",
-                ["lastName"] = "mv.LastName as lastName",
-                ["name"] = "mv.FirstName + ' ' + mv.LastName as name",
-                ["email"] = "mv.Email as email",
-                ["role"] = "CASE WHEN mv.Role = 1 THEN 'Owner' WHEN mv.Role = 0 THEN 'User' ELSE 'Unknown' END AS role",
-                ["canReceiveNotifications"] = "CASE WHEN uas.ReceiveNotifications = 1 THEN 'true' WHEN uas.ReceiveNotifications = 0 THEN 'false' ELSE 'Unknown' END AS canReceiveNotifications"
-            };
-        }
-
-
-
         public async Task<List<string>> ExecuteSql(string sql)
         {
             var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
@@ -59,18 +42,94 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
         {
             if (dict.TryGetValue("accountId", out var accountIdFromDb) && !string.IsNullOrWhiteSpace(accountIdFromDb))
             {
-                    if (dict.TryGetValue("accountId", out var acct) && !string.IsNullOrWhiteSpace(acct))
+                if (dict.TryGetValue("accountId", out var acct) && !string.IsNullOrWhiteSpace(acct))
+                {
+                    // defensive: ignore placeholder alias values that may be present instead of real data
+                    var lower = acct.Trim().ToLowerInvariant();
+                    if (lower != "accountid" && lower != "userref" && lower != "hashedaccountid" && lower != "encodedaccountid")
                     {
-                        // defensive: ignore placeholder alias values that may be present instead of real data
-                        var lower = acct.Trim().ToLowerInvariant();
-                        if (lower != "accountid" && lower != "userref" && lower != "hashedaccountid" && lower != "encodedaccountid")
-                        {
-                            _objectContext.SetAccountId(acct);
-                        }
+                        _objectContext.SetAccountId(acct);
                     }
+                }
             }
         }
 
+        public async Task PopulateExpectedUserNotification(string canOrCannot)
+        {
+            // Use a hardcoded list of properties instead of reflecting the model
+            // var modelProps = new[] { "userRef", "firstName", "lastName", "name", "email", "role", "canReceiveNotifications", "status" };
+            // Hardcode the select list and aliases to avoid reflection and ensure stable SQL
+            var selectList = "mv.AccountId as accountId,\n                    mv.UserRef as userRef,\n                    mv.FirstName as firstName,\n                    mv.LastName as lastName,\n                    mv.FirstName + ' ' + mv.LastName as name,\n                    mv.Email as email,\n                    CASE WHEN mv.Role = 1 THEN 'Owner' WHEN mv.Role = 0 THEN 'User' ELSE 'Unknown' END AS role,\n                    CASE WHEN uas.ReceiveNotifications = 1 THEN 'true' WHEN uas.ReceiveNotifications = 0 THEN 'false' ELSE 'Unknown' END AS canReceiveNotifications,\n                    NULL as status";
+            var selectAliases = new List<string> { "accountId", "userRef", "firstName", "lastName", "name", "email", "role", "canReceiveNotifications", "status" };
+            var receive = canOrCannot.Equals("can", StringComparison.OrdinalIgnoreCase) ? "1" : "0";
+            var sql = $@"SELECT TOP 1 {selectList}
+                    FROM employer_account.MembershipView mv
+                    LEFT JOIN employer_account.UserAccountSettings uas 
+                    ON mv.AccountId = uas.AccountId
+                    WHERE uas.ReceiveNotifications = " + receive;
+
+            var row = await ExecuteSql(sql);
+            if (row == null || row.Count == 0)
+            {
+                Assert.Fail($"No database row found for ReceiveNotifications = {receive}");
+                return;
+            }
+
+            var dict = MapRowToDictionary(row, selectAliases);
+            SetAccountIdIfPresent(dict);
+            // store both the expected result model and the raw SQL dictionary used for property-skipping logic
+            try { _scenarioContext.Set(dict, "expectedResult"); } catch { _scenarioContext["expectedResult"] = dict; }
+            try { _scenarioContext.Set(dict, "accUserNotificationSqlRow"); } catch { _scenarioContext["accUserNotificationSqlRow"] = dict; }
+        }
+
+        public async Task PopulateExpectedSignedAgreementVersion()
+        {
+            var sql = "SELECT TOP 1 AccountId, SignedAgreementVersion AS minimumSignedAgreementVersion FROM employer_account.AccountLegalEntity WHERE SignedAgreementVersion is not null order by AccountId desc";
+
+            var row = await ExecuteSql(sql);
+            if (row == null || row.Count == 0)
+            {
+                Assert.Fail("No database row found for SignedAgreementVersion");
+                return;
+            }
+
+            var selectAliases = new List<string> { "AccountId", "minimumSignedAgreementVersion" };
+            var dict = MapRowToDictionary(row, selectAliases);
+            SetAccountIdIfPresent(dict);
+            _scenarioContext.Set(dict, "accAgreementSqlRow");
+
+            // store the raw SQL dictionary as the expected agreement result
+            try { _scenarioContext.Set(dict, "expectedResult"); } catch { _scenarioContext["expectedResult"] = dict; }
+            try { _scenarioContext.Set(dict, "expectedAgreementResult"); } catch { _scenarioContext["expectedAgreementResult"] = dict; }
+        }
+
+        public async Task PopulateExpectedUserWithLinkedAccounts()
+        {
+            var sql = @"SELECT TOP 1 mv.UserRef as userRef, mv.Email as Email,
+            mv.UserRef as employerUserId,
+            mv.HashedAccountId as encodedAccountId,
+            mv.AccountName as dasAccountName,
+            CASE WHEN mv.Role = 1 THEN 'Owner' WHEN mv.Role = 0 THEN 'User' ELSE 'Unknown' END AS role,
+            CASE WHEN acc.ApprenticeshipEmployerType = 1 THEN 'Levy' WHEN acc.ApprenticeshipEmployerType = 0 THEN 'NonLevy' ELSE 'Unknown' END AS apprenticeshipEmployerType
+        FROM employer_account.MembershipView mv
+        JOIN employer_account.Account acc ON mv.HashedAccountId = acc.HashedId";
+
+            var row = await ExecuteSql(sql);
+            if (row == null || row.Count == 0) Assert.Fail("No database row found for linked accounts test.");
+
+            var aliases = new List<string> { "userRef", "Email", "employerUserId", "encodedAccountId", "dasAccountName", "role", "apprenticeshipEmployerType" };
+            var dict = MapRowToDictionary(row, aliases);
+
+            try { _scenarioContext.Set(dict, "expectedResult"); } catch { _scenarioContext["expectedResult"] = dict; }
+            try { _scenarioContext.Set(dict["userRef"], "UserRef"); } catch { _scenarioContext["UserRef"] = dict["userRef"]; }
+            try { _scenarioContext.Set(dict["Email"], "email"); } catch { _scenarioContext["email"] = dict["Email"]; }
+            try { _scenarioContext.Set(dict["encodedAccountId"], "encodedAccountId"); } catch { _scenarioContext["encodedAccountId"] = dict["encodedAccountId"]; }
+
+            // Ensure UserRef is present in context for downstream steps
+            string userRef = null;
+            try { userRef = _scenarioContext.ContainsKey("UserRef") ? _scenarioContext.Get<string>("UserRef") : null; } catch { }
+            Assert.IsFalse(string.IsNullOrWhiteSpace(userRef), "UserRef was not set in the test setup.");
+        }
 
         public async Task CallGetNotificationRequestSaveResponse()
         {
@@ -99,17 +158,86 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             JToken parsed = null;
             try { parsed = JToken.Parse(content); } catch { parsed = null; }
 
-            object expectedObj = null;
-            try { expectedObj = _scenarioContext.ContainsKey("expectedResult") ? _scenarioContext["expectedResult"] : null; } catch { expectedObj = null; }
-
             // determine matching property from SQL row if present, else fall back to identifier picked from expectedObj
 
-            var match = FindMatchingItem(parsed, expectedObj, "userRef");
+            var match = FindMatchingItem(parsed, "userRef");
 
             try { _scenarioContext.Set(match, "actualResult"); } catch { _scenarioContext["actualResult"] = match; }
         }
 
-        private JObject FindMatchingItem(JToken parsed, object expectedObj, string matchingProperty)
+        public async Task<JToken> CallGetAccountUserAccountsByUserRef()
+        {
+            string userRef = null;
+            try { userRef = _scenarioContext.ContainsKey("UserRef") ? _scenarioContext.Get<string>("UserRef") : null; } catch { }
+            if (string.IsNullOrWhiteSpace(userRef)) throw new ArgumentException("userRef must be provided", nameof(userRef));
+
+
+            var response = await _outerApiHelper.GetAccountUserAccountsByUserRef(userRef);
+            JToken parsed = null;
+            try { parsed = JToken.Parse(response.Content); } catch { parsed = null; }
+
+            JToken toSave = null;
+
+            if (parsed != null)
+            {
+                // try to find matching item by encodedAccountId
+                var match = FindMatchingItem(parsed, "encodedAccountId");
+                if (match != null)
+                {
+                    toSave = match;
+                }
+                else
+                {
+                    // fallback to extracting userAccounts array or nested property
+                    JToken ua = null;
+                    if (parsed.Type == JTokenType.Object) ua = parsed.SelectToken("userAccounts") ?? parsed["userAccounts"];
+                    else if (parsed.Type == JTokenType.Array)
+                    {
+                        var arr = (JArray)parsed;
+                        if (arr.Count > 0 && arr[0].Type == JTokenType.Object) ua = arr[0].SelectToken("userAccounts") ?? arr[0]["userAccounts"];
+                    }
+
+                    toSave = ua ?? parsed;
+                }
+            }
+            else
+            {
+                // invalid JSON -> save raw content
+                toSave = response.Content;
+            }
+
+            try { _objectContext.Replace("finance_lastResponse", toSave?.ToString() ?? string.Empty); } catch { }
+            try { _scenarioContext.Set(toSave, "actualResult"); } catch { _scenarioContext["actualResult"] = toSave; }
+
+            return toSave;
+        }
+
+        // Move minimum-signed-agreement endpoint logic here so step definitions remain thin
+        public async Task CallAccountIdUsersMinimumSignedAgreement()
+        {
+            string accountIdentifier = null;
+            try { accountIdentifier = _scenarioContext.ContainsKey("accAgreementSqlRow") ? _scenarioContext.Get<Dictionary<string, string>>("accAgreementSqlRow")["AccountId"] : null; } catch { accountIdentifier = null; }
+            if (string.IsNullOrWhiteSpace(accountIdentifier))
+            {
+                try { accountIdentifier = _objectContext.GetAccountId(); } catch { accountIdentifier = null; }
+            }
+
+            Assert.IsFalse(string.IsNullOrEmpty(accountIdentifier), "AccountId was not set in context for agreement test");
+
+            if (!long.TryParse(accountIdentifier, out var acctNumeric))
+            {
+                Assert.Fail("AccountId from SQL was not a valid numeric value for the outer API call.");
+                return;
+            }
+
+            var response = await _outerApiHelper.GetAccountMinimumSignedAgreementVersion(acctNumeric);
+            var content = response?.Content ?? string.Empty;
+
+            try { _scenarioContext.Set(content, "accAgreementApiResponse"); } catch { _scenarioContext["accAgreementApiResponse"] = content; }
+            try { _scenarioContext.Set(content, "actualResult"); } catch { _scenarioContext["actualResult"] = content; }
+        }
+
+        private JObject FindMatchingItem(JToken parsed, string matchingProperty)
         {
             if (parsed == null) return null;
 
@@ -125,13 +253,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 if (!string.IsNullOrWhiteSpace(matchingProperty) && sqlDict != null && sqlDict.TryGetValue(matchingProperty, out var val) && !string.IsNullOrWhiteSpace(val))
                 {
                     expectedIdentifierValue = val;
-                }
-
-                // fallback to expectedObj's identifier property
-                if (string.IsNullOrWhiteSpace(expectedIdentifierValue) && expectedObj != null)
-                {
-                    var idProp = PickIdentifierProperty(expectedObj.GetType());
-                    if (idProp != null) expectedIdentifierValue = idProp.GetValue(expectedObj)?.ToString();
                 }
 
                 if (!string.IsNullOrWhiteSpace(expectedIdentifierValue))
@@ -151,12 +272,10 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             }
 
             // if parsed is an object, return it directly
-            if (parsed.Type == JTokenType.Object) return (JObject)parsed;
+            if (parsed.Type == JTokenType.Object) return (JObject) parsed;
 
             return null;
         }
-
-        
 
         public void AssertApiMatchesSqlRow()
         {
@@ -172,9 +291,11 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             // Use the comparer that iterates API response properties and compares to expected result
             CompareApiResponseToExpectedResult(expectedObj, actualObj, sqlDict);
         }
+
         public void CompareApiResponseToExpectedResult(object expectedObj, object actualObj, Dictionary<string, string> sqlDict)
         {
             var expectedDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
             if (expectedObj is Dictionary<string, string> d) expectedDict = new Dictionary<string, string>(d, StringComparer.OrdinalIgnoreCase);
             else
             {
@@ -188,8 +309,9 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 {
                     var propName = prop.Name;
                     if (ShouldSkipProperty(sqlDict, propName)) continue;
+                    // If expected does not define this property, skip comparison (API may include additional nested data)
+                    if (!expectedDict.TryGetValue(propName, out var expectedVal)) continue;
                     var actualVal = prop.Value != null ? (prop.Value.Type == JTokenType.String ? (string)prop.Value : prop.Value.ToString()) : string.Empty;
-                    expectedDict.TryGetValue(propName, out var expectedVal);
                     ComparePropertyValue(propName, expectedVal ?? string.Empty, actualVal);
                 }
             }
@@ -257,8 +379,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             return false;
         }
 
-        
-
         public bool ShouldSkipProperty(Dictionary<string, string> sqlDict, string propName)
         {
             if (sqlDict == null) return false;
@@ -317,31 +437,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             return false;
         }
 
-        public void CompareNonStringProperty(string propName, object expectedVal, object actualVal)
-        {
-            if (expectedVal == null && actualVal == null) return;
-            if (expectedVal == null || actualVal == null) Assert.Fail($"Property '{propName}' missing on expected or actual result.");
-
-            try
-            {
-                var convertedActual = Convert.ChangeType(actualVal, expectedVal.GetType());
-                Assert.AreEqual(expectedVal, convertedActual, $"{propName} mismatch");
-            }
-            catch
-            {
-                Assert.AreEqual(expectedVal.ToString(), actualVal.ToString(), $"{propName} mismatch");
-            }
-        }
-
-        public JArray ParseApiContent(string apiContent)
-        {
-            JToken parsed;
-            try { parsed = JToken.Parse(apiContent); }
-            catch (Exception ex) { Assert.Fail($"API response is not valid JSON: {ex.Message}"); return new JArray(); }
-
-            return parsed.Type == JTokenType.Array ? (JArray)parsed : (parsed["users"] != null ? (JArray)parsed["users"] : new JArray(parsed));
-        }
-
         public System.Reflection.PropertyInfo PickIdentifierProperty(Type t)
         {
             var candidates = new[] { "userRef", "user_ref", "userid", "userId", "id", "email" };
@@ -389,52 +484,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             return false;
         }
 
-        public async Task PopulateExpectedUserNotification(string canOrCannot)
-        {
-            // Use a hardcoded list of properties instead of reflecting the model
-            // var modelProps = new[] { "userRef", "firstName", "lastName", "name", "email", "role", "canReceiveNotifications", "status" };
-            // Hardcode the select list and aliases to avoid reflection and ensure stable SQL
-            var selectList = "mv.AccountId as accountId,\n                    mv.UserRef as userRef,\n                    mv.FirstName as firstName,\n                    mv.LastName as lastName,\n                    mv.FirstName + ' ' + mv.LastName as name,\n                    mv.Email as email,\n                    CASE WHEN mv.Role = 1 THEN 'Owner' WHEN mv.Role = 0 THEN 'User' ELSE 'Unknown' END AS role,\n                    CASE WHEN uas.ReceiveNotifications = 1 THEN 'true' WHEN uas.ReceiveNotifications = 0 THEN 'false' ELSE 'Unknown' END AS canReceiveNotifications,\n                    NULL as status";
-            var selectAliases = new List<string> { "accountId", "userRef", "firstName", "lastName", "name", "email", "role", "canReceiveNotifications", "status" };
-            var receive = canOrCannot.Equals("can", StringComparison.OrdinalIgnoreCase) ? "1" : "0";
-            var sql = $@"SELECT TOP 1 {selectList}
-                    FROM employer_account.MembershipView mv
-                    LEFT JOIN employer_account.UserAccountSettings uas 
-                    ON mv.AccountId = uas.AccountId
-                    WHERE uas.ReceiveNotifications = " + receive;
 
-            var row = await ExecuteSql(sql);
-            if (row == null || row.Count == 0)
-            {
-                Assert.Fail($"No database row found for ReceiveNotifications = {receive}");
-                return;
-            }
-
-            var dict = MapRowToDictionary(row, selectAliases);
-            SetAccountIdIfPresent(dict);
-            // store both the expected result model and the raw SQL dictionary used for property-skipping logic
-            try { _scenarioContext.Set(dict, "expectedResult"); } catch { _scenarioContext["expectedResult"] = dict; }
-            try { _scenarioContext.Set(dict, "accUserNotificationSqlRow"); } catch { _scenarioContext["accUserNotificationSqlRow"] = dict; }
-        }
-
-        public async Task PopulateExpectedSignedAgreementVersion()
-        {
-            var sql = "SELECT TOP 1 AccountId, SignedAgreementVersion AS minimumSignedAgreementVersion FROM employer_account.AccountLegalEntity WHERE SignedAgreementVersion is not null order by AccountId desc";
-
-            var row = await ExecuteSql(sql);
-            if (row == null || row.Count == 0)
-            {
-                Assert.Fail("No database row found for SignedAgreementVersion");
-                return;
-            }
-
-            var selectAliases = new List<string> { "AccountId", "minimumSignedAgreementVersion" };
-            var dict = MapRowToDictionary(row, selectAliases);
-            SetAccountIdIfPresent(dict);
-            _scenarioContext.Set(dict, "accAgreementSqlRow");
-
-            // store the raw SQL dictionary as the expected agreement result
-            try { _scenarioContext.Set(dict, "expectedAgreementResult"); } catch { _scenarioContext["expectedAgreementResult"] = dict; }
-        }
     }
 }
