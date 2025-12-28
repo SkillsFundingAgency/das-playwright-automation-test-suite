@@ -94,7 +94,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheEmployerIsStoppedWithAnErrorMessage()
         {
             var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
-            var uln = apprentice.ApprenticeDetails.ULN.ToString();
+            var uln = apprentice.ApprenticeDetails.ULN;
             var name = apprentice.ApprenticeDetails.FullName;
             var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
 

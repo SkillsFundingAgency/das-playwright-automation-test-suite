@@ -52,12 +52,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             listOfApprenticeship ??= context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
-            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
+            var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
 
-            var listOflearnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
+            foreach (var apprenticeship in listOfApprenticeship)
+            {                
+                await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(apprenticeship, ukprn);
 
-            await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(listOflearnerData, academicYear);
-            //await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(listOflearnerData, academicYear); 
+                //var learnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(apprenticeship);
+                //await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(learnerData, ukprn);
+            }
+            
         }
 
         [Given("Provider adds an apprentice aged (.*) years using Foundation level standard")]

@@ -9,18 +9,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Manage your apprentices");
         }
 
-        internal async Task<ApprenticeDetails_ProviderPage> SelectViewCurrentApprenticeDetails(string name, string ULN=null)
+        internal async Task<ApprenticeDetails_ProviderPage> SelectViewCurrentApprenticeDetails(string name, long? ULN=null)
         {
-            await SearchApprentice(ULN ?? name);
+            _ = ULN == null ? SearchApprentice(name) : SearchApprentice(ULN.ToString());
             await page.GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
             return await VerifyPageAsync(() => new ApprenticeDetails_ProviderPage(context, name));
         }
 
-        internal async Task VerifyApprenticeFound(string ULN, string name)
+        internal async Task VerifyApprenticeFound(long ULN, string name)
         {
             var apprenticeLink = page.GetByRole(AriaRole.Link, new() { Name = name });
 
-            await SearchApprentice(ULN);
+            await SearchApprentice(ULN.ToString());
 
             if (await apprenticeLink.CountAsync() > 0)
             {
@@ -42,7 +42,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             var searchButton = page.GetByRole(AriaRole.Button, new() { Name = "Search" });
 
             await searchBox.FillAsync("");
-            await searchBox.FillAsync(ULN);
+            await searchBox.FillAsync(ULN.ToString());
             await searchButton.ClickAsync();
         }
 

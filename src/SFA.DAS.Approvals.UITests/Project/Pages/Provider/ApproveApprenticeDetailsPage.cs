@@ -14,7 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator cohortReference => page.Locator("dt:has-text('Cohort reference') + dd");
         private ILocator status => page.Locator("dt:has-text('Status') + dd");
         private ILocator message => page.Locator("h2:has-text('Message') + div.govuk-inset-text");
-        private ILocator row(string ULN) => page.Locator($"table tbody tr:has-text('{ULN}')");
+        private ILocator row(long ULN) => page.Locator($"table tbody tr:has-text('{ULN}')");
         private ILocator viewLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"View{name}" }).First;
         private ILocator deleteLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"Delete{name}" }).First;
         private ILocator AddAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
@@ -56,7 +56,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             var expectedTrainingDates = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy", CultureInfo.InvariantCulture) + " to " + apprenticeship.TrainingDetails.EndDate.ToString("MMM yyyy", CultureInfo.InvariantCulture);
             var expectedPrice = apprenticeship.TrainingDetails.TotalPrice.ToString("C0");
 
-            var apprenticeRow = row(apprenticeship.ApprenticeDetails.ULN.ToString());
+            var apprenticeRow = row(apprenticeship.ApprenticeDetails.ULN);
             await Assertions.Expect(Name(apprenticeRow)).ToHaveTextAsync(expectedName.Trim());
             await Assertions.Expect(Uln(apprenticeRow)).ToHaveTextAsync(expectedULN.Trim());
             await Assertions.Expect(Dob(apprenticeRow)).ToHaveTextAsync(expectedDOB.Trim());

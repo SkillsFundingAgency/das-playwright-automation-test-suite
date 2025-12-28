@@ -54,7 +54,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
         {
             var details = await GetApprenticeDetails(apprenticeship.ProviderDetails.Ukprn, apprenticeship.EmployerDetails.AccountLegalEntityId, additionalWhereFilter);
 
-            apprenticeship.ApprenticeDetails.ULN = details[0].ToString();
+            apprenticeship.ApprenticeDetails.ULN = long.Parse(details[0]);
             apprenticeship.ApprenticeDetails.FirstName = details[1].ToString();
             apprenticeship.ApprenticeDetails.LastName = details[2].ToString();
             apprenticeship.ApprenticeDetails.DateOfBirth = Convert.ToDateTime(details[3].ToString());
@@ -87,7 +87,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return await GetData(query);            
         }
 
-        internal async Task<string> GetValueFromApprenticeshipTable(string columnName, string ULN)
+        internal async Task<string> GetValueFromApprenticeshipTable(string columnName, long ULN)
         {
             string query = $"SELECT TOP(1) {columnName} FROM [dbo].[Apprenticeship] WHERE ULN = {ULN}";
             var result = await GetData(query);

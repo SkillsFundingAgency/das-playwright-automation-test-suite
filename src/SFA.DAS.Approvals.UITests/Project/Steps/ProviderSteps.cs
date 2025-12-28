@@ -77,7 +77,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             foreach (var apprentice in listOfApprenticeship)
             {
-                var uln = apprentice.ApprenticeDetails.ULN.ToString();
+                var uln = apprentice.ApprenticeDetails.ULN;
                 var name = apprentice.ApprenticeDetails.FullName;
 
                 await page.VerifyApprenticeFound(uln, name);
@@ -105,7 +105,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheProviderIsStoppedWithAnErrorMessage()
         {
             var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
-            var uln = apprentice.ApprenticeDetails.ULN.ToString();
+            var uln = apprentice.ApprenticeDetails.ULN;
             var name = apprentice.ApprenticeDetails.FullName;
             var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
 

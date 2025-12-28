@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using Dynamitey;
+using RestSharp;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.LearnerData.Events;
 using System;
@@ -21,47 +22,43 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
             learnerDataOuterApiClient = context.Get<LearnerDataOuterApiClient>();
         }
 
-        public async Task PushNewLearnersDataToAsViaNServiceBus(List<LearnerDataAPIDataModel> learnersData, int academicYear)
+
+        public async Task PushNewLearnersDataToAsViaNServiceBus(Apprenticeship apprenticeship, int Ukprn)
         {
             var serviceBusHelper = GlobalTestContext.ServiceBus;
 
-            foreach (var learner in learnersData)
+            var learnerDataEvent = new LearnerDataEvent
             {
-                var learnerDataEvent = new LearnerDataEvent
-                {
-                    ULN = long.Parse(learner.ULN),
-                    UKPRN = long.Parse(learner.UKPRN),
-                    FirstName = learner.FirstName,
-                    LastName = learner.LastName,
-                    Email = learner.LearnerEmail,
-                    DoB = DateTime.Parse(learner.DateOfBirth),
-                    StartDate = DateTime.Parse(learner.StartDate),
-                    PlannedEndDate = DateTime.Parse(learner.PlannedEndDate),
-                    PercentageLearningToBeDelivered = learner.PercentageLearningToBeDelivered,
-                    EpaoPrice = learner.EPAOPrice,
-                    TrainingPrice = learner.TrainingPrice,
-                    AgreementId = learner.AgreementId,
-                    IsFlexiJob = learner.IsFlexiJob,
-                    StandardCode = learner.StandardCode,
-                    CorrelationId = Guid.NewGuid(),
-                    ReceivedDate = DateTime.UtcNow,
-                    ConsumerReference = learner.ConsumerReference,
-                    PlannedOTJTrainingHours = learner.PlannedOTJTrainingHours,
-                    AcademicYear = academicYear
-                };
+                ULN = apprenticeship.ApprenticeDetails.ULN,
+                UKPRN = Ukprn,
+                FirstName = apprenticeship.ApprenticeDetails.FirstName,
+                LastName = apprenticeship.ApprenticeDetails.LastName,
+                Email = apprenticeship.ApprenticeDetails.Email,
+                DoB = apprenticeship.ApprenticeDetails.DateOfBirth,
+                StartDate = apprenticeship.TrainingDetails.StartDate,
+                PlannedEndDate = apprenticeship.TrainingDetails.EndDate,
+                PercentageLearningToBeDelivered = apprenticeship.TrainingDetails.PercentageLearningToBeDelivered,
+                EpaoPrice = apprenticeship.TrainingDetails.EpaoPrice,
+                TrainingPrice = apprenticeship.TrainingDetails.TrainingPrice,
+                AgreementId = apprenticeship.EmployerDetails.AgreementId,
+                IsFlexiJob = apprenticeship.TrainingDetails.IsFlexiJob,
+                StandardCode = apprenticeship.TrainingDetails.StandardCode,
+                CorrelationId = Guid.NewGuid(),
+                ReceivedDate = DateTime.UtcNow,
+                ConsumerReference = apprenticeship.TrainingDetails.ConsumerReference,
+                PlannedOTJTrainingHours = apprenticeship.TrainingDetails.PlannedOTJTrainingHours,
+                AcademicYear = apprenticeship.TrainingDetails.AcademicYear
+            };
 
-                await serviceBusHelper.Publish(learnerDataEvent);
-                objectContext.SetDebugInformation($"Publishing LearnerDataEvent to N-Service Bus for following learner:");
-                objectContext.SetDebugInformation(JsonSerializer.Serialize(learnerDataEvent, new JsonSerializerOptions { WriteIndented = true })
-);
+            await serviceBusHelper.Publish(learnerDataEvent);
+            objectContext.SetDebugInformation($"Publishing LearnerDataEvent to N-Service Bus for following learner:");
+            objectContext.SetDebugInformation(JsonSerializer.Serialize(learnerDataEvent, new JsonSerializerOptions { WriteIndented = true }));
 
-
-            }
         }
 
-        public async Task PushNewLearnersDataToASViaAPI(List<LearnerDataAPIDataModel> learnersData, int academicYear)
+        public async Task PushNewLearnersDataToASViaAPI(LearnerDataAPIDataModel learnersData, int Ukprn)
         {
-            var resource = $"/provider/{learnersData.First().UKPRN}/academicyears/{academicYear}/learners";
+            var resource = $"/providers/{Ukprn}/learners";
             var payload = JsonHelper.Serialize(learnersData).ToString();
             await learnerDataOuterApiClient.PostNewLearners(resource, payload);
         }
@@ -69,52 +66,58 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
         public async Task CheckApprenticeIsAvailableInApprovedLearnersList(Apprenticeship apprenticeship)
         {
             var resource = $"/Learners/providers/{apprenticeship.ProviderDetails.Ukprn}/academicyears/{apprenticeship.TrainingDetails.AcademicYear}/learners";
-            var learnerKey = await GetLearnerKeyByUlnAsync(resource, apprenticeship.ApprenticeDetails.ULN);
+            var learnerKey = await GetLearnerKeyByUlnAsync(resource, apprenticeship.ApprenticeDetails.ULN.ToString());
             var expectedLearningIdKey = apprenticeship.ApprenticeDetails.LearningIdKey.Trim();
             Assert.AreEqual(learnerKey.Trim(), expectedLearningIdKey, $"LearningIdKey key extracted from db [{expectedLearningIdKey}] differs from api response: [{learnerKey.Trim()}]");
 
         }
 
-        public async Task<List<LearnerDataAPIDataModel>> ConvertToLearnerDataAPIDataModel(List<Apprenticeship> listOfApprenticeships)
+        public async Task<LearnerDataAPIDataModel> ConvertToLearnerDataAPIDataModel(Apprenticeship apprenticeship)
         {
-            List<LearnerDataAPIDataModel> listOfLearnerData = new List<LearnerDataAPIDataModel>();
-            await Task.Delay(100);
-
-            foreach (var apprenticeship in listOfApprenticeships)
+            LearnerDataAPIDataModel learnerData = new LearnerDataAPIDataModel
             {
-                listOfLearnerData.Add(await ConvertToLearnerDataAPIDataModel(apprenticeship));
-            }
-
-            return listOfLearnerData;
-        }
-
-
-        private async Task<LearnerDataAPIDataModel> ConvertToLearnerDataAPIDataModel(Apprenticeship apprenticeship)
-        {
-            LearnerDataAPIDataModel learnerData = new LearnerDataAPIDataModel();
-
-            learnerData.UKPRN = apprenticeship.ProviderDetails.Ukprn.ToString();
-            learnerData.ULN = apprenticeship.ApprenticeDetails.ULN;
-            learnerData.FirstName = apprenticeship.ApprenticeDetails.FirstName;
-            learnerData.LastName = apprenticeship.ApprenticeDetails.LastName;
-            learnerData.LearnerEmail = apprenticeship.ApprenticeDetails.Email;
-            learnerData.DateOfBirth = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("yyyy-MM-dd");
-            learnerData.StartDate = apprenticeship.TrainingDetails.StartDate.ToString("yyyy-MM-dd");
-            learnerData.PlannedEndDate = apprenticeship.TrainingDetails.EndDate.ToString("yyyy-MM-dd");
-            learnerData.PercentageLearningToBeDelivered = apprenticeship.TrainingDetails.PercentageLearningToBeDelivered;
-            learnerData.EPAOPrice = apprenticeship.TrainingDetails.EpaoPrice;
-            learnerData.TrainingPrice = apprenticeship.TrainingDetails.TrainingPrice;
-            learnerData.AgreementId = apprenticeship.EmployerDetails.AgreementId;
-            learnerData.IsFlexiJob = apprenticeship.TrainingDetails.IsFlexiJob;
-            learnerData.PlannedOTJTrainingHours = apprenticeship.TrainingDetails.PlannedOTJTrainingHours;
-            learnerData.StandardCode = apprenticeship.TrainingDetails.StandardCode;
-            learnerData.ConsumerReference = apprenticeship.TrainingDetails.ConsumerReference;
+                Delivery = new Delivery
+                {
+                    OnProgramme = new List<OnProgramme>
+                    {
+                        new OnProgramme
+                        {
+                            StandardCode = apprenticeship.TrainingDetails.StandardCode,
+                            StartDate = apprenticeship.TrainingDetails.StartDate.ToString("yyyy-MM-dd"),
+                            ExpectedEndDate = apprenticeship.TrainingDetails.EndDate.ToString("yyyy-MM-dd"),
+                            Costs = new List<Cost>
+                            {
+                                new Cost
+                                {
+                                    TrainingPrice = apprenticeship.TrainingDetails.TrainingPrice,
+                                    EpaoPrice = apprenticeship.TrainingDetails.EpaoPrice,
+                                    FromDate = apprenticeship.TrainingDetails.StartDate.ToString("yyyy-MM-dd")
+                                }
+                            },
+                            LearningSupport = new List<LearningSupport>(),
+                            PercentageOfTrainingLeft = apprenticeship.TrainingDetails.PercentageLearningToBeDelivered,
+                            IsFlexiJob = apprenticeship.TrainingDetails.IsFlexiJob,
+                            AgreementId = apprenticeship.EmployerDetails.AgreementId
+                        }
+                    },
+                    EnglishAndMaths = new List<EnglishAndMaths>()
+                },
+                Learner = new Learner
+                {
+                    FirstName = apprenticeship.ApprenticeDetails.FirstName,
+                    LastName = apprenticeship.ApprenticeDetails.LastName,
+                    Email = apprenticeship.ApprenticeDetails.Email,
+                    Uln = apprenticeship.ApprenticeDetails.ULN,
+                    LearnerRef = apprenticeship.ProviderDetails.Ukprn.ToString(),
+                    Dob = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("yyyy-MM-dd"),
+                    HasEhcp = false
+                },
+                ConsumerReference = apprenticeship.TrainingDetails.ConsumerReference
+            };
 
             await Task.Delay(100);
             return learnerData;
-
         }
-
 
         private async Task<string?> GetLearnerKeyByUlnAsync(string resource, string targetUln)
         {
@@ -153,28 +156,72 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
 
     public class LearnerDataAPIDataModel
     {
-        public string ULN { get; set; }
-        public string UKPRN { get; set; }
+        public Delivery Delivery { get; set; }
+        public Learner Learner { get; set; }
+        public string ConsumerReference { get; set; }
+    }
+
+    public class Delivery
+    {
+        public List<OnProgramme> OnProgramme { get; set; }
+        public List<EnglishAndMaths> EnglishAndMaths { get; set; }
+    }
+
+    public class OnProgramme
+    {
+        public int StandardCode { get; set; }
+        public string StartDate { get; set; }
+        public string ExpectedEndDate { get; set; }
+        public List<Cost> Costs { get; set; }
+        public string CompletionDate { get; set; } = null;
+        public string WithdrawalDate { get; set; } = null;
+        public string PauseDate { get; set; } = null;
+        public List<LearningSupport> LearningSupport { get; set; }
+        public int PercentageOfTrainingLeft { get; set; } = 0;
+        public bool IsFlexiJob { get; set; }
+        public string AgreementId { get; set; }
+    }
+
+    public class EnglishAndMaths
+    {
+        public string Course { get; set; } = null;
+        public int Amount { get; set; } = 0;
+        public string StartDate { get; set; } = null;
+        public string EndDate { get; set; } = null;
+        public string CompletionDate { get; set; } = null;
+        public string WithdrawalDate { get; set; } = null;
+        public int PriorLearningPercentage { get; set; } = 0;
+        public List<LearningSupport> LearningSupport { get; set; }
+    }
+
+    public class Cost
+    {
+        public int TrainingPrice { get; set; }
+        public int EpaoPrice { get; set; }
+        public string FromDate { get; set; }
+    }
+
+    public class LearningSupport
+    {
+        public string StartDate { get; set; } = null;
+        public string EndDate { get; set; } = null;
+    }
+
+    public class Learner
+    {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string LearnerEmail { get; set; }
-        public string DateOfBirth { get; set; }
-        public string StartDate { get; set; }
-        public string PlannedEndDate { get; set; }
-        public int PercentageLearningToBeDelivered { get; set; }
-        public int EPAOPrice { get; set; }
-        public int TrainingPrice { get; set; }
-        public string AgreementId { get; set; }
-        public bool IsFlexiJob { get; set; }
-        public int PlannedOTJTrainingHours { get; set; }
-        public int StandardCode { get; set; }
-        public string ConsumerReference { get; set; }
+        public string Email { get; set; }
+        public long Uln { get; set; }
+        public string LearnerRef { get; set; }
+        public string Dob { get; set; }
+        public bool HasEhcp { get; set; } = false;
     }
 
     internal class LearnerResponse
     {
         [JsonPropertyName("learners")]
-        public List<Learner> Learners { get; set; } = new();
+        public List<Learners> Learners { get; set; } = new();
 
         [JsonPropertyName("total")]
         public int Total { get; set; }
@@ -189,7 +236,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
         public int TotalPages { get; set; }
     }
 
-    internal class Learner
+    internal class Learners
     {
         [JsonPropertyName("uln")]
         public string Uln { get; set; } = string.Empty;

@@ -202,9 +202,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page5.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
-        internal async Task<ApprenticeDetails_ProviderPage> ProviderSearchOpenApprovedApprenticeRecord(ManageYourApprentices_ProviderPage manageYourApprenticesPage, string uln, string name)
+        internal async Task<ApprenticeDetails_ProviderPage> ProviderSearchOpenApprovedApprenticeRecord(ManageYourApprentices_ProviderPage manageYourApprenticesPage, long uln, string name)
         {
-            await manageYourApprenticesPage.SearchApprentice(uln);
+            await manageYourApprenticesPage.SearchApprentice(uln.ToString());
             return await manageYourApprenticesPage.OpenFirstItemFromTheList(name);
         }
 
@@ -224,7 +224,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
-                var uln = apprenticeship.ApprenticeDetails.ULN.ToString();
+                var uln = apprenticeship.ApprenticeDetails.ULN;
 
                 await selectLearnerFromILRPage.SearchULN(uln);
                 await selectLearnerFromILRPage.VerifyNoResultsFound();

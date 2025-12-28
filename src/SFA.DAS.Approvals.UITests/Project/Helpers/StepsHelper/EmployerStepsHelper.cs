@@ -86,7 +86,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             foreach (var apprentice in listOfApprenticeship)
             {
-                var uln = apprentice.ApprenticeDetails.ULN.ToString();
+                var uln = apprentice.ApprenticeDetails.ULN;
                 var name = apprentice.ApprenticeDetails.FullName;
 
                 await page.SearchApprentice(uln, name);
@@ -94,7 +94,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         }
 
-        internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, string uln, string name)
+        internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, long uln, string name)
         {
             await apprenticesHomePage.GoToManageYourApprentices();
             var page = new Pages.Employer.ManageYourApprenticesPage(context);

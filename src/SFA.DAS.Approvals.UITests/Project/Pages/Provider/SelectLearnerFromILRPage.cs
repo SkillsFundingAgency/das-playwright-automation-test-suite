@@ -36,11 +36,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));
         }
 
-        internal async Task SearchULN(string uln)
+        internal async Task SearchULN(long uln)
         {
             
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or unique learner number (ULN)" })
-                      .FillAsync(uln);
+                      .FillAsync(uln.ToString());
 
             // Apply filters with default year (2025)
             await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" })
