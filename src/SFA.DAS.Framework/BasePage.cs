@@ -1,21 +1,21 @@
-﻿namespace SFA.DAS.Framework;
+﻿using SFA.DAS.Framework.Hooks;
+
+namespace SFA.DAS.Framework;
 
 public static class VerifyPageHelper
 {
-    public static async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
+    public static async Task<T> VerifyPageAsync<T>(ScenarioContext context, Func<T> func) where T : BasePage
     {
         var nextPage = func.Invoke();
 
-        await nextPage.VerifyPage();
+        await context.Get<RetryHelper>().RetryOnVerifyPage(nextPage.VerifyPage);
 
         return nextPage;
     }
 }
 
-public abstract class BasePage
+public abstract class BasePage : FrameworkBaseHooks
 {
-    protected readonly ScenarioContext context;
-
     protected readonly ObjectContext objectContext;
 
     protected readonly Driver driver;
@@ -33,10 +33,8 @@ public abstract class BasePage
     /// </summary>
     public abstract Task VerifyPage();
 
-    protected BasePage(ScenarioContext context)
+    protected BasePage(ScenarioContext context) : base(context)
     {
-        this.context = context;
-
         tags = context.ScenarioInfo.Tags;
 
         objectContext = context.Get<ObjectContext>();
@@ -72,20 +70,11 @@ public abstract class BasePage
         return alloptionstexts;
     }
 
-    protected async Task Navigate(string url)
-    {
-        var driver = context.Get<Driver>();
-
-        context.Get<ObjectContext>().SetDebugInformation(url);
-
-        await driver.Page.GotoAsync(url);
-    }
-
     public async Task<T> VerifyPageAsync<T>(Func<T> func) where T : BasePage
     {
         var nextPage = func.Invoke();
 
-        await nextPage.VerifyPage();
+        await retryHelper.RetryOnVerifyPage(nextPage.VerifyPage);
 
         objectContext.SetDebugInformation($"Navigated to page with Title: '{await page.TitleAsync()}'");
 

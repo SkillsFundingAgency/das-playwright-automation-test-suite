@@ -9,7 +9,7 @@ public class ManagingStandardsProviderHomePage(ScenarioContext context) : Provid
 {
     public new async Task<YourStandardsAndTrainingVenuesPage> NavigateToYourStandardsAndTrainingVenuesPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Your standards and training venues" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your training and venues"}).ClickAsync();
 
         return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
     }
@@ -24,12 +24,12 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your standards and training venues");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training and venues");
     }
 
     public async Task<TrainingVenuesPage> AccessTrainingLocations()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Training venues" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Training venues", Exact = true }).ClickAsync();
 
         return await VerifyPageAsync(() => new TrainingVenuesPage(context));
     }
@@ -43,7 +43,7 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
 
     public async Task<ManageTheStandardsYouDeliverPage> AccessStandards()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Standards" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Training", Exact = true }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }

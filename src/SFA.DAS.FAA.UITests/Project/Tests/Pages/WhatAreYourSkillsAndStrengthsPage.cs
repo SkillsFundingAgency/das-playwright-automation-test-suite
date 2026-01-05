@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
+﻿using System;
+
+namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public class WhatAreYourSkillsAndStrengthsPage(ScenarioContext context) : FAABasePage(context)
 {
@@ -122,5 +124,53 @@ public class DisabilityConfidentSchemePage(ScenarioContext context) : FAABasePag
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new DisabilityConfidentSchemePage(context));
+    }
+}
+
+public class WhereDoYouWantToApplyForPage(ScenarioContext context) : FAABasePage(context)
+{
+    private string Pagetitle = "Where do you want to apply for";
+
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(Pagetitle);
+
+    public async Task<WhereDoYouWantToApplyForPage> SelectLocationsAndContinue()
+    {
+        await SelectFirstTwoLocations();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() =>
+        {
+            var page = new WhereDoYouWantToApplyForPage(context)
+            {
+                Pagetitle = "Where you want to apply for"
+            };
+
+            return page;
+        });
+    }
+
+    public new async Task<FAA_ApplicationOverviewPage> SelectSectionCompleted()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I've completed this" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new FAA_ApplicationOverviewPage(context));
+    }
+
+    private async Task SelectFirstTwoLocations()
+    {
+        var multipleLocationsCheckboxes = await page.GetByRole(AriaRole.Checkbox).AllAsync();
+
+        var selectedMultipleLocationsCheckboxes = multipleLocationsCheckboxes.Take(2);
+
+        foreach (var checkbox in selectedMultipleLocationsCheckboxes)
+        {
+            if (!await checkbox.IsCheckedAsync())
+            {
+                await checkbox.CheckAsync();
+            }
+        }
     }
 }

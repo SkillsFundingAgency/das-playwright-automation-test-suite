@@ -27,11 +27,9 @@ public class StaffDashboardPage(ScenarioContext context) : EPAOAdmin_BasePage(co
     {
         var uri = UriHelper.GetAbsoluteUri(UrlConfig.Admin_BaseUrl, $"register/add-organisation");
 
-        objectContext.SetDebugInformation(uri);
-
-        await page.GotoAsync(uri);
-        await page.GotoAsync(uri);
-        await page.GotoAsync(uri);
+        await Navigate(uri);
+        await Navigate(uri);
+        await Navigate(uri);
 
         return await VerifyPageAsync(() => new AddOrganisationPage(context));
     }
