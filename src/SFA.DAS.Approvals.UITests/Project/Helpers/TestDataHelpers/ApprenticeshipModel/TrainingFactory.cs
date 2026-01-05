@@ -10,9 +10,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 {
     internal class TrainingFactory : ITrainingFactory
     {
-        private readonly Func<CoursesDataHelper, Task<Courses>> courseSelector;
+        private readonly Func<CoursesDataHelper, Task<Course>> courseSelector;
 
-        public TrainingFactory(Func<CoursesDataHelper, Task<Courses>> CourseSelector = null)
+        public TrainingFactory(Func<CoursesDataHelper, Task<Course>> CourseSelector = null)
         {
             courseSelector = CourseSelector;
 
@@ -23,7 +23,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             Training training = new Training();
 
             CoursesDataHelper coursesDataHelper = new CoursesDataHelper();
-            var course = courseSelector == null ? await coursesDataHelper.GetCourse(null) : await courseSelector(coursesDataHelper);
+            var course = courseSelector == null ? await coursesDataHelper.GetRandomTestCourse() : await courseSelector(coursesDataHelper);
 
             if (course.ApprenticeshipType == "FoundationApprenticeship")
             {

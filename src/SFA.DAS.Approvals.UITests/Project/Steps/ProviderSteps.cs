@@ -100,7 +100,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDoB();
             await page.VerfiyErrorMessage("DateOfBirth", "The apprentice must be 24 years or under at the start of their training");
-            await page.ClickOnNavBarLinkAsync("Home");
+            await page.NavToHomePage();
         }
 
         [When("Provider tries to edit live apprentice record by setting age old than 24 years")]
@@ -205,7 +205,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
             var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
             var page1 = await page.ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage();
-            var page2 = await page1.SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
+            await page1.SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
+            var page2 = new YouNeedPermissionToDoThisPage(context);
             var page3 = await page2.ClickOnGoToHomepageButton();
         }
 

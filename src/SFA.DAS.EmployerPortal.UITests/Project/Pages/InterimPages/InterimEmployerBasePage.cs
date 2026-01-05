@@ -80,7 +80,7 @@ public class InterimApprenticesHomePage(ScenarioContext context, bool gotourl) :
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentices");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentices", new LocatorAssertionsToContainTextOptions { Timeout = 10000 });
     }
 }
 

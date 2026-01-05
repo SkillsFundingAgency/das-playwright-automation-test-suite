@@ -1,4 +1,4 @@
-﻿using Azure;
+﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.AddJourney;
 using System;
 using System.Collections.Generic;
 
@@ -21,7 +21,33 @@ namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate
 
             return await VerifyPageAsync(() => new StatusChangePage(context));
         }
+        public async Task<ProviderRoutePage> ClickChangeTypeOfProvider()
+        {
+            var changeLink = page.Locator("//tr[th[normalize-space()='Type of provider']]//a[normalize-space()='Change']");
 
+            await Assertions.Expect(changeLink).ToBeVisibleAsync();
+            await changeLink.ClickAsync();
+
+            return await VerifyPageAsync(() => new ProviderRoutePage(context));
+        }
+        public async Task<TypeOfOrganisationPage> ClickChangeTypeOfOrganisation()
+        {
+            var changeLink = page.Locator("//tr[th[normalize-space()='Type of organisation']]//a[normalize-space()='Change']");
+
+            await Assertions.Expect(changeLink).ToBeVisibleAsync();
+            await changeLink.ClickAsync();
+
+            return await VerifyPageAsync(() => new TypeOfOrganisationPage(context));
+        }
+        public async Task<DoTheyOfferApprenticeshipUnitsPage> ClickOffersApprenticeshipUnits()
+        {
+            var changeLink = page.Locator("//tr[th[normalize-space()='Offers apprenticeship units']]//a[normalize-space()='Change']");
+
+            await Assertions.Expect(changeLink).ToBeVisibleAsync();
+            await changeLink.ClickAsync();
+
+            return await VerifyPageAsync(() => new DoTheyOfferApprenticeshipUnitsPage(context));
+        }
         public async Task<TypeOfOrganisationPage> GoToTypeOfOrganisationChange()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Change", Exact = false })
@@ -29,7 +55,46 @@ namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate
                       .ClickAsync();
             return await VerifyPageAsync(() => new TypeOfOrganisationPage(context));
         }
+        public async Task VerifyOrganisationType(string orgType)
+        {
+            var rowLocator = page.Locator("//tr[th[normalize-space()='Type of organisation']]");
+            var actualOrgType = await rowLocator.Locator("td").First.InnerTextAsync();
 
+            if (!string.Equals(actualOrgType.Trim(), orgType, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception($"Organisation type verification failed. Expected: '{orgType}', Actual: '{actualOrgType}'");
+            }
+        }
+        public async Task VerifyProviderRouteType(string providerType)
+        {
+            var expected = providerType.Trim().ToLower() switch
+            {
+                "main provider" => "Main",
+                "employer provider" => "Employer",
+                "supporting provider" => "Supporting",
+                _ => providerType 
+            };
+
+            var rowLocator = page.Locator("//tr[th[normalize-space()='Type of provider']]");
+            var actualRouteType = await rowLocator.Locator("td").First.InnerTextAsync();
+
+            if (!string.Equals(actualRouteType.Trim(), expected, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception($"Provider route type verification failed. Expected: '{expected}', Actual: '{actualRouteType}'");
+            }
+        }
+
+        public async Task VerifyApprenticeshipUnits(string expected)
+        {
+            var rowLocator = page.Locator("//tr[th[normalize-space()='Offers apprenticeship units']]");
+
+            var actualValue = await rowLocator.Locator("td").First.InnerTextAsync();
+
+            if (!string.Equals(actualValue.Trim(), expected, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception($"Apprenticeship units verification failed. Expected: '{expected}', Actual: '{actualValue}'");
+            }
+        }
         public async Task<OfferApprenticeshipsPage> GoToApprenticeshipsChange()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Change", Exact = false })
@@ -37,15 +102,13 @@ namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate
                       .ClickAsync();
             return await VerifyPageAsync(() => new OfferApprenticeshipsPage(context));
         }
-
-        public async Task<DoTheyOfferOtherQualificationsPage> GoToOtherQualificationsChange()
+        public async Task<DoTheyOfferApprenticeshipUnitsPage> GoToOtherQualificationsChange()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Change", Exact = false })
                       .Locator("xpath=preceding::text()[contains(., 'Offers other qualifications')]")
                       .ClickAsync();
-            return await VerifyPageAsync(() => new DoTheyOfferOtherQualificationsPage(context));
+            return await VerifyPageAsync(() => new DoTheyOfferApprenticeshipUnitsPage(context));
         }
-
         public async Task<TypeOfQualificationsPage> GoToTypeOfQualificationsChange()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Change", Exact = false })
