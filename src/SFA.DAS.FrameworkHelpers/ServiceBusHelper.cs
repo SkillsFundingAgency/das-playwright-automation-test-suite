@@ -40,6 +40,11 @@ namespace SFA.DAS.FrameworkHelpers
 
             config.SendOnly();
 
+            config.Conventions().DefiningEventsAs(t => t.Namespace != null &&
+                                  (t.Namespace.EndsWith("Messages") ||
+                                  t.Namespace.EndsWith("Events")));
+
+
             var transport = config.UseTransport<AzureServiceBusTransport>();
             transport.ConnectionString(connectionString);
             transport.Transactions(TransportTransactionMode.None);
