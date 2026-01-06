@@ -38,7 +38,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             //check db if an existing cohorts can be used
             var listOfApprenticeship = new List<Apprenticeship>();
-            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.Levy);
+            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortObject(EmployerType.Levy);
             apprenticeship = await dbSteps.FindUnapprovedCohortReference(apprenticeship, cohortStatus);
 
             if (apprenticeship.Cohort.Reference == null)
