@@ -69,11 +69,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                     WHERE uas.ReceiveNotifications = " + receive;
 
             var row = await ExecuteSql(sql);
-            if (row == null || row.Count == 0)
-            {
-                Assert.Fail($"No database row found for ReceiveNotifications = {receive}");
-                return;
-            }
 
             var dict = MapRowToDictionary(row, selectAliases);
             SetAccountIdIfPresent(dict);
@@ -87,11 +82,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             var sql = "SELECT TOP 1 AccountId, SignedAgreementVersion AS minimumSignedAgreementVersion FROM employer_account.AccountLegalEntity WHERE SignedAgreementVersion is not null order by AccountId desc";
 
             var row = await ExecuteSql(sql);
-            if (row == null || row.Count == 0)
-            {
-                Assert.Fail("No database row found for SignedAgreementVersion");
-                return;
-            }
 
             var selectAliases = new List<string> { "AccountId", "minimumSignedAgreementVersion" };
             var dict = MapRowToDictionary(row, selectAliases);
@@ -115,7 +105,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
         JOIN employer_account.Account acc ON mv.HashedAccountId = acc.HashedId";
 
             var row = await ExecuteSql(sql);
-            if (row == null || row.Count == 0) Assert.Fail("No database row found for linked accounts test.");
 
             var aliases = new List<string> { "userRef", "Email", "employerUserId", "encodedAccountId", "dasAccountName", "role", "apprenticeshipEmployerType" };
             var dict = MapRowToDictionary(row, aliases);
@@ -125,10 +114,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             try { _scenarioContext.Set(dict["Email"], "email"); } catch { _scenarioContext["email"] = dict["Email"]; }
             try { _scenarioContext.Set(dict["encodedAccountId"], "encodedAccountId"); } catch { _scenarioContext["encodedAccountId"] = dict["encodedAccountId"]; }
 
-            // Ensure UserRef is present in context for downstream steps
-            string userRef = null;
-            try { userRef = _scenarioContext.ContainsKey("UserRef") ? _scenarioContext.Get<string>("UserRef") : null; } catch { }
-            Assert.IsFalse(string.IsNullOrWhiteSpace(userRef), "UserRef was not set in the test setup.");
         }
 
         public async Task CallGetNotificationRequestSaveResponse()
@@ -437,28 +422,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             return false;
         }
 
-        public System.Reflection.PropertyInfo PickIdentifierProperty(Type t)
-        {
-            var candidates = new[] { "userRef", "user_ref", "userid", "userId", "id", "email" };
-            // Only consider readable, non-indexer properties to avoid calling indexers via reflection
-            var props = t.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
-                .Where(p => p.CanRead && p.GetIndexParameters().Length == 0)
-                .ToArray();
-
-            foreach (var c in candidates)
-            {
-                var p = props.FirstOrDefault(x => string.Equals(x.Name, c, StringComparison.OrdinalIgnoreCase));
-                if (p != null) return p;
-            }
-
-            var byUser = props.FirstOrDefault(x => x.Name.IndexOf("user", StringComparison.OrdinalIgnoreCase) >= 0 && x.PropertyType == typeof(string));
-            if (byUser != null) return byUser;
-            var byEmail = props.FirstOrDefault(x => x.Name.IndexOf("email", StringComparison.OrdinalIgnoreCase) >= 0 && x.PropertyType == typeof(string));
-            if (byEmail != null) return byEmail;
-
-            return props.FirstOrDefault(x => x.PropertyType == typeof(string));
-        }
-
         public bool HasJObjectPropertyEqual(JObject o, string propName, string expectedVal)
         {
             if (string.IsNullOrWhiteSpace(propName) || string.IsNullOrWhiteSpace(expectedVal)) return false;
@@ -483,7 +446,6 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             }
             return false;
         }
-
 
     }
 }

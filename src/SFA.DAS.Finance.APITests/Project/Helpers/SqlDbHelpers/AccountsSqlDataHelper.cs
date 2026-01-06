@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using SFA.DAS.FrameworkHelpers;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers
 {
@@ -111,7 +107,8 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers
             else
             {
                 // Fall back to FileHelper which may be used in ADO/CI contexts
-                sql = FileHelper.GetSql(sqlFileName);
+                // Ensure we pass the file name without extension to avoid double-extension lookups
+                sql = FileHelper.GetSql(Path.GetFileNameWithoutExtension(sqlFileName));
             }
 
             // Replace known placeholders with provided values (case-insensitive keys)

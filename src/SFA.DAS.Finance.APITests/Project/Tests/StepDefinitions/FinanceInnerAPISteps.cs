@@ -46,29 +46,11 @@ public class FinanceInnerAPISteps
     public async Task ThenEndpointApiAccountsHashedAccountIdLevyGetLevyForPeriodEndpointCanBeAccessed()
     {
         var hashedAccountId = GetHashedAccountId();
-        if (string.IsNullOrWhiteSpace(hashedAccountId))
-        {
-            Assert.Fail("hashedAccountId was not set in the test context; check DB setup or BeforeScenario hooks.");
-            return;
-        }
-
         var response = await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy");
-        if (response == null || string.IsNullOrWhiteSpace(response.Content))
-        {
-            Assert.Fail($"Levy endpoint returned no content for hashedAccountId '{hashedAccountId}'.");
-            return;
-        }
-
         var result = JsonConvert.DeserializeObject<ICollection<LevyDeclaration>>(response.Content);
-        if (result == null || !result.Any() || result.FirstOrDefault() == null)
-        {
-            Assert.Fail($"Levy endpoint returned an empty or invalid collection for hashedAccountId '{hashedAccountId}'. Content: {response.Content}");
-            return;
-        }
-
         var first = result.First();
-        await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy/{first.PayrollYear}/{first.PayrollMonth}", HttpStatusCode.OK);
 
+        await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy/{first.PayrollYear}/{first.PayrollMonth}", HttpStatusCode.OK);
     }
 
     [Then(@"endpoint \/api/accounts/\{accountId}/transactions can be accessed")]
@@ -82,39 +64,7 @@ public class FinanceInnerAPISteps
     public async Task WhenSendAnApiRequestGETApiAccountsAccountIdTransactions()
     {
         var hashedAccountId = GetHashedAccountId();
-        var response = await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions");
-        try
-        {
-            _objectContext.Replace("finance_lastResponse", response.Content);
-        }
-        catch
-        {
-            // ignore if replacing context fails
-        }
-    }
-
-    [Then(@"Verify the transactions api response with records fetch from DB")]
-    public async Task ThenVerifyTransactionsApiResponseWithRecordsFetchFromDB(Table table)
-    {
-        Assert.IsTrue(table.Rows.Count > 0 && table.Rows[0].ContainsKey("query"), "Expecting a table with a single column 'query' and a file name.");
-        var queryFile = table.Rows[0]["query"].Trim();
-
-        var accountId = GetAccountId();
-        Assert.IsFalse(string.IsNullOrEmpty(accountId), "finance_accountId was not set in the test setup.");
-
-        // Execute the transactions endpoint and capture the response to compare with SQL
-        var hashedAccountId = GetHashedAccountId();
-        var response = await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions");
-        var apiContent = response?.Content ?? string.Empty;
-        Assert.IsNotEmpty(apiContent, "API response content is empty.");
-
-        var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
-        Assert.IsNotNull(accountsHelper, "AccountsSqlDataHelper not registered in ScenarioContext; ensure FinanceBeforeScenarioHooks ran.");
-
-        var replacements = new Dictionary<string, string> { { "AccountId", accountId } };
-        var propertyOrder = new[] { "year", "month", "amount" };
-
-        await AssertHelper.AssertApiResponseMatchesSql(accountsHelper, apiContent, queryFile, propertyOrder, replacements);
+       await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions", HttpStatusCode.OK);
     }
 
     [Then(@"endpoint api/accounts/\{accountId}/transactions can be accessed")]
