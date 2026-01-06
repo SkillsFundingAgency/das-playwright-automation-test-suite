@@ -258,7 +258,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("the Provider tries to add another apprentice to an existing cohort")]
         public async Task WhenTheProviderTriesToAddAnotherApprenticeToAnExistingCohort()
         {
-            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortAsync(EmployerType.NonLevyUserAtMaxReservationLimit);
+            Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortObject(EmployerType.NonLevyUserAtMaxReservationLimit);
             apprenticeship = await new DbSteps(context).FindUnapprovedCohortReference(apprenticeship, ApprenticeRequests.ReadyForReview);
             
             await providerStepsHelper.ProviderOpenTheCohort(apprenticeship.Cohort.Reference);

@@ -54,7 +54,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             return apprenticeships;
         }
 
-        internal async Task<Apprenticeship> CreateEmptyCohortAsync(EmployerType EmployerType, ProviderConfig providerConfig = null)
+        internal async Task<Apprenticeship> CreateEmptyCohortObject(EmployerType EmployerType, ProviderConfig providerConfig = null)
         {
             providerConfig = (providerConfig == null) ? context.GetProviderConfig<ProviderConfig>() : providerConfig;
 
