@@ -82,7 +82,7 @@ public class InterimFinanceHomePage(ScenarioContext context, bool navigate, bool
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Funding and payments");
+        await Assertions.Expect(page.Locator("h1.govuk-heading-xl")).ToContainTextAsync("Funding and payments");
     }
 }
 
