@@ -151,7 +151,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         {
            await employerHomePageHelper.GotoEmployerHomePage(false);
             var page =  new EmployerHomePage(context);
-            var page2 = await page.ClickOnYourFundingReservationsLink();
+            var page2 = await page.ClickOnFundingReservationsLink();
             return await page2.TryClickOnReserveMoreFundingLink();
         }
 
