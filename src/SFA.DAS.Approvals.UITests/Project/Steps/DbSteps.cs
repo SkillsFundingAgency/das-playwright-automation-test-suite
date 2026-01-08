@@ -156,7 +156,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             listOfApprenticeship = new List<Apprenticeship>();
             var providerConfig = context.GetProviderConfig<ProviderConfig>();
-            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(EmployerType.Levy, providerConfig);
+            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortObject(EmployerType.Levy, providerConfig);
             apprenticeship = await learnerDataDbSqlHelper.GetEditableApprenticeDetails(apprenticeship);
             listOfApprenticeship.Add(apprenticeship);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
@@ -196,7 +196,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter, string ukprn = null)
         {
             var providerConfig = context.GetProviderConfig<ProviderConfig>();
-            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(employerType, providerConfig);
+            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortObject(employerType, providerConfig);
             apprenticeship = await commitmentsDbSqlHelper.GetApprenticeDetailsFromCommitmentsDb(apprenticeship, additionalWhereFilter);
             listOfApprenticeship.Add(apprenticeship);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);

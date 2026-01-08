@@ -225,8 +225,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN.ToString();
+                var startYear = apprenticeship.TrainingDetails.StartDate.Year;
 
-                await selectLearnerFromILRPage.SearchULN(uln);
+                await selectLearnerFromILRPage.SearchULN(uln, startYear);
                 await selectLearnerFromILRPage.VerifyNoResultsFound();
                 await selectLearnerFromILRPage.ClearSearch();
             }

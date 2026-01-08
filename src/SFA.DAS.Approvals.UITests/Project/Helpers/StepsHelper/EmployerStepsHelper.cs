@@ -72,7 +72,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return page1;
         }
 
-        internal async Task CheckApprenticeOnManageYourApprenticesPage(bool login = false)
+        internal async Task<ManageYourApprenticesPage> CheckApprenticeOnManageYourApprenticesPage(bool login = false)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
@@ -92,6 +92,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 await page.SearchApprentice(uln, name);
             }
 
+            return page;
         }
 
         internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, string uln, string name)
@@ -148,9 +149,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<YouCannotCreateAnotherFundingReservationPage> EmployerTriesToCreateReservation()
         {
-            await employerHomePageHelper.GotoEmployerHomePage(false);
+           await employerHomePageHelper.GotoEmployerHomePage(false);
             var page =  new EmployerHomePage(context);
-            var page2 = await page.ClickOnYourFundingReservationsLink();
+            var page2 = await page.ClickOnFundingReservationsLink();
             return await page2.TryClickOnReserveMoreFundingLink();
         }
 

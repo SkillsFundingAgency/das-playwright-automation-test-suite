@@ -1,18 +1,17 @@
 ﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages;
+using SFA.DAS.Framework.Hooks;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
-public class EmployerHomePageStepsHelper
+public class EmployerHomePageStepsHelper : FrameworkBaseHooks
 {
-    private readonly ScenarioContext _context;
     private readonly EmployerPortalLoginHelper _loginHelper;
     private readonly ObjectContext _objectContext;
 
-    public EmployerHomePageStepsHelper(ScenarioContext context)
+    public EmployerHomePageStepsHelper(ScenarioContext context) : base(context)
     {
-        _context = context;
-        _objectContext = _context.Get<ObjectContext>();
-        _loginHelper = new EmployerPortalLoginHelper(_context);
+        _objectContext = this.context.Get<ObjectContext>();
+        _loginHelper = new EmployerPortalLoginHelper(this.context);
     }
 
     public async Task<HomePage> Login(EasAccountUser loginUser) => await _loginHelper.Login(loginUser, true);
@@ -25,9 +24,9 @@ public class EmployerHomePageStepsHelper
             return await _loginHelper.ReLogin();
 
         if (await _loginHelper.IsYourAccountPageDisplayed())
-            return await new YourAccountsPage(_context).ClickAccountLink(_objectContext.GetOrganisationName());
+            return await new YourAccountsPage(context).ClickAccountLink(_objectContext.GetOrganisationName());
 
-        return new HomePage(_context, !openInNewTab);
+        return new HomePage(context, !openInNewTab);
     }
 
     public async Task<AccountUnavailablePage> ValidateUnsuccessfulLogon()
@@ -36,37 +35,22 @@ public class EmployerHomePageStepsHelper
 
         if (await _loginHelper.IsSignInPageDisplayed()) return await _loginHelper.FailedLogin1();
 
-        return new AccountUnavailablePage(_context);
+        return new AccountUnavailablePage(context);
     }
 
     public async Task GoToEmployerLoginPage(bool openInNewTab)
     {
-        if (openInNewTab) await OpenInNewTab();
+        if (openInNewTab) await OpenNewTab();
 
         await NavigateToEmployerApprenticeshipService();
 
-        if (await _loginHelper.IsLandingPageDisplayed()) await new CreateAnAccountToManageApprenticeshipsPage(_context).GoToStubSignInPage();
+        if (await _loginHelper.IsLandingPageDisplayed()) await new CreateAnAccountToManageApprenticeshipsPage(context).GoToStubSignInPage();
     }
 
     public async Task NavigateToEmployerApprenticeshipService(bool openInNewTab = false)
     {
-        if (openInNewTab) await OpenInNewTab();
+        if (openInNewTab) await OpenNewTab();
 
-        var driver = _context.Get<Driver>();
-
-        var url = UrlConfig.EmployerApprenticeshipService_BaseUrl;
-
-        _objectContext.SetDebugInformation(url);
-
-        await driver.Page.GotoAsync(url);
-    }
-
-    private async Task OpenInNewTab()
-    {
-        var driver = _context.Get<Driver>();
-
-        var page = await driver.BrowserContext.NewPageAsync();
-
-        driver.Page = page;
+        await Navigate(UrlConfig.EmployerApprenticeshipService_BaseUrl);
     }
 }

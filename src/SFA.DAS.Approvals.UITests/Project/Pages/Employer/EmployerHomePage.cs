@@ -9,9 +9,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(objectContext.GetOrganisationName());
         }
 
-        internal async Task<YourFundingReservationsPage> ClickOnYourFundingReservationsLink()
+        internal async Task<YourFundingReservationsPage> ClickOnFundingReservationsLink()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Your funding reservations" }).ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = "Funding reservations" }).ClickAsync();
             return await VerifyPageAsync(() => new YourFundingReservationsPage(context));
         }
     }

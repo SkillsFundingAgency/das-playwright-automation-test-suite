@@ -122,14 +122,14 @@ public partial class ProviderHomePage : InterimProviderBasePage
 
     public async Task<ProviderYourStandardsAndTrainingVenuesPage> NavigateToYourStandardsAndTrainingVenuesPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Your standards and training" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your training and venues" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderYourStandardsAndTrainingVenuesPage(context));
     }
 
     public async Task<ProviderInformationNotFoundPage> NavigateToShutterPage_EmployerTypeProviderPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Your standards and training" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your training and venues" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderInformationNotFoundPage(context));
     }
@@ -194,7 +194,7 @@ public class ProviderYourStandardsAndTrainingVenuesPage(ScenarioContext context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your standards and training venues");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training and venues");
     }
 }
 

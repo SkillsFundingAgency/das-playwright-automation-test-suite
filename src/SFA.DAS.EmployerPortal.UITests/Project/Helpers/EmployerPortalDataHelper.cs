@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
 public class EmployerPortalDataHelper
 {
