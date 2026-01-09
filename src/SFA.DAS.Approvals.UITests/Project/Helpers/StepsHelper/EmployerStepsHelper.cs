@@ -149,9 +149,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
         internal async Task<YouCannotCreateAnotherFundingReservationPage> EmployerTriesToCreateReservation()
         {
-            await employerHomePageHelper.GotoEmployerHomePage(false);
+           await employerHomePageHelper.GotoEmployerHomePage(false);
             var page =  new EmployerHomePage(context);
-            var page2 = await page.ClickOnYourFundingReservationsLink();
+            var page2 = await page.ClickOnFundingReservationsLink();
             return await page2.TryClickOnReserveMoreFundingLink();
         }
 

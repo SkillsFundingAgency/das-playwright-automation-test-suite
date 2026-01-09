@@ -23,10 +23,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<CheckApprenticeDetailsPage> SelectApprenticeFromILRList(Apprenticeship apprenticeship)
         {
-            await SearchULN(apprenticeship.ApprenticeDetails.ULN);
+            await SearchULN(apprenticeship.ApprenticeDetails.ULN, apprenticeship.TrainingDetails.StartDate.Year);
 
             var tableRow = apprenticeship.ApprenticeDetails.FullName + " " + apprenticeship.ApprenticeDetails.ULN;
-
 
             await page.GetByRole(AriaRole.Row, new PageGetByRoleOptions { Name = tableRow })
                       .GetByRole(AriaRole.Link)
@@ -36,30 +35,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));
         }
 
-        internal async Task SearchULN(string uln)
+        internal async Task SearchULN(string uln, int startYear)
         {
             
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or unique learner number (ULN)" })
-                      .FillAsync(uln);
-
-            // Apply filters with default year (2025)
-            await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" })
-                      .ClickAsync();
-
-            // Wait for potential results or "no records" message
-            var resultText = await page.Locator("text=apprentice records found").TextContentAsync();
-
-            // Check if zero records found
-            if (resultText != null && resultText.Contains("0 apprentice records found"))
-            {
-                // Select 2024 from "Start year" dropdown
-                await page.Locator("#FilterModel_StartYear")
-                  .SelectOptionAsync("2024");
-
-                // Re-apply the filter
-                await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" })
-                          .ClickAsync();
-            }
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or unique learner number (ULN)" }).FillAsync(uln);
+            await page.Locator("#FilterModel_StartYear").SelectOptionAsync(startYear.ToString());
+            await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
         }
 
 
