@@ -128,6 +128,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
         }
 
+        internal async Task AddEmptyCohortFromNonLevyReserveFundsAddApprenticePage()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
+ 
+            var _SelectReservedFunds = await new AddApprenticePage(context).ClickStartNowButtonNonLevyFlow();
+            var _SelectFundingPage =  await _SelectReservedFunds.SelectReservedFunds();
+            var _AddTrainingProviderPage = await _SelectFundingPage.SelectReservation();
+            var page2 = await _AddTrainingProviderPage.SubmitValidUkprn(ukprn);
+            var page3 = await page2.ConfirmTrainingProviderDetails();
+            var page4 = await page3.SelectProviderAddApprencticesAndSend();
+            var cohortRef = await page4.GetCohortId();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
+        }
+
         internal async Task ReadyForReviewCohort(string status)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -138,6 +153,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page1 = await new ApprenticesHomePage(context).GoToApprenticeRequests();
             var page2 = await page1.OpenApprenticeRequestReadyForReview(cohort);
             await page2.ValidateCohortStatus(status);
+        }
+
+        internal async Task ReadyForReviewOnDynamicHomePage(string status)
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var cohort = listOfApprenticeship.FirstOrDefault().Cohort.Reference;
+
+            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
+
+            var page1 = await new YourApprenticeDynamicHomepage(context).ReviewApprenticeDetails();
+            await page1.ValidateCohortStatus(status);
         }
 
         internal async Task LogOutThenLogbackIn()
@@ -155,6 +181,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page2.TryClickOnReserveMoreFundingLink();
         }
 
+        internal async Task<EmployerHomePage> EmployerTriesToCreateReservationOnDynamicHomepage()
+        {
+
+            // Click Start button in the home screen for newly created employer account and reserve funds
+            var _dynamicHomepage = new SetupAnApprenticeshipPage(context);
+
+            var _doYouKnowWhichCourseYourApprenticeWillTakePage = await _dynamicHomepage.StartNow();
+            var _haveYouChosenATrainingProviderToDeliverTheApprenticeshipTrainingPage = await _doYouKnowWhichCourseYourApprenticeWillTakePage.Yes();
+            var _willTheApprenticeshipTrainingStartInTheNextSixMonthsPage = await _haveYouChosenATrainingProviderToDeliverTheApprenticeshipTrainingPage.Yes();
+            var _areYouSettingUpAnApprenticeshipForAnExistingEmployeePage = await _willTheApprenticeshipTrainingStartInTheNextSixMonthsPage.StartInSixMonths();
+            var _setUpAnApprenticeshipForNewEmployeePage = await _areYouSettingUpAnApprenticeshipForAnExistingEmployeePage.No();
+            var _reserveFundingToTrainAndAssessAnApprenticePage = await _setUpAnApprenticeshipForNewEmployeePage.YesContinueToReserveFunding();
+            var _doYouKnowWhichCourseYourApprenticeWillTakePage1 = await _reserveFundingToTrainAndAssessAnApprenticePage.YesContinueToReserveFunding();
+            var _whenWillTheApprenticeStartTheirApprenticeTraining = await _doYouKnowWhichCourseYourApprenticeWillTakePage1.ReserveFundsAsync("Associate");
+            var _confirmYourReservationPage = await _whenWillTheApprenticeStartTheirApprenticeTraining.SelectAlreadyStartedDate();
+            var _youHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage = await _confirmYourReservationPage.ClickConfirmButton();
+            return await _youHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage.SelectGoToHomePageAndContinue();
+        }
 
     }
 }

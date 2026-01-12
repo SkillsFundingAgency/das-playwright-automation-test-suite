@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualBasic;
+﻿using DnsClient;
+using Mailosaur.Models;
+using Microsoft.VisualBasic;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
@@ -7,6 +9,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System;
+using System.Drawing;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -118,6 +121,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
+        [Then("the NonLevyEmployer reviews and approves the cohort from dynamic homepage")]
+        public async Task ThenTheEmployerReviewsCohortApproveFromDynamicHomePage()
+        {
+            await employerStepsHelper.ReadyForReviewOnDynamicHomePage("Ready for approval");
+            await new EmployerApproveApprenticeDetailsPage(context).EmployerApproveCohort();
+        }
+
         [When ("the Employer approves the cohort and sends to provider")]
         public async Task ThenTheEmployerApprovesCohort()
         {
@@ -178,6 +188,26 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page1.AssertRecordIsReadOnlyExceptEndDate();
         }
 
+        [When("The NonLevyEmployer reserves funding for an apprenticeship course from reserved panel")]
+        public async Task WhenTheNonLevyEmployerReservesFundingFromReservedPanel()
+        {
+            //await employerStepsHelper.EmployerLogInToEmployerPortal(false);
+            
+            await employerStepsHelper.EmployerTriesToCreateReservationOnDynamicHomepage();
+        }
+
+        [Then("The nonlevyemployer follows the link from dynamicHomePage to create a cohort and send it to the training Provider")]
+        public async Task WhenTheNonLevyEmployerSendCohortToProvider()
+        {
+            //await employerStepsHelper.EmployerLogInToEmployerPortal(false);
+            var _dynamicHomepageSettingAnApprenticeShip = new ContinueSettingupAnApprenticeship(context);
+
+
+            var _continueSettingupAnApprenticeshipPage = await _dynamicHomepageSettingAnApprenticeShip.Continue();
+            var _addApprenticePage = await _continueSettingupAnApprenticeshipPage.No();
+
+            await employerStepsHelper.AddEmptyCohortFromNonLevyReserveFundsAddApprenticePage();
+        }
 
     }
 

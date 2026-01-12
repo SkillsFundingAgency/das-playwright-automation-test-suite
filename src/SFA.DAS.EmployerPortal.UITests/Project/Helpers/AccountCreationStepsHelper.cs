@@ -199,7 +199,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
     internal void UpdateOrganisationName(OrgType orgType) => _objectContext.SetOrganisationName(GetOrgName(orgType));
 
     private string GetOrgName(OrgType orgType)
-    {
+    {   
         return orgType switch
         {
             OrgType.Company => _employerPortalDataHelper.CompanyTypeOrg,

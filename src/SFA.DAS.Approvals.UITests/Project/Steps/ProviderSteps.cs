@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using Microsoft.Azure.Amqp.Framing;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
@@ -6,6 +7,7 @@ using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
+using System.Drawing;
 using TechTalk.SpecFlow.Assist;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
@@ -183,9 +185,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheProviderAddsApprenticeDetailsApprovesTheCohortAndSendsItToTheEmployerForApproval()
         {
             var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
-            
+
             var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
             await providerStepsHelper.AddOtherApprenticesFromILRListWithRPL(page, 0);
+            await page.ProviderApproveCohort();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
+        }
+
+        [Then("the provider adds apprentice details, select an existing reservation, approves the cohort and sends it to the employer for approval")]
+        public async Task ThenTheProviderAddsApprenticeDetailsSelectsExistingReservationApprovesTheCohortAndSendsItToTheEmployerForApproval()
+        {
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
+
+            var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
+            await providerStepsHelper.ProviderAddApprencticesFromIlrRouteUseExistingReservation(page);
             await page.ProviderApproveCohort();
             await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
         }

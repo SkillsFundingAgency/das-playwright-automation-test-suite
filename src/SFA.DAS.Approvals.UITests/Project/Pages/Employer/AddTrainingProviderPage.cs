@@ -6,7 +6,7 @@
         public override async Task VerifyPage()
         {
             await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Select your training provider");
-        }
+        }   
 
         public async Task<ConfirmTrainingProvider> SubmitValidUkprn(int Ukprn)
         {
