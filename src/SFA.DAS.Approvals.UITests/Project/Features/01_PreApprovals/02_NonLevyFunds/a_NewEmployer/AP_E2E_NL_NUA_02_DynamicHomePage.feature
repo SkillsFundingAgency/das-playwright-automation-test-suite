@@ -6,7 +6,6 @@ A short summary of the feature
 @regression
 @e2escenarios
 @addnonlevyfunds
-@providerpermissions
 Scenario: AP_E2E_NL_NUA_02_NonLevyEmployer reserves funding to add an apprentice from dynamic homepage journey
 	
 	Given The User creates "NonLevy" Employer account and sign an agreement
