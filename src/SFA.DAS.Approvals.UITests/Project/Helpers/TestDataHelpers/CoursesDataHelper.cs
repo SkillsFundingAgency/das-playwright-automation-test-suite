@@ -45,7 +45,7 @@ internal class CoursesDataHelper
     {
         await Task.Delay(50);
         return AllCourses
-            .Where(c => c.ApprenticeshipType == "Apprenticeship" && c.Options == null)
+            .Where(c => c.ApprenticeshipType == "Apprenticeship" && c.Level < 7 && c.Options == null)
             .OrderBy(_ => Random.Next())
             .First();
     }
