@@ -6,7 +6,7 @@ public class YourOrganisationsAndAgreementsPage(ScenarioContext context, bool na
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your organisations and agreements");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Your organisations and agreements");
     }
 
     public async Task VerifyTransfersStatus(string expected) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"Transfers status: {expected}");

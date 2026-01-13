@@ -6,7 +6,7 @@ public class UsingYourGovtGatewayDetailsPage(ScenarioContext context) : Employer
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a PAYE scheme using your Government Gateway details");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Add a PAYE scheme using your Government Gateway details");
     }
 
     public async Task<GgSignInPage> ContinueToGGSignIn()

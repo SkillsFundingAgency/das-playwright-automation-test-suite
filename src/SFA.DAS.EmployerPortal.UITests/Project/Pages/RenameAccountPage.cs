@@ -4,7 +4,7 @@ public class RenameAccountPage(ScenarioContext context) : EmployerPortalBasePage
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Rename account");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Rename account");
     }
 
     public async Task<HomePage> EnterNewNameAndContinue(string newOrgName)

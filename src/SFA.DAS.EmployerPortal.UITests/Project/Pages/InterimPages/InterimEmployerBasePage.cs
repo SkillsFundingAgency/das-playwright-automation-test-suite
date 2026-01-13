@@ -199,7 +199,7 @@ public abstract class InterimYourTeamPage(ScenarioContext context, bool navigate
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your team");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Your team");
     }
 }
 
@@ -251,7 +251,7 @@ public class ViewTeamMemberPage(ScenarioContext context) : EmployerPortalBasePag
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(employerPortalDataHelper.FullName);
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync(employerPortalDataHelper.FullName);
     }
 
     public async Task<YourTeamPage> ClickResendInvitationButton()
@@ -280,7 +280,7 @@ public class RemoveTeamMemberPage(ScenarioContext context) : EmployerPortalBaseP
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Remove team member");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Remove team member");
     }
 
     public async Task<YourTeamPage> ClickYesRemoveNowButton()
@@ -295,7 +295,7 @@ public class CancelInvitationPage(ScenarioContext context) : EmployerPortalBaseP
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Cancel invitation");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Cancel invitation");
     }
 
     public async Task<YourTeamPage> ClickYesCancelInvitationButton()
@@ -318,7 +318,7 @@ public class CreateInvitationPage(ScenarioContext context) : EmployerPortalBaseP
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Create invitation");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Create invitation");
     }
 
     public async Task EnterEmailAndFullName(string email)
@@ -361,7 +361,7 @@ public class InterimPAYESchemesPage(ScenarioContext context, bool navigate) : In
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("PAYE schemes");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("PAYE schemes");
     }
 }
 
@@ -400,7 +400,7 @@ public class PAYESchemeDetailsPage(ScenarioContext context) : EmployerPortalBase
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("PAYE scheme");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("PAYE scheme");
     }
 
     public async Task<RemoveThisSchemePage> ClickRemovePAYESchemeButton()
