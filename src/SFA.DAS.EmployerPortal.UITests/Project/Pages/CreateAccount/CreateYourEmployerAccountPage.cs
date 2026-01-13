@@ -2,7 +2,7 @@
 
 public class CreateYourEmployerAccountPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Create your employer account");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Create your employer account");
 
     #region Constants
     public static string UserDetailsItemText => "Add your user detail";

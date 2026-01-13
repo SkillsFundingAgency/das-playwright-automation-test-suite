@@ -4,7 +4,7 @@ public class CheckYourDetailsPage(ScenarioContext context) : EmployerPortalBaseP
 {
     public override async Task VerifyPage()
     {
-        var list = await page.Locator("h1").AllTextContentsAsync();
+        var list = await page.Locator(".govuk-heading-xl").AllTextContentsAsync();
 
         VerifyPage(list, "Check your details");
     }

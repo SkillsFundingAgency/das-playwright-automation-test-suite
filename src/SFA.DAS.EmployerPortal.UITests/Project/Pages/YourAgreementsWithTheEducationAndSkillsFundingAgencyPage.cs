@@ -4,7 +4,7 @@ public class YourAgreementsWithTheEducationAndSkillsFundingAgencyPage(ScenarioCo
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your agreements with the Department for Education (DfE)");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Your agreements with the Department for Education (DfE)");
     }
 
     public async Task<ReviewYourDetailsPage> ClickUpdateTheseDetailsLinkInReviewYourDetailsPage()

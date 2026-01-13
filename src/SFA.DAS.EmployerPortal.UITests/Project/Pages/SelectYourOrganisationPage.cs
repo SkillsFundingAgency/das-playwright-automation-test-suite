@@ -6,7 +6,7 @@ public class SelectYourOrganisationPage(ScenarioContext context) : EmployerPorta
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select your organisation");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Select your organisation");
     }
 
     public async Task<CheckYourDetailsPage> SelectYourOrganisation(OrgType orgType = OrgType.Default)
