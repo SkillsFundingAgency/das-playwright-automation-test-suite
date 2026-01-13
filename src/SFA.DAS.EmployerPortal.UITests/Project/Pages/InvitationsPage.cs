@@ -2,7 +2,7 @@
 
 public class InvitationsPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Invitations");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Invitations");
 
     public async Task<HomePage> ClickAcceptInviteLink()
     {

@@ -4,7 +4,7 @@ public class ReviewYourDetailsPage(ScenarioContext context) : EmployerPortalBase
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Review your details");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Review your details");
     }
 
     public async Task VerifyInfoTextInReviewYourDetailsPage(string expectedText)

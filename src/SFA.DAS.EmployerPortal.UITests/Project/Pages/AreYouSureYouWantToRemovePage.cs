@@ -4,7 +4,7 @@ public class AreYouSureYouWantToRemovePage(ScenarioContext context) : EmployerPo
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Are you sure you want to remove");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Are you sure you want to remove");
     }
 
     public async Task<YourOrganisationsAndAgreementsPage> SelectYesRadioOptionAndClickContinueInRemoveOrganisationPage()

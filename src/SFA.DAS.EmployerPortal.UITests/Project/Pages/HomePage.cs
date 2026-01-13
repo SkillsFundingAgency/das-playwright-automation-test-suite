@@ -6,28 +6,16 @@ namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBasePage(context, navigate)
 {
-    //    #region Locators
-
-    //    protected static By FindApprenticeshipLink => By.LinkText("Find apprenticeship training and manage requests");
-    //    protected static By StartNowButton => By.LinkText("Start now");
-    //    protected static By YourFundingReservationsLink => By.LinkText("Your funding reservations");
-    //    protected static By YourTransfersLink => By.LinkText("Your transfers");
-    //    private static By SucessSummary => By.CssSelector(".das-notification");
-    //    private static By AcceptYourAgreementLink => By.LinkText("Accept your agreement");
-    //    private static By ContinueTo => By.LinkText("Continue");
-    //    private static By SetUpAnApprenticeshipSectionHeader => By.Id("set-up-an-apprenticeship");
-    //    protected static By FinancesSectionHeading => By.XPath("//h2[text()='Finances']");
-    //    protected static By YourFinancesLink => By.LinkText("Your finances");
-    //    private static By TransferRequestViewDetailsLink => By.XPath("//li[contains(span, 'Transfer request received')]/span/a[text()='View details']");
-    //    private static By TransferConnectionRequestViewDetailsLink => By.XPath("//li[contains(span, 'connection requests to review')]/span/a[text()='View details']");
-    //    #endregion
+    #region Locators
+    private ILocator PageHeading => page.Locator(".govuk-heading-xl");
+    #endregion
 
     public override async Task VerifyPage()
     {
         await retryHelper.RetryOnEmpHomePage(
             async () => await Assertions.Expect(page.GetByRole(AriaRole.Menuitem, new() { Name = "Your organisations and" })).ToBeVisibleAsync(), ReloadPageAsync);
 
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(objectContext.GetOrganisationName());
+        await Assertions.Expect(PageHeading).ToContainTextAsync(objectContext.GetOrganisationName());
     }
 
     public HomePage(ScenarioContext context) : this(context, false) { }
@@ -37,7 +25,7 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         try
         {
             await VerifyPage();
-            objectContext.SetDebugInformation($"'{await page.Locator("h1").First.TextContentAsync()}' page is displayed");
+            objectContext.SetDebugInformation($"'{await PageHeading.First.TextContentAsync()}' page is displayed");
             return true;
         }
         catch (Exception ex)
@@ -56,7 +44,7 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
 
         await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("You successfully updated the account name");
 
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(name);
+        await Assertions.Expect(PageHeading).ToContainTextAsync(name);
     }
 
     public async Task<AboutYourAgreementPage> ClickAcceptYourAgreementLinkInHomePagePanel()
