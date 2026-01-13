@@ -108,6 +108,48 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
         }
 
+        [Given(@"A live apprentice record exists for an apprentice with ""(.*)"", ""(.*)"" and ""(.*)""")]
+        public async Task GivenALiveApprenticeRecordExistsForAnApprenticeWithAnd(string courseType, string courseLevel, string startDate)
+        {
+            listOfApprenticeship = new List<Apprenticeship>();
+            string additionalWhereFilter;
+
+            if (courseType == "FoundationApprenticeship")
+            {
+                additionalWhereFilter = @"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
+                                            AND c.IsDeleted = 0
+                                            And c.Approvals = 3
+                                            AND c.ChangeOfPartyRequestId is null             
+                                            AND c.PledgeApplicationId is null
+                                            AND a.PaymentStatus = 1
+                                            AND a.HasHadDataLockSuccess = 0
+                                            AND a.PendingUpdateOriginator is null
+                                            AND a.CloneOf is null
+                                            AND a.ContinuationOfId is null
+                                            AND a.DeliveryModel = 0
+                                            AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+            }
+            else
+            {
+                additionalWhereFilter = @$"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
+                                            AND c.IsDeleted = 0
+                                            And c.Approvals = 3
+                                            AND c.ChangeOfPartyRequestId is null             
+                                            AND c.PledgeApplicationId is null
+                                            AND a.PaymentStatus = 1
+                                            AND a.HasHadDataLockSuccess = 0
+                                            AND a.PendingUpdateOriginator is null
+                                            AND a.CloneOf is null
+                                            AND a.ContinuationOfId is null
+                                            AND a.DeliveryModel = 0
+                                            AND TrainingName like '%, Level: 7'
+					                        AND StartDate > '{startDate}'";
+            }
+
+            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
+        }
+
+
         [Given("A live apprentice record exists for an apprentice on Foundation level course")]
         public async Task GivenALiveApprenticeRecordExistsForAnApprenticeOnFoundationLevelCourse()
         {
