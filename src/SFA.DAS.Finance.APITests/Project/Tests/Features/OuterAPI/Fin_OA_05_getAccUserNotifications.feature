@@ -1,9 +1,17 @@
+
 Feature: Fin_OA_05_getAccUserNotifications
 
 @api
 @employerfinanceapi
 @regression
 @outerapi
-Scenario: Fin_OA_05 getAccUserNotifications
+Scenario Outline: Fin_OA_05 getAccUserNotifications
 
-	Then endpoint /Accounts/{accountId}/users/which-receive-notifications can be accessed
+Given an employer account <receive> receive notifications
+When endpoint /Accounts/{accountId}/users/which-receive-notifications is called
+Then the response body should contain valid account details
+
+Examples:
+	| receive |
+	| can     |
+	| cannot  |
