@@ -11,7 +11,7 @@ Following courses are restricted to youth aged b/w 15-25 only:
 Scenario Outline: AP_AC_01_Validate Age-Checks for the restricted Courses_AddAnApprenticeJourney 
 	Given Provider adds an apprentice aged 25 years using below "<CourseType>", "<CourseLevel>" and "<StartDate>"
     Then system does not allow to add apprentice details if their age is below 15 years and over 25 years
-    And system allows to approve apprentice details with a warning if their age is in range of "<LowerAgeLimit>" - "<UpperAgeLimit>" years
+    And system allows to approve apprentice details with a warning if their age is in range of <LowerAgeLimit> - <UpperAgeLimit> years
 	When Employer reviews the above cohort 
 	Then display the warning message for foundation courses
 
