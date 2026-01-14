@@ -60,17 +60,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             // await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(listOflearnerData, academicYear); 
         }
 
-        [Given("Provider adds an apprentice aged (.*) years using Foundation level standard")]
-        public async Task GivenProviderAddsAnApprenticeAgedYearsUsingFoundationLevelStandard(int age)
+        [Given(@"Provider adds an apprentice aged (.*) years using below ""(.*)"", ""(.*)"" and ""(.*)""")]
+        public async Task GivenProviderAddsAnApprenticeAgedYearsUsingBelowAnd(int age, string courseType, string courseLevel, string startDate)
         {
             var coursesDataHelper = new CoursesDataHelper();
             var employerType = EmployerType.Levy;
+            DateTime parsedStartDate = DateTime.Parse(startDate);
+            var daysToAdd = (DateTime.Today - parsedStartDate).Days;
+            DateTime trainingStartDate = parsedStartDate.AddDays(new Random().Next(daysToAdd + 1));
+            TrainingFactory trainingDetails;
 
-            //create apprenticeships object with Foundation level standard and a learner aged > 25 years:
-            var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
-            var apprenticeDetails = new ApprenticeFactory(age+1);
+            //create apprenticeships object for specific course and a learner aged > 25 years:
+            if (courseType == "FoundationApprenticeship")
+                trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
+            else
+                trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomLevel7Course());
 
-            var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(employerType, 1, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
+            var apprenticeDetails = new ApprenticeFactory(age + 1);
+            var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(employerType, 1, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: trainingDetails);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
             await SLDPushDataIntoAS();
         }
