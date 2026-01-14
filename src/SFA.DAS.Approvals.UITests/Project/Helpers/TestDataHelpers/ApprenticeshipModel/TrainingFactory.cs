@@ -6,11 +6,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
     internal class TrainingFactory : ITrainingFactory
     {
         private readonly Func<CoursesDataHelper, Task<Course>> courseSelector;
+        private readonly DateTime startDate;
 
         public TrainingFactory(Func<CoursesDataHelper, Task<Course>> CourseSelector = null)
         {
             courseSelector = CourseSelector;
+        }
 
+        public TrainingFactory(DateTime StartDate, Func<CoursesDataHelper, Task<Course>> CourseSelector = null)
+        {
+            startDate = StartDate;
+            courseSelector = CourseSelector;            
         }
 
         public async Task<Training> CreateTrainingAsync(EmployerType employerType, ApprenticeshipStatus? apprenticeshipStatus = null)
@@ -18,11 +24,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             Training training = new Training();
 
             CoursesDataHelper coursesDataHelper = new CoursesDataHelper();
-            var course = courseSelector == null ? await coursesDataHelper.GetRandomTestCourse() : await courseSelector(coursesDataHelper);
+            var course = courseSelector == null ? await coursesDataHelper.GetRandomStandardCourse() : await courseSelector(coursesDataHelper);
 
-            if (course.ApprenticeshipType == "FoundationApprenticeship")
+            if (startDate != DateTime.MinValue)
             {
-                training.StartDate = course.EffectiveFrom;
+                training.StartDate = startDate;
             }
             else if (employerType == EmployerType.Levy)
             {
@@ -33,7 +39,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
                 training.StartDate = DateTime.Now;
             }
 
-            //training.StartDate = (employerType == EmployerType.Levy) ? await GetStartDate(apprenticeshipStatus) : DateTime.Now;
             training.EndDate = training.StartDate.AddMonths(15);
             training.AcademicYear = AcademicYearDatesHelper.GetCurrentAcademicYear();
             training.PercentageLearningToBeDelivered = 40;
