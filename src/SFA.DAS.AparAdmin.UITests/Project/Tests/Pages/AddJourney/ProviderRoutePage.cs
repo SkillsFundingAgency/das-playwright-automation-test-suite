@@ -1,6 +1,4 @@
-﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate;
-
-namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.AddJourney;
+﻿namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.AddJourney;
 
 public class ProviderRoutePage(ScenarioContext context) : BasePage(context)
 {
@@ -16,9 +14,8 @@ public class ProviderRoutePage(ScenarioContext context) : BasePage(context)
     public async Task SelectProviderType(string providerType)
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = providerType }).ClickAsync();
-        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+        await page.Locator("#continue").ClickAsync();
 
-        // Wait for navigation / next page to stabilise so callers can read the new heading.
         await page.WaitForLoadStateAsync();
     }
 }

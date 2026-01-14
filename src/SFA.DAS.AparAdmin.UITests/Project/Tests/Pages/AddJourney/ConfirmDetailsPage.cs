@@ -5,7 +5,12 @@
         public override async Task VerifyPage()
         {
             await Assertions.Expect(page.Locator("h1"))
-                .ToContainTextAsync("No results found for");
+                .ToContainTextAsync("Confirm details");
         }
-    }
+    public async Task<SuccessfullyAddedPage> ConfirmDetailsAndContinue()
+        {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Confirm and add organisation"}).ClickAsync();
+            return await VerifyPageAsync(() => new SuccessfullyAddedPage(context));
+        }
+}
 
