@@ -200,7 +200,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenTheNonLevyEmployerSendCohortToProvider()
         {
             //await employerStepsHelper.EmployerLogInToEmployerPortal(false);
-            var _dynamicHomepageSettingAnApprenticeShip = new ContinueSettingupAnApprenticeship(context);
+            var _dynamicHomepageSettingAnApprenticeShip = new ContinueSettingupAnApprenticeshipDynamicHomepage(context);
 
 
             var _continueSettingupAnApprenticeshipPage = await _dynamicHomepageSettingAnApprenticeShip.Continue();

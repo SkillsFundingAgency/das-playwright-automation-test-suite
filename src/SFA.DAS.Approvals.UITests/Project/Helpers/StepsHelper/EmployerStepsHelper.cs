@@ -162,7 +162,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
 
-            var page1 = await new YourApprenticeDynamicHomepage(context).ReviewApprenticeDetails();
+            var page1 = await new ReviewApprenticeDetailsDynamicHomepage(context).ReviewApprenticeDetails();
             await page1.ValidateCohortStatus(status);
         }
 
@@ -185,7 +185,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         {
 
             // Click Start button in the home screen for newly created employer account and reserve funds
-            var _dynamicHomepage = new SetupAnApprenticeshipPage(context);
+            var _dynamicHomepage = new SetupAnApprenticeshipDynamicHomepage(context);
 
             var _doYouKnowWhichCourseYourApprenticeWillTakePage = await _dynamicHomepage.StartNow();
             var _haveYouChosenATrainingProviderToDeliverTheApprenticeshipTrainingPage = await _doYouKnowWhichCourseYourApprenticeWillTakePage.Yes();
