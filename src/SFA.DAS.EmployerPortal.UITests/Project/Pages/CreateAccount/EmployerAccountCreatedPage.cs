@@ -4,7 +4,7 @@ public class EmployerAccountCreatedPage(ScenarioContext context) : EmpAccountCre
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Employer account created");
+        await Assertions.Expect(page.Locator(".govuk-panel__title")).ToContainTextAsync("Employer account created");
 
         await SetEasNewUser();
     }

@@ -4,7 +4,7 @@ public class AccessDeniedPage(ScenarioContext context) : EmployerPortalBasePage(
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Access denied");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Access denied");
     }
 
     public async Task<HomePage> GoBackToTheServiceHomePage(string orgName)

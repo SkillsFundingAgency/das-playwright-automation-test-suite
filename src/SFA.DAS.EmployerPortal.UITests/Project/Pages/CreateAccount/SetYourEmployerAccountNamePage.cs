@@ -2,7 +2,7 @@
 
 public class SetYourEmployerAccountNamePage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Set your account name");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Set your account name");
 
     public async Task<YourAccountNameHasBeenChangedPage> SelectoptionToSkipNameChange()
     {
