@@ -30,6 +30,10 @@ public class PlaywrightHooks(ScenarioContext context)
     [BeforeScenario(Order = 8)]
     public async Task SetupPlaywrightDriver()
     {
+        var objectContext = context.Get<ObjectContext>();
+
+        objectContext.SetConsoleAndDebugInformation("Entered SetupPlaywrightDriver Order = 8 hook");
+
         isCloud = InitializeDriver.isCloud;
 
         if (isCloud)

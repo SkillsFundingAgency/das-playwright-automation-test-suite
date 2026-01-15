@@ -6,7 +6,14 @@ public class ApprenticeFeedbackHooks(ScenarioContext context) : BaseHooks(contex
     private readonly DbConfig _dbConfig = context.Get<DbConfig>();
 
     [BeforeScenario(Order = 31)]
-    public async Task NavigateToApprenticePortal() => await Navigate(UrlConfig.Apprentice_BaseUrl);
+    public async Task NavigateToApprenticePortal()
+    {
+        var objectContext = context.Get<ObjectContext>();
+
+        objectContext.SetConsoleAndDebugInformation("Entered NavigateToApprenticePortal Order = 31 hook");
+
+        await Navigate(UrlConfig.Apprentice_BaseUrl);
+    }
 
     //[BeforeScenario(Order = 32)]
     //public void SetUpHelpers()

@@ -1,22 +1,17 @@
 ﻿namespace SFA.DAS.Framework.Hooks;
 
 [Binding]
-public class FrameworkHelpersHooks
+public class FrameworkHelpersHooks(ScenarioContext context)
 {
-    private readonly ScenarioContext _context;
-    private readonly string[] _tags;
-
-    public FrameworkHelpersHooks(ScenarioContext context) { _context = context; _tags = _context.ScenarioInfo.Tags; }
-
     [BeforeScenario(Order = 2)]
     public void SetUpFrameworkHelpers()
     {
-        var objectContext = _context.Get<ObjectContext>();
+        var objectContext = context.Get<ObjectContext>();
 
-        _context.Set(new TryCatchExceptionHelper(objectContext));
+        objectContext.SetConsoleAndDebugInformation("Entered SetUpFrameworkHelpers Order = 2 hook");
 
-        objectContext.SetTestDataList(_tags);
+        context.Set(new TryCatchExceptionHelper(objectContext));
 
-        _context.Set(new RetryHelper(_context.ScenarioInfo, objectContext));
+        context.Set(new RetryHelper(context.ScenarioInfo, objectContext));
     }
 }
