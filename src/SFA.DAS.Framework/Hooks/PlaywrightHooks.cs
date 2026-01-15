@@ -8,9 +8,9 @@ public class PlaywrightHooks(ScenarioContext context)
 
     private IBrowserContext browserContext;
 
-    private static IBrowser Browser;
+    private IBrowser Browser;
 
-    private static bool isCloud;
+    private bool isCloud;
 
     private static readonly DateTime Date;
 
@@ -20,9 +20,19 @@ public class PlaywrightHooks(ScenarioContext context)
     }
 
     [BeforeTestRun]
-    public static async Task BeforeAll()
+    public static Task BeforeAll()
     {
         driver = new InitializeDriver();
+
+        return Task.CompletedTask;
+    }
+
+    [BeforeScenario(Order = 8)]
+    public async Task SetupPlaywrightDriver()
+    {
+        var objectContext = context.Get<ObjectContext>();
+
+        objectContext.SetConsoleAndDebugInformation("Entered SetupPlaywrightDriver Order = 8 hook");
 
         isCloud = InitializeDriver.isCloud;
 
@@ -35,17 +45,7 @@ public class PlaywrightHooks(ScenarioContext context)
                 Headless = false,
                 Args = ["--start-maximized"],
             });
-    }
 
-    [AfterTestRun]
-    public static async Task AfterAll()
-    {
-        await Browser.CloseAsync();
-    }
-
-    [BeforeScenario(Order = 8)]
-    public async Task SetupPlaywrightDriver()
-    {
         browserContext = await Browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = ViewportSize.NoViewport
@@ -100,7 +100,7 @@ public class PlaywrightHooks(ScenarioContext context)
                 await MarkTestStatus("failed", context.TestError.Message, pDriver.Page);
         }
 
-        await browserContext.CloseAsync();
+        await Browser.CloseAsync();
     }
 
     public static async Task MarkTestStatus(string status, string reason, IPage page)
@@ -110,7 +110,7 @@ public class PlaywrightHooks(ScenarioContext context)
 
     private bool ShouldTrace() => (context.ScenarioInfo.Tags.Contains("donottracelogin") == false || isCloud == false);
 
-    private static string CreateCloudDriver()
+    private string CreateCloudDriver()
     {
         string varbrowserstackusername = Environment.GetEnvironmentVariable("BROWSERSTACKUSER");
 
@@ -129,7 +129,7 @@ public class PlaywrightHooks(ScenarioContext context)
             { "geoLocation", "FR" },
             { "project", "Playwright Campaingns project" },
             { "build", buildDateTime },
-            { "name", "context.ScenarioInfo.Title" },
+            { "name", context.ScenarioInfo.Title },
             { "buildTag", "playwright" },
             { "resolution", "1280x1024" },
             { "browserstack.local", "false" },

@@ -10,6 +10,10 @@ public class EmployerFeedbackHooks(ScenarioContext context) : BaseHooks(context)
     [BeforeScenario(Order = 21)]
     public void SetUpHelpers()
     {
+        var objectContext = context.Get<ObjectContext>();
+
+        objectContext.SetConsoleAndDebugInformation("Entered Employer Feedback SetUpHelpers Order = 21 hook");
+
         _employerFeedbackSqlHelper = new EmployerFeedbackSqlHelper(_objectContext, _context.Get<DbConfig>());
 
         _context.Set(_employerFeedbackSqlHelper);

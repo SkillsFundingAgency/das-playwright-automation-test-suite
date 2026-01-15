@@ -12,6 +12,10 @@ public class MailosaurAPIConfigurationSetup(ScenarioContext context)
     [BeforeScenario(Order = 5)]
     public void SetUpMailosaurAPIConfiguration()
     {
+        var objectContext = context.Get<ObjectContext>();
+
+        objectContext.SetConsoleAndDebugInformation("Entered SetUpMailosaurAPIConfiguration Order = 5 hook");
+
         var mailosaurApiConfigs = new MultiConfigurationSetupHelper(context).SetMultiConfiguration<MailosaurApiConfig>(MailosaurApiConfig);
 
         var mailosaurApiConfig = Configurator.IsAdoExecution ? mailosaurApiConfigs.Single(x => x.ServerName == "azure") : mailosaurApiConfigs.Single(x => x.ServerName == "local");
