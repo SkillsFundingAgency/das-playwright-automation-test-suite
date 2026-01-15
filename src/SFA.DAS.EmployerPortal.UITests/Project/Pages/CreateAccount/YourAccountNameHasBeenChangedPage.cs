@@ -6,7 +6,7 @@ public class YourAccountNameHasBeenChangedPage(ScenarioContext context) : Employ
     {
         await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync("Account name confirmed");
 
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You have confirmed your Account name");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("You have confirmed your Account name");
     }
 
     public async Task<CreateYourEmployerAccountPage> ContinueToAcknowledge()

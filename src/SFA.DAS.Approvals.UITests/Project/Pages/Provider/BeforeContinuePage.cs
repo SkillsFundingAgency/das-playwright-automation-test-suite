@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
+﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
     internal class BeforeContinuePage(ScenarioContext context) : ApprovalsBasePage(context)
     {

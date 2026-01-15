@@ -32,11 +32,14 @@ public class FAA_ApprenticeSummaryPage(ScenarioContext context) : FAABasePage(co
     //    return this;
     //}
 
-    //public FAA_ApprenticeSummaryPage SaveAndApplyForVacancy()
-    //{
-    //    formCompletionHelper.Click(SaveVacancyLink);
-    //    formCompletionHelper.Click(SavedVacanciesNavBar);
-    //    formCompletionHelper.ClickLinkByText(SavedVacancyLink, vacancyTitleDataHelper.VacancyTitle);
-    //    return new FAA_ApprenticeSummaryPage(context);
-    //}
+    public async Task<FAA_ApprenticeSummaryPage> SaveAndApplyForVacancy()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Follow the link to   Save" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Saved vacancies" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = vacancyTitleDataHelper.VacancyTitle }).ClickAsync();
+
+        return await VerifyPageAsync(() => new FAA_ApprenticeSummaryPage(context));
+    }
 }

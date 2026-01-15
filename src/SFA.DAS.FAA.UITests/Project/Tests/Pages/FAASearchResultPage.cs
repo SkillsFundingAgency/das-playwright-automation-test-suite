@@ -16,21 +16,18 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(new Regex("results? found"));
     }
 
-    public async Task ClickSignout()
+    public async Task ClickSignout() => await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
+
+    public async Task<FAA_ApplicationOverviewPage> SaveFromSearchResultsAndApplyForVacancy()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Follow the link to   Save" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Saved vacancies" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Saved vacancies" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new FAA_ApplicationOverviewPage(context));
     }
-
-    //public FAA_ApplicationOverviewPage SaveFromSearchResultsAndApplyForVacancy()
-    //{
-    //    var savedVacancyName = pageInteractionHelper.GetText(VacancyName);
-
-    //    formCompletionHelper.Click(FavouriteIcon);
-    //    formCompletionHelper.Click(SavedVacancyNavBarLink);
-    //    formCompletionHelper.Click(ApplyNow);
-
-    //    return new FAA_ApplicationOverviewPage(context);
-    //}
 
     public async Task<FAA_ApprenticeSummaryPage> ClickFirstApprenticeshipThatCanBeAppliedFor()
     {

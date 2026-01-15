@@ -7,7 +7,7 @@ public class DescriptionPage(ScenarioContext context) : RaaBasePage(context)
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("How the apprentice will train");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("How the apprentice will train", new LocatorAssertionsToContainTextOptions { Timeout = 15000});
     }
 
     public async Task<CreateAnApprenticeshipAdvertOrVacancyPage> EnterAllDescription()

@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
-using System;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 

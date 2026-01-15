@@ -6,6 +6,8 @@ public abstract class CheckPage(ScenarioContext context) : BasePage(context)
 
     protected abstract ILocator PageLocator { get; }
 
+    protected virtual int VerifyPageTimeOutinMs => 20000;
+
     public virtual async Task<bool> IsPageDisplayed()
     {
         objectContext.SetDebugInformation($"Check page using Page title : '{PageTitle}'");
@@ -26,7 +28,7 @@ public abstract class CheckPage(ScenarioContext context) : BasePage(context)
         }
     }
 
-    public override async Task VerifyPage() => await Assertions.Expect(PageLocator).ToContainTextAsync(PageTitle);
+    public override async Task VerifyPage() => await Assertions.Expect(PageLocator).ToContainTextAsync(PageTitle, new LocatorAssertionsToContainTextOptions { IgnoreCase = true, Timeout = VerifyPageTimeOutinMs });
 
 }
 

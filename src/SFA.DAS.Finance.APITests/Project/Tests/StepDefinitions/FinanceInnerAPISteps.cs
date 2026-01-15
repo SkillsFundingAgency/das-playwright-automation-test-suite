@@ -1,15 +1,27 @@
 ﻿using Newtonsoft.Json;
 using SFA.DAS.Finance.APITests.Project.Helpers;
 using SFA.DAS.Finance.APITests.Project.Models;
+using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
 
 namespace SFA.DAS.Finance.APITests.Project.Tests.StepDefinitions;
 
 [Binding]
-public class FinanceInnerAPISteps(ScenarioContext context)
+public class FinanceInnerAPISteps
 {
-    private readonly Inner_EmployerFinanceApiRestClient _innerApiRestClient = context.GetRestClient<Inner_EmployerFinanceApiRestClient>();
+    private readonly ScenarioContext _scenarioContext;
+    private readonly Inner_EmployerFinanceApiRestClient _innerApiRestClient;
+    private readonly Outer_EmployerFinanceApiHelper _outerApiHelper;
+    private readonly ObjectContext _objectContext;
+    private readonly StepHelper _stepHelper;
 
-    private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
+    public FinanceInnerAPISteps(ScenarioContext context)
+    {
+        _scenarioContext = context;
+        _innerApiRestClient = context.GetRestClient<Inner_EmployerFinanceApiRestClient>();
+        _outerApiHelper = new Outer_EmployerFinanceApiHelper(context);
+        _objectContext = context.Get<ObjectContext>();
+        _stepHelper = new StepHelper(_scenarioContext, _objectContext, _outerApiHelper);
+    }
 
     [Then(@"endpoint das-employer-finance-api /ping can be accessed")]
     public async Task ThenEndpointDas_Employer_Finance_ApiPingCanBeAccessed()
@@ -36,12 +48,27 @@ public class FinanceInnerAPISteps(ScenarioContext context)
         var hashedAccountId = GetHashedAccountId();
         var response = await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy");
         var result = JsonConvert.DeserializeObject<ICollection<LevyDeclaration>>(response.Content);
-        await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy/{result.FirstOrDefault().PayrollYear}/{result.FirstOrDefault().PayrollMonth}", HttpStatusCode.OK);
+        var first = result.First();
 
+        await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy/{first.PayrollYear}/{first.PayrollMonth}", HttpStatusCode.OK);
+    }
+
+    [Then(@"endpoint \/api/accounts/\{accountId}/transactions can be accessed")]
+    public async Task ThenEndpointApiAccountsAccountIdTransactionsEndpointCanBeAccessed()
+    {
+        var hashedAccountId = GetHashedAccountId();
+        await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions", HttpStatusCode.OK);
+    }
+
+    [When(@"send an api request GET api/accounts/\{hashedAccountId\}/transactions")]
+    public async Task WhenSendAnApiRequestGETApiAccountsAccountIdTransactions()
+    {
+        var hashedAccountId = GetHashedAccountId();
+       await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions", HttpStatusCode.OK);
     }
 
     [Then(@"endpoint api/accounts/\{accountId}/transactions can be accessed")]
-    public async Task ThenEndpointApiAccountsAccountIdTransactionsEndpointCanBeAccessed()
+    public async Task ThenEndpointApiAccountsAccountIdTransactionsEndpointCanBeAccessed1()
     {
         var hashedAccountId = GetHashedAccountId();
         await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions", HttpStatusCode.OK);

@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
-using System;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Steps;
 
@@ -185,10 +184,10 @@ public class TasksSteps
     [When("there are X transfers applications available to add an apprentice")]
     public async Task WhenThereAreTransferPledgeApplicationsAvailableToAddAnApprentice()
     {
-        var tasks = GetTaskQueryResult(); 
+        var tasks = GetTaskQueryResult();
 
         tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices = await _tasksHelper.GetNumberOfAcceptedTransferPledgeApplicationsWithNoApprentices();
-        
+
     }
 
     [Then("display task: 'X transfers available to add an apprentice'")]
@@ -204,17 +203,17 @@ public class TasksSteps
     {
         var tasks = GetTaskQueryResult();
 
-       _homePage = await TasksHelper.ClickTransfersAvailableToAddApprenticeLink(_homePage, tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices);
-        
+        _homePage = await TasksHelper.ClickTransfersAvailableToAddApprenticeLink(_homePage, tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices);
+
     }
 
 
     [When("there are X transfer application has been approved")]
     public async Task WhenTransferApplicationsHaveBeenApproved()
     {
-       var tasks = GetTaskQueryResult();
-       tasks.NumberOfTransferPledgeApplicationsApproved = await _tasksHelper.GetNumberOfTransferPledgeApplicationsApproved();
-       SetTaskQueryResult(tasks);
+        var tasks = GetTaskQueryResult();
+        tasks.NumberOfTransferPledgeApplicationsApproved = await _tasksHelper.GetNumberOfTransferPledgeApplicationsApproved();
+        SetTaskQueryResult(tasks);
     }
 
     [Then("display task: 'X transfers to accept'")]
@@ -230,6 +229,6 @@ public class TasksSteps
     {
         var tasks = GetTaskQueryResult();
 
-         _homePage =await TasksHelper.ClickTransfersToAcceptLink(_homePage, tasks.NumberOfTransferPledgeApplicationsApproved);
+        _homePage = await TasksHelper.ClickTransfersToAcceptLink(_homePage, tasks.NumberOfTransferPledgeApplicationsApproved);
     }
 }

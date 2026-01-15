@@ -68,5 +68,4 @@ public class FAACreateSteps(ScenarioContext context)
 
         await page1.SubmitApplication();
     }
-
 }

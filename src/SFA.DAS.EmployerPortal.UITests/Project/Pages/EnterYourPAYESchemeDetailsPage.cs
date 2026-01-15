@@ -4,7 +4,7 @@ public class EnterYourPAYESchemeDetailsPage(ScenarioContext context) : EmployerP
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add PAYE details");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Add PAYE details");
     }
 
     #region Constants

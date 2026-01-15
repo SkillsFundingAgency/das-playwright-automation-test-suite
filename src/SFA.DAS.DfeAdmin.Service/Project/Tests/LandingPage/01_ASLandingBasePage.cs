@@ -17,3 +17,12 @@ public abstract class ASLandingCheckBasePage(ScenarioContext context) : CheckPag
     public abstract Task ClickStartNowButton();
 }
 
+public class ASVacancyQaLandingPage(ScenarioContext context) : ASLandingCheckBasePage(context)
+{
+    protected override string PageTitle => "Apprenticeship service vacancy QA";
+
+    protected override int VerifyPageTimeOutinMs => 30000;
+
+    public override async Task ClickStartNowButton() => await page.GetByRole(AriaRole.Link, new() { Name = "Start now" }).ClickAsync();
+}
+

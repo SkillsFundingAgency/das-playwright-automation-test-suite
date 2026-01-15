@@ -1,10 +1,4 @@
-﻿using Polly;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
@@ -14,7 +8,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator ContinueButton => page.GetByRole(AriaRole.Button);
         private ILocator TrainingTotalHoursTextBox => page.Locator("#TrainingTotalHours");
         private ILocator DurationReducedByHoursTextBox => page.Locator("#DurationReducedByHours");
-        private ILocator DurationReducedByTextBox => page.Locator("#DurationReducedBy");
+       // private ILocator DurationReducedByTextBox => page.Locator("#DurationReducedBy");
         private ILocator ReducedDuration => page.Locator("#radio-notreduced");
         private ILocator PriceReduced => page.Locator("#PriceReduced");
 
@@ -29,7 +23,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
             await TrainingTotalHoursTextBox.FillAsync(rpl.TrainingTotalHours.ToString());
             await DurationReducedByHoursTextBox.FillAsync(rpl.DurationReducedBy.ToString());
-            await ReducedDuration.ClickAsync();
+           // await ReducedDuration.ClickAsync();
             await PriceReduced.FillAsync(rpl.PriceReducedBy.ToString());
             await ContinueButton.ClickAsync();
             return await VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));

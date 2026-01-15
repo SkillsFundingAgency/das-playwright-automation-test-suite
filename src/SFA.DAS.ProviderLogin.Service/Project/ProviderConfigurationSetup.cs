@@ -31,6 +31,8 @@ public class ProviderConfigurationSetup(ScenarioContext context) : ProviderConfi
 
         dfeProviderDetailsList = await new EmployerProviderRelationshipsSqlDataHelper(_context.Get<ObjectContext>(), _context.Get<DbConfig>()).GetProviderName(dfeframeworkList.SelectMany(x => x.Listofukprn).ToList());
 
+        _context.Set(dfeProviderDetailsList);
+
         SetProviderConfig();
 
         _context.SetProviderPermissionConfig(SetProviderCreds<ProviderPermissionsConfig>());

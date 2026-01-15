@@ -7,6 +7,7 @@ public abstract class RaaBasePage : BasePage
     protected readonly RAADataHelper rAADataHelper;
 
     protected readonly AdvertDataHelper advertDataHelper;
+
     protected readonly bool isRaaEmployer;
 
     //protected override By ContinueButton => By.CssSelector(".save-button");
@@ -14,8 +15,6 @@ public abstract class RaaBasePage : BasePage
     //protected override By PageHeader => By.CssSelector($"{PageHeaderSelector}, .govuk-label--xl");
 
     //protected virtual By SaveAndContinueButton => By.ClassName("govuk-button");
-
-    //private static By CancelLink => By.LinkText("Cancel");
 
     //protected static By MultipleCandidateFeedback => By.CssSelector("#provider-multiple-candidate-feedback");
     //protected static By CandidateFeedback => By.CssSelector("#CandidateFeedback");
@@ -30,13 +29,12 @@ public abstract class RaaBasePage : BasePage
 
         advertDataHelper = context.GetValue<AdvertDataHelper>();
     }
+    
     protected bool IsFoundationAdvert => context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
-    //private static By FoundationTag => By.CssSelector(".govuk-tag--pink");
-    public void CheckFoundationTag()
+    
+    public async Task CheckFoundationTag()
     {
-        //var expectedFoundationTag = "Foundation";
-        //var actualFoundationTag = pageInteractionHelper.GetText(FoundationTag).Trim();
-        //pageInteractionHelper.VerifyText(actualFoundationTag, expectedFoundationTag);
+        await Assertions.Expect(page.Locator(".govuk-tag--pink")).ToContainTextAsync("Foundation");
     }
 
     //protected virtual void SaveAndContinue() => formCompletionHelper.ClickButtonByText(SaveAndContinueButton, "Save and continue");
@@ -57,5 +55,5 @@ public abstract class RaaBasePage : BasePage
         await locator.ContentFrame.Locator(".mce-content-body").FillAsync(text);
     }
 
-    //public void EmployerCancelAdvert() => formCompletionHelper.Click(CancelLink);
+    public async Task EmployerCancelAdvert() => await page.GetByRole(AriaRole.Link, new() { Name = "Cancel" }).ClickAsync();
 }

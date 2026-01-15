@@ -1,11 +1,6 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
@@ -22,6 +17,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         private ILocator SubmitButton => page.Locator("button:has-text('Submit')");
         private ILocator editLink => page.Locator(".edit-apprentice");
         private ILocator editLink2 => page.Locator("table tr").Nth(1).Locator(".edit-apprentice");
+        private ILocator addAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
         #endregion
 
 
@@ -53,7 +49,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await new CommonStepsHelper(context).VerifyText(status, cohortStatus);
         }
 
-
         internal async Task VerifyRPLDetails(List<Apprenticeship> apprenticeships)
         {
             for (int i=0; i< apprenticeships.Count; i++)
@@ -61,6 +56,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
                 await editLink.Nth(i).ClickAsync();
                 var page1 = await new EditApprenticeDetailsPage(context).RecognitionOfPriorLearning(apprenticeships[i]);
             }           
+        }
+
+        internal async Task<ApprenticeRequestsPage> TryClickAddAnotherApprenticeLink()
+        {
+            await addAnotherApprenticeLink.ClickAsync();
+            var page = await VerifyPageAsync(() => new YouCannotCreateAnotherFundingReservationPage(context));
+            await page.ClickOnApprenticeRequestsLink();
+            return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
         }
     }
 }

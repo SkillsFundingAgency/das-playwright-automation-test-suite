@@ -60,9 +60,23 @@ public partial class FAA_ApplicationOverviewPage : FAABasePage
         return await VerifyPageAsync(() => new WhatInterestsYouAboutTThisApprenticeshipPage(context));
     }
 
+    public async Task<WhatInterestsYouAboutTThisApprenticeshipPage> Access_Section3_2Interests_Foundations()
+    {
+        await NavigateToTask(ApplicationQuestionsFirstQuestionFoundations, ApplicationQuestions_2);
+
+        return await VerifyPageAsync(() => new WhatInterestsYouAboutTThisApprenticeshipPage(context));
+    }
+
     public async Task<AdditionQuestion1Page> Access_Section3_3AdditionalQuestion1()
     {
         await NavigateToTask(ApplicationQuestionsFirstQuestion, advertDataHelper.AdditionalQuestion1);
+
+        return await VerifyPageAsync(() => new AdditionQuestion1Page(context));
+    }
+
+    public async Task<AdditionQuestion1Page> Access_Section3_3AdditionalQuestion1_Foundations()
+    {
+        await NavigateToTask(ApplicationQuestionsFirstQuestionFoundations, advertDataHelper.AdditionalQuestion1);
 
         return await VerifyPageAsync(() => new AdditionQuestion1Page(context));
     }
@@ -71,6 +85,13 @@ public partial class FAA_ApplicationOverviewPage : FAABasePage
     {
         await NavigateToTask(ApplicationQuestionsFirstQuestion, advertDataHelper.AdditionalQuestion2);
 
+        return await VerifyPageAsync(() => new AdditionQuestion2Page(context));
+    }
+
+    public async Task<AdditionQuestion2Page> Access_Section3_4AdditionalQuestion2_Foundations()
+    {
+        await NavigateToTask(ApplicationQuestionsFirstQuestionFoundations, advertDataHelper.AdditionalQuestion2);
+        
         return await VerifyPageAsync(() => new AdditionQuestion2Page(context));
     }
 
@@ -95,7 +116,15 @@ public partial class FAA_ApplicationOverviewPage : FAABasePage
         return await VerifyPageAsync(() => new DisabilityConfidentSchemePage(context));
     }
 
+    public async Task<WhereDoYouWantToApplyForPage>  Access_Section6_1Locations()
+    {
+        await NavigateToTask(LocationsFirstQuestion, LocationsFirstQuestion);
+
+        return await VerifyPageAsync(() => new WhereDoYouWantToApplyForPage(context));
+    }
+
     #endregion
+
 
     public async Task<CheckYourApplicationBeforeSubmittingPage> PreviewApplication()
     {
@@ -150,6 +179,8 @@ public partial class FAA_ApplicationOverviewPage : FAABasePage
     public async Task VerifyInterviewAadjustments_1() => await Verify_Section4(InterviewAdjustments_1, "Complete");
     public async Task VerifyDisabilityConfidence_1() => await Verify_Section5(DisabilityConfidence_1, "Complete");
 
+    public async Task VerifyLocations_1() => await Verify_Section6(LocationsFirstQuestion, "Complete");
+
     private async Task Verify_Section1(string taskName, string status) => await VerifySections(EducationHistoryFirstQuestion, taskName, status);
 
     private async Task Verify_Section2(string taskName, string status) => await VerifySections(WorkHistoryFirstQuestion, taskName, status);
@@ -159,6 +190,8 @@ public partial class FAA_ApplicationOverviewPage : FAABasePage
     private async Task Verify_Section4(string taskName, string status) => await VerifySections(InterviewAdjustmentsFirstQuestion, taskName, status);
 
     private async Task Verify_Section5(string taskName, string status) => await VerifySections(DisabilityConfidenceFirstQuestion, taskName, status);
+
+    private async Task Verify_Section6(string taskName, string status) => await VerifySections(LocationsFirstQuestion, taskName, status);
 
     private async Task VerifySections(string sectionName, string taskName, string status)
     {

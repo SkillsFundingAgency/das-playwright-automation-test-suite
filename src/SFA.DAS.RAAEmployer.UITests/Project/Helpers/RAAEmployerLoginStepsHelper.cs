@@ -1,7 +1,4 @@
-﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
-using SFA.DAS.Login.Service.Project.Helpers;
+﻿
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
@@ -14,7 +11,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
 
         internal async Task<HomePage> GoToHomePage(EasAccountUser loginUser) => await _homePageStepsHelper.Login(loginUser);
 
-        internal async Task<CreateAnAdvertHomePage>  GoToCreateAnAdvertHomePage(RAAEmployerUser user)
+        internal async Task<CreateAnAdvertHomePage> GoToCreateAnAdvertHomePage(RAAEmployerUser user)
         {
             await GoToHomePage(user);
 
@@ -23,7 +20,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
             return new CreateAnAdvertHomePage(context);
         }
 
-        internal async Task<YourApprenticeshipAdvertsHomePage>  GoToRecruitmentHomePage(RAAEmployerUser user)
+        internal async Task<YourApprenticeshipAdvertsHomePage> GoToRecruitmentHomePage(RAAEmployerUser user)
         {
             await GoToHomePage(user);
 
@@ -34,7 +31,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
 
         internal async Task<YourApprenticeshipAdvertsHomePage> NavigateToRecruitmentHomePage()
         {
-            return await VerifyPageHelper.VerifyPageAsync(() => new YourApprenticeshipAdvertsHomePage(context, true));
+            return await VerifyPageHelper.VerifyPageAsync(context, () => new YourApprenticeshipAdvertsHomePage(context, true));
         }
     }
 }

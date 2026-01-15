@@ -1,13 +1,13 @@
-﻿using System;
-using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
+using System;
 
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel
 {
     internal class ApprenticeDataHelper(ScenarioContext context)
     {
-        public async Task<List<Apprenticeship>> CreateApprenticeshipAsync(
+        public async Task<List<Apprenticeship>> CreateApprenticeshipObject(
             EmployerType EmployerType,
             int NumberOfApprenticeships,
             ProviderConfig providerConfig = null,
@@ -54,7 +54,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             return apprenticeships;
         }
 
-        internal async Task<Apprenticeship> CreateEmptyCohortAsync(EmployerType EmployerType, ProviderConfig providerConfig = null)
+        internal async Task<Apprenticeship> CreateEmptyCohortObject(EmployerType EmployerType, ProviderConfig providerConfig = null)
         {
             providerConfig = (providerConfig == null) ? context.GetProviderConfig<ProviderConfig>() : providerConfig;
 

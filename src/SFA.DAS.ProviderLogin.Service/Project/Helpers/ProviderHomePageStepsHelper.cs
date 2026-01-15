@@ -1,10 +1,11 @@
 ﻿using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
+using SFA.DAS.Framework.Hooks;
 using SFA.DAS.Login.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 
 namespace SFA.DAS.ProviderLogin.Service.Project.Helpers;
 
-public class ProviderHomePageStepsHelper(ScenarioContext context)
+public class ProviderHomePageStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
 {
     private readonly ObjectContext objectContext = context.Get<ObjectContext>();
 
@@ -14,13 +15,11 @@ public class ProviderHomePageStepsHelper(ScenarioContext context)
 
     public async Task<ProviderHomePage> GoToProviderHomePage(ProviderLoginUser login, bool newTab)
     {
-        var driver = context.Get<Driver>();
-
-        if (newTab) await OpenInNewTab();
+        if (newTab) await OpenNewTab();
 
         objectContext.SetDebugInformation($"Navigated to {Provider_BaseUrl} to login as provider '{login.Ukprn}'");
 
-        await driver.Page.GotoAsync(Provider_BaseUrl);
+        await Navigate(Provider_BaseUrl);
 
         objectContext.SetUkprn(login.Ukprn);
 
@@ -47,15 +46,6 @@ public class ProviderHomePageStepsHelper(ScenarioContext context)
         }
 
         return await loginHelper.GoToProviderHomePage();
-    }
-
-    private async Task OpenInNewTab()
-    {
-        var driver = context.Get<Driver>();
-
-        var page = await driver.BrowserContext.NewPageAsync();
-
-        driver.Page = page;
     }
 }
 

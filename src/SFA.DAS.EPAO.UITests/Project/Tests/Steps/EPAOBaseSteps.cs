@@ -4,12 +4,12 @@ using SFA.DAS.EPAO.UITests.Project.Tests.Pages.Admin;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.ManageUsers;
 using SFA.DAS.EPAO.UITests.Project.Tests.Pages.AssessmentService.OrganisationDetails;
+using SFA.DAS.Framework.Hooks;
 
 namespace SFA.DAS.EPAO.UITests.Project.Tests.Steps;
 
-public class EPAOBaseSteps
+public class EPAOBaseSteps : FrameworkBaseHooks
 {
-    protected readonly ScenarioContext context;
     protected readonly ObjectContext objectContext;
 
     protected readonly EPAOE2EApplyUser ePAOE2EApplyUser;
@@ -49,9 +49,8 @@ public class EPAOBaseSteps
     protected AS_UserDetailsPage userDetailsPage;
     protected AS_OrganisationDetailsPage aS_OrganisationDetailsPage;
 
-    protected EPAOBaseSteps(ScenarioContext context)
+    protected EPAOBaseSteps(ScenarioContext context) : base(context)
     {
-        this.context = context;
         objectContext = context.Get<ObjectContext>();
 
         ePAOE2EApplyUser = context.GetUser<EPAOE2EApplyUser>();
