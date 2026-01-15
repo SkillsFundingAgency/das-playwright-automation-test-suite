@@ -9,13 +9,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Are you setting up an apprenticeship for an existing employee?");
 
 
-        internal async Task<SetUpAnApprenticeshipForExistingEmployeePage> Yes()
+        internal async Task<AreYouSettingUpAnApprenticeshipForAnExistingEmployeePage> Yes()
         {
             await page.Locator("[value= 'Yes']").ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-            return await VerifyPageAsync(() => new SetUpAnApprenticeshipForExistingEmployeePage(context));
+            return await VerifyPageAsync(() => new AreYouSettingUpAnApprenticeshipForAnExistingEmployeePage(context));
         }
-
 
         internal async Task<SetUpAnApprenticeshipForNewEmployeePage> No()
         {
@@ -23,6 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new SetUpAnApprenticeshipForNewEmployeePage(context));
         }
+
     }
 
     internal class DoYouKnowWhichApprenticeshipTrainingYourApprenticeWillTakePage(ScenarioContext context) : ApprovalsBasePage(context)

@@ -57,7 +57,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var listOflearnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
 
             await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(listOflearnerData, academicYear);
-            // await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(listOflearnerData, academicYear); 
+            //await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(listOflearnerData, academicYear); 
         }
 
         [Given(@"Provider adds an apprentice aged (.*) years using below ""(.*)"", ""(.*)"" and ""(.*)""")]

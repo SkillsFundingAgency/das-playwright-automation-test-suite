@@ -1,6 +1,4 @@
-﻿using DnsClient;
-using Mailosaur.Models;
-using Microsoft.VisualBasic;
+﻿using Microsoft.VisualBasic;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
@@ -9,7 +7,6 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System;
-using System.Drawing;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {

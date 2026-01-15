@@ -10,4 +10,4 @@ public class ApprovalsSteps(ScenarioContext context)
     [Given(@"The User creates NonLevyEmployer account and sign an agreement")]
     [Given(@"The User creates LevyEmployer account and sign an agreement")]
     public async Task TheUserCreatesNonLevyEmployerAccountAndSignAnAgreement() => await _stepsHelper.CreateUserAccount();
-}       
+}
