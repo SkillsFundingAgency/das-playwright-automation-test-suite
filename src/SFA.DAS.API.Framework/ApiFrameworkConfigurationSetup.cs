@@ -8,6 +8,10 @@ public class ApiFrameworkConfigurationSetup(ScenarioContext context)
     [BeforeScenario(Order = 2)]
     public void SetUpApiFrameworkConfiguration()
     {
+        var objectContext = context.Get<ObjectContext>();
+
+        objectContext.SetConsoleAndDebugInformation("Entered SetUpApiFrameworkConfiguration Order = 2 hook");
+
         var inner_ApiFrameworkConfig = new Inner_ApiFrameworkConfig(_configSection.GetConfigSection<Inner_ApiAuthTokenConfig>())
         {
             IsVstsExecution = Configurator.IsAdoExecution,

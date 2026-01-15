@@ -59,13 +59,9 @@ public static class OC_TestDataListExtension
 
     public static void SetConsoleAndDebugInformation(this ObjectContext objectContext, string value)
     {
-        var message = $"✅ {value}";
+        TestContext.Progress.WriteLine(value);
 
-        TestContext.Progress.WriteLine(message);
-
-        Console.WriteLine(message);
-
-        objectContext.SetDebugInformation(message);
+        objectContext.SetDebugInformation(value);
     }
 
     public static void SetDebugInformation(this ObjectContext objectContext, string value) => objectContext.GetDebugInformations().Add($"-> {DateTime.UtcNow:dd/MM HH:mm:ss}: {value}");
