@@ -42,21 +42,28 @@ resources:
 pool:
   vmImage: 'windows-latest'
 
-jobs:
-- job: ValidateParams
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-    - script: |
-        if [ -z "${{ parameters.projectName }}" ]; then
-          echo "ERROR: projectName cannot be empty."
-          exit 1
-        fi
-      displayName: "Validate projectName is not empty"
-
 stages:
-  - template: ../pipeline-templates/stage/enviroment-stage.yml
-    parameters:
-      projectName: ${{ parameters.projectName }}
-      BuildConfiguration: $(BuildConfiguration)
-      deploy: $(Deploy)
+
+- stage: Validate
+  displayName: "Validate Input Parameters"
+  jobs:
+    - job: ValidateParams
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+        - script: |
+            if [ -z "${{ parameters.projectName }}" ]; then
+              echo "ERROR: projectName cannot be empty."
+              exit 1
+            fi
+          displayName: "Validate projectName is not empty"
+
+
+- stage: RunEnvironmentStage
+  displayName: "Environment Build/Deploy Stage"
+  jobs:
+    - template: ../pipeline-templates/stage/enviroment-stage.yml
+      parameters:
+        projectName: ${{ parameters.projectName }}
+        BuildConfiguration: $(BuildConfiguration)
+        deploy: $(Deploy)
