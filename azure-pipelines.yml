@@ -20,7 +20,9 @@ variables:
   - name: ProjectName
     value: ""
   - name: Deploy
-    value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
+    value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+               eq(variables['Build.Reason'], 'Manual'),
+               eq(variables['Build.Reason'], 'PullRequest'))]
 
 resources:
   repositories:
@@ -42,7 +44,7 @@ pool:
 stages:
 
 - stage: Validate
-  displayName: "Validate Input Parameters"
+  displayName: Validate Variables
   jobs:
     - job: ValidateParams
       pool:
@@ -53,13 +55,76 @@ stages:
               echo "ERROR: ProjectName cannot be empty."
               exit 1
             fi
-          displayName: "Validate ProjectName is not empty"
+          displayName: Validate ProjectName
 
-- stage: RunEnvironmentStage
-  displayName: "Environment Build/Deploy Stage"
+- stage: Build
+  dependsOn: Validate
+  displayName: Build Stage
   jobs:
-    - template: pipeline-templates/stage/enviroment-stage.yml
+    - template: pipeline-templates/job/code-build.yml
       parameters:
-        projectName: $(ProjectName)
         BuildConfiguration: $(BuildConfiguration)
-        deploy: $(Deploy)
+        projectName: $(ProjectName)
+
+- stage: Deploy_TEST
+  dependsOn: Build
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'Schedule'))
+  displayName: Deploy to TEST
+  variables:
+    - group: "TEST DevTest Shared Resources"
+    - group: "TEST Automation Suite Variables"
+    - group: "TEST Automation Suite Variables (Db)"
+  jobs:
+    - template: pipeline-templates/job/deploy.yml
+      parameters:
+        Environment: TEST
+        ServiceConnection: das-automation-test-suite-db-sc
+
+- stage: Deploy_TEST2
+  dependsOn: Build
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'Schedule'))
+  displayName: Deploy to TEST2
+  variables:
+    - group: "TEST2 DevTest Shared Resources"
+    - group: "TEST2 Automation Suite Variables"
+  jobs:
+    - template: pipeline-templates/job/deploy.yml
+      parameters:
+        Environment: TEST2
+        ServiceConnection: SFA-DAS-DevTest-ARM
+
+- stage: Deploy_DEMO
+  dependsOn: Build
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'Schedule'))
+  displayName: Deploy to DEMO
+  variables:
+    - group: "DEMO DevTest Shared Resources"
+    - group: "DEMO Automation Suite Variables"
+  jobs:
+    - template: pipeline-templates/job/deploy.yml
+      parameters:
+        Environment: DEMO
+        ServiceConnection: SFA-DAS-DevTest-ARM
+
+- stage: Deploy_PP
+  dependsOn: Build
+  displayName: Deploy to PP
+  variables:
+    - group: "PreProd Management Resources"
+    - group: "PreProd Shared Resources"
+    - group: "PreProd Automation Suite Variables"
+    - group: "PREPROD Automation Suite Variables (Db)"
+    - ${{ if ne(variables.PreProdSpecificVariableGroup, '') }}:
+        - group: ${{ variables.PreProdSpecificVariableGroup }}
+  jobs:
+    - ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+      - template: pipeline-templates/job/deploy.yml
+        parameters:
+          Environment: PP_AUTOMATION
+          ServiceConnection: SFA-DIG-PreProd-ARM
+
+    - ${{ else }}:
+      - template: pipeline-templates/job/deploy.yml
+        parameters:
+          Environment: PP
+          ServiceConnection: SFA-DIG-PreProd-ARM
