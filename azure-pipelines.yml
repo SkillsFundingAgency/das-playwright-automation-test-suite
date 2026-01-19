@@ -10,11 +10,6 @@ schedules:
       - master
   always: true
 
-parameters:
-- name: projectName
-  displayName: Project Name
-  type: string
-
 variables:
   - name: BuildConfiguration
     value: release
@@ -22,6 +17,8 @@ variables:
     value: any cpu
   - group: "Release Automation Suite Variables"
   - group: "Provider Release Automation Suite Variables"
+  - name: ProjectName
+    value: ""
   - name: Deploy
     value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
@@ -52,18 +49,17 @@ stages:
         vmImage: 'ubuntu-latest'
       steps:
         - script: |
-            if [ -z "${{ parameters.projectName }}" ]; then
-              echo "ERROR: projectName cannot be empty."
+            if [ -z "$(ProjectName)" ]; then
+              echo "ERROR: ProjectName cannot be empty."
               exit 1
             fi
-          displayName: "Validate projectName is not empty"
-
+          displayName: "Validate ProjectName is not empty"
 
 - stage: RunEnvironmentStage
   displayName: "Environment Build/Deploy Stage"
   jobs:
     - template: pipeline-templates/stage/enviroment-stage.yml
       parameters:
-        projectName: ${{ parameters.projectName }}
+        projectName: $(ProjectName)
         BuildConfiguration: $(BuildConfiguration)
         deploy: $(Deploy)
