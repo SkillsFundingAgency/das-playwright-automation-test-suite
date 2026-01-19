@@ -30,7 +30,7 @@ stages:
       - template: ../job/deploy.yml
         parameters:
           Environment: TEST
-          ServiceConnection: SFA-DAS-DevTest-ARM
+          ServiceConnection: das-automation-test-suite-db-sc
 
   - stage: Deploy_TEST2
     dependsOn: Build
