@@ -146,12 +146,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
 
-            var _selectLearnerFromILRPage = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink_SelectExistingReservationRoute();
-            var _checkApprenticeDetailsPage = await _selectLearnerFromILRPage.SelectApprenticeFromILRList(apprenticeship);
-            await _checkApprenticeDetailsPage.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
-            await _checkApprenticeDetailsPage.ClickAddButton();
-            var _recognitionOfPriorLearningPage = new RecognitionOfPriorLearningPage(context);
-            var page5 = await _recognitionOfPriorLearningPage.SelectNoForRPL();
+            var selectLearnerFromILRPage = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink_SelectExistingReservationRoute();
+            var checkApprenticeDetailsPage = await selectLearnerFromILRPage.SelectApprenticeFromILRList(apprenticeship);
+            await checkApprenticeDetailsPage.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
+            await checkApprenticeDetailsPage.ClickAddButton();
+            var recognitionOfPriorLearningPage = new RecognitionOfPriorLearningPage(context);
+            await recognitionOfPriorLearningPage.SelectNoForRPL();
 
             return await approveApprenticeDetailsPage.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
@@ -262,7 +262,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await new ProviderHomePage(context).GoToManageYourFunding();
             var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
-            //var page2 = await page1.SelectOptionToAddApprenticesFromILRList_NonLevyRoute();
             var page3 = await page1.SelectApprenticeFromILRList(apprenticeship);
             await page3.ClickAddButton();
             var page4 = new RecognitionOfPriorLearningPage(context);

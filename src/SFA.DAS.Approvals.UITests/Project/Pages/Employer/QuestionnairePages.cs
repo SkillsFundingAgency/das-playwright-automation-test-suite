@@ -77,7 +77,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         public async Task<DoYouNeedToCreateAdvertForThisApprenticeship> Yes()
         {
-            // [value='No']
             await page.Locator("[value='True']").ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new DoYouNeedToCreateAdvertForThisApprenticeship(context));

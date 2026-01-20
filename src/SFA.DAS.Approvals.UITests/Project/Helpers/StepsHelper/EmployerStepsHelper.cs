@@ -95,6 +95,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return page;
         }
 
+        internal async Task GoToLiveApprenticeshipPageFromDynamicHomePage()
+        {
+            await employerHomePageHelper.GotoEmployerHomePage(false);
+            await new ViewApprenticeDetailsDynamicHomepage(context).ViewApprenticeDetails();
+        }
+
         internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, string uln, string name)
         {
             await apprenticesHomePage.GoToManageYourApprentices();
@@ -133,13 +139,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
  
-            var _SelectReservedFunds = await new AddApprenticePage(context).ClickStartNowButtonNonLevyFlow();
-            var _SelectFundingPage =  await _SelectReservedFunds.SelectReservedFunds();
-            var _AddTrainingProviderPage = await _SelectFundingPage.SelectReservation();
-            var page2 = await _AddTrainingProviderPage.SubmitValidUkprn(ukprn);
-            var page3 = await page2.ConfirmTrainingProviderDetails();
-            var page4 = await page3.SelectProviderAddApprencticesAndSend();
-            var cohortRef = await page4.GetCohortId();
+            var selectReservedFunds = await new AddApprenticePage(context).ClickStartNowButtonNonLevyFlow();
+            var selectFundingPage =  await selectReservedFunds.SelectReservedFunds();
+            var addTrainingProviderPage = await selectFundingPage.SelectReservation();
+            var confirmTrainingProvider = await addTrainingProviderPage.SubmitValidUkprn(ukprn);
+            var confirmAddApprentices = await confirmTrainingProvider.ConfirmTrainingProviderDetails();
+            var confirmRequestSentPage = await confirmAddApprentices.SelectProviderAddApprencticesAndSend();
+            var cohortRef = await confirmRequestSentPage.GetCohortId();
             await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
         }
 

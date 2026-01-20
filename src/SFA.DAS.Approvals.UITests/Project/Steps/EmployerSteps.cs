@@ -125,6 +125,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new EmployerApproveApprenticeDetailsPage(context).EmployerApproveCohort();
         }
 
+        [Then("Add The employer can follow the link from dynamicHomePage to view live apprentice details")]
+        public async Task ThenTheNLEmployerViewLIveApprenticeFromDynamicHomePage()
+        {
+            var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var name = apprentice.ApprenticeDetails.FullName;
+
+            await employerStepsHelper.GoToLiveApprenticeshipPageFromDynamicHomePage();
+            await new ApprenticeDetailsPage(context, name).EmployerVerifyApprenticeStatusAndDetails(ApprenticeshipStatus.Live, "Apprentice confirmation", "Unconfirmed");
+        }
+
         [When ("the Employer approves the cohort and sends to provider")]
         public async Task ThenTheEmployerApprovesCohort()
         {
@@ -187,21 +197,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         [When("The NonLevyEmployer reserves funding for an apprenticeship course from reserved panel")]
         public async Task WhenTheNonLevyEmployerReservesFundingFromReservedPanel()
-        {
-            //await employerStepsHelper.EmployerLogInToEmployerPortal(false);
-            
+        {            
             await employerStepsHelper.EmployerTriesToCreateReservationOnDynamicHomepage();
         }
 
         [Then("The nonlevyemployer follows the link from dynamicHomePage to create a cohort and send it to the training Provider")]
         public async Task WhenTheNonLevyEmployerSendCohortToProvider()
         {
-            //await employerStepsHelper.EmployerLogInToEmployerPortal(false);
-            var _dynamicHomepageSettingAnApprenticeShip = new ContinueSettingupAnApprenticeshipDynamicHomepage(context);
+            var dynamicHomepageSettingAnApprenticeShip = new ContinueSettingupAnApprenticeshipDynamicHomepage(context);
 
 
-            var _continueSettingupAnApprenticeshipPage = await _dynamicHomepageSettingAnApprenticeShip.Continue();
-            var _addApprenticePage = await _continueSettingupAnApprenticeshipPage.No();
+            var continueSettingupAnApprenticeshipPage = await dynamicHomepageSettingAnApprenticeShip.Continue();
+            var addApprenticePage = await continueSettingupAnApprenticeshipPage.No();
 
             await employerStepsHelper.AddEmptyCohortFromNonLevyReserveFundsAddApprenticePage();
         }

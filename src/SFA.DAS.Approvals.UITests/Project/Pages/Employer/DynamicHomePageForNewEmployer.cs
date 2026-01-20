@@ -40,4 +40,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         }
 
     }
+
+    internal class ViewApprenticeDetailsDynamicHomepage(ScenarioContext context) : ApprovalsBasePage(context)
+    {
+        public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#call-to-action-your-apprentice")).ToContainTextAsync("Your apprentice");
+
+        internal async Task ViewApprenticeDetails()
+        {
+            await page.Locator("//a[contains(.,'View apprentice details')]").ClickAsync();
+        }
+
+    }
 }
