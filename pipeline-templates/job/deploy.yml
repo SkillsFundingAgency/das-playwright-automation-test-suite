@@ -114,10 +114,10 @@ jobs:
 
                 Write-Host "Searching for test DLL in: $searchFolder"
                 # Match the classic pipeline: run the ProvideFeedback UI tests DLL
-                $testDllPath = Get-ChildItem -Path $searchFolder -Filter "SFA.DAS.ProvideFeedback.UITests.dll" -Recurse -ErrorAction Stop | Select-Object -First 1 -ExpandProperty FullName
+                $testDllPath = Get-ChildItem -Path $searchFolder -Filter "$(projectName).dll" -Recurse -ErrorAction Stop | Select-Object -First 1 -ExpandProperty FullName
 
                 if (-not $testDllPath) {
-                    Write-Error "Test DLL not found: SFA.DAS.ProvideFeedback.UITests.dll"
+                    Write-Error "Test DLL not found: $(projectName).dll"
                     exit 1
                 }
 
