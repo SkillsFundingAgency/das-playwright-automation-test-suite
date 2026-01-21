@@ -191,19 +191,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         {
 
             // Click Start button in the home screen for newly created employer account and reserve funds
-            var _dynamicHomepage = new SetupAnApprenticeshipDynamicHomepage(context);
+            var dynamicHomepage = new SetupAnApprenticeshipDynamicHomepage(context);
 
-            var _doYouKnowWhichCourseYourApprenticeWillTakePage = await _dynamicHomepage.StartNow();
-            var _haveYouChosenATrainingProviderToDeliverTheApprenticeshipTrainingPage = await _doYouKnowWhichCourseYourApprenticeWillTakePage.Yes();
-            var _willTheApprenticeshipTrainingStartInTheNextSixMonthsPage = await _haveYouChosenATrainingProviderToDeliverTheApprenticeshipTrainingPage.Yes();
-            var _areYouSettingUpAnApprenticeshipForAnExistingEmployeePage = await _willTheApprenticeshipTrainingStartInTheNextSixMonthsPage.StartInSixMonths();
-            var _setUpAnApprenticeshipForNewEmployeePage = await _areYouSettingUpAnApprenticeshipForAnExistingEmployeePage.No();
-            var _reserveFundingToTrainAndAssessAnApprenticePage = await _setUpAnApprenticeshipForNewEmployeePage.YesContinueToReserveFunding();
-            var _doYouKnowWhichCourseYourApprenticeWillTakePage1 = await _reserveFundingToTrainAndAssessAnApprenticePage.YesContinueToReserveFunding();
-            var _whenWillTheApprenticeStartTheirApprenticeTraining = await _doYouKnowWhichCourseYourApprenticeWillTakePage1.ReserveFundsAsync("Associate");
-            var _confirmYourReservationPage = await _whenWillTheApprenticeStartTheirApprenticeTraining.SelectAlreadyStartedDate();
-            var _youHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage = await _confirmYourReservationPage.ClickConfirmButton();
-            return await _youHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage.SelectGoToHomePageAndContinue();
+            var doYouKnowWhichCourseYourApprenticeWillTakePage = await dynamicHomepage.StartNow();
+            var haveYouChosenATrainingProviderToDeliverTheApprenticeshipTrainingPage = await doYouKnowWhichCourseYourApprenticeWillTakePage.Yes();
+            var willTheApprenticeshipTrainingStartInTheNextSixMonthsPage = await haveYouChosenATrainingProviderToDeliverTheApprenticeshipTrainingPage.Yes();
+            var areYouSettingUpAnApprenticeshipForAnExistingEmployeePage = await willTheApprenticeshipTrainingStartInTheNextSixMonthsPage.StartInSixMonths();
+            var setUpAnApprenticeshipForNewEmployeePage = await areYouSettingUpAnApprenticeshipForAnExistingEmployeePage.No();
+            var reserveFundingToTrainAndAssessAnApprenticePage = await setUpAnApprenticeshipForNewEmployeePage.YesContinueToReserveFunding();
+            var doYouKnowWhichCourseYourApprenticeWillTakePage1 = await reserveFundingToTrainAndAssessAnApprenticePage.YesContinueToReserveFunding();
+            var whenWillTheApprenticeStartTheirApprenticeTraining = await doYouKnowWhichCourseYourApprenticeWillTakePage1.ReserveFundsAsync("Associate");
+            var confirmYourReservationPage = await whenWillTheApprenticeStartTheirApprenticeTraining.SelectAlreadyStartedDate();
+            var youHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage = await confirmYourReservationPage.ClickConfirmButton();
+            return await youHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage.SelectGoToHomePageAndContinue();
         }
 
     }

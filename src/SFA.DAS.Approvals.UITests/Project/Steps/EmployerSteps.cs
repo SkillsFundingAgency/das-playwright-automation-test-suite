@@ -195,7 +195,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page1.AssertRecordIsReadOnlyExceptEndDate();
         }
 
-        [When("The NonLevyEmployer reserves funding for an apprenticeship course from reserved panel")]
+        [When("The nonlevyemployer follows the link from dynamicHomePage to create a new reservation")]
         public async Task WhenTheNonLevyEmployerReservesFundingFromReservedPanel()
         {            
             await employerStepsHelper.EmployerTriesToCreateReservationOnDynamicHomepage();
