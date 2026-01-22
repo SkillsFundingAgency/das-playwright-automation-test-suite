@@ -73,10 +73,10 @@ stages:
         - template: ../job/deploy.yml
           parameters:
             Environment: 'PP_AUTOMATION'
-            ServiceConnection: SFA-DIG-PreProd-ARM
+            ServiceConnection: das-pp-automation-test-suite-db-sc
 
       - ${{ else }}:
         - template: ../job/deploy.yml
           parameters:
             Environment: 'PP'
-            ServiceConnection: SFA-DIG-PreProd-ARM
+            ServiceConnection: das-pp-automation-test-suite-db-sc
