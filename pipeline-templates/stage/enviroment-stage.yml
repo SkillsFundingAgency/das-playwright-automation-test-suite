@@ -30,7 +30,7 @@ stages:
       - template: ../job/deploy.yml
         parameters:
           Environment: TEST
-          ServiceConnection: das-automation-test-suite-db-sc
+          ServiceConnection: das-test-automation-test-suite-db-sc
 
   - stage: Deploy_TEST2
     dependsOn: Build
