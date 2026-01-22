@@ -190,21 +190,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task<EmployerHomePage> EmployerTriesToCreateReservationOnDynamicHomepage()
         {
 
-            // Click Start button in the home screen for newly created employer account and reserve funds
-            var dynamicHomepage = new SetupAnApprenticeshipDynamicHomepage(context);
-
-            var doYouKnowWhichCourseYourApprenticeWillTakePage = await dynamicHomepage.StartNow();
-            var haveYouChosenATrainingProviderToDeliverTheApprenticeshipTrainingPage = await doYouKnowWhichCourseYourApprenticeWillTakePage.Yes();
-            var willTheApprenticeshipTrainingStartInTheNextSixMonthsPage = await haveYouChosenATrainingProviderToDeliverTheApprenticeshipTrainingPage.Yes();
-            var areYouSettingUpAnApprenticeshipForAnExistingEmployeePage = await willTheApprenticeshipTrainingStartInTheNextSixMonthsPage.StartInSixMonths();
-            var setUpAnApprenticeshipForNewEmployeePage = await areYouSettingUpAnApprenticeshipForAnExistingEmployeePage.No();
-            var reserveFundingToTrainAndAssessAnApprenticePage = await setUpAnApprenticeshipForNewEmployeePage.YesContinueToReserveFunding();
-            var doYouKnowWhichCourseYourApprenticeWillTakePage1 = await reserveFundingToTrainAndAssessAnApprenticePage.YesContinueToReserveFunding();
-            var whenWillTheApprenticeStartTheirApprenticeTraining = await doYouKnowWhichCourseYourApprenticeWillTakePage1.ReserveFundsAsync("Associate");
-            var confirmYourReservationPage = await whenWillTheApprenticeStartTheirApprenticeTraining.SelectAlreadyStartedDate();
-            var youHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage = await confirmYourReservationPage.ClickConfirmButton();
-            return await youHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage.SelectGoToHomePageAndContinue();
+            return await ReserveFundsFromDynamicHomepage();
         }
 
+        private async Task<EmployerHomePage> ReserveFundsFromDynamicHomepage()
+        {
+            var dynamicHomepage = new SetupAnApprenticeshipDynamicHomepage(context);
+
+            var coursePage = await dynamicHomepage.StartNow();
+            var providerPage = await coursePage.Yes();
+            var startInSixMonthsPage = await providerPage.Yes();
+            var existingEmployeePage = await startInSixMonthsPage.StartInSixMonths();
+            var newEmployeePage = await existingEmployeePage.No();
+            var reserveFundingPage = await newEmployeePage.YesContinueToReserveFunding();
+            var coursePage2 = await reserveFundingPage.YesContinueToReserveFunding();
+            var startDatePage = await coursePage2.ReserveFundsAsync("Associate");
+            var confirmReservationPage = await startDatePage.SelectAlreadyStartedDate();
+            var successPage = await confirmReservationPage.ClickConfirmButton();
+
+            return await successPage.SelectGoToHomePageAndContinue();
+        }
     }
 }
