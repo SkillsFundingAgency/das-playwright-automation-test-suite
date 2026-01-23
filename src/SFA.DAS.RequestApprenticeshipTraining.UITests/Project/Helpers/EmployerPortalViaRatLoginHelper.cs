@@ -12,6 +12,6 @@ public class EmployerPortalViaRatLoginHelper(ScenarioContext context) : Employer
 
         await page.Continue();
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new AskIfTrainingProvidersCanRunThisCoursePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new AskIfTrainingProvidersCanRunThisCoursePage(context));
     }
 }

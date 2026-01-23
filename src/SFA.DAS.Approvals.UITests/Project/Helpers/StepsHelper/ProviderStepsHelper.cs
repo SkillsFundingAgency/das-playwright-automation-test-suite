@@ -1,23 +1,9 @@
-﻿using Azure;
-using Mailosaur.Models;
-using Microsoft.Playwright;
-using Polly;
-using SFA.DAS.Approvals.APITests.Project.Tests.StepDefinitions;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
-using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
-using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.Approvals.UITests.Project.Steps;
-using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 {
@@ -239,8 +225,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN.ToString();
+                var startYear = apprenticeship.TrainingDetails.StartDate.Year;
 
-                await selectLearnerFromILRPage.SearchULN(uln);
+                await selectLearnerFromILRPage.SearchULN(uln, startYear);
                 await selectLearnerFromILRPage.VerifyNoResultsFound();
                 await selectLearnerFromILRPage.ClearSearch();
             }

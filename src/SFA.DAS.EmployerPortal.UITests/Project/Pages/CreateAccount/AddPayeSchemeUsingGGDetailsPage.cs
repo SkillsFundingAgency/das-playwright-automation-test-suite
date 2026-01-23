@@ -2,7 +2,7 @@
 
 public class AddPayeSchemeUsingGGDetailsPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a PAYE scheme using your Government Gateway details");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Add a PAYE scheme using your Government Gateway details");
 
 
     public async Task<GgSignInPage> AgreeAndContinue()

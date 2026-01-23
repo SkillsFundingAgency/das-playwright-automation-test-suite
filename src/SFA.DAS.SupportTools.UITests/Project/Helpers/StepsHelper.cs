@@ -1,22 +1,14 @@
 ﻿using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign;
 using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
+using SFA.DAS.Framework.Hooks;
 using SFA.DAS.Login.Service.Project;
 using SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.SupportTools.UITests.Project.Helpers;
 
-public class StepsHelper(ScenarioContext context)
+public class StepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
 {
-    public async Task NavigateToSupportTools()
-    {
-        var driver = context.Get<Driver>();
-
-        var url = UrlConfig.SupportTools_BaseUrl;
-
-        context.Get<ObjectContext>().SetDebugInformation(url);
-
-        await driver.Page.GotoAsync(url);
-    }
+    public async Task NavigateToSupportTools() => await Navigate(UrlConfig.SupportTools_BaseUrl);
 
     public async Task<ToolSupportHomePage> ReLoginToSupportSCPTools()
     {
@@ -27,7 +19,7 @@ public class StepsHelper(ScenarioContext context)
             await new DfeAdminLoginStepsHelper(context).CheckAndLoginToSupportTool(context.GetUser<SupportToolScpUser>());
         }
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new ToolSupportHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new ToolSupportHomePage(context));
     }
 
     public async Task<ToolSupportHomePage> ValidUserLogsinToSupportSCPTools() => await LoginToSupportTools(context.GetUser<SupportToolScpUser>());
@@ -38,14 +30,14 @@ public class StepsHelper(ScenarioContext context)
     {
         await new DfeAdminLoginStepsHelper(context).LoginToSupportTool(loginUser);
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new ToolSupportHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new ToolSupportHomePage(context));
     }
 
     private async Task<SearchHomePage> LoginToSupportToolsAsEmployerSupportOnly(DfeAdminUser loginUser)
     {
         await new DfeAdminLoginStepsHelper(context).LoginToSupportTool(loginUser);
 
-        return await VerifyPageHelper.VerifyPageAsync(() => new SearchHomePage(context));
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new SearchHomePage(context));
     }
 
     public async Task<SupportConsoleBasePage> Tier1LoginToSupportTool() => await LoginToSupportToolsAsEmployerSupportOnly(context.GetUser<SupportToolTier1User>());

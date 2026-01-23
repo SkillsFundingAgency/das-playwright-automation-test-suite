@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 
 public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBasePage(context)
@@ -119,6 +118,7 @@ public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBase
         }
 
         Random random = new();
+
         int numberOfLocations = random.Next(2, 11);
 
         var multipleLocationsCheckboxes = await page.GetByRole(AriaRole.Checkbox).AllAsync();

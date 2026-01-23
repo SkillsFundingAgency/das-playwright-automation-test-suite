@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
+using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.AddJourney;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate;
 using System;
 
@@ -30,19 +31,19 @@ public class AddTrainingProviderShortCoursesSteps
     [Given("the user navigates to training providers page")]
     public async Task GivenTheUserNavigatesToTrainingProvidersPage()
     {
-        const string ukprn = "10056801";
-        const string providerSearchText = "METRO BANK PLC UKPRN: 10056801";
+        var ukprn = _context.Get<string>("ukprn");
+        var providerName = _context.Get<string>("providerName");
 
         var manageTrainingProviderPage = await OpenManageTrainingProviderPage();
         var searchPage = await manageTrainingProviderPage.ClickSearchForATrainingProvider();
-        var providerDetailsPage = await searchPage.EnterProviderDetailAndSearch(ukprn, providerSearchText);
+        var providerDetailsPage = await searchPage.EnterProviderDetailAndSearch(ukprn, providerName);
     }
 
 
     [Given(@"the user updated the training provider route status to\s*""?(.*)""?")]
     public async Task GivenTheUserUpdatedTheTrainingProviderRouteStatusTo(string status)
     {
-        const string providerName = "METRO BANK PLC";
+        var providerName = _context.Get<string>("providerName");
 
         var providerDetailsPage = new ProviderDetailsPage(_context);
         var statusChangePage = await providerDetailsPage.ClickChangeStatusOfProvider();
@@ -140,6 +141,56 @@ public class AddTrainingProviderShortCoursesSteps
         await home.ClickAddOrSearchForProvider();
         return await new ManageTrainingProviderInformationPage(_context)
             .VerifyPageAsync(() => new ManageTrainingProviderInformationPage(_context));
+    }
+
+    [Given("the admin initates an application as (Main provider|Employer provider|Supporting provider)")]
+    public async Task GivenTheAdminInitatesAnApplicationAs(string providerType)
+    {
+        var ukprn = _context.Get<string>("ukprn");
+        var providerName = _context.Get<string>("providerName");
+
+        var manageTrainingProviderPage = await OpenManageTrainingProviderPage();
+        var addPage = await manageTrainingProviderPage.ClickAddNewTrainingProvider();
+        var ukprnPage = await addPage.EnterProviderDetailAndSearch(ukprn);
+
+        var providerRoutePage = await ukprnPage.ConfirmOrganisationDetails();
+        await providerRoutePage.SelectProviderType(providerType);
+
+        // 🔍 Decide next page dynamically
+        var heading = await providerRoutePage.GetHeadingTextAsync();
+
+        OrganisationsPage organisationsPage;
+
+        if (heading.Contains("Do they offer apprenticeships?", StringComparison.OrdinalIgnoreCase))
+        {
+            // Main / Employer flow
+            var offerPage = new Add_OfferApprenticeshipsPage(_context);
+            var unitsPage = await offerPage.YesOfferApprenticeship();
+            organisationsPage = await unitsPage.YesOfferApprenticeshipUnits();
+        }
+        else if (heading.Contains("Choose the type of organisation", StringComparison.OrdinalIgnoreCase))
+        {
+            // Supporting provider skips offer + units
+            organisationsPage = new OrganisationsPage(_context);
+        }
+        else
+        {
+            throw new Exception($"Unexpected page after selecting provider type. Heading was: {heading}");
+        }
+
+        var confirmDetailsPage = await organisationsPage.SelectTypeofOrganisation_School();
+        var successpage = await confirmDetailsPage.ConfirmDetailsAndContinue();
+        var ManageTrainingProviderInformationPage = await successpage.GoBackToDashboard();
+        await ManageTrainingProviderInformationPage.GoBackToMainDashboard();
+    }
+
+    [Given(@"the provider status should be set to (.*)")]
+    public async Task GivenTheProviderStatusShouldBeSetTo(string expectedStatus)
+    {
+
+        var providerDetailsPage = new ProviderDetailsPage(_context);
+
+        await providerDetailsPage.VerifyProviderStatus(expectedStatus);
     }
 }
 

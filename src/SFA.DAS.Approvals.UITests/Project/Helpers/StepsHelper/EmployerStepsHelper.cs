@@ -1,16 +1,9 @@
-﻿using Azure;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
-using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static SFA.DAS.EmployerPortal.UITests.Project.Pages.HomePage;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 {
@@ -50,7 +43,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                     await employerLoginHelper.Login(context.GetUser<NonLevyUser>());
                     break;
                 case "nonlevyuseratmaxreservationlimit":
-                    //await employerLoginHelper.Login(context.GetUser<NonLevyUserAtMaxReservationLimit>());
+                    await employerLoginHelper.Login(context.GetUser<NonLevyUserAtMaxReservationLimit>(), false);                    
                     break;
                 default:
                     throw new ArgumentException($"Unknown employer type: {employerType}");
@@ -59,8 +52,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return new HomePage(context);
         }
 
-
-        internal async Task<EmployerApproveApprenticeDetailsPage> OpenCohort()
+        internal async Task<EmployerApproveApprenticeDetailsPage> OpenCohort(bool validateCohortDetails = true)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
@@ -74,13 +66,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             var page1 = await page.OpenApprenticeRequestReadyForReview(apprenticeship.Cohort.Reference);
 
-            await page1.VerifyCohort(apprenticeship);
+            if (validateCohortDetails)
+                await page1.VerifyCohort(apprenticeship);
 
             return page1;
         }
 
-
-        internal async Task CheckApprenticeOnManageYourApprenticesPage(bool login = false)
+        internal async Task<ManageYourApprenticesPage> CheckApprenticeOnManageYourApprenticesPage(bool login = false)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
@@ -100,6 +92,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 await page.SearchApprentice(uln, name);
             }
 
+            return page;
         }
 
         internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, string uln, string name)
@@ -147,13 +140,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page2.ValidateCohortStatus(status);
         }
 
-
         internal async Task LogOutThenLogbackIn()
         {
             await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
             await AccountSignOutHelper.SignOut(new HomePage(context));
             await EmployerLogInToEmployerPortal(false);
         }
+
+        internal async Task<YouCannotCreateAnotherFundingReservationPage> EmployerTriesToCreateReservation()
+        {
+           await employerHomePageHelper.GotoEmployerHomePage(false);
+            var page =  new EmployerHomePage(context);
+            var page2 = await page.ClickOnFundingReservationsLink();
+            return await page2.TryClickOnReserveMoreFundingLink();
+        }
+
 
     }
 }

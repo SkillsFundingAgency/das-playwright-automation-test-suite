@@ -2,7 +2,7 @@
 
 public class ChangeYourUserDetailsPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change your user details");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Change your user details");
 
     public async Task<ConfirmYourUserDetailsPage> EnterName()
     {

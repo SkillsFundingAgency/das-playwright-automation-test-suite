@@ -27,4 +27,10 @@ public class ManageTrainingProviderInformationPage(ScenarioContext context) : Ba
         await page.GetByRole(AriaRole.Link, new() { Name = "Add a new training provider" }).ClickAsync();
         return await VerifyPageAsync(() => new UKPRNPage(context));
     }
+
+    public async Task<AparAdminHomePage> GoBackToMainDashboard()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Apprenticeship service admin" }).ClickAsync();
+        return await VerifyPageAsync(() => new AparAdminHomePage(context));
+    }
 }

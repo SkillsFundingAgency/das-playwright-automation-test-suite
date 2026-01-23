@@ -1,21 +1,22 @@
-﻿using System;
-
-namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
+﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 
 public abstract class NavigateBase : BasePage
 {
     protected NavigateBase(ScenarioContext context, string url) : base(context)
     {
-        // if (!(string.IsNullOrEmpty(url))) tabHelper.GoToUrl(url);
+         if (!(string.IsNullOrEmpty(url))) NavigateTo(url);
+    }
+
+    private async void NavigateTo(string url)
+    {
+        objectContext.SetDebugInformation($"Navigated to '{url}' via NavigateBase");
+
+        await Navigate(url);
     }
 }
 
 public abstract class Navigate : NavigateBase
 {
-    //protected static By GlobalNavLink => By.CssSelector("#global-nav-links li a, #navigation li a, .das-navigation__link");
-
-    //private static By MoreLink => By.LinkText("More");
-
     protected abstract string Linktext { get; }
 
     protected Navigate(ScenarioContext context, bool navigate) : this(context, navigate, string.Empty) { }
@@ -23,17 +24,6 @@ public abstract class Navigate : NavigateBase
     protected Navigate(ScenarioContext context, bool navigate, string url) : base(context, url) => NavigateTo(navigate);
 
     protected Navigate(ScenarioContext context, Action navigate, string url) : base(context, url) => NavigateTo(navigate);
-
-    //protected void RetryClickOnException(By parentElement, Func<IWebElement> childElement)
-    //{
-    //    formCompletionHelper.RetryClickOnException(() =>
-    //    {
-    //        if (pageInteractionHelper.IsElementDisplayedAfterPageLoad(parentElement))
-    //            formCompletionHelper.ClickElement(parentElement);
-
-    //        return childElement();
-    //    });
-    //}
 
     private static void NavigateTo(Action navigate) => navigate.Invoke();
 
@@ -52,7 +42,6 @@ public abstract class Navigate : NavigateBase
         await page.GetByRole(AriaRole.Menuitem, new() { Name = name }).ClickAsync();
     }
 }
-
 
 public class InterimCreateAnAdvertHomePage(ScenarioContext context) : InterimYourApprenticeshipAdvertsHomePage(context, true)
 {
@@ -80,7 +69,7 @@ public class InterimApprenticesHomePage(ScenarioContext context, bool gotourl) :
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentices", new LocatorAssertionsToContainTextOptions { Timeout = 10000 });
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Apprentices", new LocatorAssertionsToContainTextOptions { Timeout = 10000 });
     }
 }
 
@@ -93,22 +82,17 @@ public class InterimFinanceHomePage(ScenarioContext context, bool navigate, bool
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Finance");
+        await page.WaitForURLAsync(url => url.Contains("/finance"));
+
+        var heading = page.GetByRole(AriaRole.Heading,new() { Name = "Funding and payments", Level = 1 });
+
+        await heading.WaitForAsync();
+        await Assertions.Expect(heading).ToBeVisibleAsync();
     }
 }
 
-
-
 public abstract class InterimEmployerBasePage : Navigate
 {
-    //#region Locators
-    //private static By SettingsLink => By.LinkText("Settings");
-    //private static By YourAccountsLink => By.LinkText("Your accounts");
-    //private static By HelpLink => By.LinkText("Help");
-    //private static By RenameAccountLink => By.LinkText("Rename account");
-    //private static By NotificationSettingsLink => By.PartialLinkText("Notification");
-    //#endregion
-
     protected InterimEmployerBasePage(ScenarioContext context, bool navigate) : this(context, navigate, false) { }
 
     protected InterimEmployerBasePage(ScenarioContext context, bool navigate, bool gotourl) : base(context, navigate, GoToUrl(gotourl))
@@ -117,7 +101,7 @@ public abstract class InterimEmployerBasePage : Navigate
 
     protected InterimEmployerBasePage(ScenarioContext context, Action navigate, bool gotourl) : base(context, navigate, GoToUrl(gotourl))
     {
-
+        // Action to navigate is used in Public sector reporting and manage funding reservations
     }
 
     private static string GoToUrl(bool gotourl) => gotourl ? UrlConfig.EmployerApprenticeshipService_BaseUrl : string.Empty;
@@ -201,7 +185,7 @@ public abstract class InterimEmployerBasePage : Navigate
         return await VerifyPageAsync(() => new PAYESchemesPage(context));
     }
 
-    private async Task NavigateToSettings(string name)
+    protected async Task NavigateToSettings(string name)
     {
         await page.GetByRole(AriaRole.Menuitem, new() { Name = "Settings" }).ClickAsync();
 
@@ -215,7 +199,7 @@ public abstract class InterimYourTeamPage(ScenarioContext context, bool navigate
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your team");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Your team");
     }
 }
 
@@ -267,7 +251,7 @@ public class ViewTeamMemberPage(ScenarioContext context) : EmployerPortalBasePag
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(employerPortalDataHelper.FullName);
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync(employerPortalDataHelper.FullName);
     }
 
     public async Task<YourTeamPage> ClickResendInvitationButton()
@@ -296,7 +280,7 @@ public class RemoveTeamMemberPage(ScenarioContext context) : EmployerPortalBaseP
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Remove team member");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Remove team member");
     }
 
     public async Task<YourTeamPage> ClickYesRemoveNowButton()
@@ -311,7 +295,7 @@ public class CancelInvitationPage(ScenarioContext context) : EmployerPortalBaseP
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Cancel invitation");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Cancel invitation");
     }
 
     public async Task<YourTeamPage> ClickYesCancelInvitationButton()
@@ -334,7 +318,7 @@ public class CreateInvitationPage(ScenarioContext context) : EmployerPortalBaseP
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Create invitation");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Create invitation");
     }
 
     public async Task EnterEmailAndFullName(string email)
@@ -377,7 +361,7 @@ public class InterimPAYESchemesPage(ScenarioContext context, bool navigate) : In
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("PAYE schemes");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("PAYE schemes");
     }
 }
 
@@ -416,7 +400,7 @@ public class PAYESchemeDetailsPage(ScenarioContext context) : EmployerPortalBase
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("PAYE scheme");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("PAYE scheme");
     }
 
     public async Task<RemoveThisSchemePage> ClickRemovePAYESchemeButton()

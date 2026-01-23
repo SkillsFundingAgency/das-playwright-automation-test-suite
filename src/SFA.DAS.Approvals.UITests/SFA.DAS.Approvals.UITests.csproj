@@ -20,6 +20,8 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+		<PackageReference Include="SFA.DAS.Payments.ProviderPayments.Messages" Version="2.0.2" />
+    <PackageReference Include="SFA.DAS.Payments.Messages.Common" Version="1.0.0" />
 		<PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
 		<PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
 	</ItemGroup>
@@ -54,7 +56,9 @@
 	  <Folder Include="Project\Features\01_PreApprovals\06_FlexiJobApprenticeshipAgency\" />
 	  <Folder Include="Project\Features\01_PreApprovals\05_FileUpload\" />
 	  <Folder Include="Project\Features\01_PreApprovals\09_ProviderPermissions\" />
-	  <Folder Include="Project\Features\02_PostApprovals\01_OverlappingTrainingDateRequest\" />
+	  <Folder Include="Project\Features\01_PreApprovals\08_AgeChecks\" />
+	  <Folder Include="Project\Features\02_PostApprovals\02_OverlappingTrainingDateRequest\" />
+	  <Folder Include="Project\Features\02_PostApprovals\01_ChangeOfCircs\" />
 	  <Folder Include="Project\Features\03_EmployerRoles\" />
 	  <Folder Include="Project\Features\01_PreApprovals\07_PortableFlexiJob\" />
 	  <Folder Include="Project\Features\04_ProviderRoles\AccountOwner\" />

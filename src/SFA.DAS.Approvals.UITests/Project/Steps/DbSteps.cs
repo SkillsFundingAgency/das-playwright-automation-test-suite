@@ -3,14 +3,8 @@ using Polly.Retry;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
-using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -114,12 +108,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
         }
 
-        [Given("A live apprentice record exists for an apprentice on Foundation level course")]
-        public async Task GivenALiveApprenticeRecordExistsForAnApprenticeOnFoundationLevelCourse()
+        [Given(@"A live apprentice record exists for an apprentice with ""(.*)"", ""(.*)"" and ""(.*)""")]
+        public async Task GivenALiveApprenticeRecordExistsForAnApprenticeWithAnd(string courseType, string courseLevel, string startDate)
         {
             listOfApprenticeship = new List<Apprenticeship>();
+            string additionalWhereFilter;
 
-            var additionalWhereFilter = @"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
+            if (courseType == "FoundationApprenticeship")
+            {
+                additionalWhereFilter = @"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
                                             AND c.IsDeleted = 0
                                             And c.Approvals = 3
                                             AND c.ChangeOfPartyRequestId is null             
@@ -131,6 +128,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                                             AND a.ContinuationOfId is null
                                             AND a.DeliveryModel = 0
                                             AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+            }
+            else
+            {
+                additionalWhereFilter = @$"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
+                                            AND c.IsDeleted = 0
+                                            And c.Approvals = 3
+                                            AND c.ChangeOfPartyRequestId is null             
+                                            AND c.PledgeApplicationId is null
+                                            AND a.PaymentStatus = 1
+                                            AND a.HasHadDataLockSuccess = 0
+                                            AND a.PendingUpdateOriginator is null
+                                            AND a.CloneOf is null
+                                            AND a.ContinuationOfId is null
+                                            AND a.DeliveryModel = 0
+                                            AND TrainingName like '%, Level: 7'
+					                        AND StartDate > '{startDate}'";
+            }
 
             await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
         }
@@ -162,7 +176,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             listOfApprenticeship = new List<Apprenticeship>();
             var providerConfig = context.GetProviderConfig<ProviderConfig>();
-            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(EmployerType.Levy, providerConfig);
+            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortObject(EmployerType.Levy, providerConfig);
             apprenticeship = await learnerDataDbSqlHelper.GetEditableApprenticeDetails(apprenticeship);
             listOfApprenticeship.Add(apprenticeship);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
@@ -170,20 +184,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         internal async Task<Apprenticeship> FindUnapprovedCohortReference(Apprenticeship apprenticeship, ApprenticeRequests status)
         {
-            (int withParty, int isDraft) = status switch
+            (int withParty, int isDraft, int approvals) = status switch
             {
-                ApprenticeRequests.ReadyForReview => (2, 0),
-                ApprenticeRequests.WithEmployers => (1, 0),
-                ApprenticeRequests.Drafts => (2, 1),
-                ApprenticeRequests.WithTransferSendingEmployers => (4, 0),
-                _ => (1, 0)
+                ApprenticeRequests.ReadyForReview => (2, 0, 0),
+                ApprenticeRequests.WithEmployers => (1, 0, 2),
+                ApprenticeRequests.Drafts => (2, 1, 0),
+                ApprenticeRequests.WithTransferSendingEmployers => (4, 0, 0),
+                _ => (1, 0, 0)
             };
 
             var details = await commitmentsDbSqlHelper.GetCohortRefAndLearnerDataIdFromCommitmentsDb(
                 apprenticeship.ProviderDetails.Ukprn,
                 apprenticeship.EmployerDetails.AccountLegalEntityId,
                 withParty,
-                isDraft);
+                isDraft,
+                approvals);
 
             //if no matching cohort found in the database, return as is
             if (details == null || details[0] == "")
@@ -201,7 +216,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter, string ukprn = null)
         {
             var providerConfig = context.GetProviderConfig<ProviderConfig>();
-            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortAsync(employerType, providerConfig);
+            Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortObject(employerType, providerConfig);
             apprenticeship = await commitmentsDbSqlHelper.GetApprenticeDetailsFromCommitmentsDb(apprenticeship, additionalWhereFilter);
             listOfApprenticeship.Add(apprenticeship);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);

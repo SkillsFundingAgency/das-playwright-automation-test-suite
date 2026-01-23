@@ -11,13 +11,9 @@ public class AssessmentOpportunitySteps(ScenarioContext context) : EPAOBaseSteps
     [When(@"the User visits the Assessment Opportunity Application")]
     public async Task WhenTheUserVisitsTheAssessmentOpportunityApplication()
     {
-        var driver = context.Get<Driver>();
-
         var url = UriHelper.GetAbsoluteUri(UrlConfig.EPAOAssessmentService_BaseUrl, EPAOConfig.AssessmentOpportunityFinderPath);
 
-        context.Get<ObjectContext>().SetDebugInformation(url);
-
-        await driver.Page.GotoAsync(url);
+        await Navigate(url);
 
         homePage = new AO_HomePage(_context);
     }

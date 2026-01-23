@@ -1,9 +1,9 @@
-﻿
-namespace SFA.DAS.FAA.UITests.Project.Helpers;
+﻿namespace SFA.DAS.FAA.UITests.Project.Helpers;
 
 public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
 {
     public async Task<FAASignedInLandingBasePage> GoToFAAHomePage() => await GoToFAAHomePage(context.GetUser<FAAApplyUser>());
+
     public async Task<FAASignedInLandingBasePage> GoToFAAHomePage(FAAPortalUser user)
     {
         await Navigate(UrlConfig.FAA_AppSearch);
@@ -17,8 +17,16 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
             await page1.Continue();
         }
 
-        return new FAASignedInLandingBasePage(context);
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new FAASignedInLandingBasePage(context));
     }
+
+    public async Task IneligibleUserApplyForAVacancy(FAAApplyUser user)
+    {
+        var page = await GoToFAAHomePage(user);
+
+        await page.SearchForFoundationCourseAndApply();
+    }
+
 
     public async Task<FAASignedInLandingBasePage> SubmitNewUserDetails()
     {
@@ -37,110 +45,158 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
             await page1.Continue();
         }
 
-        return new FAASignedInLandingBasePage(context);
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new FAASignedInLandingBasePage(context));
     }
 
 
-    //public void VerifyApplicationStatus(bool IsSucessful)
-    //{
-    //    var user = context.GetUser<FAAApplyUser>();
+    public async Task VerifyApplicationStatus(bool IsSucessful)
+    {
+        var user = context.GetUser<FAAApplyUser>();
 
-    //    var page = GoToFAAHomePage(user).GoToApplications();
+        var page = await GoToFAAHomePage(user);
 
-    //    if (IsSucessful) page.OpenSuccessfulApplicationPage().ViewApplication();
+        var page1 = await page.GoToApplications();
 
-    //    else page.OpenUnSuccessfulApplicationPage().ViewApplication();
-    //}
+        if (IsSucessful) { var page2 = await page1.OpenSuccessfulApplicationPage(); await page2.ViewApplication(); }
 
-    //public FAA_ApplicationOverviewPage ApplyForAVacancy(string numberOfQuestions)
-    //{
-    //    var applicationFormPage = GoToFAAHomePageAndApply();
+        else { var page2 = await page1.OpenUnSuccessfulApplicationPage(); await page2.ViewApplication(); }
 
-    //    applicationFormPage = applicationFormPage.Access_Section1_1SchoolCollegeQualifications().SelectSectionCompleted().VerifyEducationHistory_1();
+    }
 
-    //    applicationFormPage = applicationFormPage.Access_Section1_2TrainingCourse().SelectSectionCompleted().VerifyEducationHistory_2();
+    public async Task<FAA_ApplicationOverviewPage> ApplyForAVacancy(string numberOfQuestions)
+    {
+        return await ApplyForAVacancy(numberOfQuestions, context.GetUser<FAAApplyUser>(), false);
+    }
 
-    //    applicationFormPage = applicationFormPage.Access_Section2_1Jobs().SelectSectionCompleted().VerifyWorkHistory_1();
+    public async Task<FAA_ApplicationOverviewPage> ApplyForAVacancy(string numberOfQuestions, FAAPortalUser user, bool multipleLocations)
+    {
+        var applicationFormPage = await GoToFAAHomePageAndApply(user);
 
-    //    applicationFormPage = applicationFormPage.Access_Section2_2VolunteeringAndWorkExperience().SelectSectionCompleted().VerifyWorkHistory_2();
+        var page = await applicationFormPage.Access_Section1_1SchoolCollegeQualifications();
 
-    //    applicationFormPage = applicationFormPage.Access_Section3_1SkillsAndStrengths().SelectSectionCompleted().VerifyApplicationsQuestions_1();
+        applicationFormPage = await page.SelectSectionCompleted();
 
-    //    applicationFormPage = applicationFormPage.Access_Section3_2Interests().SelectSectionCompleted().VerifyApplicationsQuestions_2();
+        await applicationFormPage.VerifyEducationHistory_1();
 
-    //    switch (numberOfQuestions)
-    //    {
-    //        case "first":
-    //            applicationFormPage = applicationFormPage.Access_Section3_3AdditionalQuestion1().SelectYesAndCompleteSection().VerifyApplicationsQuestions_3();
-    //            break;
+        var page1 = await applicationFormPage.Access_Section1_2TrainingCourse();
 
-    //        case "second":
-    //            applicationFormPage = applicationFormPage.Access_Section3_4AdditionalQuestion2().SelectYesAndCompleteSection().VerifyApplicationsQuestions_4();
-    //            break;
+        applicationFormPage = await page1.SelectSectionCompleted();
 
-    //        case "both":
-    //            applicationFormPage = applicationFormPage.Access_Section3_3AdditionalQuestion1().SelectYesAndCompleteSection().VerifyApplicationsQuestions_3();
-    //            applicationFormPage = applicationFormPage.Access_Section3_4AdditionalQuestion2().SelectYesAndCompleteSection().VerifyApplicationsQuestions_4();
-    //            break;
-    //    }
+        await applicationFormPage.VerifyEducationHistory_2();
 
-    //    applicationFormPage = applicationFormPage.Access_Section4_1Adjustment().SelectYesAndContinue().SelectSectionCompleted().VerifyInterviewAadjustments_1();
+        var page2 = await applicationFormPage.Access_Section2_1Jobs();
 
-    //    applicationFormPage = applicationFormPage.Access_Section5_1DisabilityConfidence().SelectSectionCompleted().VerifyDisabilityConfidence_1();
+        applicationFormPage = await page2.SelectSectionCompleted();
 
-    //    return applicationFormPage;
-    //}
+        await applicationFormPage.VerifyWorkHistory_1();
 
-    //public FAA_ApplicationOverviewPage ApplyForAVacancy(string numberOfQuestions, object user)
-    //{
-    //    FAA_ApplicationOverviewPage applicationFormPage;
+        var page3 = await applicationFormPage.Access_Section2_2VolunteeringAndWorkExperience();
 
-    //    switch (user)
-    //    {
-    //        case FAAApplyUser faaUser:
-    //            applicationFormPage = GoToFAAHomePageAndApply(faaUser);
-    //            break;
-    //        case FAAApplySecondUser faaUser2:
-    //            applicationFormPage = GoToFAAHomePageAndApply(faaUser2);
-    //            break;
-    //        default:
-    //            throw new ArgumentException("Unsupported user type", nameof(user));
-    //    }
+        applicationFormPage = await page3.SelectSectionCompleted();
 
-    //    applicationFormPage = applicationFormPage.Access_Section1_1SchoolCollegeQualifications().SelectSectionCompleted().VerifyEducationHistory_1();
+        await applicationFormPage.VerifyWorkHistory_2();
 
-    //    applicationFormPage = applicationFormPage.Access_Section1_2TrainingCourse().SelectSectionCompleted().VerifyEducationHistory_2();
+        bool IsFoundationAdvert = context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
 
-    //    applicationFormPage = applicationFormPage.Access_Section2_1Jobs().SelectSectionCompleted().VerifyWorkHistory_1();
+        if (IsFoundationAdvert)
+        {
+            var page4 = await applicationFormPage.Access_Section3_2Interests_Foundations();
 
-    //    applicationFormPage = applicationFormPage.Access_Section2_2VolunteeringAndWorkExperience().SelectSectionCompleted().VerifyWorkHistory_2();
+            applicationFormPage = await page4.SelectSectionCompleted();
 
-    //    applicationFormPage = applicationFormPage.Access_Section3_1SkillsAndStrengths().SelectSectionCompleted().VerifyApplicationsQuestions_1();
+            await applicationFormPage.VerifyApplicationsQuestions_2();
+        }
+        else
+        {
+            var page4 = await applicationFormPage.Access_Section3_1SkillsAndStrengths();
 
-    //    applicationFormPage = applicationFormPage.Access_Section3_2Interests().SelectSectionCompleted().VerifyApplicationsQuestions_2();
+            applicationFormPage = await page4.SelectSectionCompleted();
 
-    //    switch (numberOfQuestions)
-    //    {
-    //        case "first":
-    //            applicationFormPage = applicationFormPage.Access_Section3_3AdditionalQuestion1().SelectYesAndCompleteSection().VerifyApplicationsQuestions_3();
-    //            break;
+            await applicationFormPage.VerifyApplicationsQuestions_1();
 
-    //        case "second":
-    //            applicationFormPage = applicationFormPage.Access_Section3_4AdditionalQuestion2().SelectYesAndCompleteSection().VerifyApplicationsQuestions_4();
-    //            break;
+            var page5 = await applicationFormPage.Access_Section3_2Interests();
 
-    //        case "both":
-    //            applicationFormPage = applicationFormPage.Access_Section3_3AdditionalQuestion1().SelectYesAndCompleteSection().VerifyApplicationsQuestions_3();
-    //            applicationFormPage = applicationFormPage.Access_Section3_4AdditionalQuestion2().SelectYesAndCompleteSection().VerifyApplicationsQuestions_4();
-    //            break;
-    //    }
+            applicationFormPage = await page5.SelectSectionCompleted();
 
-    //    applicationFormPage = applicationFormPage.Access_Section4_1Adjustment().SelectYesAndContinue().SelectSectionCompleted().VerifyInterviewAadjustments_1();
+            await applicationFormPage.VerifyApplicationsQuestions_2();
+        }
 
-    //    applicationFormPage = applicationFormPage.Access_Section5_1DisabilityConfidence().SelectSectionCompleted().VerifyDisabilityConfidence_1();
+        bool firstQuestion, secondQuestion;
 
-    //    return applicationFormPage;
-    //}
+        firstQuestion = numberOfQuestions == "first" || numberOfQuestions == "both";
+
+        secondQuestion = numberOfQuestions == "second" || numberOfQuestions == "both";
+
+        if (firstQuestion)
+        {
+            if (IsFoundationAdvert)
+            {
+                var page5 = await applicationFormPage.Access_Section3_3AdditionalQuestion1_Foundations();
+
+                applicationFormPage = await page5.SelectYesAndCompleteSection();
+
+                await applicationFormPage.VerifyApplicationsQuestions_3();
+            }
+            else
+            {
+                var page5 = await applicationFormPage.Access_Section3_3AdditionalQuestion1();
+
+                applicationFormPage = await page5.SelectYesAndCompleteSection();
+
+                await applicationFormPage.VerifyApplicationsQuestions_3();
+            }
+        }
+
+        if (secondQuestion)
+        {
+            if (IsFoundationAdvert)
+            {
+
+                var page4 = await applicationFormPage.Access_Section3_4AdditionalQuestion2_Foundations();
+
+                applicationFormPage = await page4.SelectYesAndCompleteSection();
+
+                await applicationFormPage.VerifyApplicationsQuestions_4();
+            }
+            else
+            {
+                var page4 = await applicationFormPage.Access_Section3_4AdditionalQuestion2();
+
+                applicationFormPage = await page4.SelectYesAndCompleteSection();
+
+                await applicationFormPage.VerifyApplicationsQuestions_4();
+            }
+        }
+
+        var page6 = await applicationFormPage.Access_Section4_1Adjustment();
+
+        var page7 = await page6.SelectYesAndContinue();
+
+        applicationFormPage = await page7.SelectSectionCompleted();
+
+        await applicationFormPage.VerifyInterviewAadjustments_1();
+
+        var page8 = await applicationFormPage.Access_Section5_1DisabilityConfidence();
+
+        applicationFormPage = await page8.SelectSectionCompleted();
+
+        await applicationFormPage.VerifyDisabilityConfidence_1();
+
+        bool multipleLocationsFlag = context.ContainsKey("multipleLocations") && (bool)context["multipleLocations"];
+
+        if (multipleLocations || multipleLocationsFlag)
+        {
+            var page9 = await applicationFormPage.Access_Section6_1Locations();
+
+            var page10 = await page9.SelectLocationsAndContinue();
+
+            applicationFormPage = await page10.SelectSectionCompleted();
+
+            await applicationFormPage.VerifyLocations_1();
+        }
+
+        return applicationFormPage;
+    }
 
     public async Task<FAA_ApplicationOverviewPage> ApplyForAVacancyWithNewAccount(bool qualificationdetails, bool trainingCourse, bool job, bool workExperience, bool interviewSupport, bool disabilityConfident)
     {
@@ -301,12 +357,49 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
         return applicationFormPage;
     }
 
+    public async Task<FAA_ApplicationOverviewPage> GoToVacancyDetailsPageThenSaveBeforeApplying()
+    {
+        var page = await GoToFAAHomePage();
 
-    //public FAA_ApplicationOverviewPage GoToVacancyDetailsPageThenSaveBeforeApplying() => GoToFAAHomePage().SearchByReferenceNumber().SaveAndApplyForVacancy().Apply();
-    //public FAA_ApplicationOverviewPage GoToSearchResultsPagePageAndSaveBeforeApplying() => GoToFAAHomePage().SearchAndSaveVacancyByReferenceNumber().SaveFromSearchResultsAndApplyForVacancy();
-    //public FAA_SubmittedApplicationPage GoToYourApplicationsPageAndWithdrawAnApplication() => GoToFAAHomePage().GoToApplications().OpenSubmittedlApplicationPage().WithdrawSelectedApplication();
-    //public FAA_SubmittedApplicationPage GoToYourApplicationsPageAndWithdrawARandomApplication() => GoToFAAHomePage().GoToApplications().OpenSubmittedlApplicationPage().WithdrawRandomlySelectedApplication();
-    //public FAA_SubmittedApplicationPage GoToYourApplicationsPageAndOpenSubmittedApplicationsPage() => GoToFAAHomePage().GoToApplications().OpenSubmittedlApplicationPage();
+        var page1 = await page.SearchByReferenceNumber();
+
+        var page2 = await page1.SaveAndApplyForVacancy();
+
+        return await page2.Apply();
+    }
+
+    public async Task<FAA_ApplicationOverviewPage> GoToSearchResultsPagePageAndSaveBeforeApplying()
+    {
+        var page = await GoToFAAHomePage();
+
+        var page1 = await page.SearchAndSaveVacancyByReferenceNumber();
+
+        return await page1.SaveFromSearchResultsAndApplyForVacancy();
+
+    }
+
+    public async Task<FAA_SubmittedApplicationPage> GoToYourApplicationsPageAndWithdrawAnApplication()
+    {
+        var page = await GoToYourApplicationsPageAndOpenSubmittedApplicationsPage();
+
+        return await page.WithdrawSelectedApplication();
+    }
+
+    public async Task<FAA_SubmittedApplicationPage> GoToYourApplicationsPageAndWithdrawARandomApplication()
+    {
+        var page = await GoToYourApplicationsPageAndOpenSubmittedApplicationsPage();
+
+        return await page.WithdrawRandomlySelectedApplication();
+    }
+
+    public async Task<FAA_SubmittedApplicationPage> GoToYourApplicationsPageAndOpenSubmittedApplicationsPage()
+    {
+        var page = await GoToFAAHomePage();
+
+        var page1 = await page.GoToApplications();
+
+        return await page1.OpenSubmittedlApplicationPage();
+    }
 
     private async Task<FAA_ApplicationOverviewPage> GoToFAASearchResultsPageToSelectAVacancyAndApply()
     {
@@ -318,9 +411,17 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
 
         return await apprenticeSummaryPage.Apply();
     }
-    //private FAA_ApplicationOverviewPage GoToFAAHomePageAndApply() => GoToFAAHomePage().SearchByReferenceNumber().Apply();
-    //private FAA_ApplicationOverviewPage GoToFAAHomePageAndApply(FAAApplyUser user) => GoToFAAHomePage(user).SearchByReferenceNumber().Apply();
-    //private FAA_ApplicationOverviewPage GoToFAAHomePageAndApply(FAAApplySecondUser user) => GoToFAAHomePage(user).SearchByReferenceNumber().Apply();
+
+    private async Task<FAA_ApplicationOverviewPage> GoToFAAHomePageAndApply() => await GoToFAAHomePageAndApply(context.GetUser<FAAApplyUser>());
+
+    private async Task<FAA_ApplicationOverviewPage> GoToFAAHomePageAndApply(FAAPortalUser user)
+    {
+        var page = await GoToFAAHomePage(user);
+
+        var page1 = await page.SearchByReferenceNumber();
+
+        return await page1.Apply();
+    }
 
     //public FAA_ApplicationOverviewPage ApplyForFirstVacancy(bool qualificationdetails, bool trainingCourse, bool job, bool workExperience, bool interviewSupport, bool disabilityConfident)
     //{

@@ -41,7 +41,8 @@ namespace SFA.DAS.ConfigurationBuilder
                 RofjaaDbConnectionString = GetConnectionString(dbDevConfig.RofjaaDbName),
                 TMDbConnectionString = GetConnectionString(dbDevConfig.TMDbName),
                 TPRDbConnectionString = GetConnectionString(dbDevConfig.TPRDbName),
-                UsersDbConnectionString = GetConnectionString(dbDevConfig.UsersDbName)
+                UsersDbConnectionString = GetConnectionString(dbDevConfig.UsersDbName),
+                QfastDbConnectionString = GetConnectionString(dbDevConfig.QfastDbName)
             };
         }
 

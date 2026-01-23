@@ -6,6 +6,8 @@ public partial class ProviderHomePage : InterimProviderBasePage
 {
     public async Task<ProviderLandingPage> SignsOut()
     {
+        await page.EvaluateAsync("() => { localStorage.clear(); sessionStorage.clear(); }");
+
         await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderLandingPage(context));
@@ -120,14 +122,14 @@ public partial class ProviderHomePage : InterimProviderBasePage
 
     public async Task<ProviderYourStandardsAndTrainingVenuesPage> NavigateToYourStandardsAndTrainingVenuesPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Your standards and training" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your training and venues" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderYourStandardsAndTrainingVenuesPage(context));
     }
 
     public async Task<ProviderInformationNotFoundPage> NavigateToShutterPage_EmployerTypeProviderPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Your standards and training" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your training and venues" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderInformationNotFoundPage(context));
     }
@@ -192,7 +194,7 @@ public class ProviderYourStandardsAndTrainingVenuesPage(ScenarioContext context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your standards and training venues");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training and venues");
     }
 }
 
@@ -246,6 +248,8 @@ public class ProviderReserveFundingForNonLevyEmployersPage(ScenarioContext conte
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Reserve funding for non-levy employers");
     }
+
+    public async Task ClickOnReserveFundingButton() => await page.GetByRole(AriaRole.Button, new() { Name = "Reserve funding" }).ClickAsync();
 
     //private static By ReserveFundingButton => By.LinkText("Reserve funding");
 

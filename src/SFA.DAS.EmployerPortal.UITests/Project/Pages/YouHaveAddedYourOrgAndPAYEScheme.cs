@@ -8,7 +8,7 @@ public class YouHaveAddedYourOrgAndPAYEScheme(ScenarioContext context) : Employe
     {
         await Assertions.Expect(page.GetByRole(AriaRole.Alert)).ToContainTextAsync("Organisation and PAYE scheme added");
 
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You've added your organisation and PAYE scheme");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("You've added your organisation and PAYE scheme");
     }
 
     public async Task<CreateYourEmployerAccountPage> ContinueToConfirmationPage()

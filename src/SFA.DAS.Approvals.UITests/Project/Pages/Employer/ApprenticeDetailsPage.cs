@@ -1,9 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
@@ -11,6 +7,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
     {
         private readonly ScenarioContext context;
         private readonly string pageTitle;
+
+        #region Locators
+        private ILocator BackPageLink => page.GetByRole(AriaRole.Link, new() { Name = "Back to manage your apprentices" });
+        private ILocator EditStatusLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit status" });
+        private ILocator ChangeProviderLink => page.GetByRole(AriaRole.Link, new() { Name = "Change   training provider" });
+        private ILocator EditApprenticeDetailsLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit   apprentice details" });
+        private ILocator EditPlannedTrainingEndDateLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit   end date" });
+        private ILocator ApprenticeStatusTag => page.Locator(".govuk-tag");
+        private ILocator StatusDateTitle => page.Locator("table:nth-of-type(1) tr:nth-of-type(2) th").First;
+        private ILocator StatusDateValue => page.Locator("table:nth-of-type(1) tr:nth-of-type(2) td").First;
+        #endregion
+
 
         internal ApprenticeDetailsPage(ScenarioContext context, string pageTitle) : base(context)
         {
@@ -25,15 +33,40 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         internal async Task<ManageYourApprenticesPage> ReturnBackToManageYourApprenticesPage()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Back to manage your apprentices" }).ClickAsync();
+            await BackPageLink.ClickAsync();
             return await VerifyPageAsync(() => new ManageYourApprenticesPage(context));
         }
 
         internal async Task<EditApprenticeDetailsPage> ClickOnEditApprenticeDetailsLink()
         { 
-            await page.Locator("#edit-apprentice-link").ClickAsync();
+            await EditApprenticeDetailsLink.ClickAsync();
             return await VerifyPageAsync(() => new EditApprenticeDetailsPage(context));
         }
+
+        internal async Task<ApprenticeDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status, string rowName, DateTime date)
+        {
+            await Assertions.Expect(ApprenticeStatusTag).ToContainTextAsync(status.ToString());
+            await Assertions.Expect(StatusDateTitle).ToContainTextAsync(rowName);
+            await Assertions.Expect(StatusDateValue).ToContainTextAsync(date.ToString("MMMM yyyy"));
+            return this;
+        }
+
+        internal async Task AssertRecordIsReadOnlyExceptEndDate()
+        { 
+            if (await EditStatusLink.IsVisibleAsync())
+                throw new Exception("Edit Status link is visible, expected to be hidden in read-only mode.");
+            
+            if (await ChangeProviderLink.IsVisibleAsync())
+                throw new Exception("Change Provider link is visible, expected to be hidden in read-only mode.");
+            
+            if (await EditApprenticeDetailsLink.IsVisibleAsync())
+                throw new Exception("Edit Apprentice Details link is visible, expected to be hidden in read-only mode.");
+            
+            if (!await EditPlannedTrainingEndDateLink.IsVisibleAsync())
+                throw new Exception("Edit Planned Training End Date link is not visible, expected to be visible in read-only mode.");
+
+        }
+
 
     }
 }

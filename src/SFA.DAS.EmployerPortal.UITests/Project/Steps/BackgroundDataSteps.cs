@@ -1,6 +1,5 @@
 ﻿
 using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
-using System;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Steps;
 
