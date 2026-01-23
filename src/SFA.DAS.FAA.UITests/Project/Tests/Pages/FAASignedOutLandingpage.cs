@@ -30,7 +30,7 @@ public class FAASignedOutLandingpage(ScenarioContext context) : FAABasePage(cont
 
     public async Task VerifyNotification()
     {
-        await Assertions.Expect(page.Locator(DeleteConfirmatioBanner)).ToContainTextAsync("Find an apprenticeship account deleted.");
+        await Assertions.Expect(page.Locator(DeleteConfirmatioBanner).First).ToContainTextAsync("Find an apprenticeship account deleted.");
     }
 }
 
