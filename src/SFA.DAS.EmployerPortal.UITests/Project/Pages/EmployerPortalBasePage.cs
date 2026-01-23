@@ -10,7 +10,7 @@ public abstract class EmployerPortalBasePage(ScenarioContext context) : BasePage
 
     public async Task<HomePage> GoToHomePage()
     {
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Home" }).ClickAsync();
+        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
 
         return await VerifyPageAsync(() => new HomePage(context));
     }
@@ -25,7 +25,7 @@ public abstract class EmployerPortalBasePage(ScenarioContext context) : BasePage
 
     public async Task<YouveLoggedOutPage> SignOut()
     {
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Sign out" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
 
         return await VerifyPageAsync(() => new YouveLoggedOutPage(context));
     }

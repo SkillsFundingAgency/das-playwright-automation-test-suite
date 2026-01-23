@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
+﻿using Azure;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using SFA.DAS.EmployerPortal.UITests.Project.Tests.Pages;
 
 
@@ -13,8 +14,8 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     public override async Task VerifyPage()
     {
         await retryHelper.RetryOnEmpHomePage(
-            async () => await Assertions.Expect(page.GetByRole(AriaRole.Menuitem, new() { Name = "Your organisations and" })).ToBeVisibleAsync(), ReloadPageAsync);
-
+            async () => await Assertions.Expect(page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Your organisations and" })).ToBeVisibleAsync(), ReloadPageAsync);
+        
         await Assertions.Expect(PageHeading).ToContainTextAsync(objectContext.GetOrganisationName());
     }
 

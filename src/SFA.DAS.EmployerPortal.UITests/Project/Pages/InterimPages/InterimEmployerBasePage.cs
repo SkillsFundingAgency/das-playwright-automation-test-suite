@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
+﻿using Azure;
+
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 
 public abstract class NavigateBase : BasePage
 {
@@ -39,7 +41,7 @@ public abstract class Navigate : NavigateBase
 
     protected async Task NavigateToMenuItem(string name)
     {
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = name }).ClickAsync();
+        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
     }
 }
 
@@ -131,7 +133,7 @@ public abstract class InterimEmployerBasePage : Navigate
     {
         var page1 = await page.RunAndWaitForPopupAsync(async () =>
         {
-            await page.GetByRole(AriaRole.Menuitem, new() { Name = "Help" }).ClickAsync();
+            await page.GetByLabel("GOV.UK One Login").GetByRole(AriaRole.Link, new() { Name = "Help" }).ClickAsync();
         });
 
         await Assertions.Expect(page1.GetByRole(AriaRole.Main)).ToContainTextAsync("Useful Links");
@@ -157,14 +159,14 @@ public abstract class InterimEmployerBasePage : Navigate
 
     public async Task<NotificationSettingsPage> GoToNotificationSettingsPage()
     {
-        await NavigateToSettings("Notifications settings");
+        await NavigateToSettings("Notification settings");
 
         return await VerifyPageAsync(() => new NotificationSettingsPage(context));
     }
 
     public async Task<YouveLoggedOutPage> SignOut()
     {
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Sign out" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
 
         return await VerifyPageAsync(() => new YouveLoggedOutPage(context));
     }
@@ -187,9 +189,9 @@ public abstract class InterimEmployerBasePage : Navigate
 
     protected async Task NavigateToSettings(string name)
     {
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Settings" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Settings" }).ClickAsync();
 
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = name }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
     }
 }
 
