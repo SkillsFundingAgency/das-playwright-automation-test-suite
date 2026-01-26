@@ -13,8 +13,7 @@ public abstract class InfluencersBasePage(ScenarioContext context) : HubBasePage
 
     public async Task<InfluencersRequestSupportPage> NavigateToRequestSupportPage()
     {
-
-        await InfluencersTab.GetByRole(AriaRole.Link, new() { Name = "Request support" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Submit a request", Exact = false }).ClickAsync();
 
         return await VerifyPageAsync(() => new InfluencersRequestSupportPage(context));
     }
