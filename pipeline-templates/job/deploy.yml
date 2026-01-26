@@ -190,15 +190,15 @@ jobs:
               azurePowerShellVersion: LatestVersion
             condition: succeededOrFailed()
 
-          - task: PublishTestResults@2
-            displayName: 'Publish UI test results'
-            inputs:
-              testResultsFormat: 'VSTest'
-              testResultsFiles: '**/*.trx'
-              searchFolder: '$(Agent.TempDirectory)/TestResults'
-              testRunTitle: 'UI Tests - ${{ parameters.Environment }}'
-              failTaskOnFailedTests: false
-            condition: succeededOrFailed()
+          # - task: PublishTestResults@2
+          #   displayName: 'Publish UI test results'
+          #   inputs:
+          #     testResultsFormat: 'VSTest'
+          #     testResultsFiles: '**/*.trx'
+          #     searchFolder: '$(Agent.TempDirectory)/TestResults'
+          #     testRunTitle: 'UI Tests - ${{ parameters.Environment }}'
+          #     failTaskOnFailedTests: false
+          #   condition: succeededOrFailed()
 
           - task: PowerShell@2
             displayName: 'Check .trx File Exists'
