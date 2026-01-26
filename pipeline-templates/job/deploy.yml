@@ -124,7 +124,7 @@ jobs:
               searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
               runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
               runInParallel: true
-              testFiltercriteria: 'TestCategory=$(TestCategory)&TestCategory!=ignoreintest&TestCategory!=accessibility'
+              testFiltercriteria: 'TestCategory=$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility'
               testRunTitle: 'Test Run - ${{ parameters.Environment }}'
               otherConsoleOptions: '/logger:trx'
               rerunFailedTests: true
