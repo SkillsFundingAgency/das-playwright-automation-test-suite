@@ -110,22 +110,12 @@ jobs:
               AZURE_TENANT_ID: $(AZURE_TENANT_ID)
               AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
             inputs:
-              # OPTION 1: Use your explicit patterns
-              testAssemblyVer2: |
-                **\*Tests*.dll
-                **\*UITests*.dll
-                **\*IntegrationTests*.dll
-                !**\*TestAdapter.dll
-                !**\obj\**
-                !**\bin\**\ref\**
-              # OPTION 2: If you want to keep the old parameterized approach:
-              # testAssemblyVer2: ${{ parameters.TestAssembly }}
-
+              testAssemblyVer2: ${{ parameters.TestAssembly }}
+              testRunTitle: 'Test Run - ${{ parameters.Environment }}'
               searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
+              testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
               runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
               runInParallel: true
-              testFiltercriteria: '(TestCategory=$(TestCategory))&TestCategory!=ignoreintest&TestCategory!=accessibility'
-              testRunTitle: 'Test Run - ${{ parameters.Environment }}'
               otherConsoleOptions: '/logger:trx'
               rerunFailedTests: true
               rerunType: basedOnTestFailureCount
