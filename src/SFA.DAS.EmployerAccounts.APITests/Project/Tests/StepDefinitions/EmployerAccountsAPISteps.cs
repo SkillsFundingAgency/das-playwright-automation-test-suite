@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Tests.StepDefinitions
         [Then(@"endpoint /api/user/\{userRef}/accounts can be accessed")]
         public async Task ThenEndpointApiUserUserRefAccountsCanBeAccessed()
         {
-            var userRef = _employerAccountsSqlDbHelper.GetUserRef();
+            var userRef = await _employerAccountsSqlDbHelper.GetUserRef();
             await _innerApiRestClient.ExecuteEndpoint($"/api/User/{userRef}/accounts", HttpStatusCode.OK);
         }
 
@@ -130,7 +130,7 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Tests.StepDefinitions
         [Then(@"endpoint /api/user can be accessed")]
         public async Task ThenEndpointApiUserCanBeAccessed()
         {
-            var userEmail = _employerAccountsSqlDbHelper.GetUserEmail();
+            var userEmail = await _employerAccountsSqlDbHelper.GetUserEmail();
             await _innerApiRestClient.ExecuteEndpoint($"/api/User?email={userEmail}", HttpStatusCode.OK);
         }
 

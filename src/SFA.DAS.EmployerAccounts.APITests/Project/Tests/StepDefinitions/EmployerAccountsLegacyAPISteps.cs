@@ -111,7 +111,7 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Tests.StepDefinitions
         [Then(@"endpoint api/user/\{userRef}/accounts from legacy accounts api can be accessed")]
         public async Task ThenEndpointApiUserUserRefAccountsCanBeAccessed()
         {
-            var userRef = _employerAccountsSqlDbHelper.GetUserRef();
+            var userRef = await _employerAccountsSqlDbHelper.GetUserRef();
             await _innerApiLegacyRestClient.ExecuteEndpoint($"/api/user/{userRef}/accounts", HttpStatusCode.OK);
         }
     }
