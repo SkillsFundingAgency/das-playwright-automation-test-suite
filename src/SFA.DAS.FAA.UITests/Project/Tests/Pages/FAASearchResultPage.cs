@@ -33,7 +33,11 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
     {
         var contextVacancyTitle = objectContext.Get("vacancyTitle");
 
-        await page.GetByRole(AriaRole.Link, new() { Name = contextVacancyTitle }).ClickAsync();
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "What" }).FillAsync(contextVacancyTitle);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).First.ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = contextVacancyTitle }).First.ClickAsync();
 
         return await VerifyPageAsync(() => new FAA_ApprenticeSummaryPage(context));
     }

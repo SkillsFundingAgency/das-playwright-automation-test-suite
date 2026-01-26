@@ -2,7 +2,7 @@
 
 public class FAABrowseByInterestsPage(ScenarioContext context) : FAASignedInLandingBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#SelectedRouteIds")).ToContainTextAsync("Browse by your interests");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#SelectedRouteIds")).ToContainTextAsync("What interests you?");
 
     public async Task<FAAWhatIsYourLocationPage> SelectCategoriesCheckBoxes()
     {
