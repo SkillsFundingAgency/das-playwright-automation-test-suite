@@ -1,7 +1,7 @@
 ﻿# Feature: EMPACC_API_02_GetEnglishFractionCurrent
 
 # @api
-# @employerfinanceapi
+# @employeraccountsapi
 # @outerapi
 # @regression
 # Scenario: EMPACC_API_02_GetEnglishFractionCurrent

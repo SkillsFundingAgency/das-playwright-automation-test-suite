@@ -1,7 +1,7 @@
 ﻿# Feature: EMPACC_API_03_GetEnglishFractionHistory
 
 # @api
-# @employerfinanceapi
+# @employeraccountsapi
 # @outerapi
 # @regression
 # Scenario: EMPACC_API_03_GetEnglishFractionHistory
