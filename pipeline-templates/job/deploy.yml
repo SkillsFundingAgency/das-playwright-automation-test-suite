@@ -111,7 +111,7 @@ jobs:
               AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
             inputs:
               testAssemblyVer2: ${{ parameters.TestAssembly }}
-              testRunTitle: 'Test Run - ${{ parameters.Environment }}'
+              testRunTitle: 'UI Test Run - ${{ parameters.Environment }}'
               searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
               testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
               runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
@@ -121,65 +121,6 @@ jobs:
               rerunType: basedOnTestFailureCount
               rerunMaxAttempts: 2
             continueOnError: true
-          # OLD VSTest TASK (kept for reference, now disabled)
-          # - task: VSTest@3
-          #   displayName: 'VsTest - Test Execution'
-          #   inputs:
-          #     testAssemblyVer2: ${{ parameters.TestAssembly }}
-          #     testRunTitle: 'Test Run - ${{ parameters.Environment }}'
-          #     searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
-          #     testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
-          #     runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
-          #     runInParallel: true
-          #     otherConsoleOptions: '/logger:trx'
-          #     rerunFailedTests: true
-          #     rerunType: basedOnTestFailureCount
-          #     rerunMaxAttempts: 2
-          #   continueOnError: true
-
-          # - task: AzureCLI@2
-          #   displayName: 'Test Execution'
-          #   inputs:
-          #     azureSubscription: ${{ parameters.ServiceConnection }}
-          #     addSpnToEnvironment: true
-          #     scriptType: ps
-          #     scriptLocation: inlineScript
-          #     inlineScript: |
-          #       $searchFolder = "$(System.DefaultWorkingDirectory)/drop/tests/"
-
-          #       Write-Host "Searching for test DLL in: $searchFolder"
-          #       # Match the classic pipeline: run the ProvideFeedback UI tests DLL
-          #       $testDllPath = Get-ChildItem -Path $searchFolder -Filter "$(projectName).dll" -Recurse -ErrorAction Stop | Select-Object -First 1 -ExpandProperty FullName
-
-          #       if (-not $testDllPath) {
-          #           Write-Error "Test DLL not found: $(projectName).dll"
-          #           exit 1
-          #       }
-
-          #       Write-Host "Found test DLL: $testDllPath"
-
-          #       $runSettings = "$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings"
-
-          #       # Same filter used in the classic pipeline
-          #       $filter = "$(TestCategory)&TestCategory!=ignoreintest&TestCategory!=accessibility"
-
-          #       Write-Host "Filter: $filter"
-
-          #       # Wire up the service principal so DefaultAzureCredential can pick it up
-          #       $env:AZURE_CLIENT_ID    = $env:servicePrincipalId
-          #       $env:AZURE_CLIENT_SECRET = $env:servicePrincipalKey
-          #       $env:AZURE_TENANT_ID    = $env:tenantId
-
-          #       Write-Host "AZURE_CLIENT_ID: $env:AZURE_CLIENT_ID"
-          #       Write-Host "AZURE_CLIENT_SECRET: $(if($env:AZURE_CLIENT_SECRET){'***SET***'}else{'NOT SET'})"
-          #       Write-Host "AZURE_TENANT_ID: $env:AZURE_TENANT_ID"
-
-          #       dotnet test $testDllPath `
-          #         --filter $filter `
-          #         --settings $runSettings `
-          #         --logger "trx;LogFileName=test_results.trx" `
-          #         --results-directory "$(Agent.TempDirectory)/TestResults"
-          #   continueOnError: true
 
           - task: AzurePowerShell@5
             displayName: "SQL - Remove Whitelisted Agent's IP Address"
@@ -189,16 +130,6 @@ jobs:
               ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
               azurePowerShellVersion: LatestVersion
             condition: succeededOrFailed()
-
-          # - task: PublishTestResults@2
-          #   displayName: 'Publish UI test results'
-          #   inputs:
-          #     testResultsFormat: 'VSTest'
-          #     testResultsFiles: '**/*.trx'
-          #     searchFolder: '$(Agent.TempDirectory)/TestResults'
-          #     testRunTitle: 'UI Tests - ${{ parameters.Environment }}'
-          #     failTaskOnFailedTests: false
-          #   condition: succeededOrFailed()
 
           - task: PowerShell@2
             displayName: 'Check .trx File Exists'
