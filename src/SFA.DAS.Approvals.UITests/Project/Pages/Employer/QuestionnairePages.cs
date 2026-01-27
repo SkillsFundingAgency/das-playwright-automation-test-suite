@@ -9,14 +9,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Are you setting up an apprenticeship for an existing employee?");
 
 
-        internal async Task<AreYouSettingUpAnApprenticeshipForAnExistingEmployeePage> Yes()
+        internal async Task<AreYouSettingUpAnApprenticeshipForAnExistingEmployeePage> SetApprenticeshipForAnExistingEmployee()
         {
             await page.Locator("[value= 'Yes']").ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new AreYouSettingUpAnApprenticeshipForAnExistingEmployeePage(context));
         }
 
-        internal async Task<SetUpAnApprenticeshipForNewEmployeePage> No()
+        internal async Task<SetUpAnApprenticeshipForNewEmployeePage> SetApprenticeshipForNewEmployee()
         {
             await page.Locator("[value= 'No']").ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
@@ -53,7 +53,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Do you know which course your apprentice will take?");
 
 
-        public async Task<HaveYouChosenATrainingProviderToDeliverTheApprenticeshipTrainingPage> Yes()
+        public async Task<HaveYouChosenATrainingProviderToDeliverTheApprenticeshipTrainingPage> IKnowWhichCourseMyApprenticeWillTake()
         {
 
             await page.Locator("[value= 'Yes']").ClickAsync();
@@ -62,7 +62,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         }
 
 
-        public async Task<SetupAnApprenticeshipDynamicHomepage> No()
+        public async Task<SetupAnApprenticeshipDynamicHomepage> IDontKnowWhichCourseMyApprenticeWillTake()
         {
             await page.Locator("[value= 'No']").ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
@@ -75,7 +75,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Do you need to create an advert for this apprenticeship?");
 
 
-        public async Task<DoYouNeedToCreateAdvertForThisApprenticeship> Yes()
+        public async Task<DoYouNeedToCreateAdvertForThisApprenticeship> CreateAdvertForThisApprenticeship()
         {
             await page.Locator("[value='True']").ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
@@ -83,7 +83,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         }
 
 
-        public async Task<AddApprenticePage> No()
+        public async Task<AddApprenticePage> DoNotCreateAdvertForThisApprenticeship()
         {
             await page.Locator("[value='False']").ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
@@ -96,14 +96,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Have you chosen a training provider to deliver the apprenticeship training?");
 
 
-        internal async Task<WillTheApprenticeshipTrainingStartInTheNextSixMonthsPage> Yes()
+        internal async Task<WillTheApprenticeshipTrainingStartInTheNextSixMonthsPage> IChooseTrainingProvider()
         {
             await page.Locator("[value= 'Yes']").ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new WillTheApprenticeshipTrainingStartInTheNextSixMonthsPage(context));
         }
 
-        internal async Task<SetupAnApprenticeshipDynamicHomepage> No()
+        internal async Task<SetupAnApprenticeshipDynamicHomepage> IDontKnowMyTrainingProvider()
         {
             await page.Locator("[value= 'No']").ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();

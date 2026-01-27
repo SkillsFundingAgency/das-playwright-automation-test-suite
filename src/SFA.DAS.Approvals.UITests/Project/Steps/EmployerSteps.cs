@@ -208,7 +208,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
 
             var continueSettingupAnApprenticeshipPage = await dynamicHomepageSettingAnApprenticeShip.Continue();
-            var addApprenticePage = await continueSettingupAnApprenticeshipPage.No();
+            await continueSettingupAnApprenticeshipPage.DoNotCreateAdvertForThisApprenticeship();
 
             await employerStepsHelper.AddEmptyCohortFromNonLevyReserveFundsAddApprenticePage();
         }

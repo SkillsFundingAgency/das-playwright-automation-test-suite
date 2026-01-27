@@ -139,13 +139,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
  
-            var selectReservedFunds = await new AddApprenticePage(context).ClickStartNowButtonNonLevyFlow();
-            var selectFundingPage =  await selectReservedFunds.SelectReservedFunds();
-            var addTrainingProviderPage = await selectFundingPage.SelectReservation();
-            var confirmTrainingProvider = await addTrainingProviderPage.SubmitValidUkprn(ukprn);
-            var confirmAddApprentices = await confirmTrainingProvider.ConfirmTrainingProviderDetails();
-            var confirmRequestSentPage = await confirmAddApprentices.SelectProviderAddApprencticesAndSend();
-            var cohortRef = await confirmRequestSentPage.GetCohortId();
+            var page1 = await new AddApprenticePage(context).ClickStartNowButtonNonLevyFlow();
+            var page2 =  await page1.SelectReservedFunds();
+            var page3 = await page2.SelectReservation();
+            var page4 = await page3.SubmitValidUkprn(ukprn);
+            var page5 = await page4.ConfirmTrainingProviderDetails();
+            var page6 = await page5.SelectProviderAddApprencticesAndSend();
+            
+            var cohortRef = await page6.GetCohortId();
             await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
         }
 
@@ -197,18 +198,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         {
             var dynamicHomepage = new SetupAnApprenticeshipDynamicHomepage(context);
 
-            var coursePage = await dynamicHomepage.StartNow();
-            var providerPage = await coursePage.Yes();
-            var startInSixMonthsPage = await providerPage.Yes();
-            var existingEmployeePage = await startInSixMonthsPage.StartInSixMonths();
-            var newEmployeePage = await existingEmployeePage.No();
-            var reserveFundingPage = await newEmployeePage.YesContinueToReserveFunding();
-            var coursePage2 = await reserveFundingPage.YesContinueToReserveFunding();
-            var startDatePage = await coursePage2.ReserveFundsAsync("Associate");
-            var confirmReservationPage = await startDatePage.SelectAlreadyStartedDate();
-            var successPage = await confirmReservationPage.ClickConfirmButton();
+            var page1 = await dynamicHomepage.StartNow();
+            var page2 = await page1.IKnowWhichCourseMyApprenticeWillTake();
+            var page3 = await page2.IChooseTrainingProvider();
+            var page4 = await page3.StartInSixMonths();
+            var page5 = await page4.SetApprenticeshipForNewEmployee();
+            var page6 = await page5.YesContinueToReserveFunding();
+            var page7 = await page6.YesContinueToReserveFunding();
+            var page8 = await page7.ReserveFundsAsync("Associate");
+            var page9 = await page8.SelectAlreadyStartedDate();
+            var page10 = await page9.ClickConfirmButton();
 
-            return await successPage.SelectGoToHomePageAndContinue();
+            return await page10.SelectGoToHomePageAndContinue();
         }
     }
 }
