@@ -1,8 +1,3 @@
-using System;
-using System.Linq;
-using System.Text;
-using HashidsNet;
-
 namespace SFA.DAS.EmployerAccounts.APITests.Project.Models;
 
 public class TransactionSummary

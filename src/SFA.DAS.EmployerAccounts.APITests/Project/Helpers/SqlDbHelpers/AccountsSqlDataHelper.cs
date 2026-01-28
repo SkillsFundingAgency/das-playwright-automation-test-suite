@@ -5,12 +5,12 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers.SqlHelpers
 {
     public class AccountsSqlDataHelper : SqlDbHelper
     {
-        private readonly DbConfig _dbConfig;
+        private readonly DbConfig dbConfig;
 
         public AccountsSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig)
             : base(objectContext, dbConfig.AccountsDbConnectionString)
         {
-            _dbConfig = dbConfig;
+            this.dbConfig = dbConfig;
         }
 
         public async Task<List<string>> GetTestAccountDetailsFromDB()
@@ -23,9 +23,9 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers.SqlHelpers
             try
             {
                 // Try to query the Finance DB for a levy AccountId (use the Finance connection string)
-                if (!string.IsNullOrWhiteSpace(_dbConfig?.FinanceDbConnectionString))
+                if (!string.IsNullOrWhiteSpace(dbConfig?.FinanceDbConnectionString))
                 {
-                    var singleLevyRow = await GetData(levyQuery, _dbConfig.FinanceDbConnectionString);
+                    var singleLevyRow = await GetData(levyQuery, dbConfig.FinanceDbConnectionString);
                     if (singleLevyRow != null && singleLevyRow.Count > 0 && !string.IsNullOrWhiteSpace(singleLevyRow[0]))
                     {
                         levyIds.Add(singleLevyRow[0].Trim());
@@ -152,11 +152,11 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers.SqlHelpers
             string execConnection = null;
             try
             {
-                if (!string.IsNullOrWhiteSpace(_dbConfig?.FinanceDbConnectionString) &&
+                if (!string.IsNullOrWhiteSpace(dbConfig?.FinanceDbConnectionString) &&
                     (sql.IndexOf("employer_financial", StringComparison.OrdinalIgnoreCase) >= 0 ||
                      string.Equals(sqlFileName, "getTransactions.sql", StringComparison.OrdinalIgnoreCase)))
                 {
-                    execConnection = _dbConfig.FinanceDbConnectionString;
+                    execConnection = dbConfig.FinanceDbConnectionString;
                 }
             }
             catch

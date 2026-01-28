@@ -1,7 +1,4 @@
-﻿using SFA.DAS.FrameworkHelpers;
-using TechTalk.SpecFlow;
-
-namespace SFA.DAS.EmployerAccounts.APITests.Project
+﻿namespace SFA.DAS.EmployerAccounts.APITests.Project
 {
     public static class ScenarioContextExtension
     {

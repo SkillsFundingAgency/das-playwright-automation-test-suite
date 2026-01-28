@@ -1,9 +1,5 @@
-﻿using SFA.DAS.API.Framework;
-using SFA.DAS.EmployerAccounts.APITests.Project.Helpers;
+﻿using SFA.DAS.EmployerAccounts.APITests.Project.Helpers;
 using SFA.DAS.EmployerAccounts.APITests.Project.Helpers.SqlDbHelpers;
-using SFA.DAS.FrameworkHelpers;
-using TechTalk.SpecFlow;
-using System;
 using SFA.DAS.HashingService;
 namespace SFA.DAS.EmployerAccounts.APITests.Project.Tests.StepDefinitions
 {

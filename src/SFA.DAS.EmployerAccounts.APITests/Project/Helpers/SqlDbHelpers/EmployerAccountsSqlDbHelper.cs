@@ -1,8 +1,4 @@
-﻿using SFA.DAS.ConfigurationBuilder;
-using SFA.DAS.FrameworkHelpers;
-using System.Collections.Generic;
-
-namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers.SqlDbHelpers
+﻿namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers.SqlDbHelpers
 {
     public class EmployerAccountsSqlDbHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AccountsDbConnectionString)
     {
