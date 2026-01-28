@@ -1,10 +1,8 @@
 ﻿@approvals
 Feature: AP_E2E_NL_NUA_02_DynamicHomePage
 
- Summary: Dynamic Home Page allows non-levy employer, 
- who are new to service, to navigate and 
- complete major user journeys with some added assistance available on the Home Page. 
- It behaves dynamically based on user actions
+ Dynamic Home Page allows non-levy employer who are new to service to navigate and complete major user journeys with some added assistance available on the Home Page.
+ It behaves dynamically based on user actions.
 
 @regression
 @e2escenarios
