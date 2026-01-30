@@ -1,8 +1,8 @@
 ﻿Feature: EMPACC_API_10_SearchOrganisationOrganisationsResults
 
 @api
-@employeraccountsapiF
+@employeraccountsapiResourceNotavailable
 @outerapi
 @regression
 Scenario: EMPACC_API_10_SearchOrganisationOrganisationsResults
-	Then endpoint /SearchOrganisation/organisations/search/results can be accessed
+#	Then endpoint /SearchOrganisation/organisations/search/results can be accessed

@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers.SqlDbHelpers
+﻿using System.ClientModel.Primitives;
+
+namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers.SqlDbHelpers
 {
     public class EmployerAccountsSqlDbHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.AccountsDbConnectionString)
     {
@@ -60,6 +62,14 @@
         {
             return await GetDataAsString("SELECT TOP 1 UserRef" +
                 " FROM [employer_account].[User] ORDER BY Id DESC");
+        }
+
+        public async Task SetUserRef()
+        {
+            var userRef = await GetDataAsString("SELECT TOP 1 UserRef" +
+                " FROM [employer_account].[User] ORDER BY Id DESC");
+
+            objectContext.SetUserRef(userRef);
         }
 
         public async Task<string> GetUserEmail()

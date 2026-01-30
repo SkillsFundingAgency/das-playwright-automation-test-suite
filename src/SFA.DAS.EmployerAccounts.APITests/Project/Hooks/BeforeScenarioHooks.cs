@@ -37,6 +37,7 @@ public class BeforeScenarioHooks(ScenarioContext context)
 
         await employerAccountsSqlDbHelper.SetHashedAccountId();
         await employerAccountsSqlDbHelper.SetAccountId();
+        await employerAccountsSqlDbHelper.SetUserRef();
         await employerAccountsSqlDbHelper.SetLegalEntityId();
         await employerAccountsSqlDbHelper.SetPayeSchemeRef();
 

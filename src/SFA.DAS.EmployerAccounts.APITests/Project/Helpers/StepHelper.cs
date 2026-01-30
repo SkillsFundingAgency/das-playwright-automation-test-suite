@@ -7,21 +7,21 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers
 {
     public class StepHelper
     {
-        private readonly ScenarioContext _scenarioContext;
-        private readonly ObjectContext _objectContext;
-        private readonly Outer_EmployerAccountsApiHelper _outerApiHelper;
+        private readonly ScenarioContext scenarioContext;
+        private readonly ObjectContext objectContext;
+        private readonly Outer_EmployerAccountsApiHelper outerApiHelper;
 
         public StepHelper(ScenarioContext scenarioContext, ObjectContext objectContext, Outer_EmployerAccountsApiHelper outerApiHelper)
         {
-            _scenarioContext = scenarioContext;
-            _objectContext = objectContext;
-            _outerApiHelper = outerApiHelper;
+            this.scenarioContext = scenarioContext;
+            this.objectContext = objectContext;
+            this.outerApiHelper = outerApiHelper;
         }
 
 
         public async Task<List<string>> ExecuteSql(string sql)
         {
-            var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+            var accountsHelper = scenarioContext.Get<AccountsSqlDataHelper>();
             Assert.IsNotNull(accountsHelper, "AccountsSqlDataHelper not registered in ScenarioContext; ensure BeforeScenario hooks ran.");
 
             return await accountsHelper.ExecuteSql(sql);
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers
                     var lower = acct.Trim().ToLowerInvariant();
                     if (lower != "accountid" && lower != "userref" && lower != "hashedaccountid" && lower != "encodedaccountid")
                     {
-                        _objectContext.SetAccountId(acct);
+                        objectContext.SetAccountId(acct);
                     }
                 }
             }
@@ -73,8 +73,8 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers
             var dict = MapRowToDictionary(row, selectAliases);
             SetAccountIdIfPresent(dict);
             // store both the expected result model and the raw SQL dictionary used for property-skipping logic
-            try { _scenarioContext.Set(dict, "expectedResult"); } catch { _scenarioContext["expectedResult"] = dict; }
-            try { _scenarioContext.Set(dict, "accUserNotificationSqlRow"); } catch { _scenarioContext["accUserNotificationSqlRow"] = dict; }
+            try { scenarioContext.Set(dict, "expectedResult"); } catch { scenarioContext["expectedResult"] = dict; }
+            try { scenarioContext.Set(dict, "accUserNotificationSqlRow"); } catch { scenarioContext["accUserNotificationSqlRow"] = dict; }
         }
 
         public async Task PopulateExpectedSignedAgreementVersion()
@@ -86,11 +86,11 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers
             var selectAliases = new List<string> { "AccountId", "minimumSignedAgreementVersion" };
             var dict = MapRowToDictionary(row, selectAliases);
             SetAccountIdIfPresent(dict);
-            _scenarioContext.Set(dict, "accAgreementSqlRow");
+            scenarioContext.Set(dict, "accAgreementSqlRow");
 
             // store the raw SQL dictionary as the expected agreement result
-            try { _scenarioContext.Set(dict, "expectedResult"); } catch { _scenarioContext["expectedResult"] = dict; }
-            try { _scenarioContext.Set(dict, "expectedAgreementResult"); } catch { _scenarioContext["expectedAgreementResult"] = dict; }
+            try { scenarioContext.Set(dict, "expectedResult"); } catch { scenarioContext["expectedResult"] = dict; }
+            try { scenarioContext.Set(dict, "expectedAgreementResult"); } catch { scenarioContext["expectedAgreementResult"] = dict; }
         }
 
         public async Task PopulateExpectedUserWithLinkedAccounts()
@@ -109,10 +109,10 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers
             var aliases = new List<string> { "userRef", "Email", "employerUserId", "encodedAccountId", "dasAccountName", "role", "apprenticeshipEmployerType" };
             var dict = MapRowToDictionary(row, aliases);
 
-            try { _scenarioContext.Set(dict, "expectedResult"); } catch { _scenarioContext["expectedResult"] = dict; }
-            try { _scenarioContext.Set(dict["userRef"], "UserRef"); } catch { _scenarioContext["UserRef"] = dict["userRef"]; }
-            try { _scenarioContext.Set(dict["Email"], "email"); } catch { _scenarioContext["email"] = dict["Email"]; }
-            try { _scenarioContext.Set(dict["encodedAccountId"], "encodedAccountId"); } catch { _scenarioContext["encodedAccountId"] = dict["encodedAccountId"]; }
+            try { scenarioContext.Set(dict, "expectedResult"); } catch { scenarioContext["expectedResult"] = dict; }
+            try { scenarioContext.Set(dict["userRef"], "UserRef"); } catch { scenarioContext["UserRef"] = dict["userRef"]; }
+            try { scenarioContext.Set(dict["Email"], "email"); } catch { scenarioContext["email"] = dict["Email"]; }
+            try { scenarioContext.Set(dict["encodedAccountId"], "encodedAccountId"); } catch { scenarioContext["encodedAccountId"] = dict["encodedAccountId"]; }
 
         }
 
@@ -218,14 +218,14 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers
         {
             object expectedObj = null;
             object actualObj = null;
-            try { expectedObj = _scenarioContext.ContainsKey("expectedResult") ? _scenarioContext["expectedResult"] : null; } catch { expectedObj = null; }
-            try { actualObj = _scenarioContext.ContainsKey("actualResult") ? _scenarioContext["actualResult"] : null; } catch { actualObj = null; }
+            try { expectedObj = scenarioContext.ContainsKey("expectedResult") ? scenarioContext["expectedResult"] : null; } catch { expectedObj = null; }
+            try { actualObj = scenarioContext.ContainsKey("actualResult") ? scenarioContext["actualResult"] : null; } catch { actualObj = null; }
             return (expectedObj, actualObj);
         }
 
         public Dictionary<string, string> TryGetSqlDict()
         {
-            try { return _scenarioContext.ContainsKey("accUserNotificationSqlRow") ? _scenarioContext.Get<Dictionary<string, string>>("accUserNotificationSqlRow") : null; } catch { return null; }
+            try { return scenarioContext.ContainsKey("accUserNotificationSqlRow") ? scenarioContext.Get<Dictionary<string, string>>("accUserNotificationSqlRow") : null; } catch { return null; }
         }
 
         public bool HandleReceiveNotificationsFalseCase(object expectedObj, object actualObj)
