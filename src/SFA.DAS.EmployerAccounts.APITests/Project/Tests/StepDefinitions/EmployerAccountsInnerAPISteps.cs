@@ -117,14 +117,14 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Tests.StepDefinitions
             await _innerApiRestClient.ExecuteEndpoint($"/api/User?email={userEmail}", HttpStatusCode.OK);
         }
 
-        [Then(@"endpoint /accounts/\{hashedAccountId}/transactions  can be accessed")]
+        [Then(@"endpoint api/accounts/\{hashedAccountId}/transactions  can be accessed")]
         public async Task ThenEndpointAccountsHashedAccountIdTransactionsCanBeAccessed()
         {
             var hashedAccountId = _objectContext.GetHashedAccountId();
             await _innerApiLegacyRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions", HttpStatusCode.OK);
         }
 
-        [Then(@"endpoint /accounts/\{hashedAccountId}/transactions/\{year}/\{month} can be accessed")]
+        [Then(@"endpoint api/accounts/\{hashedAccountId}/transactions/\{year}/\{month} can be accessed")]
         public async Task ThenEndpointAccountsHashedAccountIdTransactionsYearMonthCanBeAccessed()
         {
             var hashedAccountId = _objectContext.GetHashedAccountId();
@@ -132,6 +132,30 @@ namespace SFA.DAS.EmployerAccounts.APITests.Project.Tests.StepDefinitions
             var result = JsonConvert.DeserializeObject<ICollection<TransactionSummary>>(response.Content);
             await _innerApiLegacyRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transactions/{result.FirstOrDefault().Year}/{result.FirstOrDefault().Month}", HttpStatusCode.OK);
         }
+
+        [Then(@"endpoint api/accounts/\{hashedAccountId}/levy  can be accessed")]
+        public async Task ThenEndpointLevyAccountsHashedAccountIdCanBeAccessed()
+        {
+            var hashedAccountId = _objectContext.GetHashedAccountId();
+            await _innerApiLegacyRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy", HttpStatusCode.OK);
+        }
+
+        [Then(@"endpoint api/accounts/\{hashedAccountId}/levy/\{year}/\{month} can be accessed")]
+        public async Task ThenEndpointLevyAccountsHashedAccountIdLevyYearMonthCanBeAccessed()
+        {
+            var hashedAccountId = _objectContext.GetHashedAccountId();
+            var response = await _innerApiLegacyRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy");
+            var result = JsonConvert.DeserializeObject<ICollection<LevyDeclaration>>(response.Content);
+            await _innerApiLegacyRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/levy/{result.FirstOrDefault().PayrollYear}/{result.FirstOrDefault().PayrollMonth}", HttpStatusCode.OK);
+        }
+
+        [Then(@"endpoint api/accounts/\{hashedAccountId}/transfers/connections can be accessed")]
+        public async Task ThenEndpointTransferConnectionsHashedAccountIdCanBeAccessed()
+        {
+            var hashedAccountId = _objectContext.GetHashedAccountId();
+            await _innerApiLegacyRestClient.ExecuteEndpoint($"/api/accounts/{hashedAccountId}/transfers/connections", HttpStatusCode.OK);
+        }
+
 
         [Then(@"das-employer-accounts-api /ping endpoint can be accessed")]
         public async Task ThenDas_Employer_Accounts_ApiPingEndpointCanBeAccessed()

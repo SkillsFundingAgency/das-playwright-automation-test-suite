@@ -5,5 +5,5 @@
 @regression
 @innerapi
 Scenario: EMPACC_API_06_ApiGetAccountTransactionsHashedAccountIdTransactions
-	Then endpoint /accounts/{hashedAccountId}/transactions  can be accessed
+	Then endpoint api/accounts/{hashedAccountId}/transactions  can be accessed
 	
