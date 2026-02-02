@@ -1,8 +1,6 @@
 namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers
 {
-    using System;
-    using System.Net;
-    using System.Threading.Tasks;
+
 
     public class Outer_EmployerAccountsApiRestClient : Outer_BaseApiRestClient
     {

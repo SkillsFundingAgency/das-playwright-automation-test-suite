@@ -1,6 +1,3 @@
-
-using System;
-
 namespace SFA.DAS.EmployerAccounts.APITests.Project.Helpers;
 
 public class Outer_EmployerAccountsApiHelper

@@ -19,33 +19,17 @@ public class BeforeScenarioHooks(ScenarioContext context)
     {
         var config = context.GetEmployerAccountsApiConfig<EmployerAccountsApiConfig>();
         var hashingService = new HashingService.HashingService(config.HashCharacters, config.HashString);
-        // store hashing service in ScenarioContext so step classes can retrieve it
         context.Set<global::SFA.DAS.HashingService.IHashingService>(hashingService);
 
         var dbConfig = context.Get<DbConfig>();
-
         var objectContext = context.Get<ObjectContext>();
-        
+    
         context.Set(new EmployerAccountsSqlDbHelper(context.Get<ObjectContext>(), dbConfig));
-
         context.SetRestClient(new Inner_EmployerAccountsApiRestClient(objectContext, context.Get<Inner_ApiFrameworkConfig>()));
-
         context.SetRestClient(new Inner_EmployerAccountsLegacyApiRestClient(objectContext, context.Get<Inner_ApiFrameworkConfig>()));
-
         var employerAccountsSqlDbHelper = new EmployerAccountsSqlDbHelper(context.Get<ObjectContext>(), dbConfig);
 
-
-        await employerAccountsSqlDbHelper.SetHashedAccountId();
-        await employerAccountsSqlDbHelper.SetAccountId();
         await employerAccountsSqlDbHelper.SetUserRef();
-        await employerAccountsSqlDbHelper.SetLegalEntityId();
-        await employerAccountsSqlDbHelper.SetPayeSchemeRef();
-
-        config = context.GetEmployerAccountsApiConfig<EmployerAccountsApiConfig>();
-        // refresh hashing service in context in case config changed
-        hashingService = new HashingService.HashingService(config.HashCharacters, config.HashString);
-        context.Set<global::SFA.DAS.HashingService.IHashingService>(hashingService);
-
         await employerAccountsSqlDbHelper.SetHashedAccountId();
         await employerAccountsSqlDbHelper.SetAccountId();
         await employerAccountsSqlDbHelper.SetLegalEntityId();
