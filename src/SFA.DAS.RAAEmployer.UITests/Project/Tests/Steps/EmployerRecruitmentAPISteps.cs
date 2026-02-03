@@ -64,8 +64,13 @@ public class EmployerRecruitmentAPISteps(ScenarioContext context)
     [When(@"the employer navigates to Adverts page")]
     public async Task ThenTheEmployerNavigatesToAdvertsPage() => await _keyforAPIPage.ClickAdvertsLink();
 
-    //[Then(@"the employer selects the 'Manage your emails' link")]
-    //public async Task ThenTheEmployerSelectsTheManageYourEmailsLink() => new YourApprenticeshipAdvertsHomePage(context).ClickMangeYourEmailsLink();
+    [Then(@"the employer selects the 'Manage your emails' link")]
+    [When(@"the employer selects the 'Manage your emails' link")]
+    public async Task ThenTheEmployerSelectsTheManageYourEmailsLink()
+    {
+        var page = new YourApprenticeshipAdvertsHomePage(context);
+        await page.GoToAdvertNotificationsPage();
+    }
 
     [Given(@"the employer selects the developer get started page")]
     public async Task GivenTheEmployerSelectsTheDeveloperGetStartedPage() 
