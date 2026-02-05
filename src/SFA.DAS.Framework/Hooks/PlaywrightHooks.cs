@@ -37,6 +37,12 @@ public class PlaywrightHooks(ScenarioContext context)
             });
     }
 
+    [AfterTestRun]
+    public static async Task AfterAll()
+    {
+        await Browser.CloseAsync();
+    }
+
     [BeforeScenario(Order = 8)]
     public async Task SetupPlaywrightDriver()
     {
@@ -94,7 +100,7 @@ public class PlaywrightHooks(ScenarioContext context)
                 await MarkTestStatus("failed", context.TestError.Message, pDriver.Page);
         }
 
-        await Browser.CloseAsync();
+        await browserContext.CloseAsync();
     }
 
     public static async Task MarkTestStatus(string status, string reason, IPage page)
