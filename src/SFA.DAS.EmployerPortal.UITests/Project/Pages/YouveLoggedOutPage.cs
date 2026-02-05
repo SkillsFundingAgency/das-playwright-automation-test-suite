@@ -4,7 +4,7 @@ public class YouveLoggedOutPage(ScenarioContext context) : EmployerPortalBasePag
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You have been signed out");
+        await Assertions.Expect(page.Locator(".govuk-heading-l")).ToContainTextAsync("You have been signed out");
 
         await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "sign in" })).ToBeVisibleAsync();
     }
