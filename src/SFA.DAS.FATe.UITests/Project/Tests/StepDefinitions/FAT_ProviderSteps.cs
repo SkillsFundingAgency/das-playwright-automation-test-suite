@@ -23,27 +23,29 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 
             var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
 
-            var page2 = await page1.AccessStandards();
+            var page2 = await page1.AccessTrainingTypesPage();
 
-            var page3 = await page2.AccessAddStandard();
+            var page3 = await page2.AccessStandards_Apprenticeships();
 
-            var page4 = await page3.SelectAStandardAndContinue(StandardName);
+            var page4 = await page3.AccessAddStandard();
 
-            var page5 = await page4.YesStandardIsCorrectAndContinue();
+            var page5 = await page4.SelectAStandardAndContinue(StandardName);
 
-            var page6 = await page5.YesUseExistingContactDetails();
+            var page6 = await page5.YesStandardIsCorrectAndContinue();
 
-            var page7 = await page6.Add_ContactInformation();
+            var page7 = await page6.YesUseExistingContactDetails();
 
-            var page8 = await page7.ConfirmAtOneofYourTrainingLocations_AddStandard();
+            var page8 = await page7.Add_ContactInformation();
 
-            var page9 = await page8.AccessSeeANewTrainingVenue_AddStandard();
+            var page9 = await page8.ConfirmAtOneofYourTrainingLocations_AddStandard();
 
-            var page10 = await page9.ChooseTheVenueDeliveryAndContinue();
+            var page10 = await page9.AccessSeeANewTrainingVenue_AddStandard();
 
-            var page11 = await page10.Save_NewTrainingVenue_Continue(StandardName);
+            var page11 = await page10.ChooseTheVenueDeliveryAndContinue();
 
-            await page11.Save_NewStandard_Continue();
+            var page12 = await page11.Save_NewTrainingVenue_Continue(StandardName);
+
+            await page12.Save_NewStandard_Continue();
         }
 
         [When("the provider deletes the Craft Plasterer course from the standards list")]
@@ -53,13 +55,15 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 
             var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
 
-            var page2 = await page1.AccessStandards();
+            var page2 = await page1.AccessTrainingTypesPage();
 
-            var page3 = await page2.AccessActuaryLevel7(StandardName);
+            var page3 = await page2.AccessStandards_Apprenticeships();
 
-            var page4 = await page3.ClickDeleteAStandard();
+            var page4 = await page3.AccessActuaryLevel7(StandardName);
 
-            await page4.DeleteStandard();
+            var page5 = await page4.ClickDeleteAStandard();
+
+            await page5.DeleteStandard();
         }
     }
 }
