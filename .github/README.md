@@ -257,10 +257,9 @@ If the variables are defined in more than one place then vsts will prioritize in
 
 ### Supported Browsers: 
 The framework can currently work on the following browsers
-1. Chrome - use "chrome", "googlechrome" or "local" as values for the Browser in appsettings
-2. Firefox - use "firefox" or "mozillafirefox" as values for the Browser in appsettings
-3. Edge - use "edge" or "microsoftedge" as values for the Browser in appsettings
-3. Chrome Headless - use "headlessbrowser" or "headless" as values for the Browser in appsettings
+1. Chrome - use "chrome", as values for the Browser in appsettings
+2. Firefox - use "firefox" as values for the Browser in appsettings
+3. Safari - use "safari" as values for the Browser in appsettings
 
 Note: Tests can be executed on different browsers versions using BrowserStack.
 
