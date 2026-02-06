@@ -25,7 +25,6 @@ stages:
     variables:
       - group: "TEST DevTest Shared Resources"
       - group: "TEST Automation Suite Variables"
-      - group: "TEST Automation Suite Variables (Db)"
     jobs:
       - template: ../job/deploy.yml
         parameters:
@@ -65,7 +64,6 @@ stages:
       - group: "PreProd Management Resources"
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
-      - group: "PREPROD Automation Suite Variables (Db)"
       - ${{ if ne(parameters.PreProdSpecificVariableGroup, '') }}:
           - group: ${{ parameters.PreProdSpecificVariableGroup }}
     jobs:
