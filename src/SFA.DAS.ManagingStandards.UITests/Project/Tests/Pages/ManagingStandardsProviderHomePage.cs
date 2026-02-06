@@ -34,6 +34,13 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
         return await VerifyPageAsync(() => new TrainingVenuesPage(context));
     }
 
+    public async Task<ChooseTrainingTypePage> AccessTrainingTypesPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Training", Exact = true }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ChooseTrainingTypePage(context));
+    }
+
     public async Task<ContactDetailsPage> AccessContactDetails()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Contact details" }).ClickAsync();
@@ -41,12 +48,6 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
         return await VerifyPageAsync(() => new ContactDetailsPage(context));
     }
 
-    public async Task<ManageTheStandardsYouDeliverPage> AccessStandards()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Training", Exact = true }).ClickAsync();
-
-        return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
-    }
 
     public async Task<TrainingProviderOverviewPage> AccessProviderOverview()
     {
@@ -73,6 +74,42 @@ public class TrainingProviderOverviewPage(ScenarioContext context) : ManagingSta
 
 }
 
+public class ChooseTrainingTypePage(ScenarioContext context) : ManagingStandardsBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Choose training type");
+    }
+
+    public async Task<ManageTheStandardsYouDeliverPage> AccessStandards_Apprenticeships()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Apprenticeships", Exact = true }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
+    }
+    public async Task<ManageYourShortCoursesPage> AccessStandards_ApprenticeshipsUnits()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Apprenticeship units", Exact = true }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageYourShortCoursesPage(context));
+    }
+
+    public async Task<YourStandardsAndTrainingVenuesPage> NavigateBackToReviewYourDetails()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
+    }
+
+}
+public class ManageYourShortCoursesPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your short courses");
+    }
+
+}
 
 public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : ManagingStandardsBasePage(context)
 {
@@ -88,11 +125,11 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
 
-    public async Task<YourStandardsAndTrainingVenuesPage> ReturnToYourStandardsAndTrainingVenues()
+    public async Task<ChooseTrainingTypePage> ReturnToYourStandardsAndTrainingVenues()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
 
-        return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
+        return await VerifyPageAsync(() => new ChooseTrainingTypePage(context));
     }
     public async Task<ManageTheStandardsYouDeliverPage> VerifyStandardPresence(string standardName, bool shouldExist = true)
     {

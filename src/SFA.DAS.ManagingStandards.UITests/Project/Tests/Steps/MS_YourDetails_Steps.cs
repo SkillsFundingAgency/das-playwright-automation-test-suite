@@ -20,7 +20,9 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page3 = await page2.NavigateBackToReviewYourDetails();
 
-        await page3.AccessStandards();
+        var page4 = await page3.AccessTrainingTypesPage();
+
+        await page4.AccessStandards_Apprenticeships();
     }
 
     [Then(@"the provider verifies provider overview")]
@@ -30,11 +32,15 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page1 = await page.ReturnToYourStandardsAndTrainingVenues();
 
-        var page2 = await page1.AccessProviderOverview();
+        var page2 = await page1.NavigateBackToReviewYourDetails();
 
-        var page3 = await page2.NavigateBackToReviewYourDetails();
+        var page3 = await page2.AccessProviderOverview();
 
-        await page3.AccessStandards();
+        var page4 = await page3.NavigateBackToReviewYourDetails();
+
+        var page5 = await page4.AccessTrainingTypesPage();
+
+        await page5.AccessStandards_Apprenticeships();
     }
 
     [Then(@"the provider updates contact details")]
@@ -56,13 +62,14 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
 
-        var page2 = await page1.AccessStandards();
+        var page2 = await page1.AccessTrainingTypesPage();
+        var page3 = await page2.AccessStandards_Apprenticeships();
 
-        var page3 = await page2.AccessPodiatrist();
+        var page4 = await page3.AccessPodiatrist();
 
-        var page4 = await page3.AccessApprovedByRegulationOrNot();
+        var page5 = await page4.AccessApprovedByRegulationOrNot();
 
-        var page5 = await page4.ApproveStandard_FromStandardsPage();
+        var page6 = await page5.ApproveStandard_FromStandardsPage();
 
     }
 
@@ -128,19 +135,20 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
 
-        var page2 = await page1.AccessStandards();
+        var page2 = await page1.AccessTrainingTypesPage();
+        var page3 = await page2.AccessStandards_Apprenticeships();
 
-        var page3 = await page2.AccessPodiatrist();
+        var page4 = await page3.AccessPodiatrist();
 
-        var page4 = await page3.AccessWhereYouWillDeliverThisStandard();
+        var page5 = await page4.AccessWhereYouWillDeliverThisStandard();
 
-        var page5 = await page4.ConfirmStandardWillDeliveredInBoth();
+        var page6 = await page5.ConfirmStandardWillDeliveredInBoth();
 
-        var page6 = await page5.ConfirmVenueDetailsAndDeliveryMethod_AtBoth();
+        var page7 = await page6.ConfirmVenueDetailsAndDeliveryMethod_AtBoth();
 
-        var page7 = await page6.NoDeliverAnyWhereInEngland();
+        var page8 = await page7.NoDeliverAnyWhereInEngland();
 
-        await page7.SelectDerbyRutlandRegionsAndConfirm();
+        await page8.SelectDerbyRutlandRegionsAndConfirm();
     }
 
     [When(@"the provider is able to edit the regions")]
