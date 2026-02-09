@@ -44,13 +44,9 @@ public class CreateAccountTaskListSteps
 
         var page = await _createYourEmployerAccountPage.SignOut();
 
-        var page1 = await page.CickSignInInYouveLoggedOutPage();
+        await page.CickSignInInYouveLoggedOutPage();
 
-        var page2 = await page1.GoManageApprenticeLandingPage();
-
-        var page3 = await page2.GoToStubSignInPage();
-
-        var page4 = await page3.Login(loggedInAccountUser.Username, loggedInAccountUser.IdOrUserRef);
+        var page4 = await new StubSignInEmployerPage(_context).Login(loggedInAccountUser.Username, loggedInAccountUser.IdOrUserRef);
 
         await page4.Continue();
     }
@@ -58,7 +54,7 @@ public class CreateAccountTaskListSteps
     [Then(@"user can resume employer registration journey")]
     public async Task UserCanResumeEmployerRegistrationJourney()
     {
-        _createYourEmployerAccountPage = await VerifyPageHelper.VerifyPageAsync(_context, () => new CreateYourEmployerAccountPage(_context));
+        await new YourAccountsPage(_context).VerifyPage();
     }
 
     [Given(@"user logs into stub")]

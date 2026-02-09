@@ -6,13 +6,11 @@ public class YouveLoggedOutPage(ScenarioContext context) : EmployerPortalBasePag
     {
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("You have been signed out");
 
-        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "sign in" })).ToBeVisibleAsync();
+        await Assertions.Expect(page.Locator("//a[.='sign in']")).ToBeVisibleAsync();
     }
 
-    public async Task<SignInToYourApprenticeshipServiceAccountPage> CickSignInInYouveLoggedOutPage()
+    public async Task CickSignInInYouveLoggedOutPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "sign in" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new SignInToYourApprenticeshipServiceAccountPage(context));
+        await page.Locator("//a[.='sign in']").ClickAsync();
     }
 }

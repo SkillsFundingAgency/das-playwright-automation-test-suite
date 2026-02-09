@@ -8,9 +8,9 @@ public class AccountSignOutHelper(ScenarioContext context)
     {
         var page = await new HomePage(context, true).SignOut();
 
-        var page1 = await page.CickSignInInYouveLoggedOutPage();
+        await page.CickSignInInYouveLoggedOutPage();
         
-        return await page1.GoManageApprenticeLandingPage();
+        return await new SignInToYourApprenticeshipServiceAccountPage(context).GoManageApprenticeLandingPage();
     }
 
     public static async Task<YouveLoggedOutPage> SignOut(HomePage page) => await page.SignOut();
