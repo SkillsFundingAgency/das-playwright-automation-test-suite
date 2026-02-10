@@ -82,10 +82,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 var page2 = await page1.SelectApprenticeFromILRList(apprenticeship);
                 await page2.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
                 await page2.ClickAddButton();
-                var page3 = new RecognitionOfPriorLearningPage(context);
-                var page4 = await page3.SelectNoForRPL();
-                await page4.GetCohortId(apprenticeship);
-                await new ApproveApprenticeDetailsPage(context).GetCohortId(apprenticeship);
+                //var page3 = new RecognitionOfPriorLearningPage(context);
+                //var page4 = await page3.SelectNoForRPL();
+                //await page4.GetCohortId(apprenticeship);
+                //await new ApproveApprenticeDetailsPage(context).GetCohortId(apprenticeship);
+                var page3 = new ApproveApprenticeDetailsPage(context);
+                await page3.GetCohortId(apprenticeship);
+                return await page3.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
             }
 
             return approveApprenticeDetailsPage;
@@ -313,10 +316,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 var page1 = await page.SelectApprenticeFromILRList(apprenticeship);
                 await page1.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
                 await page1.ClickAddButton();
-                var page2 = new RecognitionOfPriorLearningPage(context);
-                var page3 = await page2.SelectYesForRPL();
-                var page4 = await page3.EnterRPLDataAndContinue(apprenticeship);
-               // await new ApproveApprenticeDetailsPage(context).GetCohortId(apprenticeship);
+                //var page2 = new RecognitionOfPriorLearningPage(context);
+                //var page3 = await page2.SelectYesForRPL();
+                //var page4 = await page3.EnterRPLDataAndContinue(apprenticeship);
+                await new ApproveApprenticeDetailsPage(context).GetCohortId(apprenticeship);
+
             }
 
             return approveApprenticeDetailsPage;
