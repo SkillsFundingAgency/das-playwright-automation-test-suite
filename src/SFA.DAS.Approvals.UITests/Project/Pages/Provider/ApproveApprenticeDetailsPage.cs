@@ -18,13 +18,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator row(string ULN) => page.Locator($"table tbody tr:has-text('{ULN}')");
         private ILocator viewLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"View{name}" }).First;
         private ILocator deleteLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"Delete{name}" }).First;
+        private ILocator removeLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"Delete{name}" }).First;
         private ILocator AddAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
         private ILocator DeleteThisCohortLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete this cohort" }).First;
         private ILocator approveRadioOption => page.Locator("label:has-text('Yes, approve and notify employer')");
         private ILocator firstRadioOption => page.Locator("div.govuk-radios__item input[type='radio']").First;
         private ILocator doNotApproveRadioOption => page.Locator("label:has-text('No, save and return to apprentice requests')");
         private ILocator messageToEmployerTextBox => page.Locator(".govuk-textarea").First;
-        private ILocator saveAndSubmitButton => page.Locator("button:has-text('Save and submit')");
+        private ILocator saveAndSubmitButton => page.Locator("button:has-text('Save and continue')");
         private ILocator saveAndexitLink => page.Locator("a:has-text('Save and exit')");
         private ILocator Name(ILocator apprenticeRow) => apprenticeRow.Locator("td:nth-child(1)");
         private ILocator Uln(ILocator apprenticeRow) => apprenticeRow.Locator("td:nth-child(2)");
@@ -33,13 +34,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator Price(ILocator apprenticeRow) => apprenticeRow.Locator("td:nth-child(5)");
         private ILocator sendToEmployerRadioOption => page.Locator("label:has-text('No, send to employer to review or add details')");
         private ILocator messageToEmployerToReviewTextBox => page.Locator(".govuk-textarea").Last;
+        private ILocator ilrCheckbox => page.Locator("label:has-text('I confirm I’ve checked RPL for each apprentice and added details where needed ')");
         #endregion
 
 
         public override async Task VerifyPage()
         {
             var headerText = await page.Locator(".govuk-heading-xl").First.TextContentAsync();
-            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Approve apprentice details|Approve 2 apprentices' details"));
+            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Check apprentice details|Approve 2 apprentices' details"));
         }
 
         public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
@@ -110,6 +112,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         
         internal async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()
         {
+            
+            await ilrCheckbox.ClickAsync();
             await approveRadioOption.ClickAsync();
             await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
             await saveAndSubmitButton.ClickAsync();
@@ -118,6 +122,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<CohortSentToEmployerForReview> ProviderSendCohortForEmployerReview()
         {
+            await ilrCheckbox.ClickAsync();
             await sendToEmployerRadioOption.ClickAsync();
             await messageToEmployerToReviewTextBox.FillAsync("Please review the details and approve the request.");
             await saveAndSubmitButton.ClickAsync();
@@ -128,6 +133,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<CohortApproved> ProviderApprovesCohortAfterEmployerApproval()
         {
+            await ilrCheckbox.ClickAsync();
             await approveRadioOption.ClickAsync();
             await saveAndSubmitButton.ClickAsync();
             return await VerifyPageAsync(() => new CohortApproved(context));
@@ -137,6 +143,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         {
             if (flag)
             {
+                await ilrCheckbox.ClickAsync();
                 await approveRadioOption.ClickAsync();
                 await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
             }
@@ -147,9 +154,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         }
 
-        internal async Task<ConfirmApprenticeDeletionPage> ClickOnDeleteApprenticeLink(string name)
+        internal async Task<ConfirmApprenticeDeletionPage> ClickOnRemoveApprenticeLink(string name)
         {
-            await deleteLink("  " + name).ClickAsync();
+            await removeLink("  " + name).ClickAsync();
             return await VerifyPageAsync(() => new ConfirmApprenticeDeletionPage(context));
         }
 

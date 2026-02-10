@@ -76,7 +76,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var page = await new ApproveApprenticeDetailsPage(context).ClickOnViewApprenticeLink(apprentice.ApprenticeDetails.FullName);
             var page1 = await page.UpdateEmail(apprentice.ApprenticeDetails.Email + ".uk");
-            var page3 = await page1.SelectNoForRPL();
+           // var page3 = await page1.SelectNoForRPL();
         }
 
         [Then("the user can send a cohort to employer")]
@@ -88,7 +88,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user can delete an apprentice in a cohort")]
         public async Task ThenTheUserCanDeleteAnApprenticeInACohort()
         {
-            var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteApprenticeLink("");
+            var page = await new ApproveApprenticeDetailsPage(context).ClickOnRemoveApprenticeLink("");
             var page1 = await page.ConfirmDeletion();
             await page1.VerifyBanner("Apprentice record deleted");
         }
