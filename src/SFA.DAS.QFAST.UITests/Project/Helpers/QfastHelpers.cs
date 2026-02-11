@@ -20,6 +20,12 @@ public class QfastHelpers(ScenarioContext context)
 
         return await VerifyPageHelper.VerifyPageAsync(context, () => new AO_Page(context));
     }
+    public async Task<AO_Page> GoToQfastAOHomePage1()
+    {
+        await new DfeAdminLoginStepsHelper(context).LoginToQfastAsAOUser2();
+
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new AO_Page(context));
+    }
     public async Task<IFATE_Page> GoToQfastIFATEHomePage()
     {
         await new DfeAdminLoginStepsHelper(context).LoginToQfastAsIFATEUser();

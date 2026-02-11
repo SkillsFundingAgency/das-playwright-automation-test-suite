@@ -28,39 +28,34 @@ public class AdminSteps(ScenarioContext context)
             case "admin user":
                 await _qfastHelpers.GoToQfastAdminHomePage();
                 break;
-
             case "ao":
             case "ao user":
             case "aouser":
                 await _qfastHelpers.GoToQfastAOHomePage();
                 break;
-
+            case "ao user2":           
+                await _qfastHelpers.GoToQfastAOHomePage1();
+                break;
             case "ifate":
             case "ifate user":
                 await _qfastHelpers.GoToQfastIFATEHomePage();
                 break;
-
             case "ofqual":
             case "ofqual user":
                 await _qfastHelpers.GoToQfastOFQUALHomePage();
                 break;
-
             case "data importer":
             case "importer":
                 await _qfastHelpers.GoToQfastDataImporterHomePage();
                 break;
-
             case "reviewer":
             case "data reviewer":
                 await _qfastHelpers.GoToQfastReviewerHomePage();
                 break;
-
             case "form editor":
                 await _qfastHelpers.GoToQfastFormEditorHomePage();
                 break;
-
             default:
-
                 await _qfastHelpers.GoToQfastAdminHomePage();
                 break;
         }

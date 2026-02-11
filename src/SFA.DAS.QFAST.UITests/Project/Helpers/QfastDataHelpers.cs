@@ -15,9 +15,9 @@ public class QfastDataHelpers
         FifthQuestionTitle = "Single Option";
         SixthQuestionTitle = "Multiple Option";
         SeventhQuestionTitle = "Attach documents";
-        QualificationTitle = "Level 3 Award in Cricket Coaching";
+        QualificationTitle = "RAD Advanced Vocational Graded Examination in Dance";
         ApplicationOwner = "Test Owner";
-        QualificationNumber = "61055244";
+        QualificationNumber = "10013398";
         AwardingOrganisation = "Test Awarding Organisation";
         PhoneNumber = "01234567890";
         Day = "01";
