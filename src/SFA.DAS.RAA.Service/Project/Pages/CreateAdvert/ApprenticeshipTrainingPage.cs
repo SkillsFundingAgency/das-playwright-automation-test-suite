@@ -18,8 +18,6 @@ public class ApprenticeshipTrainingPage(ScenarioContext context) : RaaBasePage(c
 
     private async Task EnterTrainingTitleAction(string trainingTitle)
     {
-        await page.GetByRole(AriaRole.Combobox, new() { Name = "Enter apprenticeship training" }).ClickAsync();
-
         await page.GetByRole(AriaRole.Combobox, new() { Name = "Enter apprenticeship training" }).FillAsync(trainingTitle);
 
         await page.GetByRole(AriaRole.Option, new() { Name = trainingTitle }).ClickAsync();
