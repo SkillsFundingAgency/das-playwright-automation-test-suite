@@ -82,12 +82,12 @@ public class AdminSteps(ScenarioContext context)
 
         switch (option)
         {
-            case "Create a submission form":
+            case "Create a form":
                 await _qfastAdminPage.SelectOptions(option);
                 await VerifyPageHelper.VerifyPageAsync(context, () => new ViewForms_Page(context));
                 break;
 
-            case "Review funding requests":
+            case "Review applications for funding":
                 await _qfastAdminPage.SelectOptions(option);
                 await VerifyPageHelper.VerifyPageAsync(context, () => new RequestForFundign_Page(context));
                 break;
@@ -97,7 +97,7 @@ public class AdminSteps(ScenarioContext context)
                 await VerifyPageHelper.VerifyPageAsync(context, () => new NewQualifications_Page(context));
                 break;
 
-            case "Review regulated qualifications with changes":
+            case "Review qualifications with changes":
                 await _qfastAdminPage.SelectOptions(option);
                 await VerifyPageHelper.VerifyPageAsync(context, () => new ChangedQualifications_Page(context));
                 break;
@@ -107,9 +107,14 @@ public class AdminSteps(ScenarioContext context)
                 await VerifyPageHelper.VerifyPageAsync(context, () => new ImportQualifications_Page(context));
                 break;
 
-            case "Create an output file":
+            case "Download an output file":
                 await _qfastAdminPage.SelectOptions(option);
                 await VerifyPageHelper.VerifyPageAsync(context, () => new CreateOutputFile_Page(context));
+                break;
+
+            case "Search for a qualification":
+                await _qfastAdminPage.SelectOptions(option);
+                await VerifyPageHelper.VerifyPageAsync(context, () => new SearchForQualification_Page(context));
                 break;
 
 

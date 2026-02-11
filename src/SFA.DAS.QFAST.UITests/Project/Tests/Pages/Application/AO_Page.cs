@@ -53,7 +53,7 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
     {
         await page.GetByLabel("Qualification title").FillAsync(qfastDataHelpers.QualificationTitle);
         await page.GetByLabel("Application owner").FillAsync(qfastDataHelpers.ApplicationOwner);
-        await page.GetByLabel("Qualification number (optional)").FillAsync(qfastDataHelpers.QualificationNumber);
+       // await page.GetByLabel("Qualification number (optional)").FillAsync(qfastDataHelpers.QualificationNumber);
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         return await VerifyPageAsync(() => new Application_Overview_Page(context));
     }
