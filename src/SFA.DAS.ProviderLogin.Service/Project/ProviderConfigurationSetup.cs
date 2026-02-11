@@ -27,6 +27,10 @@ public class ProviderConfigurationSetup(ScenarioContext context) : ProviderConfi
     [BeforeScenario(Order = 2)]
     public async Task SetUpProviderConfiguration()
     {
+        var objectContext = _context.Get<ObjectContext>();
+
+        objectContext.SetConsoleAndDebugInformation("Entered SetUpProviderConfiguration Order = 2 hook");
+
         dfeframeworkList = _context.Get<FrameworkList<DfeProviderUsers>>();
 
         dfeProviderDetailsList = await new EmployerProviderRelationshipsSqlDataHelper(_context.Get<ObjectContext>(), _context.Get<DbConfig>()).GetProviderName(dfeframeworkList.SelectMany(x => x.Listofukprn).ToList());

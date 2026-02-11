@@ -46,6 +46,10 @@ public class PlaywrightHooks(ScenarioContext context)
     [BeforeScenario(Order = 8)]
     public async Task SetupPlaywrightDriver()
     {
+		var objectContext = context.Get<ObjectContext>();
+
+        objectContext.SetConsoleAndDebugInformation("Entered SetupPlaywrightDriver Order = 8 hook");
+		
         browserContext = await Browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = ViewportSize.NoViewport

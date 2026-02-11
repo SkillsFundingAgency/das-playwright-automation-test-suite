@@ -5,16 +5,18 @@ namespace SFA.DAS.Framework.Hooks;
 [Binding]
 public class DirectorySetupHooks(ScenarioContext context, FeatureContext featureContext)
 {
-    private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
-
     [BeforeScenario(Order = 3)]
     public void SetUpDirectory()
     {
+        var objectContext = context.Get<ObjectContext>();
+
+        objectContext.SetConsoleAndDebugInformation("Entered SetUpDirectory Order = 3 hook");
+
         string directory = GetDirectoryPath();
 
         if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
-        _objectContext.SetDirectory(directory);
+        objectContext.SetDirectory(directory);
     }
 
     private string GetDirectoryPath()
