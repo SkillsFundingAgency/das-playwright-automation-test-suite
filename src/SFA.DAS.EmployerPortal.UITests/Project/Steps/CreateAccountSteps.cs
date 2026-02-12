@@ -29,6 +29,7 @@ public class CreateAccountSteps
     private CreateAnAccountToManageApprenticeshipsPage _indexPage;
     private AddPayeSchemeUsingGGDetailsPage _addPayeSchemeUsingGGDetailsPage;
     private SignAgreementPage _doYouAcceptTheEmployerAgreementOnBehalfOfPage;
+    private YouveLoggedOutPage _youveLoggedOutPage;
 
 
     public CreateAccountSteps(ScenarioContext context)
@@ -439,7 +440,7 @@ public class CreateAccountSteps
     }
 
     [When(@"the Employer logsout of the Account")]
-    public async Task WhenTheEmployerLogsoutOfTheAccount() => _indexPage = await _accountCreationStepsHelper.SignOut();
+    public async Task WhenTheEmployerLogsoutOfTheAccount() => _youveLoggedOutPage = await _accountCreationStepsHelper.SignOut();
 
     [Then(@"an Employer is able to create another Account with the same PublicSector Type Org but with a different PAYE")]
     public async Task ThenAnEmployerIsAbleToCreateAnotherAccountWithTheSamePublicSectorTypeOrgButWithADifferentPAYE()

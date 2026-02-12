@@ -1,17 +1,11 @@
 ﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 
 public class AccountSignOutHelper(ScenarioContext context)
 {
-    public async Task<CreateAnAccountToManageApprenticeshipsPage> SignOut()
-    {
-        var page = await new HomePage(context, true).SignOut();
-
-        var page1 = await page.CickSignInInYouveLoggedOutPage();
-        
-        return await page1.GoManageApprenticeLandingPage();
-    }
+    public async Task<YouveLoggedOutPage> SignOut() => await new HomePage(context, true).SignOut();     
 
     public static async Task<YouveLoggedOutPage> SignOut(HomePage page) => await page.SignOut();
 

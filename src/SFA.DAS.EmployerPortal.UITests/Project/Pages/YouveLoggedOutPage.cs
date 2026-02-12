@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
+
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public class YouveLoggedOutPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
@@ -9,10 +11,10 @@ public class YouveLoggedOutPage(ScenarioContext context) : EmployerPortalBasePag
         await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "sign in" }).First).ToBeVisibleAsync();
     }
 
-    public async Task<SignInToYourApprenticeshipServiceAccountPage> CickSignInInYouveLoggedOutPage()
+    public async Task<StubSignInEmployerPage> CickSignInInYouveLoggedOutPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "sign in" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "sign in" }).First.ClickAsync();
 
-        return await VerifyPageAsync(() => new SignInToYourApprenticeshipServiceAccountPage(context));
+        return await VerifyPageAsync(() => new StubSignInEmployerPage(context));
     }
 }

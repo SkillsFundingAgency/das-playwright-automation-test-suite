@@ -30,6 +30,8 @@ public abstract class EmployerPortalBasePage(ScenarioContext context) : BasePage
         return await VerifyPageAsync(() => new YouveLoggedOutPage(context));
     }
 
+    public async Task Continue() => await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
+
     protected async Task ClickBackLink()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();

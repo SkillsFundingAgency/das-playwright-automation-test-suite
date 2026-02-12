@@ -18,4 +18,6 @@ public abstract class StubYouHaveSignedInBasePage(ScenarioContext context, strin
 
         if (!newUser) await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(idOrUserRef);
     }
+
+    public async Task Continue() => await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
 }
