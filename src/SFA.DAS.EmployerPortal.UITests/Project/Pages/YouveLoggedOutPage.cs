@@ -6,7 +6,7 @@ public class YouveLoggedOutPage(ScenarioContext context) : EmployerPortalBasePag
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You have been signed out");
 
-        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "sign in" })).ToBeVisibleAsync();
+        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "sign in" }).First).ToBeVisibleAsync();
     }
 
     public async Task<SignInToYourApprenticeshipServiceAccountPage> CickSignInInYouveLoggedOutPage()

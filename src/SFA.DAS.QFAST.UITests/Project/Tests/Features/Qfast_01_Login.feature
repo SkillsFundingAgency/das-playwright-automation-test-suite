@@ -6,13 +6,14 @@ Feature: QFAT_01
 Scenario: QFAST Admin User login in to the portal
 	Given the admin user log in to the portal
 	And I validate opitons on the page with the following expected options
-		| Option										|
-		| Review funding requests						|
-		| Review newly regulated qualifications         |
-		| Review regulated qualifications with changes	|
-		| Import data							        |
-		| Create a submission form						|
-		| Create an output file					        |
+		| Option                                |
+		| Search for a qualification            |
+		| Review applications for funding       |
+		| Review qualifications with changes    |
+		| Download an output file               |
+		| Import data                           |
+		| Review newly regulated qualifications |
+		| Create a form                         |
 	
 @regression
 @qfast
@@ -36,24 +37,24 @@ Scenario: QFAST data Importer User login in to the portal
 	And I validate opitons on the page with the following expected options
 		| Option                        |
 		| Import data                   |
-		| Create an output file         |
+		| Download an output file       |
 
 @regression
 @qfast
 Scenario: QFAST reviewer User login in to the portal	
 	Given the reviewer user log in to the portal
 	And I validate opitons on the page with the following expected options
-		| Option										|
-		| Review funding requests						|
-		| Review newly regulated qualifications         |
-		| Review regulated qualifications with changes	|
+		| Option								|
+		| Review applications for funding		|
+		| Review newly regulated qualifications |
+		| Review qualifications with changes	|
 	
 @regression
 @qfast
 Scenario: QFAST form editor login in to the portal
 	Given the form editor user log in to the portal
 	And I validate opitons on the page with the following expected options
-		| Option										|
-		| Create a submission form						|
+		| Option		|
+		| Create a form |
 
 	

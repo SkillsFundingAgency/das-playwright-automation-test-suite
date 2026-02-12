@@ -6,7 +6,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(objectContext.GetOrganisationName());
+            await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync(objectContext.GetOrganisationName());
         }
 
         internal async Task<YourFundingReservationsPage> ClickOnFundingReservationsLink()

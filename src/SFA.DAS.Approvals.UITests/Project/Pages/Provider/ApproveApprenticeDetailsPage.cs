@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -91,6 +92,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await AddAnotherApprenticeLink.ClickAsync();
             return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
         }
+
+        internal async Task<SelectLearnerFromILRPage> ClickOnAddAnotherApprenticeLink_SelectExistingReservationRoute()
+        {
+            await AddAnotherApprenticeLink.ClickAsync();
+            await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
+            var reservation = await new SelectReservationPage(context).SelectReservation();
+            return new SelectLearnerFromILRPage(context);
+        }
+
 
         internal async Task<AddApprenticeDetails_EntryMothodPage> ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage()
         {

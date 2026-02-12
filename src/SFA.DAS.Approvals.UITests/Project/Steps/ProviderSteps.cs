@@ -183,9 +183,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheProviderAddsApprenticeDetailsApprovesTheCohortAndSendsItToTheEmployerForApproval()
         {
             var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
-            
+
             var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
             await providerStepsHelper.AddOtherApprenticesFromILRListWithRPL(page, 0);
+            await page.ProviderApproveCohort();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
+        }
+
+        [Then("the provider adds apprentice details, select an existing reservation, approves the cohort and sends it to the employer for approval")]
+        public async Task ThenTheProviderAddsApprenticeDetailsSelectsExistingReservationApprovesTheCohortAndSendsItToTheEmployerForApproval()
+        {
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
+
+            var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
+            await providerStepsHelper.ProviderAddApprencticesFromIlrRouteUseExistingReservation(page);
             await page.ProviderApproveCohort();
             await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
         }

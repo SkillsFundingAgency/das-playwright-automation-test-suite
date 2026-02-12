@@ -1,3 +1,5 @@
+﻿using System.Collections.Generic;
+
 ﻿namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(context)
@@ -16,7 +18,7 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
     //private static By VacancyName => By.CssSelector("span[itemprop='title']");
 
     //private static By SavedVacancyLink => By.CssSelector(".govuk-link.govuk-link--no-visited-state");
-    private static string AllVacancyLocator => ("[id^='VAC'][id$='-vacancy-title']");
+    private static string AllVacancyLocator => ("[id$='-vacancy-title']");
 
     public async Task<FAA_ApplicationsPage> GoToApplications()
     {
@@ -108,7 +110,39 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
 
         await new FAASearchResultPage(context).VerifySuccessfulResults();
 
-        var allvacancy = await AllTextAsync(AllVacancyLocator);
+        const int maxPageIterations = 20;
+        var attempts = 0;
+        IReadOnlyList<string>? allvacancy = null;
+        List<string> vacancies = new();
+
+        while (attempts < maxPageIterations)
+        {
+            allvacancy = await AllTextAsync(AllVacancyLocator);
+
+            if (allvacancy != null)
+            {
+                vacancies = allvacancy.Where(vacancy => !string.IsNullOrEmpty(vacancy) && !vacancy.Contains("from NHS jobs", StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (vacancies.Count > 0)
+            {
+                break;
+            }
+
+            var next = page.GetByRole(AriaRole.Link, new() { Name = "Next" });
+            if (await next.CountAsync() == 0)
+            {
+                break;
+            }
+
+            await next.First.ClickAsync();
+            await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+            attempts++;
+        }
+
+        if (vacancies == null || vacancies.Count == 0)
+            throw new Exception("No vacancy found that does not contain 'from NHS jobs' after paging.");
 
         var vacancyTitle = RandomDataGenerator.GetRandom(allvacancy);
 

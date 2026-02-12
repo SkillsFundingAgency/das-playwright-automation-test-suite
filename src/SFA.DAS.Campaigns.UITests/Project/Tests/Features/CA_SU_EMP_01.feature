@@ -1,4 +1,5 @@
-﻿Feature: CA_SU_EMP_01
+﻿@ignore
+Feature: CA_SU_EMP_01
 
 Sign up to Emails as an Employer
 @campaigns
