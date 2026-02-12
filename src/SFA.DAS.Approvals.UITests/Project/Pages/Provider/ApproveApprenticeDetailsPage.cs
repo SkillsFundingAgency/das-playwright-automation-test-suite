@@ -17,14 +17,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator message => page.Locator("h2:has-text('Message') + div.govuk-inset-text");
         private ILocator row(string ULN) => page.Locator($"table tbody tr:has-text('{ULN}')");
         private ILocator viewLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"View{name}" }).First;
-        private ILocator deleteLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"Delete{name}" }).First;
+        private ILocator deleteLink(string name) => page.Locator(".delete-apprentice").First;
         private ILocator AddAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
         private ILocator DeleteThisCohortLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete this cohort" }).First;
         private ILocator approveRadioOption => page.Locator("label:has-text('Yes, approve and notify employer')");
         private ILocator firstRadioOption => page.Locator("div.govuk-radios__item input[type='radio']").First;
         private ILocator doNotApproveRadioOption => page.Locator("label:has-text('No, save and return to apprentice requests')");
         private ILocator messageToEmployerTextBox => page.Locator(".govuk-textarea").First;
-        private ILocator saveAndSubmitButton => page.Locator("button:has-text('Save and submit')");
+        private ILocator saveAndSubmitButton => page.Locator("button:has-text('Save and continue')");
+        private ILocator rplVerifiedCheckBox => page.Locator("#rplVerified");
         private ILocator saveAndexitLink => page.Locator("a:has-text('Save and exit')");
         private ILocator Name(ILocator apprenticeRow) => apprenticeRow.Locator("td:nth-child(1)");
         private ILocator Uln(ILocator apprenticeRow) => apprenticeRow.Locator("td:nth-child(2)");
@@ -39,7 +40,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         public override async Task VerifyPage()
         {
             var headerText = await page.Locator(".govuk-heading-xl").First.TextContentAsync();
-            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Approve apprentice details|Approve 2 apprentices' details"));
+            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Check apprentice details|Check 2 apprentices' details"));
         }
 
         public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
@@ -110,6 +111,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         
         internal async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()
         {
+            await rplVerifiedCheckBox.ClickAsync();
             await approveRadioOption.ClickAsync();
             await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
             await saveAndSubmitButton.ClickAsync();
@@ -118,6 +120,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<CohortSentToEmployerForReview> ProviderSendCohortForEmployerReview()
         {
+            await rplVerifiedCheckBox.ClickAsync();
             await sendToEmployerRadioOption.ClickAsync();
             await messageToEmployerToReviewTextBox.FillAsync("Please review the details and approve the request.");
             await saveAndSubmitButton.ClickAsync();
@@ -172,6 +175,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task SelectFirstRadioButtonAndSubmit(string optionalMsg=null)
         {
             await firstRadioOption.CheckAsync();
+            await rplVerifiedCheckBox.ClickAsync();
             await saveAndSubmitButton.ClickAsync();
         }
 

@@ -4,7 +4,7 @@
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Confirm apprentice deletion");
+            await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Confirm apprentice deletion");
         }
 
         internal async Task<ApproveApprenticeDetailsPage> ConfirmDeletion()

@@ -13,21 +13,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator LastName => page.Locator("#lastname-value");
         private ILocator DoB => page.Locator("#dateofbirth-value");
         private ILocator Email => page.GetByRole(AriaRole.Textbox, new() { Name = "Email address" });
+        private ILocator EmailBox => page.Locator("#Email");
+        private ILocator ChangeEmailBtn => page.Locator("#change-email-link");
         private ILocator PlannedTrainingStartDate => page.Locator("#startdate-value");
         private ILocator PlannedTrainingEndDate => page.Locator("#enddate-value");
         private ILocator Price => page.Locator("#cost-value");
         #endregion
 
 
-        public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("View apprentice details");
+        public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("View details");
 
         internal async Task VerifyBanner(string title, string content) => await Assertions.Expect(page.GetByLabel(title)).ToContainTextAsync(content);
 
-        internal async Task<RecognitionOfPriorLearningPage> UpdateEmail(string email)
+        internal async Task UpdateEmail(string email)
         {
-            await Email.FillAsync(email);
+            await ChangeEmailBtn.ClickAsync();
+            await EmailBox.FillAsync(email);
             await ClickOnButton("Continue");
-            return await VerifyPageAsync(() => new RecognitionOfPriorLearningPage(context));
         }
 
         internal async Task VerifyApprenticeshipDetails(Apprenticeship apprenticeship)

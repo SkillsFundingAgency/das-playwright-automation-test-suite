@@ -75,8 +75,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var page = await new ApproveApprenticeDetailsPage(context).ClickOnViewApprenticeLink(apprentice.ApprenticeDetails.FullName);
-            var page1 = await page.UpdateEmail(apprentice.ApprenticeDetails.Email + ".uk");
-            var page3 = await page1.SelectNoForRPL();
+            await page.UpdateEmail(apprentice.ApprenticeDetails.Email + ".uk");
+            await page.ClickOnButton("Continue");
+            //var page3 = await page1.SelectNoForRPL();
         }
 
         [Then("the user can send a cohort to employer")]

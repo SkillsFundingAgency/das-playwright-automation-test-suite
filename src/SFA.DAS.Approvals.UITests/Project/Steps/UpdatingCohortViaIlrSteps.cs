@@ -132,8 +132,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             if (standardCode <= 804 || standardCode >= 812)     //RPL page does not appear for G&S foundation courses
             {
-                var page3 = new RecognitionOfPriorLearningPage(context);
-                await page3.SelectNoForRPL();
+                //var page3 = new RecognitionOfPriorLearningPage(context);
+                //await page3.SelectNoForRPL();
             }
 
             //update the original apprenticeship list with the updated details for further steps:
