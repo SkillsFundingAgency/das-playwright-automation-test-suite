@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.Playwright;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 
@@ -41,7 +42,15 @@ public abstract class Navigate : NavigateBase
 
     protected async Task NavigateToMenuItem(string name)
     {
-        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
+        var heading = page.GetByRole(AriaRole.Heading, new() { Name = "Recruitment dashboard" });
+        if (await heading.CountAsync() > 0 && await heading.IsVisibleAsync())
+        {
+            await page.GetByRole(AriaRole.Menuitem, new() { Name = name }).ClickAsync();
+        } else
+        {
+            await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
+        }
+        
     }
 }
 
@@ -61,7 +70,7 @@ public class InterimYourApprenticeshipAdvertsHomePage(ScenarioContext context, b
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your apprenticeship adverts", new LocatorAssertionsToContainTextOptions { Timeout = 10000});
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Recruitment dashboard", new LocatorAssertionsToContainTextOptions { Timeout = 10000});
     }
 }
 
@@ -131,9 +140,17 @@ public abstract class InterimEmployerBasePage : Navigate
 
     public async Task GoToHelpPage()
     {
+        var heading = page.GetByRole(AriaRole.Heading, new() { Name = "Recruitment dashboard" });
         var page1 = await page.RunAndWaitForPopupAsync(async () =>
         {
-            await page.GetByLabel("GOV.UK One Login").GetByRole(AriaRole.Link, new() { Name = "Help" }).ClickAsync();
+            if (await heading.CountAsync() > 0 && await heading.IsVisibleAsync())
+            {
+                await page.GetByRole(AriaRole.Menuitem, new() { Name = "Help" }).ClickAsync();
+            }
+            else
+            {
+                await page.GetByLabel("GOV.UK One Login").GetByRole(AriaRole.Link, new() { Name = "Help" }).ClickAsync();
+            }
         });
 
         await Assertions.Expect(page1.GetByRole(AriaRole.Main)).ToContainTextAsync("Useful Links");
@@ -159,7 +176,15 @@ public abstract class InterimEmployerBasePage : Navigate
 
     public async Task<NotificationSettingsPage> GoToNotificationSettingsPage()
     {
-        await NavigateToSettings("Notification settings");
+        var heading = page.GetByRole(AriaRole.Heading, new() { Name = "Recruitment dashboard" });
+        if (await heading.CountAsync() > 0 && await heading.IsVisibleAsync())
+        {
+            await NavigateToSettings("Notifications settings");
+        }
+        else
+        {
+            await NavigateToSettings("Notification settings");
+        }
 
         return await VerifyPageAsync(() => new NotificationSettingsPage(context));
     }
@@ -189,9 +214,17 @@ public abstract class InterimEmployerBasePage : Navigate
 
     protected async Task NavigateToSettings(string name)
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Settings" }).ClickAsync();
-
-        await page.GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
+        var heading = page.GetByRole(AriaRole.Heading, new() { Name = "Recruitment dashboard" });
+        if (await heading.CountAsync() > 0 && await heading.IsVisibleAsync())
+        {
+            await page.GetByRole(AriaRole.Menuitem, new() { Name = "Settings" }).ClickAsync();
+            await page.GetByRole(AriaRole.Menuitem, new() { Name = name }).ClickAsync();
+        }
+        else
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = "Settings" }).ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
+        }
     }
 }
 
