@@ -110,5 +110,5 @@ public class TeamMemberSteps
         await _yourTeamPage.VerifyTeamMemberRemovedHeaderInfoMessage();
     }
 
-    private async Task<YouveLoggedOutPage> SignOut() => await _accountSignOutHelper.SignOut();
+    private async Task<YouHaveBeenSignedOutPage> SignOut() => await _accountSignOutHelper.SignOut();
 }

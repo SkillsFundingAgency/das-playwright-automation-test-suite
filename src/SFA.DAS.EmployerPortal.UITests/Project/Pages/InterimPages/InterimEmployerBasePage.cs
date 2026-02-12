@@ -164,11 +164,11 @@ public abstract class InterimEmployerBasePage : Navigate
         return await VerifyPageAsync(() => new NotificationSettingsPage(context));
     }
 
-    public async Task<YouveLoggedOutPage> SignOut()
+    public async Task<YouHaveBeenSignedOutPage> SignOut()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new YouveLoggedOutPage(context));
+        return await VerifyPageAsync(() => new YouHaveBeenSignedOutPage(context));
     }
 
     public async Task<YourTeamPage> GotoYourTeamPage()

@@ -30,7 +30,7 @@ public class CreateAccountSteps
     private CreateAnAccountToManageApprenticeshipsPage _indexPage;
     private AddPayeSchemeUsingGGDetailsPage _addPayeSchemeUsingGGDetailsPage;
     private SignAgreementPage _doYouAcceptTheEmployerAgreementOnBehalfOfPage;
-    private YouveLoggedOutPage _youveLoggedOutPage;
+    private YouHaveBeenSignedOutPage _youveLoggedOutPage;
 
 
     public CreateAccountSteps(ScenarioContext context)
