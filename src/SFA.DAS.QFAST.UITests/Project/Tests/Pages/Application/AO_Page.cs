@@ -25,6 +25,13 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await applicationOverview_Page.ClickAcceptAndSubmit();
         await applicationOverview_Page.ClickBackToDashboard();
     }
+    public async Task SubmitApplicationForDiffOrganisation()
+    {
+        await ClickStartNewApplicationButton();
+        await StartApplication(qfastDataHelpers.FormName);
+        await VerifyErrorMessageForEmptyApplicationDetails();        
+        await VerifyErrorMessageAsIncorrectAO();
+    }
     public async Task<AvailableForms_Page> ClickStartNewApplicationButton()
     {
         await page.Locator("a.govuk-button:has-text(\"Start new application\")").ClickAsync();
@@ -56,5 +63,15 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await page.GetByLabel("Qualification number (optional)").FillAsync(qfastDataHelpers.QualificationNumber);
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         return await VerifyPageAsync(() => new Application_Overview_Page(context));
+    }
+    public async Task<StartApplication_Page> VerifyErrorMessageAsIncorrectAO()
+    {
+        await page.GetByLabel("Qualification title").FillAsync(qfastDataHelpers.QualificationTitle);
+        await page.GetByLabel("Application owner").FillAsync(qfastDataHelpers.ApplicationOwner);
+        await page.GetByLabel("Qualification number (optional)").FillAsync(qfastDataHelpers.QualificationNumber);
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+        var AoErrorMessage = page.Locator("a[href='#QualificationNumber']");        
+        await Assertions.Expect(AoErrorMessage).ToContainTextAsync("This QAN does not match any qualifications associated with your AO.");
+        return await VerifyPageAsync(() => new StartApplication_Page(context));
     }
 }
