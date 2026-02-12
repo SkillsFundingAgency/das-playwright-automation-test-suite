@@ -54,7 +54,6 @@ public class StubYouHaveSignedInEmployerPage(ScenarioContext context, string use
         return await VerifyPageAsync(() => new StubAddYourUserDetailsPage(context));
     }
 
-    public async Task Continue() => await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
 }
 
 
