@@ -6,6 +6,7 @@ public class NewQualifications_Page(ScenarioContext context) : BasePage(context)
     public async Task<NewQualifications_Page> VerifyQANnumberIsLink()
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        await page.Locator("table.govuk-table tbody tr").First.WaitForAsync();
         var firstLink = page.Locator("table.govuk-table tbody tr").Nth(0).Locator("td").Nth(0).Locator("a");
         if (!await firstLink.IsVisibleAsync())
         {

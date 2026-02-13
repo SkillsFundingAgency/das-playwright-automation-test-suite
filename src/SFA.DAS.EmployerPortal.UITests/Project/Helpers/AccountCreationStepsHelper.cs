@@ -92,7 +92,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
     }
 
 
-    internal async Task<CreateAnAccountToManageApprenticeshipsPage> SignOut() => await _accountSignOutHelper.SignOut();
+    internal async Task<YouHaveBeenSignedOutPage> SignOut() => await _accountSignOutHelper.SignOut();
 
     internal static async Task<CheckYourDetailsPage> SearchAndSelectOrg(SearchForYourOrganisationPage searchForYourOrganistionPage, OrgType org)
     {
