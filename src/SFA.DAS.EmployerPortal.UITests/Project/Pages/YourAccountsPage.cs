@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
+﻿using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
+
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public class YourAccountsPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
@@ -31,4 +33,8 @@ public class YourAccountsPage(ScenarioContext context) : EmployerPortalBasePage(
 
         return await VerifyPageAsync(() => new HomePage(context));
     }
+
+    public async Task ClickOnOpenLink() => await page.GetByRole(AriaRole.Link, new() { Name = $"Open  {objectContext.GetOrganisationName()}" }).ClickAsync();
+
+
 }

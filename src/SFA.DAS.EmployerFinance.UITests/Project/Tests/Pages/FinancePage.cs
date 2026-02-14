@@ -114,7 +114,7 @@ public abstract class EmployerFinanceBasePage(ScenarioContext context) : BasePag
 
     public async Task<FinancePage> GoToFinancePage()
     {
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Finance" }).ClickAsync();
+        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Finance" }).ClickAsync();
 
         return await VerifyPageAsync(() => new FinancePage(context));
     }
