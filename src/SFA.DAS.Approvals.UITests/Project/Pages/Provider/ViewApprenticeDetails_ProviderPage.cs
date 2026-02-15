@@ -11,7 +11,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator ULN => page.Locator("dt:has-text('Unique learner number') + dd");
         private ILocator FirstName => page.Locator("#firstname-value");
         private ILocator LastName => page.Locator("#lastname-value");
-        private ILocator name => page.Locator("dt:has-text('Name') + dd").First;
+        private ILocator FullName => page.Locator("dt:has-text('Name') + dd").First;
         private ILocator DoB => page.Locator("dt:has-text('Date of birth') + dd").First;
         private ILocator Email => page.Locator("dt:has-text('Email address') + dd");
         private ILocator EmailBox => page.Locator("#Email");
@@ -44,8 +44,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(Employer).ToContainTextAsync(apprenticeship.EmployerDetails.EmployerName);
             await Assertions.Expect(Course).ToContainTextAsync(apprenticeship.TrainingDetails.CourseTitle);
             await Assertions.Expect(ULN).ToContainTextAsync(apprenticeship.ApprenticeDetails.ULN);
-            await Assertions.Expect(name).ToContainTextAsync(apprenticeship.ApprenticeDetails.FirstName);
-            await Assertions.Expect(name).ToContainTextAsync(apprenticeship.ApprenticeDetails.LastName);
+            await Assertions.Expect(FullName).ToContainTextAsync(apprenticeship.ApprenticeDetails.FirstName);
+            await Assertions.Expect(FullName).ToContainTextAsync(apprenticeship.ApprenticeDetails.LastName);
             await Assertions.Expect(DoB).ToContainTextAsync(expectedDOB);
             await Assertions.Expect(Email).ToContainTextAsync(apprenticeship.ApprenticeDetails.Email);
             await Assertions.Expect(PlannedTrainingStartDate).ToContainTextAsync(expectedTrainingStartDate);
