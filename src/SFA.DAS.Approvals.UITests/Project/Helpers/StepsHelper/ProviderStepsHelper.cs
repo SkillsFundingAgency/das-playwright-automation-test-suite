@@ -299,10 +299,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 var page1 = await page.SelectApprenticeFromILRList(apprenticeship);
                 await page1.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
                 await page1.ClickAddButton();
-                var page2 = new RecognitionOfPriorLearningPage(context);
-                var page3 = await page2.SelectYesForRPL();
-                var page4 = await page3.EnterRPLDataAndContinue(apprenticeship);
-               await page4.GetCohortId(apprenticeship);
+                //var page2 = new RecognitionOfPriorLearningPage(context);
+                //var page3 = await page2.SelectYesForRPL();
+                //var page4 = await page3.EnterRPLDataAndContinue(apprenticeship);
+               await new ApproveApprenticeDetailsPage(context).GetCohortId(apprenticeship);
             }
 
             return approveApprenticeDetailsPage;
@@ -316,7 +316,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
             await page.ClickAddButton();
 
-            ApproveApprenticeDetailsPage page2;
+            ApproveApprenticeDetailsPage page2 = new ApproveApprenticeDetailsPage(context);
 
             if (apprenticeship.TrainingDetails.StandardCode is 805 or 806 or 807 or 808 or 809 or 810 or 811)       //RPL check does not appear for foundation courses
             {
