@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ConfigurationBuilder", "SFA.DAS.ConfigurationBuilder\SFA.DAS.ConfigurationBuilder.csproj", "{9CED14CA-16D2-4EF8-A29E-B6B01DD33E4E}"
 EndProject
@@ -82,6 +82,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.APITests", "SFA.DAS.EmployerAccounts.APITests\SFA.DAS.EmployerAccounts.APITests.csproj", "{A011C59D-0F0B-469F-891E-3B109CA79327}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.RAA.Service", "SFA.DAS.RAA.Service\SFA.DAS.RAA.Service.csproj", "{F3F43496-F367-4D9C-BFD1-C2CE074396C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Digicerts.UITests", "SFA.DAS.Digicerts.UITests\SFA.DAS.Digicerts.UITests.csproj", "{95DAC701-2494-4EBA-9FA8-736064692C3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -525,6 +527,18 @@ Global
 		{F3F43496-F367-4D9C-BFD1-C2CE074396C4}.Release|x64.Build.0 = Release|Any CPU
 		{F3F43496-F367-4D9C-BFD1-C2CE074396C4}.Release|x86.ActiveCfg = Release|Any CPU
 		{F3F43496-F367-4D9C-BFD1-C2CE074396C4}.Release|x86.Build.0 = Release|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Debug|x64.Build.0 = Debug|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Debug|x86.Build.0 = Debug|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Release|x64.ActiveCfg = Release|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Release|x64.Build.0 = Release|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Release|x86.ActiveCfg = Release|Any CPU
+		{95DAC701-2494-4EBA-9FA8-736064692C3E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

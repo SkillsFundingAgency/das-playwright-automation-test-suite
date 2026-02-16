@@ -20,8 +20,19 @@ public class EmployerFeedbackSteps(ScenarioContext context)
 
         await _employerPortalLoginHelper.Login(user, true);
 
-        _objectContext.SetTestData(await _provideFeedbackSqlHelper.GetTestData(user.Username));
+      // _objectContext.SetTestData(await _provideFeedbackSqlHelper.GetTestData(user.Username));
     }
+
+    [Given("the Second Employer View only User logins into Employer Portal")]
+    public async void GivenTheSecondEmployerViewOnlyUserLoginsIntoEmployerPortal()
+    {
+        var user = context.GetUser<EmployerViewOnlyUser>();
+
+        await _employerPortalLoginHelper.Login(user, true);
+
+      //  _objectContext.SetTestData(await _provideFeedbackSqlHelper.GetTestData(user.Username));
+    }
+       
 
     [Given(@"completes the feedback journey for a training provider")]
     public async Task GivenCompletesTheFeedbackJourneyForATrainingProvider()
