@@ -41,22 +41,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
             await page.ClickAddButton();
 
-            ApproveApprenticeDetailsPage page2;
+            
+            ApproveApprenticeDetailsPage page2= new ApproveApprenticeDetailsPage(context);
 
-            if (apprenticeship.TrainingDetails.StandardCode is 805 or 806 or 807 or 808 or 809 or 810 or 811)       //RPL check does not appear for foundation courses
-            {
-                page2 = new ApproveApprenticeDetailsPage(context);
-            }
-            else
-            {
-                //var page1 = new RecognitionOfPriorLearningPage(context);
-                //page2 = await page1.SelectNoForRPL();
-            }
+            //if (apprenticeship.TrainingDetails.StandardCode is 805 or 806 or 807 or 808 or 809 or 810 or 811)       //RPL check does not appear for foundation courses
+            //{
+            //    page2 = new ApproveApprenticeDetailsPage(context);
+            //}
+            //else
+            //{
+            //    //var page1 = new RecognitionOfPriorLearningPage(context);
+            //    //page2 = await page1.SelectNoForRPL();
+            //    page2 = new ApproveApprenticeDetailsPage(context);
 
-            //await page1.GetCohortId(apprenticeship);
+            //}
+            await page2.GetCohortId(apprenticeship);
 
             objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.Cohort.Reference}");
-            return new ApproveApprenticeDetailsPage(context);
+            return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
         internal async Task<CheckApprenticeDetailsPage> TryAddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
