@@ -67,9 +67,9 @@ public class ExistingAccountSteps
     {
         _homePage = new HomePage(_context, true);
 
-        await _homePage.VerifyPage();
-
         await _homePage.GoToHomePage();
+
+        await _homePage.VerifyPage();
     }
 
     [Then(@"the user can not add an organisation")]
