@@ -55,7 +55,7 @@ stages:
       - template: ../job/deploy.yml
         parameters:
           Environment: DEMO
-          ServiceConnection: SFA-DAS-DevTest-ARM
+          ServiceConnection: das-demo-automation-test-suite-db-sc
 
   - stage: Deploy_PP
     dependsOn: Build
