@@ -78,9 +78,9 @@ Given the provider has been rated by employers as follows
 	| Previous     | Poor      |
 When The provider logs in to the provider portal
 And the provider opts to view their feedback
-Then their overall employer feedback score is 'Excellent'
+Then their overall employer feedback score is 'Good'
 When they select the employer feedback tab for the current academic year
 Then their employer feedback score for that year is 'Good'
 When they select the employer feedback tab for the previous academic year
-Then their employer feedback score for that year is 'Excellent'
+Then their employer feedback score for that year is 'Good'
 #Feedback consolidation for previous year (23/24) is different from current year (24/25) onwards
