@@ -46,13 +46,9 @@ public class CreateAccountTaskListSteps
 
         var page1 = await page.CickSignInInYouveLoggedOutPage();
 
-        var page2 = await page1.GoManageApprenticeLandingPage();
+        var page2 = await page1.Login(loggedInAccountUser.Username, loggedInAccountUser.IdOrUserRef);
 
-        var page3 = await page2.GoToStubSignInPage();
-
-        var page4 = await page3.Login(loggedInAccountUser.Username, loggedInAccountUser.IdOrUserRef);
-
-        await page4.Continue();
+        await page2.Continue();
     }
 
     [Then(@"user can resume employer registration journey")]

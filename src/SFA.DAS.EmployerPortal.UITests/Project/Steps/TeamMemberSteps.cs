@@ -79,7 +79,11 @@ public class TeamMemberSteps
     {
         await ThenEmployerIsAbleToInviteATeamMemberWithViewerAccess();
 
-        await _accountCreationStepsHelper.AcceptUserInvite(await SignOut(), _invitedMemberEmailId);
+        await _accountSignOutHelper.SignOut();
+
+        await new EmployerHomePageStepsHelper(_context).NavigateToEmployerApprenticeshipService(false);
+
+        await _accountCreationStepsHelper.AcceptUserInvite(new CreateAnAccountToManageApprenticeshipsPage(_context), _invitedMemberEmailId);
     }
 
     [Then(@"Employer is able to Remove the team member from the account")]
@@ -87,7 +91,7 @@ public class TeamMemberSteps
     {
         var page = await SignOut();
 
-        var page1 = await page.GoToStubSignInPage();
+        var page1 = await page.CickSignInInYouveLoggedOutPage();
 
         var page2 = await page1.Login(_objectContext.GetLoginCredentials());
 
@@ -104,5 +108,5 @@ public class TeamMemberSteps
         await _yourTeamPage.VerifyTeamMemberRemovedHeaderInfoMessage();
     }
 
-    private async Task<CreateAnAccountToManageApprenticeshipsPage> SignOut() => await _accountSignOutHelper.SignOut();
+    private async Task<YouHaveBeenSignedOutPage> SignOut() => await _accountSignOutHelper.SignOut();
 }

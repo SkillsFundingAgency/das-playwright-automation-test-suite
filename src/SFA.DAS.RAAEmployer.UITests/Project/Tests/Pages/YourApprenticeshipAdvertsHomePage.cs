@@ -33,11 +33,11 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
 
     public async Task<EmployerVacancySearchResultPage> SearchAdvertByReferenceNumber() => await _searchVacancyPageHelper.SearchEmployerVacancy();
 
-    public async Task<ManageYourAdvertEmailsPage> GoToAdvertNotificationsPage()
+    public async Task<ManageYourEmailsEmployerPage> GoToAdvertNotificationsPage()
     {
-        await NavigateToSettings("Manage your advert");
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage recruitment emails" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new ManageYourAdvertEmailsPage(context));
+        return await VerifyPageAsync(() => new ManageYourEmailsEmployerPage(context));
     }
 
     public async Task<GetStartedWithRecruitmentAPIsPage> ClickRecruitmentAPILink()

@@ -16,6 +16,7 @@ public class CreateAccountSteps
     private readonly EmployerPortalSqlDataHelper _employerPortalSqlDataHelper;
     private readonly TprSqlDataHelper _tprSqlDataHelper;
     private readonly AccountCreationStepsHelper _accountCreationStepsHelper;
+    private readonly EmployerHomePageStepsHelper _employerHomePageStepsHelper;
 
     private HomePage _homePage;
     private AddAPAYESchemePage _addAPAYESchemePage;
@@ -29,6 +30,7 @@ public class CreateAccountSteps
     private CreateAnAccountToManageApprenticeshipsPage _indexPage;
     private AddPayeSchemeUsingGGDetailsPage _addPayeSchemeUsingGGDetailsPage;
     private SignAgreementPage _doYouAcceptTheEmployerAgreementOnBehalfOfPage;
+    private YouHaveBeenSignedOutPage _youveLoggedOutPage;
 
 
     public CreateAccountSteps(ScenarioContext context)
@@ -39,6 +41,7 @@ public class CreateAccountSteps
         _employerPortalSqlDataHelper = context.Get<EmployerPortalSqlDataHelper>();
         _tprSqlDataHelper = context.Get<TprSqlDataHelper>();
         _accountCreationStepsHelper = new AccountCreationStepsHelper(context);
+        _employerHomePageStepsHelper = new EmployerHomePageStepsHelper(context);
     }
 
     [Given(@"a User Account is created")]
@@ -260,6 +263,8 @@ public class CreateAccountSteps
     {
         await _accountCreationStepsHelper.SignOut();
 
+        await _employerHomePageStepsHelper.NavigateToEmployerApprenticeshipService(false);
+
         _objectContext.SetRegisteredEmail(_employerPortalDataHelper.AnotherRandomEmail);
 
         _addAPAYESchemePage = await _accountCreationStepsHelper.RegisterUserAccount();
@@ -439,12 +444,14 @@ public class CreateAccountSteps
     }
 
     [When(@"the Employer logsout of the Account")]
-    public async Task WhenTheEmployerLogsoutOfTheAccount() => _indexPage = await _accountCreationStepsHelper.SignOut();
+    public async Task WhenTheEmployerLogsoutOfTheAccount() => _youveLoggedOutPage = await _accountCreationStepsHelper.SignOut();
 
     [Then(@"an Employer is able to create another Account with the same PublicSector Type Org but with a different PAYE")]
     public async Task ThenAnEmployerIsAbleToCreateAnotherAccountWithTheSamePublicSectorTypeOrgButWithADifferentPAYE()
     {
-        _addAPAYESchemePage = await _accountCreationStepsHelper.CreateAnotherUserAccount(_indexPage);
+        await _employerHomePageStepsHelper.NavigateToEmployerApprenticeshipService(false);
+
+        _addAPAYESchemePage = await _accountCreationStepsHelper.CreateAnotherUserAccount(new CreateAnAccountToManageApprenticeshipsPage(_context));
 
         await AddPayeDetails(1);
 

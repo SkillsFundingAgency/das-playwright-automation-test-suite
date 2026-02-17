@@ -51,6 +51,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return this;
         }
 
+        internal async Task<ApprenticeDetailsPage> EmployerVerifyApprenticeStatusAndDetails(ApprenticeshipStatus status, string type, string apprenticeStatus)
+        {
+            await Assertions.Expect(ApprenticeStatusTag).ToContainTextAsync(status.ToString());
+            await Assertions.Expect(StatusDateTitle).ToContainTextAsync(type);
+            await Assertions.Expect(StatusDateValue).ToContainTextAsync(apprenticeStatus);
+            return this;
+        }
+
         internal async Task AssertRecordIsReadOnlyExceptEndDate()
         { 
             if (await EditStatusLink.IsVisibleAsync())

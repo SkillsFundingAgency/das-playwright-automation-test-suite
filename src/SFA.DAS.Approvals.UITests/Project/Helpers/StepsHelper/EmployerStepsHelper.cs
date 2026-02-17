@@ -95,6 +95,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return page;
         }
 
+        internal async Task GoToLiveApprenticeshipPageFromDynamicHomePage()
+        {
+            await employerHomePageHelper.GotoEmployerHomePage(false);
+            await new ViewApprenticeDetailsDynamicHomepage(context).ViewApprenticeDetails();
+        }
+
         internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, string uln, string name)
         {
             await apprenticesHomePage.GoToManageYourApprentices();
@@ -128,6 +134,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
         }
 
+        internal async Task AddEmptyCohortFromNonLevyReserveFundsAddApprenticePage()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
+ 
+            var page1 = await new AddApprenticePage(context).ClickStartNowButtonNonLevyFlow();
+            var page2 =  await page1.SelectReservedFunds();
+            var page3 = await page2.SelectReservation();
+            var page4 = await page3.SubmitValidUkprn(ukprn);
+            var page5 = await page4.ConfirmTrainingProviderDetails();
+            var page6 = await page5.SelectProviderAddApprencticesAndSend();
+            
+            var cohortRef = await page6.GetCohortId();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
+        }
+
         internal async Task ReadyForReviewCohort(string status)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -138,6 +160,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page1 = await new ApprenticesHomePage(context).GoToApprenticeRequests();
             var page2 = await page1.OpenApprenticeRequestReadyForReview(cohort);
             await page2.ValidateCohortStatus(status);
+        }
+
+        internal async Task ReadyForReviewOnDynamicHomePage(string status)
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var cohort = listOfApprenticeship.FirstOrDefault().Cohort.Reference;
+
+            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
+
+            var page1 = await new ReviewApprenticeDetailsDynamicHomepage(context).ReviewApprenticeDetails();
+            await page1.ValidateCohortStatus(status);
         }
 
         internal async Task LogOutThenLogbackIn()
@@ -155,6 +188,28 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page2.TryClickOnReserveMoreFundingLink();
         }
 
+        internal async Task<EmployerHomePage> EmployerTriesToCreateReservationOnDynamicHomepage()
+        {
 
+            return await ReserveFundsFromDynamicHomepage();
+        }
+
+        private async Task<EmployerHomePage> ReserveFundsFromDynamicHomepage()
+        {
+            var dynamicHomepage = new SetupAnApprenticeshipDynamicHomepage(context);
+
+            var page1 = await dynamicHomepage.StartNow();
+            var page2 = await page1.IKnowWhichCourseMyApprenticeWillTake();
+            var page3 = await page2.IChooseTrainingProvider();
+            var page4 = await page3.StartInSixMonths();
+            var page5 = await page4.SetApprenticeshipForNewEmployee();
+            var page6 = await page5.YesContinueToReserveFunding();
+            var page7 = await page6.YesContinueToReserveFunding();
+            var page8 = await page7.ReserveFundsAsync("Associate");
+            var page9 = await page8.SelectAlreadyStartedDate();
+            var page10 = await page9.ClickConfirmButton();
+
+            return await page10.SelectGoToHomePageAndContinue();
+        }
     }
 }
