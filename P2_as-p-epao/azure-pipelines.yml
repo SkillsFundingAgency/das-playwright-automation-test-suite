@@ -10,7 +10,7 @@ schedules:
   always: true
 
 variables:
-  - template: vars.yml
+  - template: ../pipeline-templates/vars.yml
   - name: projectName
     value: |
       "SFA.DAS.EPAO.UITests"
