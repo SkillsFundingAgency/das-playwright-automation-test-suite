@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -25,7 +24,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator doNotApproveRadioOption => page.Locator("label:has-text('No, save and return to apprentice requests')");
         private ILocator messageToEmployerTextBox => page.Locator(".govuk-textarea").First;
         private ILocator saveAndSubmitButton => page.Locator("button:has-text('Save and continue')");
+        private ILocator ContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         private ILocator rplVerifiedCheckBox => page.Locator("#rplVerified");
+        private ILocator AddRplLink => page.GetByRole(AriaRole.Link, new() { Name = "Add RPL" }).First;
         private ILocator saveAndexitLink => page.Locator("a:has-text('Save and exit')");
         private ILocator Name(ILocator apprenticeRow) => apprenticeRow.Locator("td:nth-child(1)");
         private ILocator Uln(ILocator apprenticeRow) => apprenticeRow.Locator("td:nth-child(2)");
@@ -44,6 +45,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         }
 
         public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
+        public async Task ClickContinueButtonAsync() => await ContinueButton.ClickAsync();
 
         internal async Task VerifyCohort(Apprenticeship apprenticeship, string cohortStatus)
         {
@@ -166,6 +168,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         {
             await saveAndexitLink.ClickAsync();
             return await VerifyPageAsync(() => new ApprenticeRequests_ProviderPage(context));
+        }
+
+        internal async Task<AddRecognitionOfPriorLearningDetailsPage> AddRPL() {
+            await AddRplLink.ClickAsync();
+            return await VerifyPageAsync(() => new AddRecognitionOfPriorLearningDetailsPage(context));
         }
 
         internal async Task VerifyBanner(string text) => await Assertions.Expect(banner).ToContainTextAsync(text);

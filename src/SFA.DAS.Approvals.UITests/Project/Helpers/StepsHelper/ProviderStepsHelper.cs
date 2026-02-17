@@ -318,7 +318,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
             await page.ClickAddButton();
 
-            ApproveApprenticeDetailsPage page2 = new ApproveApprenticeDetailsPage(context);
+            ApproveApprenticeDetailsPage page2;
 
             if (apprenticeship.TrainingDetails.StandardCode is 805 or 806 or 807 or 808 or 809 or 810 or 811)       //RPL check does not appear for foundation courses
             {
@@ -326,15 +326,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             }
             else
             {
-                var page1 = new RecognitionOfPriorLearningPage(context);
-                var page3 = await page1.SelectYesForRPL();
-                page2 = await page3.EnterRPLDataAndContinue(apprenticeship);
+                page2 = new ApproveApprenticeDetailsPage(context);
+                var page3 = await page2.AddRPL();
+                await page3.EnterRPLDataAndContinue(apprenticeship);
+                await page2.ClickContinueButtonAsync();
             }
 
             await page2.GetCohortId(apprenticeship);
 
             objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.Cohort.Reference}");
-            return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
+            return page2;
         }
 
         internal async Task<ApproveApprenticeDetailsPage> ProviderOpenTheCohort(string cohortRerefence)
