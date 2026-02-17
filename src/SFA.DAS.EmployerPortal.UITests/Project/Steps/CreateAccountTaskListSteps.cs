@@ -48,10 +48,7 @@ public class CreateAccountTaskListSteps
 
         var page2 = await page1.Login(loggedInAccountUser.Username, loggedInAccountUser.IdOrUserRef);
 
-        var page3 = await page2.ContinueToYourAccountsPage();
-
-        await page3.ClickOnOpenLink();
-
+        await page2.Continue();
     }
 
     [Then(@"user can resume employer registration journey")]
