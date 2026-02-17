@@ -137,7 +137,7 @@ public abstract class InterimEmployerBasePage : Navigate
             await page.GetByLabel("GOV.UK One Login").GetByRole(AriaRole.Link, new() { Name = "Help" }).ClickAsync();
         });
 
-        await Assertions.Expect(page.GetByRole(AriaRole.Main)).ToContainTextAsync("Useful Links");
+        await Assertions.Expect(page1.GetByRole(AriaRole.Main)).ToContainTextAsync("Useful Links");
 
         await page1.CloseAsync();
     }
