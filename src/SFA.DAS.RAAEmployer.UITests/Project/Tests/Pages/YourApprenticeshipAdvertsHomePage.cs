@@ -35,7 +35,7 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
 
     public async Task<ManageYourEmailsEmployerPage> GoToAdvertNotificationsPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your emails" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage recruitment emails" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageYourEmailsEmployerPage(context));
     }

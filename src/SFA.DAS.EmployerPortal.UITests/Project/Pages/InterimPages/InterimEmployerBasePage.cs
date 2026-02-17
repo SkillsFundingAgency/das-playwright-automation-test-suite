@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.Playwright;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 
@@ -190,7 +191,6 @@ public abstract class InterimEmployerBasePage : Navigate
     protected async Task NavigateToSettings(string name)
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Settings" }).ClickAsync();
-
         await page.GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
     }
 }
