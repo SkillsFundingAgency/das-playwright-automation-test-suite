@@ -132,15 +132,14 @@ public abstract class InterimEmployerBasePage : Navigate
 
     public async Task GoToHelpPage()
     {
-        //var page1 = await page.RunAndWaitForPopupAsync(async () =>
-        //{
-        //    await page.GetByLabel("GOV.UK One Login").GetByRole(AriaRole.Link, new() { Name = "Help" }).ClickAsync();
-        //});
-        await page.GetByLabel("GOV.UK One Login").GetByRole(AriaRole.Link, new() { Name = "Help" }).ClickAsync();
+        var page1 = await page.RunAndWaitForPopupAsync(async () =>
+        {
+            await page.GetByLabel("GOV.UK One Login").GetByRole(AriaRole.Link, new() { Name = "Help" }).ClickAsync();
+        });
 
         await Assertions.Expect(page.GetByRole(AriaRole.Main)).ToContainTextAsync("Useful Links");
 
-        //await page1.CloseAsync();
+        await page1.CloseAsync();
     }
     public async Task GoToAccessibilityStatementPage()
     {
