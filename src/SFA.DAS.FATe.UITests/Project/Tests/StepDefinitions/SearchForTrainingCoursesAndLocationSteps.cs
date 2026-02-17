@@ -56,7 +56,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         [Then("the relevant training courses are displayed with filters set")]
         public async Task ThenTheRelevantTrainingCoursesAreDisplayedWithFiltersSet()
         {
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("worker");
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Worker");
             await _apprenticeshipTrainingCoursesPage.VerifyCourseSearchResults("worker");
         }
 

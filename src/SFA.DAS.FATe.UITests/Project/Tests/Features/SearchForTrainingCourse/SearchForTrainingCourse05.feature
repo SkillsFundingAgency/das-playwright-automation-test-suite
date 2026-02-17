@@ -22,6 +22,5 @@ Scenario: Search for courses_Foundation Apprenticeships
       | Apprenticeships           |                              |                |
       | ApprenticeshipUnits       | FoundationApprenticeships    |                |
       | ApprenticeshipUnits       | Apprenticeships              |                |
-      #The below combinations are not workign as expected due to a bug in html dev's will put in a fix
-      #| Apprenticeships           | FoundationApprenticeships    |                |
-      #| ApprenticeshipUnits       | FoundationApprenticeships    | Apprenticeships |
+      | Apprenticeships           | FoundationApprenticeships    |                |
+      | ApprenticeshipUnits       | FoundationApprenticeships    | Apprenticeships |
