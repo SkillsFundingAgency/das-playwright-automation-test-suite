@@ -5,7 +5,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.Pages;
 public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext context) : FATeBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).
-        ToContainTextAsync("Search for apprenticeship training courses and training providers");
+        ToContainTextAsync("Find training if you’re an employer");
 
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithCourseOnly()
     {
@@ -59,4 +59,31 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
         await page.Locator("text=Browse all courses").ClickAsync();
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
+    public async Task<ApprenticeshipTrainingCoursesPage> SelectTrainingTypes(
+     params TrainingType[] trainingTypes)
+    {
+        foreach (var type in trainingTypes)
+        {
+            var checkboxLocator = type switch
+            {
+                TrainingType.ApprenticeshipUnits =>
+                    page.Locator("[id='filteritem-training-types-Apprenticeship units']"),
+
+                TrainingType.FoundationApprenticeships =>
+                    page.Locator("[id='filteritem-training-types-Foundation apprenticeships']"),
+
+                TrainingType.Apprenticeships =>
+                    page.Locator("[id='filteritem-training-types-Apprenticeships']"),
+
+                _ => throw new ArgumentOutOfRangeException(nameof(type))
+            };
+
+            await checkboxLocator.CheckAsync();
+        }
+
+        await ClickContinue();
+
+        return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
+    }
+
 }
