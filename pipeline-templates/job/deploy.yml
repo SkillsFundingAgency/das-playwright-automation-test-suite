@@ -86,11 +86,32 @@ jobs:
               ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
               azurePowerShellVersion: LatestVersion
 
+
+          # 1) Bootstrap: extract Service Connection creds to pipeline variables
+          - task: AzureCLI@2
+            displayName: 'Bootstrap Azure SP credentials'
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              addSpnToEnvironment: true
+              scriptType: ps
+              scriptLocation: inlineScript
+              inlineScript: |
+                # Promote SP credentials from the service connection to pipeline variables
+                Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID;issecret=false]$env:servicePrincipalId"
+                Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID;issecret=false]$env:tenantId"
+                Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
+
+          # 2) VSTest: run multiple assemblies; DefaultAzureCredential picks up env vars
+
           - task: VSTest@3
             displayName: 'VsTest - Test Execution'
+            env:
+              AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+              AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+              AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
             inputs:
-              testAssemblyVer2: ${{ parameters.TestAssembly }}              
-              testRunTitle: 'Test Run - ${{ parameters.Environment }}'
+              testAssemblyVer2: ${{ parameters.TestAssembly }}
+              testRunTitle: 'UI Test Run - ${{ parameters.Environment }}'
               searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
               testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
               runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
@@ -116,3 +137,4 @@ jobs:
               targetType: 'filePath'
               filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
               arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
+            condition: succeededOrFailed()

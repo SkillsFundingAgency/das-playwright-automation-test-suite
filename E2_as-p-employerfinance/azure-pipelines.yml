@@ -1,3 +1,4 @@
+
 trigger: none
 pr: none
 schedules:
@@ -9,15 +10,7 @@ schedules:
   always: true
 
 variables:
-  - name: BuildConfiguration
-    value: release
-  - name: BuildPlatform
-    value: any cpu
-  - group: "Release Automation Suite Variables"
-  - group: "Release Automation Suite Variables (Db)"
-  - group: "Provider Release Automation Suite Variables"
-  - name: Deploy
-    value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
+  - template: ../pipeline-templates/vars.yml
   - name: projectName
     value: "SFA.DAS.EmployerFinance.UITests"
 
@@ -44,4 +37,3 @@ stages:
       projectName: $(projectName)
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
-      

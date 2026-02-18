@@ -29,7 +29,7 @@ stages:
       - template: ../job/deploy.yml
         parameters:
           Environment: TEST
-          ServiceConnection: SFA-DAS-DevTest-ARM
+          ServiceConnection: das-test-automation-test-suite-db-sc
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -42,7 +42,7 @@ stages:
       - template: ../job/deploy.yml
         parameters:
           Environment: TEST2
-          ServiceConnection: SFA-DAS-DevTest-ARM
+          ServiceConnection: das-test2-automation-test-suite-db-sc
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -55,7 +55,7 @@ stages:
       - template: ../job/deploy.yml
         parameters:
           Environment: DEMO
-          ServiceConnection: SFA-DAS-DevTest-ARM
+          ServiceConnection: das-demo-automation-test-suite-db-sc
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -64,7 +64,6 @@ stages:
       - group: "PreProd Management Resources"
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
-      - group: "PREPROD Automation Suite Variables (Db)"
       - ${{ if ne(parameters.PreProdSpecificVariableGroup, '') }}:
           - group: ${{ parameters.PreProdSpecificVariableGroup }}
     jobs:
@@ -72,10 +71,10 @@ stages:
         - template: ../job/deploy.yml
           parameters:
             Environment: 'PP_AUTOMATION'
-            ServiceConnection: SFA-DIG-PreProd-ARM
-      
+            ServiceConnection: das-pp-automation-test-suite-db-sc
+
       - ${{ else }}:
         - template: ../job/deploy.yml
           parameters:
             Environment: 'PP'
-            ServiceConnection: SFA-DIG-PreProd-ARM
+            ServiceConnection: das-pp-automation-test-suite-db-sc
