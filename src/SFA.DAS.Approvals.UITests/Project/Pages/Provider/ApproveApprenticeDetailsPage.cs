@@ -133,6 +133,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<CohortApproved> ProviderApprovesCohortAfterEmployerApproval()
         {
+            await rplVerifiedCheckBox.ClickAsync();
             await approveRadioOption.ClickAsync();
             await saveAndSubmitButton.ClickAsync();
             return await VerifyPageAsync(() => new CohortApproved(context));

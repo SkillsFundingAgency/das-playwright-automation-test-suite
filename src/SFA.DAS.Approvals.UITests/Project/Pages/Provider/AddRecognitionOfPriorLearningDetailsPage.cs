@@ -17,7 +17,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Add recognition of prior learning details");
         }
 
-        public async Task<ApproveApprenticeDetailsPage> EnterRPLDataAndContinue(Apprenticeship apprentice)
+        public async Task EnterRPLDataAndContinue(Apprenticeship apprentice)
         {
             var rpl = apprentice.RPLDetails;
 
@@ -26,9 +26,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
            // await ReducedDuration.ClickAsync();
             await PriceReduced.FillAsync(rpl.PriceReducedBy.ToString());
             await ContinueButton.ClickAsync();
-            return await VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-
-        }
+    }
 }
