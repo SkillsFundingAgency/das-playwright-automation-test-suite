@@ -1,0 +1,140 @@
+parameters:
+  - name: ServiceConnection
+    type: string
+  - name: Environment
+    type: string
+  - name: TestAssembly
+    type: string
+    default: '**\**\SFA.DAS*tests*.dll'
+
+jobs:
+- deployment: Deploy_AutomationTests
+  displayName: 'Deploy Automation Tests to ${{ parameters.Environment }}'
+  environment: ${{ parameters.Environment }}
+  variables:
+    projectName: $[ stageDependencies.Build.CodeBuild.outputs['buildProjectPaths.projectName'] ]
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+          - checkout: self
+            displayName: 'Checkout current branch'
+
+          - checkout: das-platform-automation
+            displayName: 'Checkout das-platform-automation'
+
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download build artifacts'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.DefaultWorkingDirectory)'
+
+          - task: ExtractFiles@1
+            displayName: 'Extract files'
+            inputs:
+              archiveFilePatterns: 'drop/tests.zip'
+              destinationFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
+
+          - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
+            displayName: 'Tokenization: Transform file *.json'
+            inputs:
+              SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests'
+              TargetFileNames: '*.json'
+
+          - task: PowerShell@2
+            displayName: 'Update NumberOfTestWorkers'
+            inputs:
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/src/UpdateNoofTestWorkers.ps1'
+              arguments: '-browser $(BROWSER_TYPE)'
+
+          - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
+            displayName: 'Tokenization: Transform file *.runsettings'
+            inputs:
+              SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
+              TargetFileNames: '*.runsettings'
+
+          - task: PowerShell@2
+            displayName: 'Install Playwright Browsers'
+            inputs:
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
+              arguments: install
+
+          - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
+            displayName: 'Set Screen Resolution'
+            inputs:
+              displaySettings: specific
+              width: 1920
+              height: 1080
+
+          - task: AzurePowerShell@5
+            displayName: "Get Agent's IP Address"
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Get-MyIpAddress.ps1'
+              ScriptArguments: '-WhatsMyIpUrl "https://ifconfig.me/ip"'
+              azurePowerShellVersion: LatestVersion
+
+          - task: AzurePowerShell@5
+            displayName: "Whitelist agent's IP address"
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AzSqlIpException.ps1'
+              ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
+              azurePowerShellVersion: LatestVersion
+
+
+          # 1) Bootstrap: extract Service Connection creds to pipeline variables
+          - task: AzureCLI@2
+            displayName: 'Bootstrap Azure SP credentials'
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              addSpnToEnvironment: true
+              scriptType: ps
+              scriptLocation: inlineScript
+              inlineScript: |
+                # Promote SP credentials from the service connection to pipeline variables
+                Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID;issecret=false]$env:servicePrincipalId"
+                Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID;issecret=false]$env:tenantId"
+                Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
+
+          # 2) VSTest: run multiple assemblies; DefaultAzureCredential picks up env vars
+
+          - task: VSTest@3
+            displayName: 'VsTest - Test Execution'
+            env:
+              AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+              AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+              AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+            inputs:
+              testAssemblyVer2: ${{ parameters.TestAssembly }}
+              testRunTitle: 'UI Test Run - ${{ parameters.Environment }}'
+              searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
+              testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
+              runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
+              runInParallel: true
+              otherConsoleOptions: '/logger:trx'
+              rerunFailedTests: true
+              rerunType: basedOnTestFailureCount
+              rerunMaxAttempts: 2
+            continueOnError: true
+
+          - task: AzurePowerShell@5
+            displayName: "SQL - Remove Whitelisted Agent's IP Address"
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AzSqlIpException.ps1'
+              ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
+              azurePowerShellVersion: LatestVersion
+            condition: succeededOrFailed()
+
+          - task: PowerShell@2
+            displayName: 'Check .trx File Exists'
+            inputs:
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
+              arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
+            condition: succeededOrFailed()
