@@ -89,7 +89,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     public async Task SelectApprenticeshipType(string typeName)
     {
         var checkbox = page.Locator($"input.govuk-checkboxes__input[name='ApprenticeshipTypes'][value='{typeName}']");
-        var expandButton = page.GetByRole(AriaRole.Button, new() { Name = "Apprenticeship type , Show" });
+        var expandButton = page.GetByRole(AriaRole.Button, new() { Name = "Training type , Show" });
 
         if (!await checkbox.IsVisibleAsync())
         {
@@ -176,7 +176,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyFilterIsSet(string filterText)
     {
-        var filterLocator = page.Locator($"a.das-filter__tag.das-breakable:has-text(\"{filterText}\")");
+        var filterLocator = page.GetByRole(AriaRole.Link, new() { Name = filterText, Exact = true});
         await filterLocator.WaitForAsync();
         await Assertions.Expect(filterLocator).ToBeVisibleAsync();
     }
