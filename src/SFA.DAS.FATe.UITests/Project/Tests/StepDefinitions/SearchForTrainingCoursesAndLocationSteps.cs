@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.FATe.UITests.Project.Tests.Pages;
 using System.Linq;
-using TechTalk.SpecFlow.Assist;
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 {
