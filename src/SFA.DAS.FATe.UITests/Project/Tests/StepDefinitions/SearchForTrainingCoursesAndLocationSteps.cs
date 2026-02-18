@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.FATe.UITests.Project.Tests.Pages;
+using System.Linq;
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 {
@@ -17,6 +18,13 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
             await _fATeHomePage.ClickStartNow();
             await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
+        }
+
+        [Given("the user navigates to find training page")]
+        public async Task GivenTheUserNavigatesToFindTrainingPage()
+        {
+            await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
+            await _fATeHomePage.ClickStartNow();
         }
 
         [When("the user navigates to Training providers page")]
@@ -47,7 +55,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         [Then("the relevant training courses are displayed with filters set")]
         public async Task ThenTheRelevantTrainingCoursesAreDisplayedWithFiltersSet()
         {
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("worker");
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Worker");
             await _apprenticeshipTrainingCoursesPage.VerifyCourseSearchResults("worker");
         }
 
@@ -77,5 +85,41 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCoursesPage.VerifyNoResultsMessage();
             await _apprenticeshipTrainingCoursesPage.VerifyNoresultStartAnewSearchLink();
         }
+
+        [When("I select the following training types")]
+        public async Task WhenISelectTheFollowingTrainingTypes(Table table)
+        {
+
+            var trainingTypes = table.Rows
+                    .Select(r => r["TrainingType"])
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Select(x => Enum.Parse<TrainingType>(x.Replace(" ", ""), ignoreCase: true))
+                    .ToArray();
+
+            await _search_TrainingCourses_ApprenticeworkLocationPage.SelectTrainingTypes(trainingTypes);
+        }
+
+        [Then(@"the following training type filters are applied")]
+        public async Task ThenTheFollowingTrainingTypeFiltersAreApplied(Table table)
+        {
+            var expectedTypes = table.Rows
+                .Select(r => r["TrainingType"])
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => Enum.Parse<TrainingType>(x, ignoreCase: true))
+                .ToArray();
+
+            foreach (var type in expectedTypes)
+            {
+                var filterText = type switch
+                {
+                    TrainingType.ApprenticeshipUnits => "Apprenticeship units",
+                    TrainingType.FoundationApprenticeships => "Foundation apprenticeships",
+                    TrainingType.Apprenticeships => "Apprenticeships",
+                    _ => throw new ArgumentOutOfRangeException(nameof(type))
+                };
+
+                await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet(filterText);
+            }
+        }
     }
-}
+ }
