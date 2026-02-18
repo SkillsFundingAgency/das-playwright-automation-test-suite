@@ -1,4 +1,5 @@
-﻿using SFA.DAS.QFAST.UITests.Project.Helpers;
+﻿using Microsoft.Identity.Client;
+using SFA.DAS.QFAST.UITests.Project.Helpers;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Application;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Form;
@@ -16,6 +17,7 @@ public class AdminSteps(ScenarioContext context)
     private readonly Application_Details_Page application_Details_Page = new(context);
     private readonly Application_Messages_Page application_Messages_Page = new(context);
     private readonly StartApplication_Page startApplicationPage = new(context);
+    private readonly SearchForQualification_Page searchForQualification_Page = new(context);
 
     [Given(@"the (.*) user log in to the portal")]
     public async Task GivenTheAdminUserLogInToThePortal(string user)
@@ -199,5 +201,29 @@ public class AdminSteps(ScenarioContext context)
                 await startApplicationPage.ValidateStatus(status);
                 break;
         }
+    }
+
+    [When("I validate the error messages when I search without entering correct details")]
+    public async Task WhenIValidateTheErrorMessages()
+    {
+      await searchForQualification_Page.ValidateErrorMessage();
+    }
+
+    [When("I search for a qualification using partial title (.*) and validate the search result has Qualifcation with title containing (.*)")]
+    public async Task WhenISearchForAQualificationUsingPartialTitleAndValidateTheSearchResult(string partialtext, string acutaltext)
+    {
+        await searchForQualification_Page.SearchForQualificationUsingPartialTitle(partialtext, acutaltext);
+    }
+
+    [When("I search for a qualification using whitespace in QAN and validate the search result")]
+    public async Task WhenISearchForAQualificationUsingPartialQANAndValidateTheSearchResult()
+    {
+        await searchForQualification_Page.ValidateQAN();
+    }
+    [When("I assign (.*) and (.*) as reviewer for (.*) application")]
+    public async Task WhenIAssignAodpTestAdminAndAodpTestAdminAsReviewerForRADAdvancedVocationalGradedExaminationInDanceApplication(string reviewer1, string reviewer2, string application)
+    {
+        await application_Details_Page.SelectApplicationAsQfauOfqualAndIfateUser(application);
+        await application_Details_Page.AssignReviewers(reviewer1, reviewer2);
     }
 }
