@@ -8,8 +8,10 @@ parameters:
     default: '**\**\SFA.DAS*tests*.dll'
   - name: ResourceName
     type: string
+    default: ''
   - name: RuleName
     type: string
+    default: ''
 
 jobs:
 - deployment: Deploy_AutomationTests
