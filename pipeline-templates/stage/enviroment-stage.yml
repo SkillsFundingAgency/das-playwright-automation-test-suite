@@ -8,6 +8,10 @@ parameters:
   - name: PreProdSpecificVariableGroup
     type: string
     default: ''
+  - name: ResourceName
+    type: string
+  - name: RuleName
+    type: string
 
 stages:
   - stage: Build
@@ -69,22 +73,22 @@ stages:
     jobs:
 # Choose template based on Build.Reason and ResourceName
       - ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
-        - template: ../job/deploy.yml
-          parameters:
-            Environment: 'PP_AUTOMATION'
-            ServiceConnection: das-pp-automation-test-suite-db-sc
+          - template: ../job/deploy.yml
+            parameters:
+              Environment: 'PP_AUTOMATION'
+              ServiceConnection: das-pp-automation-test-suite-db-sc
 
       - ${{ if and(ne(variables['Build.Reason'], 'Schedule'), ne(parameters.ResourceName, '')) }}:
-        - template: ../job/api-deploy.yml
-          parameters:
-            Environment: 'PP_AUTOMATION'
-            ServiceConnection: das-pp-automation-test-suite-db-sc
+          - template: ../job/api-deploy.yml
+            parameters:
+              Environment: 'PP_AUTOMATION'
+              ServiceConnection: das-pp-automation-test-suite-db-sc
 
       - ${{ if ne(parameters.ResourceName, '') }}:
-        - template: ../job/api-deploy.yml
-          parameters:
-            Environment: 'PP'
-            ServiceConnection: das-pp-automation-test-suite-db-sc
+          - template: ../job/api-deploy.yml
+            parameters:
+              Environment: 'PP'
+              ServiceConnection: das-pp-automation-test-suite-db-sc
 
       - ${{ else }}:
           - template: ../job/deploy.yml
