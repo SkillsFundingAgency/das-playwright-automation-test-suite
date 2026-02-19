@@ -65,16 +65,9 @@ stages:
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
       - ${{ if ne(parameters.PreProdSpecificVariableGroup, '') }}:
-          - group: ${{ parameters.PreProdSpecificVariableGroup }}
+        - group: ${{ parameters.PreProdSpecificVariableGroup }}
     jobs:
-      - ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
-        - template: ../job/deploy.yml
-          parameters:
-            Environment: 'PP_AUTOMATION'
-            ServiceConnection: das-pp-automation-test-suite-db-sc
-
-      - ${{ else }}:
-        - template: ../job/deploy.yml
-          parameters:
-            Environment: 'PP'
-            ServiceConnection: das-pp-automation-test-suite-db-sc
+      - template: ${{ if eq(variables['Build.Reason'], 'Schedule') then '../job/deploy.yml' else (if ne(variables['ResourceName'], '') then '../job/api-deploy.yml' else '../job/deploy.yml') }}
+        parameters:
+          Environment: ${{ if eq(variables['Build.Reason'], 'Schedule') then 'PP_AUTOMATION' else 'PP' }}
+          ServiceConnection: das-pp-automation-test-suite-db-sc
