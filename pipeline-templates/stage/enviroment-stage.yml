@@ -74,13 +74,13 @@ stages:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: das-pp-automation-test-suite-db-sc
 
-      - ${{ if and(ne(variables['Build.Reason'], 'Schedule'), ne(variables['ResourceName'], '')) }}:
+      - ${{ if and(ne(variables['Build.Reason'], 'Schedule'), ne(parameters.ResourceName, '')) }}:
         - template: ../job/api-deploy.yml
           parameters:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: das-pp-automation-test-suite-db-sc
 
-      - ${{ if ne(variables['ResourceName'], '')) }}:
+      - ${{ if ne(parameters.ResourceName, '') }}:
         - template: ../job/api-deploy.yml
           parameters:
             Environment: 'PP'
