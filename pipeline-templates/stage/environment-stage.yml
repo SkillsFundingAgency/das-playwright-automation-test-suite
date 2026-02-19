@@ -10,8 +10,10 @@ parameters:
     default: ''
   - name: ResourceName
     type: string
+    default: ''
   - name: RuleName
     type: string
+    default: ''
 
 stages:
   - stage: Build
