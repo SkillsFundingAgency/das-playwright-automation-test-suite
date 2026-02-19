@@ -12,7 +12,7 @@ variables:
   - template: ../pipeline-templates/vars.yml
   - name: projectName
     value: "SFA.DAS.EmployerPortal.UITests"
-    name: RuleName
+  - name: RuleName
     value: "AM_das-accapi-test-suite"
   - name: ResourceName
     value: $(EmployerAccountsAppServiceName)
