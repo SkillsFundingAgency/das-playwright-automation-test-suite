@@ -85,6 +85,8 @@ stages:
             parameters:
               Environment: 'PP_AUTOMATION'
               ServiceConnection: das-pp-automation-test-suite-db-sc
+              ResourceName: ${{ parameters.ResourceName }}
+              RuleName: ${{ parameters.RuleName }}
               
 # If a manual run has ResourceName provided (indicating API tests), deploy to PP using api-deploy.yml
       - ${{ if and(ne(variables['Build.Reason'], 'Schedule'), ne(parameters.ResourceName, '')) }}:
@@ -92,6 +94,8 @@ stages:
             parameters:
               Environment: 'PP'
               ServiceConnection: das-pp-automation-test-suite-db-sc
+              ResourceName: ${{ parameters.ResourceName }}
+              RuleName: ${{ parameters.RuleName }}
               
 # If a manual run has no ResourceName (indicating non-API tests), deploy to PP using deploy.yml
       - ${{ else }}:
