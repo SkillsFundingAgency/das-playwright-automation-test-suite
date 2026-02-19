@@ -70,29 +70,30 @@ stages:
       - group: "PreProd Automation Suite Variables"
       - ${{ if ne(parameters.PreProdSpecificVariableGroup, '') }}:
         - group: ${{ parameters.PreProdSpecificVariableGroup }}
+# Choose template and environment based on Build.Reason and ResourceName
     jobs:
-# Choose template based on Build.Reason and ResourceName
-# If it's a scheduled run, deploy to PP_AUTOMATION using deploy.yml
-      - ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+# If it's a scheduled run and ResourceName is empty, deploy to PP_AUTOMATION using deploy.yml
+      - ${{ if and(eq(variables['Build.Reason'], 'Schedule'), eq(parameters.ResourceName, '')) }}:
           - template: ../job/deploy.yml
             parameters:
               Environment: 'PP_AUTOMATION'
               ServiceConnection: das-pp-automation-test-suite-db-sc
 
-# If a triggered test has ResourceName provided (indicating API tests), deploy to PP_AUTOMATION using api-deploy.yml; otherwise, use deploy.yml
+# If a triggered test has ResourceName provided (indicating API tests), deploy to PP_AUTOMATION using api-deploy.yml;
       - ${{ if and(eq(variables['Build.Reason'], 'Schedule'), ne(parameters.ResourceName, '')) }}:
           - template: ../job/api-deploy.yml
             parameters:
               Environment: 'PP_AUTOMATION'
               ServiceConnection: das-pp-automation-test-suite-db-sc
               
-# If a run has ResourceName provided (indicating API tests), deploy to PP using api-deploy.yml
-      - ${{ if and(ne(variables['Build.Reason'], 'Schedule'), (parameters.ResourceName, '')) }}:
+# If a manual run has ResourceName provided (indicating API tests), deploy to PP using api-deploy.yml
+      - ${{ if and(ne(variables['Build.Reason'], 'Schedule'), ne(parameters.ResourceName, '')) }}:
           - template: ../job/api-deploy.yml
             parameters:
               Environment: 'PP'
               ServiceConnection: das-pp-automation-test-suite-db-sc
-
+              
+# If a manual run has no ResourceName (indicating non-API tests), deploy to PP using deploy.yml
       - ${{ else }}:
           - template: ../job/deploy.yml
             parameters:
