@@ -77,9 +77,13 @@ stages:
           parameters:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: das-pp-automation-test-suite-db-sc
+            RuleName: ${{ parameters.RuleName }}
+            ResourceName: ${{ parameters.ResourceName }}
 
       - ${{ else }}:
         - template: ../job/deploy.yml
           parameters:
             Environment: 'PP'
             ServiceConnection: das-pp-automation-test-suite-db-sc
+            ResourceName: ${{ parameters.ResourceName }}
+            RuleName: ${{ parameters.RuleName }}

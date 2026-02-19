@@ -14,8 +14,10 @@ variables:
     value: "SFA.DAS.Approvals.UITests"
   - name: RuleName
     value: "AM_das-accapi-test-suite"
+    default: ""
   - name: ResourceName
     value: "$(EmployerAccountsAppServiceName)"
+    default: ""
 
 resources:
   repositories:

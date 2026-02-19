@@ -6,6 +6,10 @@ parameters:
   - name: TestAssembly
     type: string
     default: '**\**\SFA.DAS*tests*.dll'
+  - name: ResourceName
+    type: string
+  - name: RuleName
+    type: string
 
 jobs:
 - deployment: Deploy_AutomationTests
@@ -86,6 +90,14 @@ jobs:
               ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
               azurePowerShellVersion: LatestVersion
 
+          - task: AzurePowerShell@5
+            displayName: 'Whitelist agent''s IP address on $(AppServiceName)'
+            condition: ne(parameters.ResourceName, '')
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
+              ScriptArguments: '-ResourceName ${{ parameters.ResourceName }} -IPAddress $(IPAddress) -RuleName ${{ parameters.RuleName }}'
+              azurePowerShellVersion: LatestVersion
 
           # 1) Bootstrap: extract Service Connection creds to pipeline variables
           - task: AzureCLI@2
@@ -129,6 +141,17 @@ jobs:
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AzSqlIpException.ps1'
               ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
               azurePowerShellVersion: LatestVersion
+            condition: succeededOrFailed()
+
+          - task: AzurePowerShell@5
+            displayName: 'App Service - Remove Whitelisted Agent''s IP Address'
+            condition: ne(parameters.ResourceName, '')
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
+              ScriptArguments: '-IPAddress $(IPAddress) -ResourceName ${{ parameters.ResourceName }}'
+              azurePowerShellVersion: LatestVersion
+              pwsh: true
             condition: succeededOrFailed()
 
           - task: PowerShell@2
