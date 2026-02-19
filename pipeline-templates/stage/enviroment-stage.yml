@@ -80,14 +80,14 @@ stages:
               ServiceConnection: das-pp-automation-test-suite-db-sc
 
 # If a triggered test has ResourceName provided (indicating API tests), deploy to PP_AUTOMATION using api-deploy.yml; otherwise, use deploy.yml
-      - ${{ if (ne(variables['Build.Reason'], 'Schedule'), and ne(parameters.ResourceName, '')) }}:
+      - ${{ if and(eq(variables['Build.Reason'], 'Schedule'), ne(parameters.ResourceName, '')) }}:
           - template: ../job/api-deploy.yml
             parameters:
               Environment: 'PP_AUTOMATION'
               ServiceConnection: das-pp-automation-test-suite-db-sc
               
 # If a run has ResourceName provided (indicating API tests), deploy to PP using api-deploy.yml
-      - ${{ if ne(parameters.ResourceName, '') }}:
+      - ${{ if and(ne(variables['Build.Reason'], 'Schedule'), (parameters.ResourceName, '')) }}:
           - template: ../job/api-deploy.yml
             parameters:
               Environment: 'PP'
