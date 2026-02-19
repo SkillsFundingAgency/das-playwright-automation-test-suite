@@ -94,7 +94,7 @@ jobs:
 
           - task: AzurePowerShell@5
             displayName: 'Whitelist agent''s IP address on $(AppServiceName)'
-            condition: ne(parameters.ResourceName, '')
+            condition: ne('${{ parameters.ResourceName }}', '')
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
@@ -153,7 +153,7 @@ jobs:
               ScriptArguments: '-IPAddress $(IPAddress) -ResourceName ${{ parameters.ResourceName }}'
               azurePowerShellVersion: LatestVersion
               pwsh: true
-            condition: and(succeededOrFailed(), ne(parameters.ResourceName, ''))
+            condition: and(succeededOrFailed(), ne('${{ parameters.ResourceName }}', '')
 
           - task: PowerShell@2
             displayName: 'Check .trx File Exists'
