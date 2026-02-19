@@ -153,7 +153,7 @@ jobs:
               ScriptArguments: '-IPAddress $(IPAddress) -ResourceName ${{ parameters.ResourceName }}'
               azurePowerShellVersion: LatestVersion
               pwsh: true
-            condition: and(succeededOrFailed(), ne('${{ parameters.ResourceName }}', '')
+            condition: and(succeededOrFailed(), ne('${{ parameters.ResourceName }}', ''))
 
           - task: PowerShell@2
             displayName: 'Check .trx File Exists'
