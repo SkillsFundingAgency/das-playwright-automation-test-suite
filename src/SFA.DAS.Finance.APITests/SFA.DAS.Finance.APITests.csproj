@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <TargetFramework>net9.0</TargetFramework>
-	  <RootNamespace>SFA.DAS.Finance.APITests</RootNamespace>
+      <TargetFramework>net10.0</TargetFramework>
+ 	  <RootNamespace>SFA.DAS.Finance.APITests</RootNamespace>
 	  <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 	  <IsPackable>false</IsPackable>
   </PropertyGroup>
