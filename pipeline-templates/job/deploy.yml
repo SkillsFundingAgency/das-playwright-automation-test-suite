@@ -145,14 +145,13 @@ jobs:
 
           - task: AzurePowerShell@5
             displayName: 'App Service - Remove Whitelisted Agent''s IP Address'
-            condition: ne(parameters.ResourceName, '')
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
               ScriptArguments: '-IPAddress $(IPAddress) -ResourceName ${{ parameters.ResourceName }}'
               azurePowerShellVersion: LatestVersion
               pwsh: true
-            condition: succeededOrFailed()
+            condition: and(succeededOrFailed(), ne(parameters.ResourceName, ''))
 
           - task: PowerShell@2
             displayName: 'Check .trx File Exists'
