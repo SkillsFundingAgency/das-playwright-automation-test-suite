@@ -1,4 +1,5 @@
 ﻿using NServiceBus;
+using NServiceBus.Transport.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using System.Threading.Tasks;
