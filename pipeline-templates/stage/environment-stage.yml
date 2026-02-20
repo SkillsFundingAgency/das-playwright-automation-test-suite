@@ -36,6 +36,8 @@ stages:
         parameters:
           Environment: TEST
           ServiceConnection: das-test-automation-test-suite-db-sc
+          ResourceName: ${{ parameters.ResourceName }}
+          RuleName: ${{ parameters.RuleName }}
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -49,6 +51,8 @@ stages:
         parameters:
           Environment: TEST2
           ServiceConnection: das-test2-automation-test-suite-db-sc
+          ResourceName: ${{ parameters.ResourceName }}
+          RuleName: ${{ parameters.RuleName }}
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -62,6 +66,8 @@ stages:
         parameters:
           Environment: DEMO
           ServiceConnection: das-demo-automation-test-suite-db-sc
+          ResourceName: ${{ parameters.ResourceName }}
+          RuleName: ${{ parameters.RuleName }}
 
   - stage: Deploy_PP
     dependsOn: Build
