@@ -1,4 +1,6 @@
-﻿﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.FrameworkHelpers;
@@ -7,36 +9,54 @@ public static class GetSqlConnectionHelper
 {
     internal static async Task<SqlConnection> GetSqlConnection(string connectionString)
     {
-        if (connectionString.Contains("Authentication=", StringComparison.OrdinalIgnoreCase))
+        if (connectionString.Contains("User ID="))
         {
             return new SqlConnection(connectionString);
         }
-        var tenantidkey = "TENANTID=";
 
-        string accessToken;
+        var parts = connectionString
+            .Split(';', StringSplitOptions.RemoveEmptyEntries)
+            .Select(p => p.Trim())
+            .ToList();
 
-        if (connectionString.Contains("User ID="))
+        const string tenantIdKey = "TENANTID=";
+        const string authKey = "AUTHENTICATION=";
+
+        string tenantId = null;
+
+        for (int i = parts.Count - 1; i >= 0; i--)
         {
-            accessToken = null;
-        }
-        else
-        {
-            if (connectionString.Contains(tenantidkey))
+            if (parts[i].StartsWith(tenantIdKey, StringComparison.OrdinalIgnoreCase))
             {
-                var tenantidwithKey = connectionString.Split(';').ToList().Single(x => x.StartsWith(tenantidkey, StringComparison.OrdinalIgnoreCase));
-
-                connectionString = connectionString.Replace(tenantidwithKey, string.Empty);
-
-                var tenantid = tenantidwithKey.Replace(tenantidkey, string.Empty);
-
-                accessToken = await AzureTokenService.GetDatabaseAuthToken(tenantid);
-            }
-            else
-            {
-                accessToken = await AzureTokenService.GetDatabaseAuthToken();
+                tenantId = parts[i].Substring(tenantIdKey.Length);
+                parts.RemoveAt(i);
+                break;
             }
         }
 
-        return new() { ConnectionString = connectionString, AccessToken = accessToken };
+        for (int i = parts.Count - 1; i >= 0; i--)
+        {
+            if (parts[i].StartsWith(authKey, StringComparison.OrdinalIgnoreCase))
+            {
+                parts.RemoveAt(i);
+                break;
+            }
+        }
+
+        var baseConnectionString = string.Join(";", parts.Where(p => !string.IsNullOrWhiteSpace(p)));
+
+        if (string.IsNullOrWhiteSpace(baseConnectionString))
+        {
+            throw new ArgumentException("Connection string cannot be empty after processing.", nameof(connectionString));
+        }
+
+        var accessToken = tenantId is not null
+            ? await AzureTokenService.GetDatabaseAuthToken(tenantId)
+            : await AzureTokenService.GetDatabaseAuthToken();
+
+        var sqlConnection = new SqlConnection(baseConnectionString);
+        sqlConnection.AccessToken = accessToken;
+
+        return sqlConnection;
     }
 }
