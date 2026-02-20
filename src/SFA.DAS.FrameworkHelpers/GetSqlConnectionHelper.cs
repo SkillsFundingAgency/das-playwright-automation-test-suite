@@ -43,16 +43,19 @@ public static class GetSqlConnectionHelper
             }
         }
 
-        var baseConnectionString = string.Join(";", parts);
+        var baseConnectionString = string.Join(";", parts.Where(p => !string.IsNullOrWhiteSpace(p)));
+
+        if (string.IsNullOrWhiteSpace(baseConnectionString))
+        {
+            throw new ArgumentException("Connection string cannot be empty after processing.", nameof(connectionString));
+        }
 
         var accessToken = tenantId is not null
             ? await AzureTokenService.GetDatabaseAuthToken(tenantId)
             : await AzureTokenService.GetDatabaseAuthToken();
 
-        var sqlConnection = new SqlConnection(baseConnectionString)
-        {
-            AccessToken = accessToken
-        };
+        var sqlConnection = new SqlConnection(baseConnectionString);
+        sqlConnection.AccessToken = accessToken;
 
         return sqlConnection;
     }
