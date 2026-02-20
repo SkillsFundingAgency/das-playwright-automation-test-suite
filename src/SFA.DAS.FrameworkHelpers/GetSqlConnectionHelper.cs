@@ -1,7 +1,7 @@
+using Microsoft.Data.SqlClient;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
 
 namespace SFA.DAS.FrameworkHelpers;
 
