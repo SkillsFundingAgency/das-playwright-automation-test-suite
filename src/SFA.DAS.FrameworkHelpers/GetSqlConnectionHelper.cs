@@ -49,10 +49,11 @@ public static class GetSqlConnectionHelper
             ? await AzureTokenService.GetDatabaseAuthToken(tenantId)
             : await AzureTokenService.GetDatabaseAuthToken();
 
-        return new SqlConnection
+        var sqlConnection = new SqlConnection(baseConnectionString)
         {
-            ConnectionString = baseConnectionString,
             AccessToken = accessToken
         };
+
+        return sqlConnection;
     }
 }

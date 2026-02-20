@@ -30,7 +30,7 @@ resources:
       endpoint: SkillsFundingAgency
 
 pool:
-  vmImage: 'windows-2022'
+  vmImage: 'windows-latest'
 
 stages:
   - template: ../pipeline-templates/stage/environment-stage.yml
