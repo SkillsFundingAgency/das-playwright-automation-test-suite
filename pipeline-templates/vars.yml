@@ -4,6 +4,7 @@ variables:
   - name: BuildPlatform
     value: any cpu
   - group: "Release Automation Suite Variables"
+  - group: "Release Automation Suite Variables (AppService)"
   - group: "YAML Automation Suite Variables (Db)"
   - group: "Provider Release Automation Suite Variables"
   - name: Deploy
