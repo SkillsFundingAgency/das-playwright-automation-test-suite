@@ -95,17 +95,15 @@ public class TeamMemberSteps
 
         var page2 = await page1.Login(_objectContext.GetLoginCredentials());
 
-        var page3 = await page2.ContinueToYourAccountsPage();
+        var page3 = await page2.ContinueToHomePage();
 
-        var page4 = await page3.OpenAccount();
+        var page4 = await page3.GotoYourTeamPage();
 
-        var page5 = await page4.GotoYourTeamPage();
+        var page5 = await page4.ClickViewMemberLink(_invitedMemberEmailId);
 
-        var page6 = await page5.ClickViewMemberLink(_invitedMemberEmailId);
+        var page6 = await page5.ClickRemoveTeamMemberButton();
 
-        var page7 = await page6.ClickRemoveTeamMemberButton();
-
-        _yourTeamPage = await page7.ClickYesRemoveNowButton();
+        _yourTeamPage = await page6.ClickYesRemoveNowButton();
 
         await _yourTeamPage.VerifyTeamMemberRemovedHeaderInfoMessage();
     }

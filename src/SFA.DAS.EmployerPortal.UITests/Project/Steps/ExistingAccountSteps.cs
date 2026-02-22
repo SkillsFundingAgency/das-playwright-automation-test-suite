@@ -67,9 +67,9 @@ public class ExistingAccountSteps
     {
         _homePage = new HomePage(_context, true);
 
-        await _homePage.VerifyPage();
-
         await _homePage.GoToHomePage();
+
+        await _homePage.VerifyPage();
     }
 
     [Then(@"the user can not add an organisation")]
@@ -133,7 +133,7 @@ public class ExistingAccountSteps
     [Then(@"the user can not add an apprentices")]
     public async Task ThenTheUserCanNotAddAnApprentices()
     {
-        await _context.Get<Driver>().Page.GetByRole(AriaRole.Link, new() { Name = "Apprentices", Exact = true }).ClickAsync();
+        await _context.Get<Driver>().Page.GetByRole(AriaRole.Link, new() { Name = "Apprentices", Exact = true }).First.ClickAsync();
 
         var page = await VerifyPageHelper.VerifyPageAsync(_context, () => new AccessDeniedPage(_context));
 

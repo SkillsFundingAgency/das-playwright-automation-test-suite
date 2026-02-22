@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.Playwright;
 
 namespace SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 
@@ -61,7 +62,7 @@ public class InterimYourApprenticeshipAdvertsHomePage(ScenarioContext context, b
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your apprenticeship adverts", new LocatorAssertionsToContainTextOptions { Timeout = 10000});
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Recruitment dashboard", new LocatorAssertionsToContainTextOptions { Timeout = 10000});
     }
 }
 
@@ -190,7 +191,6 @@ public abstract class InterimEmployerBasePage : Navigate
     protected async Task NavigateToSettings(string name)
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Settings" }).ClickAsync();
-
         await page.GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
     }
 }
