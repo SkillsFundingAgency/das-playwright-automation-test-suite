@@ -30,6 +30,7 @@
 		<ProjectReference Include="..\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.FAA.UITests\SFA.DAS.FAA.UITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
+		<ProjectReference Include="..\SFA.DAS.FrameworkHelpers\SFA.DAS.FrameworkHelpers.csproj" />
 		<ProjectReference Include="..\SFA.DAS.DfeAdmin.Service\SFA.DAS.DfeAdmin.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.ProviderLogin.Service\SFA.DAS.ProviderLogin.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.RAA.Service\SFA.DAS.RAA.Service.csproj" />
