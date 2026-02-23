@@ -1,4 +1,4 @@
-﻿
+
 using SFA.DAS.RAA.Service.Project.Helpers;
 
 namespace SFA.DAS.RAA.Service.Project;
@@ -17,15 +17,9 @@ public class Hooks(ScenarioContext context)
 
         context.Set(new AdvertDataHelper());
 
-        var dbConfig = context.Get<DbConfig>();
+        var browserContext = context.Get<Driver>().BrowserContext;
 
         var objectContext = context.Get<ObjectContext>();
-
-        context.Set(new ProviderCreateVacancySqlDbHelper(objectContext, dbConfig));
-
-        context.Set(new RAAProviderPermissionsSqlDbHelper(objectContext, dbConfig));
-
-        var browserContext = context.Get<Driver>().BrowserContext;
 
         objectContext.SetDebugInformation("*****Setting DefaultNavigationTimeout to be 40000ms = 40 sec*****");
 

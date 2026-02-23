@@ -1,10 +1,22 @@
-﻿
+
+
+using SFA.DAS.RAAEmployer.UITests.Project.Helpers.SqlDbHelpers;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project;
 
 [Binding]
 public class Hooks(ScenarioContext context)
 {
+    [BeforeScenario(Order = 33)]
+    public void SetUpSqlDbHelpers()
+    {
+        var dbConfig = context.Get<DbConfig>();
+        var objectContext = context.Get<ObjectContext>();
+
+        context.Set(new ProviderCreateVacancySqlDbHelper(objectContext, dbConfig));
+        context.Set(new RAAProviderPermissionsSqlDbHelper(objectContext, dbConfig));
+    }
+
     [BeforeScenario(Order = 34)]
     public async Task SetUpHelpers()
     {
