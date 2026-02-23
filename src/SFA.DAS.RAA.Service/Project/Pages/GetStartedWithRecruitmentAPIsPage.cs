@@ -74,7 +74,7 @@ public class KeyforApiPage(ScenarioContext context) : RaaBasePage(context)
         return await VerifyPageAsync(() => new AreYouSureYouWantToRenewThisAPIKeyPage(context));
     }
 
-    public async Task ClickAdvertsLink() => await page.GetByRole(AriaRole.Menuitem, new() { Name = "Adverts" }).ClickAsync();
+    public async Task ClickAdvertsLink() => await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Adverts" }).ClickAsync();
 }
 
 public class AreYouSureYouWantToRenewThisAPIKeyPage(ScenarioContext context) : RaaBasePage(context)
