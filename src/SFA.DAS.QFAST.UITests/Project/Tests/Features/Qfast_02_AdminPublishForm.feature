@@ -16,6 +16,7 @@ Scenario: QFAST Admin Publish Form and AO Create Funding Application
 	Given the admin user log in to the portal
 	When I select the Review applications for funding option
 	And I assign aodp TestAdmin1 and aodp TestAdmin2 as reviewer for RAD Advanced Vocational Graded Examination in Dance application
+	And I validate List of Qualifications approved for funding is a link and opens in a new tab and validate URL is https://www.qualifications.education.gov.uk/Home/FurtherInformation
 	And I Sign out from the portal
 # Qfau user change the status to On hold
 	Given the admin user log in to the portal

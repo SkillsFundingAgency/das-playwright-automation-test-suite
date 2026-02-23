@@ -220,10 +220,17 @@ public class AdminSteps(ScenarioContext context)
     {
         await searchForQualification_Page.ValidateQAN();
     }
+
     [When("I assign (.*) and (.*) as reviewer for (.*) application")]
     public async Task WhenIAssignAodpTestAdminAndAodpTestAdminAsReviewerForRADAdvancedVocationalGradedExaminationInDanceApplication(string reviewer1, string reviewer2, string application)
     {
         await application_Details_Page.SelectApplicationAsQfauOfqualAndIfateUser(application);
         await application_Details_Page.AssignReviewers(reviewer1, reviewer2);
+    }
+
+    [When("I validate (.*) is a link and opens in a new tab and validate URL is (.*)")]
+    public async Task WhenIValidateListOfQualificationsApprovedForFundingIsALinkAndOpensInANewTab(string linkText, string expectedUrl)
+    {
+        await application_Details_Page.ValidateLinkAndOpenInNewTab(linkText, expectedUrl);
     }
 }

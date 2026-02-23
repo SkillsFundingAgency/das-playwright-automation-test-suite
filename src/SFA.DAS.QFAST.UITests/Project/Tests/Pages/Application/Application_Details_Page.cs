@@ -52,4 +52,24 @@ public class Application_Details_Page (ScenarioContext context) : BasePage(conte
         await page.Locator("form:has(#Reviewer2)").GetByRole(AriaRole.Button, new() { Name = "Change" }).ClickAsync();
         return await VerifyPageAsync(() => new Application_Details_Page(context));
     }
+    public async Task ValidateLinkAndOpenInNewTab(string linkText, string expectedUrl)
+    {
+        var link = page.GetByRole(AriaRole.Link, new() { Name = linkText });
+        await Assertions.Expect(link).ToBeVisibleAsync();
+        if (await link.CountAsync() == 0)
+        {
+            throw new Exception($"The text '{linkText}' was not found as a link on the page.");
+        }
+        var targetAttribute = await link.GetAttributeAsync("target");
+        if (string.IsNullOrEmpty(targetAttribute))
+        {
+            throw new Exception($"The link '{linkText}' does not contain a target attribute and may not open in a new tab.");
+        }        
+        var popupTask = page.WaitForPopupAsync();
+        await link.ClickAsync();
+        var popupPage = await popupTask;
+        await popupPage.WaitForLoadStateAsync(LoadState.DOMContentLoaded);        
+        await Assertions.Expect(popupPage).ToHaveURLAsync(expectedUrl);
+        await popupPage.CloseAsync();
+    }
 }
