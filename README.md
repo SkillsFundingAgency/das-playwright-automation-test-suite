@@ -1,1 +1,0 @@
-# das-playwright-automation-test-suite

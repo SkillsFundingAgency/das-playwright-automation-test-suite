@@ -1,8 +1,0 @@
-﻿Feature: EMPACC_API_09_SearchOrganisationIdentifiableOrganisationTypes
-
-@api
-@employeraccountsapi
-@outerapi
-@regression
-Scenario: EMPACC_API_09_SearchOrganisationIdentifiableOrganisationTypes
-	Then endpoint /SearchOrganisation/IdentifiableOrganisationTypes can be accessed
