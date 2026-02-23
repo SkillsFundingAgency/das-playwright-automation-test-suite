@@ -27,6 +27,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
+		<ProjectReference Include="..\SFA.DAS.FrameworkHelpers\SFA.DAS.FrameworkHelpers.csproj" />
 		<ProjectReference Include="..\SFA.DAS.Login.Service\SFA.DAS.Login.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.RAA.DataGenerator\SFA.DAS.RAA.DataGenerator.csproj" />
 	</ItemGroup>
