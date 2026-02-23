@@ -12,8 +12,8 @@ variables:
   - template: ../pipeline-templates/vars.yml
   - name: projectName
     value: |
-            "SFA.DAS.RAAEmployer.UITests"
-            "SFA.DAS.FAA.UITests"
+      "SFA.DAS.RAAEmployer.UITests"
+      "SFA.DAS.FAA.UITests"
 
 resources:
   repositories:
