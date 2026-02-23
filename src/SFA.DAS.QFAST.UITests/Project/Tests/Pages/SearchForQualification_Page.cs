@@ -58,7 +58,7 @@ namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages
             }
             return await VerifyPageAsync(() => new SearchForQualification_Page(context));
         }
-        public async Task<SearchForQualification_Page> ValidateQAN()
+        public async Task<QualificationDetails_Page> ValidateQAN()
         {
             //white space outside the value should be trimmed from the search term
             await page.Locator("#SearchTerm").FillAsync("    10013398    ");
@@ -84,7 +84,8 @@ namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages
                 throw new InvalidOperationException(
                     $"Expected QAN to be '10013398', but found '{qanValue}'.");
             }
-            return await VerifyPageAsync(() => new SearchForQualification_Page(context));
+            await page.GetByRole(AriaRole.Link, new() { Name = "RAD Advanced Vocational Graded Examination in Dance" }).ClickAsync();
+            return await VerifyPageAsync(() => new QualificationDetails_Page(context));            
         }
     }
 }

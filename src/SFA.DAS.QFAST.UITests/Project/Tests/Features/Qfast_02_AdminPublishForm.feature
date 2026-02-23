@@ -53,3 +53,9 @@ Scenario: QFAST Admin Publish Form and AO Create Funding Application
 	Given the ao user user log in to the portal	
 	And I create a new funding application on behalf of different organisation
 	When I Sign out from the portal
+
+	Given the admin user log in to the portal
+	When I select the Search for a qualification option	
+	And I search for a qualification using whitespace in QAN and validate the search result
+	Then I validate user can click on the accociated applications
+	When I Sign out from the portal

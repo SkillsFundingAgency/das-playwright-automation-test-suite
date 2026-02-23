@@ -18,6 +18,7 @@ public class AdminSteps(ScenarioContext context)
     private readonly Application_Messages_Page application_Messages_Page = new(context);
     private readonly StartApplication_Page startApplicationPage = new(context);
     private readonly SearchForQualification_Page searchForQualification_Page = new(context);
+    private readonly QualificationDetails_Page qualificationDetails_Page = new(context);
 
     [Given(@"the (.*) user log in to the portal")]
     public async Task GivenTheAdminUserLogInToThePortal(string user)
@@ -232,5 +233,11 @@ public class AdminSteps(ScenarioContext context)
     public async Task WhenIValidateListOfQualificationsApprovedForFundingIsALinkAndOpensInANewTab(string linkText, string expectedUrl)
     {
         await application_Details_Page.ValidateLinkAndOpenInNewTab(linkText, expectedUrl);
+    }
+
+    [Then("I validate user can click on the accociated applications")]
+    public async Task ThenIValidateUserCanClickOnTheAccociatedApplications()
+    {
+        await qualificationDetails_Page.ClickOnFirstAssociatedApplication();
     }
 }

@@ -6,4 +6,5 @@ Scenario: Fuzzy Search for a qualification
 	When I select the Search for a qualification option
 	And I validate the error messages when I search without entering correct details
 	And I search for a qualification using partial title Elect and validate the search result has Qualifcation with title containing Electrical
-	And I search for a qualification using whitespace in QAN and validate the search result
+	
+	
