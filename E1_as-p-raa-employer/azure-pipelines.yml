@@ -11,8 +11,10 @@ schedules:
 variables:
   - template: ../pipeline-templates/vars.yml
   - name: projectName
-    value: "SFA.DAS.FAA.UITests"
-            
+    value: |
+            "SFA.DAS.RAAEmployer.UITests"
+            "SFA.DAS.FAA.UITests"
+
 resources:
   repositories:
     - repository: self
