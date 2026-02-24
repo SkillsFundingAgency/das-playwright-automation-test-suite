@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<PackageId>SFA.DAS.Framework</PackageId>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 		<!--HasRuntimeOutput>true</HasRuntimeOutput-->
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Mailosaur" Version="8.11.*" />
+		<PackageReference Include="Mailosaur" Version="9.0.*" />
 	</ItemGroup>
 
 	<ItemGroup>
