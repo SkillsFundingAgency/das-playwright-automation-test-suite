@@ -8,6 +8,12 @@ parameters:
   - name: PreProdSpecificVariableGroup
     type: string
     default: ''
+  - name: ResourceName
+    type: string
+    default: ''
+  - name: RuleName
+    type: string
+    default: ''
 
 stages:
   - stage: Build
@@ -30,6 +36,8 @@ stages:
         parameters:
           Environment: TEST
           ServiceConnection: das-test-automation-test-suite-db-sc
+          ResourceName: ${{ parameters.ResourceName }}
+          RuleName: ${{ parameters.RuleName }}
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -43,6 +51,8 @@ stages:
         parameters:
           Environment: TEST2
           ServiceConnection: das-test2-automation-test-suite-db-sc
+          ResourceName: ${{ parameters.ResourceName }}
+          RuleName: ${{ parameters.RuleName }}
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -56,6 +66,8 @@ stages:
         parameters:
           Environment: DEMO
           ServiceConnection: das-demo-automation-test-suite-db-sc
+          ResourceName: ${{ parameters.ResourceName }}
+          RuleName: ${{ parameters.RuleName }}
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -65,16 +77,21 @@ stages:
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
       - ${{ if ne(parameters.PreProdSpecificVariableGroup, '') }}:
-          - group: ${{ parameters.PreProdSpecificVariableGroup }}
+        - group: ${{ parameters.PreProdSpecificVariableGroup }}
+
     jobs:
       - ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
         - template: ../job/deploy.yml
           parameters:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: das-pp-automation-test-suite-db-sc
+            RuleName: ${{ parameters.RuleName }}
+            ResourceName: ${{ parameters.ResourceName }}
 
       - ${{ else }}:
         - template: ../job/deploy.yml
           parameters:
             Environment: 'PP'
             ServiceConnection: das-pp-automation-test-suite-db-sc
+            ResourceName: ${{ parameters.ResourceName }}
+            RuleName: ${{ parameters.RuleName }}
