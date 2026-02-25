@@ -267,7 +267,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     public async Task<(int ProviderCount, TrainingProvidersPage Page)> ViewTrainingProvidersForCourse(string courseId)
     {
         string linkId = $"standard-{courseId}";
-        var linkLocator = page.Locator($"a.das-search-results__link#standard-{courseId}:has-text('View')");
+        var linkLocator = page.Locator($"a.das-search-results__link[larscode='standard-{courseId}'][href*='/providers']");
 
         if (!await linkLocator.IsVisibleAsync())
             throw new Exception($"Could not find the provider link for course ID: {courseId}");
