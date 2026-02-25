@@ -43,18 +43,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             
             ApproveApprenticeDetailsPage page2= new ApproveApprenticeDetailsPage(context);
-
-            //if (apprenticeship.TrainingDetails.StandardCode is 805 or 806 or 807 or 808 or 809 or 810 or 811)       //RPL check does not appear for foundation courses
-            //{
-            //    page2 = new ApproveApprenticeDetailsPage(context);
-            //}
-            //else
-            //{
-            //    //var page1 = new RecognitionOfPriorLearningPage(context);
-            //    //page2 = await page1.SelectNoForRPL();
-            //    page2 = new ApproveApprenticeDetailsPage(context);
-
-            //}
+            //RPL check does not appear for foundation courses - Now no need to filter here since the final checkbox in approvals screen ensure that is checked.
             await page2.GetCohortId(apprenticeship);
 
             objectContext.SetDebugInformation($"Cohort Ref is: {apprenticeship.Cohort.Reference}");
@@ -134,8 +123,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             //var page2 = await page1.SelectOptionToAddApprenticesFromILRList_NonLevyRoute();
             var page3 = await page1.SelectApprenticeFromILRList(apprenticeship);            
             await page3.ClickAddButton();
-            //var page4 = new RecognitionOfPriorLearningPage(context);
-            //var page5 = await page4.SelectNoForRPL();
+            //NO RPL case - Now no need to filter here since the final checkbox in approvals screen ensure that is checked.
             var page4 = new ApproveApprenticeDetailsPage(context);
             await page4.GetCohortId(apprenticeship);
 
@@ -152,8 +140,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var checkApprenticeDetailsPage = await selectLearnerFromILRPage.SelectApprenticeFromILRList(apprenticeship);
             await checkApprenticeDetailsPage.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
             await checkApprenticeDetailsPage.ClickAddButton();
-            //var recognitionOfPriorLearningPage = new RecognitionOfPriorLearningPage(context);
-            //await recognitionOfPriorLearningPage.SelectNoForRPL();
+            //NO RPL case - Now no need to filter here since the final checkbox in approvals screen ensure that is checked.
 
             return await approveApprenticeDetailsPage.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
@@ -172,8 +159,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                     var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);
                     await page3.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
                     await page3.ClickAddButton();
-                    //var page4 = new RecognitionOfPriorLearningPage(context);
-                    //var page5 = await page4.SelectNoForRPL();
+                    //NO RPL case - Now no need to filter here since the final checkbox in approvals screen ensure that is checked.
                     await new ApproveApprenticeDetailsPage(context).GetCohortId(apprenticeship);
                 }
             }
@@ -301,10 +287,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
                 var page1 = await page.SelectApprenticeFromILRList(apprenticeship);
                 await page1.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
                 await page1.ClickAddButton();
-                //var page2 = new RecognitionOfPriorLearningPage(context);
-                //var page3 = await page2.SelectYesForRPL();
-                //var page4 = await page3.EnterRPLDataAndContinue(apprenticeship);
-               await new ApproveApprenticeDetailsPage(context).GetCohortId(apprenticeship);
+                //Yes RPL case - Now Yes need to filter here since the final checkbox in approvals screen ensure that is checked.
+                await new ApproveApprenticeDetailsPage(context).GetCohortId(apprenticeship);
             }
 
             return approveApprenticeDetailsPage;

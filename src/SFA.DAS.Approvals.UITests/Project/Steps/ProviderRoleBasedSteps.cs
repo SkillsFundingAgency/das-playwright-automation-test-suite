@@ -77,7 +77,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page = await new ApproveApprenticeDetailsPage(context).ClickOnViewApprenticeLink(apprentice.ApprenticeDetails.FullName);
             await page.UpdateEmail(apprentice.ApprenticeDetails.Email + ".uk");
             await page.ClickOnButton("Continue");
-            //var page3 = await page1.SelectNoForRPL();
+            // By default the selection is NO and in approval page the checkbox ensures this no need of filter
         }
 
         [Then("the user can send a cohort to employer")]
