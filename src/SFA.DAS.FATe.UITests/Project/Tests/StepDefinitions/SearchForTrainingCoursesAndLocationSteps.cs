@@ -81,7 +81,9 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         [Then("no courses that match your search is displayed with filters set")]
         public async Task ThenNoCoursesThatMatchYourSearchIsDisplayedWithFiltersSet()
         {
-            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Selected");
+            // The search term used for the no-results scenario is generated at runtime and stored in the object context
+            var expectedSearchTerm = context.Get<ObjectContext>().Get("NoResultsSearchTerm");
+            await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet(expectedSearchTerm);
             await _apprenticeshipTrainingCoursesPage.VerifyNoResultsMessage();
             await _apprenticeshipTrainingCoursesPage.VerifyNoresultStartAnewSearchLink();
         }

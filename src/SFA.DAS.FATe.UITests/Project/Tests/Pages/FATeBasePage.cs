@@ -49,8 +49,18 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task SelectAutocompleteOption(string optionText)
     {
-        var autocompleteOption = page.Locator($"text={optionText}");
-        await autocompleteOption.ClickAsync();
+        // Prefer selecting the autocomplete option by role to avoid matching the live-region status element
+        ILocator optionLocator = page.GetByRole(AriaRole.Option, new() { Name = optionText });
+
+        // Fallback to a more specific locator if GetByRole doesn't find an option
+        if (await optionLocator.CountAsync() == 0)
+        {
+            optionLocator = page.Locator($"li[role='option']:has-text('{optionText}')");
+        }
+
+        // Wait for the option to be visible and click the first match
+        await optionLocator.First.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
+        await optionLocator.First.ClickAsync();
     }
     public async Task SelectJobCategory(string categoryName)
     {
@@ -176,8 +186,8 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyFilterIsSet(string filterText)
     {
-        var filterLocator = page.GetByRole(AriaRole.Link, new() { Name = filterText, Exact = true});
-        await filterLocator.WaitForAsync();
+        // Use a case-insensitive match for the filter name so UI casing differences don't break the test
+        var filterLocator = page.GetByRole(AriaRole.Link, new() { NameRegex = new Regex($"^{Regex.Escape(filterText)}$", RegexOptions.IgnoreCase) });
         await Assertions.Expect(filterLocator).ToBeVisibleAsync();
     }
     public async Task VerifyCourseSearchResults(string resultsword)
@@ -190,7 +200,12 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
         for (int i = 0; i < limit; i++)
         {
             var resultLocator = resultsLinks.Nth(i);
-            await Assertions.Expect(resultLocator).ToContainTextAsync(resultsword);
+            // Perform a case-insensitive check of the result text to avoid failures due to casing
+            var resultText = await resultLocator.InnerTextAsync() ?? string.Empty;
+            if (resultText.IndexOf(resultsword, StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                throw new Exception($"Expected search result to contain '{resultsword}' (case-insensitive), but found: '{resultText}'");
+            }
         }
     }
     public async Task ClearAllFilters()

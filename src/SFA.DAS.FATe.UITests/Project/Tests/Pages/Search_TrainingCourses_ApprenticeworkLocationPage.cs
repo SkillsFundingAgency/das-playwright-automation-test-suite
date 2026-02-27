@@ -17,7 +17,11 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithCourseNoResults()
     {
         await page.Locator("#keyword-input").ClickAsync();
-        await page.Locator("#keyword-input").FillAsync(fateDataHelper.NoResultsCourseName);
+        // Use a unique search term to ensure no real courses match (make test deterministic)
+        var uniqueSearchTerm = Guid.NewGuid().ToString("N");
+        // store the generated term so later steps can verify the filter tag
+        objectContext.Set("NoResultsSearchTerm", uniqueSearchTerm);
+        await page.Locator("#keyword-input").FillAsync(uniqueSearchTerm);
         await ClickContinue();
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
     }
