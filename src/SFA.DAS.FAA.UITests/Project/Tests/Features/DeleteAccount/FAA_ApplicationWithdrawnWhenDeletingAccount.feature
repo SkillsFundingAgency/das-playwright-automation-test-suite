@@ -1,8 +1,6 @@
 ﻿Feature: FAA_DA_02
 
-@raa
 @regression
-@raaprovider
 @faa
 Scenario: FAA_DA_02 - Submitted Application Is Withdrawn On Account Deletion
 	Given appretince creates an account

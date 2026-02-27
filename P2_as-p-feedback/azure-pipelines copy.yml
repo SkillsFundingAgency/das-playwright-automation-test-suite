@@ -1,7 +1,8 @@
+
 trigger: none
 pr: none
 schedules:
-- cron: '0 3 * * 1-5'
+- cron: '0 6 * * 1-5'
   displayName: ScheduledRun
   branches:
     include:
@@ -11,11 +12,7 @@ schedules:
 variables:
   - template: ../pipeline-templates/vars.yml
   - name: projectName
-    value: "SFA.DAS.Approvals.UITests"
-  - name: RuleName
-    value: "AM_das-approvals-test-suite"
-  - name: ResourceName
-    value: "$(EmployerAccountsAppServiceName)"
+    value: "SFA.DAS.ProvideFeedback.UITests"
 
 resources:
   repositories:
@@ -40,5 +37,3 @@ stages:
       projectName: $(projectName)
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
-      RuleName: $(RuleName)
-      ResourceName: $(ResourceName)

@@ -14,6 +14,9 @@ parameters:
   - name: RuleName
     type: string
     default: ''
+  - name: pipelineTimeout
+    type: integer
+    default: 60
 
 stages:
   - stage: Build
@@ -95,3 +98,4 @@ stages:
             ServiceConnection: das-pp-automation-test-suite-db-sc
             ResourceName: ${{ parameters.ResourceName }}
             RuleName: ${{ parameters.RuleName }}
+            pipelineTimeout: ${{ parameters.pipelineTimeout }}
