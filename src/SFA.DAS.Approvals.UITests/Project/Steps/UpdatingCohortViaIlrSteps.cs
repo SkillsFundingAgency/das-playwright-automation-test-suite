@@ -130,11 +130,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page2.VerifyApprenticeshipDetails(listOfUpdatedApprenticeship.FirstOrDefault());
             await page2.ClickOnButton("Continue");
 
-            if (standardCode <= 804 || standardCode >= 812)     //RPL page does not appear for G&S foundation courses
-            {
-                var page3 = new RecognitionOfPriorLearningPage(context);
-                await page3.SelectNoForRPL();
-            }
+            // RPL page does not appear for G&S foundation courses
+            // By default the selection is NO and in approval page the checkbox ensures this no need of filter
 
             //update the original apprenticeship list with the updated details for further steps:
             listOfApprenticeship.Clear();
