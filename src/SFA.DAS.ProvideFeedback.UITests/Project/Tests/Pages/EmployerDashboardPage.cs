@@ -33,7 +33,7 @@ public class EmployerFeedbackSelectProviderPage(ScenarioContext context) : Emplo
 
     private static string SelectLink(string ukprn) => ($"a[href*='/providers/{ukprn}']");
 
-    public async Task<ApprenticeFeedbackConfirmProviderPage> SelectTrainingProvider()
+    public async Task<ApprenticeFeedbackConfirmProviderPage> SelectTrainingProvider(string user)
     {
         // await page.Locator(SelectLink(objectContext.GetProviderUkprn())).ClickAsync();
 
@@ -43,10 +43,16 @@ public class EmployerFeedbackSelectProviderPage(ScenarioContext context) : Emplo
         {
             var objectContext = context.Get<ObjectContext>();
             var dbConfig = context.Get<DbConfig>();
-            
+          
             var sqlHelper = new EmployerFeedbackSqlHelper(objectContext, dbConfig);
-            await sqlHelper.UpdateEmployerFeedbackResult();
+          
+            int feedbackResultId = user == "viewUser" ? 20409 : 20408;
+           
+            Console.WriteLine(feedbackResultId);
+
+            await sqlHelper.UpdateEmployerFeedbackResult(feedbackResultId);
             await page.ReloadAsync();
+            
         }
 
         await selectLocator.First.ClickAsync();

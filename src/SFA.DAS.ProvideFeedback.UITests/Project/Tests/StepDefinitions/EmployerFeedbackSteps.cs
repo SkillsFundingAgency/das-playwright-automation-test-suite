@@ -34,12 +34,12 @@ public class EmployerFeedbackSteps(ScenarioContext context)
     }
        
 
-    [Given(@"completes the feedback journey for a training provider")]
-    public async Task GivenCompletesTheFeedbackJourneyForATrainingProvider()
+    [Given(@"the (.*) completes the feedback journey for a training provider")]
+    public async Task GivenTheCompletesTheFeedbackJourneyForATrainingProvider(string user)
     {
         var page = await new EmployerDashboardPage(context).ClickFeedbackLink();
 
-        var page1 = await page.SelectTrainingProvider();
+        var page1 = await page.SelectTrainingProvider(user);
 
         var page2 = await page1.ConfirmTrainingProvider();
 
@@ -47,6 +47,7 @@ public class EmployerFeedbackSteps(ScenarioContext context)
 
         await _providerFeedbackCheckYourAnswers.SubmitAnswersNow();
     }
+   
 
     [Given(@"completes the feedback journey for a training provider via survey code")]
     public async Task GivenCompletesTheFeedbackJourneyForATrainingProviderViaSurveyCode()

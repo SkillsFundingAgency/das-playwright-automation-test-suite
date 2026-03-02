@@ -96,9 +96,9 @@ public class EmployerFeedbackSqlHelper(ObjectContext objectContext, DbConfig con
         await ExecuteSqlCommand(query);
     }
 
-    public async Task UpdateEmployerFeedbackResult()
+    public async Task UpdateEmployerFeedbackResult(int feedbackResultId)
     {
-        var feedbackId = 20394;
+        var feedbackId = feedbackResultId;
 
         var sql =
             $"UPDATE [EmployerFeedbackResult] " +

@@ -42,13 +42,14 @@ public class ApprenticeFeedbackSqlHelper(ObjectContext objectContext, DbConfig c
         {
             var targetId = Guid.NewGuid();
             var resultId = Guid.NewGuid();
+            var ApprenticeId = Guid.NewGuid();
             var resultDate = rating.AcademicYear == "Previous" ? previousAcademicYearDate : currentAcademicYearDate;
 
             sql += $@"
             INSERT INTO [dbo].[ApprenticeFeedbackTarget]
             ([Id], [ApprenticeId], [ApprenticeshipId], [Status], [StartDate], [EndDate], [Ukprn], [ProviderName], [StandardUId], [LarsCode], [StandardName], [FeedbackEligibility], [EligibilityCalculationDate], [CreatedOn], [UpdatedOn], [Withdrawn], [IsTransfer], [DateTransferIdentified], [ApprenticeshipStatus])
             VALUES 
-            ('{targetId}', 'B46EDA62-4621-4187-AA2B-A65280B41BDC', {apprenticeshipId}, 2, GETDATE(), DATEADD(year, 2, GETDATE()), {ukprn}, '{providerName}', 'ST0005_1.1', 119, NULL, 1, GETDATE(), GETDATE(), GETDATE(), 0, 0, NULL, 1);
+            ('{targetId}', '{ApprenticeId}', {apprenticeshipId}, 2, GETDATE(), DATEADD(year, 2, GETDATE()), {ukprn}, '{providerName}', 'ST0005_1.1', 119, NULL, 1, GETDATE(), GETDATE(), GETDATE(), 0, 0, NULL, 1);
 
             INSERT INTO [dbo].[ApprenticeFeedbackResult]
             ([Id],[ApprenticeFeedbackTargetId],[StandardUId],[DateTimeCompleted],[ProviderRating],[AllowContact])
