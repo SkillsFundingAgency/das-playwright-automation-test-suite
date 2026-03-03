@@ -89,6 +89,7 @@ stages:
             ServiceConnection: das-pp-automation-test-suite-db-sc
             RuleName: ${{ parameters.RuleName }}
             ResourceName: ${{ parameters.ResourceName }}
+            pipelineTimeout: ${{ parameters.pipelineTimeout }}
 
       - ${{ else }}:
         - template: ../job/deploy.yml
