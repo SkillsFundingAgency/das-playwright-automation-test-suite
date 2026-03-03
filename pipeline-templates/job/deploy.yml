@@ -132,8 +132,9 @@ jobs:
               runInParallel: true
               otherConsoleOptions: '/logger:trx'
               rerunFailedTests: true
-              rerunType: basedOnTestFailureCount
-              rerunMaxAttempts: 2
+              rerunType: basedontestfailurepercentage
+              rerunFailedTestsMaxPercent: 20
+              rerunMaxAttempts: 1
             continueOnError: true
 
           - task: AzurePowerShell@5
