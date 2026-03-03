@@ -14,8 +14,6 @@ variables:
     value: |
             "SFA.DAS.RAAEmployer.UITests"
             "SFA.DAS.FAA.UITests"
-  - name: pipelineTimeout
-    value: 90
 
 resources:
   repositories:
@@ -40,4 +38,3 @@ stages:
       projectName: $(projectName)
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
-      pipelineTimeout: $(pipelineTimeout)
