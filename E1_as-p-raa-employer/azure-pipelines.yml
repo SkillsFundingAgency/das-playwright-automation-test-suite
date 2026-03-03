@@ -40,4 +40,4 @@ stages:
       projectName: $(projectName)
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
-      pipelineTimeout: ${{ parameters.pipelineTimeout }}
+      pipelineTimeout: $(pipelineTimeout)
