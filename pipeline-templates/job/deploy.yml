@@ -12,14 +12,16 @@ parameters:
   - name: RuleName
     type: string
     default: ''
-  - name: pipelineTimeout
-    default: 60
+  # - name: pipelineTimeout
+  #   type: number
+  #   default: 60
 
 jobs:
 - deployment: Deploy_AutomationTests
   displayName: 'Deploy Automation Tests to ${{ parameters.Environment }}'
   environment: ${{ parameters.Environment }}
-  timeoutInMinutes: ${{ parameters.pipelineTimeout }}
+  # timeoutInMinutes: ${{ parameters.pipelineTimeout }}
+  timeoutInMinutes: 90
   variables:
     projectName: $[ stageDependencies.Build.CodeBuild.outputs['buildProjectPaths.projectName'] ]
   strategy:
