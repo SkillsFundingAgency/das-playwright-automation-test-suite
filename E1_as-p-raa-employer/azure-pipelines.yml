@@ -15,7 +15,6 @@ variables:
             "SFA.DAS.RAAEmployer.UITests"
             "SFA.DAS.FAA.UITests"
   - name: pipelineTimeout
-    type: integer
     value: 120
 
 resources:

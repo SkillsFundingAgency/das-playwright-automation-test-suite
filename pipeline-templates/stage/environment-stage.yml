@@ -15,7 +15,6 @@ parameters:
     type: string
     default: ''
   - name: pipelineTimeout
-    type: integer
     default: 60
 
 stages:
