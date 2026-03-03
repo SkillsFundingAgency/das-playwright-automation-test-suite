@@ -13,7 +13,7 @@ parameters:
     type: string
     default: ''
   - name: pipelineTimeout
-    type: number
+    type: integer
     default: 60
 
 jobs:
