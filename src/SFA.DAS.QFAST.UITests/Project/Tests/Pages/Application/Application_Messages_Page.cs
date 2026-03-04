@@ -5,8 +5,8 @@
         public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Application messages" })).ToBeVisibleAsync();
         public async Task SelectMessageType(string MessageType)
         {
-            await page.FillAsync("#messageText", "test");
-            await page.SelectOptionAsync("#messageType",new[] {MessageType});            
+            await page.FillAsync("#MessageText", "test");
+            await page.SelectOptionAsync("#SelectedMessageType", new[] {MessageType});            
         }
         public async Task<Application_Messages_Page> ClickOnPreviewButton()
         {
