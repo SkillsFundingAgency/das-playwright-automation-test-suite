@@ -16,7 +16,7 @@ public class AOSteps(ScenarioContext context)
         await qfastAOPage.SubmitApplication();        
     }
 
-    [Given("I createa new funding application on behalf of different organisation")]
+    [Given("I create a new funding application on behalf of different organisation")]
     public async Task GivenICreateaNewFundingApplicationOnBehalfOfDiffOrganisation()
     {
         await qfastAOPage.SubmitApplicationForDiffOrganisation();

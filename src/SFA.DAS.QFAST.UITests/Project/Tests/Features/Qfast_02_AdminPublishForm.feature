@@ -12,6 +12,12 @@ Scenario: QFAST Admin Publish Form and AO Create Funding Application
 	And I create a new funding application and submit the application
 	And I validate status is In review for RAD Advanced Vocational Graded Examination in Dance application
 	When I Sign out from the portal
+# Qfasu user assgin reviewer for the application
+	Given the admin user log in to the portal
+	When I select the Review applications for funding option
+	And I assign aodp TestAdmin1 and aodp TestAdmin2 as reviewer for RAD Advanced Vocational Graded Examination in Dance application
+	And I validate List of Qualifications approved for funding is a link and opens in a new tab and validate URL is https://www.qualifications.education.gov.uk/Home/FurtherInformation
+	And I Sign out from the portal
 # Qfau user change the status to On hold
 	Given the admin user log in to the portal
 	When I select the Review applications for funding option
@@ -45,4 +51,11 @@ Scenario: QFAST Admin Publish Form and AO Create Funding Application
 	# Hence, only Ao user2 can apply for funding and Ao user will not be able to apply for funding for the qualification associated with Royal Academy of Dance organisation.
 
 	Given the ao user user log in to the portal	
-	And I createa new funding application on behalf of different organisation
+	And I create a new funding application on behalf of different organisation
+	When I Sign out from the portal
+
+	Given the admin user log in to the portal
+	When I select the Search for a qualification option	
+	And I search for a qualification using whitespace in QAN and validate the search result
+	Then I validate user can click on the accociated applications
+	When I Sign out from the portal
