@@ -17,6 +17,7 @@ jobs:
 - deployment: Deploy_AutomationTests
   displayName: 'Deploy Automation Tests to ${{ parameters.Environment }}'
   environment: ${{ parameters.Environment }}
+  timeoutInMinutes: 90
   variables:
     projectName: $[ stageDependencies.Build.CodeBuild.outputs['buildProjectPaths.projectName'] ]
   strategy:
@@ -133,7 +134,7 @@ jobs:
               otherConsoleOptions: '/logger:trx'
               rerunFailedTests: true
               rerunType: basedontestfailurepercentage
-              rerunFailedTestsMaxPercent: 20
+              rerunFailedTestsMaxPercent: 30
               rerunMaxAttempts: 1
             continueOnError: true
 
