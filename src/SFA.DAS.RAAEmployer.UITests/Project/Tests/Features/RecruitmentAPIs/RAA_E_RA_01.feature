@@ -1,7 +1,5 @@
 ﻿Feature: RAA_E_RA_01
 
-@raa
-@raaemployer
 @regression
 @recruitmentapikey
 Scenario: RAA_E_RA_01 - Renew Employer Recruitment API Key
