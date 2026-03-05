@@ -11,7 +11,7 @@ schedules:
 variables:
   - template: ../pipeline-templates/vars.yml
   - name: projectName
-    value: "SFA.DAS.EmployerAccounts.APITests"
+    value: "SFA.DAS.Finance.APITests"
   - name: RuleName
     value: "AM_das-finapi-test-suite"
   - name: ResourceName
