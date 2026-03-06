@@ -139,6 +139,7 @@ jobs:
               rerunType: basedontestfailurepercentage
               rerunFailedTestsMaxPercent: 30
               rerunMaxAttempts: 1
+              tag: ${{ parameters.Environment }}
             continueOnError: true
 
           - task: AzurePowerShell@5
