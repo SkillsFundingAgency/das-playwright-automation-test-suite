@@ -36,4 +36,3 @@ stages:
       projectName: $(projectName)
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
-      pipelineTimeout: $(pipelineTimeout)
