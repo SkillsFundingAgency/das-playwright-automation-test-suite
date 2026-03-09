@@ -1,8 +1,9 @@
 ﻿Feature: RAA_E_AV_01
 
 @regression
-Scenario: RAA_E_AV_01 - Create anonymous advert, Approve, Apply
+Scenario: RAA_E_AV_01 - Create anonymous advert, Approve, Apply and close the advert
 	Given the Employer creates an anonymous advert
 	When the Reviewer Approves the vacancy
 	Then the 'employer' receives 'approved advert' email notification
 	Then the Applicant can apply for a Vacancy in FAA
+	Then the Employer can close the vacancy
