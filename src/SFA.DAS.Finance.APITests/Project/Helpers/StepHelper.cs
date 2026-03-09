@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers
@@ -49,7 +50,8 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
 
         private static string GetPayloadTemplate(string fileName)
         {
-            var payloadFilePath = Path.Combine(FileHelper.GetLocalProjectRootFilePath(), "Project", "Tests", "Payload", fileName);
+            var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var payloadFilePath = Path.Combine(assemblyLocation, "Project", "Tests", "Payload", fileName);
             return File.ReadAllText(payloadFilePath);
         }
 
