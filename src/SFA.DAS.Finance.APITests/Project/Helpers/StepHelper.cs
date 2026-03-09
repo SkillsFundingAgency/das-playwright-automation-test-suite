@@ -1,6 +1,8 @@
 using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
+using System.IO;
 using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers
@@ -27,6 +29,30 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             return await accountsHelper.ExecuteSql(sql);
         }
 
+        public async Task<string> PrepareTransferStagingPayload(string fileName)
+        {
+            var transferId = new Random().Next(1, 800000);
+            try { _scenarioContext.Set(transferId, "transferId"); } catch { _scenarioContext["transferId"] = transferId; }
+
+            var payloadTemplate = GetPayloadTemplate(fileName);
+            var payloadObject = JObject.Parse(payloadTemplate);
+            var transfer = payloadObject["transfers"]?[0] as JObject;
+            if (transfer != null)
+            {
+                transfer["transferId"] = transferId;
+            }
+
+            try { _scenarioContext.Set(transfer, "transferStagingExpectedPayload"); } catch { _scenarioContext["transferStagingExpectedPayload"] = transfer; }
+
+            return payloadObject.ToString(Formatting.None);
+        }
+
+        private static string GetPayloadTemplate(string fileName)
+        {
+            var payloadFilePath = Path.Combine(FileHelper.GetLocalProjectRootFilePath(), "Project", "Tests", "Payload", fileName);
+            return File.ReadAllText(payloadFilePath);
+        }
+
         public Dictionary<string, string> MapRowToDictionary(List<string> row, List<string> selectAliases)
         {
             var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -36,6 +62,66 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 dict[alias] = i < row.Count ? (row[i] ?? string.Empty) : string.Empty;
             }
             return dict;
+        }
+
+        public async Task CompareTransferStagingDataAgainstDb()
+        {
+            var expectedTransfer = _scenarioContext.Get<JObject>("transferStagingExpectedPayload");
+            var sqlResult = _scenarioContext.Get<List<string>>("transferStagingDbRecord");
+
+            Assert.IsNotNull(expectedTransfer, "Expected transfer payload was not found in ScenarioContext.");
+            Assert.IsNotNull(sqlResult, "Transfer staging DB record was not found in ScenarioContext.");
+
+            var aliases = new List<string>
+            {
+                "transferId",
+                "senderAccountId",
+                "receiverAccountId",
+                "receiverAccountName",
+                "amount",
+                "transferDate",
+                "periodEnd",
+                "collectionPeriodMonth",
+                "collectionPeriodYear",
+                "ukprn",
+                "courseName",
+                "createdBy",
+                "correlationId"
+            };
+
+            var sqlDict = MapRowToDictionary(sqlResult, aliases);
+            if (sqlDict.TryGetValue("transferDate", out var transferDate)) sqlDict["transferDate"] = ParseDateTime(transferDate);
+            if (sqlDict.TryGetValue("periodEnd", out var periodEnd)) sqlDict["periodEnd"] = ParseDate(periodEnd);
+
+            var expectedDict = expectedTransfer.Properties()
+                .ToDictionary(
+                    property => property.Name,
+                    property => property.Value?.ToString() ?? string.Empty,
+                    StringComparer.OrdinalIgnoreCase);
+
+            if (expectedDict.TryGetValue("transferDate", out var expectedTransferDate)) expectedDict["transferDate"] = ParseDateTime(expectedTransferDate);
+            if (expectedDict.TryGetValue("periodEnd", out var expectedPeriodEnd)) expectedDict["periodEnd"] = ParseDate(expectedPeriodEnd);
+
+            var actualObj = JObject.FromObject(sqlDict);
+            CompareApiResponseToExpectedResult(expectedDict, actualObj, null);
+        }
+
+        private static string ParseDate(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+            var parsed = DateTime.Parse(value ?? string.Empty, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            return parsed.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        }
+
+        private static string ParseDateTime(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+            DateTime parsed;
+            if (!DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out parsed))
+            {
+                parsed = DateTime.Parse(value ?? string.Empty, new CultureInfo("en-GB"), DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            }
+            return parsed.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture);
         }
 
         public void SetAccountIdIfPresent(Dictionary<string, string> dict)
