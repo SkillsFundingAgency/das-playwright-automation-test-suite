@@ -26,7 +26,7 @@ public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inn
     public async Task<RestResponse> PostTransferStaging(string payloadContent)
     {
         await CreateRestRequest(Method.Post, "/api/transfers/staging", payloadContent);
-        var response = await Execute(HttpStatusCode.InternalServerError);
+        var response = await Execute(HttpStatusCode.Conflict);
         return response;
     }
 }
