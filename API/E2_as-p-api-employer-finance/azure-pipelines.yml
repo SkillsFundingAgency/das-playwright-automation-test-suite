@@ -9,13 +9,13 @@ schedules:
   always: true
 
 variables:
-  - template: ../pipeline-templates/vars.yml
+  - template: ../../pipeline-templates/vars.yml
   - name: projectName
-    value: "SFA.DAS.EmployerAccounts.APITests"
+    value: "SFA.DAS.Finance.APITests"
   - name: RuleName
-    value: "AM_das-accapi-test-suite"
+    value: "AM_das-finapi-test-suite"
   - name: ResourceName
-    value: "$(EmployerAccountsAppServiceName)"
+    value: "$(EmployerFinanceAppServiceName)"
 
 resources:
   repositories:
@@ -35,7 +35,7 @@ pool:
   vmImage: 'windows-latest'
 
 stages:
-  - template: ../pipeline-templates/stage/environment-stage.yml
+  - template: ../../pipeline-templates/stage/environment-stage.yml
     parameters:
       projectName: $(projectName)
       BuildConfiguration: $(BuildConfiguration)
