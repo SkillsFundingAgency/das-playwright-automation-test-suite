@@ -15,7 +15,7 @@ variables:
   - name: RuleName
     value: "AM_das-accapi-test-suite"
   - name: ResourceName
-    value: "$(EmployerAccountsAppServiceName)"
+    value: "$(EmployerAccountsAppWhitelistName)"
 
 resources:
   repositories:
