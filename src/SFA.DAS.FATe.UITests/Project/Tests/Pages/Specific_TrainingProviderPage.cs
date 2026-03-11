@@ -30,8 +30,7 @@ public class Specific_TrainingProviderPage(ScenarioContext context, string provi
     }
     public async Task<Specific_TrainingProviderPage> GoToTrainingProviderCoursePage()
     {
-        var linkLocator = page.GetByText("View", new() { Exact = false })
-                              .Filter(new LocatorFilterOptions { HasTextString = "courses delivered by this training provider" });
+        var linkLocator = page.Locator("summary").Filter(new() { HasTextString = "apprenticeships delivered by this training provider" }).Nth(1);
 
         await Assertions.Expect(linkLocator).ToBeVisibleAsync();
         await linkLocator.ClickAsync();
