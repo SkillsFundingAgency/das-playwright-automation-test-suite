@@ -21,7 +21,7 @@ public class InitializeDriver
 
         isCloud = BrowserType == BrowserType.Cloud;
 
-        var factory = new DriverFactory(isCloud ? BrowserType.Chrome : BrowserType);
+        var factory = new DriverFactory(isCloud ? BrowserType.Chromium : BrowserType);
 
         return await factory.CreateDriver();
     }
@@ -30,10 +30,10 @@ public class InitializeDriver
     {
         string envBrowserType = Environment.GetEnvironmentVariable("BROWSER_TYPE");
 
-        string browserType = string.IsNullOrEmpty(envBrowserType) ? "Chrome" : envBrowserType;
+        string browserType = string.IsNullOrEmpty(envBrowserType) ? "Chromium" : envBrowserType;
 
         if (!Enum.TryParse(browserType, true, out BrowserType type))
-            type = BrowserType.Chrome;
+            type = BrowserType.Chromium;
 
         return type;
     }
