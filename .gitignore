@@ -251,4 +251,7 @@ src/.idea/.idea.SFA.DAS.TestAutomation/.idea/
 
 # SpecFlow generated files
 *.feature.cs
+
+# VScode generated build output
+/src/build_output.txt
 .vscode/settings.json
