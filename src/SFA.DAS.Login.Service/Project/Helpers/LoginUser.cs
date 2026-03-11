@@ -36,6 +36,8 @@ public abstract class EasAccountUser : GovSignUser
 
 public class EmployerFeedbackUser : EasAccountUser { }
 
+public class EmployerViewOnlyUser : EasAccountUser { }
+
 public class AuthTestUser : EasAccountUser { }
 
 public class RAAEmployerUser : EasAccountUser { }
