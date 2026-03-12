@@ -1,7 +1,11 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SFA.DAS.Finance.APITests.Project.Helpers;
-using SFA.DAS.Finance.APITests.Project.Models;
 using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
+using SFA.DAS.Finance.APITests.Project.Models;
+using System;
+using System.Globalization;
+using System.Net;
 
 namespace SFA.DAS.Finance.APITests.Project.Tests.StepDefinitions;
 
@@ -130,6 +134,30 @@ public class FinanceInnerAPISteps
     {
         await _innerApiRestClient.ExecuteEndpoint("/api/period-ends", HttpStatusCode.OK);
     }
+
+    [Given(@"post new transfers to TransferStaging table via api")]
+    public async Task GivenPostNewTransfersToTransferStagingTableViaApi()
+    {
+        var payloadContent = await _stepHelper.PrepareTransferStagingPayload("TransferStagingTemplate.json");
+        await _innerApiRestClient.PostTransferStaging(payloadContent);
+    }
+
+    [When(@"find record in TransferStaging table")]
+    public async Task WhenExecuteTheDBForNewlyInsertedRecord()
+    {
+        var transferId = Convert.ToInt32(_scenarioContext["transferId"], CultureInfo.InvariantCulture);
+        var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+        
+        var sqlResult = await accountsHelper.ExecuteSqlFileWithReplacements(
+            "getTransferStagingByTransferId.sql",
+            new Dictionary<string, string> { { "transferId", transferId.ToString(CultureInfo.InvariantCulture) } });
+
+        try { _scenarioContext.Set(sqlResult, "transferStagingDbRecord"); } catch { _scenarioContext["transferStagingDbRecord"] = sqlResult; }
+    }
+
+    [Then(@"Verify the record in TransferStaging table with the data posted via api")]
+    public async Task ThenVerifyTheRecordInTransferStagingTableWithTheDataPostedViaApi() => await _stepHelper.CompareTransferStagingDataAgainstDb();
+    
 
     private string GetHashedAccountId() => _objectContext.GetHashedAccountId();
 
