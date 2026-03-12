@@ -18,6 +18,7 @@ public class ManagingStandardsDataHelpers
     public string NewlyUpdatedEmailAddress { get; init; } = "NewlyUpdatedManagingStandardstest.demo@l38cxwya.mailosaur.net";
     public string VenueName { get; init; } = LocationName;
     public string Standard_ActuaryLevel7 { get; init; } = "Actuary (level 7)";
+    public string Apprenticeshipunit_Floorlayer{ get; init; } = "Floorlayer Apprenticeship unit";
     public string Standard_CraftPlastererlevel { get; init; } = "Craft plasterer (level 3)";
     public string PostCode { get; init; } = "Tw14 9py";
     public string FullAddressDetails { get; init; } = "160 Hatton Road, Feltham, TW14 9PY";

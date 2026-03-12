@@ -1,7 +1,8 @@
 ﻿
 
-using System;
 using Azure;
+using System;
+using static SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.VenueAndDelivery_ApprenticeshipUnitPage;
 
 namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
 
@@ -106,7 +107,14 @@ public class ManageYourShortCoursesPage(ScenarioContext context) : ManagingStand
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your short courses");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprenticeship units");
+    }
+    public async Task<SelectAStandardPage> AccessAddApprenticeshipUnit()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Add an apprenticeship unit" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SelectAStandardPage(context,"Select an apprenticeship unit"));
+
     }
 
 }
@@ -213,11 +221,12 @@ public class AreYouSureDeleteStandardPage(ScenarioContext context) : ManagingSta
 }
 
 
-public class SelectAStandardPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+public class SelectAStandardPage(ScenarioContext context, string pageTitle = "Select a standard") : ManagingStandardsBasePage(context)
 {
+    private readonly string _pageTitle = pageTitle;
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select a standard");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(_pageTitle);
     }
 
     public async Task<AddAstandardPage> SelectAStandardAndContinue(string standardName)
@@ -247,8 +256,21 @@ public class AddAstandardPage(ScenarioContext context, string standardName) : Ma
 
         return await VerifyPageAsync(() => new UseYourSavedContactDetailsPage(context));
     }
+    public async Task<UseYourSavedContactDetailsPage> YesStandardIsCorrectAndContinue_ApprenticeshipUnit()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
 
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
+        return await VerifyPageAsync(() => new UseYourSavedContactDetailsPage(context, "Do you want to use your saved contact details for this apprenticeship unit?"));
+    }
+
+    public async Task<ApprenticeshipUnit_SavedPage> Save_NewApprenticeshipUnit_Continue()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save apprenticeship unit" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ApprenticeshipUnit_SavedPage(context));
+    }
 
     public async Task<ManageTheStandardsYouDeliverPage> Save_NewStandard_Continue()
     {
@@ -257,13 +279,15 @@ public class AddAstandardPage(ScenarioContext context, string standardName) : Ma
         return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }
 }
-public class UseYourSavedContactDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+public class UseYourSavedContactDetailsPage(ScenarioContext context, string pageTitle ="Do you want to use your saved contact details for this standard?"): ManagingStandardsBasePage(context)
 {
+    private readonly string _pageTitle = pageTitle;
+
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Do you want to use your saved contact details for this standard?");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl"))
+            .ToContainTextAsync(_pageTitle);
     }
-
     public async Task<YourContactInformationForThisStandardPage> YesUseExistingContactDetails()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
@@ -271,6 +295,14 @@ public class UseYourSavedContactDetailsPage(ScenarioContext context) : ManagingS
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new YourContactInformationForThisStandardPage(context));
+    }
+    public async Task<YourContactInformationForThisStandardPage> YesUseExistingContactDetails_ApprenticeshipUnit()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourContactInformationForThisStandardPage(context, "Your contact details for this apprenticeship unit"));
     }
 
     public async Task<YourContactInformationForThisStandardPage> NoDontUseExistingContactDetails()
@@ -391,11 +423,14 @@ public class ManageAStandard_TeacherPage(ScenarioContext context, string standar
     }
 }
 
-public class WhereWillThisStandardBeDeliveredPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+public class WhereWillThisStandardBeDeliveredPage(ScenarioContext context, string pageTitle = "Where will this standard be delivered?") : ManagingStandardsBasePage(context)
 {
+    private readonly string _pageTitle = pageTitle;
+
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Where will this standard be delivered?");
+        await Assertions.Expect(page.Locator(".h1"))
+            .ToContainTextAsync(_pageTitle);
     }
 
     public async Task<TrainingLocation_ConfirmVenuePage> ConfirmAtOneofYourTrainingLocations()
@@ -441,6 +476,14 @@ public class WhereWillThisStandardBeDeliveredPage(ScenarioContext context) : Man
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new TrainingVenuesPage(context));
+    }
+    public async Task<VenueAndDelivery_ApprenticeshipUnitPage> ConfirmAtOneofYourTrainingLocations_AddApprenticeshipUnit()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "At one of your training" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new VenueAndDelivery_ApprenticeshipUnitPage(context));
     }
 }
 
@@ -534,12 +577,14 @@ public class WhereCanYouDeliverTrainingPage(ScenarioContext context) : ManagingS
 }
 
 
-public class YourContactInformationForThisStandardPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+public class YourContactInformationForThisStandardPage(ScenarioContext context, string pageTitle = "Your contact information for this standard"): ManagingStandardsBasePage(context)
 {
+    private readonly string _pageTitle = pageTitle;
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your contact information for this standard");
+        await Assertions.Expect(page.Locator(".h1"))
+            .ToContainTextAsync(_pageTitle);
     }
 
     public async Task<ManageAStandard_TeacherPage> UpdateContactInformation()
@@ -554,6 +599,12 @@ public class YourContactInformationForThisStandardPage(ScenarioContext context) 
         await UseExistingContactInformation();
 
         return await VerifyPageAsync(() => new WhereWillThisStandardBeDeliveredPage(context));
+    }
+    public async Task<WhereWillThisStandardBeDeliveredPage> Add_ContactInformation_ApprenticeshipUnit()
+    {
+        await UseExistingContactInformation();
+
+        return await VerifyPageAsync(() => new WhereWillThisStandardBeDeliveredPage(context, "Where can you deliver this apprenticeship unit?"));
     }
 
     public async Task<WhereWillThisStandardBeDeliveredPage> AddNewContactInformation()
@@ -642,277 +693,304 @@ public class TrainingVenuesPage(ScenarioContext context) : ManagingStandardsBase
         return await VerifyPageAsync(() => new VenueAndDeliveryPage(context));
     }
 }
-
-public class VenueAndDeliveryPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+public class VenueAndDelivery_ApprenticeshipUnitPage(ScenarioContext context) : ManagingStandardsBasePage(context)
 {
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Venue and delivery");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Choose a training venue");
     }
 
-    public async Task<TrainingVenuesPage> ChooseTheVenueDeliveryAndContinue()
+    public async Task<AddAstandardPage> ChooseTheVenueDeliveryAndContinue_ApprenticeshipUnit(string standardname)
     {
-        await page.Locator("#TrainingVenueNavigationId").SelectOptionAsync(["CENTRAL HAIR ESSEX"]);
-
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Day release" }).CheckAsync();
-
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Block release" }).CheckAsync();
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new TrainingVenuesPage(context));
-    }
-}
-
-public class VenueAddedPage(ScenarioContext context) : ManagingStandardsBasePage(context)
-{
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Venue details and standards");
-    }
-
-    public async Task<VenueDetailsPage> Click_ChangeVenueName()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Change venue name" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new VenueDetailsPage(context));
-    }
-}
-
-public class VenueDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
-{
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change venue name");
-    }
-
-    public async Task<VenueAddedPage> UpdateVenueDetailsAndSubmit()
-    {
-        await page.Locator("#LocationName").FillAsync(managingStandardsDataHelpers.UpdatedVenueName);
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new VenueAddedPage(context));
-    }
-}
-
-
-public class SelectAddressPage(ScenarioContext context) : ManagingStandardsBasePage(context)
-{
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select an address");
-    }
-
-    public async Task<AddVenueDetailsPage> EnterPostcodeAndContinue()
-    {
-        var postcode = managingStandardsDataHelpers.PostCode;
-        var fullAddress = managingStandardsDataHelpers.FullAddressDetails;
-
-        await page.Locator("input[role='combobox']").FillAsync(postcode);
-        await page.Locator($"li:has-text(\"{fullAddress}\")").ClickAsync();
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-        return await VerifyPageAsync(() => new AddVenueDetailsPage(context));
-    }
-}
-public class ChooseTheAddressPage(ScenarioContext context) : ManagingStandardsBasePage(context)
-{
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Choose the address");
-    }
-
-    public async Task<AddVenueDetailsPage> ChooseTheAddressAndContinue()
-    {
-        await page.Locator("#SelectedAddressUprn").SelectOptionAsync(["100021525713"]);
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new AddVenueDetailsPage(context));
-    }
-}
-
-public class AddVenueDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
-{
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add venue name");
-    }
-
-    public async Task<TrainingLocation_ConfirmVenuePage> AddVenueDetailsAndSubmit()
-    {
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Venue name" }).FillAsync(managingStandardsDataHelpers.VenueName);
-
-        //Commented out this for now as we might be resuing them
-        //await page.Locator("#Website").FillAsync(managingStandardsDataHelpers.ContactWebsite);
-
-        //await page.Locator("#EmailAddress").FillAsync(managingStandardsDataHelpers.EmailAddress);
-
-        //await page.Locator("#PhoneNumber").FillAsync(managingStandardsDataHelpers.EmailAddress);
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new TrainingLocation_ConfirmVenuePage(context));
-    }
-}
-
-public class ContactDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
-{
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Contact details");
-    }
-
-    public async Task<SaveContactDetailsPage> ChangeContactDetails()
-    {
-
-        await page.GetByRole(AriaRole.Link, new() { Name = "Change" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new SaveContactDetailsPage(context));
-    }
-}
-
-public class SaveContactDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
-{
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Save your contact details");
-    }
-
-    public async Task<UpdateStandardsWithNewContactDetailsPage> ChangeEmailAndPhonenumberContactDetails()
-    {
-        var email = page.Locator("#EmailAddress");
-        await email.ClearAsync();
-        await email.FillAsync(managingStandardsDataHelpers.UpdatedEmailAddress);
-
-        var phone = page.Locator("#PhoneNumber");
-        await phone.ClearAsync();
-        await phone.FillAsync(managingStandardsDataHelpers.ContactNumber);
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
-    }
-    public async Task<UpdateStandardsWithNewContactDetailsPage> ChangeEmailAndPhonenumberContactDetails_Latest()
-    {
-        var email = page.Locator("#EmailAddress");
-        await email.ClearAsync();
-        await email.FillAsync(managingStandardsDataHelpers.EmailAddress);
-
-        var phone = page.Locator("#PhoneNumber");
-        await phone.ClearAsync();
-        await phone.FillAsync(managingStandardsDataHelpers.NewlyUpdatedContactNumber);
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
-    }
-    public async Task<UpdateStandardsWithNewContactDetailsPage> ChangePhonenumberOnly()
-    {
-        var phone = page.Locator("#PhoneNumber");
-        await phone.ClearAsync();
-        await phone.FillAsync(managingStandardsDataHelpers.UpdatedContactNumber);
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
-    }
-    public async Task<UpdateStandardsWithNewContactDetailsPage> ChangeEmailOnly()
-    {
-        var email = page.Locator("#EmailAddress");
-        await email.ClearAsync();
-        await email.FillAsync(managingStandardsDataHelpers.NewlyUpdatedEmailAddress);
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
-    }
-}
-
-public class UpdateStandardsWithNewContactDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
-{
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Update your existing standards with these contact details");
-    }
-
-    public async Task<CheckDetailsPage> NoDontUpdateExistingStandards( )
-    {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "No, I just want to save them as an option for when I add a new standard"}).CheckAsync();
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new CheckDetailsPage(context));
-    }
-    public async Task<UpdateContactDetailsStandardPage> YesUpdateExistingStandards()
-    {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I want to choose which standards to update with these details" }).CheckAsync();
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new UpdateContactDetailsStandardPage(context));
-    }
-}
-
-public class UpdateContactDetailsStandardPage(ScenarioContext context) : ManagingStandardsBasePage(context)
-{
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select the standards you want these contact details to apply to");
-    }
-
-    public async Task<CheckDetailsPage> YesUpdateAllStandardsContactDetails()
-    {
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Select all" }).CheckAsync();
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new CheckDetailsPage(context));
-    }
-}
-
-public class CheckDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
-{
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Check details");
-    }
-
-    public async Task<ContactDetailsSavedPage> ConfirmUpdateContactDetailsAndContinue()
-    {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new ContactDetailsSavedPage(context));
-    }
-}
-
-public class ContactDetailsSavedPage(ScenarioContext context) : ManagingStandardsBasePage(context)
-{
-    public override async Task VerifyPage()
-    {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Contact details saved");
-    }
-
-    public async Task<YourStandardsAndTrainingVenuesPage> ReturnToManagingStandardsDashboard()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your standards" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
-    }
-
-    public async Task VerifyUpdatedContactDetails(string? expectedEmail = null, string? expectedPhone = null)
-    {
-        var confirmationText = page.GetByText("You have updated your contact details", new() { Exact = false });
-
-        if (!string.IsNullOrEmpty(expectedEmail))
         {
-            await Assertions.Expect(confirmationText).ToContainTextAsync(expectedEmail);
-        }
+            await page.Locator("#TrainingVenueNavigationId").SelectOptionAsync(["CENTRAL HAIR ESSEX"]);
 
-        if (!string.IsNullOrEmpty(expectedPhone))
-        {
-            await Assertions.Expect(confirmationText).ToContainTextAsync(expectedPhone);
+            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new AddAstandardPage(context, standardname));
         }
     }
+
+
+    public class VenueAndDeliveryPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Venue and delivery");
+        }
+
+        public async Task<TrainingVenuesPage> ChooseTheVenueDeliveryAndContinue()
+        {
+            await page.Locator("#TrainingVenueNavigationId").SelectOptionAsync(["CENTRAL HAIR ESSEX"]);
+
+            await page.GetByRole(AriaRole.Checkbox, new() { Name = "Day release" }).CheckAsync();
+
+            await page.GetByRole(AriaRole.Checkbox, new() { Name = "Block release" }).CheckAsync();
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new TrainingVenuesPage(context));
+        }
+    }
+
+    public class VenueAddedPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Venue details and standards");
+        }
+
+        public async Task<VenueDetailsPage> Click_ChangeVenueName()
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = "Change venue name" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new VenueDetailsPage(context));
+        }
+    }
+
+    public class VenueDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change venue name");
+        }
+
+        public async Task<VenueAddedPage> UpdateVenueDetailsAndSubmit()
+        {
+            await page.Locator("#LocationName").FillAsync(managingStandardsDataHelpers.UpdatedVenueName);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new VenueAddedPage(context));
+        }
+    }
+
+
+    public class SelectAddressPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select an address");
+        }
+
+        public async Task<AddVenueDetailsPage> EnterPostcodeAndContinue()
+        {
+            var postcode = managingStandardsDataHelpers.PostCode;
+            var fullAddress = managingStandardsDataHelpers.FullAddressDetails;
+
+            await page.Locator("input[role='combobox']").FillAsync(postcode);
+            await page.Locator($"li:has-text(\"{fullAddress}\")").ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+            return await VerifyPageAsync(() => new AddVenueDetailsPage(context));
+        }
+    }
+    public class ChooseTheAddressPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Choose the address");
+        }
+
+        public async Task<AddVenueDetailsPage> ChooseTheAddressAndContinue()
+        {
+            await page.Locator("#SelectedAddressUprn").SelectOptionAsync(["100021525713"]);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new AddVenueDetailsPage(context));
+        }
+    }
+
+    public class AddVenueDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add venue name");
+        }
+
+        public async Task<TrainingLocation_ConfirmVenuePage> AddVenueDetailsAndSubmit()
+        {
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Venue name" }).FillAsync(managingStandardsDataHelpers.VenueName);
+
+            //Commented out this for now as we might be resuing them
+            //await page.Locator("#Website").FillAsync(managingStandardsDataHelpers.ContactWebsite);
+
+            //await page.Locator("#EmailAddress").FillAsync(managingStandardsDataHelpers.EmailAddress);
+
+            //await page.Locator("#PhoneNumber").FillAsync(managingStandardsDataHelpers.EmailAddress);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new TrainingLocation_ConfirmVenuePage(context));
+        }
+    }
+
+    public class ContactDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Contact details");
+        }
+
+        public async Task<SaveContactDetailsPage> ChangeContactDetails()
+        {
+
+            await page.GetByRole(AriaRole.Link, new() { Name = "Change" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new SaveContactDetailsPage(context));
+        }
+    }
+
+    public class SaveContactDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Save your contact details");
+        }
+
+        public async Task<UpdateStandardsWithNewContactDetailsPage> ChangeEmailAndPhonenumberContactDetails()
+        {
+            var email = page.Locator("#EmailAddress");
+            await email.ClearAsync();
+            await email.FillAsync(managingStandardsDataHelpers.UpdatedEmailAddress);
+
+            var phone = page.Locator("#PhoneNumber");
+            await phone.ClearAsync();
+            await phone.FillAsync(managingStandardsDataHelpers.ContactNumber);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
+        }
+        public async Task<UpdateStandardsWithNewContactDetailsPage> ChangeEmailAndPhonenumberContactDetails_Latest()
+        {
+            var email = page.Locator("#EmailAddress");
+            await email.ClearAsync();
+            await email.FillAsync(managingStandardsDataHelpers.EmailAddress);
+
+            var phone = page.Locator("#PhoneNumber");
+            await phone.ClearAsync();
+            await phone.FillAsync(managingStandardsDataHelpers.NewlyUpdatedContactNumber);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
+        }
+        public async Task<UpdateStandardsWithNewContactDetailsPage> ChangePhonenumberOnly()
+        {
+            var phone = page.Locator("#PhoneNumber");
+            await phone.ClearAsync();
+            await phone.FillAsync(managingStandardsDataHelpers.UpdatedContactNumber);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
+        }
+        public async Task<UpdateStandardsWithNewContactDetailsPage> ChangeEmailOnly()
+        {
+            var email = page.Locator("#EmailAddress");
+            await email.ClearAsync();
+            await email.FillAsync(managingStandardsDataHelpers.NewlyUpdatedEmailAddress);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new UpdateStandardsWithNewContactDetailsPage(context));
+        }
+    }
+
+    public class UpdateStandardsWithNewContactDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Update your existing standards with these contact details");
+        }
+
+        public async Task<CheckDetailsPage> NoDontUpdateExistingStandards()
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "No, I just want to save them as an option for when I add a new standard" }).CheckAsync();
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new CheckDetailsPage(context));
+        }
+        public async Task<UpdateContactDetailsStandardPage> YesUpdateExistingStandards()
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I want to choose which standards to update with these details" }).CheckAsync();
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new UpdateContactDetailsStandardPage(context));
+        }
+    }
+
+    public class UpdateContactDetailsStandardPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Select the standards you want these contact details to apply to");
+        }
+
+        public async Task<CheckDetailsPage> YesUpdateAllStandardsContactDetails()
+        {
+            await page.GetByRole(AriaRole.Checkbox, new() { Name = "Select all" }).CheckAsync();
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new CheckDetailsPage(context));
+        }
+    }
+    public class ApprenticeshipUnit_SavedPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Training saved");
+        }
+    }
+    public class CheckDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Check details");
+        }
+
+        public async Task<ContactDetailsSavedPage> ConfirmUpdateContactDetailsAndContinue()
+        {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new ContactDetailsSavedPage(context));
+        }
+    }
+
+    public class ContactDetailsSavedPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Contact details saved");
+        }
+
+        public async Task<YourStandardsAndTrainingVenuesPage> ReturnToManagingStandardsDashboard()
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = "Manage your standards" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
+        }
+
+        public async Task VerifyUpdatedContactDetails(string? expectedEmail = null, string? expectedPhone = null)
+        {
+            var confirmationText = page.GetByText("You have updated your contact details", new() { Exact = false });
+
+            if (!string.IsNullOrEmpty(expectedEmail))
+            {
+                await Assertions.Expect(confirmationText).ToContainTextAsync(expectedEmail);
+            }
+
+            if (!string.IsNullOrEmpty(expectedPhone))
+            {
+                await Assertions.Expect(confirmationText).ToContainTextAsync(expectedPhone);
+            }
+        }
+    }
+
 }

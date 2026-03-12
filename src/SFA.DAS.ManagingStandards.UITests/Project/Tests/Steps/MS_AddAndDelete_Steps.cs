@@ -103,4 +103,44 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
 
         await page2.DeleteStandard();
     }
+    [When(@"the provider is able to delete the ApprenticeshipUnit")]
+    public async Task WhenTheProviderIsAbleToDeleteTheApprenticeshipUnit()
+    {
+        var page = new ManageTheStandardsYouDeliverPage(context);
+
+        var page1 = await page.AccessActuaryLevel7(StandardName);
+
+        var page2 = await page1.ClickDeleteAStandard();
+
+        await page2.DeleteStandard();
+    }
+
+    [When(@"the provider is able to add the ApprenticeshipUnit delivered in one of the training locations")]
+    public async Task WhenTheProviderIsAbleToAddTheApprenticeshipUnitDeliveredInOneOfTheTrainingLocations()
+    {
+        StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_Floorlayer;
+
+        var page = new ManagingStandardsProviderHomePage(context);
+
+        var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
+
+        var page2 = await page1.AccessTrainingTypesPage();
+        var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
+
+        var page4 = await page3.AccessAddApprenticeshipUnit();
+
+        var page5 = await page4.SelectAStandardAndContinue(StandardName);
+
+        var page6 = await page5.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
+
+        var page7 = await page6.YesUseExistingContactDetails_ApprenticeshipUnit();
+
+        var page8 = await page7.Add_ContactInformation_ApprenticeshipUnit();
+
+        var page9 = await page8.ConfirmAtOneofYourTrainingLocations_AddApprenticeshipUnit();
+
+        var page10 = await page9.ChooseTheVenueDeliveryAndContinue_ApprenticeshipUnit(StandardName);
+
+        await page10.Save_NewApprenticeshipUnit_Continue();
+    }
 }
