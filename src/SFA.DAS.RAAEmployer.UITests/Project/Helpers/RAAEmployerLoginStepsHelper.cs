@@ -1,5 +1,6 @@
 ﻿
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
+using System.Linq;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
 {
@@ -9,13 +10,15 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
 
         internal async Task<HomePage> GotoEmployerHomePage()
         {
+            if(context.ScenarioInfo.Tags.Contains("raaapiemployer"))
+            {
                 var user = context.GetUser<RAAEmployerUser>();
 
                 if (user != null)
                 {
                     return await _homePageStepsHelper.Login(user);
                 }
-
+            }
             return await _homePageStepsHelper.GotoEmployerHomePage();
         }
 
