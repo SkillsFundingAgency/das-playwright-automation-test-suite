@@ -15,7 +15,7 @@ variables:
   - name: RuleName
     value: "AM_das-finapi-test-suite"
   - name: ResourceName
-    value: "$(EmployerFinanceAppServiceName)"
+    value: "$(EmployerFinanceAppWhitelistName)"
 
 resources:
   repositories:

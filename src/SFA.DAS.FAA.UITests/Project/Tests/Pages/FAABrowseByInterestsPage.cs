@@ -19,7 +19,7 @@ public class FAABrowseByInterestsPage(ScenarioContext context) : FAASignedInLand
 
 public class FAAWhatIsYourLocationPage(ScenarioContext context) : FAASignedInLandingBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What is your location?");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Where would you like to search");
 
     public async Task<FAASearchResultPage> EnterLocationDetails(string locationOptionText)
     {
