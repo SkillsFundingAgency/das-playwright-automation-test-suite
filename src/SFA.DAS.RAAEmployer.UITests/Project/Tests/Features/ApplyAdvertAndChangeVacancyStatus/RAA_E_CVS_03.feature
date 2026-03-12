@@ -3,6 +3,8 @@
 @raa		
 @raaemployer
 @regression
+@raaapiemployer
+
 Scenario Outline: RAA_E_CVS_03 - Create, Approve and Close the advert before applying
 	When the user sends POST request to vacancy with payload <Payload>
 	Then a <ResponseStatus> response is received
