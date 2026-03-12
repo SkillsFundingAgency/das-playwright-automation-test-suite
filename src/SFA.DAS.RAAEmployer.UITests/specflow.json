@@ -1,9 +1,9 @@
 {
   "bindingCulture": {
-    "feature": "en-GB"
+    "feature": "en"
   },
   "language": {
-    "feature": "en-GB"
+    "feature": "en"
   },
   "stepAssemblies": [
     { "assembly": "SFA.DAS.Framework" },
