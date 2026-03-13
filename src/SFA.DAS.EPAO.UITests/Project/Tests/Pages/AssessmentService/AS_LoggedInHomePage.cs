@@ -101,7 +101,7 @@ public class StandardDetailsForAssociateProjectManagerPage(ScenarioContext conte
 
     public async Task<ConfirmOptInForAssociateProjectManagerPage> ClickOnAssociateProjectManagerOptInLinkForVersion1_1()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Opt into standard version" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Opt into standard version" }).First.ClickAsync();
 
         return await VerifyPageAsync(() => new ConfirmOptInForAssociateProjectManagerPage(context));
     }
