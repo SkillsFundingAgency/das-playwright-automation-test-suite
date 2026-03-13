@@ -1,9 +1,9 @@
 {
   "bindingCulture": {
-    "feature": "en"
+    "feature": "en-GB"
   },
   "language": {
-    "feature": "en"
+    "feature": "en-GB"
   },
   "stepAssemblies": [
     { "assembly": "SFA.DAS.Framework" },
@@ -11,7 +11,8 @@
     { "assembly": "SFA.DAS.RAA.Service" },
     { "assembly": "SFA.DAS.FAA.UITests" },
     { "assembly": "SFA.DAS.ProviderLogin.Service" },
-    { "assembly": "SFA.DAS.DfeAdmin.Service" }
+    { "assembly": "SFA.DAS.DfeAdmin.Service" },
+    { "assembly": "SFA.DAS.RAA.APITests" }
   ],
   "generator": {
     "allowRowTests": false,
