@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
+using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 
 namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Steps;

@@ -5,6 +5,7 @@ public record StandardsTestData
     public string LarsCode;
     public string StandardName;
     public string Venue;
+    public string ApprenticeshipUnitLarsCode;
 }
 
 public class ManagingStandardsDataHelpers
@@ -28,7 +29,7 @@ public class ManagingStandardsDataHelpers
     public string ContactNumber { get; init; } = "12345678910";
     public string UpdatedContactNumber { get; init; } = "0999999399333";
     public string NewlyUpdatedContactNumber { get; init; } = "98989843434334";
-    public static StandardsTestData StandardsTestData => new() { LarsCode = "281", StandardName = "Podiatrist (level 6)", Venue = LocationName };
+    public static StandardsTestData StandardsTestData => new() { LarsCode = "281", StandardName = "Podiatrist (level 6)", Venue = LocationName , ApprenticeshipUnitLarsCode = "ZSC00012" };
     public string UpdateProviderDescriptionText { get; init; } = RandomDataGenerator.GenerateRandomAlphanumericString(20);
    
 }

@@ -35,5 +35,19 @@ namespace SFA.DAS.ManagingStandards.UITests.Project.Hooks
         {
             if (_tags.Any(x => x == "managingstandards04")) await _managingStandardsSqlDataHelper.ClearProviderLocation(_config.Ukprn, ManagingStandardsDataHelpers.StandardsTestData.Venue);
         }
+
+        [BeforeScenario(Order = 33)]
+        public async Task ClearDownProviderSpecificApprenticeshipUnit()
+        {
+            if (_tags.Any(x => x == "managingstandardsadddeleteapprenticeshipunit")) await _managingStandardsSqlDataHelper.ClearStandard(_config.Ukprn, 
+                ManagingStandardsDataHelpers.StandardsTestData.ApprenticeshipUnitLarsCode);
+        }
+
+        [BeforeScenario(Order = 33)]
+        public async Task ClearDownProviderSpecificStandard()
+        {
+            if (_tags.Any(x => x == "managingstandards05")) await _managingStandardsSqlDataHelper.ClearStandard(_config.Ukprn, 
+                ManagingStandardsDataHelpers.StandardsTestData.LarsCode);
+        }
     }
 }
