@@ -47,7 +47,7 @@ namespace SFA.DAS.ManagingStandards.UITests.Project.Hooks
         public async Task ClearDownProviderSpecificStandard()
         {
             if (_tags.Any(x => x == "managingstandards05")) await _managingStandardsSqlDataHelper.ClearStandard(_config.Ukprn, 
-                ManagingStandardsDataHelpers.StandardsTestData.LarsCode);
+                ManagingStandardsDataHelpers.StandardsTestData.LarsCode_Delete);
         }
     }
 }

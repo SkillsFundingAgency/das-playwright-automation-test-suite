@@ -1,10 +1,8 @@
-﻿using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
+﻿namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
 
-namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
-
-public partial class VenueAndDelivery_ApprenticeshipUnitPage(ScenarioContext context) : ManagingStandardsBasePage(context)
+public class VenueAndDelivery_ApprenticeshipUnitPage(ScenarioContext context) : ManagingStandardsBasePage(context)
 {
-
+ 
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Choose a training venue");
@@ -12,13 +10,9 @@ public partial class VenueAndDelivery_ApprenticeshipUnitPage(ScenarioContext con
 
     public async Task<AddAstandardPage> ChooseTheVenueDeliveryAndContinue_ApprenticeshipUnit(string standardname)
     {
-        {
-            await page.GetByRole(AriaRole.Checkbox, new() { Name = "CENTRAL HAIR ESSEX" }).CheckAsync();
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "CENTRAL HAIR ESSEX" }).CheckAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-
-            return await VerifyPageAsync(() => new AddAstandardPage(context, standardname));
-        }
+        return await VerifyPageAsync(() => new AddAstandardPage(context, standardname));
     }
-
 }

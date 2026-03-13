@@ -1,8 +1,6 @@
 ﻿using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
-
 namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
-public partial class VenueAndDelivery_ApprenticeshipUnitPage
-{
+
     public class VenueAddedPage(ScenarioContext context) : ManagingStandardsBasePage(context)
     {
         public override async Task VerifyPage()
@@ -17,5 +15,3 @@ public partial class VenueAndDelivery_ApprenticeshipUnitPage
             return await VerifyPageAsync(() => new VenueDetailsPage(context));
         }
     }
-
-}

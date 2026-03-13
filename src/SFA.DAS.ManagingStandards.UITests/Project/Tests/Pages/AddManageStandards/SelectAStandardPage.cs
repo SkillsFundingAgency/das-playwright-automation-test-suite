@@ -1,5 +1,4 @@
 ﻿namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
-
 public class SelectAStandardPage(ScenarioContext context, string pageTitle = "Select a standard") : ManagingStandardsBasePage(context)
 {
     private readonly string _pageTitle = pageTitle;
