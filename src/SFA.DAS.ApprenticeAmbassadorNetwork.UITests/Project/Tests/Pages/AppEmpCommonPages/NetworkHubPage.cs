@@ -11,7 +11,7 @@ public abstract class NetworkHubPage(ScenarioContext context) : AanBasePage(cont
 
     public async Task<HomePage> GoToEmployerHomePage()
     {
-        await page.GetByRole(AriaRole.Menuitem, new() { Name = "Home" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
 
         return await VerifyPageAsync(() => new HomePage(context));
     }
