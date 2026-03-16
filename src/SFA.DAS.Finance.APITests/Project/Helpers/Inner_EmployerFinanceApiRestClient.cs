@@ -29,4 +29,11 @@ public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inn
         var response = await Execute(HttpStatusCode.Conflict);
         return response;
     }
+
+    public async Task<RestResponse> PostPaymentsStaging(string payloadContent)
+    {
+        await CreateRestRequest(Method.Post, "/api/payments/staging", payloadContent);
+        var response = await Execute(HttpStatusCode.Conflict);
+        return response;
+    }
 }

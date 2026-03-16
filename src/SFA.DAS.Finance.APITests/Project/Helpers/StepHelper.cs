@@ -48,6 +48,24 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             return payloadObject.ToString(Formatting.None);
         }
 
+        public async Task<string> PreparePaymentStagingPayload(string fileName)
+        {
+            var paymentId = Guid.NewGuid().ToString();
+            try { _scenarioContext.Set(paymentId, "paymentId"); } catch { _scenarioContext["paymentId"] = paymentId; }
+
+            var payloadTemplate = GetPayloadTemplate(fileName);
+            var payloadObject = JObject.Parse(payloadTemplate);
+            var payment = payloadObject["PAYMENTS"]?[0] as JObject;
+            if (payment != null)
+            {
+                payment["paymentId"] = paymentId;
+            }
+
+            try { _scenarioContext.Set(payment, "paymentStagingExpectedPayload"); } catch { _scenarioContext["paymentStagingExpectedPayload"] = payment; }
+
+            return payloadObject.ToString(Formatting.None);
+        }
+
         private static string GetPayloadTemplate(string fileName)
         {
             var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -103,6 +121,47 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
 
             if (expectedDict.TryGetValue("transferDate", out var expectedTransferDate)) expectedDict["transferDate"] = ParseDateTime(expectedTransferDate);
             if (expectedDict.TryGetValue("periodEnd", out var expectedPeriodEnd)) expectedDict["periodEnd"] = ParseDate(expectedPeriodEnd);
+
+            var actualObj = JObject.FromObject(sqlDict);
+            CompareApiResponseToExpectedResult(expectedDict, actualObj, null);
+        }
+
+        public async Task ComparePaymentStagingDataAgainstDb()
+        {
+            var expectedPayment = _scenarioContext.Get<JObject>("paymentStagingExpectedPayload");
+            var sqlResult = _scenarioContext.Get<List<string>>("paymentStagingDbRecord");
+
+            var aliases = new List<string>
+            {
+                "paymentId",
+                "ukprn",
+                "uln",
+                "accountId",
+                "apprenticeshipId",
+                "deliveryPeriodMonth",
+                "deliveryPeriodYear",
+                "collectionPeriodId",
+                "collectionPeriodMonth",
+                "collectionPeriodYear",
+                "fundingSource",
+                "transactionType",
+                "amount",
+                "evidenceSubmittedOn",
+                "employerAccountVersion",
+                "apprenticeshipVersion"
+            };
+
+            var sqlDict = MapRowToDictionary(sqlResult, aliases);
+            if (sqlDict.TryGetValue("evidenceSubmittedOn", out var evidenceSubmittedOn)) sqlDict["evidenceSubmittedOn"] = ParseDateTime(evidenceSubmittedOn);
+
+            var expectedDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var alias in aliases)
+            {
+                var token = expectedPayment[alias];
+                expectedDict[alias] = token?.ToString() ?? string.Empty;
+            }
+
+            if (expectedDict.TryGetValue("evidenceSubmittedOn", out var expectedEvidenceSubmittedOn)) expectedDict["evidenceSubmittedOn"] = ParseDateTime(expectedEvidenceSubmittedOn);
 
             var actualObj = JObject.FromObject(sqlDict);
             CompareApiResponseToExpectedResult(expectedDict, actualObj, null);

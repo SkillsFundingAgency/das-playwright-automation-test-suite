@@ -157,6 +157,29 @@ public class FinanceInnerAPISteps
 
     [Then(@"Verify the record in TransferStaging table with the data posted via api")]
     public async Task ThenVerifyTheRecordInTransferStagingTableWithTheDataPostedViaApi() => await _stepHelper.CompareTransferStagingDataAgainstDb();
+
+    [Given(@"post new payments to PaymentStaging table via api")]
+    public async Task GivenPostNewPaymentsToPaymentStagingTableViaApi()
+    {
+        var payloadContent = await _stepHelper.PreparePaymentStagingPayload("PaymentStagingTemplate.json");
+        await _innerApiRestClient.PostPaymentsStaging(payloadContent);
+    }
+
+    [When(@"find record in PaymentStaging table")]
+    public async Task WhenFindRecordInPaymentStagingTable()
+    {
+        var paymentId = _scenarioContext.Get<string>("paymentId");
+        var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+
+        var sqlResult = await accountsHelper.ExecuteSqlFileWithReplacements(
+            "getPaymentStagingByPaymentId.sql",
+            new Dictionary<string, string> { { "paymentId", paymentId } });
+
+        try { _scenarioContext.Set(sqlResult, "paymentStagingDbRecord"); } catch { _scenarioContext["paymentStagingDbRecord"] = sqlResult; }
+    }
+
+    [Then(@"Verify the record in PaymentStaging table with the data posted via api")]
+    public async Task ThenVerifyTheRecordInPaymentStagingTableWithTheDataPostedViaApi() => await _stepHelper.ComparePaymentStagingDataAgainstDb();
     
 
     private string GetHashedAccountId() => _objectContext.GetHashedAccountId();

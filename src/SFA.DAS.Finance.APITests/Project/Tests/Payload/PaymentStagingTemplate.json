@@ -1,0 +1,22 @@
+{
+  "PAYMENTS": [
+    {
+      "paymentId": "00000000-0000-0000-0000-000000000000",
+      "accountId": 123456,
+      "ukprn": 10012345,
+      "uln": 1234567890,
+      "apprenticeshipId": 987654,
+      "collectionPeriodId": "R01-2026",
+      "deliveryPeriodMonth": 3,
+      "deliveryPeriodYear": 2026,
+      "collectionPeriodMonth": 3,
+      "collectionPeriodYear": 2026,
+      "fundingSource": "Levy",
+      "transactionType": "Learning",
+      "amount": 1500.75,
+      "evidenceSubmittedOn": "2026-03-03T00:41:31.163Z",
+      "employerAccountVersion": "1.0",
+      "apprenticeshipVersion": "1.0"
+    }
+  ]
+}
