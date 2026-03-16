@@ -49,8 +49,8 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         await ClearSpecificFilter("Above 70%");
         await CheckAndVerifyCheckbox("filteritem-modes-filter-Workplace");
         await ApplyFilters();
-        await VerifyFilterIsSet("At apprentice's workplace");
-        await ClearSpecificFilter("At apprentice's workplace");
+        await VerifyFilterIsSet("At Learner's workplace");
+        await ClearSpecificFilter("At Learner's workplace");
         await CheckAndVerifyCheckbox("filteritem-modes-filter-Provider");
         await ApplyFilters();
         await VerifyFilterIsSet("Day release");
@@ -83,7 +83,7 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         await VerifyFilterIsSet("Above 70%");
         await VerifyFilterIsSet("Day release");
         await VerifyFilterIsSet("Block release");
-        await VerifyFilterIsSet("At apprentice's workplace");
+        await VerifyFilterIsSet("At Learner's workplace");
         await ClearAllFilters();
         await VerifyNoFiltersAreApplied();
     }

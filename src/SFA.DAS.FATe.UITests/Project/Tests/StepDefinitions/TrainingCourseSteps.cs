@@ -78,8 +78,8 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         [When("verifies the travel distance is updated correctly")]
         public async Task WhenVerifiesTheTravelDistanceIsUpdatedCorrectly()
         {
-            await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistance("Apprentice's work location:", "Coventry, West Midlands");
-            await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistance("Apprentice can travel:", "50 miles");
+            await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistance("Learner's work location:", "Coventry, West Midlands");
+            await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistance("Learner can travel:", "50 miles");
         }
 
         [When("removes the location")]
@@ -99,8 +99,8 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         [Then("verifies the new location and travel distance are updated correctly")]
         public async Task ThenVerifiesTheNewLocationAndTravelDistanceAreUpdatedCorrectly()
         {
-            await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistance("Apprentice's work location:", "Shear Brow, Lancashire");
-            await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistance("Apprentice can travel:", "50 miles");
+            await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistance("Learner's work location:", "Shear Brow, Lancashire");
+            await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistance("Learner can travel:", "50 miles");
         }
     }
 }
