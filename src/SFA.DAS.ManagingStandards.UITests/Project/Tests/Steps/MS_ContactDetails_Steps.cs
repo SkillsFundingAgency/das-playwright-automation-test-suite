@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Microsoft.Playwright;
 using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
+using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
 
 namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Steps;
 
