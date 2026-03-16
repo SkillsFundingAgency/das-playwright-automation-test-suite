@@ -36,4 +36,11 @@ public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inn
         var response = await Execute(HttpStatusCode.Conflict);
         return response;
     }
+
+    public async Task<RestResponse> PutPaymentMetaDataStaging(string paymentId, string payloadContent)
+    {
+        await CreateRestRequest(Method.Put, $"/api/payments/{paymentId}/metadata/staging", payloadContent);
+        var response = await Execute(HttpStatusCode.OK);
+        return response;
+    }
 }

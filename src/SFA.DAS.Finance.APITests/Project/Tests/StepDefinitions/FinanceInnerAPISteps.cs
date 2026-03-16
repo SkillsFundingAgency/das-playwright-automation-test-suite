@@ -180,6 +180,30 @@ public class FinanceInnerAPISteps
 
     [Then(@"Verify the record in PaymentStaging table with the data posted via api")]
     public async Task ThenVerifyTheRecordInPaymentStagingTableWithTheDataPostedViaApi() => await _stepHelper.ComparePaymentStagingDataAgainstDb();
+
+    [When(@"put payment metadata in PaymentMetaDataStaging table via api")]
+    public async Task WhenPutPaymentMetadataInPaymentMetaDataStagingTableViaApi()
+    {
+        var paymentId = _scenarioContext.Get<string>("paymentId");
+        var payloadContent = await _stepHelper.PreparePaymentMetaDataStagingPayload("PaymentMetaDataStagingTemplate.json");
+        await _innerApiRestClient.PutPaymentMetaDataStaging(paymentId, payloadContent);
+    }
+
+    [When(@"find record in PaymentMetaDataStaging table")]
+    public async Task WhenFindRecordInPaymentMetaDataStagingTable()
+    {
+        var paymentId = _scenarioContext.Get<string>("paymentId");
+        var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+
+        var sqlResult = await accountsHelper.ExecuteSqlFileWithReplacements(
+            "getPaymentMetaDataStagingByPaymentId.sql",
+            new Dictionary<string, string> { { "paymentId", paymentId } });
+
+        try { _scenarioContext.Set(sqlResult, "paymentMetaDataStagingDbRecord"); } catch { _scenarioContext["paymentMetaDataStagingDbRecord"] = sqlResult; }
+    }
+
+    [Then(@"Verify the record in PaymentMetaDataStaging table with the data posted via api")]
+    public async Task ThenVerifyTheRecordInPaymentMetaDataStagingTableWithTheDataPostedViaApi() => await _stepHelper.ComparePaymentMetaDataStagingDataAgainstDb();
     
 
     private string GetHashedAccountId() => _objectContext.GetHashedAccountId();

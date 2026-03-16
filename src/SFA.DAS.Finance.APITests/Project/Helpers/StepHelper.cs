@@ -66,6 +66,16 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             return payloadObject.ToString(Formatting.None);
         }
 
+        public async Task<string> PreparePaymentMetaDataStagingPayload(string fileName)
+        {
+            var payloadTemplate = GetPayloadTemplate(fileName);
+            var payloadObject = JObject.Parse(payloadTemplate);
+
+            try { _scenarioContext.Set(payloadObject, "paymentMetaDataStagingExpectedPayload"); } catch { _scenarioContext["paymentMetaDataStagingExpectedPayload"] = payloadObject; }
+
+            return payloadObject.ToString(Formatting.None);
+        }
+
         private static string GetPayloadTemplate(string fileName)
         {
             var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -162,6 +172,52 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             }
 
             if (expectedDict.TryGetValue("evidenceSubmittedOn", out var expectedEvidenceSubmittedOn)) expectedDict["evidenceSubmittedOn"] = ParseDateTime(expectedEvidenceSubmittedOn);
+
+            var actualObj = JObject.FromObject(sqlDict);
+            CompareApiResponseToExpectedResult(expectedDict, actualObj, null);
+        }
+
+        public async Task ComparePaymentMetaDataStagingDataAgainstDb()
+        {
+            var expectedPaymentMetaData = _scenarioContext.Get<JObject>("paymentMetaDataStagingExpectedPayload");
+            var sqlResult = _scenarioContext.Get<List<string>>("paymentMetaDataStagingDbRecord");
+
+            var aliases = new List<string>
+            {
+                "paymentId",
+                "providerName",
+                "standardCode",
+                "frameworkCode",
+                "programmeType",
+                "pathwayCode",
+                "pathwayName",
+                "apprenticeshipCourseName",
+                "apprenticeshipCourseStartDate",
+                "apprenticeshipCourseLevel",
+                "apprenticeName",
+                "apprenticeNINumber",
+                "isHistoricProviderName",
+                "createdBy",
+                "correlationId"
+            };
+
+            var sqlDict = MapRowToDictionary(sqlResult, aliases);
+            if (sqlDict.TryGetValue("apprenticeshipCourseStartDate", out var courseStartDate)) sqlDict["apprenticeshipCourseStartDate"] = ParseDate(courseStartDate);
+
+            var expectedDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var alias in aliases)
+            {
+                if (string.Equals(alias, "paymentId", StringComparison.OrdinalIgnoreCase))
+                {
+                    expectedDict[alias] = _scenarioContext.Get<string>("paymentId");
+                    continue;
+                }
+
+                var token = expectedPaymentMetaData[alias];
+                expectedDict[alias] = token?.ToString() ?? string.Empty;
+            }
+
+            if (expectedDict.TryGetValue("apprenticeshipCourseStartDate", out var expectedCourseStartDate)) expectedDict["apprenticeshipCourseStartDate"] = ParseDate(expectedCourseStartDate);
 
             var actualObj = JObject.FromObject(sqlDict);
             CompareApiResponseToExpectedResult(expectedDict, actualObj, null);
