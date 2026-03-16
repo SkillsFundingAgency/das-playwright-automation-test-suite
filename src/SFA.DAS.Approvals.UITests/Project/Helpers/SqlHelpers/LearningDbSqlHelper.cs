@@ -6,7 +6,7 @@
 
         internal async Task<string> CheckIfApprenticeshipRecordCreatedInLearningDb(int ApprenticeshipId, string ULN)
         {
-            string query = $@"SELECT * FROM [dbo].[Learner] l
+            string query = $@"SELECT TOP(1) l.[Key] FROM [dbo].[Learner] l
                                 JOIN [dbo].[ApprenticeshipLearning] al 
                                 ON l.[key] = al.LearnerKey
                                 WHERE l.uln = {ULN}
