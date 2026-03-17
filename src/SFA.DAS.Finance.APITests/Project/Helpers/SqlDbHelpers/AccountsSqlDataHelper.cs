@@ -169,10 +169,16 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers
             return result;
         }
 
-        // Public wrapper to execute an arbitrary SQL string from test step definitions.
-        public async Task<List<string>> ExecuteSql(string sql)
+        // Public wrapper to execute an arbitrary SQL string.
+        // By default uses Accounts DB; pass useFinanceDb=true to run against Finance DB.
+        public async Task<List<string>> ExecuteSql(string sql, bool useFinanceDb = false)
         {
             if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentException("sql must be provided", nameof(sql));
+
+            if (useFinanceDb)
+            {
+                return await GetData(sql, _dbConfig.FinanceDbConnectionString);
+            }
 
             return await GetData(sql);
         }
