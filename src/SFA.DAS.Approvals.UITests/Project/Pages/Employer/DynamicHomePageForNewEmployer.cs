@@ -47,7 +47,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         internal async Task ViewApprenticeDetails()
         {
-            await page.Locator("//a[contains(.,'View apprentice details')]").ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = "View apprentice details" }).First.ClickAsync();
         }
 
     }

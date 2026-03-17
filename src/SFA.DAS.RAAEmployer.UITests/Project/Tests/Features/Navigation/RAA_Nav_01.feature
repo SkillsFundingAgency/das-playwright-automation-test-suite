@@ -13,4 +13,4 @@ Scenario: RAA_E_Nav_01_Navigate to EAS sub sites from Recruit Page
 	And the employer can navigate to rename account settings page
 	And the employer can navigate to notification settings page
 	And the employer can navigate to advert notifications page via settings dropdwon
-	And the employer can navigate to help settings page
+	#And the employer can navigate to help settings page

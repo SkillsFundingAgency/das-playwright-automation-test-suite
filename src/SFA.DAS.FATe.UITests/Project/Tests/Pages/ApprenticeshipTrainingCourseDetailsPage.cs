@@ -39,16 +39,16 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
     public async Task<TrainingProvidersPage> EnterLocationAndViewProviders_PartialPostcode_AcrossEngland()
     {
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
-        await VerifyWorkLocationAndTravelDistance("Apprentice's work location:", "TW14 Hounslow");
-        await VerifyWorkLocationAndTravelDistance("Apprentice can travel:", "10 miles");
+        await VerifyWorkLocationAndTravelDistance("Learner's work location:", "TW14 Hounslow");
+        await VerifyWorkLocationAndTravelDistance("Learner can travel:", "10 miles");
         await ViewProvidersForThisCourse();
         return await VerifyPageAsync(() => new TrainingProvidersPage(context));
     }
     public async Task<ApprenticeshipTrainingCourseDetailsPage> EnterLocationAndViewProviders_10miles_Coventry()
     {
         await EnterApprenticeWorkLocation(fateDataHelper.Location, fateDataHelper.LocationDetails);
-        await VerifyWorkLocationAndTravelDistance("Apprentice's work location:", "Coventry, West Midlands");
-        await VerifyWorkLocationAndTravelDistance("Apprentice can travel:", "10 miles");
+        await VerifyWorkLocationAndTravelDistance("Learner's work location:", "Coventry, West Midlands");
+        await VerifyWorkLocationAndTravelDistance("Learner can travel:", "10 miles");
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCourseDetailsPage(context));
     }
     public async Task VerifyWorkLocationAndTravelDistance(string headingLabel, string expectedValue)

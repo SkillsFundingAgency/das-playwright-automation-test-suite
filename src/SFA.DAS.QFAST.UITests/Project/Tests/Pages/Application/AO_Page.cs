@@ -52,8 +52,8 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         var formError = page.Locator("a[href='#Name']");
         var descriptionError = page.Locator("a[href='#Owner']");
-        await Assertions.Expect(formError).ToContainTextAsync("The Name field is required.");
-        await Assertions.Expect(descriptionError).ToContainTextAsync("The Owner field is required.");
+        await Assertions.Expect(formError).ToContainTextAsync("Enter a qualification title.");
+        await Assertions.Expect(descriptionError).ToContainTextAsync("Enter an application owner.");
         return await VerifyPageAsync(() => new StartApplication_Page(context));
     }
     public async Task<Application_Overview_Page> EnterApplicationDetailsAndSubmit()

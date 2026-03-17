@@ -18,7 +18,7 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
     //private static By VacancyName => By.CssSelector("span[itemprop='title']");
 
     //private static By SavedVacancyLink => By.CssSelector(".govuk-link.govuk-link--no-visited-state");
-    private static string AllVacancyLocator => ("[id$='-vacancy-title']");
+    private static string AllVacancyLocator => "[id^='VAC'][id$='-vacancy-title']";
 
     public async Task<FAA_ApplicationsPage> GoToApplications()
     {
