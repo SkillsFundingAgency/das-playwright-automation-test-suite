@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.Moderation;
+﻿using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
+
+namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.Moderation;
 
 public class Moderation_ProviderDetailsPage(ScenarioContext context) : ManagingStandardsBasePage(context)
 {
