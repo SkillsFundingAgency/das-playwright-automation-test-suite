@@ -1,8 +1,6 @@
-using Polly;
 using SFA.DAS.Framework;
 using SFA.DAS.RAA.DataGenerator.Project.Config;
 using SFA.DAS.RAA.DataGenerator.Project.Helpers;
-using System;
 
 namespace SFA.DAS.RAA.APITests.Project;
 

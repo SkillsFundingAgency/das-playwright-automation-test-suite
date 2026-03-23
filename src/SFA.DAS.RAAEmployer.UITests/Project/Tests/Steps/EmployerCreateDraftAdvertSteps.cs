@@ -1,9 +1,7 @@
 ﻿using SFA.DAS.RAA.APITests.Project.Tests.StepDefinitions;
-using SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 using SFA.DAS.RAAEmployer.UITests.Project.Helpers;
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
 using System.Net;
-using TechTalk.SpecFlow;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.Steps;
 

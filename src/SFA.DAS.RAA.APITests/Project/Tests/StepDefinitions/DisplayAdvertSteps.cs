@@ -1,5 +1,4 @@
 ﻿
-using Polly;
 using System;
 
 namespace SFA.DAS.RAA.APITests.Project.Tests.StepDefinitions;

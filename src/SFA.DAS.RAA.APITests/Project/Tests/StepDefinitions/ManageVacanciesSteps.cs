@@ -1,5 +1,4 @@
-﻿using SFA.DAS.Framework;
-using SFA.DAS.RAA.DataGenerator.Project;
+﻿using SFA.DAS.RAA.DataGenerator.Project;
 using SFA.DAS.RAA.DataGenerator.Project.Helpers;
 using System;
 
