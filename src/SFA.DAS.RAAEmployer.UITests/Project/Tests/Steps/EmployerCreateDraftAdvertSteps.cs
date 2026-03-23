@@ -1,6 +1,7 @@
-﻿using SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
+﻿using SFA.DAS.RAA.APITests.Project.Tests.StepDefinitions;
 using SFA.DAS.RAAEmployer.UITests.Project.Helpers;
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
+using System.Net;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.Steps;
 
@@ -40,4 +41,19 @@ public class EmployerCreateDraftAdvertSteps(ScenarioContext context)
 
         return await page.CreateAnApprenticeshipAdvertPage();
     }
+}
+
+[Binding]
+public class ApiStepWrapper
+{
+    private readonly ManageVacanciesSteps _apiSteps;
+
+    public ApiStepWrapper(ManageVacanciesSteps apiSteps) { _apiSteps = apiSteps; }
+
+    [When(@"the user sends POST request to vacancy with payload (.*)")]
+    public async Task When_User_Sends_Post(string payload) => await _apiSteps.TheUserSendsRequestTo(RestSharp.Method.Post, "vacancy", payload);
+
+    [Then(@"a (Created|Unauthorized) response is received")]
+    public async Task ThenAOKResponseIsReceived(HttpStatusCode responseCode) => await _apiSteps.ThenAOKResponseIsReceived(responseCode);
+    
 }
