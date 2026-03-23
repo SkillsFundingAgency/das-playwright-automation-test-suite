@@ -46,7 +46,7 @@ public class EmployerFeedbackSelectProviderPage(ScenarioContext context) : Emplo
           
             var sqlHelper = new EmployerFeedbackSqlHelper(objectContext, dbConfig);
           
-            int feedbackResultId = user == "viewUser" ? 20409 : 20408;
+            int feedbackResultId = user == "viewUser" ? 20507 : 20506;
            
             Console.WriteLine(feedbackResultId);
 
