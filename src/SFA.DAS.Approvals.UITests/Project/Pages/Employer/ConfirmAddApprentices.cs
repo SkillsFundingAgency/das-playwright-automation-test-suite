@@ -4,7 +4,7 @@
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Start adding apprentices");
+            await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("How would you like to add learners?");
         }
 
         internal async Task<ConfirmRequestSentPage> SelectProviderAddApprencticesAndSend()

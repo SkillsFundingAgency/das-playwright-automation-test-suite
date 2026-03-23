@@ -4,6 +4,7 @@ using Polly;
 using SFA.DAS.FATe.UITests.Project.Tests.Pages;
 using SFA.DAS.ManagingStandards.UITests.Project.Helpers;
 using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
+using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 
 
