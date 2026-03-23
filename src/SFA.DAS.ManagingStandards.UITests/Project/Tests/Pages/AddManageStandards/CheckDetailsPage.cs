@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
 public partial class VenueAndDelivery_ApprenticeshipUnitPage
@@ -12,10 +13,11 @@ public partial class VenueAndDelivery_ApprenticeshipUnitPage
 
         public async Task<ContactDetailsSavedPage> ConfirmUpdateContactDetailsAndContinue()
         {
-            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+            await (await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).IsVisibleAsync()
+             ? page.GetByRole(AriaRole.Button, new() { Name = "Confirm" })
+             : page.GetByRole(AriaRole.Button, new() { Name = "Continue" })).ClickAsync();
 
             return await VerifyPageAsync(() => new ContactDetailsSavedPage(context));
         }
     }
-
 }
