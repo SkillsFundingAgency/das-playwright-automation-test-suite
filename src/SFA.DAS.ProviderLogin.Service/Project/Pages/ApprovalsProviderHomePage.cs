@@ -211,7 +211,7 @@ public class ProviderManageYourApprenticesPage(ScenarioContext context) : Interi
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprentices");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your learners");
     }
 }
 
