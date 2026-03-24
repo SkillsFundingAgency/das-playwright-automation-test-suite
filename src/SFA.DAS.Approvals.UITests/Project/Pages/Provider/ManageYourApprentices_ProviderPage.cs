@@ -6,7 +6,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Manage your apprentices");
+            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Manage your learners");
         }
 
         internal async Task<ApprenticeDetails_ProviderPage> SelectViewCurrentApprenticeDetails(string name, string ULN=null)
@@ -38,7 +38,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task SearchApprentice(string ULN)
         {
-            var searchBox = page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or" });
+            var searchBox = page.GetByRole(AriaRole.Textbox, new() { Name = "Search by learner name or" });
             var searchButton = page.GetByRole(AriaRole.Button, new() { Name = "Search" });
 
             await searchBox.FillAsync("");
