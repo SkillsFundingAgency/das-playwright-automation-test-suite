@@ -17,6 +17,11 @@ public class ProvideFeedbackConfigurationSetup(ScenarioContext context)
             configSection.GetConfigSection<EmployerFeedbackUser>()
         ]);
 
+        await context.SetEasLoginUser(
+        [
+            configSection.GetConfigSection<EmployerViewOnlyUser>()
+        ]);
+
         await context.SetApprenticeAccountsPortalUser(
         [
            configSection.GetConfigSection<ApprenticeFeedbackUser>(),

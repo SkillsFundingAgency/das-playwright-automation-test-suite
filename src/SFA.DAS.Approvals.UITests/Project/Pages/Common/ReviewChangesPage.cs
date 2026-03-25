@@ -10,10 +10,5 @@
         internal async Task SelectReviewChangesOptions() => await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         internal async Task ClickOnCancelAndReturn() => await page.GetByRole(AriaRole.Link, new() { Name = "Cancel and return" }).ClickAsync();
-
-
-
-
-
     }
 }
