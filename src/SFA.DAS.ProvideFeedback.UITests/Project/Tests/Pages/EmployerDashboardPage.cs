@@ -1,9 +1,4 @@
-﻿using Azure;
-using Microsoft.Playwright;
-using SFA.DAS.Framework;
-using SFA.DAS.FrameworkHelpers;
-using SFA.DAS.ProvideFeedback.UITests.Project.Helpers;
-using SFA.DAS.ProviderLogin.Service.Project;
+﻿using SFA.DAS.ProvideFeedback.UITests.Project.Helpers;
 
 
 namespace SFA.DAS.ProvideFeedback.UITests.Project.Tests.Pages;
