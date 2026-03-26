@@ -13,11 +13,11 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
     //    return new YourApprenticeshipAdvertsHomePage(context);
     //}
 
-    public async Task<EmployerVacancySearchResultPage> GoToYourAdvertFromDraftAdverts()
+    public async Task<EmployerDraftVacanciesListPage> GoToYourAdvertFromDraftAdverts()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Draft adverts" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new EmployerVacancySearchResultPage(context));
+        return await VerifyPageAsync(() => new EmployerDraftVacanciesListPage(context));
     }
 
     public async Task<CreateAnAdvertHomePage> CreateAnApprenticeshipAdvert()
