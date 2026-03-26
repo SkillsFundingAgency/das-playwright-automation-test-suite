@@ -18,7 +18,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator ChangeEmailBtn => page.Locator("#change-email-link");
         private ILocator PlannedTrainingStartDate => page.Locator("#startdate-value").First;
         private ILocator PlannedTrainingEndDate => page.Locator("#enddate-value").First;
-        private ILocator Price => page.Locator("#cost-value").First;
+        private ILocator Price => page.Locator("dt:has-text('Total agreed apprenticeship price') + dd").First;
         #endregion
 
 
