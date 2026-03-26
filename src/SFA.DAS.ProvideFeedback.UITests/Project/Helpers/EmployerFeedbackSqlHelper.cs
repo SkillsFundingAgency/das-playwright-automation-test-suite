@@ -1,7 +1,4 @@
 ﻿
-
-using System.Linq;
-
 namespace SFA.DAS.ProvideFeedback.UITests.Project.Helpers;
 
 
@@ -35,15 +32,14 @@ public class EmployerFeedbackSqlHelper(ObjectContext objectContext, DbConfig con
         var sql =
             $"delete from ProviderStarsSummary where Ukprn = {ukprn};" +
             $"delete from ProviderRatingSummary where Ukprn = {ukprn}; " +
-            $"delete from EmployerSurveyCodes where FeedbackId in (select FeedbackId from EmployerFeedback where Ukprn = {ukprn}); " +
             $"delete from ProviderAttributes where EmployerFeedbackResultId in (select Id from EmployerFeedbackResult where FeedbackId in (select FeedbackId from EmployerFeedback where Ukprn = {ukprn}))" +
             $"delete from EmployerFeedbackResult where FeedbackId in (select FeedbackId from EmployerFeedback where Ukprn = {ukprn})" +
             $"delete from EmployerFeedback where Ukprn = {ukprn}";
 
         foreach (var row in data)
         {
-            sql += $"INSERT INTO [dbo].[EmployerFeedback]([UserRef], [Ukprn], [AccountId], [IsActive])" +
-                  $"VALUES ('{userReference}', {ukprn}, {accountId}, 1);";
+            sql += $"INSERT INTO [dbo].[EmployerFeedback]([UserRef], [Ukprn], [AccountId])" +
+                  $"VALUES ('{userReference}', {ukprn}, {accountId});";
 
             accountId++;
         }
@@ -96,5 +92,23 @@ public class EmployerFeedbackSqlHelper(ObjectContext objectContext, DbConfig con
 
         query = $"EXEC [dbo].[GenerateProviderAttributeResults]";
         await ExecuteSqlCommand(query);
+    }
+
+    public async Task UpdateEmployerFeedbackResult(int feedbackResultId)
+    {
+        var feedbackId = feedbackResultId;
+
+        var sql =
+            $"UPDATE [EmployerFeedbackResult] " +
+            $"SET datetimecompleted = DATEADD(day, -21, datetimecompleted) " +
+            $"WHERE feedbackid = '{feedbackId}' " +
+            $"AND datetimecompleted = ( " +
+            $"SELECT TOP 1 datetimecompleted " +
+            $"FROM [EmployerFeedbackResult] " +
+            $"WHERE feedbackid = '{feedbackId}' " +
+              $"ORDER BY datetimecompleted DESC" +
+            $");";
+
+        await ExecuteSqlCommand(sql);
     }
 }
