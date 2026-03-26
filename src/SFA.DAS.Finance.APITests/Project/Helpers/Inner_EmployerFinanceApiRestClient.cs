@@ -18,7 +18,11 @@ public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inn
 
     public async Task<RestResponse> PostPeriodEnds(string payloadContent)
     {
+        var (tokenType, accessToken) = await GetAADAuthToken();
+
         await CreateRestRequest(Method.Post, "/api/period-ends", payloadContent);
+        Addheader("Authorization", $"{tokenType} {accessToken}");
+
         var response = await Execute(HttpStatusCode.OK);
         return response;
     }
@@ -40,6 +44,13 @@ public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inn
     public async Task<RestResponse> PutPaymentMetaDataStaging(string paymentId, string payloadContent)
     {
         await CreateRestRequest(Method.Put, $"/api/payments/{paymentId}/metadata/staging", payloadContent);
+        var response = await Execute(HttpStatusCode.OK);
+        return response;
+    }
+
+    public async Task<RestResponse> PostEnglishFractions(string payloadContent)
+    {
+        await CreateRestRequest(Method.Post, "/api/english-fractions", payloadContent);
         var response = await Execute(HttpStatusCode.OK);
         return response;
     }

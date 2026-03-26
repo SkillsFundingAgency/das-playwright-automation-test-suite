@@ -35,6 +35,16 @@ WHERE [PaymentId] = '{escapedPaymentId}';", useFinanceDb: true);
 DELETE FROM [employer_financial].[TransferStaging]
             WHERE [TransferId] = '{escapedTransferId}';", useFinanceDb: true);
         }
+
+        var empRef = GetContextValue("englishFractionsEmpRef");
+        if (!string.IsNullOrWhiteSpace(empRef))
+        {
+            var escapedEmpRef = empRef.Replace("'", "''");
+
+            await accountsHelper.ExecuteSql($@"
+DELETE FROM [employer_financial].[EnglishFraction]
+WHERE EmpRef = '{escapedEmpRef}';", useFinanceDb: true);
+        }
     }
 
     private string GetContextValue(string key)

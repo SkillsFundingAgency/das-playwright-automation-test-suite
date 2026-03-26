@@ -181,6 +181,79 @@ public class FinanceInnerAPISteps
     [Then(@"Verify the record in PaymentStaging table with the data posted via api")]
     public async Task ThenVerifyTheRecordInPaymentStagingTableWithTheDataPostedViaApi() => await _stepHelper.ComparePaymentStagingDataAgainstDb();
 
+    [Given(@"post new period end to PeriodEnd table via api")]
+    [Given(@"a new period end is submitted")]
+    public async Task GivenPostNewPeriodEndViaApi()
+    {
+        var payloadContent = await _stepHelper.PreparePeriodEndPayload("PeriodEndTemplate.json");
+        await _innerApiRestClient.PostPeriodEnds(payloadContent);
+    }
+
+    [When(@"find record in PeriodEnd table")]
+    [When(@"the saved period end details are checked")]
+    public async Task WhenFindRecordInPeriodEndTable()
+    {
+        var periodEndId = _scenarioContext.Get<string>("periodEndId");
+        var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+
+        var sqlResult = await accountsHelper.ExecuteSqlFileWithReplacements(
+            "getPeriodEndByPeriodEndId.sql",
+            new Dictionary<string, string> { { "periodEndId", periodEndId } });
+
+        try { _scenarioContext.Set(sqlResult, "periodEndDbRecord"); } catch { _scenarioContext["periodEndDbRecord"] = sqlResult; }
+    }
+
+    [Then(@"Verify the record in PeriodEnd table with the data posted via api")]
+    [Then(@"the period end details are correct")]
+    public async Task ThenVerifyTheRecordInPeriodEndTableWithTheDataPostedViaApi() => await _stepHelper.ComparePeriodEndDataAgainstDb();
+
+    [When(@"get period ends list via api and save response in context")]
+    [When(@"the period end list is requested")]
+    public async Task WhenGetPeriodEndsListViaApiAndSaveResponseInContext()
+    {
+        var response = await _innerApiRestClient.ExecuteEndpoint("/api/period-ends", HttpStatusCode.OK);
+        try { _scenarioContext.Set(response.Content, "periodEndsResponseContent"); } catch { _scenarioContext["periodEndsResponseContent"] = response.Content; }
+    }
+
+    [When(@"get period end by id via api and save response in context")]
+    [When(@"the period end is requested by its id")]
+    public async Task WhenGetPeriodEndByIdViaApiAndSaveResponseInContext()
+    {
+        var periodEndId = _scenarioContext.Get<string>("periodEndId");
+        var response = await _innerApiRestClient.ExecuteEndpoint($"/api/period-ends/{periodEndId}", HttpStatusCode.OK);
+
+        var parsed = JToken.Parse(response.Content);
+        var actualResult = parsed as JObject ?? parsed["data"] as JObject ?? parsed["periodEnd"] as JObject;
+
+        try { _scenarioContext.Set(actualResult ?? parsed, "actualResult"); } catch { _scenarioContext["actualResult"] = actualResult ?? parsed; }
+    }
+
+    [Then(@"verify period ends response contains posted period end id")]
+    [Then(@"the new period end is included in the period end list")]
+    public void ThenVerifyPeriodEndsResponseContainsPostedPeriodEndId()
+    {
+        var expectedPeriodEndId = _scenarioContext.Get<string>("periodEndId");
+        var responseContent = _scenarioContext.Get<string>("periodEndsResponseContent");
+
+        Assert.IsFalse(string.IsNullOrWhiteSpace(responseContent), "Period-ends response content is empty.");
+
+        var parsed = JToken.Parse(responseContent);
+        var periodEnds = parsed as JArray
+            ?? parsed["periodEnds"] as JArray
+            ?? parsed["data"] as JArray;
+
+        Assert.IsNotNull(periodEnds, "Period-ends response does not contain an array payload.");
+
+        var found = periodEnds
+            .Children<JObject>()
+            .Any(item => item.Properties().Any(prop =>
+                string.Equals(prop.Name, "periodEndId", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(prop.Value?.ToString(), expectedPeriodEndId, StringComparison.OrdinalIgnoreCase)));
+
+        Assert.IsTrue(found, $"Period-ends response does not include periodEndId '{expectedPeriodEndId}'.");
+    }
+
+
     [When(@"put payment metadata in PaymentMetaDataStaging table via api")]
     public async Task WhenPutPaymentMetadataInPaymentMetaDataStagingTableViaApi()
     {
@@ -204,7 +277,101 @@ public class FinanceInnerAPISteps
 
     [Then(@"Verify the record in PaymentMetaDataStaging table with the data posted via api")]
     public async Task ThenVerifyTheRecordInPaymentMetaDataStagingTableWithTheDataPostedViaApi() => await _stepHelper.ComparePaymentMetaDataStagingDataAgainstDb();
+
+    [Given(@"post english fractions via api")]
+    public async Task GivenPostEnglishFractionsViaApi()
+    {
+        // Generate a unique EmpRef for this scenario to avoid parallel test conflicts
+        var uniqueEmpRef = $"777/GDS{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
+        var payloadContent = await _stepHelper.PrepareEnglishFractionsPayload("EnglishFractionsTemplate.json", empRefOverride: uniqueEmpRef);
+        var response = await _innerApiRestClient.PostEnglishFractions(payloadContent);
+
+        AssertEnglishFractionsPostResponse(response, expectedStored: 1, expectedIgnored: 0);
+    }
+
+    [Given(@"post english fractions via api with update required false")]
+    public async Task GivenPostEnglishFractionsViaApiWithUpdateRequiredFalse()
+    {
+        // Generate a unique EmpRef for this scenario to avoid parallel interference
+        var uniqueEmpRef = $"777/GDS{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
+
+        // Seed the record so it already exists in DB (updateRequired=true)
+        var seedPayload = await _stepHelper.PrepareEnglishFractionsPayload("EnglishFractionsTemplate.json", empRefOverride: uniqueEmpRef);
+        await _innerApiRestClient.PostEnglishFractions(seedPayload);
+
+        // Post again with updateRequired=false — API should ignore it as the record already exists
+        // Build the ignored payload inline to avoid overwriting the context set by the seed call above
+        var ignoredPayload = JObject.Parse(seedPayload);
+        ignoredPayload["updateRequired"] = false;
+        var response = await _innerApiRestClient.PostEnglishFractions(ignoredPayload.ToString(Newtonsoft.Json.Formatting.None));
+
+        AssertEnglishFractionsPostResponse(response, expectedStored: 0, expectedIgnored: 1);
+    }
+
+    [When(@"find record in EnglishFraction table")]
+    public async Task WhenFindRecordInEnglishFractionTable()
+    {
+        var empRef = _scenarioContext.Get<string>("englishFractionsEmpRef");
+        var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+
+        var sqlResult = await accountsHelper.ExecuteSqlFileWithReplacements(
+            "getEnglishFractionByEmpRef.sql",
+            new Dictionary<string, string> { { "empRef", empRef } });
+
+        try { _scenarioContext.Set(sqlResult, "englishFractionsDbRecord"); } catch { _scenarioContext["englishFractionsDbRecord"] = sqlResult; }
+    }
+
+    [Then(@"Verify the record in EnglishFraction table with the data posted via api")]
+    public async Task ThenVerifyTheRecordInEnglishFractionTableWithTheDataPostedViaApi() => await _stepHelper.CompareEnglishFractionsDataAgainstDb();
+
+    private static void AssertEnglishFractionsPostResponse(RestResponse response, int expectedStored, int expectedIgnored)
+    {
+        var responseBody = JObject.Parse(response.Content);
+        Assert.AreEqual(expectedStored, responseBody["stored"]?.Value<int>() ?? -1, "stored mismatch");
+        Assert.AreEqual(expectedIgnored, responseBody["ignored"]?.Value<int>() ?? -1, "ignored mismatch");
+    }
+
     
+    [Given(@"a valid employer account with a PAYE reference")]
+    public async Task GivenQueryAccountPayeAndSaveAccountIdAndEmpRefInContext()
+    {
+        var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+        var result = await accountsHelper.ExecuteSql(
+            "SELECT TOP (1) [AccountId], [EmpRef] FROM [employer_financial].[AccountPaye] WHERE Aorn IS NULL",
+            useFinanceDb: true);
+        
+        if (result == null || result.Count < 2)
+            throw new Exception("No AccountPaye records found");
+
+        var accountId = result[0]?.Trim();
+        var empRef = result[1]?.Trim();
+        
+        if (string.IsNullOrWhiteSpace(accountId))
+            throw new Exception("Account ID is empty");
+        if (string.IsNullOrWhiteSpace(empRef))
+            throw new Exception("EmpRef is empty");
+            
+        _scenarioContext["accountId"] = accountId;
+        _scenarioContext["empRef"] = empRef;
+    }
+
+    [When(@"PAYE schemes are requested for that employer account")]
+    public async Task WhenCallTheGetPayeSchemesEndpointAndSaveResponse()
+    {
+        var accountId = _scenarioContext["accountId"].ToString();
+        var response = await _innerApiRestClient.ExecuteEndpoint($"/api/accounts/{accountId}/paye-schemes?source=government-gateway", HttpStatusCode.OK);
+        
+        _scenarioContext["payeSchemesResponse"] = response.Content;
+    }
+
+    [Then(@"the returned PAYE schemes include that PAYE reference")]
+    public async Task ThenVerifyThePayeSchemesResponseContainsTheEmpRef()
+    {
+        var empRef = _scenarioContext["empRef"].ToString();
+        var responseContent = _scenarioContext["payeSchemesResponse"].ToString();
+        
+        await _stepHelper.VerifyEmpRefInPayeSchemesResponse(responseContent, empRef);
+    }
 
     private string GetHashedAccountId() => _objectContext.GetHashedAccountId();
 
