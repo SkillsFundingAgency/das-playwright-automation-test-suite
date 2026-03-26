@@ -1,6 +1,5 @@
-﻿using Azure;
-using Microsoft.Playwright;
-using SFA.DAS.Framework;
+﻿using SFA.DAS.ProvideFeedback.UITests.Project.Helpers;
+
 
 namespace SFA.DAS.ProvideFeedback.UITests.Project.Tests.Pages;
 
@@ -18,7 +17,7 @@ public class EmployerDashboardPage(ScenarioContext context) : EmployerFeedbackBa
     public async Task<EmployerFeedbackHomePage> OpenFeedbackLinkWithSurveyCode()
     {
         await OpenFeedbackUsingSurveyCode();
-
+        
         return await VerifyPageAsync(() => new EmployerFeedbackHomePage(context));
     }
 }
@@ -29,9 +28,29 @@ public class EmployerFeedbackSelectProviderPage(ScenarioContext context) : Emplo
 
     private static string SelectLink(string ukprn) => ($"a[href*='/providers/{ukprn}']");
 
-    public async Task<ApprenticeFeedbackConfirmProviderPage> SelectTrainingProvider()
+    public async Task<ApprenticeFeedbackConfirmProviderPage> SelectTrainingProvider(string user)
     {
-        await page.Locator(SelectLink(objectContext.GetProviderUkprn())).ClickAsync();
+        // await page.Locator(SelectLink(objectContext.GetProviderUkprn())).ClickAsync();
+
+        var selectLocator = page.Locator("a:has-text('Select')");
+
+        if (await selectLocator.CountAsync() == 0)
+        {
+            var objectContext = context.Get<ObjectContext>();
+            var dbConfig = context.Get<DbConfig>();
+          
+            var sqlHelper = new EmployerFeedbackSqlHelper(objectContext, dbConfig);
+          
+            int feedbackResultId = user == "viewUser" ? 20507 : 20506;
+           
+            Console.WriteLine(feedbackResultId);
+
+            await sqlHelper.UpdateEmployerFeedbackResult(feedbackResultId);
+            await page.ReloadAsync();
+            
+        }
+
+        await selectLocator.First.ClickAsync();
 
         return await VerifyPageAsync(() => new ApprenticeFeedbackConfirmProviderPage(context));
     }
