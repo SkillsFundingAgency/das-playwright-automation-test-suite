@@ -8,8 +8,7 @@ public class DriverFactory(BrowserType browserType)
 
         return browserType switch
         {
-            BrowserType.Chrome => playwright.Chromium,
-            BrowserType.Safari => playwright.Webkit,
+            BrowserType.Webkit => playwright.Webkit,
             BrowserType.Firefox => playwright.Firefox,
             _ => playwright.Chromium,
         };
