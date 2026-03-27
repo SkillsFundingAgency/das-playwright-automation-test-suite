@@ -51,13 +51,6 @@ jobs:
               SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests'
               TargetFileNames: '*.json'
 
-          - task: PowerShell@2
-            displayName: 'Update NumberOfTestWorkers'
-            inputs:
-              targetType: 'filePath'
-              filePath: '$(System.DefaultWorkingDirectory)/drop/src/UpdateNoofTestWorkers.ps1'
-              arguments: '-browser $(BROWSER_TYPE)'
-
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.runsettings'
             inputs:
@@ -69,7 +62,7 @@ jobs:
             inputs:
               targetType: 'filePath'
               filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
-              arguments: install
+              arguments: install $(BROWSER_TYPE)
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
             displayName: 'Set Screen Resolution'
@@ -125,8 +118,6 @@ jobs:
               AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
               AZURE_TENANT_ID: $(AZURE_TENANT_ID)
               AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
-              BROWSER_TYPE: $(BROWSER_TYPE)
-              HEADLESS: $(headless)
             inputs:
               testAssemblyVer2: ${{ parameters.TestAssembly }}
               testRunTitle: 'UI Test Run - ${{ parameters.Environment }}'
