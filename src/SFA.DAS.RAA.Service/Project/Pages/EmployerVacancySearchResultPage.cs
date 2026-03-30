@@ -47,7 +47,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
     public async Task<ManageRecruitPage> GoToVacancyManagePage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Manage   Clone"}).First.ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage"}).First.ClickAsync();
 
         return await VerifyPageAsync(() => new ManageRecruitPage(context));
     }
