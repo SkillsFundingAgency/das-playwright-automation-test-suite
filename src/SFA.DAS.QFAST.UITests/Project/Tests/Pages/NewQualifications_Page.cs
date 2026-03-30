@@ -7,7 +7,7 @@ public class NewQualifications_Page(ScenarioContext context) : BasePage(context)
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
         await page.Locator("table.govuk-table tbody tr").First.WaitForAsync();
-        var firstLink = page.Locator("table.govuk-table tbody tr").Nth(0).Locator("td").Nth(0).Locator("a");
+        var firstLink = page.Locator("table.govuk-table tbody tr").First.Locator("td").Nth(1).Locator("a");
         if (!await firstLink.IsVisibleAsync())
         {
             throw new Exception("The first qualification is not a link.");
@@ -21,7 +21,7 @@ public class NewQualifications_Page(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyClickingOnLinkOpensNewTab()
     {
-        var firstQanLink = page.Locator("table.govuk-table tbody tr").Nth(0).Locator("td").Nth(0).Locator("a");        
+        var firstQanLink = page.Locator("table.govuk-table tbody tr").First.Locator("td").Nth(1).Locator("a");
         var popupTask = page.WaitForPopupAsync();    
         await firstQanLink.ClickAsync();
         var popupPage = await popupTask;
