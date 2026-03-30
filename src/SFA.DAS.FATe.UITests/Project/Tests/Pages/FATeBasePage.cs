@@ -250,7 +250,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
         {
             var tag = foundationTags.Nth(i);
             await Assertions.Expect(tag).ToBeVisibleAsync();
-            await Assertions.Expect(tag).ToHaveTextAsync("Foundation");
+            await Assertions.Expect(tag).ToHaveTextAsync("Foundation apprenticeship");
         }
     }
     public async Task VerifyPaginationLinks(List<int> pageNumbers)
