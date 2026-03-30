@@ -54,4 +54,11 @@ public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inn
         var response = await Execute(HttpStatusCode.OK);
         return response;
     }
+
+    public async Task<RestResponse> PostEnglishFractionCalculationDate(string payloadContent)
+    {
+        await CreateRestRequest(Method.Post, "/api/english-fraction-calculation-date", payloadContent);
+        var response = await Execute(HttpStatusCode.OK);
+        return response;
+    }
 }

@@ -45,6 +45,16 @@ DELETE FROM [employer_financial].[TransferStaging]
 DELETE FROM [employer_financial].[EnglishFraction]
 WHERE EmpRef = '{escapedEmpRef}';", useFinanceDb: true);
         }
+
+        var englishFractionCalculationDate = GetContextValue("englishFractionCalculationDate");
+        if (!string.IsNullOrWhiteSpace(englishFractionCalculationDate))
+        {
+            var escapedDate = englishFractionCalculationDate.Replace("'", "''");
+
+            await accountsHelper.ExecuteSql($@"
+DELETE FROM [employer_financial].[EnglishFractionCalculationDate]
+WHERE CONVERT(varchar(10), [DateCalculated], 23) = '{escapedDate}';", useFinanceDb: true);
+        }
     }
 
     private string GetContextValue(string key)

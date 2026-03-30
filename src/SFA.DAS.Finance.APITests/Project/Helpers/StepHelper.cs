@@ -98,6 +98,25 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             return payloadObject.ToString(Formatting.None);
         }
 
+        public async Task<string> PrepareEnglishFractionCalculationDatePayload(string fileName)
+        {
+            var random = new Random();
+            var startDate = new DateTime(2020, 1, 1);
+            var endDate = new DateTime(2030, 12, 31);
+            var range = (endDate - startDate).Days;
+            var dateCalculated = startDate.AddDays(random.Next(range + 1)).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            try { _scenarioContext.Set(dateCalculated, "englishFractionCalculationDate"); } catch { _scenarioContext["englishFractionCalculationDate"] = dateCalculated; }
+
+            var payloadTemplate = GetPayloadTemplate(fileName);
+            var payloadObject = JObject.Parse(payloadTemplate);
+            payloadObject["dateCalculated"] = dateCalculated;
+
+            try { _scenarioContext.Set(payloadObject, "englishFractionCalculationDateExpectedPayload"); } catch { _scenarioContext["englishFractionCalculationDateExpectedPayload"] = payloadObject; }
+
+            return payloadObject.ToString(Formatting.None);
+        }
+
         private static string GetPayloadTemplate(string fileName)
         {
             var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -351,10 +370,30 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             Assert.AreEqual(expectedAmount, actualAmount, "Amount mismatch");
         }
 
+        public async Task VerifyEnglishFractionCalculationDateExistsInDb()
+        {
+            var expectedDate = _scenarioContext.Get<string>("englishFractionCalculationDate");
+            var sqlResults = _scenarioContext.Get<List<string[]>>("englishFractionCalculationDateDbRecords");
+
+            Assert.IsFalse(string.IsNullOrWhiteSpace(expectedDate), "Expected english fraction calculation date was not found in ScenarioContext.");
+            Assert.IsNotNull(sqlResults, "EnglishFractionCalculationDate DB records were not found in ScenarioContext.");
+
+            var normalizedDates = sqlResults
+                .Where(row => row != null && row.Length > 0 && !string.IsNullOrWhiteSpace(row[0]))
+                .Select(row => ParseDate(row[0]))
+                .ToList();
+
+            Assert.Contains(expectedDate, normalizedDates, $"Expected date '{expectedDate}' was not found in EnglishFractionCalculationDate records.");
+        }
+
         private static string ParseDate(string value)
         {
             if (string.IsNullOrWhiteSpace(value)) return string.Empty;
-            var parsed = DateTime.Parse(value ?? string.Empty, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            DateTime parsed;
+            if (!DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out parsed))
+            {
+                parsed = DateTime.Parse(value ?? string.Empty, new CultureInfo("en-GB"), DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            }
             return parsed.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         }
 

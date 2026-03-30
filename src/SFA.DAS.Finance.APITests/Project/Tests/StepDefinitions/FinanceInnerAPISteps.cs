@@ -324,6 +324,46 @@ public class FinanceInnerAPISteps
     [Then(@"Verify the record in EnglishFraction table with the data posted via api")]
     public async Task ThenVerifyTheRecordInEnglishFractionTableWithTheDataPostedViaApi() => await _stepHelper.CompareEnglishFractionsDataAgainstDb();
 
+    [Given(@"post english fraction calculation date via api")]
+    public async Task GivenPostEnglishFractionCalculationDateViaApi()
+    {
+        var payloadContent = await _stepHelper.PrepareEnglishFractionCalculationDatePayload("EnglishFractionCalculationDateTemplate.json");
+        await _innerApiRestClient.PostEnglishFractionCalculationDate(payloadContent);
+    }
+
+    [When(@"find records in EnglishFractionCalculationDate table")]
+    public async Task WhenFindRecordsInEnglishFractionCalculationDateTable()
+    {
+        var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+        var expectedDate = _scenarioContext.Get<string>("englishFractionCalculationDate");
+        var sql = @"SELECT TOP (1000) [DateCalculated]
+FROM [employer_financial].[EnglishFractionCalculationDate]";
+
+        List<string[]> sqlResults = null;
+
+        for (var attempt = 0; attempt < 5; attempt++)
+        {
+            sqlResults = await accountsHelper.ExecuteMultipleSql(sql, useFinanceDb: true);
+
+            var found = sqlResults
+                .Where(row => row != null && row.Length > 0 && !string.IsNullOrWhiteSpace(row[0]))
+                .Select(row => DateTime.Parse(row[0], new CultureInfo("en-GB"), DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture))
+                .Contains(expectedDate, StringComparer.OrdinalIgnoreCase);
+
+            if (found)
+            {
+                break;
+            }
+
+            await Task.Delay(2000);
+        }
+
+        try { _scenarioContext.Set(sqlResults, "englishFractionCalculationDateDbRecords"); } catch { _scenarioContext["englishFractionCalculationDateDbRecords"] = sqlResults; }
+    }
+
+    [Then(@"Verify the records in EnglishFractionCalculationDate table contains the data posted via api")]
+    public async Task ThenVerifyTheRecordsInEnglishFractionCalculationDateTableContainsTheDataPostedViaApi() => await _stepHelper.VerifyEnglishFractionCalculationDateExistsInDb();
+
     private static void AssertEnglishFractionsPostResponse(RestResponse response, int expectedStored, int expectedIgnored)
     {
         var responseBody = JObject.Parse(response.Content);
