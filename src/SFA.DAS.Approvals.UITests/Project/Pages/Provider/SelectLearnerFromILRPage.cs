@@ -7,7 +7,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         #region locators
         private ILocator entryMethod => page.GetByRole(AriaRole.Radio, new() { NameRegex = new Regex("Select (apprentices|learners) from ILR") });
-
+        private ILocator clearFilterLink => page.GetByRole(AriaRole.Link, new() { Name = "Clear search and filters" });
         #endregion
 
         public override async Task VerifyPage()
@@ -23,6 +23,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<CheckApprenticeDetailsPage> SelectApprenticeFromILRList(Apprenticeship apprenticeship)
         {
+            await ClearSearch();
+
             await SearchULN(apprenticeship.ApprenticeDetails.ULN, apprenticeship.TrainingDetails.StartDate.Year);
 
             var tableRow = apprenticeship.ApprenticeDetails.FullName + " " + apprenticeship.ApprenticeDetails.ULN;
@@ -44,7 +46,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         }
 
 
-        internal async Task ClearSearch() => await page.GetByRole(AriaRole.Link, new() { Name = "Clear search and filters" }).ClickAsync();
+        internal async Task ClearSearch()
+        {
+            if (await clearFilterLink.IsVisibleAsync())
+            {
+                await clearFilterLink.ClickAsync();
+            }
+        }
 
         internal async Task VerifyNoResultsFound() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("There are no matching results.");
 

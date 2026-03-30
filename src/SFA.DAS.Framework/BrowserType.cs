@@ -2,8 +2,7 @@
 
 public enum BrowserType
 {
-    Chrome,
+    Chromium,
     Firefox,
-    Safari,
-    Cloud
+    Webkit
 }

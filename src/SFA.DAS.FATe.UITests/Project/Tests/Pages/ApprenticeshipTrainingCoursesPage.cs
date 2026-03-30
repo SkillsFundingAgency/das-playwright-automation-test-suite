@@ -3,7 +3,7 @@
 public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).
-        ToContainTextAsync("Apprenticeship training courses");
+        ToContainTextAsync("Training courses");
     public async Task VerifyNoResultsMessage()
     {
         var noResultsVisible = await page.Locator("p.govuk-body:has-text('No results')").IsVisibleAsync();
