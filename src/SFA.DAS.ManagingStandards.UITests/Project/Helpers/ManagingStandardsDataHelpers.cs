@@ -20,7 +20,7 @@ public class ManagingStandardsDataHelpers
     public string NewlyUpdatedEmailAddress { get; init; } = "NewlyUpdatedManagingStandardstest.demo@l38cxwya.mailosaur.net";
     public string VenueName { get; init; } = LocationName;
     public string Standard_ActuaryLevel7 { get; init; } = "Actuary (level 7)";
-    public string Apprenticeshipunit_Floorlayer{ get; init; } = "Floorlayer Apprenticeship unit";
+    public string Apprenticeshipunit_AIleadership{ get; init; } = "AI leadership";
     public string Standard_CraftPlastererlevel { get; init; } = "Craft plasterer (level 3)";
     public string PostCode { get; init; } = "Tw14 9py";
     public string FullAddressDetails { get; init; } = "160 Hatton Road, Feltham, TW14 9PY";
@@ -31,7 +31,7 @@ public class ManagingStandardsDataHelpers
     public string UpdatedContactNumber { get; init; } = "0999999399333";
     public string NewlyUpdatedContactNumber { get; init; } = "98989843434334";
     public static StandardsTestData StandardsTestData => new() { LarsCode = "281", StandardName = "Podiatrist (level 6)", Venue = LocationName ,
-        LarsCode_Delete = "255", ApprenticeshipUnitLarsCode = "ZSC00012" };
+        LarsCode_Delete = "255", ApprenticeshipUnitLarsCode = "ZSC00003"};
     public string UpdateProviderDescriptionText { get; init; } = RandomDataGenerator.GenerateRandomAlphanumericString(20);
    
 }

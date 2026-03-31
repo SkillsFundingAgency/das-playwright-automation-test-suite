@@ -1,6 +1,7 @@
 ﻿Feature: RAA_E_AV_01
 
 @regression
+@raaemployer
 Scenario: RAA_E_AV_01 - Create anonymous advert, Approve, Apply and close the advert
 	Given the Employer creates an anonymous advert
 	When the Reviewer Approves the vacancy

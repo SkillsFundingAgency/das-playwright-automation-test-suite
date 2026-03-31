@@ -46,7 +46,7 @@ public class DeleteVacancyQuestionPage(ScenarioContext context) : RaaBasePage(co
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        await Assertions.Expect(page.GetByLabel("Success").Locator("h3")).ToContainTextAsync("has been deleted.");
+        await Assertions.Expect(page.Locator(".govuk-notification-banner__heading")).ToContainTextAsync("has been deleted.");
 
     }
 
