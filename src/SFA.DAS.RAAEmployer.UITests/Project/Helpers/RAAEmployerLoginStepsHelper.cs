@@ -1,5 +1,6 @@
 ﻿
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
+using SFA.DAS.Login.Service.Project.Helpers;
 using System.Linq;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
@@ -16,7 +17,14 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
 
                 if (user != null)
                 {
-                    return await _homePageStepsHelper.Login(user);
+                    context.Get<ObjectContext>().Set("loggedinuserobject", new LoggedInAccountUser
+                    {
+                        Username = user.Username,
+                        IdOrUserRef = user.IdOrUserRef,
+                        OrganisationName = user.OrganisationName
+                    });
+
+                    context.Get<ObjectContext>().Replace("organisationname", user.OrganisationName);
                 }
             }
             return await _homePageStepsHelper.GotoEmployerHomePage();
