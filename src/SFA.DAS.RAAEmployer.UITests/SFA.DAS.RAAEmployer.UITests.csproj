@@ -20,7 +20,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-		<PackageReference Include="Reqnroll" Version="3.3.3" />
 		<PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
 		<PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
 	</ItemGroup>
