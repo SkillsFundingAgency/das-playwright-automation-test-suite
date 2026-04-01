@@ -5,7 +5,7 @@
 @raae2e
 @raaemployere2e
 @regression
-Scenario: RAA_E_E2E_01 - Create an advert with registered name, Approve, Apply, receive email notifications and make Application Successful
+Scenario: RAA_E_E2E_01 - Create an advert with registered name, Approve, Apply, receive email notifications, make Application Successful and close the advert
 	Given the Employer creates an advert by using a registered name
 	And the Reviewer Approves the vacancy
 	Then the 'provider' receives 'employer listed you as training provider' email notification
@@ -15,3 +15,4 @@ Scenario: RAA_E_E2E_01 - Create an advert with registered name, Approve, Apply, 
 	Then Employer can make the application successful
 	And the status of the Application is shown as 'successful' in FAA 
 	And the 'applicant' receives 'successful application' email notification
+	Then the Employer can close the vacancy
