@@ -84,7 +84,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
 
         if (!await checkbox.IsVisibleAsync())
         {
-            var expandButton = page.GetByRole(AriaRole.Button, new() { Name = "Apprenticeship level , Show" });
+            var expandButton = page.GetByRole(AriaRole.Button, new() { Name = "Training level , Show" });
             if (await expandButton.IsVisibleAsync())
             {
                 await expandButton.ClickAsync();
@@ -98,7 +98,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task SelectApprenticeshipType(string typeName)
     {
-        var checkbox = page.Locator($"input.govuk-checkboxes__input[name='ApprenticeshipTypes'][value='{typeName}']");
+        var checkbox = page.Locator($"input.govuk-checkboxes__input[name='LearningTypes'][value='{typeName}']");
         var expandButton = page.GetByRole(AriaRole.Button, new() { Name = "Training type , Show" });
 
         if (!await checkbox.IsVisibleAsync())
@@ -320,7 +320,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task SelectAchievementRateCheckbox(string ratingValue)
     {
-        var accordionButton = page.GetByRole(AriaRole.Button, new() { Name = "Achievement rate From 2023 to 2024" });
+        var accordionButton = page.GetByRole(AriaRole.Button, new() { Name = "Achievement rate From 2024 to 2025" });
         if (await accordionButton.GetAttributeAsync("aria-expanded") == "false")
         {
             await accordionButton.ClickAsync();

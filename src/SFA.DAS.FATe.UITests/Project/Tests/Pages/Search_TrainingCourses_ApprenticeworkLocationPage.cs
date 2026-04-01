@@ -71,13 +71,13 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
             var checkboxLocator = type switch
             {
                 TrainingType.ApprenticeshipUnits =>
-                    page.Locator("[id='filteritem-training-types-Apprenticeship units']"),
+                    page.Locator("[id='filteritem-training-types-ApprenticeshipUnit']"),
 
                 TrainingType.FoundationApprenticeships =>
-                    page.Locator("[id='filteritem-training-types-Foundation apprenticeships']"),
+                    page.Locator("[id='filteritem-training-types-FoundationApprenticeship']"),
 
                 TrainingType.Apprenticeships =>
-                    page.Locator("[id='filteritem-training-types-Apprenticeships']"),
+                    page.Locator("[id='filteritem-training-types-Apprenticeship']"),
 
                 _ => throw new ArgumentOutOfRangeException(nameof(type))
             };
