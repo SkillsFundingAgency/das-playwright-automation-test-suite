@@ -120,7 +120,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     public async Task ApplyFoundationStandardsFilter()
     {
         await VerifyNoFiltersAreApplied();
-        await SelectApprenticeshipType("Foundation apprenticeships");
+        await SelectApprenticeshipType("FoundationApprenticeship");
         await ApplyFilters();
     }
     public async Task ApplyLocationFilterAndVerifyResultsForTW14_50miles()
