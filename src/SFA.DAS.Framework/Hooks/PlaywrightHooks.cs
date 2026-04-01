@@ -10,8 +10,6 @@ public class PlaywrightHooks(ScenarioContext context)
 
     private static IBrowser Browser;
 
-    private static bool isCloud;
-
     private static readonly DateTime Date;
 
     static PlaywrightHooks()
@@ -24,17 +22,15 @@ public class PlaywrightHooks(ScenarioContext context)
     {
         driver = new InitializeDriver();
 
-        isCloud = InitializeDriver.isCloud;
+        string isHeadlessVar = Environment.GetEnvironmentVariable("headless");
 
-        if (isCloud)
-            Browser = await driver.IBrowserType.ConnectAsync(CreateCloudDriver());
+        bool isHeadless = !string.IsNullOrEmpty(isHeadlessVar) && isHeadlessVar.ContainsCompareCaseInsensitive("true");
 
-        else
-            Browser = await driver.IBrowserType.LaunchAsync(new BrowserTypeLaunchOptions
-            {
-                Headless = false,
-                Args = ["--start-maximized"],
-            });
+        Browser = await driver.IBrowserType.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = isHeadless,
+            Args = ["--start-maximized"],
+        });
     }
 
     [AfterTestRun]
@@ -49,7 +45,7 @@ public class PlaywrightHooks(ScenarioContext context)
 		var objectContext = context.Get<ObjectContext>();
 
         objectContext.SetConsoleAndDebugInformation("Entered SetupPlaywrightDriver Order = 8 hook");
-		
+
         browserContext = await Browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = ViewportSize.NoViewport
@@ -96,57 +92,22 @@ public class PlaywrightHooks(ScenarioContext context)
                 );
         }
 
-        if (isCloud)
-        {
-            if (context.TestError == null)
-                await MarkTestStatus("passed", string.Empty, pDriver.Page);
-            else
-                await MarkTestStatus("failed", context.TestError.Message, pDriver.Page);
-        }
+        // Marking test status in BrowserStack if running in cloud
+        //if (isCloud)
+        //{
+        //    if (context.TestError == null)
+        //        await MarkTestStatus("passed", string.Empty, pDriver.Page);
+        //    else
+        //        await MarkTestStatus("failed", context.TestError.Message, pDriver.Page);
+        //}
 
         await browserContext.CloseAsync();
     }
 
-    public static async Task MarkTestStatus(string status, string reason, IPage page)
-    {
-        await page.EvaluateAsync("_ => {}", "browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"" + status + "\", \"reason\": \"" + reason + "\"}}");
-    }
+    //public static async Task MarkTestStatus(string status, string reason, IPage page)
+    //{
+    //    await page.EvaluateAsync("_ => {}", "browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"" + status + "\", \"reason\": \"" + reason + "\"}}");
+    //}
 
-    private bool ShouldTrace() => (context.ScenarioInfo.Tags.Contains("donottracelogin") == false || isCloud == false);
-
-    private static string CreateCloudDriver()
-    {
-        string varbrowserstackusername = Environment.GetEnvironmentVariable("BROWSERSTACKUSER");
-
-        string varbrowserstackaccessKey = Environment.GetEnvironmentVariable("BROWSERSTACKKEY");
-
-        var buildDateTime = Date.ToString("ddMMMyyyy_HH:mm:ss").ToUpper();
-
-        Dictionary<string, string> browserstackOptions = new()
-        {
-            { "os", "Windows" },
-            { "os_version", "11" },
-            { "browser", "chrome" },  // allowed browsers are `chrome`, `edge`, `playwright-chromium`, `playwright-firefox` and `playwright-webkit`
-            { "browser_version", "latest" },
-            { "browserstack.username", varbrowserstackusername },
-            { "browserstack.accessKey", varbrowserstackaccessKey },
-            { "geoLocation", "FR" },
-            { "project", "Playwright Campaingns project" },
-            { "build", buildDateTime },
-            { "name", "context.ScenarioInfo.Title" },
-            { "buildTag", "playwright" },
-            { "resolution", "1280x1024" },
-            { "browserstack.local", "false" },
-            { "browserstack.localIdentifier", "local_connection_name" },
-            { "browserstack.playwrightVersion", "1.latest" },
-            { "client.playwrightVersion", "1.latest" },
-            { "browserstack.debug", "true" },
-            { "browserstack.interactiveDebugging", "true" },
-            { "browserstack.console", "info" },
-            { "browserstack.networkLogs", "true" }
-        };
-        string capsJson = JsonConvert.SerializeObject(browserstackOptions);
-
-        return "wss://cdp.browserstack.com/playwright?caps=" + Uri.EscapeDataString(capsJson);
-    }
+    private bool ShouldTrace() => !context.ScenarioInfo.Tags.Contains("donottracelogin");
 }

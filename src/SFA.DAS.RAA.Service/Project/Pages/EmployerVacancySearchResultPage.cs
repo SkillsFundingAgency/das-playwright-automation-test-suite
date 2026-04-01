@@ -19,13 +19,13 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
     protected async Task DraftVacancy()
     {
-        await page.GetByLabel("Filter adverts by").SelectOptionAsync(new[] { "All" });
+        //await page.GetByLabel("Filter adverts by").SelectOptionAsync(new[] { "All" });
 
-        await page.GetByLabel("Filter adverts by").SelectOptionAsync(new[] { "Draft" });
+        //await page.GetByLabel("Filter adverts by").SelectOptionAsync(new[] { "Draft" });
 
-        await Assertions.Expect(page.Locator("h3")).ToContainTextAsync("draft adverts");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Draft adverts");
 
-        await page.GetByRole(AriaRole.Combobox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
@@ -47,7 +47,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
     public async Task<ManageRecruitPage> GoToVacancyManagePage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Manage", Exact = true }).First.ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage"}).First.ClickAsync();
 
         return await VerifyPageAsync(() => new ManageRecruitPage(context));
     }
@@ -57,7 +57,7 @@ public class EmployerVacancySearchResultPage(ScenarioContext context) : VacancyS
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your adverts");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("All adverts");
     }
 
     public async Task<CreateAnApprenticeshipAdvertOrVacancyPage> CreateAnApprenticeshipAdvertPage()
@@ -102,5 +102,20 @@ public class EmployerVacancySearchResultPage(ScenarioContext context) : VacancyS
         await page.GetByRole(AriaRole.Link, new() { Name = linkTest, Exact = true }).ClickAsync();
 
         return await VerifyPageAsync(() => new ViewVacancyPage(context));
+    }
+}
+
+public class EmployerDraftVacanciesListPage(ScenarioContext context) : VacancySearchResultPage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Draft adverts");
+    }
+
+    public async Task<CreateAnApprenticeshipAdvertOrVacancyPage> CreateAnApprenticeshipAdvertPage()
+    {
+        await DraftVacancy();
+
+        return await VerifyPageAsync(() => new CreateAnApprenticeshipAdvertOrVacancyPage(context));
     }
 }

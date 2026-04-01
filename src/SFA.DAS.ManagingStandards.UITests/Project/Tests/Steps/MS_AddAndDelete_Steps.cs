@@ -119,7 +119,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
     [When(@"the provider is able to add the ApprenticeshipUnit delivered in one of the training locations")]
     public async Task WhenTheProviderIsAbleToAddTheApprenticeshipUnitDeliveredInOneOfTheTrainingLocations()
     {
-        StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_Floorlayer;
+        StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_AIleadership;
 
         var page = new ManagingStandardsProviderHomePage(context);
 
@@ -148,7 +148,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
     [When(@"the provider is able to add the ApprenticeshipUnit delivered in employers locations")]
     public async Task WhenTheProviderIsAbleToAddTheApprenticeshipUnitDeliveredInEmployersLocations()
     {
-        StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_Floorlayer;
+        StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_AIleadership;
 
         var page = new ManagingStandardsProviderHomePage(context);
 
@@ -177,7 +177,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
     [When(@"the provider is able to add the ApprenticeshipUnit delivered online")]
     public async Task WhenTheProviderIsAbleToAddTheApprenticeshipUnitDeliveredOnline()
     {
-        StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_Floorlayer;
+        StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_AIleadership;
 
         var page = new ManagingStandardsProviderHomePage(context);
 
