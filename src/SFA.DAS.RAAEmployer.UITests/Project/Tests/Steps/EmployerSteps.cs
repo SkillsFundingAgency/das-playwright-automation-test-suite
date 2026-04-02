@@ -29,5 +29,6 @@ public class EmployerSteps(ScenarioContext context)
     public async Task ThenTheEmployerCanEditTheVacancy() => await _employerStepsHelper.EditVacancyDates();
 
     [Then(@"the Employer verify '(National Minimum Wage For Apprentices|National Minimum Wage|Fixed Wage Type|Set As Competitive)' the wage option selected in the Preview page")]
+    [When(@"the Employer verify '(National Minimum Wage For Apprentices|National Minimum Wage|Fixed Wage Type|Set As Competitive)' the wage option selected in the Preview page")]
     public async Task ThenTheEmployerVerifyTheWageOptionSelectedInThePreviewPage(string wageType) => await _employerStepsHelper.VerifyWageType(wageType);
 }

@@ -182,6 +182,8 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
 
     internal async Task<VacancyReferencePage> CreateANewAdvert(bool isApplicationMethodFAA) => await CreateANewAdvertOrVacancy(string.Empty, "employer", true, RAAConst.NationalMinWages, isApplicationMethodFAA, false, true, true);
 
+    internal async Task<VacancyReferencePage> CreateANewAdvert(string employername, bool disabilityConfidence) => await CreateANewAdvertOrVacancy(employername, "employer", disabilityConfidence, RAAConst.FixedWageType, true, false, true, true);
+
     internal async Task<VacancyReferencePage> CreateANewAdvert(string employername, string locationType, bool disabilityConfidence, string wageType) => await CreateANewAdvertOrVacancy(employername, locationType, disabilityConfidence, wageType, true, false, true, true);
 
     protected override async Task<CreateAnApprenticeshipAdvertOrVacancyPage> CreateAnApprenticeshipAdvertOrVacancy()
