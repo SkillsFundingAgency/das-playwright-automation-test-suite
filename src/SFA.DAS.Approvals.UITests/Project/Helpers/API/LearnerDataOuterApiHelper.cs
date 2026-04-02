@@ -61,6 +61,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
             await learnerDataOuterApiClient.PostNewLearners(resource, payload);
         }
 
+        public async Task PushNewGSOLearnersDataToASViaAPI(LearnerDataAPIDataModel learnerData, int Ukprn)
+        {
+            var resource = $"/providers/{Ukprn}/shortCourses";
+            var payload = JsonHelper.Serialize(learnerData).ToString();
+            await learnerDataOuterApiClient.PostNewLearners(resource, payload);
+        }
+
         public async Task CheckApprenticeIsAvailableInApprovedLearnersList(Apprenticeship apprenticeship)
         {
             var resource = $"/Learners/providers/{apprenticeship.ProviderDetails.Ukprn}/academicyears/{apprenticeship.TrainingDetails.AcademicYear}/learners";
@@ -81,9 +88,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
                         new OnProgramme
                         {
                             StandardCode = apprenticeship.TrainingDetails.StandardCode,
+                            LearnAimRef = "ZPROG001",
                             AgreementId = apprenticeship.EmployerDetails.AgreementId,
                             StartDate = apprenticeship.TrainingDetails.StartDate.ToString("yyyy-MM-dd"),
                             ExpectedEndDate = apprenticeship.TrainingDetails.EndDate.ToString("yyyy-MM-dd"),
+                            OffTheJobHours = 242,
                             PercentageOfTrainingLeft = apprenticeship.TrainingDetails.PercentageLearningToBeDelivered,
                             Costs = new List<Cost>
                             {
@@ -94,6 +103,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
                                     FromDate = apprenticeship.TrainingDetails.StartDate.ToString("yyyy-MM-dd")
                                 }
                             },
+                            CompletionDate = null,
+                            WithdrawalDate = null,
+                            PauseDate = null,
                             Care = new Care
                             {
                                 Careleaver = false,
@@ -104,6 +116,43 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
                         }
                     },
                     EnglishAndMaths = new List<EnglishAndMaths>()
+                },
+                Learner = new Learner
+                {
+                    FirstName = apprenticeship.ApprenticeDetails.FirstName,
+                    LastName = apprenticeship.ApprenticeDetails.LastName,
+                    Email = apprenticeship.ApprenticeDetails.Email,
+                    Uln = long.Parse(apprenticeship.ApprenticeDetails.ULN),
+                    LearnerRef = apprenticeship.ProviderDetails.Ukprn.ToString(),
+                    Dob = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("yyyy-MM-dd"),
+                    HasEhcp = false
+                },
+                ConsumerReference = apprenticeship.TrainingDetails.ConsumerReference
+            };
+
+            await Task.Delay(100);
+            return learnerData;
+        }
+
+        public async Task<LearnerDataAPIDataModel> ConvertToGSOLearnerDataAPIDataModel(Apprenticeship apprenticeship)
+        {
+            LearnerDataAPIDataModel learnerData = new LearnerDataAPIDataModel
+            {
+                Delivery = new Delivery
+                {
+                    OnProgramme = new List<OnProgramme>
+                    {
+                        new OnProgramme
+                        {
+                            CourseCode = apprenticeship.TrainingDetails.StandardCode.ToString(),
+                            AgreementId = apprenticeship.EmployerDetails.AgreementId,
+                            StartDate = apprenticeship.TrainingDetails.StartDate.ToString("yyyy-MM-dd"),
+                            ExpectedEndDate = apprenticeship.TrainingDetails.EndDate.ToString("yyyy-MM-dd"),
+                            LearningSupport = new List<LearningSupport>(),
+                            AimSequenceNumber = 1,
+                            Milestones = new string[] {  }
+                        }
+                    },
                 },
                 Learner = new Learner
                 {
@@ -167,26 +216,57 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
     public class Delivery
     {
         public List<OnProgramme> OnProgramme { get; set; }
-        public List<EnglishAndMaths> EnglishAndMaths { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<EnglishAndMaths>? EnglishAndMaths { get; set; } = null;
     }
 
     public class OnProgramme
     {
-        public int StandardCode { get; set; }
-        public string LearnAimRef { get; set; } = "ZPROG001";
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? StandardCode { get; set; } = null;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CourseCode { get; set; } = null;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string LearnAimRef { get; set; } = null;
         public string AgreementId { get; set; }
         public string StartDate { get; set; }
         public string ExpectedEndDate { get; set; }
-        public int OffTheJobHours { get; set; }
-        public int PercentageOfTrainingLeft { get; set; } = 80;
-        public List<Cost> Costs { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? OffTheJobHours { get; set; } = null;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? PercentageOfTrainingLeft { get; set; } = null;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<Cost>? Costs { get; set; } = null;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string CompletionDate { get; set; } = null;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string WithdrawalDate { get; set; } = null;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string PauseDate { get; set; } = null;
-        public Care Care { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Care? Care { get; set; } = null;
         public List<LearningSupport> LearningSupport { get; set; }
-        public bool IsFlexiJob { get; set; }
-        
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsFlexiJob { get; set; } = null;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? AimSequenceNumber { get; set; } = null;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string[] Milestones { get; set; } = null;
+
+
     }
 
     public class EnglishAndMaths
@@ -224,7 +304,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        //public long Uln { get; set; }
         public string LearnerRef { get; set; }
         public string Dob { get; set; }
         public bool HasEhcp { get; set; } = false;
@@ -233,7 +312,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
         public long? Uln { get; set; } = null;
 
         [JsonPropertyName("key")]
-        public string Key { get; set; } = string.Empty;
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Key { get; set; } = null;
     }
 
 

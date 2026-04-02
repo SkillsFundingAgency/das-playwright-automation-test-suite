@@ -60,6 +60,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
                 var learnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(apprenticeship);
                 await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(learnerData, ukprn);
+
+                //var learnerData = await learnerDataOuterApiHelper.ConvertToGSOLearnerDataAPIDataModel(apprenticeship);
+                //await learnerDataOuterApiHelper.PushNewGSOLearnersDataToASViaAPI(learnerData, ukprn);
             }
         }
 
