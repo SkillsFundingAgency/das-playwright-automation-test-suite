@@ -45,7 +45,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
             await page.GetByRole(AriaRole.Link, new() { Name = "Give feedback" }).ClickAsync();
         });
 
-        await Assertions.Expect(page2.Locator("legend")).ToContainTextAsync("Which of the below describes you?");
+        await Assertions.Expect(page2.GetByText("Your feedback on the Apprenticeship service")).ToBeVisibleAsync();
 
         await page2.CloseAsync();
     }
