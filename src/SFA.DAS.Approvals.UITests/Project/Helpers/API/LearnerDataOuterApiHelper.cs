@@ -41,6 +41,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
                 AgreementId = apprenticeship.EmployerDetails.AgreementId,
                 IsFlexiJob = apprenticeship.TrainingDetails.IsFlexiJob,
                 StandardCode = apprenticeship.TrainingDetails.StandardCode,
+                LarsCode = "ZSC00004",
+                //LearningType = 2,
                 CorrelationId = Guid.NewGuid(),
                 ReceivedDate = DateTime.UtcNow,
                 ConsumerReference = apprenticeship.TrainingDetails.ConsumerReference,
