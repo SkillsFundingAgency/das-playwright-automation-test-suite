@@ -87,6 +87,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.RAA.APITests", "SFA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Digicerts.UITests", "SFA.DAS.Digicerts.UITests\SFA.DAS.Digicerts.UITests.csproj", "{7F53111F-AA76-6723-12A2-D4C8374CE185}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ApprenticeApp.UITests", "SFA.DAS.ApprenticeApp.UITests\SFA.DAS.ApprenticeApp.UITests.csproj", "{BDE4E498-6CB6-4241-8750-E35B2CFE255F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -553,6 +555,18 @@ Global
 		{7F53111F-AA76-6723-12A2-D4C8374CE185}.Release|x64.Build.0 = Release|Any CPU
 		{7F53111F-AA76-6723-12A2-D4C8374CE185}.Release|x86.ActiveCfg = Release|Any CPU
 		{7F53111F-AA76-6723-12A2-D4C8374CE185}.Release|x86.Build.0 = Release|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Debug|x64.Build.0 = Debug|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Debug|x86.Build.0 = Debug|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Release|x64.ActiveCfg = Release|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Release|x64.Build.0 = Release|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDE4E498-6CB6-4241-8750-E35B2CFE255F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
