@@ -110,7 +110,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     public async Task ApplyFoundationStandardsFilterAndVerifyResultsForFoundationStandards()
     {
         await VerifyNoFiltersAreApplied();
-        await SelectApprenticeshipType("Foundation apprenticeships");
+        await SelectApprenticeshipType("FoundationApprenticeship");
         await ApplyFilters();
         await VerifyFilterIsSet("Foundation apprenticeships");
         await VerifyAllResultsHaveFoundationTag();
@@ -120,7 +120,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     public async Task ApplyFoundationStandardsFilter()
     {
         await VerifyNoFiltersAreApplied();
-        await SelectApprenticeshipType("Foundation apprenticeships");
+        await SelectApprenticeshipType("FoundationApprenticeship");
         await ApplyFilters();
     }
     public async Task ApplyLocationFilterAndVerifyResultsForTW14_50miles()
