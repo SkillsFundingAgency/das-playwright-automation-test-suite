@@ -40,9 +40,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
                 TrainingPrice = apprenticeship.TrainingDetails.TrainingPrice,
                 AgreementId = apprenticeship.EmployerDetails.AgreementId,
                 IsFlexiJob = apprenticeship.TrainingDetails.IsFlexiJob,
-                StandardCode = apprenticeship.TrainingDetails.StandardCode,
-                LarsCode = "ZSC00004",
-                //LearningType = 2,
+                StandardCode = int.TryParse(apprenticeship.TrainingDetails.LarsCode, out int standardCode) ? standardCode : 0,
+                LarsCode = apprenticeship.TrainingDetails.LarsCode,
+                LearningType = apprenticeship.TrainingDetails.LearningType,
                 CorrelationId = Guid.NewGuid(),
                 ReceivedDate = DateTime.UtcNow,
                 ConsumerReference = apprenticeship.TrainingDetails.ConsumerReference,
@@ -89,7 +89,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
                     {
                         new OnProgramme
                         {
-                            StandardCode = apprenticeship.TrainingDetails.StandardCode,
+                            StandardCode = Int32.Parse(apprenticeship.TrainingDetails.LarsCode),
                             LearnAimRef = "ZPROG001",
                             AgreementId = apprenticeship.EmployerDetails.AgreementId,
                             StartDate = apprenticeship.TrainingDetails.StartDate.ToString("yyyy-MM-dd"),
@@ -146,7 +146,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
                     {
                         new OnProgramme
                         {
-                            CourseCode = apprenticeship.TrainingDetails.StandardCode.ToString(),
+                            CourseCode = apprenticeship.TrainingDetails.LarsCode,
                             AgreementId = apprenticeship.EmployerDetails.AgreementId,
                             StartDate = apprenticeship.TrainingDetails.StartDate.ToString("yyyy-MM-dd"),
                             ExpectedEndDate = apprenticeship.TrainingDetails.EndDate.ToString("yyyy-MM-dd"),

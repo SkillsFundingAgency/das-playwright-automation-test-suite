@@ -47,7 +47,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             training.TotalPrice = training.EpaoPrice + training.TrainingPrice;
             training.IsFlexiJob = false;
             training.PlannedOTJTrainingHours = 1200;
-            training.StandardCode = course.StandardCode;
+            training.LarsCode = course.LarsCode;
+            training.LearningType = (int)course.ApprenticeshipType;
             training.CourseTitle = course.Title;
             training.ConsumerReference = "CR123456";
 

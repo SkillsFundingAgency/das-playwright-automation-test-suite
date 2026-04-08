@@ -304,7 +304,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             ApproveApprenticeDetailsPage page2;
 
-            if (apprenticeship.TrainingDetails.StandardCode is 805 or 806 or 807 or 808 or 809 or 810 or 811)       //RPL check does not appear for foundation courses
+            if (apprenticeship.TrainingDetails.LearningType > 0)       //RPL check does not appear for foundation & short courses
             {
                 page2 = new ApproveApprenticeDetailsPage(context);
             }

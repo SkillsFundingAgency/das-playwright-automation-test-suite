@@ -54,8 +54,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             for (int i = 0; i < apprenticeships.Count; i++)
             {
                 var apprentice = apprenticeships[i];
-                if (!(apprentice.TrainingDetails.StandardCode is 805 or 806 or 807 or 808 or 809 or 810 or 811)) {
-                    //RPL check does not appear for foundation courses
+                if (!(apprentice.TrainingDetails.LearningType > 0)) {
+                    //RPL check does not appear for foundation or short courses
                   
                     var rplAvailable = page.Locator($"//td[contains(.,'{apprentice.ApprenticeDetails.FirstName}')]/following-sibling::td[contains(., 'Yes')]/following-sibling::td/a[contains(., 'View')]");
 
