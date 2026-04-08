@@ -15,5 +15,16 @@ namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages
             await firstApplicationLink.ClickAsync();
             return await VerifyPageAsync(() => new Application_Details_Page(context));
         }
+        public async Task ClickOnReturnToQualifications()
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = "Return to qualifications" }).ClickAsync();
+        }
+        public async Task VerifyStatusOfQualification(string expectedStatus)
+        {
+            var firstRow = page.Locator("table.govuk-table tbody tr").First;
+            await firstRow.Locator("a.govuk-link").ClickAsync();
+            var statusField = page.Locator(".govuk-summary-list__row").Filter(new() { HasText = "Status" }).Locator(".govuk-summary-list__value");
+            await Assertions.Expect(statusField).ToHaveTextAsync(expectedStatus);
+        }
     }
 }

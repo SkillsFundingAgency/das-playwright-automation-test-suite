@@ -1,4 +1,5 @@
-﻿using Microsoft.Identity.Client;
+﻿using Azure;
+using Microsoft.Identity.Client;
 using SFA.DAS.QFAST.UITests.Project.Helpers;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Application;
@@ -239,5 +240,27 @@ public class AdminSteps(ScenarioContext context)
     public async Task ThenIValidateUserCanClickOnTheAccociatedApplications()
     {
         await qualificationDetails_Page.ClickOnFirstAssociatedApplication();
+    }
+
+    [Then("I bulk update the qualifications")]
+    public async Task AndIBulkUpdateTheQualifications()
+    {
+        await _newQualificationsPage.ClickOnApplyToThisSelectionButton();
+        await _newQualificationsPage.VefiryErrorMessage();
+        await _newQualificationsPage.ClickOnSelectAllOnThisPageLink();
+        await _newQualificationsPage.VerifyAllCheckboxesAreSelected();
+        await _newQualificationsPage.ClickOnSelectStatusDropdown();
+        await _newQualificationsPage.SelectOption("No Action Required");
+        await _newQualificationsPage.ClickOnApplyToThisSelectionButton();
+        await _newQualificationsPage.VerifySuccessMessage("Actions have been applied to the selected qualifications");
+        await qualificationDetails_Page.VerifyStatusOfQualification("No Action Required");        
+    }
+
+    [Then("I verify user is able to update the qualification manually")]
+    public async Task ThenIVerifyUserIsAbleToUpdateTheQualificationManually()
+    {
+        await qualificationDetails_Page.ClickOnReturnToQualifications();
+        await _newQualificationsPage.ChangeTheQualificationStatusManually("On Hold");
+        await qualificationDetails_Page.VerifyStatusOfQualification("On Hold");
     }
 }
