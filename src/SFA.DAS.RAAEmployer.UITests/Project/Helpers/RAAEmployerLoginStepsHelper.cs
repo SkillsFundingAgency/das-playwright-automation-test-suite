@@ -13,7 +13,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
         {
             if(context.ScenarioInfo.Tags.Contains("raaapiemployer"))
             {
-                var user = context.GetUser<RAAEmployerUser>();
+                var user = context.GetUser<RAAApiEmployerUser>();
 
                 if (user != null)
                 {
@@ -41,14 +41,28 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
             return new CreateAnAdvertHomePage(context);
         }
 
-        internal async Task<YourApprenticeshipAdvertsHomePage> GoToRecruitmentHomePage(RAAEmployerUser user)
+        internal async Task<YourApprenticeshipAdvertsHomePage> GoToRecruitmentHomePage(EasAccountUser user)
         {
             await GoToHomePage(user);
 
             return await NavigateToRecruitmentHomePage();
         }
 
-        internal async Task<YourApprenticeshipAdvertsHomePage> GoToRecruitmentHomePage() => await GoToRecruitmentHomePage(context.GetUser<RAAEmployerUser>());
+        internal async Task<YourApprenticeshipAdvertsHomePage> GoToRecruitmentHomePage() 
+        {
+            EasAccountUser user;
+
+            if (context.ScenarioInfo.Tags.Contains("raaapiemployer"))
+            {
+                user = context.GetUser<RAAApiEmployerUser>();
+            }
+            else
+            {
+                user = context.GetUser<RAAEmployerUser>();
+            }
+
+            return await GoToRecruitmentHomePage(user);
+        }
 
         internal async Task<YourApprenticeshipAdvertsHomePage> NavigateToRecruitmentHomePage()
         {

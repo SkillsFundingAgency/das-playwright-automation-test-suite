@@ -42,6 +42,8 @@ public class AuthTestUser : EasAccountUser { }
 
 public class RAAEmployerUser : EasAccountUser { }
 
+public class RAAApiEmployerUser : EasAccountUser { }
+
 public class RAAEmployerProviderPermissionUser : EasAccountUser { }
 
 public class RAAEmployerProviderYesPermissionUser : EasAccountUser { }
