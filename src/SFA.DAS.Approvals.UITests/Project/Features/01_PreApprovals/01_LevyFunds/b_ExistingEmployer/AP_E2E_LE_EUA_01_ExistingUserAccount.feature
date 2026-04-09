@@ -1,6 +1,6 @@
 ﻿@approvals
 @linkedScenarios
-Feature: AP_E2E_EUA_01_ExistingUserAccount
+Feature: AP_E2E_LE_EUA_01_ExistingUserAccount
 
 A brief end-to-end journey for Non-Levy employers
 It starts by pushing data into outer api or event in the N-Service bus, that mimicks SLD pushing ILR data into AS.
@@ -9,7 +9,7 @@ Finally, employer approves that cohort and apprentice record is created in Learn
 
 @regression
 @e2escenarios
-Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves it
+Scenario: AP_E2E_LE_EUA_01a Provider creates cohort from ILR data Employer approves it
 	Given Provider successfully submits 1 ILR record containing a learner record for a "Levy" Employer
 	Then a record is created in LearnerData Db for each learner
 	When Provider sends an apprentice request (cohort) to the employer by selecting same apprentices
@@ -24,7 +24,7 @@ Scenario: AP_E2E_EUA_01a Provider creates cohort from ILR data Employer approves
 
 @regression
 @e2escenarios
-Scenario Outline: AP_E2E_EUA_01b emails validation
+Scenario Outline: AP_E2E_LE_EUA_01b emails validation
 	Given previous test has been completed successfully
 	Then Verify the "<Recipient>" receive "<NotificationType>" email
 

@@ -1,12 +1,12 @@
 ﻿@approvals
-Feature: AP_NL_E2E_EUA_02_MaxReservationsLimitReached
+Feature: AP_E2E_NL_EUA_02_MaxReservationsLimitReached
 
 This feature validates funding retrictions when non-levy employer account has reached 
 its max reservation limit.
 
 @regression
 @e2escenarios
-Scenario: AP_NL_E2E_EUA_02_Block users to add apprentice when max reservation limit is reached
+Scenario: AP_E2E_NL_EUA_02_Block users to add apprentice when max reservation limit is reached
 	Given the Employer logins using an existing NonLevy Account which has reached it max reservations limit
 	When the Employer tries to add another apprentice to an existing cohort
 	Then the Employer is blocked with a shutter page for existing cohort

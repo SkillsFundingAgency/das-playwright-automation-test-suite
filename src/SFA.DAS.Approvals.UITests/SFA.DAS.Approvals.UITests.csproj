@@ -8,10 +8,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <SpecFlowFeatureFiles Remove="Project\Features\01_PreApprovals\01_LevyFunds\b_ExistingEmployer\AP_E2E_LE_EUA_04_GSO.feature" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Compile Include="..\NUnitConfigurator.cs" Link="NUnitConfigurator.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
 		</Compile>
+		<Compile Include="Project\Features\01_PreApprovals\01_LevyFunds\b_ExistingEmployer\AP_E2E_LE_EUA_04_GSO.feature" />
 	</ItemGroup>
 
 	<ItemGroup>

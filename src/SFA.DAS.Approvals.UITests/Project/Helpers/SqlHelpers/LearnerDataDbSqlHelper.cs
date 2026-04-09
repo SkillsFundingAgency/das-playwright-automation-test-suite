@@ -37,7 +37,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
         private async Task<Apprenticeship> GetLearnerReadyToAdd(Apprenticeship apprenticeship, string additionalWhereFilter = null)
         {
             string query = @$"SELECT Id, ULN, UKPRN, Firstname, Lastname, Email, Dob, AcademicYear, StartDate, PlannedEndDate, 
-                                PercentageLearningToBeDelivered, EpaoPrice, TrainingPrice, StandardCode, 
+                                PercentageLearningToBeDelivered, EpaoPrice, TrainingPrice, TrainingCode, 
                                 IsFlexiJob, PlannedOTJTrainingHours, ConsumerReference, ApprenticeshipId
                             FROM LearnerData
                             WHERE UKPRN = {apprenticeship.ProviderDetails.Ukprn}                             
