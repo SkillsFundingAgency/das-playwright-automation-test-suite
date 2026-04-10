@@ -25,11 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Project\" />
     <Folder Include="Project\Helpers\" />
     <Folder Include="Project\Hooks\" />
-    <Folder Include="Project\Tests\" />
-    <Folder Include="Project\Tests\Features\" />
     <Folder Include="Project\Tests\Pages\" />
     <Folder Include="Project\Tests\StepDefinitions\" />
   </ItemGroup>
