@@ -15,3 +15,10 @@ Scenario: Bulk update of qualifications - MVS1 - Changed Qualifications
 	When I select the Review qualifications with changes option
 	Then I bulk update the qualifications
 	And I verify user is able to update the qualification manually
+
+@regression
+@qfast
+Scenario: Bulk update of qualifications - MVS2 - Applications
+	Given the admin user log in to the portal
+	When I select the Review applications for funding option
+	Then I bulk update the applications	

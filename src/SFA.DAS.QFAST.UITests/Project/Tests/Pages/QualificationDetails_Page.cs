@@ -1,7 +1,4 @@
-﻿
-
-using SFA.DAS.EmployerPortal.UITests.Project.Tests.Pages;
-using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Application;
+﻿using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Application;
 using System.Text.RegularExpressions;
 
 namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages
@@ -15,15 +12,14 @@ namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages
             await firstApplicationLink.ClickAsync();
             return await VerifyPageAsync(() => new Application_Details_Page(context));
         }
-        public async Task ClickOnReturnToQualifications()
+        public async Task ClickOnBackLink()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Return to qualifications" }).ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
         }
         public async Task VerifyStatusOfQualification(string expectedStatus)
         {
-            var firstRow = page.Locator("table.govuk-table tbody tr").First;
-            await firstRow.Locator("a.govuk-link").ClickAsync();
-            var statusField = page.Locator(".govuk-summary-list__row").Filter(new() { HasText = "Status" }).Locator(".govuk-summary-list__value");
+            await page.Locator("td").Nth(2).Locator("a").ClickAsync();
+            var statusField = page.Locator(".govuk-summary-list__row:has(dt:text-is('Status')) dd.govuk-summary-list__value");
             await Assertions.Expect(statusField).ToHaveTextAsync(expectedStatus);
         }
     }
