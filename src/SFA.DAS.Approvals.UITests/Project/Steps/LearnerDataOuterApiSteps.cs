@@ -1,9 +1,11 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using Azure;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.API;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers.ApprenticeshipModel;
 using System;
+using TechTalk.SpecFlow.Assist;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -56,13 +58,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
-                //await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(apprenticeship, ukprn);
+                await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(apprenticeship, ukprn);
 
-                var learnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(apprenticeship);
-                await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(learnerData, ukprn);
+                /*
+                if (apprenticeship.TrainingDetails.LearningType == (int)LearningType.ShortCourses)
+                {
+                    var learnerData = await learnerDataOuterApiHelper.ConvertToGSOLearnerDataAPIDataModel(apprenticeship);
+                    await learnerDataOuterApiHelper.PushNewGSOLearnersDataToASViaAPI(learnerData, ukprn);
+                }
+                else
+                {
+                    var learnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(apprenticeship);
+                    await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(learnerData, ukprn);
+                }
+                */
+                
 
-                //var learnerData = await learnerDataOuterApiHelper.ConvertToGSOLearnerDataAPIDataModel(apprenticeship);
-                //await learnerDataOuterApiHelper.PushNewGSOLearnersDataToASViaAPI(learnerData, ukprn);
+                
             }
         }
 
@@ -79,15 +91,66 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             //create apprenticeships object for specific course and a learner aged > 25 years:
             if (courseType == "FoundationApprenticeship")
                 trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
-            else
+            else if (courseLevel == "Level-7")
                 trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomLevel7Course());
+            else
+                trainingDetails = new TrainingFactory();
 
             var apprenticeDetails = new ApprenticeFactory(age + 1);
             var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(employerType, 1, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: trainingDetails);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
             await SLDPushDataIntoAS();
         }
-     
+
+        [Given(@"Provider submits ILR for following learners for a ""(.*)"" employer:")]
+        public async Task GivenProviderSubmitsIlrForFollowingLearnersForAEmployer(string employer, Table table)
+        {
+            EmployerType employerType;
+
+            switch (employer.ToLower())
+            {
+                case "levy":
+                    employerType = EmployerType.Levy;
+                    break;
+                case "nonlevy":
+                    employerType = EmployerType.NonLevy;
+                    break;
+                case "nonlevyuseratmaxreservationlimit":
+                    employerType = EmployerType.NonLevyUserAtMaxReservationLimit;
+                    break;
+                default:
+                    throw new ArgumentException($"Unknown employer type: {employer}");
+            }
+
+            var learners = table.CreateSet<SpecFlowTableToApprenticeshipMapper>().ToList();
+            var NoOfLearners = learners.Count;
+            var coursesDataHelper = new CoursesDataHelper();
+            TrainingFactory trainingDetails;
+
+            foreach (var learner in learners)
+            {                
+                DateTime parsedStartDate = DateTime.Parse(learner.StartDate);
+                var daysToAdd = (DateTime.Today - parsedStartDate).Days;
+                DateTime trainingStartDate = parsedStartDate.AddDays(new Random().Next(daysToAdd + 1));
+                
+
+                //create apprenticeships object for specific course and a learner aged > 25 years:
+                if (learner.CourseType == "FoundationApprenticeship")
+                    trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
+                else if (learner.CourseType == "ShortCourses")
+                    trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomShortCourse(), learner.DuationInDays);
+                else if (learner.CourseLevel == "Level-7")
+                    trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomLevel7Course());
+                else
+                    trainingDetails = new TrainingFactory();
+
+                var apprenticeDetails = new ApprenticeFactory(learner.LowerAgeLimit + 1);
+                var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(employerType, learners.Count, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: trainingDetails);
+                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+                await SLDPushDataIntoAS();
+            }
+        }
+
         [Given("new learner details are processed in ILR for (\\d+) apprentices")]
         [Given("the employer has (\\d+) apprentice ready to start training")]
         public async Task ProcessedLearnersInILR(int NoOfApprentices)
@@ -122,6 +185,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
+    }
+
+    public class SpecFlowTableToApprenticeshipMapper
+    {     
+        public string CourseType { get; set; }
+        public string CourseLevel { get; set; }
+        public string StartDate { get; set; }        
+        public int DuationInDays { get; set; }
+        public int LowerAgeLimit { get; set; }
+        public int UpperAgeLimit { get; set; }
     }
 
 }
