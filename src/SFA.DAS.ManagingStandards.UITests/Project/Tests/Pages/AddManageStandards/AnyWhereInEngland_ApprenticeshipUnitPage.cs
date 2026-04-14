@@ -16,6 +16,24 @@ public class AnyWhereInEngland_ApprenticeshipUnitPage(ScenarioContext context) :
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
 
+    public async Task<ManageAnAppUnitPage> EditDeliverAnyWhereInEnglandToYes(string standardName)
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, I can deliver training" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageAnAppUnitPage(context, standardName));
+    }
+
+    public async Task<WhereCanYouDeliverTrainingPage> EditDeliverAnyWhereInEnglandToNo()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "No, I want to select the" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new WhereCanYouDeliverTrainingPage(context));
+    }
+
     public async Task<AddAstandardPage> YesDeliverAnyWhereInEngland_AddApprenticeshipUnit(string standardname)
     {
         await page.Locator("#Yes").CheckAsync();
@@ -29,7 +47,7 @@ public class AnyWhereInEngland_ApprenticeshipUnitPage(ScenarioContext context) :
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "No, I want to select the" }).CheckAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new WhereCanYouDeliverTrainingPage(context));
     }

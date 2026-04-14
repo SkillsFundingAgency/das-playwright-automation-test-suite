@@ -126,6 +126,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
         var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
 
         var page2 = await page1.AccessTrainingTypesPage();
+
         var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
 
         var page4 = await page3.AccessAddApprenticeshipUnit();
@@ -155,6 +156,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
         var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
 
         var page2 = await page1.AccessTrainingTypesPage();
+        
         var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
 
         var page4 = await page3.AccessAddApprenticeshipUnit();
