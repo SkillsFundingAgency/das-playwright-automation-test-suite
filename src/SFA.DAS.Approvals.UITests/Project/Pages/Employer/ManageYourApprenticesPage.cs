@@ -3,7 +3,7 @@ using System;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class ManageYourApprenticesPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class ManageYourLearnersPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator statusLocator => page.Locator("tbody.govuk-table__body tr.govuk-table__row:first-of-type td[data-label='Status'] strong");
@@ -14,7 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Manage your apprentices");
+            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Manage your learners");
         }
 
         internal async Task<ApprenticeDetails_ProviderPage> SelectViewCurrentApprenticeDetails(string ULN, string name)
