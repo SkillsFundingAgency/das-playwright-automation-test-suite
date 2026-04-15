@@ -16,7 +16,10 @@ Scenario: AP_E2E_LE_EUA_04_GSO Provider add learners on short course and employe
 	When Provider sends an apprentice request (cohort) to the employer by selecting same apprentices	
 	Then Commitments Db is updated with respective LearnerData Id
 	When the Employer approves the apprentice request (cohort)
-	#Then LearnerData Db is updated with respective Apprenticeship Id
+	Then LearnerData Db is updated with respective Apprenticeship Id
 	#Then Apprenticeship record is created in Learning Db
 	Then Provider can access live apprentice records under Manager Your Apprentices section
-	#And xyz are read-only for the short courses apprentices
+	And learning details can be edited as per below rules:
+		| FirstName | LastName | EMailAddress | DateOfBirth | DeliveryModel | ULN	| TrainingCourse | Version | Option | StartDate | FinishDate | Cost  |
+		| true      | true     | true         | true        | false         | false	| false          | false   | false  | false     | false      | false |
+	And apprentice/learner record is no longer available on SelectLearnerFromILR page
