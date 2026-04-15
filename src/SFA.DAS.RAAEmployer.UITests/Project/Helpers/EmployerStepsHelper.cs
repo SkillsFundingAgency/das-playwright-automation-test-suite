@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers;
+﻿using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
+
+namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers;
 
 public class EmployerStepsHelper(ScenarioContext context)
 {
@@ -55,7 +57,20 @@ public class EmployerStepsHelper(ScenarioContext context)
 
     private async Task<EmployerVacancySearchResultPage> SearchVacancyByVacancyReference()
     {
-        var page = await _rAAEmployerLoginHelper.NavigateToRecruitmentHomePage();
+        YourApprenticeshipAdvertsHomePage page;
+
+        var driver = context.Get<Driver>();
+        var playwrightPage = driver.Page;
+        
+        try
+        {
+            await Assertions.Expect(playwrightPage.Locator("h1")).ToContainTextAsync("Recruitment dashboard", new LocatorAssertionsToContainTextOptions { Timeout = 2000 });
+            page = new YourApprenticeshipAdvertsHomePage(context, false); 
+        }
+        catch
+        {
+            page = await _rAAEmployerLoginHelper.NavigateToRecruitmentHomePage();
+        }
 
         return await page.SearchAdvertByReferenceNumber();
     }

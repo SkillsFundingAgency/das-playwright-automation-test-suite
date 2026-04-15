@@ -116,7 +116,7 @@ public class EditVacancyDatesPage(ScenarioContext context) : VacancyDatesBasePag
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Update advert" }).ClickAsync();
 
-        await Assertions.Expect(page.GetByLabel("Success").Locator("h3")).ToContainTextAsync("have been updated.");
+        await Assertions.Expect(page.Locator(".govuk-notification-banner__heading")).ToContainTextAsync("have been updated.");
 
         return await VerifyPageAsync(() => new EmployerVacancySearchResultPage(context));
     }

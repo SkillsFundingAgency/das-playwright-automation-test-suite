@@ -19,6 +19,6 @@ public class ReviewerSteps(ScenarioContext context)
     [Given(@"the Reviewer Refer the vacancy")]
     public async Task GivenTheReviewerReferTheVacancy() => await _reviewerStepsHelper.Refer();
 
-    [Then(@"the Reviewer verifies disability confident and approves the vacancy")]
+    [When(@"the Reviewer verifies disability confident and approves the vacancy")]
     public async Task ThenTheReviewerVerifiesDisabilityConfidentAndApprovesTheVacancy() => await _reviewerStepsHelper.VerifyDisabilityConfidenceAndApprove();
 }

@@ -31,9 +31,6 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
     [When(@"Employer selects '(National Minimum Wage|National Minimum Wage For Apprentices|Fixed Wage Type|Set As Competitive)' in the first part of the journey")]
     public async Task EmployerSelectsInTheFirstPartOfTheJourney(string wageType) => await _employerCreateVacancyStepsHelper.CreateANewAdvert_WageType(wageType);
 
-    [Given(@"the Employer creates an offline advert with disability confidence")]
-    public async Task TheEmployerCreatesAnOfflineAdvertWithDisabilityConfidence() => await _employerCreateVacancyStepsHelper.CreateOfflineVacancy();
-
     [Given(@"the Employer clones and creates an advert")]
     public async Task TheEmployerClonesAndCreatesAnAdvert() => await _employerCreateVacancyStepsHelper.CloneAnAdvert();
 
@@ -44,7 +41,7 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
     public async Task TheEmployerCreatesAnAnonymousAdvert() => await _employerCreateVacancyStepsHelper.CreateANewAdvert(RAAConst.Anonymous);
 
     [Given(@"the Employer creates an advert by using a registered name")]
-    public async Task TheEmployerCreatesAnanAdvertByUsingARegisteredName() => await _employerCreateVacancyStepsHelper.CreateANewAdvert();
+    public async Task TheEmployerCreatesAnanAdvertByUsingARegisteredName() => await _employerCreateVacancyStepsHelper.CreateANewAdvert(RAAConst.LegalEntityName, true);
 
     [Given(@"the Employer creates a foundation advert by using a registered name")]
     public async Task TheEmployerCreatesAfoundationAdvertByUsingARegisteredName()
@@ -66,7 +63,7 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
     [Given(@"the Employer creates an advert with ""(.*)"" work location")]
     public async Task GivenTheEmployerCreatesAnAdvertWithWorkLocation(string locationType) => await _employerCreateVacancyStepsHelper.CreateANewAdvert(locationType, locationType);
 
-    [Given(@"the Employer creates an advert with ""(.*)"" work location and '(.*)' wage type")]
+    [Given(@"the Employer creates a advert with ""(.*)"" work location and '(.*)' wage type")]
     public async Task GivenTheEmployerCreatesAnAdvertWithWorkLocationAndWageType(string locationType, string wageType) => await _employerCreateVacancyStepsHelper.CreateANewAdvert_LocationAndWageType(locationType, wageType);
 
 }
