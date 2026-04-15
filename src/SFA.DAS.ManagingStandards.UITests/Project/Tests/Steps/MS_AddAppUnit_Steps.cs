@@ -59,6 +59,38 @@ public class MS_AddAppUnit_Steps(ScenarioContext context)
         await page9.VerifyUpdatedRegion("North Yorkshire");
     }
 
+    [Then(@"the provider is able to add a new application unit with different contact")]
+    public async Task ThenTheProviderIsAbleToAddANewApplicationUnitWithDifferentContact()
+    {
+        standardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_Electricvehicle;
+
+        var page = new ManagingStandardsProviderHomePage(context);
+
+        var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
+
+        var page2 = await page1.AccessTrainingTypesPage();
+        
+        var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
+
+        var page4 = await page3.AccessAddApprenticeshipUnit();
+
+        var page5 = await page4.SelectAStandardAndContinue(standardName);
+
+        var page6 = await page5.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
+
+        var page7 = await page6.NoDontUseExistingContactDetails_ApprenticeshipUnit();
+
+        var page8 = await page7.AddAll_ContactInformation_ApprenticeshipUnit();
+
+        var page9 = await page8.ConfirmAllLocations_AddApprenticeshipUnit();
+
+        var page10 = await page9.ChooseTheVenueDeliveryAndContinueToDeliver_ApprenticeshipUnit();
+
+        var page11 = await page10.YesDeliverAnyWhereInEngland_AddApprenticeshipUnit(standardName);
+
+        await page11.Save_NewApprenticeshipUnit_Continue();
+    }
+
 
     [Then(@"the provider is able to add a new application unit with regions")]
     public async Task ThenTheProviderIsAbleToAddANewApplicationUnit()

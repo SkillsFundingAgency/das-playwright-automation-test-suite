@@ -3,15 +3,34 @@
 public class YourContactInformationForThisAppUnit(ScenarioContext context) : ManagingStandardsBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your contact details for this apprenticeship unit");
-    
 
-    public async Task<WhereWillThisStandardBeDeliveredPage> Add_ContactInformation_ApprenticeshipUnit()
+    public async Task<WhereWillThisAppUnitBeDeliveredPage> Add_ContactInformation_ApprenticeshipUnit()
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Website" }).FillAsync(managingStandardsDataHelpers.Website);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new WhereWillThisStandardBeDeliveredPage(context, "Where can you deliver this apprenticeship unit?"));
+        return await VerifyPageAsync(() => new WhereWillThisAppUnitBeDeliveredPage(context));
+    }
+    
+
+    public async Task<WhereWillThisAppUnitBeDeliveredPage> AddAll_ContactInformation_ApprenticeshipUnit()
+    {
+        await Assertions.Expect(page.GetByRole(AriaRole.Textbox, new() { Name = "Email address" })).ToHaveValueAsync("");
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Email address" }).FillAsync(managingStandardsDataHelpers.EmailAddress);
+
+        await Assertions.Expect(page.GetByRole(AriaRole.Textbox, new() { Name = "Phone number" })).ToHaveValueAsync("");
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Phone number" }).FillAsync(managingStandardsDataHelpers.ContactNumber);
+
+        await Assertions.Expect(page.GetByRole(AriaRole.Textbox, new() { Name = "Website" })).ToHaveValueAsync("");
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Website" }).FillAsync(managingStandardsDataHelpers.Website);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new WhereWillThisAppUnitBeDeliveredPage(context));
     }
 
     public async Task<ManageAnAppUnitPage> Edit_ContactInformation_ApprenticeshipUnit(string standardName)
