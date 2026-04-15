@@ -1,6 +1,4 @@
-﻿using Azure;
-using Microsoft.Identity.Client;
-using SFA.DAS.QFAST.UITests.Project.Helpers;
+﻿using SFA.DAS.QFAST.UITests.Project.Helpers;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Application;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Form;
@@ -20,7 +18,7 @@ public class AdminSteps(ScenarioContext context)
     private readonly StartApplication_Page startApplicationPage = new(context);
     private readonly SearchForQualification_Page searchForQualification_Page = new(context);
     private readonly QualificationDetails_Page qualificationDetails_Page = new(context);
-    private readonly RequestForFundign_Page requestForFundign_Page = new(context);
+    private readonly RequestForFunding_Page requestForFunding_Page = new(context);
 
     [Given(@"the (.*) user log in to the portal")]
     public async Task GivenTheAdminUserLogInToThePortal(string user)
@@ -89,7 +87,7 @@ public class AdminSteps(ScenarioContext context)
 
             case "Review applications for funding":
                 await _qfastAdminPage.SelectOptions(option);
-                await VerifyPageHelper.VerifyPageAsync(context, () => new RequestForFundign_Page(context));
+                await VerifyPageHelper.VerifyPageAsync(context, () => new RequestForFunding_Page(context));
                 break;
 
             case "Review newly regulated qualifications":
@@ -268,17 +266,17 @@ public class AdminSteps(ScenarioContext context)
     [Then("I bulk update the applications")]
     public async Task AndIBulkUpdateTheApplications()
     {
-        await requestForFundign_Page.ClickOnApplyActionsToThisSelections();
-        await requestForFundign_Page.VefiryErrorMessage();
-        await requestForFundign_Page.ClickOnApplyAssignReviewersToThisSelection();
-        await requestForFundign_Page.VefiryErrorMessageForAssignReviewers();        
+        await requestForFunding_Page.ClickOnApplyActionsToThisSelections();
+        await requestForFunding_Page.VefiryErrorMessage();
+        await requestForFunding_Page.ClickOnApplyAssignReviewersToThisSelection();
+        await requestForFunding_Page.VefiryErrorMessageForAssignReviewers();        
         await _newQualificationsPage.ClickOnSelectAllOnThisPageLink();
         await _newQualificationsPage.VerifyAllCheckboxesAreSelected();
-        await requestForFundign_Page.SelectActionForApplications("Share with Skills England");
-        await requestForFundign_Page.ClickOnApplyActionsToThisSelections();
+        await requestForFunding_Page.SelectActionForApplications("Share with Skills England");
+        await requestForFunding_Page.ClickOnApplyActionsToThisSelections();
         await _newQualificationsPage.ClickOnSelectAllOnThisPageLink();
         await _newQualificationsPage.VerifyAllCheckboxesAreSelected();
-        await requestForFundign_Page.SelectReviewerForApplications("aodp TestAdmin1", "aodp TestAdmin2");
-        await requestForFundign_Page.ClickOnApplyAssignReviewersToThisSelection();
+        await requestForFunding_Page.SelectReviewerForApplications("aodp TestAdmin1", "aodp TestAdmin2");
+        await requestForFunding_Page.ClickOnApplyAssignReviewersToThisSelection();
     }
 }

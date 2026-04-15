@@ -32,10 +32,10 @@ public class Application_Details_Page (ScenarioContext context) : BasePage(conte
         await page.GetByRole(AriaRole.Link, new() { Name = "View messages" }).ClickAsync();
         return await VerifyPageAsync(() => new Application_Messages_Page(context));
     }
-    public async Task<RequestForFundign_Page> ClickBackLinkOnApplicationDetailsPage()
+    public async Task<RequestForFunding_Page> ClickBackLinkOnApplicationDetailsPage()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
-        return await VerifyPageAsync(() => new RequestForFundign_Page(context));
+        return await VerifyPageAsync(() => new RequestForFunding_Page(context));
     }
     public async Task<Application_Details_Page> AssignReviewers(string reviewer1, string reviewer2)
     {
