@@ -1,6 +1,5 @@
 ﻿
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
-using SFA.DAS.Login.Service.Project.Helpers;
 using System.Linq;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
