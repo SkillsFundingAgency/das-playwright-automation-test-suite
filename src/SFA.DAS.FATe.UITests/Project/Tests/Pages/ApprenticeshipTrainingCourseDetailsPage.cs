@@ -71,7 +71,7 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
     {
         var ifateLink = page.Locator("a", new()
         {
-            HasTextString = "from the Institute for Apprenticeships and Technical Education"
+            HasTextString = "from Skills England"
         });
 
         var popup = await page.RunAndWaitForPopupAsync(async () =>

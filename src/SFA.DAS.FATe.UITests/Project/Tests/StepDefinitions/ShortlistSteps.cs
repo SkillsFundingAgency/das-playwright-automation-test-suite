@@ -19,7 +19,7 @@ public class ShortlistSteps
     public async Task ThenVerifyAddRemoveCountShortlistFunctionality()
     {
         {
-            await _trainingProvidersPage.AddProviderToShortlist("10005077");
+            await _trainingProvidersPage.AddProviderToShortlist("10002599");
             await _trainingProvidersPage.ClickViewShortlistAsync();
             await _shortlistPage.VerifyCourseNameShortlisted("Adult care worker (level 2)");
             await _shortlistPage.GoToTrainingProvidersPage();
