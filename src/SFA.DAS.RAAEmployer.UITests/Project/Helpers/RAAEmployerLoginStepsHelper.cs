@@ -12,11 +12,18 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
         {
             if(context.ScenarioInfo.Tags.Contains("raaapiemployer"))
             {
-                var user = context.GetUser<RAAEmployerUser>();
+                var user = context.GetUser<RAAApiEmployerUser>();
 
                 if (user != null)
                 {
-                    return await _homePageStepsHelper.Login(user);
+                    context.Get<ObjectContext>().Set("loggedinuserobject", new LoggedInAccountUser
+                    {
+                        Username = user.Username,
+                        IdOrUserRef = user.IdOrUserRef,
+                        OrganisationName = user.OrganisationName
+                    });
+
+                    context.Get<ObjectContext>().Replace("organisationname", user.OrganisationName);
                 }
             }
             return await _homePageStepsHelper.GotoEmployerHomePage();
@@ -33,14 +40,28 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
             return new CreateAnAdvertHomePage(context);
         }
 
-        internal async Task<YourApprenticeshipAdvertsHomePage> GoToRecruitmentHomePage(RAAEmployerUser user)
+        internal async Task<YourApprenticeshipAdvertsHomePage> GoToRecruitmentHomePage(EasAccountUser user)
         {
             await GoToHomePage(user);
 
             return await NavigateToRecruitmentHomePage();
         }
 
-        internal async Task<YourApprenticeshipAdvertsHomePage> GoToRecruitmentHomePage() => await GoToRecruitmentHomePage(context.GetUser<RAAEmployerUser>());
+        internal async Task<YourApprenticeshipAdvertsHomePage> GoToRecruitmentHomePage() 
+        {
+            EasAccountUser user;
+
+            if (context.ScenarioInfo.Tags.Contains("raaapiemployer"))
+            {
+                user = context.GetUser<RAAApiEmployerUser>();
+            }
+            else
+            {
+                user = context.GetUser<RAAEmployerUser>();
+            }
+
+            return await GoToRecruitmentHomePage(user);
+        }
 
         internal async Task<YourApprenticeshipAdvertsHomePage> NavigateToRecruitmentHomePage()
         {
