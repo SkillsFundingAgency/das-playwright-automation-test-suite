@@ -72,7 +72,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return page1;
         }
 
-        internal async Task<ManageYourApprenticesPage> CheckApprenticeOnManageYourApprenticesPage(bool login = false)
+        internal async Task<ManageYourLearnersPage> CheckApprenticeOnManageYourApprenticesPage(bool login = false)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
@@ -82,7 +82,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await new ApprenticesHomePage(context).GoToManageYourApprentices();
 
-            var page = new Pages.Employer.ManageYourApprenticesPage(context);
+            var page = new Pages.Employer.ManageYourLearnersPage(context);
 
             foreach (var apprentice in listOfApprenticeship)
             {
@@ -104,7 +104,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, string uln, string name)
         {
             await apprenticesHomePage.GoToManageYourApprentices();
-            var page = new Pages.Employer.ManageYourApprenticesPage(context);
+            var page = new Pages.Employer.ManageYourLearnersPage(context);
             await page.SearchApprentice(uln, name);
             return await page.OpenFirstItemFromTheList(name);
         }
