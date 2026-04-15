@@ -91,6 +91,22 @@ public class MS_AddAppUnit_Steps(ScenarioContext context)
         await page11.Save_NewApprenticeshipUnit_Continue();
     }
 
+    [Then(@"the provider can add delivery forecast")]
+    public async Task ThenTheProviderCanAddADeliveryForecast()
+    {
+       var page = new ApprenticeshipUnit_SavedPage(context);
+
+       var page1 = await page.GoToProviderHomePage();
+
+       var page2 = await page1.NavigateToYourStandardsAndTrainingVenuesPage();
+
+       var page3 = await page2.AccessDeliveryForecast();
+
+       var page4 = await page3.SelectAppUnit(standardName);
+
+       await page4.EnterAppUnitForecast();
+    }
+
 
     [Then(@"the provider is able to add a new application unit with regions")]
     public async Task ThenTheProviderIsAbleToAddANewApplicationUnit()

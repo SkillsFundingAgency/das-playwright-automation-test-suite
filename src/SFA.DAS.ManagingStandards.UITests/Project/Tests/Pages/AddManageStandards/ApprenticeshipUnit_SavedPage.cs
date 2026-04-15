@@ -16,6 +16,13 @@ public partial class VenueAndDelivery_ApprenticeshipUnitPage
 
             return await VerifyPageAsync(() => new ManageYourAppUnitPage(context));
         }
+
+        public async Task<ManagingStandardsProviderHomePage> GoToProviderHomePage()
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new ManagingStandardsProviderHomePage(context));
+        }
     }
 
 }
