@@ -31,10 +31,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync(pageTitle);
         }
 
-        internal async Task<ManageYourApprenticesPage> ReturnBackToManageYourApprenticesPage()
+        internal async Task<ManageYourLearnersPage> ReturnBackToManageYourApprenticesPage()
         {
             await BackPageLink.ClickAsync();
-            return await VerifyPageAsync(() => new ManageYourApprenticesPage(context));
+            return await VerifyPageAsync(() => new ManageYourLearnersPage(context));
         }
 
         internal async Task<EditApprenticeDetailsPage> ClickOnEditApprenticeDetailsLink()
