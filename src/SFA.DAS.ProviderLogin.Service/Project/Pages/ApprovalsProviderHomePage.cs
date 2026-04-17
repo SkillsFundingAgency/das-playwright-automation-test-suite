@@ -106,11 +106,11 @@ public partial class ProviderHomePage : InterimProviderBasePage
         return await VerifyPageAsync(() => new ProviderFundingForNonLevyEmployersPage(context));
     }
 
-    public async Task<ProviderManageYourApprenticesPage>  GoToProviderManageYourApprenticePage()
+    public async Task<ProviderManageYourLearnersPage>  GoToProviderManageYourApprenticePage()
     {
         await page.GetByRole(AriaRole.Heading, new() { Name = "Manage your apprentices" }).GetByRole(AriaRole.Link).ClickAsync();
 
-        return await VerifyPageAsync(() => new ProviderManageYourApprenticesPage(context));
+        return await VerifyPageAsync(() => new ProviderManageYourLearnersPage(context));
     }
 
     public async Task<ProviderRecruitApprenticesHomePage> GoToProviderRecruitApprenticesHomePage()
@@ -207,11 +207,11 @@ public class ProviderInformationNotFoundPage(ScenarioContext context) : InterimP
 }
 
 
-public class ProviderManageYourApprenticesPage(ScenarioContext context) : InterimProviderBasePage(context)
+public class ProviderManageYourLearnersPage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprentices");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your learners");
     }
 }
 
