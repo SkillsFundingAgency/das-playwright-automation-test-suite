@@ -7,8 +7,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
     {
         #region locators
         private ILocator statusLocator => page.Locator("tbody.govuk-table__body tr.govuk-table__row:first-of-type td[data-label='Status'] strong");
-        private ILocator searchBox => page.GetByRole(AriaRole.Textbox, new() { Name = "Search by apprentice name" });
-        private ILocator searchButton => page.GetByRole(AriaRole.Button, new() { Name = "Search" });
+        private ILocator searchBox => page.Locator("input#searchTerm[name='searchTerm']");
+        private ILocator searchButton => page.Locator("button.govuk-button.das-search-form__button", new() { HasTextString = "Search" });
         private ILocator apprenticeLink(string apprenticeName) => page.GetByRole(AriaRole.Link, new () { Name = apprenticeName });
         #endregion
 
