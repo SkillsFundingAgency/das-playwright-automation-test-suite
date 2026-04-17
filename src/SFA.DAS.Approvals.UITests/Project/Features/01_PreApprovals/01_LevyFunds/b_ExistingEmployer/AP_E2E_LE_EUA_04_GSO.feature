@@ -17,9 +17,26 @@ Scenario: AP_E2E_LE_EUA_04_GSO Provider add learners on short course and employe
 	Then Commitments Db is updated with respective LearnerData Id
 	When the Employer approves the apprentice request (cohort)
 	Then LearnerData Db is updated with respective Apprenticeship Id
-	#Then Apprenticeship record is created in Learning Db
+	And apprentice/learner record is no longer available on SelectLearnerFromILR page
+	Then Apprenticeship record is created in Learning Db
 	Then Provider can access live apprentice records under Manager Your Apprentices section
 	And learning details can be edited as per below rules:
-		| FirstName | LastName | EMailAddress | DateOfBirth | DeliveryModel | ULN	| TrainingCourse | Version | Option | StartDate | FinishDate | Cost  |
-		| true      | true     | true         | true        | false         | false	| false          | false   | false  | false     | false      | false |
-	And apprentice/learner record is no longer available on SelectLearnerFromILR page
+	#	| FirstName | LastName | EMailAddress | DateOfBirth | DeliveryModel | ULN	| TrainingCourse | Version | Option | StartDate | FinishDate | Cost  |
+	#	| true      | true     | true         | true        | false         | false	| false          | false   | false  | false     | false      | false |
+	| Locator							| Editable	|
+    | #firstName						| true		|
+    | #lastName							| true		|
+    | #email							| true		|
+    | #dob-day							| true		|
+    | #dob-month						| true		|
+    | #dob-year							| true		|
+    | input#DeliveryModel[type=hidden]	| false		|
+    | #uln								| false		|
+    | #trainingName						| false		|
+    | input#Version[type=hidden]		| false		|
+    | input#Option[type=hidden]			| false		|
+    | #startDate						| false		|
+    | #endDate							| false		|
+    | #cost								| false		|
+
+

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using Azure;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
@@ -6,7 +7,9 @@ using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
+using System.Xml.Linq;
 using TechTalk.SpecFlow.Assist;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -298,6 +301,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
+        [Then(@"learning details can be edited as per below rules:")]
+        public async Task ThenLearningDetailsCanBeEditedAsPerBelowRules(Table table)
+        {
+            await new EditApprenticeDetails_ProviderPage(context).ValidateEditability(table);
+        }        
 
 
 

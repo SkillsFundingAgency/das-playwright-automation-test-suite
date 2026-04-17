@@ -28,5 +28,39 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         }
 
         internal async Task ClickOnCancelAndReturnLink() => await page.GetByRole(AriaRole.Link, new() { Name = "Cancel and return" }).ClickAsync();
+
+        internal async Task ValidateEditability(Table table)
+        {
+            foreach (var row in table.Rows)
+            {
+                var locator = row["Locator"];
+                var expected = bool.Parse(row["Editable"]);
+
+                var actual = await isEditable(page, locator);
+
+                //actual.Should().Be(expected, $"Locator '{locator}' should be editable={expected}");
+                Assert.AreEqual(expected, actual, $"Locator '{locator}' editability does not match expected value.");
+            }
+        }
+
+        private async Task<bool> isEditable(IPage page, string locator)
+        {
+            var element = page.Locator(locator);
+
+            // If element doesn't exist → treat as non-editable
+            if (!(await element.CountAsync() == 0)) return false;
+
+            // Hidden input → not editable
+            var type = await element.GetAttributeAsync("type");
+            if (type == "hidden") return false;
+
+            // Not visible → not editable
+            if (!(await element.IsVisibleAsync())) return false;
+            // Disabled or readonly → not editable
+            if (await element.IsDisabledAsync()) return false;
+            if (await element.GetAttributeAsync("readonly") != null) return false;
+
+            return true;
+        }
     }
 }

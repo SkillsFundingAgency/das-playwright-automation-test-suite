@@ -28,8 +28,12 @@ internal class CoursesDataHelper
         new() { LarsCode = "811", Title = "Health and social care foundation apprenticeship", MaxFunding = 3000, EffectiveFrom = new(2025, 08, 01), ApprenticeshipType = LearningType.FoundationApprenticeship, Level = 2, Version = "1.0" },
 
         // Short Courses
-        new() { LarsCode = "ZSC00001", Title = "Permanent modular building assembly – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },
+        new() { LarsCode = "ZSC00002", Title = "AI leadership – Developing AI strategy – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },
         new() { LarsCode = "ZSC00004", Title = "Welding (mechanised) – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },
+        new() { LarsCode = "ZSC00005", Title = "Electrical fitting and assembly – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },
+        new() { LarsCode = "ZSC00006", Title = "Electric vehicle (EV) charging point installation and maintenance – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 3, Version = "1.0" },
+        new() { LarsCode = "ZSC00007", Title = "Solar PV installation and maintenance – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 3, Version = "1.0" },
+        new() { LarsCode = "ZSC00008", Title = "Battery Manufacturing - Apprenticeship Unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },
 
         // Courses with Options      
         new() { LarsCode = "57", Title = "Gas network craftsperson", MaxFunding = 27000, EffectiveFrom = new(2015, 08, 01), Level = 3, Version = "1.3", Options = new() { "Emergency Response Craftsperson", "Network Pipelines Maintenance Craftsperson", "Network Maintenance Craftsperson (Pressure Management)", "Network Maintenance Craftsperson (Electrical & Instrumentation)" } },      

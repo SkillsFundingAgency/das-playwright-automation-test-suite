@@ -99,7 +99,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
                 var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
-                var result = await retryPolicy.ExecuteAsync(() => learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln));
+                var learningType = apprenticeship.TrainingDetails.LearningType;
+                string result = string.Empty;
+                
+                if (learningType == (int)LearningType.ShortCourses)
+                    result = await retryPolicy.ExecuteAsync(() => learningDbSqlHelper.CheckIfShortCourseLearnerRecordUpdatedInLearningDb(apprenticeshipId, uln));
+                else
+                    result = await retryPolicy.ExecuteAsync(() => learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln));
+
                 Assert.IsNotEmpty(result, $"Apprenticeship record not found in Learning Db for ApprenticeshipId: {apprenticeshipId}");
                 apprenticeship.ApprenticeDetails.LearningIdKey = result;
                 await Task.Delay(100);
