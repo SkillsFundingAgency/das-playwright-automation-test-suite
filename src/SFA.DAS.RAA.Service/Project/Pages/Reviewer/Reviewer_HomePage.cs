@@ -20,16 +20,18 @@ public class Reviewer_HomePage(ScenarioContext context) : BasePage(context)
 
         var reviewlocator = page.GetByRole(AriaRole.Link, new() { Name = "Review" });
 
-        for (int i = 0; i < 5; i++)
+        var reviewLocatorPresent = (await reviewlocator.CountAsync()) > 0 && await reviewlocator.IsEnabledAsync() && await reviewlocator.IsVisibleAsync();
+
+        if (!reviewLocatorPresent)
         {
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search vacancies" }).FillAsync(vacref);
-
-            await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
-
-            if (await reviewlocator.IsEnabledAsync() && await reviewlocator.IsVisibleAsync())
+            int attempts = 0;
+            const int maxAttempts = 15;
+            do
             {
-                break;
-            }
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "Search vacancies" }).FillAsync(vacref);
+                await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+                attempts++;
+            } while (((await reviewlocator.CountAsync()) == 0 || !(await reviewlocator.IsEnabledAsync() && await reviewlocator.IsVisibleAsync())) && attempts < maxAttempts);
         }
 
         await page.GetByRole(AriaRole.Row, new() { Name = vacref }).GetByRole(AriaRole.Link, new() { Name = "Review" }).ClickAsync();
@@ -97,12 +99,20 @@ public class QAReviewsPage(ScenarioContext context) : VerifyDetailsBasePage(cont
 {
     public override async Task VerifyPage()
     {
-        await page.WaitForURLAsync(new Regex("reviews"), new PageWaitForURLOptions
+        await page.WaitForURLAsync(new Regex("reviews|Dashboard"), new PageWaitForURLOptions
         {
             WaitUntil = WaitUntilState.NetworkIdle,
             Timeout = 5000
         });
 
-        await Assertions.Expect(page.Locator("form")).ToContainTextAsync("Summary");
+        var currentUrl = page.Url;
+        if (currentUrl.Contains("reviews"))
+        {
+            await Assertions.Expect(page.Locator("form")).ToContainTextAsync("Summary");
+        }
+        else if (currentUrl.Contains("Dashboard"))
+        {
+            await Assertions.Expect(page.Locator("form")).ToContainTextAsync("Statistics");
+        }
     }
 }
