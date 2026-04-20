@@ -1,7 +1,7 @@
 ﻿Feature: MS_06_AddDeleteApprenticeshipUnit
 
 @managingstandards
-@managingstandardsadddeleteapprenticeshipunit
+@managingstandardsadddeleteaiapprenticeshipunit
 @managingstandards06
 @regression
 Scenario: MS_06A_Add_Delete_ApprenticeshipUnit_TrainingLocation
@@ -11,7 +11,7 @@ Scenario: MS_06A_Add_Delete_ApprenticeshipUnit_TrainingLocation
 
 
 @managingstandards
-@managingstandardsadddeleteapprenticeshipunit
+@managingstandardsadddeleteaiapprenticeshipunit
 @managingstandards07
 @regression
 Scenario: MS_06B_Add_Delete_ApprenticeshipUnit_employerLocation
@@ -22,7 +22,7 @@ Scenario: MS_06B_Add_Delete_ApprenticeshipUnit_employerLocation
 
 	
 @managingstandards
-@managingstandardsadddeleteapprenticeshipunit
+@managingstandardsadddeleteaiapprenticeshipunit
 @managingstandards07
 @regression
 Scenario: MS_06C_Add_Delete_ApprenticeshipUnit_Online
