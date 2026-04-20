@@ -1,5 +1,4 @@
-﻿using Microsoft.Identity.Client;
-using SFA.DAS.QFAST.UITests.Project.Helpers;
+﻿using SFA.DAS.QFAST.UITests.Project.Helpers;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Application;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Form;
@@ -19,6 +18,7 @@ public class AdminSteps(ScenarioContext context)
     private readonly StartApplication_Page startApplicationPage = new(context);
     private readonly SearchForQualification_Page searchForQualification_Page = new(context);
     private readonly QualificationDetails_Page qualificationDetails_Page = new(context);
+    private readonly RequestForFunding_Page requestForFunding_Page = new(context);
 
     [Given(@"the (.*) user log in to the portal")]
     public async Task GivenTheAdminUserLogInToThePortal(string user)
@@ -87,7 +87,7 @@ public class AdminSteps(ScenarioContext context)
 
             case "Review applications for funding":
                 await _qfastAdminPage.SelectOptions(option);
-                await VerifyPageHelper.VerifyPageAsync(context, () => new RequestForFundign_Page(context));
+                await VerifyPageHelper.VerifyPageAsync(context, () => new RequestForFunding_Page(context));
                 break;
 
             case "Review newly regulated qualifications":
@@ -239,5 +239,44 @@ public class AdminSteps(ScenarioContext context)
     public async Task ThenIValidateUserCanClickOnTheAccociatedApplications()
     {
         await qualificationDetails_Page.ClickOnFirstAssociatedApplication();
+    }
+
+    [Then("I bulk update the qualifications")]
+    public async Task AndIBulkUpdateTheQualifications()
+    {
+        await _newQualificationsPage.ClickOnApplyToThisSelectionButton();
+        await _newQualificationsPage.VefiryErrorMessage();
+        await _newQualificationsPage.ClickOnSelectAllOnThisPageLink();
+        await _newQualificationsPage.VerifyAllCheckboxesAreSelected();
+        await _newQualificationsPage.ClickOnSelectStatusDropdown();
+        await _newQualificationsPage.SelectOption("No Action Required");
+        await _newQualificationsPage.ClickOnApplyToThisSelectionButton();
+        await _newQualificationsPage.VerifySuccessMessage("Actions have been applied to the selected qualifications");
+        await qualificationDetails_Page.VerifyStatusOfQualification("No Action Required");        
+    }
+
+    [Then("I verify user is able to update the qualification manually")]
+    public async Task ThenIVerifyUserIsAbleToUpdateTheQualificationManually()
+    {
+        await qualificationDetails_Page.ClickOnBackLink();
+        await _newQualificationsPage.ChangeTheQualificationStatusManually("On Hold");
+        await qualificationDetails_Page.VerifyStatusOfQualification("On Hold");
+    }
+
+    [Then("I bulk update the applications")]
+    public async Task AndIBulkUpdateTheApplications()
+    {
+        await requestForFunding_Page.ClickOnApplyActionsToThisSelections();
+        await requestForFunding_Page.VefiryErrorMessage();
+        await requestForFunding_Page.ClickOnApplyAssignReviewersToThisSelection();
+        await requestForFunding_Page.VefiryErrorMessageForAssignReviewers();        
+        await _newQualificationsPage.ClickOnSelectAllOnThisPageLink();
+        await _newQualificationsPage.VerifyAllCheckboxesAreSelected();
+        await requestForFunding_Page.SelectActionForApplications("Share with Skills England");
+        await requestForFunding_Page.ClickOnApplyActionsToThisSelections();
+        await _newQualificationsPage.ClickOnSelectAllOnThisPageLink();
+        await _newQualificationsPage.VerifyAllCheckboxesAreSelected();
+        await requestForFunding_Page.SelectReviewerForApplications("aodp TestAdmin1", "aodp TestAdmin2");
+        await requestForFunding_Page.ClickOnApplyAssignReviewersToThisSelection();
     }
 }
