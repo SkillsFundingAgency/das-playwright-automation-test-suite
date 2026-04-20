@@ -255,3 +255,4 @@ src/.idea/.idea.SFA.DAS.TestAutomation/.idea/
 # VScode generated build output
 /src/build_output.txt
 .vscode/settings.json
+Tracefiles
