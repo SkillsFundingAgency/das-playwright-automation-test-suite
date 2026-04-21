@@ -30,7 +30,7 @@ internal class CoursesDataHelper
         // Short Courses
         new() { LarsCode = "ZSC00002", Title = "AI leadership – Developing AI strategy – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },
         new() { LarsCode = "ZSC00004", Title = "Welding (mechanised) – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },
-        new() { LarsCode = "ZSC00005", Title = "Electrical fitting and assembly – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },
+        //new() { LarsCode = "ZSC00005", Title = "Electrical fitting and assembly – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },
         new() { LarsCode = "ZSC00006", Title = "Electric vehicle (EV) charging point installation and maintenance – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 3, Version = "1.0" },
         new() { LarsCode = "ZSC00007", Title = "Solar PV installation and maintenance – Apprenticeship unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 3, Version = "1.0" },
         new() { LarsCode = "ZSC00008", Title = "Battery Manufacturing - Apprenticeship Unit", MaxFunding = 1000, EffectiveFrom = new(2026, 03, 17), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },

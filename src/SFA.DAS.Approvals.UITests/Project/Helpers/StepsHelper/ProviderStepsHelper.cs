@@ -215,8 +215,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task TryEditApprenticeAgeAndValidateError(ApprenticeDetails_ProviderPage apprenticeDetailsPage, DateTime dateOfBirth)
         {
             string expectedErrorMessage = "The apprentice must be younger than 25 years old at the start of their training";
-            await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();
-            var page = new EditApprenticeDetails_ProviderPage(context);
+            var page = await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();            
             await page.EditDoB(dateOfBirth);
             await page.ClickUpdateDetailsButton();
             await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");

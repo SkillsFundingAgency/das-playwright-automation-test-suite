@@ -21,8 +21,6 @@ Scenario: AP_E2E_LE_EUA_04_GSO Provider add learners on short course and employe
 	Then Apprenticeship record is created in Learning Db
 	Then Provider can access live apprentice records under Manager Your Apprentices section
 	And learning details can be edited as per below rules:
-	#	| FirstName | LastName | EMailAddress | DateOfBirth | DeliveryModel | ULN	| TrainingCourse | Version | Option | StartDate | FinishDate | Cost  |
-	#	| true      | true     | true         | true        | false         | false	| false          | false   | false  | false     | false      | false |
 	| Locator							| Editable	|
     | #firstName						| true		|
     | #lastName							| true		|

@@ -379,16 +379,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheUserEditAnExistingApprenticeshipRecordBySelectingEditApprenticeLinkUnderManageApprentices(string status)
         {
             var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(LiveApprentice);
-            await page.ClickOnEditApprenticeDetailsLink();
-            var page1 = new EditApprenticeDetails_ProviderPage(context);
+          
 
             if (status == "can")
             {
-                await page.VerifyPageAsync(() => new EditApprenticeDetails_ProviderPage(context));
+                await page.ClickOnEditApprenticeDetailsLink();
+                var page1 = await page.VerifyPageAsync(() => new EditApprenticeDetails_ProviderPage(context));
                 await page1.ClickOnCancelAndReturnLink();
             }
             else 
             {
+                await page.ClickOnEditApprenticeDetailsLinkLeadToAccessDeniedPage();
                 await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
                 await page.NavigateBrowserBack();
             }            

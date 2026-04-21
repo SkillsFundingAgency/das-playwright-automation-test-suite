@@ -304,7 +304,26 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then(@"learning details can be edited as per below rules:")]
         public async Task ThenLearningDetailsCanBeEditedAsPerBelowRules(Table table)
         {
-            await new EditApprenticeDetails_ProviderPage(context).ValidateEditability(table);
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+
+            await providerHomePageStepsHelper.GoToProviderHomePage(true);
+            await UserNavigatesToManageYourApprenticesPage();
+            var page = new ManageYourApprentices_ProviderPage(context);
+
+            foreach (var apprentice in listOfApprenticeship)
+            {
+                var uln = apprentice.ApprenticeDetails.ULN.ToString();
+                var name = apprentice.ApprenticeDetails.FullName;
+
+                await page.VerifyApprenticeFound(uln, name);
+                var page2 = await page.SelectViewCurrentApprenticeDetails(name, uln);
+                await page2.ClickOnEditApprenticeDetailsLink();
+                await new EditApprenticeDetails_ProviderPage(context).ValidateEditability(table);
+            }
+
+
+
+
         }        
 
 

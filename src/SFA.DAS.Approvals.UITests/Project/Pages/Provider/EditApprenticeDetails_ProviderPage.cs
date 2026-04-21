@@ -35,10 +35,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             {
                 var locator = row["Locator"];
                 var expected = bool.Parse(row["Editable"]);
-
                 var actual = await isEditable(page, locator);
 
-                //actual.Should().Be(expected, $"Locator '{locator}' should be editable={expected}");
                 Assert.AreEqual(expected, actual, $"Locator '{locator}' editability does not match expected value.");
             }
         }
