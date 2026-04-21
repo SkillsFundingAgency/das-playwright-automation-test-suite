@@ -9,6 +9,16 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(expectedCourseTitle);
     }
 
+    public async Task<bool> ProviderAvailableForThisCourse()
+    {
+        if (await page.GetByRole(AriaRole.Heading, new() { Name = "No training providers" }).IsVisibleAsync())
+        {
+            Console.WriteLine("No training providers Heading is visible");
+            return false;
+        }
+        return true;
+    }
+
     public async Task<TrainingProvidersPage> ViewProvidersForThisCourse()
     {
         var viewProvidersButton = page.GetByRole(AriaRole.Link, new() { Name = "View providers for this course" });

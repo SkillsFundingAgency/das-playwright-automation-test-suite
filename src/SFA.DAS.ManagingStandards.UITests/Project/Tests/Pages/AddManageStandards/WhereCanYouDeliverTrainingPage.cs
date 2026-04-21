@@ -9,22 +9,54 @@ public class WhereCanYouDeliverTrainingPage(ScenarioContext context) : ManagingS
 
     public async Task<ManageAStandard_TeacherPage> SelectDerbyRutlandRegionsAndConfirm()
     {
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Derby", Exact = true }).CheckAsync();
+        await SelectCheckboxByText("Derby");
 
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Rutland" }).CheckAsync();
+        await SelectCheckboxByText("Rutland");
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
+
+    public async Task<ManageAnAppUnitPage> SelectRegionsAndConfirm(string[] regions, string standardName)
+    {
+        foreach (var region in regions)
+        {
+            await SelectCheckboxByText(region);
+        }
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageAnAppUnitPage(context, standardName));
+    }
+
+    public async Task<ManageAnAppUnitPage> SelectRegionsAndContinue(string[] regions, string standardName)
+    {
+        foreach (var region in regions)
+        {
+            await SelectCheckboxByText(region);
+        }       
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageAnAppUnitPage(context, standardName));
+    }
+    
     public async Task<ManageAStandard_TeacherPage> EditRegionsAddLutonEssexAndConfirm()
     {
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Luton" }).CheckAsync();
+        await SelectCheckboxByText("Luton");
 
-        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Essex" }).CheckAsync();
+        await SelectCheckboxByText("Essex");
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
+    }
+
+    private async Task SelectCheckboxByText(string text)
+    {
+        var checkbox = page.Locator(".govuk-checkboxes__item").Filter(new() { HasText = text }).First.Locator("input[type='checkbox']");
+
+        await checkbox.CheckAsync();
     }
 }
