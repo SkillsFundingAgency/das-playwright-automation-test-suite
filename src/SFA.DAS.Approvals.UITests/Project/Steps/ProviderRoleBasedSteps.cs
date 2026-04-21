@@ -4,9 +4,11 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages;
 using SFA.DAS.Approvals.UITests.Project.Pages.Common;
+using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
+using YourFundingReservationsPage = SFA.DAS.Approvals.UITests.Project.Pages.Provider.YourFundingReservationsPage;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -164,7 +166,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user \"(.*)\" reserve new funding")]
         public async Task ThenTheUserCanReserveNewFunding(string status)
         {
-            var page = new FundingForNonLevyEmployersPage(context);
+            var page = new YourFundingReservationsPage(context);
             await page.ClickOnReserveMoreFundingLink();
 
             if (status == "can")
@@ -182,7 +184,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user \"(.*)\" delete existing reservervations")]
         public async Task ThenTheUserCanDeleteExistingReservervations(string status)
         {
-            var page = new FundingForNonLevyEmployersPage(context);
+            var page = new YourFundingReservationsPage(context);
             await page.ClickOnDeleteReservationLink();
 
             if (status == "can")
@@ -200,8 +202,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user \"(.*)\" add apprentices to an existing reservation")]
         public async Task ThenTheUserCanAddApprenticesToAnExistingReservation(string status)
         {
-            var page = new FundingForNonLevyEmployersPage(context);
-            await page.ClickOnAddApprenticeLink();
+            var page = new YourFundingReservationsPage(context);
+            await page.ClickOnAddLearnerLink();
 
             if (status ==  "can")
             {

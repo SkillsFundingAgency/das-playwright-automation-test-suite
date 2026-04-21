@@ -3,18 +3,18 @@ using System;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class FundingForNonLevyEmployersPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class YourFundingReservationsPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator ReserveMoreFundingLink => page.GetByRole(AriaRole.Link, new() { Name = "Reserve more funding" });
-        private ILocator AddApprenticeLink => page.GetByRole(AriaRole.Link, new() { Name = "Add apprentice" }).First;
+        private ILocator AddLearnerLink => page.GetByRole(AriaRole.Link, new() { Name = "Add learner" }).First;
         private ILocator DeleteLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).First;
         private ILocator NextPageLink => page.GetByRole(AriaRole.Link, new() { Name = "Next" }).First;
         #endregion
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Funding for non-levy employers");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your funding reservations");
         }
 
         internal async Task ClickOnReserveMoreFundingLink() => await ReserveMoreFundingLink.ClickAsync();
@@ -31,7 +31,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
 
             string partialHref = $"reservationId={apprenticeship.ReservationID}";
-            var reservationLink = page.Locator($"a[href*='{partialHref}']:text('Add apprentice')");
+            var reservationLink = page.Locator($"a[href*='{partialHref}']:text('Add learner')");
             var nextPageButton = page.GetByRole(AriaRole.Link, new() { Name = "Next page" });
 
             // ✅ First, check if link is already present and visible
@@ -65,10 +65,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
-        internal async Task ClickOnAddApprenticeLink()
+        internal async Task ClickOnAddLearnerLink()
         {
             await SearchForAnyReservation();
-            await AddApprenticeLink.ClickAsync();
+            await AddLearnerLink.ClickAsync();
         }
 
         internal async Task ClickOnDeleteReservationLink()

@@ -102,7 +102,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var page = await new ProviderHomePage(context).GoToManageYourFunding();
-                await new FundingForNonLevyEmployersPage(context).ClickOnReserveMoreFundingLink();
+                await new YourFundingReservationsPage(context).ClickOnReserveMoreFundingLink();
                 var page1 = await new ReserveFundingForNonLevyEmployersPage(context).ClickOnReserveFundingButton();
                 var page2 = await SelectEmployer(page1);
                 var page3 = await page2.ConfirmNonLevyEmployer();
@@ -119,7 +119,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await new ProviderHomePage(context).GoToManageYourFunding();
-            var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
+            var page1 = await new YourFundingReservationsPage(context).SelectReservationToAddApprentice(apprenticeship);
             //var page2 = await page1.SelectOptionToAddApprenticesFromILRList_NonLevyRoute();
             var page3 = await page1.SelectApprenticeFromILRList(apprenticeship);            
             await page3.ClickAddButton();
@@ -249,7 +249,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await new ProviderHomePage(context).GoToManageYourFunding();
-            var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
+            var page1 = await new YourFundingReservationsPage(context).SelectReservationToAddApprentice(apprenticeship);
             var page3 = await page1.SelectApprenticeFromILRList(apprenticeship);
             await page3.ClickAddButton();
             var page4 =  new ApproveApprenticeDetailsPage(context);
