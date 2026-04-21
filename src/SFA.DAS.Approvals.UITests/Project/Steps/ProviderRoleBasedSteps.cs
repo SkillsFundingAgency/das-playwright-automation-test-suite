@@ -384,7 +384,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             if (status == "can")
             {
                 await page.ClickOnEditApprenticeDetailsLink();
-                var page1 = await page.VerifyPageAsync(() => new EditApprenticeDetails_ProviderPage(context));
+                var page1 = await page.VerifyPageAsync(() => new EditLearnerDetails_ProviderPage(context));
                 await page1.ClickOnCancelAndReturnLink();
             }
             else 

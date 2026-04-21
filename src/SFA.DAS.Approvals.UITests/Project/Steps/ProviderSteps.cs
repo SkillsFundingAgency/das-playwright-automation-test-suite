@@ -7,6 +7,7 @@ using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
+using System.Runtime.ConstrainedExecution;
 using System.Xml.Linq;
 using TechTalk.SpecFlow.Assist;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -300,9 +301,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page2.ConfirmNonLevyEmployerWithFundingRestrictions();
         }
 
-
-        [Then(@"learning details can be edited as per below rules:")]
-        public async Task ThenLearningDetailsCanBeEditedAsPerBelowRules(Table table)
+        [Then(@"Provider can access live learner records and modify them as per below table:")]
+        public async Task ThenProviderCanAccessLiveLearnerRecordsAndModifyThemAsPerBelowTable(Table table)
         {
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
@@ -318,7 +318,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 await page.VerifyApprenticeFound(uln, name);
                 var page2 = await page.SelectViewCurrentApprenticeDetails(name, uln);
                 await page2.ClickOnEditApprenticeDetailsLink();
-                await new EditApprenticeDetails_ProviderPage(context).ValidateEditability(table);
+                await new EditLearnerDetails_ProviderPage(context).ValidateEditability(table);
             }
 
 

@@ -30,10 +30,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync(pageTitle);
         }
 
-        internal async Task<EditApprenticeDetails_ProviderPage> ClickOnEditApprenticeDetailsLink()
+        internal async Task<EditLearnerDetails_ProviderPage> ClickOnEditApprenticeDetailsLink()
         {
             await EditApprenticeDetailsLink.ClickAsync();
-            return await VerifyPageAsync(() => new EditApprenticeDetails_ProviderPage(context));
+            return await VerifyPageAsync(() => new EditLearnerDetails_ProviderPage(context));
         }
 
         internal async Task<ProviderAccessDeniedPage> ClickOnEditApprenticeDetailsLinkLeadToAccessDeniedPage()
