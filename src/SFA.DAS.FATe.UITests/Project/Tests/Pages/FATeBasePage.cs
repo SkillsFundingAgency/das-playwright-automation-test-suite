@@ -29,7 +29,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task<FATeHomePage> ReturnToStartPage()
     {
-        await page.Locator(".govuk-header__link.govuk-header__service-name").ClickAsync();
+        await page.Locator(".govuk-service-navigation__link").ClickAsync();
         return await VerifyPageAsync(() => new FATeHomePage(context));
     }
     public async Task<Search_TrainingCourses_ApprenticeworkLocationPage> ReturnToSearch_TrainingCourses_ApprenticeworkLocationPage()
@@ -224,7 +224,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyTrainingProviderWithinDistance(int miles)
     {
-        var providerLinks = page.GetByRole(AriaRole.Link, new() { NameRegex = new Regex($"View \\d+ training providers within {miles} miles") });
+        var providerLinks = page.GetByRole(AriaRole.Link, new() { NameRegex = new Regex($@"View \d+ training providers within {miles} miles") });
 
         int count = await providerLinks.CountAsync();
         if (count == 0)

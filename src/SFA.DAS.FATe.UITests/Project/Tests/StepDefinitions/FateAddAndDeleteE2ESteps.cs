@@ -25,7 +25,7 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
         await _fATeHomePage.ApplyFilters();
         await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Electrical fitting and assembly – Apprenticeship unit (level 2)");
         await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
-        await _trainingProvidersPage.VerifyProviderListed("CENTRAL TRAINING ACADEMY LIMITED", true);
+        await _trainingProvidersPage.VerifyProviderListed("REMIT GROUP LIMITED", true);
 
         await Navigate(UrlConfig.Provider_BaseUrl);
         await _fATeHomePage.StartNow();
@@ -43,7 +43,7 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
         if (await _apprenticeshipTrainingCourseDetailsPage.ProviderAvailableForThisCourse())
         {
             await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
-            await _trainingProvidersPage.VerifyProviderListed("CENTRAL TRAINING ACADEMY LIMITED", false);
+            await _trainingProvidersPage.VerifyProviderListed("REMIT GROUP LIMITED", false);
         }       
     }
 
