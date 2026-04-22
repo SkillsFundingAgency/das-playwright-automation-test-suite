@@ -76,7 +76,9 @@ public class EmployerVacancySearchResultPage(ScenarioContext context) : VacancyS
             await CheckFoundationTag();
         }
 
-        await page.Locator("a[data-label='application_review']").ClickAsync();
+        var newApplicationRow = page.Locator("tr.govuk-table__row", new() { Has = page.Locator("strong.govuk-tag", new() { HasTextString = "New" })}).First;
+
+        await newApplicationRow.Locator("a[data-label='application_review']").ClickAsync();
 
         return await VerifyPageAsync(() => new ManageApplicantPage(context));
     }

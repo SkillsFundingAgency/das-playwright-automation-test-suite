@@ -38,8 +38,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task SearchApprentice(string ULN)
         {
-            var searchBox = page.GetByRole(AriaRole.Textbox, new() { Name = "Search apprentice name or" });
-            var searchButton = page.GetByRole(AriaRole.Button, new() { Name = "Search" });
+            var searchBox = page.Locator("input#searchTerm[name='searchTerm']");
+            var searchButton = page.Locator("button.govuk-button.das-search-form__button", new() { HasTextString = "Search" });
 
             await searchBox.FillAsync("");
             await searchBox.FillAsync(ULN);
