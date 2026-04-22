@@ -18,12 +18,7 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
     [When("the provider is listed on the FAT apprenticeship unit providers page")]
     public async Task WhenTheProviderIsListedOnTheFATApprenticeshipUnitProvidersPage()
     {
-        await Navigate(UrlConfig.FAT_BaseUrl);
-        await _fATeHomePage.ClickStartNow();
-        await _search_TrainingCourses_ApprenticeworkLocationPage.SelectTrainingTypes([TrainingType.ApprenticeshipUnits]);
-        await _fATeHomePage.EnterCourseJobOrStandard(_appName);
-        await _fATeHomePage.ApplyFilters();
-        await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Electrical fitting and assembly – Apprenticeship unit (level 2)");
+        await SelectAppUnitCourseByName();
         await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
         string providerName = "CENTRAL TRAINING ACADEMY LIMITED";
         await _trainingProvidersPage.VerifyProviderListed(providerName, true);
@@ -35,12 +30,7 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
     [When("the provider is listed at learners and provider location on the FAT apprenticeship unit providers page")]
     public async Task TheProviderIsListedOnlearnersAndProviderLocationOnTheFATApprenticeshipUnitProvidersPage()
     {
-        await Navigate(UrlConfig.FAT_BaseUrl);
-        await _fATeHomePage.ClickStartNow();
-        await _search_TrainingCourses_ApprenticeworkLocationPage.SelectTrainingTypes([TrainingType.ApprenticeshipUnits]);
-        await _fATeHomePage.EnterCourseJobOrStandard(_appName);
-        await _fATeHomePage.ApplyFilters();
-        await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Electrical fitting and assembly – Apprenticeship unit (level 2)");
+        await SelectAppUnitCourseByName();
         await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
         string providerName = "CENTRAL TRAINING ACADEMY LIMITED";
         await _trainingProvidersPage.VerifyProviderListed(providerName, true);
@@ -53,17 +43,23 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
     [Then("the provider is not listed or no provider found on the FAT apprenticeship unit providers page")]
     public async Task TheProviderIsNotListedOrNotFound()
     {
+        await SelectAppUnitCourseByName();
+
+        if (await _apprenticeshipTrainingCourseDetailsPage.ProviderAvailableForThisCourse())
+        {
+            await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
+            await _trainingProvidersPage.VerifyProviderListed("CENTRAL TRAINING ACADEMY LIMITED", false);
+        }       
+    }
+
+    private async Task SelectAppUnitCourseByName()
+    {
         await Navigate(UrlConfig.FAT_BaseUrl);
         await _fATeHomePage.ClickStartNow();
         await _search_TrainingCourses_ApprenticeworkLocationPage.SelectTrainingTypes([TrainingType.ApprenticeshipUnits]);
         await _fATeHomePage.EnterCourseJobOrStandard(_appName);
         await _fATeHomePage.ApplyFilters();
         await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Electrical fitting and assembly – Apprenticeship unit (level 2)");
-        if (await _apprenticeshipTrainingCourseDetailsPage.ProviderAvailableForThisCourse())
-        {
-            await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
-            await _trainingProvidersPage.VerifyProviderListed("CENTRAL TRAINING ACADEMY LIMITED", false);
-        }       
     }
 
 

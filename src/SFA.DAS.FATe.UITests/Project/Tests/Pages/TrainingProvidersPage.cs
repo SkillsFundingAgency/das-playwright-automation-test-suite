@@ -120,8 +120,6 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         {
             await Assertions.Expect(locator).ToContainTextAsync(location, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
         }
-
-        
     }
 
     public async Task VerifyWithProviderLocationFilter(List<string> locations)
