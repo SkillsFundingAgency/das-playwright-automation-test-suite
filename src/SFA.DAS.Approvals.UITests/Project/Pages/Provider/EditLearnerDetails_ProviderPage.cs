@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
@@ -6,7 +7,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Edit learner details");
+            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync(new Regex(@"Edit (learner|apprentice) details"));
         }
 
         internal async Task EditDoB(DateTime DoB)
