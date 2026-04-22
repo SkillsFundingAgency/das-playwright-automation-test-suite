@@ -25,8 +25,27 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
         await _fATeHomePage.ApplyFilters();
         await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Electrical fitting and assembly – Apprenticeship unit (level 2)");
         await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
-        await _trainingProvidersPage.VerifyProviderListed("CENTRAL TRAINING ACADEMY LIMITED", true);
+        string providerName = "CENTRAL TRAINING ACADEMY LIMITED";
+        await _trainingProvidersPage.VerifyProviderListed(providerName, true);
+        await _trainingProvidersPage.VerifyProviderTrainingLocation([providerName, "Online"]);          
+        await Navigate(UrlConfig.Provider_BaseUrl);
+        await _fATeHomePage.StartNow();
+    }
 
+    [When("the provider is listed at learners and provider location on the FAT apprenticeship unit providers page")]
+    public async Task TheProviderIsListedOnlearnersAndProviderLocationOnTheFATApprenticeshipUnitProvidersPage()
+    {
+        await Navigate(UrlConfig.FAT_BaseUrl);
+        await _fATeHomePage.ClickStartNow();
+        await _search_TrainingCourses_ApprenticeworkLocationPage.SelectTrainingTypes([TrainingType.ApprenticeshipUnits]);
+        await _fATeHomePage.EnterCourseJobOrStandard(_appName);
+        await _fATeHomePage.ApplyFilters();
+        await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Electrical fitting and assembly – Apprenticeship unit (level 2)");
+        await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
+        string providerName = "CENTRAL TRAINING ACADEMY LIMITED";
+        await _trainingProvidersPage.VerifyProviderListed(providerName, true);
+        await _trainingProvidersPage.VerifyProviderTrainingLocation([providerName, "At learner's workplace", "At training provider's location"]);
+        await _trainingProvidersPage.VerifyWithProviderLocationFilter([providerName, "At learner's workplace", "At training provider's location", "miles"]);
         await Navigate(UrlConfig.Provider_BaseUrl);
         await _fATeHomePage.StartNow();
     }

@@ -43,6 +43,30 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await page9.Save_NewApprenticeshipUnit_Continue();  
         }
 
+        [When("the provider updates the course to be available at learners and provider location")]
+        public async Task WhenTheProviderUpdatesTheCourseToBeAvailableAtLearnersAndProviderLocation()
+        {
+            StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_ElectricalFitting;
+
+            var page = new ManagingStandardsProviderHomePage(context);
+
+            var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
+
+            var page2 = await page1.AccessTrainingTypesPage();
+        
+            var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
+
+            var page4 = await page3.ManageAnAppUnitPage(StandardName);
+
+            var page5 = await page4.EditFromOnlineTo();
+
+            var page6 = await page5.UpdateToEmpAndProLocationOnly_AprenticeshipUnit();
+
+            var page7 = await page6.ChooseTheVenueDeliveryAndContinueToDeliver_ApprenticeshipUnit();
+
+            await page7.EditDeliverAnyWhereInEnglandToYes(StandardName);
+        }
+
 
         [When("the provider deletes the Electrical Fitting course from the App Units list")]
         public async Task WhenTheProviderDeletesTheElectricalFittingCourseFromTheAppUnitsList()
