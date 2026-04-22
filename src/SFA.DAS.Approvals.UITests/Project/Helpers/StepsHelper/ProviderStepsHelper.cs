@@ -206,7 +206,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page5.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
-        internal async Task<ApprenticeDetails_ProviderPage> ProviderSearchOpenApprovedApprenticeRecord(ManageYourApprentices_ProviderPage manageYourApprenticesPage, string uln, string name)
+        internal async Task<ApprenticeDetails_ProviderPage> ProviderSearchOpenApprovedApprenticeRecord(ManageYourLearners_ProviderPage manageYourApprenticesPage, string uln, string name)
         {
             await manageYourApprenticesPage.SearchApprentice(uln);
             return await manageYourApprenticesPage.OpenFirstItemFromTheList(name);

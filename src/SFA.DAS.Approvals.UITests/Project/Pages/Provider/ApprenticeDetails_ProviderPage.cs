@@ -50,10 +50,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task ClickOnChangeEmployerLink() => await ChangeEmployerLink.ClickAsync();
 
-        internal async Task<ManageYourApprentices_ProviderPage> ReturnBackToManageYourApprenticesPage()
+        internal async Task<ManageYourLearners_ProviderPage> ReturnBackToManageYourApprenticesPage()
         {
             await ManageYourApprenticesLinks.ClickAsync();
-            return await VerifyPageAsync(() => new ManageYourApprentices_ProviderPage(context));
+            return await VerifyPageAsync(() => new ManageYourLearners_ProviderPage(context));
         }
 
         internal async Task AssertBanner(string Title, string Body) => await Assertions.Expect(Banner(Title, Body)).ToBeVisibleAsync();

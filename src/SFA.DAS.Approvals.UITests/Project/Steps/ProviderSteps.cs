@@ -71,13 +71,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Then("Provider can access live apprentice records under Manager Your Apprentices section")]
-        internal async Task<ManageYourApprentices_ProviderPage> ThenProviderAccessLiveApprenticeRecords()
+        internal async Task<ManageYourLearners_ProviderPage> ThenProviderAccessLiveApprenticeRecords()
         {
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             await providerHomePageStepsHelper.GoToProviderHomePage(true);
             await UserNavigatesToManageYourApprenticesPage();
-            var page = new ManageYourApprentices_ProviderPage(context);
+            var page = new ManageYourLearners_ProviderPage(context);
 
             foreach (var apprentice in listOfApprenticeship)
             {
@@ -113,7 +113,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var name = apprentice.ApprenticeDetails.FullName;
             var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
 
-            var apprenticeDetailsPage = await providerStepsHelper.ProviderSearchOpenApprovedApprenticeRecord(new ManageYourApprentices_ProviderPage(context), uln, name);
+            var apprenticeDetailsPage = await providerStepsHelper.ProviderSearchOpenApprovedApprenticeRecord(new ManageYourLearners_ProviderPage(context), uln, name);
             await providerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
         }
 
@@ -308,7 +308,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             await providerHomePageStepsHelper.GoToProviderHomePage(true);
             await UserNavigatesToManageYourApprenticesPage();
-            var page = new ManageYourApprentices_ProviderPage(context);
+            var page = new ManageYourLearners_ProviderPage(context);
 
             foreach (var apprentice in listOfApprenticeship)
             {
@@ -317,8 +317,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
                 await page.VerifyApprenticeFound(uln, name);
                 var page2 = await page.SelectViewCurrentApprenticeDetails(name, uln);
-                await page2.ClickOnEditApprenticeDetailsLink();
-                await new EditLearnerDetails_ProviderPage(context).ValidateEditability(table);
+                var page3 = await page2.ClickOnEditApprenticeDetailsLink();
+                await page3.ValidateEditability(table);
+                await page3.ClickOnCancelAndReturnLink();
+                await page2.ReturnBackToManageYourApprenticesPage();
             }
 
 

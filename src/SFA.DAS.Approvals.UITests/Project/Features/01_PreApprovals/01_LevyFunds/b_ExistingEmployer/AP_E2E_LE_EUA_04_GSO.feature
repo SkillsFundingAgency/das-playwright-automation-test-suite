@@ -12,6 +12,7 @@ Scenario: AP_E2E_LE_EUA_04_GSO Provider add learners on short course and employe
 	Given Provider submits ILR for following learners for a "Levy" employer:
 			| CourseType   | CourseLevel | StartDate   | DuationInDays	| LowerAgeLimit | UpperAgeLimit |
 			| ShortCourses | N/A         | 2026-04-01  | 40				| 19			| 115			|
+			| ShortCourses | N/A         | 2026-04-01  | 40				| 19			| 115			|
 	Then a record is created in LearnerData Db for each learner
 	When Provider sends an apprentice request (cohort) to the employer by selecting same apprentices	
 	Then Commitments Db is updated with respective LearnerData Id
