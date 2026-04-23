@@ -79,8 +79,8 @@ public class TasksSteps
         await _homePage.VerifyApprenticeChangeToReviewMessageShown(tasks.NumberOfApprenticesToReview);
     }
 
-    [Then("View changes link should navigate user to Manage your apprentices page")]
-    public async Task ThenViewApprenticeChangesNavigatesToManageYourApprenticesPage()
+    [Then("View changes link should navigate user to Manage your learners page")]
+    public async Task ThenViewApprenticeChangesNavigatesToManageYourLearnersPage()
     {
         var tasks = GetTaskQueryResult();
 
