@@ -2,11 +2,11 @@
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class ManageYourApprentices_ProviderPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class ManageYourLearners_ProviderPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Manage your apprentices");
+            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Manage your learners");
         }
 
         internal async Task<ApprenticeDetails_ProviderPage> SelectViewCurrentApprenticeDetails(string name, string ULN=null)
@@ -52,10 +52,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new ApprenticeDetails_ProviderPage(context, name));
         }
 
-        internal async Task<ManageYourApprentices_ProviderPage> DownloadCsv()
+        internal async Task<ManageYourLearners_ProviderPage> DownloadCsv()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Download all data" }).ClickAsync();
-            return await VerifyPageAsync(() => new ManageYourApprentices_ProviderPage(context));
+            return await VerifyPageAsync(() => new ManageYourLearners_ProviderPage(context));
         }
 
 

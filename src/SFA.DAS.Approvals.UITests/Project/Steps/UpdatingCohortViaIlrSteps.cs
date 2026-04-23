@@ -118,7 +118,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var listOfUpdatedApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfUpdatedApprenticeship);
-            var standardCode = listOfUpdatedApprenticeship.FirstOrDefault().TrainingDetails.StandardCode;
+            var larsCode = listOfUpdatedApprenticeship.FirstOrDefault().TrainingDetails.LarsCode;
 
             var page = new ApproveApprenticeDetailsPage(context);
             await page.ClickOnLink(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.FullName);

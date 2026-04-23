@@ -7,6 +7,7 @@
 *.userosscache
 *.sln.docstates
 Screenshots
+Tracefiles
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -255,5 +256,4 @@ src/.idea/.idea.SFA.DAS.TestAutomation/.idea/
 # VScode generated build output
 /src/build_output.txt
 .vscode/settings.json
-Tracefiles
 src/.vscode/settings.json
