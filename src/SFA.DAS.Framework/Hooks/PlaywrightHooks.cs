@@ -4,49 +4,41 @@ namespace SFA.DAS.Framework.Hooks;
 [Binding]
 public class PlaywrightHooks(ScenarioContext context)
 {
-    private static InitializeDriver driver;
+    
+    private static IPlaywright _playwright;
 
-    private IBrowserContext browserContext;
+    private readonly ScenarioContext _context = context;
 
-    private static IBrowser Browser;
+    private static bool _isHeadless;
 
-    private static readonly DateTime Date;
-
-    static PlaywrightHooks()
-    {
-        Date = DateTime.Now;
-    }
+    private static BrowserType _browserType;
 
     [BeforeTestRun]
-    public static async Task BeforeAll()
+    public static async Task BeforeTestRun()
     {
-        driver = new InitializeDriver();
+        _playwright = await Playwright.CreateAsync();
 
-        string isHeadlessVar = Environment.GetEnvironmentVariable("headless");
+        _isHeadless = GetheadlessFromEnv();
 
-        bool isHeadless = !string.IsNullOrEmpty(isHeadlessVar) && isHeadlessVar.ContainsCompareCaseInsensitive("true");
-
-        Browser = await driver.IBrowserType.LaunchAsync(new BrowserTypeLaunchOptions
-        {
-            Headless = isHeadless,
-            Args = ["--start-maximized"],
-        });
-    }
-
-    [AfterTestRun]
-    public static async Task AfterAll()
-    {
-        await Browser.CloseAsync();
+        _browserType = GetBrowserTypeFromEnv();
     }
 
     [BeforeScenario(Order = 8)]
-    public async Task SetupPlaywrightDriver()
+    public async Task BeforeScenario()
     {
-		var objectContext = context.Get<ObjectContext>();
+        var objectContext = _context.Get<ObjectContext>();
 
         objectContext.SetConsoleAndDebugInformation("Entered SetupPlaywrightDriver Order = 8 hook");
 
-        browserContext = await Browser.NewContextAsync(new BrowserNewContextOptions
+        var browserType = await CreateDriver(_playwright, _browserType);
+
+        var browser = await browserType.LaunchAsync(new()
+        {
+            Headless = _isHeadless,
+            Args = ["--start-maximized"]
+        });
+
+        var browserContext = await browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = ViewportSize.NoViewport
         });
@@ -55,7 +47,7 @@ public class PlaywrightHooks(ScenarioContext context)
         {
             await browserContext.Tracing.StartAsync(new()
             {
-                Title = context.ScenarioInfo.Title,
+                Title = _context.ScenarioInfo.Title,
                 Screenshots = true,
                 Snapshots = true
             });
@@ -63,26 +55,28 @@ public class PlaywrightHooks(ScenarioContext context)
 
         var page = await browserContext.NewPageAsync();
 
-        context.Set(new Driver(browserContext, page, context.Get<ObjectContext>()));
+        _context.Set(new Driver(browser, browserContext, page, objectContext));
     }
 
     [AfterScenario(Order = 98)]
-    public async Task StopTracing()
+    public async Task AfterScenario()
     {
-        var pDriver = context.Get<Driver>();
+        var x = _context.TryGetValue(out Driver driver);
 
-        await context.Get<TryCatchExceptionHelper>().AfterScenarioException(() => pDriver.ScreenshotAsync(true));
+        if (!x) return;
+
+        await _context.Get<TryCatchExceptionHelper>().AfterScenarioException(() => driver.ScreenshotAsync(true));
 
         if (ShouldTrace())
         {
             var tracefileName = $"PLAYWRIGHTDATA_{DateTime.Now:HH-mm-ss-fffff}.zip";
 
-            var tracefilePath = $"{context.Get<ObjectContext>().GetDirectory()}/{tracefileName}";
+            var tracefilePath = $"{_context.Get<ObjectContext>().GetDirectory()}/{tracefileName}";
 
-            await context.Get<TryCatchExceptionHelper>().AfterScenarioException(
+            await _context.Get<TryCatchExceptionHelper>().AfterScenarioException(
                 async () =>
                 {
-                    await browserContext.Tracing.StopAsync(new()
+                    await driver.BrowserContext.Tracing.StopAsync(new()
                     {
                         Path = tracefilePath
                     });
@@ -101,7 +95,14 @@ public class PlaywrightHooks(ScenarioContext context)
         //        await MarkTestStatus("failed", context.TestError.Message, pDriver.Page);
         //}
 
-        await browserContext.CloseAsync();
+        await driver.BrowserContext.CloseAsync(new BrowserContextCloseOptions { Reason = $"Closed browser context for scenario: {_context.ScenarioInfo.Title}" });
+
+    }
+
+    [AfterTestRun]
+    public static void AfterTestRun()
+    {
+        _playwright?.Dispose();
     }
 
     //public static async Task MarkTestStatus(string status, string reason, IPage page)
@@ -109,5 +110,34 @@ public class PlaywrightHooks(ScenarioContext context)
     //    await page.EvaluateAsync("_ => {}", "browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"" + status + "\", \"reason\": \"" + reason + "\"}}");
     //}
 
-    private bool ShouldTrace() => !context.ScenarioInfo.Tags.Contains("donottracelogin");
+    private bool ShouldTrace() => !_context.ScenarioInfo.Tags.Contains("donottracelogin");
+
+    private static bool GetheadlessFromEnv()
+    {
+        string isHeadlessVar = Environment.GetEnvironmentVariable("headless");
+
+        return !string.IsNullOrEmpty(isHeadlessVar) && isHeadlessVar.ContainsCompareCaseInsensitive("true");
+    }
+
+    private static BrowserType GetBrowserTypeFromEnv()
+    {
+        string envBrowserType = Environment.GetEnvironmentVariable("BROWSER_TYPE");
+
+        string browserType = string.IsNullOrEmpty(envBrowserType) ? "Chromium" : envBrowserType;
+
+        if (!Enum.TryParse(browserType, true, out BrowserType type))
+            type = BrowserType.Chromium;
+
+        return type;
+    }
+
+    private static async Task<IBrowserType> CreateDriver(IPlaywright playwright, BrowserType browserType)
+    {
+        return browserType switch
+        {
+            BrowserType.Webkit => playwright.Webkit,
+            BrowserType.Firefox => playwright.Firefox,
+            _ => playwright.Chromium,
+        };
+    }
 }
