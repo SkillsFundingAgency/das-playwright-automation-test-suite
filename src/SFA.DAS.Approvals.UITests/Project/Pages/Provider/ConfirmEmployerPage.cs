@@ -11,7 +11,7 @@
         {
             await page.Locator("#confirm-true").ClickAsync();
 
-            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync(new LocatorClickOptions { Timeout = 30000 });
 
             return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }

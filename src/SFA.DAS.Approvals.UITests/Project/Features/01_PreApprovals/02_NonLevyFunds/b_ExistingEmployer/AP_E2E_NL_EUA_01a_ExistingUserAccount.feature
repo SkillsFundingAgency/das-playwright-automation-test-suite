@@ -1,10 +1,10 @@
 ﻿@approvals
 @linkedScenarios
-Feature: AP_NL_E2E_EUA_01a_ExistingUserAccount
+Feature: AP_E2E_NL_EUA_01a_ExistingUserAccount
 
 @regression
 @e2escenarios
-Scenario: AP_NL_E2E_EUA_01a Provider creates cohort from ILR data Employer approves it
+Scenario: AP_E2E_NL_EUA_01a Provider creates cohort from ILR data Employer approves it
  
 	Given Provider successfully submits 2 ILR record containing a learner record for a "NonLevy" Employer
 	When Provider logs into Provider-Portal
@@ -17,7 +17,7 @@ Scenario: AP_NL_E2E_EUA_01a Provider creates cohort from ILR data Employer appro
 
 @regression
 @e2escenarios
-Scenario Outline: AP_NL_E2E_EUA_01b emails validation
+Scenario Outline: AP_E2E_NL_EUA_01b emails validation
 	Given previous test has been completed successfully
 	Then Verify the "<Recipient>" receive "<NotificationType>" email
 

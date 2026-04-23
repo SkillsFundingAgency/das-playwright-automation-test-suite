@@ -41,3 +41,10 @@ public enum ProviderUserRoles
     AccountOwner,
     Viewer
 }
+
+internal enum LearningType
+{
+    Apprenticeship = 0,
+    FoundationApprenticeship = 1,
+    ShortCourses = 2
+}

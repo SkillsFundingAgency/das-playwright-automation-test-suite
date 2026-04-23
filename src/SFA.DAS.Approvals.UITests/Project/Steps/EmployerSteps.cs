@@ -132,7 +132,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var name = apprentice.ApprenticeDetails.FullName;
 
             await employerStepsHelper.GoToLiveApprenticeshipPageFromDynamicHomePage();
-            await new ApprenticeDetailsPage(context, name).EmployerVerifyApprenticeStatusAndDetails(ApprenticeshipStatus.Live, "Apprentice confirmation", "Unconfirmed");
+            await new ApprenticeDetailsPage(context, name).EmployerVerifyApprenticeStatusAndDetails(ApprenticeshipStatus.Live, "Learner confirmation", "Unconfirmed");
         }
 
         [When ("the Employer approves the cohort and sends to provider")]

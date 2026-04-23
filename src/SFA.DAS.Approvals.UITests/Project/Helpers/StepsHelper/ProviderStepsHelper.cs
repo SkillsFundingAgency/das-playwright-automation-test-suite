@@ -206,7 +206,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page5.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
-        internal async Task<ApprenticeDetails_ProviderPage> ProviderSearchOpenApprovedApprenticeRecord(ManageYourApprentices_ProviderPage manageYourApprenticesPage, string uln, string name)
+        internal async Task<ApprenticeDetails_ProviderPage> ProviderSearchOpenApprovedApprenticeRecord(ManageYourLearners_ProviderPage manageYourApprenticesPage, string uln, string name)
         {
             await manageYourApprenticesPage.SearchApprentice(uln);
             return await manageYourApprenticesPage.OpenFirstItemFromTheList(name);
@@ -215,8 +215,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task TryEditApprenticeAgeAndValidateError(ApprenticeDetails_ProviderPage apprenticeDetailsPage, DateTime dateOfBirth)
         {
             string expectedErrorMessage = "The apprentice must be younger than 25 years old at the start of their training";
-            await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();
-            var page = new EditApprenticeDetails_ProviderPage(context);
+            var page = await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();            
             await page.EditDoB(dateOfBirth);
             await page.ClickUpdateDetailsButton();
             await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
@@ -304,7 +303,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             ApproveApprenticeDetailsPage page2;
 
-            if (apprenticeship.TrainingDetails.StandardCode is 805 or 806 or 807 or 808 or 809 or 810 or 811)       //RPL check does not appear for foundation courses
+            if (apprenticeship.TrainingDetails.LearningType > 0)       //RPL check does not appear for foundation & short courses
             {
                 page2 = new ApproveApprenticeDetailsPage(context);
             }

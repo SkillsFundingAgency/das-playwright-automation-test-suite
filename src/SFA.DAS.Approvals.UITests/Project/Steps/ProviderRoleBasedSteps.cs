@@ -218,21 +218,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user can download csv file")]
         public async Task ThenTheUserCanDownloadCsvFile()
         {
-            await new ManageYourApprentices_ProviderPage(context).DownloadCsv();
+            await new ManageYourLearners_ProviderPage(context).DownloadCsv();
         }
 
 
         [Then("the user can view details of the apprenticeship on apprenticeship details page")]
         public async Task ThenTheUserCanViewDetailsOfTheApprenticeshipOnApprenticeshipDetailsPage()
         {
-            var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(LiveApprentice);
+            var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(LiveApprentice);
             await page.ReturnBackToManageYourApprenticesPage();
         }
 
         [Then("the user can view changes via view changes link in the banner")]
         public async Task ThenTheUserCanViewChangesViaViewChangesLinkInTheBanner()
         {
-            var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(ChangesForReviewApprentice);
+            var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(ChangesForReviewApprentice);
             await page.AssertBanner("Action required", "The employer has made a change which needs to be reviewed and approved by you.");
             await page.ClickOnReviewChanges();
         }
@@ -240,7 +240,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user can view details of ILR mismatch via view details link in the ILR data mismatch banner")]
         public async Task ThenTheUserCanViewDetailsOfILRMismatchViaViewDetailsLinkInTheILRDataMismatchBanner()
         {
-            var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(ILRDataMisMatchRequestDetails);
+            var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(ILRDataMisMatchRequestDetails);
             await page.AssertBanner("Action required", $"ILR data mismatch: Payment for {ILRDataMisMatchRequestDetails} can't be made until this is resolved.");
             await page.ClickOnViewDetails();
         }
@@ -269,7 +269,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user can view details of ILR mismatch request restart via view details link in the ILR data mismatch banner")]
         public async Task ThenTheUserCanViewDetailsOfILRMismatchRequestRestartViaViewDetailsLinkInTheILRDataMismatchBanner()
         {
-            var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(ILRDataMisMatchAskEmployerToFix);
+            var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(ILRDataMisMatchAskEmployerToFix);
             await page.AssertBanner("Action required", $"ILR data mismatch: Payment for {ILRDataMisMatchAskEmployerToFix} can't be made until this is resolved.");
             await page.ClickOnViewDetails();
             
@@ -299,7 +299,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user can view review changes via review details link in the banner")]
         public async Task ThenTheUserCanViewReviewChangesViaReviewDetailsLinkInTheBanner()
         {
-            var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(ChangesForReviewApprentice);
+            var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(ChangesForReviewApprentice);
             await page.AssertBanner("Action required", $"The employer has made a change which needs to be reviewed and approved by you.");
             await page.ClickOnReviewChanges();
         }
@@ -328,7 +328,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user can view view changes nonCoE page via view changes link in the banner")]
         public async Task ThenTheUserCanViewViewChangesNonCoEPageViaViewChangesLinkInTheBanner()
         {
-            var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(ChangesPendingApprentice);
+            var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(ChangesPendingApprentice);
             await page.AssertBanner2("Changes to this apprenticeship", $"You have made a change which needs to be approved by the employer.");
             await page.ClickOnViewChanges();
         }
@@ -357,7 +357,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user \"(.*)\" trigger change of employer journey using change link against the employer field")]
         public async Task ThenTheUserTriggerChangeOfEmployerJourneyUsingChangeLinkAgainstTheEmployerField(string status)
         {
-            var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(StoppedApprentice);
+            var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(StoppedApprentice);
             await page.ClickOnChangeEmployerLink();
             var page1 = new ChangeOfEmployerInformationPage(context);
             if (status == "can")
@@ -378,17 +378,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("the user \"(.*)\" edit an existing apprenticeship record by selecting edit apprentice link under manage apprentices")]
         public async Task ThenTheUserEditAnExistingApprenticeshipRecordBySelectingEditApprenticeLinkUnderManageApprentices(string status)
         {
-            var page = await new ManageYourApprentices_ProviderPage(context).SelectViewCurrentApprenticeDetails(LiveApprentice);
-            await page.ClickOnEditApprenticeDetailsLink();
-            var page1 = new EditApprenticeDetails_ProviderPage(context);
+            var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(LiveApprentice);
+          
 
             if (status == "can")
             {
-                await page.VerifyPageAsync(() => new EditApprenticeDetails_ProviderPage(context));
+                await page.ClickOnEditApprenticeDetailsLink();
+                var page1 = await page.VerifyPageAsync(() => new EditLearnerDetails_ProviderPage(context));
                 await page1.ClickOnCancelAndReturnLink();
             }
             else 
             {
+                await page.ClickOnEditApprenticeDetailsLinkLeadToAccessDeniedPage();
                 await page.VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
                 await page.NavigateBrowserBack();
             }            

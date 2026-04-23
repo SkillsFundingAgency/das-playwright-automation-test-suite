@@ -4,6 +4,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 {
     internal interface ITrainingFactory
     {
-        Task<Training> CreateTrainingAsync(EmployerType employerType, ApprenticeshipStatus? apprenticeshipStatus = null);
+        Task<Training> CreateTrainingAsync(EmployerType employerType, ApprenticeshipStatus? apprenticeshipStatus = null, int? duration = null);
     }
 }
