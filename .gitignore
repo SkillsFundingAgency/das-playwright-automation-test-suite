@@ -256,3 +256,4 @@ src/.idea/.idea.SFA.DAS.TestAutomation/.idea/
 /src/build_output.txt
 .vscode/settings.json
 Tracefiles
+src/.vscode/settings.json

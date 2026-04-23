@@ -3,11 +3,12 @@ namespace SFA.DAS.Framework.Hooks;
 
 [Binding]
 public class PlaywrightHooks(ScenarioContext context)
-{
-    
+{   
     private static IPlaywright _playwright;
 
     private readonly ScenarioContext _context = context;
+
+    private ObjectContext _objectContext;
 
     private static bool _isHeadless;
 
@@ -26,9 +27,9 @@ public class PlaywrightHooks(ScenarioContext context)
     [BeforeScenario(Order = 8)]
     public async Task BeforeScenario()
     {
-        var objectContext = _context.Get<ObjectContext>();
+        _objectContext = _context.Get<ObjectContext>();
 
-        objectContext.SetConsoleAndDebugInformation("Entered SetupPlaywrightDriver Order = 8 hook");
+        _objectContext.SetConsoleAndDebugInformation("Entered SetupPlaywrightDriver Order = 8 hook");
 
         var browserType = await CreateDriver(_playwright, _browserType);
 
@@ -55,15 +56,17 @@ public class PlaywrightHooks(ScenarioContext context)
 
         var page = await browserContext.NewPageAsync();
 
-        _context.Set(new Driver(browser, browserContext, page, objectContext));
+        _context.Set(new Driver(browser, browserContext, page, _objectContext));
     }
 
-    [AfterScenario(Order = 98)]
+    [AfterScenario(Order = 100)]
     public async Task AfterScenario()
     {
         var x = _context.TryGetValue(out Driver driver);
 
         if (!x) return;
+
+        _objectContext.SetConsoleAndDebugInformation("Entered TearDownPlaywrightDriver Order = 100 hook");
 
         await _context.Get<TryCatchExceptionHelper>().AfterScenarioException(() => driver.ScreenshotAsync(true));
 
@@ -71,7 +74,7 @@ public class PlaywrightHooks(ScenarioContext context)
         {
             var tracefileName = $"PLAYWRIGHTDATA_{DateTime.Now:HH-mm-ss-fffff}.zip";
 
-            var tracefilePath = $"{_context.Get<ObjectContext>().GetDirectory()}/{tracefileName}";
+            var tracefilePath = $"{_objectContext.GetDirectory()}/{tracefileName}";
 
             await _context.Get<TryCatchExceptionHelper>().AfterScenarioException(
                 async () =>
@@ -95,7 +98,9 @@ public class PlaywrightHooks(ScenarioContext context)
         //        await MarkTestStatus("failed", context.TestError.Message, pDriver.Page);
         //}
 
-        await driver.BrowserContext.CloseAsync(new BrowserContextCloseOptions { Reason = $"Closed browser context for scenario: {_context.ScenarioInfo.Title}" });
+        await driver.BrowserContext.CloseAsync(new BrowserContextCloseOptions { Reason = $"Browser context refused to close for scenario: {_context.ScenarioInfo.Title}" });
+
+        await driver.Browser.CloseAsync(new BrowserCloseOptions { Reason = $"Browser refused to close for scenario: {_context.ScenarioInfo.Title}" });
 
     }
 
