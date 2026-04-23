@@ -9,6 +9,20 @@ public partial class VenueAndDelivery_ApprenticeshipUnitPage
         {
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Training saved");
         }
+
+        public async Task<ManageYourAppUnitPage> GoToTrainingAndVenues()
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = "training types and venues" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new ManageYourAppUnitPage(context));
+        }
+
+        public async Task<ManagingStandardsProviderHomePage> GoToProviderHomePage()
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new ManagingStandardsProviderHomePage(context));
+        }
     }
 
 }

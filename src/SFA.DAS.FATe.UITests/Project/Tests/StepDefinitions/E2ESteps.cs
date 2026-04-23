@@ -1,7 +1,6 @@
 ﻿using SFA.DAS.FATe.UITests.Project.Tests.Pages;
 using SFA.DAS.Framework.Hooks;
 
-
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
 {
     [Binding, Scope(Tag = "fate")]
@@ -121,36 +120,6 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Finishing trades foundation apprenticeship (level 2)");
             await _apprenticeshipTrainingCourseDetailsPage.ClickViewKnowledgeSkillsAndBehaviours();
             await _apprenticeshipTrainingCourseDetailsPage.VerifyIFATELinkOpensInNewTab();
-        }
-
-
-        [When("the provider is listed on the FAT training providers page")]
-        public async Task WhenTheProviderIsListedOnTheFATTrainingProvidersPage()
-        {
-            await Navigate(UrlConfig.FAT_BaseUrl);
-            await _fATeHomePage.ClickStartNow();
-            await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
-            await _fATeHomePage.EnterCourseJobOrStandard("Craft plasterer");
-            await _fATeHomePage.ApplyFilters();
-            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Craft plasterer (level 3)");
-            await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
-            await _trainingProvidersPage.VerifyProviderListed("REMIT GROUP LIMITED", true);
-
-            await Navigate(UrlConfig.Provider_BaseUrl);
-            await _fATeHomePage.StartNow();
-        }
-
-        [When("the provider is not listed on the FAT training providers page")]
-        public async Task WhenTheProviderIsNotListedOnTheFATTrainingProvidersPage()
-        {
-            await Navigate(UrlConfig.FAT_BaseUrl);
-            await _fATeHomePage.ClickStartNow();
-            await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
-            await _fATeHomePage.EnterCourseJobOrStandard("Craft plasterer");
-            await _fATeHomePage.ApplyFilters();
-            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Craft plasterer (level 3)");
-            await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
-            await _trainingProvidersPage.VerifyProviderListed("REMIT GROUP LIMITED", false);
         }
     }
 }
