@@ -1,5 +1,5 @@
 ﻿global using SFA.DAS.FrameworkHelpers;
-global using TechTalk.SpecFlow;
+global using Reqnroll;
 global using Mailosaur;
 global using Mailosaur.Models;
 global using NUnit.Framework;

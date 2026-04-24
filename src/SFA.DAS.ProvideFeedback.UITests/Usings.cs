@@ -10,6 +10,6 @@ global using System;
 global using System.Collections.Generic;
 global using System.Text;
 global using System.Threading.Tasks;
-global using TechTalk.SpecFlow;
+global using Reqnroll;
 global using SFA.DAS.Framework;
 global using System.Linq;

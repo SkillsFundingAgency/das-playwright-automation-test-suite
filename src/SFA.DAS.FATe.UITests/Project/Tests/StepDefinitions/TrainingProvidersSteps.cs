@@ -2,7 +2,7 @@
 using Polly;
 using SFA.DAS.FATe.UITests.Helpers;
 using SFA.DAS.FATe.UITests.Project.Tests.Pages;
-using TechTalk.SpecFlow.CommonModels;
+using Reqnroll.CommonModels;
 
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions

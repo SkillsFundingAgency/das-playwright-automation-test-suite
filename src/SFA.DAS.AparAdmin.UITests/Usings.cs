@@ -1,7 +1,7 @@
 ﻿global using SFA.DAS.Apar.UITests.Project;
 global using SFA.DAS.Apar.UITests.Project.Helpers;
 global using SFA.DAS.Apar.UITests.Project.Hooks;
-global using TechTalk.SpecFlow;
+global using Reqnroll;
 global using SFA.DAS.FrameworkHelpers;
 global using SFA.DAS.Framework;
 global using Microsoft.Playwright;

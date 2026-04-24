@@ -6,7 +6,7 @@ global using SFA.DAS.FrameworkHelpers;
 global using System;
 global using System.Collections.Generic;
 global using System.Net;
-global using TechTalk.SpecFlow;
+global using Reqnroll;
 global using NUnit.Framework;
 global using Newtonsoft.Json.Linq;
 global using SFA.DAS.API.Framework.RestClients;

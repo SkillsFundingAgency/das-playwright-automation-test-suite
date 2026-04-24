@@ -2,7 +2,7 @@
 using SFA.DAS.SupportTools.UITests.Project.Helpers;
 using SFA.DAS.SupportTools.UITests.Project.Tests.Pages;
 using System.Linq;
-using TechTalk.SpecFlow.Assist;
+using Reqnroll.Assist;
 
 namespace SFA.DAS.SupportTools.UITests.Project.Tests.Steps;
 

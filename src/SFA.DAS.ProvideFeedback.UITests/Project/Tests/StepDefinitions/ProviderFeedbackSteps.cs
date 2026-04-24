@@ -2,7 +2,7 @@
 using SFA.DAS.ProvideFeedback.UITests.Project.Tests.Pages;
 using SFA.DAS.ProviderLogin.Service.Project;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
-using TechTalk.SpecFlow.Assist;
+using Reqnroll.Assist;
 
 namespace SFA.DAS.ProvideFeedback.UITests.Project.Tests.StepDefinitions;
 

@@ -6,7 +6,7 @@ global using SFA.DAS.FrameworkHelpers;
 global using System;
 global using System.Collections.Generic;
 global using System.Linq;
-global using TechTalk.SpecFlow;
+global using Reqnroll;
 global using SFA.DAS.Framework;
 global using System.Threading.Tasks;
 global using Microsoft.Playwright;

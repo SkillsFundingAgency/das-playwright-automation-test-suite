@@ -12,5 +12,11 @@
     "generator": {
         "allowRowTests": false,
         "addNonParallelizableMarkerForTags": [ "donotexecuteinparallel" ]
+    },
+    "$schema": "https://schemas.reqnroll.net/reqnroll-config-latest.json",
+    "formatters": {
+        "html": {
+            "outputFilePath": "bdd-report.html"
+        }
     }
 }
