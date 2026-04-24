@@ -20,7 +20,7 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
     {
         await SelectAppUnitCourseByName();
         await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
-        string providerName = "CENTRAL TRAINING ACADEMY LIMITED";
+        string providerName = "REMIT GROUP LIMITED";
         await _trainingProvidersPage.VerifyProviderListed(providerName, true);
         await _trainingProvidersPage.VerifyProviderTrainingLocation([providerName, "Online"]);          
         await Navigate(UrlConfig.Provider_BaseUrl);
@@ -32,10 +32,10 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
     {
         await SelectAppUnitCourseByName();
         await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
-        string providerName = "CENTRAL TRAINING ACADEMY LIMITED";
+        string providerName = "REMIT GROUP LIMITED";
         await _trainingProvidersPage.VerifyProviderListed(providerName, true);
         await _trainingProvidersPage.VerifyProviderTrainingLocation([providerName, "At learner's workplace", "At training provider's location"]);
-        await _trainingProvidersPage.VerifyWithProviderLocationFilter([providerName, "At learner's workplace", "At training provider's location", "miles"]);
+        await _trainingProvidersPage.VerifyWithProviderLocationFilter([providerName, "At learner's workplace", "miles"]);
         await Navigate(UrlConfig.Provider_BaseUrl);
         await _fATeHomePage.StartNow();
     }
@@ -48,7 +48,7 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
         if (await _apprenticeshipTrainingCourseDetailsPage.ProviderAvailableForThisCourse())
         {
             await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
-            await _trainingProvidersPage.VerifyProviderListed("CENTRAL TRAINING ACADEMY LIMITED", false);
+            await _trainingProvidersPage.VerifyProviderListed("REMIT GROUP LIMITED", false);
         }       
     }
 
