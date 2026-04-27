@@ -1,0 +1,19 @@
+{
+  "transfers": [
+    {
+      "transferId": 0,
+      "senderAccountId": 243,
+      "receiverAccountId": 8766,
+      "receiverAccountName": "Greenfield Engineering Ltd",
+      "amount": 2500.75,
+      "transferDate": "2026-02-19T13:19:07.834Z",
+      "periodEnd": "2026-02-28",
+      "collectionPeriodMonth": 2,
+      "collectionPeriodYear": 2026,
+      "ukprn": 10012345,
+      "courseName": "Level 3 Engineering Technician",
+      "createdBy": "finance-system",
+      "correlationId": "a1f4c7e2-9d34-4b1e-8a9f-2c7d6e5f1234"
+    }
+  ]
+}

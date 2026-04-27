@@ -1,0 +1,11 @@
+{
+  "empRef": "777/GDS00004",
+  "updateRequired": true,
+  "dateCalculated": "2001-03-19T13:55:45.694Z",
+  "fractions": [
+    {
+      "dateCalculated": "2066-02-19T13:55:45.694Z",
+      "amount": 666
+    }
+  ]
+}
