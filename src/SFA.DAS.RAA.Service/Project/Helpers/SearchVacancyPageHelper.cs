@@ -39,17 +39,32 @@ public class SearchVacancyPageHelper(ScenarioContext context)
         return await VerifyPageHelper.VerifyPageAsync(context, () => new ManageRecruitPage(context));
     }
 
+    public async Task<ManageRecruitPage> SelectLiveVacancy()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Live vacancies" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Live vacancies");
+
+        var locators = await page.GetByRole(AriaRole.Row, new() { Name = "VAC" }).Filter(new LocatorFilterOptions { HasNotTextString = "Foundation" }).GetByRole(AriaRole.Link).AllAsync();
+
+        var locator = RandomDataGenerator.GetRandom(locators);
+
+        await locator.ClickAsync();
+
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new ManageRecruitPage(context));
+    }
+
     //public async Task<ProviderVacancySearchResultPage> SearchVacancyByVacancyReference()
     //{
     //    await SearchVacancy();
     //    return await VerifyPageHelper.VerifyPageAsync(() => new ProviderVacancySearchResultPage(context));
     //}
 
-    //public async Task<ProviderVacancySearchResultPage> SearchProviderVacancy()
-    //{
-    //    await SearchVacancy();
-    //    return await VerifyPageHelper.VerifyPageAsync(() => new ProviderVacancySearchResultPage(context));
-    //}
+    public async Task<ProviderVacancySearchResultPage> SearchProviderVacancy()
+    {
+       await SearchVacancy();
+       return await VerifyPageHelper.VerifyPageAsync(context, () => new ProviderVacancySearchResultPage(context));
+    }
 
     //public async Task<VacancyCompletedAllSectionsPage> SearchReferVacancy()
     //{
