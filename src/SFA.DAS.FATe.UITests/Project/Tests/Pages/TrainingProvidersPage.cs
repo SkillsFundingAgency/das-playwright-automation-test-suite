@@ -112,4 +112,24 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
             Assert.False(visible, $"Expected provider '{providerName}' to NOT be listed, but it was.");
         }
     }
+    public async Task VerifyProviderTrainingLocation(List<string> locations)
+    {
+        var locator = page.Locator(".govuk-summary-card").Filter(new LocatorFilterOptions { HasTextString = locations[0] });
+
+        foreach (var location in locations)
+        {
+            await Assertions.Expect(locator).ToContainTextAsync(location, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
+        }
+    }
+
+    public async Task VerifyWithProviderLocationFilter(List<string> locations)
+    {
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "Learner's work location" }).FillAsync("southend");
+
+        await page.GetByRole(AriaRole.Option, new() { Name = "Southend-on-Sea, Essex" }).ClickAsync();
+
+        await page.Locator("#filters-submit-top").ClickAsync();
+        
+        await VerifyProviderTrainingLocation(locations);
+    }
 }

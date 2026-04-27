@@ -52,7 +52,7 @@ public class MS_AddAppUnit_Steps(ScenarioContext context)
 
         var page7 = await page6.EditNationalProviderDetails();
 
-        var page8 = await page7.EditDeliverAnyWhereInEnglandToNo();
+        var page8 = await page7.NoDeliverAnyWhereInEngland();
 
         var page9 = await page8.SelectRegionsAndConfirm(["North Yorkshire"], standardName);
 
