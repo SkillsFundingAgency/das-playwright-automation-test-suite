@@ -40,7 +40,7 @@
 		<None Update="appsettings.Project.json">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
-		<None Update="specflow.json">
+		<None Update="reqnroll.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

@@ -23,7 +23,7 @@
 		</Compile>
 	</ItemGroup>
 	<ItemGroup>
-		<None Update="specflow.json">
+		<None Update="reqnroll.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

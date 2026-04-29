@@ -32,7 +32,7 @@
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
 		</None>
-		<None Update="specflow.json">
+		<None Update="reqnroll.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

@@ -47,7 +47,7 @@
 		<None Update="Project\AP_GnS_0_BulkUpload.csv">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="specflow.json">
+		<None Update="reqnroll.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

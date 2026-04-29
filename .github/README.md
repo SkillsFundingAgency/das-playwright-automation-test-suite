@@ -7,7 +7,7 @@ This is a **BDD (Behavior-Driven Development) test automation suite** using Spec
 - **Base Framework**: `SFA.DAS.Framework` + `SFA.DAS.FrameworkHelpers` - shared test infrastructure
 - **Project Structure**: Each test project (e.g., `SFA.DAS.Apar.UITests`, `SFA.DAS.EmployerPortal.UITests`) contains:
   - `Project/` - test code for that specific application
-  - `specflow.json` - test language configuration (en-GB)
+  - `reqnroll.json` - test language configuration (en-GB)
   - `appsettings.Environment.json` - environment/secret overrides (git-ignored)
   
 ### Build System
@@ -188,7 +188,7 @@ dotnet test src/SFA.DAS.Apar.UITests/SFA.DAS.Apar.UITests.csproj --configuration
 2. Create `SFA.DAS.MyService.UITests.csproj` (copy from existing project, update namespace)
 3. Reference `SFA.DAS.Framework.csproj` and any service projects
 4. Create `Project/MyServiceBaseHooks.cs` inheriting `FrameworkBaseHooks` with project-specific setup
-5. Create `specflow.json` (see `SFA.DAS.Apar.UITests/specflow.json` template)
+5. Create `reqnroll.json` (see `SFA.DAS.Apar.UITests/reqnroll.json` template)
 6. Add to `SFA.DAS.TestAutomation.sln` by building the project
 
 ### Add a New Hook Order
