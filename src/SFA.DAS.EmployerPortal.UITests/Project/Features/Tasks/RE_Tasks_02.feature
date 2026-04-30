@@ -8,7 +8,7 @@ Scenario: RE_Tasks_02_Verify tasks menu on employer home page
 	Then display task: Levy declaration due by 19 MMMM
 	When there are X apprentice changes to review
 	Then display task: X apprentice changes to review
-	And View changes link should navigate user to Manage your apprentices page
+	And View changes link should navigate user to Manage your learners page
 	When there are X cohorts ready for approval
 	Then display task: X cohorts ready for approval
 	And 'View cohorts' link should navigate user to 'Apprentice Requests' page

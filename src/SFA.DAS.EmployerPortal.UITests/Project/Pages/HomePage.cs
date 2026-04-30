@@ -151,13 +151,13 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         await Assertions.Expect(page.GetByLabel("Tasks").GetByRole(AriaRole.List)).ToContainTextAsync(messageText);
     }
 
-    public async Task<ManageYourApprenticesPage> ClickViewChangesForApprenticeChangesToReview(int numberOfChanges)
+    public async Task<ManageYourLearnersPage> ClickViewChangesForApprenticeChangesToReview(int numberOfChanges)
     {
         var linkText = numberOfChanges == 1 ? "change" : "changes";
 
         await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = $"apprentice {linkText} to review" }).GetByRole(AriaRole.Link).ClickAsync();
 
-        return await VerifyPageAsync(() => new ManageYourApprenticesPage(context));
+        return await VerifyPageAsync(() => new ManageYourLearnersPage(context));
     }
 
     public async Task<ApprenticeRequestsPage> ClickViewCohortsForCohortsReadyToReview()
@@ -188,11 +188,11 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         return await VerifyPageAsync(() => new MyTransferPledgesPage(context));
     }
 
-    public class ManageYourApprenticesPage(ScenarioContext context) : EmployerPortalBasePage(context)
+    public class ManageYourLearnersPage(ScenarioContext context) : EmployerPortalBasePage(context)
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprentices");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your learners");
         }
     }
 
