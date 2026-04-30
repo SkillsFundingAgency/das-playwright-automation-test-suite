@@ -7,7 +7,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         #region locators
         private ILocator ReserveMoreFundingLink => page.GetByRole(AriaRole.Link, new() { Name = "Reserve more funding" });
-        private ILocator AddApprenticeLink => page.GetByRole(AriaRole.Link, new() { Name = "Add apprentice" }).First;
+        private ILocator AddLearnerLink => page.GetByRole(AriaRole.Link, new() { Name = "Add learner" }).First;
         private ILocator DeleteLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).First;
         private ILocator NextPageLink => page.GetByRole(AriaRole.Link, new() { Name = "Next" }).First;
         #endregion
@@ -68,7 +68,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task ClickOnAddApprenticeLink()
         {
             await SearchForAnyReservation();
-            await AddApprenticeLink.ClickAsync();
+            await AddLearnerLink.ClickAsync();
         }
 
         internal async Task ClickOnDeleteReservationLink()
