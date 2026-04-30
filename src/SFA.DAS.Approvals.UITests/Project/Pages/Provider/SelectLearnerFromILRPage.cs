@@ -41,7 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         {
             
             await page.Locator("#searchTerm").FillAsync(uln);
-            await page.Locator("#selectedStartDate").SelectOptionAsync(startYear.ToString());
+            await page.Locator("#FilterModel_StartYear").SelectOptionAsync(startYear.ToString());
             await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
         }
 
