@@ -40,8 +40,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task SearchULN(string uln, int startYear)
         {
             
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by learner name or unique learner number (ULN)" }).FillAsync(uln);
-            await page.Locator("#FilterModel_StartYear").SelectOptionAsync(startYear.ToString());
+            await page.Locator("#searchTerm").FillAsync(uln);
+            await page.Locator("#selectedStartDate").SelectOptionAsync(startYear.ToString());
             await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
         }
 
