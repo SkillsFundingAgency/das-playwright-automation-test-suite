@@ -1,5 +1,9 @@
 ﻿{
-    "language": {
+    "trace": {
+    "stepDefinitionSkeletonStyle": "RegexAttribute"
+  },
+
+"language": {
         "feature": "en-GB"
     },
     "bindingAssemblies": [

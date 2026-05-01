@@ -1,7 +1,11 @@
 {
   "$schema": "https://schemas.reqnroll.net/reqnroll-config-latest.json",
 
-  "language": {
+  "trace": {
+    "stepDefinitionSkeletonStyle": "RegexAttribute"
+  },
+
+"language": {
     "feature": "en-GB"
   },
   "bindingAssemblies": [
