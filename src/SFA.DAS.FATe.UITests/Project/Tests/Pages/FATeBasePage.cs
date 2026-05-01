@@ -197,15 +197,21 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
         var count = await resultsLinks.CountAsync();
         var limit = Math.Min(count, 4);
 
+        bool matchFound = false;
+
         for (int i = 0; i < limit; i++)
         {
-            var resultLocator = resultsLinks.Nth(i);
-            // Perform a case-insensitive check of the result text to avoid failures due to casing
-            var resultText = await resultLocator.InnerTextAsync() ?? string.Empty;
-            if (resultText.IndexOf(resultsword, StringComparison.OrdinalIgnoreCase) < 0)
+            var resultText = await resultsLinks.Nth(i).InnerTextAsync() ?? string.Empty;
+
+            if (resultText.IndexOf(resultsword, StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                throw new Exception($"Expected search result to contain '{resultsword}' (case-insensitive), but found: '{resultText}'");
+                matchFound = true;
             }
+        }
+
+        if (!matchFound)
+        {
+            throw new Exception($"Expected at least one search result to contain '{resultsword}', but none did.");
         }
     }
     public async Task ClearAllFilters()

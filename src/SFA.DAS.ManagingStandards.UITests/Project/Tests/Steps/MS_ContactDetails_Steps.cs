@@ -104,7 +104,7 @@ public class MS_ContactDetails_Steps(ScenarioContext context)
 
         var page1 = await page.AccessTrainingTypesPage();
         var page2 = await page1.AccessStandards_Apprenticeships();
-        var page3 = await page2.AccessPodiatrist();
+        var page3 = await page2.AccessTeacher();
         await page3.VerifyUpdatedContactDetailsVisibleInStandard(managingStandardsDataHelpers.EmailAddress, managingStandardsDataHelpers.NewlyUpdatedContactNumber);
     }
 }
