@@ -29,7 +29,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
             await _fATeHomePage.ClickStartNow();
             await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
-            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Accountancy or taxation professional (level 7)");
+            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Advanced and creative hair professional (level 3)");
        }
 
         [When("the user searches for a provider without entering a location")]
@@ -72,7 +72,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         {
             await _fATeHomePage.SelectApprenticeTravelDistance("50 miles");
             await _fATeHomePage.ApplyFilters();
-            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Accountancy or taxation professional (level 7)");
+            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Advanced and creative hair professional (level 3)");
         }
 
         [When("verifies the travel distance is updated correctly")]
