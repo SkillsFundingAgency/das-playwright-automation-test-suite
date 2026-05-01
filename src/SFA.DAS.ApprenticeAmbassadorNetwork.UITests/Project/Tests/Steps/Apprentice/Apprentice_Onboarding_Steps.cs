@@ -3,7 +3,7 @@
 [Binding, Scope(Tag = "@aanaprentice")]
 public class Apprentice_Onboarding_Steps(ScenarioContext context) : Apprentice_BaseSteps(context)
 {
-    [Given(@"an apprentice logs into the AAN portal")]
+    [Given(@"^an apprentice logs into the AAN portal$")]
     public async Task GivenAnApprenticeLogsIntoTheAANPortal()
     {
         var page = await GetSignInPage();
@@ -11,7 +11,7 @@ public class Apprentice_Onboarding_Steps(ScenarioContext context) : Apprentice_B
         beforeYouStartPage = await page.SubmitValidUserDetails(context.Get<AanApprenticeUser>());
     }
 
-    [When(@"the user provides all the required details for the onboarding journey")]
+    [When(@"^the user provides all the required details for the onboarding journey$")]
     public async Task WhenUserProvidesAllRequiredDetails()
     {
         var page = await beforeYouStartPage.StartApprenticeOnboardingJourney();
@@ -41,13 +41,13 @@ public class Apprentice_Onboarding_Steps(ScenarioContext context) : Apprentice_B
         checkYourAnswersPage = await page11.YesHaveEngagedWithAnAmbassadaorAndContinue();
     }
 
-    [Then(@"the Apprentice onboarding process should be successfully completed")]
+    [Then(@"^the Apprentice onboarding process should be successfully completed$")]
     public async Task ThenApprenticeOnboardingProcessShouldBeCompleted() => applicationSubmittedPage = await checkYourAnswersPage.AcceptAndSubmitApplication();
 
-    [Then(@"the user should be redirected to the Hub page")]
+    [Then(@"^the user should be redirected to the Hub page$")]
     public async Task ThenUserShouldBeRedirectedToHubPage() => await applicationSubmittedPage.ContinueToAmbassadorHub();
 
-    [When(@"the user does not have manager permission")]
+    [When(@"^the user does not have manager permission$")]
     public async Task WhenUserDoesNotHaveManagerPermission()
     {
         var page = await beforeYouStartPage.StartApprenticeOnboardingJourney();
@@ -57,10 +57,10 @@ public class Apprentice_Onboarding_Steps(ScenarioContext context) : Apprentice_B
         shutterPage = await page1.NoHaveApprovalFromMaanagerAndContinue();
     }
 
-    [Then(@"a shutter page should be displayed")]
+    [Then(@"^a shutter page should be displayed$")]
     public async Task ThenShutterPageShouldBeDisplayed() => await shutterPage.VerifyApprenticePortalLink();
 
-    [When(@"the user should be able to modify any of the provided answers")]
+    [When(@"^the user should be able to modify any of the provided answers$")]
     public async Task WhenUserShouldBeAbleToModifyAnswers()
     {
         var page = await checkYourAnswersPage.AccessChangeCurrentEmployerAndContinue();
@@ -86,7 +86,7 @@ public class Apprentice_Onboarding_Steps(ScenarioContext context) : Apprentice_B
         await page9.NoHaveEngagedWithAnAmbassadaorAndContinue();
     }
 
-    [Then(@"the user can sign back in to the AAN Apprentice platform")]
+    [Then(@"^the user can sign back in to the AAN Apprentice platform$")]
     public async Task TheUserCanSignBackIn()
     {
         await applicationSubmittedPage.SignOut();
@@ -96,7 +96,7 @@ public class Apprentice_Onboarding_Steps(ScenarioContext context) : Apprentice_B
         await SubmitUserDetails_OnboardingJourneyComplete(objectContext.GetLoginCredentials());
     }
 
-    [Then(@"the users can reinstate their membership within fourteen days of leaving the network")]
+    [Then(@"^the users can reinstate their membership within fourteen days of leaving the network$")]
     public async Task ThenTheUsersCanReinstateTheirMembershipWithinFourteenDaysOfLeavingTheNetwork()
     {
         var page = await applicationSubmittedPage.ContinueToAmbassadorHub();

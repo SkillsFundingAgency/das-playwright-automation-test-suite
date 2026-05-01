@@ -15,7 +15,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _search_TrainingCourses_ApprenticeworkLocationPage = new Search_TrainingCourses_ApprenticeworkLocationPage(context);
         }
 
-        [When("verifies that all expected links are present and functional")]
+        [When("^verifies that all expected links are present and functional$")]
         public async Task GivenVerifiesThatAllExpectedLinksArePresentAndFunctional()
         {
             await _fATeHomePage.ReturnToSearch_TrainingCourses_ApprenticeworkLocationPage();
@@ -29,7 +29,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
             await _fATeHomePage.ReturnToSearch_TrainingCourses_ApprenticeworkLocationPage();
         }
-        [When("the user verifies pagination links are working as expected")]
+        [When("^the user verifies pagination links are working as expected$")]
         public async Task WhenTheUserVerifiesPaginationLinksAreWorkingAsExpected()
         {
             await _fATeHomePage.VerifyPaginationLinks(new List<int> { 2, 4, 5, 3, 1 });

@@ -84,7 +84,7 @@ var dbConfig = configSection.GetConfigSection<DbConfig>();
 ```csharp
 public class MySteps(ScenarioContext context) : AparBaseHooks(context)
 {
-    [When(@"I do something")]
+    [When(@"^I do something$")]
     public async Task DoSomething()
     {
         var driver = context.Get<Driver>();

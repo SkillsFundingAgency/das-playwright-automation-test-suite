@@ -9,7 +9,7 @@ namespace SFA.DAS.ProvideFeedback.UITests.Project.Tests.StepDefinitions;
 [Binding]
 public class ProviderFeedbackSteps(ScenarioContext context)
 {
-    [When(@"The provider logs in to the provider portal")]
+    [When(@"^The provider logs in to the provider portal$")]
     public async Task GivenTheProviderLogsInToTheProviderPortal()
     {
         var providerCommonStepsHelper = new ProviderHomePageStepsHelper(context);
@@ -17,7 +17,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
         await providerCommonStepsHelper.GoToProviderHomePage(false);
     }
 
-    [When(@"the provider opts to view their feedback")]
+    [When(@"^the provider opts to view their feedback$")]
     public async Task WhenTheProviderOptsToViewTheirFeedback()
     {
         var homePage = new FeedbackProviderHomePage(context);
@@ -25,7 +25,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
         await homePage.SelectYourFeedback();
     }
 
-    [Given(@"the provider has been rated by apprentices as follows")]
+    [Given(@"^the provider has been rated by apprentices as follows$")]
     public async Task GivenTheProviderHasBeenRatedByApprenticesAsFollows(Table table)
     {
         var objectContext = context.Get<ObjectContext>();
@@ -43,7 +43,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
         await sqlHelper.GenerateFeedbackSummaries();
     }
 
-    [Given(@"the provider has been rated by employers as follows")]
+    [Given(@"^the provider has been rated by employers as follows$")]
     public async Task GivenTheProviderHasBeenRatedByEmployersAsFollows(Table table)
     {
         var objectContext = context.Get<ObjectContext>();
@@ -62,7 +62,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
         await sqlHelper.GenerateFeedbackSummaries();
     }
 
-    [Then(@"their overall apprentice feedback score is '([^']*)'")]
+    [Then(@"^their overall apprentice feedback score is '([^']*)'$")]
     public async Task ThenTheirOverallScoreIs(string rating)
     {
         var summaryPage = new FeedbackOverviewPage(context);
@@ -70,7 +70,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
         await summaryPage.VerifyApprenticeFeedbackRating("All", rating);
     }
 
-    [When(@"they select the apprentice feedback tab for the current academic year")]
+    [When(@"^they select the apprentice feedback tab for the current academic year$")]
     public async Task WhenTheySelectTheTabForTheCurrentAcademicYear()
     {
         var academicYearHelper = new AcademicYearHelper();
@@ -84,7 +84,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
         await summaryPage.SelectApprenticeTabForAcademicYear(academicYear);
     }
 
-    [When(@"they select the apprentice feedback tab for the previous academic year")]
+    [When(@"^they select the apprentice feedback tab for the previous academic year$")]
     public async Task WhenTheySelectTheTabForThePreviousAcademicYear()
     {
         var academicYearHelper = new AcademicYearHelper();
@@ -98,7 +98,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
         await summaryPage.SelectApprenticeTabForAcademicYear(academicYear);
     }
 
-    [Then(@"their apprentice feedback score for that year is '([^']*)'")]
+    [Then(@"^their apprentice feedback score for that year is '([^']*)'$")]
     public async Task ThenTheirScoreForThatYearIs(string rating)
     {
         var objectContext = context.Get<ObjectContext>();
@@ -109,7 +109,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
         await summaryPage.VerifyApprenticeFeedbackRating(academicYear, rating);
     }
 
-    [Then(@"their overall employer feedback score is '([^']*)'")]
+    [Then(@"^their overall employer feedback score is '([^']*)'$")]
     public async Task ThenTheirOverallEmployerFeedbackScoreIs(string rating)
     {
         var summaryPage = new FeedbackOverviewPage(context);
@@ -118,7 +118,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
 
     }
 
-    [When(@"they select the employer feedback tab for the current academic year")]
+    [When(@"^they select the employer feedback tab for the current academic year$")]
     public async Task WhenTheySelectTheEmployerFeedbackTabForTheCurrentAcademicYear()
     {
         var academicYearHelper = new AcademicYearHelper();
@@ -132,7 +132,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
         await summaryPage.SelectEmployerTabForAcademicYear(academicYear);
     }
 
-    [Then(@"their employer feedback score for that year is '([^']*)'")]
+    [Then(@"^their employer feedback score for that year is '([^']*)'$")]
     public async Task ThenTheirEmployerFeedbackScoreForThatYearIs(string rating)
     {
         var objectContext = context.Get<ObjectContext>();
@@ -143,7 +143,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
         await summaryPage.VerifyEmployerFeedbackRating(academicYear, rating);
     }
 
-    [When(@"they select the employer feedback tab for the previous academic year")]
+    [When(@"^they select the employer feedback tab for the previous academic year$")]
     public async Task WhenTheySelectTheEmployerFeedbackTabForThePreviousAcademicYear()
     {
         var academicYearHelper = new AcademicYearHelper();
@@ -157,7 +157,7 @@ public class ProviderFeedbackSteps(ScenarioContext context)
         await summaryPage.SelectEmployerTabForAcademicYear(academicYear);
     }
 
-    [Then(@"they see the following text: ""([^""]*)""")]
+    [Then(@"^they see the following text: ""([^""]*)""$")]
     public async Task ThenTheySeeTheFollowingText(string expectedText)
     {
         var summaryPage = new FeedbackOverviewPage(context);

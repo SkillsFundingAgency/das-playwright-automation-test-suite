@@ -9,10 +9,10 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
     private ConfirmReasonBasePage confirmReasonBasePage;
     private ConfirmationAmendReprintBasePage confirmationAmendReprintBasePage;
 
-    [Then(@"the admin can add organisation")]
+    [Then(@"^the admin can add organisation$")]
     public async Task ThenTheAdminCanAddOrganisation() => await AdminStepshelper.AddOrganisation(await GoToEpaoAdminHomePage());
 
-    [Then(@"the admin can make organisation to be live")]
+    [Then(@"^the admin can make organisation to be live$")]
     public async Task ThenTheAdminCanMakeOrganisationToBeLive()
     {
         var epaoid = EPAOAdminDataHelper.MakeLiveOrganisationEpaoId;
@@ -24,7 +24,7 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
         organisationDetailsPage = await AdminStepshelper.MakeEPAOOrganisationLive(await GoToEpaoAdminHomePage());
     }
 
-    [Then(@"the admin can edit the organisation")]
+    [Then(@"^the admin can edit the organisation$")]
     public async Task ThenTheAdminCanEditTheOrganisation()
     {
         var page = await organisationDetailsPage.EditOrganisation();
@@ -36,13 +36,13 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
         await organisationDetailsPage.VerifyOrganisationCompanyNumber();
     }
 
-    [Then(@"the admin can search using organisation name")]
+    [Then(@"^the admin can search using organisation name$")]
     public async Task ThenTheAdminCanSearchUsingOrganisationName() => await SearchEpaoRegister(EPAOAdminDataHelper.OrganisationName);
 
-    [Then(@"the admin can search using organisation epao id")]
+    [Then(@"^the admin can search using organisation epao id$")]
     public async Task ThenTheAdminCanSearchUsingOrganisationEpaoId() => await SearchEpaoRegister(EPAOAdminDataHelper.OrganisationEpaoId);
 
-    [Then(@"the admin can add contact details")]
+    [Then(@"^the admin can add contact details$")]
     public async Task ThenTheAdminCanAddContactDetails()
     {
         var page = await organisationDetailsPage.AddNewContact();
@@ -57,24 +57,24 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
     }
 
 
-    [Then(@"the admin can search using organisation ukprn")]
+    [Then(@"^the admin can search using organisation ukprn$")]
     public async Task ThenTheAdminCanSearchUsingOrganisationUkprn() => await SearchEpaoRegister(EPAOAdminDataHelper.OrganisationUkprn);
 
-    [Given(@"the (Admin all roles user) is logged into the Admin Service Application")]
+    [Given(@"^the (Admin all roles user) is logged into the Admin Service Application$")]
     public async Task GivenTheAdminIsLoggedIntoTheAdminServiceApplication(string _) => staffDashboardPage = await GoToEpaoAdminHomePage();
 
-    [Given(@"the Admin can search using learner uln")]
-    [When(@"the Admin can search using learner uln")]
-    [Then(@"the Admin can search using learner uln")]
+    [Given(@"^the Admin can search using learner uln$")]
+    [When(@"^the Admin can search using learner uln$")]
+    [Then(@"^the Admin can search using learner uln$")]
     public async Task GivenWhenThenTheAdminCanSearchUsingUln() => certificateDetailsPage = await AdminStepshelper.SearchAssessments(staffDashboardPage, ePAOAdminDataHelper.LearnerUln);
 
-    [When(@"the Admin amends the certificate with ticket reference '(.*)' and selects reason '(.*)'")]
+    [When(@"^the Admin amends the certificate with ticket reference '(.*)' and selects reason '(.*)'$")]
     public async Task WhenTheAdminAmendsTheCertificateAndEnteresAReasonForAmendment(string ticketReference, string amendReason) => await EnterTicketRefeferenceAndSelectReason(await certificateDetailsPage.ClickAmendCertificateLink(), ticketReference, amendReason);
 
-    [When(@"the Admin reprints the certificate with ticket reference '(.*)' and selects reason '(.*)'")]
+    [When(@"^the Admin reprints the certificate with ticket reference '(.*)' and selects reason '(.*)'$")]
     public async Task WhenTheAdminReprintTheCertificateAndEnteresAReasonForAmendment(string ticketReference, string reprintReason) => await EnterTicketRefeferenceAndSelectReason(await certificateDetailsPage.ClickReprintCertificateLink(), ticketReference, reprintReason);
 
-    [Then(@"the SendTo can be changed from '(employer|apprentice)' to '(employer|apprentice)'")]
+    [Then(@"^the SendTo can be changed from '(employer|apprentice)' to '(employer|apprentice)'$")]
     public async Task ThenTheSendToCanBeChangedFrom(string currentSentTo, string newSendTo)
     {
         var page = await checkAndSubmitAssessmentDetailsPage.ClickChangeSendToLink();
@@ -82,40 +82,40 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
         certificateAddressPage = await page.ChangeSendToRadioButtonAndContinue(currentSentTo, newSendTo);
     }
 
-    [Then(@"the new address can be entered without employer name or recipient")]
+    [Then(@"^the new address can be entered without employer name or recipient$")]
     public async Task ThenTheNewAddressCanBeEnteredWithoutEmployerNameOrRecipient() => await EnterNewAdddress(string.Empty, string.Empty);
 
-    [Then(@"the new address can be entered with employer name '(.*)' and recipient '(.*)'")]
+    [Then(@"^the new address can be entered with employer name '(.*)' and recipient '(.*)'$")]
     public async Task ThenThenNewAddressCanBeEnteredWithEmployerNameAndRecipient(string employer, string recipient) => await EnterNewAdddress(employer, recipient);
 
-    [Then(@"the recipient's name on the check page is '(.*)'")]
+    [Then(@"^the recipient's name on the check page is '(.*)'$")]
     public async Task ThenTheRecipientIsTheNewOneWhichWasEntered(string recipient) => await checkAndSubmitAssessmentDetailsPage.VerifyRecipient(recipient);
 
-    [Then(@"the recipient is defaulted to the apprentice name")]
+    [Then(@"^the recipient is defaulted to the apprentice name$")]
     public async Task ThenTheRecipientIsDefaultedToTheApprenticeName() => await checkAndSubmitAssessmentDetailsPage.VerifyRecipientIsApprentice();
 
-    [Then(@"the address contains the employer name '(.*)'")]
+    [Then(@"^the address contains the employer name '(.*)'$")]
     public async Task ThenTheAddressContainsTheEmployerName(string employer) => await checkAndSubmitAssessmentDetailsPage.VerifyEmployer(employer);
 
-    [When(@"the Admin amends the certificate")]
+    [When(@"^the Admin amends the certificate$")]
     public async Task WhenTheAdminAmendsTheCertificate() => confirmReasonBasePage = await certificateDetailsPage.ClickAmendCertificateLink();
 
-    [When(@"the Admin reprints the certificate")]
+    [When(@"^the Admin reprints the certificate$")]
     public async Task WhenTheAdminReprintsTheCertificate() => confirmReasonBasePage = await certificateDetailsPage.ClickReprintCertificateLink();
 
-    [Then(@"the ticket reference '(.*)' and reason for amend '(.*)' can be entered")]
+    [Then(@"^the ticket reference '(.*)' and reason for amend '(.*)' can be entered$")]
     public async Task ThenTheReasonForAmendCanBeEntered(string ticketReference, string reasonForAmend) => checkAndSubmitAssessmentDetailsPage = await confirmReasonBasePage.EnterTicketRefeferenceAndSelectReason(ticketReference, reasonForAmend);
 
-    [Then(@"the ticket reference '(.*)' and reason for reprint '(.*)' can be entered")]
+    [Then(@"^the ticket reference '(.*)' and reason for reprint '(.*)' can be entered$")]
     public async Task ThenTheReasonForReprintCanBeEntered(string ticketReference, string reasonForReprint) => checkAndSubmitAssessmentDetailsPage = await confirmReasonBasePage.EnterTicketRefeferenceAndSelectReason(ticketReference, reasonForReprint);
 
-    [Then(@"the amend can be confirmed")]
+    [Then(@"^the amend can be confirmed$")]
     public async Task ThenTheAmendCanBeConfirmed() => confirmationAmendReprintBasePage = await checkAndSubmitAssessmentDetailsPage.ClickConfirmAmend();
 
-    [Then(@"the reprint can be confirmed")]
+    [Then(@"^the reprint can be confirmed$")]
     public async Task ThenTheReprintCanBeConfirmed() => confirmationAmendReprintBasePage = await checkAndSubmitAssessmentDetailsPage.ClickConfirmReprint();
 
-    [Then(@"the certificate history contains the incident number '(.*)' and amend reason '(.*)'")]
+    [Then(@"^the certificate history contains the incident number '(.*)' and amend reason '(.*)'$")]
     public async Task ThenTheCertificateHistoryContainsTheReasonForAmending(string incidentNumber, string amendReason)
     {
         var page = await SelectACertificate();
@@ -127,7 +127,7 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
         await page.VerifyFirstReason(1, amendReason);
     }
 
-    [Then(@"the certificate history contains the incident number '(.*)' and reprint reason '(.*)'")]
+    [Then(@"^the certificate history contains the incident number '(.*)' and reprint reason '(.*)'$")]
     public async Task ThenTheCertificateHistoryContainsTheReasonForReprinting(string incidentNumber, string reprintReason)
     {
         var page = await SelectACertificate();
@@ -141,7 +141,7 @@ public class AdminSteps(ScenarioContext context) : EPAOBaseSteps(context)
         await page.VerifyFirstReason(2, reprintReason);
     }
 
-    [Then(@"the admin can search batches")]
+    [Then(@"^the admin can search batches$")]
     public async Task ThenTheAdminCanSearchBatches()
     {
         var page = await GoToEpaoAdminHomePage();

@@ -13,18 +13,18 @@ public class SupportToolsSteps(ScenarioContext context)
 
     private readonly StepsHelper _stepsHelper = new(context);
 
-    [Given(@"Opens the Pause Utility")]
-    [When(@"user opens Pause Utility")]
+    [Given(@"^Opens the Pause Utility$")]
+    [When(@"^user opens Pause Utility$")]
     public async Task WhenUserOpensPauseUtility() => await new ToolSupportHomePage(context).ClickPauseApprenticeshipsLink();
 
-    [Given(@"Opens the Resume Utility")]
+    [Given(@"^Opens the Resume Utility$")]
     public async Task GivenOpensTheResumeUtility() => await new ToolSupportHomePage(context).ClickResumeApprenticeshipsLink();
 
-    [Given(@"Opens the Stop Utility")]
+    [Given(@"^Opens the Stop Utility$")]
     public async Task GivenOpensTheStopUtility() => await new ToolSupportHomePage(context).ClickStopApprenticeshipsLink();
 
-    [Given(@"Search for Apprentices using following criteria")]
-    [Then(@"following filters should return the expected number of TotalRecords")]
+    [Given(@"^Search for Apprentices using following criteria$")]
+    [Then(@"^following filters should return the expected number of TotalRecords$")]
     public async Task ThenFollowingFiltersShouldReturnTheExpectedNumberOfTotalRecords(Table table)
     {
         var filters = table.CreateSet<Filters>().ToList();
@@ -60,19 +60,19 @@ public class SupportToolsSteps(ScenarioContext context)
         }
     }
 
-    [When(@"User selects all records and click on Pause Apprenticeship button")]
+    [When(@"^User selects all records and click on Pause Apprenticeship button$")]
     public async Task WhenUserSelectsAllRecordsAndClickOnPauseApprenticeshipButton() { var page = await SelectAllRecords(); await page.ClickPauseButton(); }
 
-    [When(@"User selects all records and click on Resume Apprenticeship button")]
+    [When(@"^User selects all records and click on Resume Apprenticeship button$")]
     public async Task WhenUserSelectsAllRecordsAndClickOnResumeApprenticeshipButton() { var page = await SelectAllRecords(); await page.ClickResumeButton(); }
 
-    [When(@"User selects all records and click on Stop Apprenticeship button")]
+    [When(@"^User selects all records and click on Stop Apprenticeship button$")]
     public async Task WhenUserSelectsAllRecordsAndClickOnStopApprenticeshipButton() { var page = await SelectAllRecords(); await page.ClickStopButton(); }
 
-    [Given(@"the SCS User is logged into Support Tools")]
+    [Given(@"^the SCS User is logged into Support Tools$")]
     public async Task GivenTheSCSUserIsLoggedIntoSupportTools() => await _stepsHelper.ValidUserLogsinToSupportSCSTools();
 
-    [Given(@"the SCP User is logged into Support Tools")]
+    [Given(@"^the SCP User is logged into Support Tools$")]
     public async Task GivenTheSCPUserIsLoggedIntoSupportTools() => await _stepsHelper.ValidUserLogsinToSupportSCPTools();
 
     private async Task<SearchForApprenticeshipPage> SelectAllRecords()
@@ -88,7 +88,7 @@ public class SupportToolsSteps(ScenarioContext context)
         return await VerifyPageHelper.VerifyPageAsync(context, () => new SearchForApprenticeshipPage(context));
     }
 
-    [Then(@"User should be able to stop all the records")]
+    [Then(@"^User should be able to stop all the records$")]
     public async Task ThenUserShouldBeAbleToStopAllTheRecords()
     {
         var page = new StopApprenticeshipsPage(context);
@@ -108,7 +108,7 @@ public class SupportToolsSteps(ScenarioContext context)
         ValidateStopSuccessful(ststusList);
     }
 
-    [Then(@"User should be able to pause all the live records")]
+    [Then(@"^User should be able to pause all the live records$")]
     public async Task ThenUserShouldBeAbleToPauseAllTheLiveRecords()
     {
         var page = new PauseApprenticeshipsPage(context);
@@ -122,7 +122,7 @@ public class SupportToolsSteps(ScenarioContext context)
         ValidatePausedSuccessful(ststusList);
     }
 
-    [Then(@"User should be able to resume all the paused records")]
+    [Then(@"^User should be able to resume all the paused records$")]
     public async Task ThenUserShouldBeAbleToResumeAllThePausedRecords()
     {
         var page = new ResumeApprenticeshipsPage(context);
@@ -136,7 +136,7 @@ public class SupportToolsSteps(ScenarioContext context)
         ValidateResumeSuccessful(ststusList);
     }
 
-    [Given(@"User should NOT be able to see Pause, Resume, Suspend and Reinstate utilities")]
+    [Given(@"^User should NOT be able to see Pause, Resume, Suspend and Reinstate utilities$")]
     public async Task ThenUserShouldNOTBeAbleToSeePauseResumeSuspendAndReinstateUtilities()
     {
         ToolSupportHomePage toolSupportHomePage = new(context);
@@ -148,7 +148,7 @@ public class SupportToolsSteps(ScenarioContext context)
         Assert.IsTrue(await toolSupportHomePage.IsStopApprenticeshipLinkVisible());
     }
 
-    [When(@"that account is suspended using bulk utility")]
+    [When(@"^that account is suspended using bulk utility$")]
     public async Task WhenThatAccountIsSuspendedUsingBulkUtility()
     {
         await _stepsHelper.NavigateToSupportTools();
@@ -168,7 +168,7 @@ public class SupportToolsSteps(ScenarioContext context)
         await page2.ClickSuspendUsersbtn();
     }
 
-    [When(@"that account is reinstated using bulk utility")]
+    [When(@"^that account is reinstated using bulk utility$")]
     public async Task WhenThatAccountIsReinstatedUsingBulkUtility()
     {
         var page = await _stepsHelper.ReLoginToSupportSCPTools();

@@ -7,7 +7,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
 {
     private string StandardName;
 
-    [When(@"the provider is able to add the standard delivered in one of the training locations")]
+    [When(@"^the provider is able to add the standard delivered in one of the training locations$")]
     public async Task WhenTheProviderIsAbleToAddTheStandardDeliveredInOneOfTheTrainingLocations()
     {
         StandardName = context.Get<ManagingStandardsDataHelpers>().Standard_ActuaryLevel7;
@@ -40,7 +40,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
         await page12.Save_NewStandard_Continue();
     }
 
-    [When("the provider is able to add the standard using new contact details")]
+    [When("^the provider is able to add the standard using new contact details$")]
     public async Task WhenTheProviderIsAbleToAddTheStandardUsingNewContactDetails()
     {
         StandardName = context.Get<ManagingStandardsDataHelpers>().Standard_ActuaryLevel7;
@@ -68,7 +68,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
         await page9.Save_NewStandard_Continue();
     }
 
-    [When("the provider is able to add the standard delivered nationally")]
+    [When("^the provider is able to add the standard delivered nationally$")]
     public async Task WhenTheProviderIsAbleToAddTheStandardDeliveredNationally()
     {
         StandardName = context.Get<ManagingStandardsDataHelpers>().Standard_ActuaryLevel7;
@@ -92,7 +92,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
         await page7.Save_NewStandard_Continue();
     }
 
-    [When(@"the provider is able to delete the standard")]
+    [When(@"^the provider is able to delete the standard$")]
     public async Task WhenTheProviderIsAbleToDeleteTheStandard()
     {
         var page = new ManageTheStandardsYouDeliverPage(context);
@@ -103,7 +103,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
 
         await page2.DeleteStandard();
     }
-    [When(@"the provider is able to delete the ApprenticeshipUnit")]
+    [When(@"^the provider is able to delete the ApprenticeshipUnit$")]
     public async Task WhenTheProviderIsAbleToDeleteTheApprenticeshipUnit()
     {
         var page = new ManageTheStandardsYouDeliverPage(context);
@@ -115,7 +115,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
         await page2.DeleteStandard();
     }
 
-    [When(@"the provider is able to add the ApprenticeshipUnit delivered in one of the training locations")]
+    [When(@"^the provider is able to add the ApprenticeshipUnit delivered in one of the training locations$")]
     public async Task WhenTheProviderIsAbleToAddTheApprenticeshipUnitDeliveredInOneOfTheTrainingLocations()
     {
         StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_AIleadership;
@@ -145,7 +145,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
         await page10.Save_NewApprenticeshipUnit_Continue();
     }
 
-    [When(@"the provider is able to add the ApprenticeshipUnit delivered in employers locations")]
+    [When(@"^the provider is able to add the ApprenticeshipUnit delivered in employers locations$")]
     public async Task WhenTheProviderIsAbleToAddTheApprenticeshipUnitDeliveredInEmployersLocations()
     {
         StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_AIleadership;
@@ -175,7 +175,7 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
         await page10.Save_NewApprenticeshipUnit_Continue();
     }
 
-    [When(@"the provider is able to add the ApprenticeshipUnit delivered online")]
+    [When(@"^the provider is able to add the ApprenticeshipUnit delivered online$")]
     public async Task WhenTheProviderIsAbleToAddTheApprenticeshipUnitDeliveredOnline()
     {
         StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_AIleadership;

@@ -5,7 +5,7 @@ public class FAACreateSteps(ScenarioContext context)
 {
     private readonly FAAStepsHelper _faaStepsHelper = new(context);
 
-    [Given(@"appretince creates an account")]
+    [Given(@"^appretince creates an account$")]
     public async Task GivenAppretinceCreatesAnAccount()
     {
         await _faaStepsHelper.SubmitNewUserDetails();
@@ -25,7 +25,7 @@ public class FAACreateSteps(ScenarioContext context)
         await page5.ClickCreateYourAccountConfirmation();
     }
 
-    [Then(@"apprentice is able to delete account")]
+    [Then(@"^apprentice is able to delete account$")]
     public async Task ThenApprenticeIsAbleToDeleteAccount()
     {
         var page = new SettingPage(context);
@@ -41,7 +41,7 @@ public class FAACreateSteps(ScenarioContext context)
         await page3.VerifyNotification();
     }
 
-    [Then("the apprentice attempts to delete their account they are notified of application withdrawal")]
+    [Then("^the apprentice attempts to delete their account they are notified of application withdrawal$")]
     public async Task WhenTheApprenticeAttemptsToDeleteTheirAccountTheyAreNotifiedOfApplicationWithdrawal()
     {
         var page = new SettingPage(context);
@@ -59,7 +59,7 @@ public class FAACreateSteps(ScenarioContext context)
         await page4.VerifyNotification();
     }
 
-    [When("the apprentice has submitted their first application")]
+    [When("^the apprentice has submitted their first application$")]
     public async Task GivenTheApprenticeHasSubmittedTheirFirstApplication()
     {
         var page = await _faaStepsHelper.ApplyForAVacancyWithNewAccount(true, true, true, true, true, true);

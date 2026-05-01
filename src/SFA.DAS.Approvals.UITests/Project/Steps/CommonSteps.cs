@@ -25,7 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Given("previous test has been completed successfully")]
+        [Given("^previous test has been completed successfully$")]
         public async Task GivenPreviousTestHasBeenCompletedSuccessfully()
         {
             await Task.CompletedTask;
@@ -52,13 +52,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
          }
 
-        [Then(@"Verify the ""(.*)"" receive ""(.*)"" email")]
+        [Then(@"^Verify the ""(.*)"" receive ""(.*)"" email$")]
         public async Task ThenVerifyTheReceiveEmail(string recipient, string notificationType)
         {
             await new ApprovalsEmailsHelper(context).VerifyEmailAsync(recipient, notificationType);
         }
 
-        [Then(@"the '(.*)' receives '(.*)' email notification")]
+        [Then(@"^the '(.*)' receives '(.*)' email notification$")]
         public async Task ThenTheReceivesEmailNotification(string recipient, string notificationType)
         {
             await approvalsEmailsHelper.VerifyEmailAsync(recipient, notificationType);

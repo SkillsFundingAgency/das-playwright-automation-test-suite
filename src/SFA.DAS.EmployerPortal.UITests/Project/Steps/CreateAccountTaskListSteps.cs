@@ -37,7 +37,7 @@ public class CreateAccountTaskListSteps
         return value == "does";
     }
 
-    [When(@"user logs out and log back in")]
+    [When(@"^user logs out and log back in$")]
     public async Task WhenUserLogsOutAndLogsBackIn()
     {
         var loggedInAccountUser = _objectContext.GetLoginCredentials();
@@ -51,29 +51,29 @@ public class CreateAccountTaskListSteps
         await page2.Continue();
     }
 
-    [Then(@"user can resume employer registration journey")]
+    [Then(@"^user can resume employer registration journey$")]
     public async Task UserCanResumeEmployerRegistrationJourney()
     {
         _createYourEmployerAccountPage = await VerifyPageHelper.VerifyPageAsync(_context, () => new CreateYourEmployerAccountPage(_context));
     }
 
-    [Given(@"user logs into stub")]
+    [Given(@"^user logs into stub$")]
     public async Task<StubAddYourUserDetailsPage> UserLogsIntoStub() => _stubAddYourUserDetailsPage = await _accountCreationStepsHelper.UserLogsIntoStub();
 
-    [Then(@"User is prompted to enter first and last name")]
+    [Then(@"^User is prompted to enter first and last name$")]
     public async Task<ConfirmYourUserDetailsPage> UserEntersNameAndContinue() => _confirmYourUserDetailsPage = await _accountCreationTaskListStepsHelper.UserEntersNameAndContinue(_stubAddYourUserDetailsPage);
 
-    [Then(@"user can amend name before submitting it")]
+    [Then(@"^user can amend name before submitting it$")]
     public async Task<ConfirmYourUserDetailsPage> UserAmendsNameThenSubmits() => _confirmYourUserDetailsPage = await _accountCreationTaskListStepsHelper.UserChangesUserDetails(_confirmYourUserDetailsPage);
 
-    [When(@"user adds name successfully to the account")]
-    [Then(@"user adds name successfully to the account")]
+    [When(@"^user adds name successfully to the account$")]
+    [Then(@"^user adds name successfully to the account$")]
     public async Task<CreateYourEmployerAccountPage> UserConfirmsNameAndAcknowledges() => _createYourEmployerAccountPage = await AccountCreationTaskListStepsHelper.UserClicksContinueButtonToAcknowledge(_confirmYourUserDetailsPage);
 
-    [Then(@"user can change user details from the task list")]
+    [Then(@"^user can change user details from the task list$")]
     public async Task<CreateYourEmployerAccountPage> UserChangesUserDetailsFromTaskList() => _createYourEmployerAccountPage = await AccountCreationTaskListStepsHelper.UserChangesDetailsFromTaskList(_createYourEmployerAccountPage);
 
-    [When(@"user (.*) add PAYE details")]
+    [When(@"^user (.*) add PAYE details$")]
     public async Task<CreateYourEmployerAccountPage> UserCanAddPAYEFromTaskList(bool doesAdd)
     {
         if (doesAdd)
@@ -89,7 +89,7 @@ public class CreateAccountTaskListSteps
         return _createYourEmployerAccountPage;
     }
 
-    [When(@"user (.*) set account name and (.*)")]
+    [When(@"^user (.*) set account name and (.*)$")]
     public async Task<CreateYourEmployerAccountPage> UserCanSetAccountNameFromTaskList(bool canSetAccountName, bool doesSet)
     {
         if (canSetAccountName)
@@ -104,21 +104,21 @@ public class CreateAccountTaskListSteps
         return _createYourEmployerAccountPage;
     }
 
-    [Then(@"user can update account name")]
+    [Then(@"^user can update account name$")]
     public async Task<CreateYourEmployerAccountPage> UserCanUpdateAccountName()
     {
         _createYourEmployerAccountPage = await _accountCreationTaskListStepsHelper.UpdateEmployerAccountName(_createYourEmployerAccountPage);
         return _createYourEmployerAccountPage;
     }
 
-    [When(@"user acknowledges the employer agreement")]
+    [When(@"^user acknowledges the employer agreement$")]
     public async Task<CreateYourEmployerAccountPage> UserAcknowledgesEmployerAgreement()
     {
         _createYourEmployerAccountPage = await AccountCreationTaskListStepsHelper.UserAcknowledgesEmployerAgreement(_createYourEmployerAccountPage);
         return _createYourEmployerAccountPage;
     }
 
-    [When(@"user (.*) accept the employer agreement and (.*)")]
+    [When(@"^user (.*) accept the employer agreement and (.*)$")]
     public async Task<CreateYourEmployerAccountPage> UserCanAcceptEmployerAgreement(bool canAcceptAgreement, bool doesAccept)
     {
 
@@ -134,10 +134,10 @@ public class CreateAccountTaskListSteps
         return _createYourEmployerAccountPage;
     }
 
-    [Then(@"user accepts agreement from the home page")]
+    [Then(@"^user accepts agreement from the home page$")]
     public async Task UserAcceptsAgreementFromTheHomePage() => await AccountCreationStepsHelper.SignAgreementFromHomePage(new HomePage(_context));
 
-    [When(@"user (.*) add training provider and (.*), the user (.*) grant training provider permissions")]
+    [When(@"^user (.*) add training provider and (.*), the user (.*) grant training provider permissions$")]
     public async Task UserAddTrainingProviderAndGrantPermission(bool canAddTrainingProvider, bool doesAdd, bool doesGrant)
     {
         if (canAddTrainingProvider)

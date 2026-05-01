@@ -14,7 +14,7 @@ public class ShortlistSteps
         _trainingProvidersPage = new TrainingProvidersPage(context);
         _shortlistPage = new ShortlistPage(context);
     }
-    [Then("verify add remove count shortlist functionality")]
+    [Then("^verify add remove count shortlist functionality$")]
 
     public async Task ThenVerifyAddRemoveCountShortlistFunctionality()
     {

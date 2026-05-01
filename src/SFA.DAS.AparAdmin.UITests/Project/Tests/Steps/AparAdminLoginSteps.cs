@@ -12,10 +12,10 @@ public class AparAdminLoginSteps(ScenarioContext context) : FrameworkBaseHooks(c
 
     private readonly AssessorLoginStepsHelper _assessorLoginStepsHelper = new(context);
 
-    [Given(@"the admin lands on the Dashboard")]
+    [Given(@"^the admin lands on the Dashboard$")]
     public async Task GivenTheAdminLandsOnTheDashboard() => await _dfeAdminLoginStepsHelper.NavigateAndLoginToASAdmin();
 
-    [When(@"the (Assessor1|Assessor2) is on the Apar assessor applications dashboard")]
+    [When(@"^the (Assessor1|Assessor2) is on the Apar assessor applications dashboard$")]
     public async Task WhenTheAssessorIsOnTheRoATPAssessorApplicationsDashboard(string assessorUser)
     {
         await Navigate(UrlConfig.RoATPAssessor_BaseUrl);

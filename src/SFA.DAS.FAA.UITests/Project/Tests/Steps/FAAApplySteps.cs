@@ -7,8 +7,8 @@ public class FAAApplySteps(ScenarioContext context)
 
     protected bool IsFoundationAdvert => context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
 
-    [When(@"the Applicant can apply for a Vacancy in FAA")]
-    [Then(@"the Applicant can apply for a Vacancy in FAA")]
+    [When(@"^the Applicant can apply for a Vacancy in FAA$")]
+    [Then(@"^the Applicant can apply for a Vacancy in FAA$")]
     public async Task TheApplicantCanApplyForAVacancyInFAA()
     {
         FAAPortalUser user = IsFoundationAdvert ? context.GetUser<FAAFoundationUser>() : context.GetUser<FAAApplyUser>();
@@ -20,8 +20,8 @@ public class FAAApplySteps(ScenarioContext context)
         await page1.SubmitApplication();
     }
 
-    [When(@"the Applicant can apply for a Vacancy with multiple locations in FAA")]
-    [Then(@"the Applicant can apply for a Vacancy with multiple locations in FAA")]
+    [When(@"^the Applicant can apply for a Vacancy with multiple locations in FAA$")]
+    [Then(@"^the Applicant can apply for a Vacancy with multiple locations in FAA$")]
     public async Task TheApplicantCanApplyForAVacancyWithMultipleLocationsInFAA()
     {
         var user = context.GetUser<FAAApplyUser>();
@@ -33,8 +33,8 @@ public class FAAApplySteps(ScenarioContext context)
         await page1.SubmitApplication();
     }
 
-    [When(@"the Applicant can apply for a foundation vacancy in FAA")]
-    [Then(@"the Applicant can apply for a foundation vacancy in FAA")]
+    [When(@"^the Applicant can apply for a foundation vacancy in FAA$")]
+    [Then(@"^the Applicant can apply for a foundation vacancy in FAA$")]
     public async Task TheApplicantCanApplyForAFoundationVacancyInFAA()
     {
         var user = context.GetUser<FAAFoundationUser>();
@@ -46,7 +46,7 @@ public class FAAApplySteps(ScenarioContext context)
         await page1.SubmitApplication();
     }
 
-    [Then("the ineligible applicant can not apply for a foundation vacancy in FAA")]
+    [Then("^the ineligible applicant can not apply for a foundation vacancy in FAA$")]
     public async Task ThenTheIneligibleApplicantCanNotApplyForAFoundationVacancyInFAA()
     {
         var user = context.GetUser<FAAApplyUser>();
@@ -54,7 +54,7 @@ public class FAAApplySteps(ScenarioContext context)
         await _faaStepsHelper.IneligibleUserApplyForAVacancy(user);
     }
 
-    [When(@"the Applicant can apply for a Vacancy in FAA with ""(.*)"" additional questions")]
+    [When(@"^the Applicant can apply for a Vacancy in FAA with ""(.*)"" additional questions$")]
     public async Task TheApplicantCanApplyForAVacancyInFAA(string numberOfQuestions)
     {
         var user = context.GetUser<FAAApplyUser>();
@@ -66,7 +66,7 @@ public class FAAApplySteps(ScenarioContext context)
         await page1.SubmitApplication();
     }
 
-    [When(@"the Applicant can apply for a multiple locations Vacancy in FAA with ""(.*)"" additional questions")]
+    [When(@"^the Applicant can apply for a multiple locations Vacancy in FAA with ""(.*)"" additional questions$")]
     public async Task TheApplicantCanApplyForAVacancyWithMultipleLocationsInFAA(string numberOfQuestions)
     {
         var user = context.GetUser<FAAApplyUser>();
@@ -78,7 +78,7 @@ public class FAAApplySteps(ScenarioContext context)
         await page1.SubmitApplication();
     }
 
-    [When(@"multiple Applicants can apply for a Vacancy in FAA")]
+    [When(@"^multiple Applicants can apply for a Vacancy in FAA$")]
     public async Task MultipleApplicantsCanApplyForAVacancyInFAA()
     {
         var user = context.GetUser<FAAApplyUser>();

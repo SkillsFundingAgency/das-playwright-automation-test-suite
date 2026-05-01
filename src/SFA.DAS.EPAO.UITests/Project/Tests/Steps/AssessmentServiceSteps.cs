@@ -14,7 +14,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
 
     private AS_AssessmentRecordedPage assessmentRecordedPage;
 
-    [Given(@"the (Assessor User|Delete Assessor User|Standard Apply User|Manage User|EPAO Withdrawal User) is logged into Assessment Service Application")]
+    [Given(@"^the (Assessor User|Delete Assessor User|Standard Apply User|Manage User|EPAO Withdrawal User) is logged into Assessment Service Application$")]
     public async Task GivenTheUserIsLoggedIn(Func<Task<AS_LoggedInHomePage>> userloginFunc) => loggedInHomePage = await userloginFunc?.Invoke();
 
     [StepArgumentTransformation(@"(Assessor User|Delete Assessor User|Standard Apply User|Manage User|EPAO Withdrawal User)")]
@@ -31,10 +31,10 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         };
     }
 
-    [When(@"the User certifies an Apprentice as '(pass|fail)' using '(employer|apprentice)' route")]
+    [When(@"^the User certifies an Apprentice as '(pass|fail)' using '(employer|apprentice)' route$")]
     public async Task WhenTheUserCertifiesAnApprenticeAsWhoHasEnrolledForStandard(string grade, string route) => await RecordAGrade(grade, route, await SetLearnerDetails(), true);
 
-    [When(@"the User provides the matching uln and invalid Family name for the existing certificate")]
+    [When(@"^the User provides the matching uln and invalid Family name for the existing certificate$")]
     public async Task WhenTheUserProvidesTheMatchingUlnAndInvalidFamilyNameForTheExistingCertificate()
     {
         var page = await loggedInHomePage.GoToRecordAGradePage();
@@ -42,13 +42,13 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         await page.EnterApprenticeDetailsForExistingCertificateAndContinue();
     }
 
-    [When(@"the User certifies same Apprentice as (pass|PassWithExcellence) using '(employer|apprentice)' route")]
+    [When(@"^the User certifies same Apprentice as (pass|PassWithExcellence) using '(employer|apprentice)' route$")]
     public async Task WhenTheUserCertifiesSameApprenticeAsPass(string grade, string route) => await RecordAGrade(grade, route, GetLearnerCriteria(), false);
 
-    [Then(@"the Assessment is recorded as '(pass|fail|pass with excellence)'")]
+    [Then(@"^the Assessment is recorded as '(pass|fail|pass with excellence)'$")]
     public async Task ThenTheAssessmentIsRecordedAs(string grade) => await assessmentServiceStepsHelper.VerifyApprenticeGrade(grade, GetLearnerCriteria());
 
-    [Then(@"the Admin user can delete a certificate that has been incorrectly submitted")]
+    [Then(@"^the Admin user can delete a certificate that has been incorrectly submitted$")]
     public async Task ThenTheAdminUserCanDeleteACertificateThatHasBeenIncorrectlySubmitted()
     {
         var page = await ePAOHomePageHelper.LoginToEpaoAdminHomePage(true);
@@ -56,10 +56,10 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         await assessmentServiceStepsHelper.DeleteCertificate(page);
     }
 
-    [Then(@"the User can navigates to record another grade")]
+    [Then(@"^the User can navigates to record another grade$")]
     public async Task ThenTheUserCanNavigatesToRecordAnotherGrade() => await assessmentRecordedPage.ClickRecordAnotherGradeLink();
 
-    [Given(@"the User should be able to Opt In for the new version of the Standard")]
+    [Given(@"^the User should be able to Opt In for the new version of the Standard$")]
     public async Task GivenTheUserShouldBeAbleToOptInForTheNewVersionOfTheStandard()
     {
         var page = await loggedInHomePage.ApprovedStandardAndVersions();
@@ -71,10 +71,10 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         await page2.ConfirmOptIn();
     }
 
-    [Then(@"'(.*)' message is displayed")]
+    [Then(@"^'(.*)' message is displayed$")]
     public async Task ThenErrorMessageIsDisplayed(string _) => await recordAGradePage.VerifyCantFindApprentice();
 
-    [Then(@"the '(.*)' is displayed")]
+    [Then(@"^the '(.*)' is displayed$")]
     public async Task ThenErrorIsDisplayed(string errorMessage)
     {
         switch (errorMessage)
@@ -95,7 +95,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         }
     }
 
-    [When(@"the User clicks on the continue button '(.*)'")]
+    [When(@"^the User clicks on the continue button '(.*)'$")]
     public async Task WhenTheUserClicksOnTheContinueButton(string scenario)
     {
         string familyName = ePAOAdminDataHelper.FamilyName, uln = ePAOAdminDataHelper.LearnerUln;
@@ -122,10 +122,10 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         await recordAGradePage.EnterApprenticeDetailsAndContinue(familyName, uln);
     }
 
-    [Given(@"navigates to Assessment page")]
+    [Given(@"^navigates to Assessment page$")]
     public async Task GivenNavigatesToAssessmentPage() { await SetLearnerDetails(); recordAGradePage = await loggedInHomePage.GoToRecordAGradePage(); }
 
-    [Given(@"the User certifies an Apprentice as '(pass|fail)' with '(employer|apprentice)' route and records a grade")]
+    [Given(@"^the User certifies an Apprentice as '(pass|fail)' with '(employer|apprentice)' route and records a grade$")]
     public async Task WhenTheUserCertifiesAnApprenticeAndRecordsAGrade(string grade, string route)
     {
         var page = await CertifyApprentice(grade, route, await SetLearnerDetails(), true);
@@ -133,11 +133,11 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         await page.ClickContinueInCheckAndSubmitAssessmentPage();
     }
 
-    [When(@"the User certifies an Apprentice as '(pass|fail)' with '(employer|apprentice)' route and lands on Confirm Assessment Page")]
+    [When(@"^the User certifies an Apprentice as '(pass|fail)' with '(employer|apprentice)' route and lands on Confirm Assessment Page$")]
     public async Task WhenTheUserCertifiesAnApprenticeAndLandsOnConfirmAssessmentPage(string grade, string route)
         => checkAndSubmitAssessmentPage = await CertifyApprentice(grade, route, await SetLearnerDetails(), true);
 
-    [Then(@"the Change links navigate to the respective pages")]
+    [Then(@"^the Change links navigate to the respective pages$")]
     public async Task ThenTheChangeLinksNavigateToTheRespectivePages()
     {
         await CheckCommonLinks();
@@ -147,7 +147,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         checkAndSubmitAssessmentPage = await page.ClickBackLink();
     }
 
-    [Then(@"the Change links navigate to employer pages")]
+    [Then(@"^the Change links navigate to employer pages$")]
     public async Task ThenTheChangeLinksNavigateToTheEmployerPages()
     {
         await CheckCommonLinks();
@@ -162,13 +162,13 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
 
     }
 
-    [When(@"the User navigates to the Completed assessments tab")]
+    [When(@"^the User navigates to the Completed assessments tab$")]
     public async Task WhenTheUserNavigatesToTheCompletedAssessmentsTab() => await loggedInHomePage.ClickCompletedAssessmentsLink();
 
-    [Then(@"the User is able to view the history of the assessments")]
+    [Then(@"^the User is able to view the history of the assessments$")]
     public async Task ThenTheUserIsAbleToViewTheHistoryOfTheAssessments() => await new AS_CompletedAssessmentsPage(_context).VerifyTableHeaders();
 
-    [When(@"the User navigates to Organisation details page")]
+    [When(@"^the User navigates to Organisation details page$")]
     public async Task WhenTheUserNavigatesToOrganisationDetailsPage()
     {
         await AssessmentServiceStepsHelper.RemoveChangeOrgDetailsPermissionForTheUser(loggedInHomePage);
@@ -178,7 +178,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         await new AS_ChangeOrganisationDetailsPage(_context).ClickAccessButton();
     }
 
-    [Then(@"the User is able to change the Registered details")]
+    [Then(@"^the User is able to change the Registered details$")]
     public async Task ThenTheUserIsAbleToChangeTheRegisteredDetails()
     {
         aS_OrganisationDetailsPage = new AS_OrganisationDetailsPage(_context);
@@ -196,7 +196,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         aS_OrganisationDetailsPage = await AssessmentServiceStepsHelper.ChangeWebsiteAddress(aS_OrganisationDetailsPage);
     }
 
-    [When(@"the User initiates editing permissions of another user")]
+    [When(@"^the User initiates editing permissions of another user$")]
     public async Task WhenTheUserInitiatesEditingPermissionsOfAnotherUser()
     {
         var page = await loggedInHomePage.ClickManageUsersLink();
@@ -216,7 +216,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         _permissionsSelected = !_permissionsSelected;
     }
 
-    [Then(@"the User is able to change the permissions")]
+    [Then(@"^the User is able to change the permissions$")]
     public async Task ThenTheUserIsAbleToChangeThePermissions()
     {
         var permissions = await userDetailsPage.GetDashboardPermissions();
@@ -242,13 +242,13 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
 
 
 
-    [When(@"the User initiates inviting a new user journey")]
+    [When(@"^the User initiates inviting a new user journey$")]
     public async Task WhenTheUserInitiatesInvitingANewUserJourney() => _newUserEmailId = await AssessmentServiceStepsHelper.InviteAUser(loggedInHomePage);
 
-    [Then(@"a new User is invited and able to initiate inviting another user")]
+    [Then(@"^a new User is invited and able to initiate inviting another user$")]
     public async Task ThenANewUserIsInvitedAndAbleToInitiateInvitingAnotherUser() => await new AS_UserInvitedPage(_context).ClickInviteSomeoneElseLink();
 
-    [Then(@"the User can remove newly invited user")]
+    [Then(@"^the User can remove newly invited user$")]
     public async Task ThenTheUserCanRemoveNewlyInvitedUser()
     {
         await loggedInHomePage.ClickHomeTopMenuLink();
@@ -262,7 +262,7 @@ public class AssessmentServiceSteps(ScenarioContext context) : EPAOBaseSteps(con
         await page2.ClickRemoveUserButtonInRemoveUserPage();
     }
 
-    [Given(@"the certificate is printed")]
+    [Given(@"^the certificate is printed$")]
     public async Task GivenTheCertificateIsSentToPrinter() => await ePAOAdminSqlDataHelper.UpdateCertificateToPrinted(ePAOAdminDataHelper.LearnerUln);
 
     private async Task CheckCommonLinks()

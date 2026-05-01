@@ -25,7 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [When("the employer grants provider permissions to add apprentices")]
+        [When("^the employer grants provider permissions to add apprentices$")]
         public async Task WhenTheEmployerGrantsProviderPermissionsToAddApprentices()
         {
             var providerConfig = context.GetProviderConfig<ProviderConfig>();
@@ -35,8 +35,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [When(@"a (.*) Employer (.*) create cohort permission to a provider")]
-        [Given(@"a (.*) Employer (.*) create cohort permission to a provider")]
+        [When(@"^a (.*) Employer (.*) create cohort permission to a provider$")]
+        [Given(@"^a (.*) Employer (.*) create cohort permission to a provider$")]
         public async Task WhenALevyEmployerGrantCreateCohortPermissionToAProvider(EmployerType employerType, string permission)
         {
             EasAccountUser employerUser = context.GetUser<ProviderPermissionLevyUser>();
@@ -65,7 +65,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
     
-        [Then("Provider can Create Cohort")]
+        [Then("^Provider can Create Cohort$")]
         public async Task ThenProviderCanCreateCohort()
         {
             var selectRoutePage = await GoToSelectOptionPage();
@@ -78,7 +78,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerHomePage.SignsOut();
         }
 
-        [Then(@"the Provider (.*) create Reservations")]
+        [Then(@"^the Provider (.*) create Reservations$")]
         public async Task ThenTheProviderCanCreateReservations(string val)
         {
             if (val == "cannot")
@@ -97,7 +97,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
 
 
-        [Then("Provider cannot Create Cohort")]
+        [Then("^Provider cannot Create Cohort$")]
         public async Task ThenProviderCannotCreateCohort()
         {
             var selectRoutePage = await GoToSelectOptionPage();

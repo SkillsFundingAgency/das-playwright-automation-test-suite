@@ -33,7 +33,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Given(@"a cohort created via ILR exists in (.*) section")]
+        [Given(@"^a cohort created via ILR exists in (.*) section$")]
         public async Task GivenACohortCreatedViaILRExistsInSection(ApprenticeRequests cohortStatus)
         {
             //check db if an existing cohorts can be used
@@ -83,7 +83,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
 
 
-        [Then("a banner is displayed on the cohort for provider to accept changes")]
+        [Then("^a banner is displayed on the cohort for provider to accept changes$")]
         public async Task ThenABannerIsDisplayedOnTheCohortForProviderToAcceptChanges()
         {
             var updatedApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfUpdatedApprenticeship).FirstOrDefault();
@@ -106,14 +106,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page2.VerifyBanner(bannerTitle, bannerMessage);
         }
 
-        [Then("Provider cannot approve the cohort")]
+        [Then("^Provider cannot approve the cohort$")]
         public async Task ThenProviderCannotApproveTheCohort()
         {
             var page = new ApproveApprenticeDetailsPage(context);
             await page.CanCohortBeApproved(false);
         }
 
-        [When("Provider reviews and accepts the changes")]
+        [When("^Provider reviews and accepts the changes$")]
         public async Task WhenProviderReviewsAndAcceptsTheChanges()
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -140,7 +140,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             listOfUpdatedApprenticeship.Clear();
         }
 
-        [Then("Provider can approve the cohort")]
+        [Then("^Provider can approve the cohort$")]
         public async Task ThenProviderCanApproveTheCohort()
         {
             var page = new ApproveApprenticeDetailsPage(context);
