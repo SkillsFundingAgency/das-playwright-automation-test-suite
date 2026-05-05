@@ -31,7 +31,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
 
             string partialHref = $"reservationId={apprenticeship.ReservationID}";
-            var reservationLink = page.Locator($"a[href*='{partialHref}']:text('Add apprentice')");
+            var reservationLink = page.Locator($"a[href*='{partialHref}']:text('Add learner')");
             var nextPageButton = page.GetByRole(AriaRole.Link, new() { Name = "Next page" });
 
             // ✅ First, check if link is already present and visible
