@@ -11,10 +11,10 @@ public class TasksHelper(ScenarioContext context)
     private readonly TransferMatchingSqlDataHelper _transferMatchingSqlDataHelper = context.Get<TransferMatchingSqlDataHelper>();
     private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
     
-    public async Task<int> GetNumberOfApprenticesToReview()
+    public async Task<int> GetNumberOfLearnersToReview()
     {
         var accountId = _objectContext.GetDBAccountId();
-        return await _commitmentsSqlHelper.GetNumberOfApprenticesToReview(accountId);
+        return await _commitmentsSqlHelper.GetNumberOfLearnersToReview(accountId);
     }
 
     public async Task<int> GetNumberOfCohortsReadyToReview()
@@ -48,7 +48,7 @@ public class TasksHelper(ScenarioContext context)
         return approvedApplications?.Count ?? 0;
     }
 
-    public async Task<int> GetNumberOfAcceptedTransferPledgeApplicationsWithNoApprentices()
+    public async Task<int> GetNumberOfAcceptedTransferPledgeApplicationsWithNoLearners()
     {
         var accountId = _objectContext.GetDBAccountId();
         var acceptedApplications = await _transferMatchingSqlDataHelper.GetTransferPledgeApplicationsByApplicationStatus(accountId, "3");
@@ -57,29 +57,29 @@ public class TasksHelper(ScenarioContext context)
             return 0;
         }
 
-        var cohortResult = await _commitmentsSqlHelper.GetPledgeApplicationIdsAndNumberOfDraftApprentices(accountId);
+        var cohortResult = await _commitmentsSqlHelper.GetPledgeApplicationIdsAndNumberOfDraftLearners(accountId);
         if (cohortResult == null || (cohortResult).Count == 0)
         {
             return acceptedApplications.Count;
         }
-
-        var acceptedApplicationIdsWithoutApprentices = new List<int>();
+    
+        var acceptedApplicationIdsWithoutLearners = new List<int>();
 
         foreach (var appId in acceptedApplications)
         {
             var cohortsForApplication = cohortResult.Where(x => x.PledgeApplicationId == appId).ToList();
-            if (cohortsForApplication.Count == 0 || cohortsForApplication.Any(x => x.NumberOfDraftApprentices == 0))
+            if (cohortsForApplication.Count == 0 || cohortsForApplication.Any(x => x.NumberOfDraftLearners == 0))
             {
-                acceptedApplicationIdsWithoutApprentices.Add(appId);
+                acceptedApplicationIdsWithoutLearners.Add(appId);
             }
         }
 
-        return acceptedApplicationIdsWithoutApprentices.Count;
+        return acceptedApplicationIdsWithoutLearners.Count;
     }
 
-    public static async Task<HomePage> ClickViewApprenticeChangesLink(HomePage homePage, int numberOfChanges)
+    public static async Task<HomePage> ClickViewLearnerChangesLink(HomePage homePage, int numberOfChanges)
     {
-        var page = await homePage.ClickViewChangesForApprenticeChangesToReview(numberOfChanges);
+        var page = await homePage.ClickViewChangesForLearnerChangesToReview(numberOfChanges);
         
         return await page.GoToHomePage();
     }
