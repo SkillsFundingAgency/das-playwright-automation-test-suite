@@ -19,6 +19,7 @@ public class AdminSteps(ScenarioContext context)
     private readonly SearchForQualification_Page searchForQualification_Page = new(context);
     private readonly QualificationDetails_Page qualificationDetails_Page = new(context);
     private readonly RequestForFunding_Page requestForFunding_Page = new(context);
+    private readonly DfeFundigReview_Page dfeFundigReview_Page = new(context);
 
     [Given(@"the (.*) user log in to the portal")]
     public async Task GivenTheAdminUserLogInToThePortal(string user)
@@ -278,5 +279,33 @@ public class AdminSteps(ScenarioContext context)
         await _newQualificationsPage.VerifyAllCheckboxesAreSelected();
         await requestForFunding_Page.SelectReviewerForApplications("aodp TestAdmin1", "aodp TestAdmin2");
         await requestForFunding_Page.ClickOnApplyAssignReviewersToThisSelection();
+    }
+    
+    [When("I publish the form for eligibility update scenario")]
+    public async Task ThenICreateANewSubmissionFormAndPublishTheFormForEligibilityUpdateScenario()
+    {
+        await _viewFormsPage.ClickCreateNewFormButton();
+        await _createNewFormPage.CreateFormForEligibilityUpdate();
+    }
+
+    [Then("I select the (.*) application")]     
+    public async Task IselectTheApplication(string application)
+    {
+        await application_Details_Page.SelectApplicationAsQfauOfqualAndIfateUser(application);
+    }
+
+    [Then("I set the funding stream and approve the application")]
+    public async Task ThenISetTheFundingStreamAndApproveTheApplication()
+    {
+        await application_Details_Page.ClickOnDfeFundingReviewButton();
+        await dfeFundigReview_Page.ApproveTheApplcaiton();
+        await dfeFundigReview_Page.SelectFundingStream();
+        await dfeFundigReview_Page.SetFundingStreamsAndApprovedTheApplication();
+    }
+    [Then("I validate QAN (.*) has status as (.*)")]
+    public async Task ThenIValidateQANStatus(string QAN, string status)
+    {       
+        await _newQualificationsPage.SearchAndSelectQualification(QAN);
+        await qualificationDetails_Page.VerifyStatusOfQualification(status);
     }
 }

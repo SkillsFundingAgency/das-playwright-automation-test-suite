@@ -35,4 +35,9 @@ public class AOSteps(ScenarioContext context)
         await startApplication_Page.WithdrawTheApplication();
         await startApplication_Page.ClickOnManageFundingApplications();
     }
+    [When("I submit the application for eligibility update")]
+    public async Task AndISubmitTheApplicationForEligibilityCheck()
+    {
+        await qfastAOPage.SubmitApplicationForEligibilityChanged();
+    }
 }

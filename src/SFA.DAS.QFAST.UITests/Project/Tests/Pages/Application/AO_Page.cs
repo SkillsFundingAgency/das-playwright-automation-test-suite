@@ -74,4 +74,30 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await Assertions.Expect(AoErrorMessage).ToContainTextAsync("This QAN does not match any qualifications associated with your AO.");
         return await VerifyPageAsync(() => new StartApplication_Page(context));
     }
+    public async Task SubmitApplicationForEligibilityChanged()
+    {
+        await ClickStartNewApplicationButton();
+        await StartApplication(qfastDataHelpers.FormNameForEligibilityChanged);
+        await VerifyErrorMessageForEmptyApplicationDetails();
+        await EnterApplicationDetailsAndSubmitForEligibilityChanged();
+        await applicationOverview_Page.DeletButtonIsVisible();
+        await applicationOverview_Page.ClickTestSection();
+        await testSection_Page.ClickTestPage();
+        await testPage_Page.SubmitTheAnswer();
+        await testSection_Page.ClickBackToViewApplication();
+        await applicationOverview_Page.VerifyApplicationIsCompleted();
+        // at this stage AO user can still delete the application
+        await applicationOverview_Page.DeletButtonIsVisible();
+        await applicationOverview_Page.ClickSubmitApplication();
+        await applicationOverview_Page.ClickAcceptAndSubmit();
+        await applicationOverview_Page.ClickBackToDashboard();
+    }
+      public async Task<Application_Overview_Page> EnterApplicationDetailsAndSubmitForEligibilityChanged()
+    {
+        await page.GetByLabel("Qualification title").FillAsync(qfastDataHelpers.QualificationTitleForEligibilityChanged);
+        await page.GetByLabel("Application owner").FillAsync(qfastDataHelpers.ApplicationOwner);
+        await page.GetByLabel("Qualification number (optional)").FillAsync(qfastDataHelpers.QualificationNumberForEligibilityChanged);
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+        return await VerifyPageAsync(() => new Application_Overview_Page(context));
+    }
 }

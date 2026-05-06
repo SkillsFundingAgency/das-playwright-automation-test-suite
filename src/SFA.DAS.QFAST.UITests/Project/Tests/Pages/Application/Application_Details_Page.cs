@@ -72,4 +72,9 @@ public class Application_Details_Page (ScenarioContext context) : BasePage(conte
         await Assertions.Expect(popupPage).ToHaveURLAsync(expectedUrl);
         await popupPage.CloseAsync();
     }
+    public async Task<DfeFundigReview_Page> ClickOnDfeFundingReviewButton()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "DfE funding review" }).ClickAsync();
+        return await VerifyPageAsync(() => new DfeFundigReview_Page(context));
+    }    
 }

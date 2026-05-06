@@ -75,6 +75,14 @@ public class NewQualifications_Page(ScenarioContext context) : BasePage(context)
         await firstRow.Locator("input[type='checkbox']").ClickAsync();
         await SelectOption(option);
         await ClickOnApplyToThisSelectionButton();       
-    }    
+    }
+    public async Task SearchAndSelectQualification(string Qan)
+    {
+        await page.Locator("#Filter_QAN").FillAsync(Qan);;
+        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        await page.Locator("table.govuk-table tbody tr").First.WaitForAsync();
+        var firstRow = page.Locator("table.govuk-table tbody tr").First;
+        await firstRow.Locator("input[type='checkbox']").ClickAsync();
+    }   
 }
 
