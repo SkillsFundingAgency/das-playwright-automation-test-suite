@@ -49,7 +49,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
     {
         var page = new ManageTheStandardsYouDeliverPage(context);
 
-        var page1 = await page.AccessPodiatrist();
+        var page1 = await page.AccessTeacher();
 
         var page2 = await page1.UpdateTheseContactDetails();
 
@@ -66,7 +66,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
         var page2 = await page1.AccessTrainingTypesPage();
         var page3 = await page2.AccessStandards_Apprenticeships();
 
-        var page4 = await page3.AccessPodiatrist();
+        var page4 = await page3.AccessTeacher();
 
         var page5 = await page4.AccessApprovedByRegulationOrNot();
 
@@ -87,7 +87,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page4 = await page3.Return_StandardsManagement();
 
-        await page4.VerifyOrangeMoreDetailsNeededTagForStandardAsync("Podiatrist (level 6)", shouldExist: true);
+        await page4.VerifyOrangeMoreDetailsNeededTagForStandardAsync("Teacher - Postgraduate (level 6)", shouldExist: true);
 
     }
 
@@ -139,7 +139,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
         var page2 = await page1.AccessTrainingTypesPage();
         var page3 = await page2.AccessStandards_Apprenticeships();
 
-        var page4 = await page3.AccessPodiatrist();
+        var page4 = await page3.AccessTeacher();
 
         var page5 = await page4.AccessWhereYouWillDeliverThisStandard();
 

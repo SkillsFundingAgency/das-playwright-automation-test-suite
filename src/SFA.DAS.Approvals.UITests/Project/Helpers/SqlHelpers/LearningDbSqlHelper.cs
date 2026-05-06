@@ -7,10 +7,11 @@
         internal async Task<string> CheckIfApprenticeshipRecordCreatedInLearningDb(int ApprenticeshipId, string ULN)
         {
             string query = $@"SELECT TOP(1) l.[Key] FROM [dbo].[Learner] l
-                                JOIN [dbo].[ApprenticeshipLearning] al 
-                                ON l.[key] = al.LearnerKey
-                                WHERE l.uln = '{ULN}'
-                                AND al.ApprovalsApprenticeshipId = {ApprenticeshipId}";
+                     JOIN [dbo].[ApprenticeshipLearning] al ON l.[key] = al.LearnerKey
+                     JOIN [dbo].[ApprenticeshipEpisode] ae ON al.[Key] = ae.LearningKey
+                     WHERE l.uln = '{ULN}'
+                     AND ae.ApprovalsApprenticeshipId = {ApprenticeshipId}";
+
             var result = await GetData(query);
             return result.FirstOrDefault() ?? string.Empty;
         }

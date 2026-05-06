@@ -157,7 +157,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
 
-            var page1 = await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            var page1 = await new ApprenticesHomePage(context).GoToApprenticeRequestsFromHome();
             var page2 = await page1.OpenApprenticeRequestReadyForReview(cohort);
             await page2.ValidateCohortStatus(status);
         }

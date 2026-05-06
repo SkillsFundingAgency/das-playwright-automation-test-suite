@@ -43,7 +43,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
             await _fATeHomePage.ClickStartNow();
             await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
-            await _fATeHomePage.ViewTrainingProvidersForCourse("204");
+            await _fATeHomePage.ViewTrainingProvidersForCourse("274");
         }
         [Given("^verify the filters functionality$")]
         public async Task GivenVerifyTheFiltersFunctionality()
