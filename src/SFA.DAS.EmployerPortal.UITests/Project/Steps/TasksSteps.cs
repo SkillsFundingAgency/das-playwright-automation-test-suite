@@ -61,30 +61,30 @@ public class TasksSteps
         }
     }
 
-    [When("there are X apprentice changes to review")]
-    public async Task WhenThereAreApprenticeChangesToReview()
+    [When("there are X learner changes to review")]
+    public async Task WhenThereAreLearnerChangesToReview()
     {
         var tasks = GetTaskQueryResult();
 
-        tasks.NumberOfApprenticesToReview = await _tasksHelper.GetNumberOfApprenticesToReview();
+        tasks.NumberOfLearnersToReview = await _tasksHelper.GetNumberOfLearnersToReview();
 
         SetTaskQueryResult(tasks);
     }
 
-    [Then("display task: X apprentice changes to review")]
-    public async Task ThenDisplayApprenticeChangesToReview()
+    [Then("display task: X learner changes to review")]
+    public async Task ThenDisplayLearnerChangesToReview()
     {
         var tasks = GetTaskQueryResult();
 
-        await _homePage.VerifyApprenticeChangeToReviewMessageShown(tasks.NumberOfApprenticesToReview);
+        await _homePage.VerifyLearnerChangeToReviewMessageShown(tasks.NumberOfLearnersToReview);
     }
 
     [Then("View changes link should navigate user to Manage your learners page")]
-    public async Task ThenViewApprenticeChangesNavigatesToManageYourLearnersPage()
+    public async Task ThenViewLearnerChangesNavigatesToManageYourLearnersPage()
     {
         var tasks = GetTaskQueryResult();
 
-        _homePage = await TasksHelper.ClickViewApprenticeChangesLink(_homePage, tasks.NumberOfApprenticesToReview);
+        _homePage = await TasksHelper.ClickViewLearnerChangesLink(_homePage, tasks.NumberOfLearnersToReview);
     }
 
     [When("there are X cohorts ready for approval")]
@@ -105,8 +105,8 @@ public class TasksSteps
         await _homePage.VerifyCohortsReadyToReviewMessageShown(tasks.NumberOfCohortsReadyToReview);
     }
 
-    [Then("'View cohorts' link should navigate user to 'Apprentice Requests' page")]
-    public async Task ThenViewCohortsReadyToReviewNavigatesToApprenticeRequestsPage()
+    [Then("'View cohorts' link should navigate user to 'Learner Requests' page")]
+    public async Task ThenViewCohortsReadyToReviewNavigatesToLearnerRequestsPage()
     {
         _homePage = await TasksHelper.ClickViewCohortsToReviewLink(_homePage);
     }
@@ -181,21 +181,21 @@ public class TasksSteps
         _homePage = await TasksHelper.ClickTransferPledgeApplicationsLink(_homePage);
     }
 
-    [When("there are X transfers applications available to add an apprentice")]
-    public async Task WhenThereAreTransferPledgeApplicationsAvailableToAddAnApprentice()
+    [When("there are X transfers applications available to add a learner")]
+    public async Task WhenThereAreTransferPledgeApplicationsAvailableToAddALearner()
     {
         var tasks = GetTaskQueryResult();
 
-        tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices = await _tasksHelper.GetNumberOfAcceptedTransferPledgeApplicationsWithNoApprentices();
+        tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoLearners = await _tasksHelper.GetNumberOfAcceptedTransferPledgeApplicationsWithNoLearners();
 
     }
 
-    [Then("display task: 'X transfers available to add an apprentice'")]
-    public async Task ThenDisplayNumberTransfersAvailableToAddAnApprentice()
+    [Then("display task: 'X transfers available to add a learner'")]
+    public async Task ThenDisplayNumberTransfersAvailableToAddALearner()
     {
         var tasks = GetTaskQueryResult();
 
-        await _homePage.VerifyTransfersAvailableToAddAnApprenticeMessageShown(tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices);
+        await _homePage.VerifyTransfersAvailableToAddALearnerMessageShown(tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoLearners);
     }
 
     [Then("'View details' link should navigate user to 'My applications' page")]
@@ -203,7 +203,7 @@ public class TasksSteps
     {
         var tasks = GetTaskQueryResult();
 
-        _homePage = await TasksHelper.ClickTransfersAvailableToAddApprenticeLink(_homePage, tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices);
+        _homePage = await TasksHelper.ClickTransfersAvailableToAddApprenticeLink(_homePage, tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoLearners);
 
     }
 

@@ -12,7 +12,7 @@ public partial class TasksHomePage(ScenarioContext context) : HomePage(context)
     public const string ReviewConnectionRequest = "ReviewConnectionRequest";
     public const string TransferRequestReceived = "TransferRequestReceived";
 
-    public async Task VerifyStartAddingApprenticesNowTaskLink() => await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Start adding apprentices now" })).ToBeVisibleAsync();
+    public async Task VerifyStartAddingApprenticesNowTaskLink() => await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Start adding learners now" })).ToBeVisibleAsync();
 
     //public void AssertTaskCount(string taskType, int expectedNumberOfTasks)
     //{
