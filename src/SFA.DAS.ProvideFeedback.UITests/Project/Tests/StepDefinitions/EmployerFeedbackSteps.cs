@@ -24,7 +24,7 @@ public class EmployerFeedbackSteps(ScenarioContext context)
     }
 
     [Given("^the Second Employer View only User logins into Employer Portal$")]
-    public async void GivenTheSecondEmployerViewOnlyUserLoginsIntoEmployerPortal()
+    public async Task GivenTheSecondEmployerViewOnlyUserLoginsIntoEmployerPortal()
     {
         var user = context.GetUser<EmployerViewOnlyUser>();
 
