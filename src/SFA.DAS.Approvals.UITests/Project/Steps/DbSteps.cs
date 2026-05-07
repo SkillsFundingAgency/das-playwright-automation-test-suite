@@ -33,7 +33,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             apprenticeDataHelper = new ApprenticeDataHelper(context);
         }
 
-        [Then("a record is created in LearnerData Db for each learner")]
+        [Then("^a record is created in LearnerData Db for each learner$")]
         public async Task ThenARecordIsCreatedInLearnerDataDbForEachLearner()
         {
             listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -52,7 +52,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        [Then("Commitments Db is updated with respective LearnerData Id")]
+        [Then("^Commitments Db is updated with respective LearnerData Id$")]
         public async Task ThenCommitmentsDbIsUpdatedWithRespectiveLearnerDataId()
         {
             listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -72,7 +72,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             
         }
 
-        [Then("LearnerData Db is updated with respective Apprenticeship Id")]
+        [Then("^LearnerData Db is updated with respective Apprenticeship Id$")]
         public async Task ThenLearnerDataDbIsUpdatedWithRespectiveApprenticeshipId()
         {
             listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -89,7 +89,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        [Then("Apprenticeship record is created in Learning Db")]
+        [Then("^Apprenticeship record is created in Learning Db$")]
         public async Task ThenApprenticeshipRecordIsCreatedInLearningDb()
         {
             listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -115,7 +115,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
         }
 
-        [Given(@"A live apprentice record exists for an apprentice with ""(.*)"", ""(.*)"" and ""(.*)""")]
+        [Given(@"^A live apprentice record exists for an apprentice with ""(.*)"", ""(.*)"" and ""(.*)""$")]
         public async Task GivenALiveApprenticeRecordExistsForAnApprenticeWithAnd(string courseType, string courseLevel, string startDate)
         {
             listOfApprenticeship = new List<Apprenticeship>();
@@ -156,7 +156,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
         }
 
-        [Given(@"a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date")]
+        [Given(@"^a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date$")]
         public async Task GivenALiveApprenticeRecordExistsWithStartdateOfMonthsAndEndDateOfMonthsFromCurrentDate(int startDateFromNow, int endDateFromNow)
         {
             listOfApprenticeship = new List<Apprenticeship>();

@@ -17,8 +17,8 @@ public class ProviderLoginSteps(ScenarioContext context)
 {
     private readonly ProviderHomePageStepsHelper _providerHomePageStepsHelper = new(context);
 
-    [Given(@"the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer|EmployerTypeProviderAccount)")]
-    [When(@"the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer|EmployerTypeProviderAccount)")]
+    [Given(@"^the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer|EmployerTypeProviderAccount)$")]
+    [When(@"^the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer|EmployerTypeProviderAccount)$")]
     public async Task GivenTheProviderLogsInAs(ProviderConfig config) => await _providerHomePageStepsHelper.GoToProviderHomePage(config, false);
 
     [StepArgumentTransformation(@"(Contributor|ContributorWithApproval|AccountOwner|Viewer|EmployerTypeProviderAccount)")]

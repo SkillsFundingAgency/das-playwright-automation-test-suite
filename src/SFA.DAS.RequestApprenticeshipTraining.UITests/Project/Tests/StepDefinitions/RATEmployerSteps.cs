@@ -13,7 +13,7 @@ public class RatEmployerSteps(ScenarioContext context)
 
     private readonly EmployerHomePageStepsHelper _homePageStepsHelper = new(context);
 
-    [Given("an employer user can login to EAS")]
+    [Given("^an employer user can login to EAS$")]
     public async Task AnEmployerUserCanLoginToEAS()
     {
         await _homePageStepsHelper.NavigateToEmployerApprenticeshipService();
@@ -21,7 +21,7 @@ public class RatEmployerSteps(ScenarioContext context)
         await new EmployerPortalLoginHelper(context).Login(context.GetUser<RatEmployerUser>(), true);
     }
 
-    [Then("the employer requests apprenticeship training")]
+    [Then("^the employer requests apprenticeship training$")]
     public async Task TheEmployerRequestsApprenticeshipTraining()
     {
         var page = await GoToRatHomePage();
@@ -29,22 +29,22 @@ public class RatEmployerSteps(ScenarioContext context)
         await page.GoToApprenticeshipTrainingCourses();
     }
 
-    [Given(@"an employer requests apprenticeship training")]
+    [Given(@"^an employer requests apprenticeship training$")]
     public async Task AnEmployerRequestsApprenticeshipTraining() => await RequestTrainingProvider(false);
 
-    [Given(@"an employer adds location to requests apprenticeship training")]
+    [Given(@"^an employer adds location to requests apprenticeship training$")]
     public async Task AnEmployerAddsLocationToRequestsApprenticeshipTraining() => await RequestTrainingProvider(true);
 
-    [When(@"the employer logs in to rat employer account")]
+    [When(@"^the employer logs in to rat employer account$")]
     public async Task WhenTheEmployerLogsInToRatEmployerAccount() => await LoginViaRat(context.GetUser<RatEmployerUser>());
 
-    [When(@"the employer logs in to rat cancel employer account")]
+    [When(@"^the employer logs in to rat cancel employer account$")]
     public async Task TheEmployerLogsInToRatCancelEmployerAccount() => await LoginViaRat(context.GetUser<RatCancelEmployerUser>());
 
-    [When(@"the employer logs in to rat multi employer account")]
+    [When(@"^the employer logs in to rat multi employer account$")]
     public async Task TheEmployerLogsInToRatMultiEmployerAccount() => await LoginViaRat(context.GetUser<RatMultiEmployerUser>());
 
-    [Then(@"the employer submits the request for single location")]
+    [Then(@"^the employer submits the request for single location$")]
     public async Task TheEmployerSubmitsTheRequestForSingleLocation()
     {
         var page = await landingPage.ClickStarNow();
@@ -58,7 +58,7 @@ public class RatEmployerSteps(ScenarioContext context)
         await SelectActiveRequest(page3);
     }
 
-    [Then(@"the employer submits the request for multiple location")]
+    [Then(@"^the employer submits the request for multiple location$")]
     public async Task TheEmployerSubmitsTheRequest()
     {
         var page = await landingPage.ClickStarNow();
@@ -72,7 +72,7 @@ public class RatEmployerSteps(ScenarioContext context)
         await SelectActiveRequest(page3);
     }
 
-    [Then(@"the employer submits the request for one apprentice")]
+    [Then(@"^the employer submits the request for one apprentice$")]
     public async Task TheEmployerSubmitsTheRequestForOneApprentice()
     {
         var page = await landingPage.ClickStarNow();
@@ -84,7 +84,7 @@ public class RatEmployerSteps(ScenarioContext context)
         await SelectActiveRequest(page2);
     }
 
-    [Then(@"the employer can cancel the request")]
+    [Then(@"^the employer can cancel the request$")]
     public async Task TheEmployerCanCancelTheRequest()
     {
         var page = await trainingRequestDetailPage.CancelYourRequest();
@@ -92,7 +92,7 @@ public class RatEmployerSteps(ScenarioContext context)
         await page.SubmitCancelRequest();
     }
 
-    [Then(@"the employer receives the response")]
+    [Then(@"^the employer receives the response$")]
     public async Task TheEmployerReceivesTheResponse()
     {
         await _homePageStepsHelper.GotoEmployerHomePage();

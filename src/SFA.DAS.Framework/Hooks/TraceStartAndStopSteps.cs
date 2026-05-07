@@ -3,7 +3,7 @@
 [Binding, Scope(Tag = "@donottracelogin")]
 public class TraceStartAndStopSteps(ScenarioContext context)
 {
-    [Given("the trace is started")]
+    [Given("^the trace is started$")]
     public async Task GivenTheTraceIsStarted()
     {
         var driver = context.Get<Driver>();
@@ -16,7 +16,7 @@ public class TraceStartAndStopSteps(ScenarioContext context)
         });
     }
 
-    [Given("the trace is stopped")]
+    [Given("^the trace is stopped$")]
     public async Task GivenTheTraceIsStopped()
     {
         var driver = context.Get<Driver>();

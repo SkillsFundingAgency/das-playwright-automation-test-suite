@@ -15,7 +15,7 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
 
     private readonly string _appName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_ElectricalFitting;
 
-    [When("the provider is listed on the FAT apprenticeship unit providers page")]
+    [When("^the provider is listed on the FAT apprenticeship unit providers page$")]
     public async Task WhenTheProviderIsListedOnTheFATApprenticeshipUnitProvidersPage()
     {
         await SelectAppUnitCourseByName();
@@ -27,7 +27,7 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
         await _fATeHomePage.StartNow();
     }
 
-    [When("the provider is listed at learners and provider location on the FAT apprenticeship unit providers page")]
+    [When("^the provider is listed at learners and provider location on the FAT apprenticeship unit providers page$")]
     public async Task TheProviderIsListedOnlearnersAndProviderLocationOnTheFATApprenticeshipUnitProvidersPage()
     {
         await SelectAppUnitCourseByName();
@@ -40,7 +40,7 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
         await _fATeHomePage.StartNow();
     }
 
-    [Then("the provider is not listed or no provider found on the FAT apprenticeship unit providers page")]
+    [Then("^the provider is not listed or no provider found on the FAT apprenticeship unit providers page$")]
     public async Task TheProviderIsNotListedOrNotFound()
     {
         await SelectAppUnitCourseByName();
@@ -63,7 +63,7 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
     }
 
 
-    [When("the provider is listed on the FAT training providers page")]
+    [When("^the provider is listed on the FAT training providers page$")]
     public async Task WhenTheProviderIsListedOnTheFATTrainingProvidersPage()
     {
         await Navigate(UrlConfig.FAT_BaseUrl);
@@ -79,7 +79,7 @@ public class FateAddAndDeleteE2ESteps(ScenarioContext context) : FrameworkBaseHo
         await _fATeHomePage.StartNow();
     }
 
-    [When("the provider is not listed on the FAT training providers page")]
+    [When("^the provider is not listed on the FAT training providers page$")]
     public async Task WhenTheProviderIsNotListedOnTheFATTrainingProvidersPage()
     {
         await Navigate(UrlConfig.FAT_BaseUrl);

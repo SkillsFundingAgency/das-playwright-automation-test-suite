@@ -5,7 +5,7 @@ namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Steps;
 [Binding]
 public class MS_TrainingVenue_Steps(ScenarioContext context)
 {
-    [Then(@"the provider is able to add a new training venue")]
+    [Then(@"^the provider is able to add a new training venue$")]
     public async Task ThenTheProviderIsAbleToAddANewTrainingVenue()
     {
         var page = new ManagingStandardsProviderHomePage(context);
@@ -22,7 +22,7 @@ public class MS_TrainingVenue_Steps(ScenarioContext context)
 
     }
 
-    [Then(@"the provider is able to update the new training venue")]
+    [Then(@"^the provider is able to update the new training venue$")]
     public async Task ThenTheProviderIsAbleToUpdateTheNewTrainingVenue()
     {
         var page = new TrainingVenuesPage(context);

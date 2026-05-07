@@ -19,10 +19,10 @@ class OrganisationDetailsChangeSteps
         _employerPortalSqlDataHelper = context.Get<EmployerPortalSqlDataHelper>();
     }
 
-    [When(@"the Employer reviews Agreement page")]
+    [When(@"^the Employer reviews Agreement page$")]
     public async Task WhenTheEmployerReviewsAgreementPage() => _yourAgreementsWithTheEducationAndSkillsFundingAgencyPage = await ClickViewAgreementLinkInYourOrganisationsAndAgreementsPage();
 
-    [Then(@"clicking on 'Update these details' link displays 'Review your details' page showing (These details are the same as those previously held|We've retrieved the most up-to-date details we could find for your organisation)")]
+    [Then(@"^clicking on 'Update these details' link displays 'Review your details' page showing (These details are the same as those previously held|We've retrieved the most up-to-date details we could find for your organisation)$")]
     public async Task ThenClickingOnUpdateTheseDetailsLinkDisplaysReviewYourDetailsPageShowingExpectedMessage(string expectedMessage)
     {
         _reviewYourDetailsPage = await _yourAgreementsWithTheEducationAndSkillsFundingAgencyPage.ClickUpdateTheseDetailsLinkInReviewYourDetailsPage();
@@ -30,7 +30,7 @@ class OrganisationDetailsChangeSteps
         await _reviewYourDetailsPage.VerifyInfoTextInReviewYourDetailsPage(expectedMessage);
     }
 
-    [When(@"the Employer revisits the Agreement page during change in Organisation name scenario")]
+    [When(@"^the Employer revisits the Agreement page during change in Organisation name scenario$")]
     public async Task WhenTheEmployerRevisitsTheAgreementPageDuringChangeInOrganisationNameScenario()
     {
         var loginUser = _objectContext.GetLoginCredentials();
@@ -40,7 +40,7 @@ class OrganisationDetailsChangeSteps
         _yourAgreementsWithTheEducationAndSkillsFundingAgencyPage = await ClickViewAgreementLinkInYourOrganisationsAndAgreementsPage();
     }
 
-    [Then(@"continuing by choosing 'Update details' option displays 'Details updated' page showing (You've successfully updated your organisation details)")]
+    [Then(@"^continuing by choosing 'Update details' option displays 'Details updated' page showing (You've successfully updated your organisation details)$")]
     public async Task ThenContinuingByChoosingOptionDisplaysPageShowing(string _)
     {
         var page = await _reviewYourDetailsPage.SelectUpdateMyDetailsRadioOptionAndContinueInReviewYourDetailsPage();
@@ -58,6 +58,6 @@ class OrganisationDetailsChangeSteps
     }
 
 
-    [Then(@"the 'Update these details' link is not displayed for PublicSector Type Org")]
+    [Then(@"^the 'Update these details' link is not displayed for PublicSector Type Org$")]
     public async Task ThenTheUpdateTheseDetailsLinkIsNotDisplayedForPublicSectorTypeOrg() => await _yourAgreementsWithTheEducationAndSkillsFundingAgencyPage.VerifyIfUpdateTheseDetailsLinkIsHidden();
 }

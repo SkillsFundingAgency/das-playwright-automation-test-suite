@@ -7,7 +7,7 @@ global using SFA.DAS.ConfigurationBuilder;
 global using SFA.DAS.FrameworkHelpers;
 global using System.Net;
 global using System.Threading.Tasks;
-global using TechTalk.SpecFlow;
+global using Reqnroll;
 global using System.Collections.Generic;
 global using System.Linq;
 global using SFA.DAS.RAA.APITests.Project.Helpers.SqlDbHelpers;
