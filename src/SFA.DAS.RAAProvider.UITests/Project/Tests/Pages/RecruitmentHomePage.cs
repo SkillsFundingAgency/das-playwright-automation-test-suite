@@ -8,7 +8,7 @@ public class RecruitmentHomePage(ScenarioContext context) : InterimProviderBaseP
     private readonly SearchVacancyPageHelper _searchVacancyPageHelper = new(context);
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Recruitment");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Recruitment dashboard");
     }
 
     public async Task<CreateAVacancyPage> CreateVacancy()

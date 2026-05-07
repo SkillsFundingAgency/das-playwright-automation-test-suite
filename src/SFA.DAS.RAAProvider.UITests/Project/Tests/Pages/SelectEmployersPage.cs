@@ -18,6 +18,18 @@ public class SelectEmployersPage(ScenarioContext context) : RaaBasePage(context)
 
         var validemployers = await context.Get<ProviderCreateVacancySqlDbHelper>().GetValidHashedId(employers);
 
+        if (validemployers.Count == 0)
+        {
+            objectContext.SetDebugInformation($"No valid employers found for hashed id '{empHashedId}'. Selecting first available employer.");
+
+            var firstEmployer = _values.First();
+            await page.Locator($".govuk-table .das-button--inline-link[value='{firstEmployer.Value}']").ClickAsync();
+            await page.Locator("#confirm-yes").ClickAsync();
+            await SaveAndContinue();
+
+            return (await VerifyPageAsync(() => new CreateAnApprenticeshipAdvertOrVacancyPage(context)), false);
+        }
+
         var hashedid = GetRandomElementFromListOfElements(validemployers);
 
         (string hashedidvalue, int noOfLegalEntity) = ((string)hashedid[0], (int)hashedid[1]);
