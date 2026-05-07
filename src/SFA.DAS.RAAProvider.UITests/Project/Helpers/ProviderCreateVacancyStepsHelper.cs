@@ -53,7 +53,7 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Helpers
 
             var page2 = await page1.EnterEmployerDescriptionAndGoToContactDetailsPage(disabilityConfidence, optionalFields);
 
-            var page3 = await page2.EnterContactDetailsAndGoToApplicationProcessPage(optionalFields);
+            var page3 = await page2.EnterProviderContactDetails(optionalFields);
 
             return await page3.SelectApplicationMethod_Employer(isApplicationMethodFAA);
         }
@@ -129,90 +129,78 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Helpers
 
         protected virtual async Task<ApprenticeshipTrainingPage> EnterAdvertTitle(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage)
         {
-            var page = await EnterAdvertTitleMultiOrg(createAdvertPage);
-
-            return await page.SelectOrganisationMultiOrg();
-        }
-
-        protected static async Task<SelectOrganisationPage> EnterAdvertTitleMultiOrg(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage)
-        {
             var page = await NavigateToAdvertTitle(createAdvertPage);
 
-            return await page.EnterAdvertTitleMultiOrg();
+            return await page.EnterAdvertTitleMultiOrgProvider();
         }
-
-        // protected override CreateAnApprenticeshipAdvertOrVacancyPage CreateAnApprenticeshipAdvertOrVacancy()
-        // {
-        //     (CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage, bool isMultiOrg) =
-        //         new RecruitmentProviderHomePageStepsHelper(context)
-        //         .GoToRecruitmentProviderHomePage(newTab)
-        //         .GoToViewAllVacancyPage()
-        //         .ReturnToDashboard()
-        //         .CreateVacancy()
-        //         .StartNow()
-        //         .SelectEmployer(_hashedid);
-
-        //     _isMultiOrg = isMultiOrg;
-
-        //     return createAdvertPage;
-        // }
 
         protected override async Task<CreateAnApprenticeshipAdvertOrVacancyPage> CreateAnApprenticeshipAdvertOrVacancy()
-    {
-        var page = await GoToRecruitmentHomePage();
-
-        var page1 = await page.CreateVacancy();
-
-        return await page1.GoToCreateAnApprenticeshipAdvertPage();
-    }
-
-        protected virtual async Task<ApprenticeshipTrainingPage> EnterVacancyTitle(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage)
         {
-            var page = await EnterAdvertTitleMultiOrg(createAdvertPage);
+            var page = await GoToRecruitmentHomePage();
 
-            return await page.SelectOrganisationMultiOrg();
+            var page1 = await page.GoToViewAllVacancyPage();
+            var page2 = await page1.ReturnToDashboard();
+
+            var page3 = await page2.CreateVacancy();
+            var page4 = await page3.StartNow();
+
+            (CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage, bool isMultiOrg) = await page4.SelectEmployer(_hashedid);
+
+            _isMultiOrg = isMultiOrg;
+
+            return createAdvertPage;
         }
 
-        internal RecruitmentHomePage CancelAdvert()
+        //internal RecruitmentHomePage CancelAdvert()
+        //{
+        //    (CreateAnApprenticeshipAdvertOrVacancy()).AdvertTitle().EnterVacancyTitle().EmployerCancelAdvert();
+        //    return new RecruitmentHomePage(context);
+        //}
+
+        //    internal async Task<RecruitmentHomePage> CancelAdvert()
+        //{
+        //    var page = await CreateAnApprenticeshipAdvertOrVacancy();
+
+        //    var page1 = await EnterAdvertTitleMultiOrg(page);
+
+        //    await page1.EmployerCancelAdvert();
+
+        //    return await VerifyPageHelper.VerifyPageAsync(context, () => new RecruitmentHomePage(context));
+        //}
+
+        //internal CreateAnApprenticeshipAdvertOrVacancyPage CreateDraftAdvert() => CreateDraftAdvert(CreateAnApprenticeshipAdvertOrVacancy(), false);
+
+        //internal CreateAnApprenticeshipAdvertOrVacancyPage CreateDraftAdvert(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage, bool createFirstDraftAdvert)
+        //{
+
+        //    return EmploymentDetails(createFirstDraftAdvert ? FirstAdvertSummary(createAdvertPage) : AdvertOrVacancySummary(createAdvertPage), "employer", RAAConst.NationalMinWages);
+        //}
+
+        //private static CreateAnApprenticeshipAdvertOrVacancyPage FirstAdvertSummary(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage) =>
+        //    AdvertSummary(NavigateToAdvertTitle(createAdvertPage).EnterVacancyTitleForTheFirstAdvert().SelectYes(), false);
+
+        private static async Task<CreateAnApprenticeshipAdvertOrVacancyPage> AdvertSummary(ApprenticeshipTrainingPage page, bool isFoundationAdvert)
         {
-            (CreateAnApprenticeshipAdvertOrVacancy()).AdvertTitle().EnterVacancyTitle().EmployerCancelAdvert();
-            return new RecruitmentHomePage(context);
+            var page1 = await page.EnterTrainingTitle();
+
+            var page2 = await page1.ConfirmTrainingAndContinueToSummaryPage();
+
+            //var page3 = await page2.SelectTrainingProvider();
+
+            //var page4 = await page3.ConfirmProviderAndContinueToSummaryPage();
+
+            var page3 = await page2.EnterShortDescription();
+
+            var page4 = await page3.EnterShortDescriptionOfWhatApprenticeWillDo();
+
+            return await page4.EnterAllDescription();
         }
 
-        internal async Task<RecruitmentHomePage> CancelAdvert()
-    {
-        var page = await CreateAnApprenticeshipAdvertOrVacancy();
-
-        var page1 = await EnterAdvertTitleMultiOrg(page);
-
-        await page1.EmployerCancelAdvert();
-
-        return await VerifyPageHelper.VerifyPageAsync(context, () => new RecruitmentHomePage(context));
-    }
-
-        internal CreateAnApprenticeshipAdvertOrVacancyPage CreateDraftAdvert() => CreateDraftAdvert(CreateAnApprenticeshipAdvertOrVacancy(), false);
-
-        internal CreateAnApprenticeshipAdvertOrVacancyPage CreateDraftAdvert(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage, bool createFirstDraftAdvert)
-        {
-
-            return EmploymentDetails(createFirstDraftAdvert ? FirstAdvertSummary(createAdvertPage) : AdvertOrVacancySummary(createAdvertPage), "employer", RAAConst.NationalMinWages);
-        }
-
-        private static CreateAnApprenticeshipAdvertOrVacancyPage FirstAdvertSummary(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage) =>
-            AdvertSummary(NavigateToAdvertTitle(createAdvertPage).EnterVacancyTitleForTheFirstAdvert().SelectYes(), false);
-
-        private static CreateAnApprenticeshipAdvertOrVacancyPage AdvertSummary(ApprenticeshipTrainingPage page, bool isFoundationAdvert) =>
-        page.EnterTrainingTitle()
-            .ConfirmTrainingproviderAndContinue(isFoundationAdvert)
-            .SelectTrainingProvider()
-            .ConfirmProviderAndContinueToSummaryPage()
-            .EnterShortDescription()
-            .EnterShortDescriptionOfWhatApprenticeWillDo()
-            .EnterAllDescription();
-
-        internal VacancyReferencePage CloneAnAdvert() => SubmitAndSetVacancyReference(GoToRecruitmentHomePage().SelectLiveVacancy().CloneVacancy()
-            .SelectYes().UpdateTitle().UpdateVacancyTitleAndGoToCheckYourAnswersPage().UpdateAdditionalQuestion().UpdateAllAdditionalQuestionsAndGoToCheckYourAnswersPage(true, true));
+        //internal VacancyReferencePage CloneAnAdvert() => SubmitAndSetVacancyReference(GoToRecruitmentHomePage().SelectLiveVacancy().CloneVacancy()
+        //    .SelectYes().UpdateTitle().UpdateVacancyTitleAndGoToCheckYourAnswersPage().UpdateAdditionalQuestion().UpdateAllAdditionalQuestionsAndGoToCheckYourAnswersPage(true, true));
 
         protected virtual async Task<RecruitmentHomePage> GoToRecruitmentHomePage() => await _recruitmentProviderHomePageStepsHelper.GoToRecruitmentProviderHomePage(true);
+
+
     }
 }

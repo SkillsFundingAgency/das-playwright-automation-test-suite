@@ -7,6 +7,6 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Helpers;
     {
         protected readonly ScenarioContext _context = context;
 
-        protected RecruitmentHomePage GoToRecruitmentHomePage(bool newTab) => new RecruitmentProviderHomePageStepsHelper(_context).GoToRecruitmentProviderHomePage(newTab);
+        protected async Task<RecruitmentHomePage> GoToRecruitmentHomePage(bool newTab) => await new RecruitmentProviderHomePageStepsHelper(_context).GoToRecruitmentProviderHomePage(newTab);
     }
 

@@ -47,6 +47,24 @@ public class ProviderHomePageStepsHelper(ScenarioContext context) : FrameworkBas
 
         return await loginHelper.GoToProviderHomePage();
     }
+
+    public async Task GoToProviderHomePageAndClickRecruitVacanciesLink(bool newTab)
+    {
+        var homePage = await GoToProviderHomePage(newTab);
+        await homePage.ClickRecruitVacanciesLink();
+    }
+
+    public async Task GoToProviderHomePageAndClickRecruitVacanciesLink(ProviderLoginUser login, bool newTab)
+    {
+        var homePage = await GoToProviderHomePage(login, newTab);
+        await homePage.ClickRecruitVacanciesLink();
+    }
+
+    public async Task GoToProviderHomePageAndClickRecruitVacanciesLink(ProviderConfig login, bool newTab)
+    {
+        var homePage = await GoToProviderHomePage(login, newTab);
+        await homePage.ClickRecruitVacanciesLink();
+    }
 }
 
 public class CheckDfeSignInOrProviderHomePage(ScenarioContext context, string ukprn) : CheckMultipleHomePage(context)

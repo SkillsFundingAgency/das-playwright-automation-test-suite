@@ -11,9 +11,11 @@ public class RecruitmentProviderHomePageStepsHelper(ScenarioContext context)
 
     public async Task<RecruitmentHomePage> GoToRecruitmentProviderHomePage(bool newTab)
     {
-        await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(newTab);
+        await new ProviderHomePageStepsHelper(context).GoToProviderHomePageAndClickRecruitVacanciesLink(newTab);
         return new RecruitmentHomePage(context);
     }
+
+
     // public ReportsPage GoToReportsPage()
     // {
         // var recruitmentHomePage = new RecruitmentHomePage(context);
@@ -25,39 +27,39 @@ public class RecruitmentProviderHomePageStepsHelper(ScenarioContext context)
     //     return new RecruitmentHomePage(context);
     // }
 
-public async Task<ManageYourRecruitmentEmailsPage> GoToManageYourRecruitmentEmailsPage(bool newTab = false)
-{
-    var page = GoToRecruitmentProviderHomePage(newTab);
-    return await page.GoToManageYourRecruitmentEmailsPage();
-}
-public ApprenticeRequestsPage GoToApprenticeRequestsPage(bool newTab = false)
-{
-    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
-    return recruitmentHomePage.NavigateToApprenticeRequestsPage();
-}
-public ManageFundingPage GoToManageFundingPage(bool newTab = false)
-{
-    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
-    return recruitmentHomePage.NavigateToManageFundingPage();
-}
-public ManageYourApprenticePage GoToManageYourApprenticesPage(bool newTab = false)
-{
-    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
-    return recruitmentHomePage.NavigateToManageYourApprenticesPage();
-}
-public OrganisationsAndAgreementsPage GoToOrganisationsAndAgreementsPage(bool newTab = false)
-{
-    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
-    return recruitmentHomePage.NavigateToOrganisationsAndAgreementsPage();
-}
-public NotificationsSettingsPage GoToNotificationsViaSettingsPage(bool newTab = false)
-{
-    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
-    return recruitmentHomePage.GoToNotificationsSettingsPage();
-}
-public ChangeYourSignInDetailsPage GoToChangeYourSignInDetailsPage(bool newTab = false)
-{
-    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
-    return recruitmentHomePage.GoToChangeYourSignInDetailsPage();
-}
+//public async Task<ManageYourRecruitmentEmailsPage> GoToManageYourRecruitmentEmailsPage(bool newTab = false)
+//{
+//    var page = GoToRecruitmentProviderHomePage(newTab);
+//    return await page.GoToManageYourRecruitmentEmailsPage();
+//}
+//public ApprenticeRequestsPage GoToApprenticeRequestsPage(bool newTab = false)
+//{
+//    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
+//    return recruitmentHomePage.NavigateToApprenticeRequestsPage();
+//}
+//public ManageFundingPage GoToManageFundingPage(bool newTab = false)
+//{
+//    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
+//    return recruitmentHomePage.NavigateToManageFundingPage();
+//}
+//public ManageYourApprenticePage GoToManageYourApprenticesPage(bool newTab = false)
+//{
+//    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
+//    return recruitmentHomePage.NavigateToManageYourApprenticesPage();
+//}
+//public OrganisationsAndAgreementsPage GoToOrganisationsAndAgreementsPage(bool newTab = false)
+//{
+//    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
+//    return recruitmentHomePage.NavigateToOrganisationsAndAgreementsPage();
+//}
+//public NotificationsSettingsPage GoToNotificationsViaSettingsPage(bool newTab = false)
+//{
+//    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
+//    return recruitmentHomePage.GoToNotificationsSettingsPage();
+//}
+//public ChangeYourSignInDetailsPage GoToChangeYourSignInDetailsPage(bool newTab = false)
+//{
+//    var recruitmentHomePage = GoToRecruitmentProviderHomePage(newTab);
+//    return recruitmentHomePage.GoToChangeYourSignInDetailsPage();
+//}
 }
