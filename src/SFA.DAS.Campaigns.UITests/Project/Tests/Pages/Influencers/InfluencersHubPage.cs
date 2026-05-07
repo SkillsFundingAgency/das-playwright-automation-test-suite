@@ -10,7 +10,9 @@ public class InfluencersHubPage(ScenarioContext context) : InfluencersBasePage(c
 
     public async Task<BrowseApprenticeshipPage> NavigateToBrowseApprenticeshipPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Browse apprenticeships" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Finding the right apprenticeship" }).ClickAsync();
+
+        await page.Locator("#fiu-panel-link-faa").ClickAsync();
 
         return await VerifyPageAsync(() => new BrowseApprenticeshipPage(context));
     }
