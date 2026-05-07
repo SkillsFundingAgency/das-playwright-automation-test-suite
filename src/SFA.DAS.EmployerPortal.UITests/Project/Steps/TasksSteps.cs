@@ -66,7 +66,7 @@ public class TasksSteps
     {
         var tasks = GetTaskQueryResult();
 
-        tasks.NumberOfApprenticesToReview = await _tasksHelper.GetNumberOfApprenticesToReview();
+        tasks.NumberOfLearnersToReview = await _tasksHelper.GetNumberOfLearnersToReview();
 
         SetTaskQueryResult(tasks);
     }
@@ -76,7 +76,7 @@ public class TasksSteps
     {
         var tasks = GetTaskQueryResult();
 
-        await _homePage.VerifyApprenticeChangeToReviewMessageShown(tasks.NumberOfApprenticesToReview);
+        await _homePage.VerifyLearnerChangeToReviewMessageShown(tasks.NumberOfLearnersToReview);
     }
 
     [Then("^View changes link should navigate user to Manage your learners page$")]
@@ -84,7 +84,7 @@ public class TasksSteps
     {
         var tasks = GetTaskQueryResult();
 
-        _homePage = await TasksHelper.ClickViewApprenticeChangesLink(_homePage, tasks.NumberOfApprenticesToReview);
+        _homePage = await TasksHelper.ClickViewLearnerChangesLink(_homePage, tasks.NumberOfLearnersToReview);
     }
 
     [When("^there are X cohorts ready for approval$")]
@@ -186,7 +186,7 @@ public class TasksSteps
     {
         var tasks = GetTaskQueryResult();
 
-        tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices = await _tasksHelper.GetNumberOfAcceptedTransferPledgeApplicationsWithNoApprentices();
+        tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoLearners = await _tasksHelper.GetNumberOfAcceptedTransferPledgeApplicationsWithNoLearners();
 
     }
 
@@ -195,7 +195,7 @@ public class TasksSteps
     {
         var tasks = GetTaskQueryResult();
 
-        await _homePage.VerifyTransfersAvailableToAddAnApprenticeMessageShown(tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices);
+        await _homePage.VerifyTransfersAvailableToAddALearnerMessageShown(tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoLearners);
     }
 
     [Then("^'View details' link should navigate user to 'My applications' page$")]
@@ -203,7 +203,7 @@ public class TasksSteps
     {
         var tasks = GetTaskQueryResult();
 
-        _homePage = await TasksHelper.ClickTransfersAvailableToAddApprenticeLink(_homePage, tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices);
+        _homePage = await TasksHelper.ClickTransfersAvailableToAddApprenticeLink(_homePage, tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoLearners);
 
     }
 
