@@ -1,7 +1,6 @@
-Feature: User Login
+@apprenticeapp
+Feature: Sign in
 
     Scenario: Successful login with valid credentials
-        Given the user is on the login page
-        When the user enters valid credentials
-        And clicks the login button
+        When the user signs in to the Apprentice app
         Then the user should be redirected to the dashboard
