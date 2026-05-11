@@ -157,7 +157,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var listOfApprenticeship = new List<Apprenticeship>();
             Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortObject(EmployerType.NonLevyUserAtMaxReservationLimit);
-            apprenticeship = await new DbSteps(context).FindUnapprovedCohortReference(apprenticeship, ApprenticeRequests.WithEmployers);
             listOfApprenticeship.Add(apprenticeship);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);           
         }
@@ -166,8 +165,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("^the Employer tries to add another apprentice to an existing cohort$")]
         public async Task WhenTheEmployerTriesToAddAnotherApprenticeToAnExistingCohort()
         {
-            await employerStepsHelper.OpenCohort(false);
-            
+            await employerStepsHelper.OpenAnyDraftCohort();            
         }
 
         
