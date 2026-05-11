@@ -72,6 +72,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return page1;
         }
 
+        internal async Task<EmployerApproveApprenticeDetailsPage> OpenAnyDraftCohort()
+        {
+            await EmployerLogInToEmployerPortal();
+            await new InterimApprenticesHomePage(context, false).VerifyPage();
+            var page = await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            return await page.GoToDraftsAndOpenFirstDetailsLink();
+        }
+
         internal async Task<ManageYourLearnersPage> CheckApprenticeOnManageYourApprenticesPage(bool login = false)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);

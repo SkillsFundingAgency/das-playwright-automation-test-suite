@@ -14,8 +14,16 @@
             return await VerifyPageAsync(() => new EmployerApproveApprenticeDetailsPage(context));
         }
 
+        internal async Task<EmployerApproveApprenticeDetailsPage> GoToDraftsAndOpenFirstDetailsLink()
+        {
+            await page.Locator("#Draft").ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = "Details" }).First.ClickAsync();
+            return await VerifyPageAsync(() => new EmployerApproveApprenticeDetailsPage(context));
+        }
 
 
 
-    }
+
+
+        }
 }
