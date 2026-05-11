@@ -28,8 +28,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [When(@"the Employer approves the apprentice request \(cohort\)")]
-        [Then("the Employer can approve the cohort")]
+        [When(@"^the Employer approves the apprentice request \(cohort\)$")]
+        [Then("^the Employer can approve the cohort$")]
         public async Task WhenTheEmployerApprovesTheApprenticeRequestCohort()
         {
             var page = await employerStepsHelper.OpenCohort();
@@ -37,7 +37,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [When("Employer does not take any action on that cohort for more than 2 weeks")]
+        [When("^Employer does not take any action on that cohort for more than 2 weeks$")]
         public async Task WhenEmployerDoesNotTakeAnyActionOnThatCohortForMoreThan2Weeks()
         {
             var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
@@ -55,21 +55,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Then("the Employer can access live apprentice records under Manager Your Apprentices section")]
+        [Then("^the Employer can access live apprentice records under Manager Your Apprentices section$")]
         public async Task ThenTheEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
         {
             await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage();
         }
 
 
-        [When("Employer reviews the above cohort")]
+        [When("^Employer reviews the above cohort$")]
         public async Task WhenEmployerReviewsTheAboveCohort()
         {
             await employerStepsHelper.OpenCohort();
         }
 
 
-        [Then("display the warning message for foundation courses")]
+        [Then("^display the warning message for foundation courses$")]
         public async Task ThenDisplayTheWarningMessageForFoundationCourses()
         {
             var page = new EmployerApproveApprenticeDetailsPage(context);
@@ -81,7 +81,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [When("Employer tries to edit live apprentice record by setting age old than 24 years")]
+        [When("^Employer tries to edit live apprentice record by setting age old than 24 years$")]
         public async Task WhenEmployerTriesToEditLiveApprenticeRecordBySettingAgeOldThan24Years()
         {
             await employerStepsHelper.EmployerLogInToEmployerPortal();
@@ -90,7 +90,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Then("the employer is stopped with an error message")]
+        [Then("^the employer is stopped with an error message$")]
         public async Task ThenTheEmployerIsStoppedWithAnErrorMessage()
         {
             var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
@@ -103,8 +103,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Given(@"Employer create and send an empty cohort to the training provider to add learner details")]
-        [When(@"the employer create and send an empty cohort to the training provider to add learner details")]
+        [Given(@"^Employer create and send an empty cohort to the training provider to add learner details$")]
+        [When(@"^the employer create and send an empty cohort to the training provider to add learner details$")]
         public async Task GivenEmployerCreatesEmptyRequestCohort()
         {
             await employerStepsHelper.AddEmptyCohort();
@@ -118,14 +118,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Then("the NonLevyEmployer reviews and approves the cohort from dynamic homepage")]
+        [Then("^the NonLevyEmployer reviews and approves the cohort from dynamic homepage$")]
         public async Task ThenTheEmployerReviewsCohortApproveFromDynamicHomePage()
         {
             await employerStepsHelper.ReadyForReviewOnDynamicHomePage("Ready for approval");
             await new EmployerApproveApprenticeDetailsPage(context).EmployerApproveCohort();
         }
 
-        [Then("Add The employer can follow the link from dynamicHomePage to view live apprentice details")]
+        [Then("^Add The employer can follow the link from dynamicHomePage to view live apprentice details$")]
         public async Task ThenTheNLEmployerViewLIveApprenticeFromDynamicHomePage()
         {
             var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
@@ -152,7 +152,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         
-        [Given("the Employer logins using an existing NonLevy Account which has reached it max reservations limit")]
+        [Given("^the Employer logins using an existing NonLevy Account which has reached it max reservations limit$")]
         public async Task GivenTheEmployerLoginsUsingAnExistingNonLevyAccountWhichHasReachedItMaxReservationsLimit()
         {
             var listOfApprenticeship = new List<Apprenticeship>();
@@ -163,7 +163,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         
-        [When("the Employer tries to add another apprentice to an existing cohort")]
+        [When("^the Employer tries to add another apprentice to an existing cohort$")]
         public async Task WhenTheEmployerTriesToAddAnotherApprenticeToAnExistingCohort()
         {
             await employerStepsHelper.OpenCohort(false);
@@ -171,21 +171,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         
-        [Then("the Employer is blocked with a shutter page for existing cohort")]
+        [Then("^the Employer is blocked with a shutter page for existing cohort$")]
         public async Task ThenTheEmployerIsBlockedWithAShutterPageForExistingCohort()
         {
             await new EmployerApproveApprenticeDetailsPage(context).TryClickAddAnotherApprenticeLink();
         }
 
 
-        [Then("the employer is blocked to create new reservations")]
+        [Then("^the employer is blocked to create new reservations$")]
         public async Task ThenTheEmployerIsBlockedToCreateNewReservations()
         {
             await employerStepsHelper.EmployerTriesToCreateReservation();
         }
 
 
-        [Then("the apprenticeship is marked as Completed")]
+        [Then("^the apprenticeship is marked as Completed$")]
         public async Task ThenTheApprenticeshipIsMarkedAsCompleted()
         {
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
@@ -195,13 +195,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page1.AssertRecordIsReadOnlyExceptEndDate();
         }
 
-        [When("The nonlevyemployer follows the link from dynamicHomePage to create a new reservation")]
+        [When("^The nonlevyemployer follows the link from dynamicHomePage to create a new reservation$")]
         public async Task WhenTheNonLevyEmployerReservesFundingFromReservedPanel()
         {            
             await employerStepsHelper.EmployerTriesToCreateReservationOnDynamicHomepage();
         }
 
-        [Then("The nonlevyemployer follows the link from dynamicHomePage to create a cohort and send it to the training Provider")]
+        [Then("^The nonlevyemployer follows the link from dynamicHomePage to create a cohort and send it to the training Provider$")]
         public async Task WhenTheNonLevyEmployerSendCohortToProvider()
         {
             var dynamicHomepageSettingAnApprenticeShip = new ContinueSettingupAnApprenticeshipDynamicHomepage(context);

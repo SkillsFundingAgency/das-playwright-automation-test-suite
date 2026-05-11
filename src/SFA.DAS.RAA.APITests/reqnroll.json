@@ -1,11 +1,12 @@
 {
-    "bindingCulture": {
+    "trace": {
+    "stepDefinitionSkeletonStyle": "RegexAttribute"
+  },
+
+"language": {
       "feature": "en-GB"
     },
-    "language": {
-      "feature": "en-GB"
-    },
-    "stepAssemblies": [
+    "bindingAssemblies": [
       { "assembly": "SFA.DAS.API.Framework" },
       { "assembly": "SFA.DAS.ConfigurationBuilder" },
       { "assembly": "SFA.DAS.Framework" }
@@ -13,5 +14,13 @@
   "generator": {
     "allowRowTests": false,
     "addNonParallelizableMarkerForTags": [ "donotexecuteinparallel" ]
-  }
+  },
+  
+    "$schema": "https://schemas.reqnroll.net/reqnroll-config-latest.json",
+
+    "formatters": {
+        "html": {
+            "outputFilePath": "bdd-report.html"
+        }
+    }
   }

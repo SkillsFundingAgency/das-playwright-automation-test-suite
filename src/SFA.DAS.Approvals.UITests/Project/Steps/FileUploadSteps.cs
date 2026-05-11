@@ -27,7 +27,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Given("Provider have few apprentices to add using CSV file upload")]
+        [Given("^Provider have few apprentices to add using CSV file upload$")]
         public async Task GivenProviderHaveFewApprenticesToAddUsingCSVFileUpload()
         {
             var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
@@ -39,7 +39,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        [Given("one of the apprentice on Level-7 course is above (.*) years")]
+        [Given("^one of the apprentice on Level-7 course is above (.*) years$")]
         public async Task GivenOneOfTheApprenticeOnLevelCourseIsAboveYears(int ageLimit)
         {
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -51,7 +51,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        [Given("one of the apprentice on Foundation course is above (.*) years")]
+        [Given("^one of the apprentice on Foundation course is above (.*) years$")]
         public async Task GivenOneOfTheApprenticeOnFoundationCourseIsAboveYears(int ageLimit)
         {
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -65,7 +65,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await csvFileFactory.CreateCsvFile(listOfApprenticeship, fileUploadHelper.CsvFileLocation());            
         }
 
-        [When("Provider uploads the csv file")]
+        [When("^Provider uploads the csv file$")]
         public async Task WhenProviderUploadsTheCsvFile()
         {
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
@@ -73,7 +73,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.UploadFile(fileUploadHelper.CsvFileLocation());
         }
 
-        [Then("system does not allow to upload the file and displays an error message")]
+        [Then("^system does not allow to upload the file and displays an error message$")]
         public async Task ThenSystemDoesNotAllowToUploadTheFileAndDisplaysAnErrorMessage()
         {
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -93,7 +93,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
         }
 
-        [Then("the user can bulk upload apprentices")]
+        [Then("^the user can bulk upload apprentices$")]
         internal async Task ThenTheUserCanBulkUploadApprentices()
         {
             await new ApprenticeRequests_ProviderPage(context).NavToHomePage();

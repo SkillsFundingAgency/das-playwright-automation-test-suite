@@ -19,7 +19,7 @@ namespace SFA.DAS.SupportTools.UITests.Project.Tests.Steps
             _usersSqlDataHelper = new UsersSqlDataHelper(_context.Get<ObjectContext>(), _context.Get<DbConfig>());
         }
 
-        [Given(@"the employer user can login to EAS")]
+        [Given(@"^the employer user can login to EAS$")]
         public async Task GivenTheEmployerUserCanLoginToEAS()
         {
             await _employerHomePageStepsHelper.NavigateToEmployerApprenticeshipService();
@@ -33,10 +33,10 @@ namespace SFA.DAS.SupportTools.UITests.Project.Tests.Steps
             await AccountSignOutHelper.SignOut(homePage);
         }
 
-        [Then(@"the employer user can login to EAS")]
+        [Then(@"^the employer user can login to EAS$")]
         public async Task ThenTheEmployerUserCanLoginToEAS() => await _employerHomePageStepsHelper.GotoEmployerHomePage();
 
-        [Then(@"the employer user cannot login to EAS")]
+        [Then(@"^the employer user cannot login to EAS$")]
         public async Task ThenTheEmployerUserCannotLoginToEAS()
         {
             var accountUnavailablePage = await _employerHomePageStepsHelper.ValidateUnsuccessfulLogon();

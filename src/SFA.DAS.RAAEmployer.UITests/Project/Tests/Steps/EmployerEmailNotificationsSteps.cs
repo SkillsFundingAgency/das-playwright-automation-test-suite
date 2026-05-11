@@ -14,7 +14,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
     private readonly MailosaurApiHelper mailosaurApiHelper = context.Get<MailosaurApiHelper>();
     protected readonly VacancyTitleDatahelper vacancyTitleDataHelper = context.Get<VacancyTitleDatahelper>();
 
-    [Then(@"the '(.*)' receives '(.*)' email notification")]
+    [Then(@"^the '(.*)' receives '(.*)' email notification$")]
     public async Task ThenTheEmployerReceivesEmailNotification(string userType, string notificationType)
     {
         string GetProviderEmail()

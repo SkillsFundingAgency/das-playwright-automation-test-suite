@@ -11,7 +11,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
 
     private List<string> titles;
 
-    [Then(@"the user should be able to successfully filter events by date")]
+    [Then(@"^the user should be able to successfully filter events by date$")]
     public async Task TheUserShouldBeAbleToSuccessfullyFilterEventsByDate()
     {
         manageEventsPage = await new AdminAdministratorHubPage(context).AccessManageEvents();
@@ -21,7 +21,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
         await manageEventsPage.ClearAllFilters();
     }
 
-    [Then(@"the user should be able to successfully filter events by event status")]
+    [Then(@"^the user should be able to successfully filter events by event status$")]
     public async Task ThenTheUserShouldBeAbleToSuccessfullyFilterEventsByEventStatus()
     {
         await manageEventsPage.FilterEventByEventStatus_Published();
@@ -37,7 +37,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
         await manageEventsPage.ClearAllFilters();
     }
 
-    [Then(@"the user should be able to successfully filter events by event type")]
+    [Then(@"^the user should be able to successfully filter events by event type$")]
     public async Task ThenTheUserShouldBeAbleTosuccessfullyFilterEventsByEventType()
     {
         await manageEventsPage.FilterEventByEventType_TrainingEvent();
@@ -47,7 +47,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
         await manageEventsPage.ClearAllFilters();
     }
 
-    [Then(@"the user should be able to successfully filter events by regions")]
+    [Then(@"^the user should be able to successfully filter events by regions$")]
     public async Task ThenTheUserShouldBeAbleToSuccessfullyFilterEventsByRegions()
     {
         await manageEventsPage.FilterEventByEventRegion_London();
@@ -57,7 +57,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
         await manageEventsPage.ClearAllFilters();
     }
 
-    [Then(@"the user should be able to successfully filter events by multiple combination of filters")]
+    [Then(@"^the user should be able to successfully filter events by multiple combination of filters$")]
     public async Task ThenTheUserShouldBeAbleTosuccessfullyFilterEventsByMultipleCombinationOfFilters()
     {
         await manageEventsPage.FilterEventByOneMonth();
@@ -71,7 +71,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
 
     }
 
-    [Given(@"the following events have been created:")]
+    [Given(@"^the following events have been created:$")]
     public async Task GivenTheFollowingEventsHaveBeenCreated(Table table)
     {
         var stepsHelper = context.Get<AanAdminStepsHelper>();
@@ -89,7 +89,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
         ;
     }
 
-    [When(@"the user filters events within (.*) miles of ""([^""]*)""")]
+    [When(@"^the user filters events within (.*) miles of ""([^""]*)""$")]
     public async Task WhenTheUserFiltersEventsWithinMilesOf(int radius, string location)
     {
         var hub = new AdminAdministratorHubPage(context);
@@ -103,7 +103,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
         stepsHelper.ClearEventTitleCache();
     }
 
-    [Then(@"the following events can be found within the search results:")]
+    [Then(@"^the following events can be found within the search results:$")]
     public async Task ThenTheFollowingEventsCanBeFoundWithinTheSearchResults(Table table)
     {
         var stepsHelper = context.Get<AanAdminStepsHelper>();
@@ -117,7 +117,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
         AssertListContains(titles, expectedEvents);
     }
 
-    [Then(@"the following events can not be found within the search results:")]
+    [Then(@"^the following events can not be found within the search results:$")]
     public void ThenTheFollowingEventsCanNotBeFoundWithingTheSearchResults(Table table)
     {
         var unexpectedEvents = table.CreateSet<NetworkEvent>().ToList();
@@ -128,7 +128,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
         }
     }
 
-    [Then(@"the heading text ""([^""]*)"" is displayed")]
+    [Then(@"^the heading text ""([^""]*)"" is displayed$")]
     public async Task ThenTheHeadingTextIsDisplayed(string expectedText)
     {
         manageEventsPage = new ManageEventsPage(context);
@@ -136,7 +136,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
         await manageEventsPage.VerifyHeadingText(expectedText);
     }
 
-    [Then(@"the text ""([^""]*)"" is displayed")]
+    [Then(@"^the text ""([^""]*)"" is displayed$")]
     public async Task ThenTheTextIsDisplayed(string expectedText)
     {
         manageEventsPage = new ManageEventsPage(context);
@@ -144,13 +144,13 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
         await manageEventsPage.VerifyBodyText(expectedText);
     }
 
-    [When(@"the user navigates to Manage Events")]
+    [When(@"^the user navigates to Manage Events$")]
     public async Task WhenTheUserNavigatesToManageEvents()
     {
         manageEventsPage = await new AdminAdministratorHubPage(context).AccessManageEvents();
     }
 
-    [When(@"the user filters events by Cancelled status")]
+    [When(@"^the user filters events by Cancelled status$")]
     public async Task WhenTheFiltersEventsByCancelledEventType()
     {
         manageEventsPage = new ManageEventsPage(context);
@@ -158,7 +158,7 @@ public class Admin_Events_Filter_Steps(ScenarioContext context) : AanBaseSteps(c
         await manageEventsPage.FilterEventByEventStatus_Cancelled();
     }
 
-    [When(@"the user filters events by Training event type")]
+    [When(@"^the user filters events by Training event type$")]
     public async Task WhenTheUserFiltersEventsByTrainingEventType()
     {
         manageEventsPage = new ManageEventsPage(context);

@@ -7,34 +7,34 @@ public class Admin_ChangeEvent_Steps(ScenarioContext context) : AdminCreateEvent
 {
     private CheckYourEventPage checkYourEventPage;
 
-    [When(@"the user should be able to successfully enters all the details for InPerson event")]
+    [When(@"^the user should be able to successfully enters all the details for InPerson event$")]
     public async Task TheUserShouldBeAbleToSuccessfullyEntersAllTheDetailsForInPersonEvent()
     {
         checkYourEventPage = await CheckYourEvent(EventFormat.InPerson, false, false);
     }
 
-    [When(@"the user should be able to successfully enters all the details for hybrid event")]
+    [When(@"^the user should be able to successfully enters all the details for hybrid event$")]
     public async Task TheUserShouldBeAbleToSuccessfullyEntersAllTheDetailsForHybridEvent()
     {
         checkYourEventPage = await CheckYourEvent(EventFormat.Hybrid, false, false);
     }
 
-    [When(@"the user should be able to successfully enters all the details for an Online event")]
+    [When(@"^the user should be able to successfully enters all the details for an Online event$")]
     public async Task TheUserShouldBeAbleToSuccessfullyEntersAllTheDetailsForAnOnlineEvent()
     {
         checkYourEventPage = await CheckYourEvent(EventFormat.Online, false, false);
     }
 
-    [When(@"changes the event to a in person event")]
+    [When(@"^changes the event to a in person event$")]
     public async Task ChangesTheEventToAInPersonEvent() => await ChangesTheEventTo(EventFormat.InPerson);
 
-    [When(@"changes the event to a hybrid event")]
+    [When(@"^changes the event to a hybrid event$")]
     public async Task ChangesTheEventToAHybridEvent() => await ChangesTheEventTo(EventFormat.Hybrid);
 
-    [When(@"changes the event to an online event")]
+    [When(@"^changes the event to an online event$")]
     public async Task ChangesTheEventToAnOnlineEvent() => await ChangesTheEventTo(EventFormat.Online);
 
-    [When(@"changes all the event details")]
+    [When(@"^changes all the event details$")]
     public async Task ChangesAllTheEventDetails()
     {
         var page = await checkYourEventPage.ChangeEventType();

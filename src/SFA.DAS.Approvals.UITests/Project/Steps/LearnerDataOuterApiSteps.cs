@@ -4,7 +4,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers.ApprenticeshipModel;
 using System;
-using TechTalk.SpecFlow.Assist;
+using Reqnroll.Assist;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -22,7 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             apprenticeDataHelper = new ApprenticeDataHelper(context);
         }
 
-        [Given("Provider successfully submits (\\d+) ILR record containing a learner record for a \"(.*)\" Employer")]
+        [Given("^Provider successfully submits (\\d+) ILR record containing a learner record for a \"(.*)\" Employer$")]
         public async Task ProviderSubmitsAnILRRecord(int NoOfApprentices, string type)
         {
             EmployerType employerType;
@@ -72,7 +72,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
         }
 
-        [Given(@"Provider adds an apprentice aged (.*) years using below ""(.*)"", ""(.*)"" and ""(.*)""")]
+        [Given(@"^Provider adds an apprentice aged (.*) years using below ""(.*)"", ""(.*)"" and ""(.*)""$")]
         public async Task GivenProviderAddsAnApprenticeAgedYearsUsingBelowAnd(int age, string courseType, string courseLevel, string startDate)
         {
             var coursesDataHelper = new CoursesDataHelper();
@@ -96,7 +96,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await SLDPushDataIntoAS();
         }
 
-        [Given(@"Provider submits ILR for following learners for a ""(.*)"" employer:")]
+        [Given(@"^Provider submits ILR for following learners for a ""(.*)"" employer:$")]
         public async Task GivenProviderSubmitsIlrForFollowingLearnersForAEmployer(string employer, Table table)
         {
             EmployerType employerType;
@@ -145,8 +145,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
         }
 
-        [Given("new learner details are processed in ILR for (\\d+) apprentices")]
-        [Given("the employer has (\\d+) apprentice ready to start training")]
+        [Given("^new learner details are processed in ILR for (\\d+) apprentices$")]
+        [Given("^the employer has (\\d+) apprentice ready to start training$")]
         public async Task ProcessedLearnersInILR(int NoOfApprentices)
         {
             var employerType = context.ScenarioInfo.Title.ToLower().Contains("nonlevy") ? EmployerType.NonLevy : EmployerType.Levy;
@@ -154,7 +154,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await SLDPushDataIntoAS();
         }
 
-        [Then(@"apprentice\/learner record is available on Learning endpoint for SLD \(so they do not resubmit it\)")]
+        [Then(@"^apprentice\/learner record is available on Learning endpoint for SLD \(so they do not resubmit it\)$")]
         public async Task ThenApprenticeLearnerRecordIsAvailableOnLearningEndpointForSLDSoTheyDoNotResubmitIt()
         {
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -163,7 +163,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             
         }
 
-        [When("Provider resubmits ILR file with changes to apprentice details")]
+        [When("^Provider resubmits ILR file with changes to apprentice details$")]
         public async Task WhenProviderResubmitsILRFileWithChangesToApprenticeDetails()
         {
             var updatedSuffix = "_UpdatedAt_" + DateTime.Now.ToString("yyyyMMddHHmmss");

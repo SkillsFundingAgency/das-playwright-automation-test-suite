@@ -10,7 +10,7 @@ public class MS_ContactDetails_Steps(ScenarioContext context)
 {
     private readonly ManagingStandardsDataHelpers managingStandardsDataHelpers = new();
 
-    [Then("the provider is able to update contact details")]
+    [Then("^the provider is able to update contact details$")]
     public async Task ThenTheProviderIsAbleToUpdateContactDetails()
     {
         var page = new ManagingStandardsProviderHomePage(context);
@@ -32,7 +32,7 @@ public class MS_ContactDetails_Steps(ScenarioContext context)
         await page6.ReturnToManagingStandardsDashboard();
     }
 
-    [Then("the provider is able to update phone number only")]
+    [Then("^the provider is able to update phone number only$")]
     public async Task ThenTheProviderIsAbleToUpdatePhoneNumberOnly()
     {
         var page = new YourStandardsAndTrainingVenuesPage(context);
@@ -53,7 +53,7 @@ public class MS_ContactDetails_Steps(ScenarioContext context)
 
     }
 
-    [Then("the provider is able to update email only")]
+    [Then("^the provider is able to update email only$")]
     public async Task ThenTheProviderIsAbleToUpdateEmailOnly()
     {
         var page = new YourStandardsAndTrainingVenuesPage(context);
@@ -74,7 +74,7 @@ public class MS_ContactDetails_Steps(ScenarioContext context)
 
     }
 
-    [Then("the provider is able to update contact details to all the standards")]
+    [Then("^the provider is able to update contact details to all the standards$")]
     public async Task ThenTheProviderIsAbleToUpdateContactDetailsToAllTheStandards()
     {
         var page = new YourStandardsAndTrainingVenuesPage(context);
@@ -96,7 +96,7 @@ public class MS_ContactDetails_Steps(ScenarioContext context)
         await page6.ReturnToManagingStandardsDashboard();
     }
 
-    [Then("the updated contact details are visible in the standard information section")]
+    [Then("^the updated contact details are visible in the standard information section$")]
     public async Task ThenTheUpdatedContactDetailsAreVisibleInTheStandardInformationSection()
     {
 
