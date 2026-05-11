@@ -7,6 +7,7 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
     protected readonly Application_Overview_Page applicationOverview_Page = new(context);
     protected readonly TestPage_Page testPage_Page = new(context);
     protected readonly TestSection_Page testSection_Page = new(context);
+    
     public async Task SubmitApplication()
     {
         await ClickStartNewApplicationButton();
@@ -25,6 +26,7 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await applicationOverview_Page.ClickAcceptAndSubmit();
         await applicationOverview_Page.ClickBackToDashboard();
     }
+
     public async Task SubmitApplicationForDiffOrganisation()
     {
         await ClickStartNewApplicationButton();
@@ -32,11 +34,13 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await VerifyErrorMessageForEmptyApplicationDetails();        
         await VerifyErrorMessageAsIncorrectAO();
     }
+
     public async Task<AvailableForms_Page> ClickStartNewApplicationButton()
     {
         await page.Locator("a.govuk-button:has-text(\"Start new application\")").ClickAsync();
         return await VerifyPageAsync(() => new AvailableForms_Page(context));
     }
+
     public async Task<StartApplication_Page> StartApplication(string formTitle)
     {
         var headings = page.Locator("h2", new() { HasTextString = formTitle });
@@ -47,6 +51,7 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await startButton.ClickAsync();
         return await VerifyPageAsync(() => new StartApplication_Page(context));
     }
+
     public async Task<StartApplication_Page> VerifyErrorMessageForEmptyApplicationDetails()
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
@@ -56,6 +61,7 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await Assertions.Expect(descriptionError).ToContainTextAsync("Enter an application owner.");
         return await VerifyPageAsync(() => new StartApplication_Page(context));
     }
+
     public async Task<Application_Overview_Page> EnterApplicationDetailsAndSubmit()
     {
         await page.GetByLabel("Qualification title").FillAsync(qfastDataHelpers.QualificationTitle);
@@ -64,6 +70,7 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         return await VerifyPageAsync(() => new Application_Overview_Page(context));
     }
+
     public async Task<StartApplication_Page> VerifyErrorMessageAsIncorrectAO()
     {
         await page.GetByLabel("Qualification title").FillAsync(qfastDataHelpers.QualificationTitle);
@@ -74,6 +81,7 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await Assertions.Expect(AoErrorMessage).ToContainTextAsync("This QAN does not match any qualifications associated with your AO.");
         return await VerifyPageAsync(() => new StartApplication_Page(context));
     }
+
     public async Task SubmitApplicationForEligibilityChanged()
     {
         await ClickStartNewApplicationButton();
@@ -92,6 +100,7 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await applicationOverview_Page.ClickAcceptAndSubmit();
         await applicationOverview_Page.ClickBackToDashboard();
     }
+
       public async Task<Application_Overview_Page> EnterApplicationDetailsAndSubmitForEligibilityChanged()
     {
         await page.GetByLabel("Qualification title").FillAsync(qfastDataHelpers.QualificationTitleForEligibilityChanged);

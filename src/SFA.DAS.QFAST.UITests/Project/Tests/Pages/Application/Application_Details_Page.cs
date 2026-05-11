@@ -3,6 +3,7 @@
 public class Application_Details_Page (ScenarioContext context) : BasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Application details" })).ToBeVisibleAsync();
+    
     public async Task<Application_Details_Page> SelectApplicationAsQfauOfqualAndIfateUser(string application)
     {
         var rows = page.Locator($"tr:has-text('{application}')");
@@ -15,28 +16,33 @@ public class Application_Details_Page (ScenarioContext context) : BasePage(conte
         await link.ClickAsync();
         return await VerifyPageAsync(() => new Application_Details_Page(context));
     }
+
     public async Task<Application_Details_Page> ShareApplicaitonWithOfqualUser()
     {
         await page.GetByRole(AriaRole.Link, new(){ Name = "Share with Skills England" }).ClickAsync();
         await page.GetByRole(AriaRole.Button, new(){ Name = "Confirm" }).ClickAsync();
         return await VerifyPageAsync(() => new Application_Details_Page(context));
     }
+
     public async Task<Application_Details_Page> ShareApplicaitonWithIfatelUser()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Share with Ofqual" }).ClickAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
         return await VerifyPageAsync(() => new Application_Details_Page(context));
     }
+
     public async Task<Application_Messages_Page> ClickOnViewMessagesLink()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "View messages" }).ClickAsync();
         return await VerifyPageAsync(() => new Application_Messages_Page(context));
     }
+
     public async Task<RequestForFunding_Page> ClickBackLinkOnApplicationDetailsPage()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
         return await VerifyPageAsync(() => new RequestForFunding_Page(context));
     }
+
     public async Task<Application_Details_Page> AssignReviewers(string reviewer1, string reviewer2)
     {
         // A user cannot be assigned as Reviewer 1 and Reviewer 2 for the same application.
@@ -52,6 +58,7 @@ public class Application_Details_Page (ScenarioContext context) : BasePage(conte
         await page.Locator("form:has(#Reviewer2)").GetByRole(AriaRole.Button, new() { Name = "Change" }).ClickAsync();
         return await VerifyPageAsync(() => new Application_Details_Page(context));
     }
+
     public async Task ValidateLinkAndOpenInNewTab(string linkText, string expectedUrl)
     {
         var link = page.GetByRole(AriaRole.Link, new() { Name = linkText });
@@ -72,6 +79,7 @@ public class Application_Details_Page (ScenarioContext context) : BasePage(conte
         await Assertions.Expect(popupPage).ToHaveURLAsync(expectedUrl);
         await popupPage.CloseAsync();
     }
+
     public async Task<DfeFundigReview_Page> ClickOnDfeFundingReviewButton()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "DfE funding review" }).ClickAsync();
