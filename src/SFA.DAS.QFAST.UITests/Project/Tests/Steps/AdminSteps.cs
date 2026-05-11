@@ -12,7 +12,7 @@ public class AdminSteps(ScenarioContext context)
     private readonly ViewForms_Page _viewFormsPage = new(context);
     private readonly CreateNewForm_Page _createNewFormPage = new(context);
     private readonly CreateOutputFile_Page _createOutputFilePage = new(context);
-    private readonly NewQualifications_Page _newQualificationsPage = new(context);    
+    private readonly NewQualifications_Page _newQualificationsPage = new(context);
     private readonly Application_Details_Page application_Details_Page = new(context);
     private readonly Application_Messages_Page application_Messages_Page = new(context);
     private readonly StartApplication_Page startApplicationPage = new(context);
@@ -37,7 +37,7 @@ public class AdminSteps(ScenarioContext context)
             case "aouser":
                 await _qfastHelpers.GoToQfastAOHomePage();
                 break;
-            case "ao user2":           
+            case "ao user2":
                 await _qfastHelpers.GoToQfastAOHomePage1();
                 break;
             case "ifate":
@@ -144,21 +144,21 @@ public class AdminSteps(ScenarioContext context)
     [When("I verify first option always has present date and download the file with present date")]
     public async Task WhenIVerifyFirstOptionAlwaysHasPresentDate()
     {
-        await _createOutputFilePage.VerifyPresentDate();        
+        await _createOutputFilePage.VerifyPresentDate();
     }
 
     [When("I select a publication date and generate the output file")]
     public async Task WhenISelectAPublicationDateAndGenerateTheOutputFile()
     {
         await _createOutputFilePage.ValidateDateErrorMessage();
-        await _createOutputFilePage.EnterFuturPublicationDate();       
+        await _createOutputFilePage.EnterFuturPublicationDate();
     }
 
     [Then("I verify that QAN number is a clickable link")]
     public async Task ThenIVerifyThatQANNumberIsAClickableLink()
     {
         await _newQualificationsPage.VerifyQANnumberIsLink();
-    }    
+    }
 
     [Then("I verify that the QAN number link opens the correct page in a new tab")]
     public async Task ThenIVerifyThatTheQANNumberLinkOpensTheCorrectPageInANewTab()
@@ -177,7 +177,7 @@ public class AdminSteps(ScenarioContext context)
         await application_Messages_Page.ClickOnPreviewButton();
         await application_Messages_Page.ClickOnConfirmMessageButton();
         await application_Messages_Page.ClickBackLinkOnApplicationMessagePage();
-        await application_Details_Page.ClickBackLinkOnApplicationDetailsPage();        
+        await application_Details_Page.ClickBackLinkOnApplicationDetailsPage();
     }
 
     [Then("I validate as an (.+) application status is (.+) for (.+)")]
@@ -208,7 +208,7 @@ public class AdminSteps(ScenarioContext context)
     [When("I validate the error messages when I search without entering correct details")]
     public async Task WhenIValidateTheErrorMessages()
     {
-      await searchForQualification_Page.ValidateErrorMessage();
+        await searchForQualification_Page.ValidateErrorMessage();
     }
 
     [When("I search for a qualification using partial title (.*) and validate the search result has Qualifcation with title containing (.*)")]
@@ -253,7 +253,7 @@ public class AdminSteps(ScenarioContext context)
         await _newQualificationsPage.SelectOption("No Action Required");
         await _newQualificationsPage.ClickOnApplyToThisSelectionButton();
         await _newQualificationsPage.VerifySuccessMessage("Actions have been applied to the selected qualifications");
-        await qualificationDetails_Page.VerifyStatusOfQualification("No Action Required");        
+        await qualificationDetails_Page.VerifyStatusOfQualification("No Action Required");
     }
 
     [Then("I verify user is able to update the qualification manually")]
@@ -270,7 +270,7 @@ public class AdminSteps(ScenarioContext context)
         await requestForFunding_Page.ClickOnApplyActionsToThisSelections();
         await requestForFunding_Page.VefiryErrorMessage();
         await requestForFunding_Page.ClickOnApplyAssignReviewersToThisSelection();
-        await requestForFunding_Page.VefiryErrorMessageForAssignReviewers();        
+        await requestForFunding_Page.VefiryErrorMessageForAssignReviewers();
         await _newQualificationsPage.ClickOnSelectAllOnThisPageLink();
         await _newQualificationsPage.VerifyAllCheckboxesAreSelected();
         await requestForFunding_Page.SelectActionForApplications("Share with Skills England");
@@ -280,7 +280,7 @@ public class AdminSteps(ScenarioContext context)
         await requestForFunding_Page.SelectReviewerForApplications("aodp TestAdmin1", "aodp TestAdmin2");
         await requestForFunding_Page.ClickOnApplyAssignReviewersToThisSelection();
     }
-    
+
     [When("I publish the form for eligibility update scenario")]
     public async Task ThenICreateANewSubmissionFormAndPublishTheFormForEligibilityUpdateScenario()
     {
@@ -288,7 +288,7 @@ public class AdminSteps(ScenarioContext context)
         await _createNewFormPage.CreateFormForEligibilityUpdate();
     }
 
-    [Then("I select the (.*) application")]     
+    [Then("I select the (.*) application")]
     public async Task IselectTheApplication(string application)
     {
         await application_Details_Page.SelectApplicationAsQfauOfqualAndIfateUser(application);
@@ -302,10 +302,33 @@ public class AdminSteps(ScenarioContext context)
         await dfeFundigReview_Page.SelectFundingStream();
         await dfeFundigReview_Page.SetFundingStreamsAndApprovedTheApplication();
     }
+
     [Then("I validate QAN (.*) has status as (.*)")]
     public async Task ThenIValidateQANStatus(string QAN, string status)
-    {       
+    {
         await _newQualificationsPage.SearchAndSelectQualification(QAN);
         await qualificationDetails_Page.VerifyStatusOfQualification(status);
+    }
+
+    [Then("I click on (.*) link")]
+    public async Task ThenIClickOnDashboardLink(string Link)
+    {
+       switch(Link)
+        {
+            case "Dashboard":
+                 await _qfastAdminPage.ClickDashboard();
+                break;
+            case "Import data":
+                await _qfastAdminPage.ClickImportData();
+                break;
+            case "Create a form":
+                await _qfastAdminPage.ClickCreateAForm();
+                break;
+            case "Create an output file":
+                await _qfastAdminPage.ClickCreateAnOutputFile();
+                break;
+            default:
+                throw new ArgumentException($"No matching case found for link: '{Link}'", nameof(Link));
+        }        
     }
 }

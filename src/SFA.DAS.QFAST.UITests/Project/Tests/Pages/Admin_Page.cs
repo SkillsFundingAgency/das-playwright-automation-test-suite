@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.DfeAdmin.Service.Project.Tests.LandingPage;
 namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages;
+
 public class Admin_Page(ScenarioContext context) : BasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("QFAST homepage");
@@ -11,7 +12,7 @@ public class Admin_Page(ScenarioContext context) : BasePage(context)
     public async Task ValidateOptionsAsync(IEnumerable<string> expectedOptions)
     {
         if (expectedOptions is null || !expectedOptions.Any())
-            throw new ArgumentException("No options available", nameof(expectedOptions));        
+            throw new ArgumentException("No options available", nameof(expectedOptions));
         var container = page.Locator("main");
         foreach (var optionText in expectedOptions)
         {
@@ -22,11 +23,31 @@ public class Admin_Page(ScenarioContext context) : BasePage(context)
     public async Task SelectOptions(string option)
     {
         var optionLocator = page.Locator($"a.govuk-link:has-text(\"{option}\")");
-        await optionLocator.ClickAsync();        
+        await optionLocator.ClickAsync();
     }
     public async Task<CheckDfeSignInPage> ClickLogOut()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
-        return await VerifyPageAsync(() => new CheckDfeSignInPage(context)); 
+        return await VerifyPageAsync(() => new CheckDfeSignInPage(context));
+    }
+    public async Task<Admin_Page> ClickDashboard()
+    {
+        await page.GetByRole(AriaRole.Link, new() {Name = "Dashboard",Exact = true}).ClickAsync();
+        return await VerifyPageAsync(() => new Admin_Page(context));
+    }
+    public async Task<Admin_Page> ClickCreateAForm()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Create a form", Exact = true }).ClickAsync();
+        return await VerifyPageAsync(() => new Admin_Page(context));
+    }
+    public async Task<Admin_Page> ClickImportData()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Import data", Exact = true }).ClickAsync();
+        return await VerifyPageAsync(() => new Admin_Page(context));
+    }
+    public async Task<Admin_Page> ClickCreateAnOutputFile()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Create an output file", Exact = true }).ClickAsync();
+        return await VerifyPageAsync(() => new Admin_Page(context));
     }
 }
