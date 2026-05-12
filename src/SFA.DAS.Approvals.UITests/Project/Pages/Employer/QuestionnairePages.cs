@@ -117,11 +117,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         private ILocator alreadyStarted => page.Locator("#StartDate-alreadyStarted");
 
-        internal async Task<ConfirmYourReservationPage> SelectAlreadyStartedDate()
+        internal async Task<CheckDetailsAndReserveFundingPage> SelectAlreadyStartedDate()
         {
             await alreadyStarted.ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
-            return await VerifyPageAsync(() => new ConfirmYourReservationPage(context));
+            return await VerifyPageAsync(() => new CheckDetailsAndReserveFundingPage(context));
         }
 
     }

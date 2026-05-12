@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class ConfirmYourReservationPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class CheckDetailsAndReserveFundingPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {
@@ -9,7 +9,7 @@
 
         internal async Task<YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage> ClickConfirmButton()
         {
-            await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "like to reserve funding" }).ClickAsync();
             
             return await VerifyPageAsync(() => new YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage(context));
         }
