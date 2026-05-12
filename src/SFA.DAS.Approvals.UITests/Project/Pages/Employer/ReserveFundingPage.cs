@@ -8,7 +8,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         internal async Task<DoYouKnowWhichTrainingCourseYourLearnerWillTakePage> YesContinueToReserveFunding()
         {
-            await page.Locator("//*[.='Reserve funding']").ClickAsync();
+            await page.Locator("//a[.='Reserve funding']").ClickAsync();
             return await VerifyPageAsync(() => new DoYouKnowWhichTrainingCourseYourLearnerWillTakePage(context));
         }
     }
