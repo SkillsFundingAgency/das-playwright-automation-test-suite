@@ -62,7 +62,7 @@ public class InterimYourApprenticeshipAdvertsHomePage(ScenarioContext context, b
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Recruitment dashboard", new LocatorAssertionsToContainTextOptions { Timeout = 10000});
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Create an advert for Find an apprenticeship", new LocatorAssertionsToContainTextOptions { Timeout = 10000});
     }
 }
 
