@@ -68,4 +68,48 @@ public class StepsHelper(ScenarioContext context)
         await page.VerifyEmployerWageType(wageType);
     }
 
+    public static async Task ProviderApplicantSucessful(ProviderVacancySearchResultPage providerVacancySearchResultPage)
+    {
+        var page = await providerVacancySearchResultPage.NavigateToManageApplicant();
+
+        var page1 = await page.MakeApplicantSucessful();
+
+        await page1.NotifyApplicant();
+    }
+
+    public static async Task ProviderApplicantUnsucessful(ProviderVacancySearchResultPage providerVacancySearchResultPage)
+    {
+        var page = await providerVacancySearchResultPage.NavigateToManageApplicant();
+
+        var page1 = await page.MakeApplicantUnsucessful();
+
+        await page1.NotifyApplicant();
+    }
+
+    public static async Task ProviderApplicantMarkForInterview(ProviderVacancySearchResultPage providerVacancySearchResultPage)
+    {
+        var page = await providerVacancySearchResultPage.NavigateToManageApplicant();
+
+        await page.MarkApplicantAsInterviewing();
+    }
+
+    public static async Task ProviderApplicantInReview(ProviderVacancySearchResultPage providerVacancySearchResultPage)
+    {
+        var page = await providerVacancySearchResultPage.NavigateToManageApplicant();
+
+        await page.MarkApplicantInReview();
+    }
+
+    public static async Task ApplicantShared(ProviderVacancySearchResultPage providerVacancySearchResultPage)
+    {
+        //   => providerVacancySearchResultPage.NavigateToManageApplicant().ProviderShareApplicantWithEmployer().ConfirmSharing();
+        var page = await providerVacancySearchResultPage.NavigateToManageApplicant();
+        //await page.OutcomeSharedWithEmployer();
+    }
+
+    public static async Task ProviderApplicantWithdrawn(ProviderVacancySearchResultPage providerVacancySearchResultPage)
+    {
+        await providerVacancySearchResultPage.CheckApplicantStatus("Withdrawn");
+    }
+
 }

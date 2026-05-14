@@ -83,7 +83,13 @@ public class SearchVacancyPageHelper(ScenarioContext context)
     {
         var vacRef = _objectContext.GetVacancyReference();
 
-        await page.GetByRole(AriaRole.Combobox, new() { Name = "Search by advert title or" }).FillAsync(vacRef);
+        if(context.ScenarioInfo.Tags.Contains("raaemployer"))
+        {
+            await page.GetByRole(AriaRole.Combobox, new() { Name = "Search by advert title or" }).FillAsync(vacRef);
+        } else
+        {
+            await page.GetByRole(AriaRole.Combobox, new() { Name = "Search by vacancy title" }).FillAsync(vacRef);
+        }
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 

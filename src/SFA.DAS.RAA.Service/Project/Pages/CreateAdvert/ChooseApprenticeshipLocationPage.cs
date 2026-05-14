@@ -56,7 +56,7 @@ public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBase
 
                 await page.GetByRole(AriaRole.Link, new() { Name = "Locations" }).ClickAsync();
 
-                await page.GetByRole(AriaRole.Radio, new() { Name = "At more than one location" }).CheckAsync();
+                await page.GetByRole(AriaRole.Radio, new() { Name = "More than one location" }).CheckAsync();
 
                 await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
