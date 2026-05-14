@@ -49,5 +49,11 @@ public class RecruitmentHomePage(ScenarioContext context) : InterimProviderBaseP
     // {
 
     // }
-    
+
+    public async Task<ManageYourRecruitmentEmailsPage> GoToManageYourRecruitmentEmailsPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage recruitment emails" }).ClickAsync();
+        return await VerifyPageAsync(() => new ManageYourRecruitmentEmailsPage(context));
+    }
+
 }
