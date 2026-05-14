@@ -1,6 +1,4 @@
-﻿using Reqnroll;
-
-namespace SFA.DAS.Framework.Hooks;
+﻿namespace SFA.DAS.Framework.Hooks;
 
 public abstract class FrameworkBaseHooks(ScenarioContext context)
 {
