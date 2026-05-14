@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Framework.Hooks;
+using Reqnroll;
 
 namespace SFA.DAS.Framework;
 
