@@ -202,6 +202,36 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await ReserveFundsFromDynamicHomepage();
         }
 
+        internal async Task EmployerCreatesReservationAndAddsApprentice()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+            int dateOffset = -1;
+
+            await EmployerLogInToEmployerPortal(false);
+            //await employerHomePageHelper.GotoEmployerHomePage(false);
+            var page  = new EmployerHomePage(context);
+            var page2 = await page.ClickOnFundingReservationsLink();
+            var page3 = await page2.ClickOnReserveMoreFundingLink();
+            var page4 = await page3.YesContinueToReserveFunding();
+            var page5 = await page4.ReserveFundsAsync(apprenticeship.TrainingDetails.CourseTitle);
+
+            if(apprenticeship.TrainingDetails.LearningType == 2)
+            {
+                await page5.VerifyPreiousMonthIsNotAvailableToSelect();
+                dateOffset = 0;
+            }                
+            
+            var page6 = await page5.SelectReservationDate(dateOffset);
+            var page7 = await page6.ClickConfirmButton();
+            await page7.GetReservationIdFromUrl(apprenticeship);
+            var page8 = await page7.SelectOptionAddApprenticeDetails();
+            var page9 = await page8.ClickStartNowButton();
+            var page10 = await page9.SubmitValidUkprn(apprenticeship.ProviderDetails.Ukprn);
+            var page11 = await page10.ConfirmTrainingProviderDetails();
+            await page11.SelectEmployerAddApprencticesAndSend();
+        }
+
         private async Task<EmployerHomePage> ReserveFundsFromDynamicHomepage()
         {
             var dynamicHomepage = new SetupAnApprenticeshipDynamicHomepage(context);
@@ -214,10 +244,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page6 = await page5.YesContinueToReserveFunding();
             var page7 = await page6.YesContinueToReserveFunding();
             var page8 = await page7.ReserveFundsAsync("Associate");
-            var page9 = await page8.SelectAlreadyStartedDate();
+            var page9 = await page8.SelectReservationDate(-1);
             var page10 = await page9.ClickConfirmButton();
-
-            return await page10.SelectGoToHomePageAndContinue();
+            return await page10.SelectOptionGoToHomePage();
         }
     }
 }

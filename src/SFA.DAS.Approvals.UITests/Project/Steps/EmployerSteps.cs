@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using Azure;
+using Microsoft.VisualBasic;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
@@ -7,6 +8,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -203,13 +205,35 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenTheNonLevyEmployerSendCohortToProvider()
         {
             var dynamicHomepageSettingAnApprenticeShip = new ContinueSettingupAnApprenticeshipDynamicHomepage(context);
-
-
             var continueSettingupAnApprenticeshipPage = await dynamicHomepageSettingAnApprenticeShip.Continue();
             await continueSettingupAnApprenticeshipPage.DoNotCreateAdvertForThisApprenticeship();
-
             await employerStepsHelper.AddEmptyCohortFromNonLevyReserveFundsAddApprenticePage();
         }
+
+        [Given(@"Employer creates a reservation with GSO standard and tries to add a learner to the reservation")]
+        public async Task GivenEmployerCreatesAReservationWithGSOStandardAndTriesToAddALearnerToTheReservation()
+        {
+            await employerStepsHelper.EmployerCreatesReservationAndAddsApprentice();
+        }
+
+        [Then(@"the Employer is blocked with error message")]
+        public async Task ThenTheEmployerIsBlockedWithErrorMessage()
+        {
+            var errorMsg1 = "You previously chose a reservation for an apprenticeship unit.";
+            var errorMsg2 = "You must send a request to your training provider to add learners doing apprenticeship units.";
+            var employerSelectRoutePage = new ConfirmAddApprentices(context);
+            await employerSelectRoutePage.VerifyErrorMessage(new[] { errorMsg1, errorMsg2 });
+        }
+
+        [When(@"Employer sends an empty cohort to the provider")]
+        public async Task WhenEmployerSendsAnEmptyCohortToTheProvider()
+        {
+            var employerSelectRoutePage = new ConfirmAddApprentices(context);
+            var page = await employerSelectRoutePage.SelectProviderAddApprencticesAndSend();
+            var cohortRef = await page.GetCohortId();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
+        }
+
 
     }
 

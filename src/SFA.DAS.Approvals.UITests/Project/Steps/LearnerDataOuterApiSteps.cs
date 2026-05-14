@@ -25,22 +25,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("^Provider successfully submits (\\d+) ILR record containing a learner record for a \"(.*)\" Employer$")]
         public async Task ProviderSubmitsAnILRRecord(int NoOfApprentices, string type)
         {
-            EmployerType employerType;
-
-            switch (type.ToLower())
+            var employerType = type.ToLower() switch
             {
-                case "levy":
-                    employerType = EmployerType.Levy;
-                    break;
-                case "nonlevy":
-                    employerType = EmployerType.NonLevy;
-                    break;
-                case "nonlevyuseratmaxreservationlimit":
-                    employerType = EmployerType.NonLevyUserAtMaxReservationLimit;
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown employer type: {type}");
-            }
+                "levy" => EmployerType.Levy,
+                "nonlevy" => EmployerType.NonLevy,
+                "nonlevyuseratmaxreservationlimit" => EmployerType.NonLevyUserAtMaxReservationLimit,
+                _ => throw new ArgumentException($"Unknown employer type: {type}"),
+            };
 
             var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateApprenticeshipObject(employerType, NoOfApprentices);
 
@@ -99,22 +90,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given(@"^Provider submits ILR for following learners for a ""(.*)"" employer:$")]
         public async Task GivenProviderSubmitsIlrForFollowingLearnersForAEmployer(string employer, Table table)
         {
-            EmployerType employerType;
-
-            switch (employer.ToLower())
+            var employerType = employer.ToLower() switch
             {
-                case "levy":
-                    employerType = EmployerType.Levy;
-                    break;
-                case "nonlevy":
-                    employerType = EmployerType.NonLevy;
-                    break;
-                case "nonlevyuseratmaxreservationlimit":
-                    employerType = EmployerType.NonLevyUserAtMaxReservationLimit;
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown employer type: {employer}");
-            }
+                "levy" => EmployerType.Levy,
+                "nonlevy" => EmployerType.NonLevy,
+                "nonlevyuseratmaxreservationlimit" => EmployerType.NonLevyUserAtMaxReservationLimit,
+                _ => throw new ArgumentException($"Unknown employer type: {employer}"),
+            };
 
             var learners = table.CreateSet<SpecFlowTableToApprenticeshipMapper>().ToList();
             var NoOfLearners = learners.Count;
@@ -149,7 +131,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("^the employer has (\\d+) apprentice ready to start training$")]
         public async Task ProcessedLearnersInILR(int NoOfApprentices)
         {
-            var employerType = context.ScenarioInfo.Title.ToLower().Contains("nonlevy") ? EmployerType.NonLevy : EmployerType.Levy;
+            var employerType = context.ScenarioInfo.Title.Contains("nonlevy", StringComparison.CurrentCultureIgnoreCase) ? EmployerType.NonLevy : EmployerType.Levy;
             await ProviderSubmitsAnILRRecord(NoOfApprentices, employerType.ToString());
             await SLDPushDataIntoAS();
         }
@@ -158,7 +140,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenApprenticeLearnerRecordIsAvailableOnLearningEndpointForSLDSoTheyDoNotResubmitIt()
         {
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
             await learnerDataOuterApiHelper.CheckApprenticeIsAvailableInApprovedLearnersList(listOfApprenticeship.FirstOrDefault());
             
         }

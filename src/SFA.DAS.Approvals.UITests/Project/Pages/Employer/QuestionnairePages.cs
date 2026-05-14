@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using System;
 using System.Text.RegularExpressions;
 
 
@@ -115,14 +116,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
     {
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("When will the training start?");
 
-        private ILocator alreadyStarted => page.Locator("#StartDate-alreadyStarted");
+        private ILocator reservationStartDate(int offset) => page.Locator($"#StartDate-{DateTime.Now.AddMonths(offset):yyyy-MM}");
 
-        internal async Task<CheckDetailsAndReserveFundingPage> SelectAlreadyStartedDate()
+
+        internal async Task<CheckDetailsAndReserveFundingPage> SelectReservationDate(int offset)
         {
-            await alreadyStarted.ClickAsync();
+            await reservationStartDate(offset).ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
             return await VerifyPageAsync(() => new CheckDetailsAndReserveFundingPage(context));
         }
+
+        internal async Task VerifyPreiousMonthIsNotAvailableToSelect() => await Assertions.Expect(reservationStartDate(-1)).Not.ToBeVisibleAsync();
+
 
     }
 
@@ -161,12 +166,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(page.Locator(".govuk-panel__title")).ToContainTextAsync("You have successfully reserved funding for apprenticeship training");
         }
 
-        internal async Task<EmployerHomePage> SelectGoToHomePageAndContinue()
+        internal async Task<EmployerHomePage> SelectOptionGoToHomePage()
         {
             await page.GetByRole(AriaRole.Radio, new() { Name = "Go to homepage" }).ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new EmployerHomePage(context));
+        }
 
+        internal async Task<AddApprenticePage> SelectOptionAddApprenticeDetails()
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "Add apprentice's details" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+            return await VerifyPageAsync(() => new AddApprenticePage(context));
         }
 
 
