@@ -1,5 +1,6 @@
 using SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages;
 using SFA.DAS.Framework.Hooks;
+using Reqnroll;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 {
@@ -14,7 +15,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         public async Task<ApprenticeAppLoginPage> NavigateToApprenticeAppLoginPage()
         {
-            await Navigate("https://pp-apprentice-app.apprenticeships.education.gov.uk/");
+            await Navigate(UrlConfig.ApprenticeApp_BaseUrl);
 
             var loginPage = new ApprenticeAppLoginPage(context);
 

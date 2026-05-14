@@ -2,4 +2,4 @@
 global using SFA.DAS.ConfigurationBuilder;
 global using SFA.DAS.Framework;
 global using System.Threading.Tasks;
-global using TechTalk.SpecFlow;
+global using Reqnroll;
