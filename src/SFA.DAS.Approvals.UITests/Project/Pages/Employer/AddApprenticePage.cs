@@ -8,7 +8,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add an apprentice");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a learner or send a learner request");
         }       
 
 
