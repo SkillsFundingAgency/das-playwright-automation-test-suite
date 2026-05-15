@@ -60,7 +60,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await new InterimApprenticesHomePage(context, false).VerifyPage();
 
-            var page = await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            var page = await new LearnersHomePage(context).GoToReviewLearnerRequests();
 
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
 
@@ -76,11 +76,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         {
             await EmployerLogInToEmployerPortal();
             await new InterimApprenticesHomePage(context, false).VerifyPage();
-            var page = await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            var page = await new LearnersHomePage(context).GoToReviewLearnerRequests();
             return await page.GoToDraftsAndOpenFirstDetailsLink();
         }
 
-        internal async Task<ManageYourLearnersPage> CheckApprenticeOnManageYourApprenticesPage(bool login = false)
+        internal async Task<ManageYourLearnersPage> CheckLearnerOnManageYourLearnersPage(bool login = false)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
@@ -88,7 +88,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await new InterimApprenticesHomePage(context, false).VerifyPage();
 
-            await new ApprenticesHomePage(context).GoToManageYourApprentices();
+            await new LearnersHomePage(context).GoToManageYourLearners();
 
             var page = new Pages.Employer.ManageYourLearnersPage(context);
 
@@ -109,9 +109,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await new ViewApprenticeDetailsDynamicHomepage(context).ViewApprenticeDetails();
         }
 
-        internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, string uln, string name)
+        internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedLearnerRecord(LearnersHomePage apprenticesHomePage, string uln, string name)
         {
-            await apprenticesHomePage.GoToManageYourApprentices();
+            await apprenticesHomePage.GoToManageYourLearners();
             var page = new Pages.Employer.ManageYourLearnersPage(context);
             await page.SearchApprentice(uln, name);
             return await page.OpenFirstItemFromTheList(name);
@@ -133,7 +133,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await EmployerLogInToEmployerPortal(false);
             await new InterimApprenticesHomePage(context, false).VerifyPage();
-            var page = await new ApprenticesHomePage(context).GoToAddAnApprentice();
+            var page = await new LearnersHomePage(context).GoToAddALearner();
             var page1 =  await page.ClickStartNowButton();
             var page2 =   await page1.SubmitValidUkprn(ukprn);
             var page3 =   await page2.ConfirmTrainingProviderDetails();
@@ -165,7 +165,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
 
-            var page1 = await new ApprenticesHomePage(context).GoToApprenticeRequestsFromHome();
+            var page1 = await new LearnersHomePage(context).GoToLearnerRequestsFromHome();
             var page2 = await page1.OpenApprenticeRequestReadyForReview(cohort);
             await page2.ValidateCohortStatus(status);
         }

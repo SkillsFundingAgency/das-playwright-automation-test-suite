@@ -58,7 +58,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("^the Employer can access live apprentice records under Manager Your Apprentices section$")]
         public async Task ThenTheEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
         {
-            await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage();
+            await employerStepsHelper.CheckLearnerOnManageYourLearnersPage();
         }
 
 
@@ -98,7 +98,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var name = apprentice.ApprenticeDetails.FullName;
             var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
 
-            var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedApprenticeRecord(new ApprenticesHomePage(context), uln, name);
+            var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedLearnerRecord(new LearnersHomePage(context), uln, name);
             await employerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
         }
 
@@ -187,7 +187,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheApprenticeshipIsMarkedAsCompleted()
         {
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
-            var page = await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage(true);
+            var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
             var page1 = await page.OpenFirstItemFromTheList(apprenticeship.ApprenticeDetails.FullName);
             await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Completed, "Completion payment month", DateTime.Now);
             await page1.AssertRecordIsReadOnlyExceptEndDate();
