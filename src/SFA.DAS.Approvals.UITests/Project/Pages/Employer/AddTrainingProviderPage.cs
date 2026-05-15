@@ -1,11 +1,11 @@
 ﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class AddTrainingProviderPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class ChooseYourMainTrainingProviderPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         private ILocator ukprnInputBox => page.Locator("#Ukprn");
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Select your training provider");
+            await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Choose your main training provider");
         }
 
         public async Task<ConfirmTrainingProvider> SubmitValidUkprn(int Ukprn)

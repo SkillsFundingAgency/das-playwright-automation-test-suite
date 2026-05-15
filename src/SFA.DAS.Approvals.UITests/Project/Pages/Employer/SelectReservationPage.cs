@@ -9,11 +9,11 @@
             await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Select a Reservation");
         }
 
-        internal async Task<AddTrainingProviderPage> SelectReservation()
+        internal async Task<ChooseYourMainTrainingProviderPage> SelectReservation()
         {
             await page.Locator("//*[@name=\"SelectedReservationId\" and not(@id='CreateNew')]").ClickAsync();
             await continueButton.ClickAsync();
-            return await VerifyPageAsync(() => new AddTrainingProviderPage(context));
+            return await VerifyPageAsync(() => new ChooseYourMainTrainingProviderPage(context));
         }
 
     }
