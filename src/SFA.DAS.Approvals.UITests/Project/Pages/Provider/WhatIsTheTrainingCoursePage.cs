@@ -2,11 +2,11 @@
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class ApprenticeshipTrainingPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class WhatIsTheTrainingCoursePage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprenticeship training");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What is the training course?");
         }
 
         internal async Task<ConfirmYourReservationPage> ReserveFundsAsync(string courseName, DateTime reservationStartDate)
