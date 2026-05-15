@@ -4,11 +4,12 @@ using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class YouHaveReservedFundingForTrainingPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
+ 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You have successfully reserved funding for apprenticeship training");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You have reserved funding for training");
         }
 
         internal async Task<ProviderHomePage> SelectGoToHomePageAndContinue()
