@@ -58,7 +58,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await EmployerLogInToEmployerPortal();
 
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
+            await new InterimLearnersHomePage(context, false).VerifyPage();
 
             var page = await new ApprenticesHomePage(context).GoToApprenticeRequests();
 
@@ -75,7 +75,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         internal async Task<EmployerApproveApprenticeDetailsPage> OpenAnyDraftCohort()
         {
             await EmployerLogInToEmployerPortal();
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
+            await new InterimLearnersHomePage(context, false).VerifyPage();
             var page = await new ApprenticesHomePage(context).GoToApprenticeRequests();
             return await page.GoToDraftsAndOpenFirstDetailsLink();
         }
@@ -86,7 +86,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await (login ? EmployerLogInToEmployerPortal() : employerHomePageHelper.NavigateToEmployerApprenticeshipService(true));
 
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
+            await new InterimLearnersHomePage(context, false).VerifyPage();
 
             await new ApprenticesHomePage(context).GoToManageYourApprentices();
 
@@ -132,7 +132,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
 
             await EmployerLogInToEmployerPortal(false);
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
+            await new InterimLearnersHomePage(context, false).VerifyPage();
             var page = await new ApprenticesHomePage(context).GoToAddAnApprentice();
             var page1 =  await page.ClickStartNowButton();
             var page2 =   await page1.SubmitValidUkprn(ukprn);

@@ -85,7 +85,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenEmployerTriesToEditLiveApprenticeRecordBySettingAgeOldThan24Years()
         {
             await employerStepsHelper.EmployerLogInToEmployerPortal();
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
+            await new InterimLearnersHomePage(context, false).VerifyPage();
 
         }
 

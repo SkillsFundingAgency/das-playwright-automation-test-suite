@@ -6,7 +6,7 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages;
 
 public abstract class CampaingnsHeaderBasePage(ScenarioContext context) : CampaingnsVerifyLinks(context)
 {
-    protected ILocator Apprentice => page.GetByLabel("Main navigation").GetByRole(AriaRole.Link, new() { Name = "Apprentices" });
+    protected ILocator Learners => page.GetByLabel("Main navigation").GetByRole(AriaRole.Link, new() { Name = "Learners" });
 
     protected ILocator Employer => page.GetByLabel("Main navigation").GetByRole(AriaRole.Link, new() { Name = "Employers" });
 
@@ -16,7 +16,7 @@ public abstract class CampaingnsHeaderBasePage(ScenarioContext context) : Campai
 
     public async Task<ApprenticeHubPage> NavigateToApprenticeshipHubPage()
     {
-        await Apprentice.ClickAsync();
+        await Learners.ClickAsync();
 
         return await VerifyPageAsync(() => new ApprenticeHubPage(context));
     }

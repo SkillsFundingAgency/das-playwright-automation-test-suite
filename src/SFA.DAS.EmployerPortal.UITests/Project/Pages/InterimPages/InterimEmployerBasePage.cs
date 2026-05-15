@@ -66,13 +66,13 @@ public class InterimYourApprenticeshipAdvertsHomePage(ScenarioContext context, b
     }
 }
 
-public class InterimApprenticesHomePage(ScenarioContext context, bool gotourl) : InterimEmployerBasePage(context, true, gotourl)
+public class InterimLearnersHomePage(ScenarioContext context, bool gotourl) : InterimEmployerBasePage(context, true, gotourl)
 {
-    protected override string Linktext => "Apprentices";
+    protected override string Linktext => "Learners";
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Apprentices", new LocatorAssertionsToContainTextOptions { Timeout = 30000 });
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Learners", new LocatorAssertionsToContainTextOptions { Timeout = 30000 });
     }
 }
 
