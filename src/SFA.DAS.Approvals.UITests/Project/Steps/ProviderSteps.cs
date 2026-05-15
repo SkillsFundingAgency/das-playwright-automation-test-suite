@@ -47,7 +47,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenSendsAnApprenticeRequestCohortToTheEmployerBySelectingApprenticesFromILRListAndReservations()
         {
             var page = await providerStepsHelper.ProviderAddsFirstApprenitceUsingReservation();
-            var page1 = await providerStepsHelper.ProviderAddsOtherApprenticesUsingReservation(page);
+            var page1 = await providerStepsHelper.ProviderAddsApprenticesUsingReservation(page, 1);
             await providerStepsHelper.ProviderApproveCohort(page1);
             await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
         }
@@ -318,11 +318,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 await page3.ClickOnCancelAndReturnLink();
                 await page2.ReturnBackToManageYourApprenticesPage();
             }
+        }
 
+        [Then(@"Provider can add learners to above cohort using existing and new reservations")]
+        public async Task ThenProviderCanAddLearnersToAboveCohortUsingExistingAndNewReservations()
+        {
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
+            var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
+            await providerStepsHelper.ProviderAddsApprenticesUsingReservation(page, 0);            
+        }
 
+        [Then(@"Provider can approve the cohort and send it to the employer for final approval")]
+        public async Task ThenProviderCanApproveTheCohortAndSendItToTheEmployerForFinalApproval()
+        {
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
-        }        
+            await new ApproveApprenticeDetailsPage(context).ProviderApproveCohort();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
+        }
 
 
 

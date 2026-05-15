@@ -145,20 +145,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await approveApprenticeDetailsPage.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<ApproveApprenticeDetailsPage> ProviderAddsOtherApprenticesUsingReservation(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        internal async Task<ApproveApprenticeDetailsPage> ProviderAddsApprenticesUsingReservation(ApproveApprenticeDetailsPage approveApprenticeDetailsPage, int skipLearner)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             if (listOfApprenticeship.Count > 1)
             {
-                foreach (var apprenticeship in listOfApprenticeship.Skip(1))
+                foreach (var apprenticeship in listOfApprenticeship.Skip(skipLearner))
                 {
                     var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink_SelectReservationRoute();
-                     //var page1 = await page.SelectOptionToAddApprenticesFromILRList_SelectReservationRoute();
-                    var page2 = await page.SelectReservation(apprenticeship.ReservationID);
-                    var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);
-                    await page3.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
-                    await page3.ClickAddButton();
+                    var page1 = await page.SelectReservation(apprenticeship.ReservationID);     //follow auto reservation route if ReservationID==null
+                    var page2 = await page1.SelectApprenticeFromILRList(apprenticeship);
+                    await page2.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
+                    await page2.ClickAddButton();
                     //NO RPL case - Now no need to filter here since the final checkbox in approvals screen ensure that is checked.
                     await new ApproveApprenticeDetailsPage(context).GetCohortId(apprenticeship);
                 }
@@ -346,6 +345,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page = await GoToSelectApprenticeFromILRPage();
             return await AddFirstApprenticeFromILRList(page);
 
+        }
+
+        internal async Task ProviderAddLearnerToACohortUsingExistingReservation(string cohortRerefence, string ReservationId)
+        {
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+            var page = await new ProviderHomePage(context).GoToManageYourFunding();
+            var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
+            //var page2 = await page1.SelectOptionToAddApprenticesFromILRList_NonLevyRoute();
+            var page3 = await page1.SelectApprenticeFromILRList(apprenticeship);
+            await page3.ClickAddButton();
+            //NO RPL case - Now no need to filter here since the final checkbox in approvals screen ensure that is checked.
+            var page4 = new ApproveApprenticeDetailsPage(context);            
+
+            //return page4;
         }
     }
 

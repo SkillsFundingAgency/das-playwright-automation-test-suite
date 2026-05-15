@@ -3,7 +3,7 @@
 A brief end-to-end journey for learners on Growth & Skills (GSO) short courses  in reservations space
 Key rules to validate:
 1) Employer can create reservations using GSO standard but cannot add learner 
-2) Provider can create reservations using GSO standard and only add learner via ILR route
+2) Provider can add GSO learners via ILR route by using existing reservations or by creating nre reservations on the fly
 
 
 @tag1
@@ -15,8 +15,8 @@ Scenario: AP_E2E_NL_EUA_03_GSO_Employer led reservations journey
 	Given Employer creates a reservation with GSO standard and tries to add a learner to the reservation
 	Then the Employer is blocked with error message 
 	When Employer sends an empty cohort to the provider
-	#And Provider select reservation created by the employer and add a learner via ILR route
-	#And provider add another learner to the same cohort via Auto Reservation
-	#Then Provider can approve the cohort and send it to the employer for final approval
-	#And Employer can review and approve the cohort
+	Then Provider can add learners to above cohort using existing and new reservations
+	And Provider can approve the cohort and send it to the employer for final approval
+	And the Employer can approve the cohort
+	And the Employer can access live apprentice records under Manager Your Apprentices section
 
