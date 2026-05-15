@@ -9,9 +9,9 @@ Key rules to validate:
 @tag1
 Scenario: AP_E2E_NL_EUA_03_GSO_Employer led reservations journey
 	Given Provider submits ILR for following learners for a "NonLevy" employer:
-			| CourseType   | CourseLevel | StartDate   | DuationInDays	| LowerAgeLimit | UpperAgeLimit |
-			| ShortCourses | N/A         | 2026-05-01  | 40				| 19			| 115			|
-			| ShortCourses | N/A         | 2026-05-01  | 40				| 19			| 115			|
+			| CourseType   | CourseLevel | StartDateOffset	| DuationInDays	| LowerAgeLimit | UpperAgeLimit |
+			| ShortCourses | N/A         |	-30				| 40			| 19			| 115			|
+			| ShortCourses | N/A         |	0				| 10			| 19			| 115			|
 	Given Employer creates a reservation with GSO standard and tries to add a learner to the reservation
 	Then the Employer is blocked with error message 
 	When Employer sends an empty cohort to the provider

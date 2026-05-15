@@ -104,11 +104,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             TrainingFactory trainingDetails;
 
             foreach (var learner in learners)
-            {                
-                DateTime parsedStartDate = DateTime.Parse(learner.StartDate);
-                var daysToAdd = (DateTime.Today - parsedStartDate).Days;
-                DateTime trainingStartDate = parsedStartDate.AddDays(new Random().Next(daysToAdd + 1));
-                
+            {          
+                DateTime trainingStartDate = DateTime.Today.AddDays(learner.StartDateOffset);                
 
                 //create apprenticeships object for specific course and a learner aged > 25 years:
                 if (learner.CourseType == "FoundationApprenticeship")
@@ -166,7 +163,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     {     
         public string CourseType { get; set; }
         public string CourseLevel { get; set; }
-        public string StartDate { get; set; }        
+        public int StartDateOffset { get; set; }        
         public int DuationInDays { get; set; }
         public int LowerAgeLimit { get; set; }
         public int UpperAgeLimit { get; set; }
