@@ -2,15 +2,23 @@
 @raaprovider
 @regression
 @recruitmentapikey
-Feature: RAA_P_RA_05
+Feature: RAA_P_RA_04
 
 
-Scenario: RAA_P_RA_05_01 - Provider views Display advert api from dev hub
-	Then the provider views 'Display advert api'
+Scenario: RAA_E_RA_04_01 - View display advert api dev hub pages
+	Given the Provider navigates to 'Recruit' Page
+	And the provider selects the developer get started page
+	When the provider selects 'Display Advert API' link
+	Then the provider can view the 'Display advert API' page
 
-Scenario: RAA_P_RA_05_02 - Provider views Recruitment api from dev hub
-	Then the provider views 'Recruitment api'
+Scenario: RAA_E_RA_04_02 - View recruitment api dev hub pages
+	Given the Provider navigates to 'Recruit' Page
+	And the provider selects the developer get started page
+	When the provider selects 'Recruitment API' link
+	Then the provider can view the 'Recruitment API' page
 
-Scenario: RAA_P_RA_05_03 - Provider signs in to dev hub
-	Then the provider signs in to developer hub
-	And the provider views 'API List page'
+Scenario: RAA_E_RA_04_03 - Sign in to api dev hub
+	Given the Provider navigates to 'Recruit' Page
+	And the provider selects the developer get started page
+	When the provider signs in to dev hub
+	Then the provider can view the 'API list' page

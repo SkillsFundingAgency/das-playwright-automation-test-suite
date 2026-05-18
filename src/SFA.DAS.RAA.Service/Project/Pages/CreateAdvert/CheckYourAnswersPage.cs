@@ -11,14 +11,16 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
 
     public async Task<DeleteVacancyQuestionPage> DeleteVacancy()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Delete advert" }).ClickAsync();
+        string linkText = isRaaEmployer ? "Delete advert" : "Delete vacancy";
+        await page.GetByRole(AriaRole.Link, new() { Name = linkText }).ClickAsync();
 
         return await VerifyPageAsync(() => new DeleteVacancyQuestionPage(context));
     }
 
     public async Task<PreviewYourAdvertOrVacancyPage> PreviewAdvert()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Preview advert before" }).ClickAsync();
+        string linkText = isRaaEmployer ? "Preview advert before" : "Preview vacancy before";
+        await page.GetByRole(AriaRole.Link, new() { Name = linkText }).ClickAsync();
 
         return await VerifyPageAsync(() => new PreviewYourAdvertOrVacancyPage(context));
     }

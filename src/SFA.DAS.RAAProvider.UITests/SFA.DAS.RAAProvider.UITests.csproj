@@ -43,9 +43,6 @@
 		<None Update="appsettings.Project.json">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
-		<None Update="specflow.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 
   <ItemGroup>

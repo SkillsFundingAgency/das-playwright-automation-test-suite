@@ -9,6 +9,18 @@ public class ProviderApiKeyStepsHelper(ScenarioContext context) : ProviderBaseSt
         return await page.ClickViewRecruitmentAPILink();
     }
 
+    public async Task<KeyforApiPage> ViewRecruitmentApiSandboxKeyPage()
+    {
+        var page = await NavigateToAPIListPage();
+        return await page.ClickViewRecruitmentAPISandBoxLink();
+    }
+
+    public async Task<KeyforApiPage> ViewDisplayApiKeyPage()
+    {
+        var page = await NavigateToAPIListPage();
+        return await page.ClickViewDisplayAPILink();
+    }
+
     private async Task<ApiListPage> NavigateToAPIListPage()
     {
         var page = await GoToRecruitmentHomePage(false);
@@ -16,5 +28,5 @@ public class ProviderApiKeyStepsHelper(ScenarioContext context) : ProviderBaseSt
         return await page1.ClickAPIKeysHereLink();
     }
 
-
+    
 }
