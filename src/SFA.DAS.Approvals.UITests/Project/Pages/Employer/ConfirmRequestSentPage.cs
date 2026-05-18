@@ -6,7 +6,7 @@
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Add apprentice request sent to training provider");
+            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Request sent to training provider");
         }
 
         internal async Task<string> GetCohortId() => await cohortReference.InnerTextAsync();
