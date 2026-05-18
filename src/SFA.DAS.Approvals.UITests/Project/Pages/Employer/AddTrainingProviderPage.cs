@@ -1,4 +1,7 @@
-﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+
+namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
     internal class ChooseYourMainTrainingProviderPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
@@ -10,13 +13,16 @@
 
         public async Task<ChooseYourMainTrainingProvidePage> SubmitValidUkprn(int Ukprn)
         {
+            var employerName = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault()?.EmployerDetails?.EmployerName
+                               ?? "Choose your main training provider";
+
             await ukprnInputBox.ClickAsync();
             await ukprnInputBox.FillAsync(Ukprn.ToString());
             var option = page.Locator($"li[role='option']:has-text(\"{Ukprn}\")");
             await option.ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-            return await VerifyPageAsync(() => new ChooseYourMainTrainingProvidePage(context)); 
+            return await VerifyPageAsync(() => new ChooseYourMainTrainingProvidePage(context, employerName));
         }
         
     }
