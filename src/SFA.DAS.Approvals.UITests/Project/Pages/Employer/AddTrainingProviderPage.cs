@@ -8,7 +8,7 @@
             await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Choose your main training provider");
         }
 
-        public async Task<ConfirmTrainingProvider> SubmitValidUkprn(int Ukprn)
+        public async Task<ChooseYourMainTrainingProvidePage> SubmitValidUkprn(int Ukprn)
         {
             await ukprnInputBox.ClickAsync();
             await ukprnInputBox.FillAsync(Ukprn.ToString());
@@ -16,7 +16,7 @@
             await option.ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-            return await VerifyPageAsync(() => new ConfirmTrainingProvider(context)); 
+            return await VerifyPageAsync(() => new ChooseYourMainTrainingProvidePage(context)); 
         }
         
     }
