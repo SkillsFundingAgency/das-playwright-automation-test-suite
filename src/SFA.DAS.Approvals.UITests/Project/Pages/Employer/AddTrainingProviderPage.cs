@@ -13,7 +13,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         public async Task<ChooseYourMainTrainingProvidePage> SubmitValidUkprn(int Ukprn)
         {
-            var employerName = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault()?.EmployerDetails?.EmployerName
+            var employerName = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault()?.ProviderDetails?.ProviderName 
                                ?? "Choose your main training provider";
 
             await ukprnInputBox.ClickAsync();
