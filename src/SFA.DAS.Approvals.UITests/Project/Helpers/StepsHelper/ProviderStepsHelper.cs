@@ -328,7 +328,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return new ApproveApprenticeDetailsPage(context);
         }
 
-        internal async Task<ApproveApprenticeDetailsPage> UpdateDobAndReprocessData(int lowerAgeLimit, int upperAgeLimit)
+        internal async Task UpdateDobAndReSubmitIlrData(int lowerAgeLimit, int upperAgeLimit)
         {
             var currentDate = DateTime.Now;
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -341,10 +341,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             context["listOfApprenticeship"] = listOfApprenticeship;
 
             await learnerDataOuterApiSteps.SLDPushDataIntoAS();
-
-            var page = await GoToSelectApprenticeFromILRPage();
-            return await AddFirstApprenticeFromILRList(page);
-
         }
 
         internal async Task ProviderAddLearnerToACohortUsingExistingReservation(string cohortRerefence, string ReservationId)

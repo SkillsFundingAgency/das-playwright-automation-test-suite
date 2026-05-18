@@ -86,13 +86,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             return page;
         }
 
-        [Then("^system does not allow to add apprentice details if their age is below 15 years and over 25 years$")]
-        public async Task ThenSystemDoesNotAllowToAddApprenticeDetailsIfTheirAgeIsBelow15YearsAndOver25Years()
+
+        [Then(@"system stop user to add that apprentice with an error message for ""([^""]*)""")]
+        public async Task ThenSystemStopUserToAddThatApprenticeWithAnErrorMessageFor(string ageLimit)
         {
+            int age = int.Parse(ageLimit);
+            string errorMsg = age < 20 ? $"The apprentice must be at least {age} years old at the start of their training" : $"The apprentice must be {age - 1} years or under at the start of their training";
             var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDoB();
-            await page.VerfiyErrorMessage("DateOfBirth", "The apprentice must be 24 years or under at the start of their training");
+            await page.VerfiyErrorMessage("DateOfBirth", errorMsg);
             await page.NavToHomePage();
         }
+
+
 
         [When("^Provider tries to edit live apprentice record by setting age old than 24 years$")]
         public async Task WhenProviderTriesToEditLiveApprenticeRecordBySettingAgeOldThanYears()
@@ -253,17 +258,33 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.VerifyCohortExistsAsync(cohortRef);
         }
 
-
-        [Then("^system allows to approve apprentice details with a warning if their age is in range of (.*) - (.*) years$")]
-        public async Task ThenSystemAllowsToapproveApprenticeDetailsWithAWarningIfTheirAgeIsInRangeOf_Years(int lowerAgeLimit, int upperAgeLimit)
+        [When(@"Provider resubmits ILR with apprentice aged below ""([^""]*)""")]
+        public async Task WhenProviderResubmitsILRWithApprenticeAgedBelow(string lowerAgeLimit)
         {
-            var page = await providerStepsHelper.UpdateDobAndReprocessData(lowerAgeLimit, upperAgeLimit);
-            var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
-            await page.ValidateWarningMessageForFoundationCourses(warningMsg);
-            await providerStepsHelper.ProviderApproveCohort(page);
+            var age = int.Parse(lowerAgeLimit);
+            await providerStepsHelper.UpdateDobAndReSubmitIlrData(age-1, age);
+            var page = await providerStepsHelper.GoToSelectApprenticeFromILRPage();
+            await providerStepsHelper.TryAddFirstApprenticeFromILRList(page);
+        }
+
+
+        [Then(@"system allows to approve apprentice details with a ""([^""]*)"" if their age is in range of (.*) - (.*) years")]
+        public async Task ThenSystemAllowsToApproveApprenticeDetailsWithAIfTheirAgeIsInRangeOf_Years(bool displayWarningMsg, int lowerAgeLimit, int upperAgeLimit)
+        {
+
+            await providerStepsHelper.UpdateDobAndReSubmitIlrData(lowerAgeLimit, upperAgeLimit);
+            var page = await providerStepsHelper.GoToSelectApprenticeFromILRPage();
+            var page1 = await providerStepsHelper.AddFirstApprenticeFromILRList(page);
+            if (displayWarningMsg)
+            {
+                var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
+                await page1.ValidateWarningMessageForFoundationCourses(warningMsg);
+            }            
+            await providerStepsHelper.ProviderApproveCohort(page1);
             await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
 
         }
+
 
 
         [When("^the Provider tries to add another apprentice to an existing cohort$")]

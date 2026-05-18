@@ -39,6 +39,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
+        [When(@"Provider tries to upload a short course via csv file upload route")]
+        public async Task WhenProviderTriesToUploadAShortCourseViaCsvFileUploadRoute()
+        {            
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            //update first apprentice with short course details:
+            var shortCourseTrainingDetails = new TrainingFactory(DateTime.Today, coursesDataHelper => coursesDataHelper.GetRandomShortCourse());
+            listOfApprenticeship.FirstOrDefault().TrainingDetails = await shortCourseTrainingDetails.CreateTrainingAsync(EmployerType.Levy);
+            context["listOfApprenticeship"] = listOfApprenticeship;
+        }
+
+
         [Given("^one of the apprentice on Level-7 course is above (.*) years$")]
         public async Task GivenOneOfTheApprenticeOnLevelCourseIsAboveYears(int ageLimit)
         {

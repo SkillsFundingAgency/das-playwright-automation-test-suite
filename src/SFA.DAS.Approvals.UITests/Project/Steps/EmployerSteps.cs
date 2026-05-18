@@ -71,14 +71,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Then("^display the warning message for foundation courses$")]
-        public async Task ThenDisplayTheWarningMessageForFoundationCourses()
+        [Then(@"display the ""([^""]*)"" as per table below")]
+        public async Task ThenDisplayTheAsPerTableBelow(bool warningMessage)
         {
             var page = new EmployerApproveApprenticeDetailsPage(context);
-            var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
-            
-            await page.ValidateWarningMessageForFoundationCourses(warningMsg);
-            
+
+            if (warningMessage)
+            {
+                var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
+                await page.ValidateWarningMessageForFoundationCourses(warningMsg);
+            }            
+
             await page.EmployerApproveCohort();
         }
 

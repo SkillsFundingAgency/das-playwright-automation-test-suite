@@ -64,7 +64,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Given(@"^Provider adds an apprentice aged (.*) years using below ""(.*)"", ""(.*)"" and ""(.*)""$")]
-        public async Task GivenProviderAddsAnApprenticeAgedYearsUsingBelowAnd(int age, string courseType, string courseLevel, string startDate)
+        public async Task GivenProviderAddsAnApprenticeAgedYearsUsingBelowAnd(int upperAgeLimit, string courseType, string courseLevel, string startDate)
         {
             var coursesDataHelper = new CoursesDataHelper();
             var employerType = EmployerType.Levy;
@@ -73,15 +73,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             DateTime trainingStartDate = parsedStartDate.AddDays(new Random().Next(daysToAdd + 1));
             TrainingFactory trainingDetails;
 
-            //create apprenticeships object for specific course and a learner aged > 25 years:
+            //create apprenticeships object for specific course and a learner aged > upperAgeLimit:
             if (courseType == "FoundationApprenticeship")
                 trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
+            else if (courseType == "ShortCourses")
+                trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomShortCourse());
             else if (courseLevel == "Level-7")
                 trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomLevel7Course());
             else
                 trainingDetails = new TrainingFactory();
 
-            var apprenticeDetails = new ApprenticeFactory(age + 1);
+            var apprenticeDetails = new ApprenticeFactory(upperAgeLimit + 1);
             var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(employerType, 1, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: trainingDetails);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
             await SLDPushDataIntoAS();

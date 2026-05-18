@@ -1,9 +1,10 @@
 ﻿@approvals
 Feature: AP_AC_03_AgeCheckForTheGivenCourse_PostApprovalsCoCJourney
 
-Following courses are restricted to youth aged b/w 15-25 only:
-	- Foundation type (G&S) standards	-	enforced from: 1st Aug 2025
-	- Level-7 standards					-	enforced from: 1st Jan 2026
+Following courses / levels have age restrictions:
+	- Foundation type (G&S) standards			-	enforced from: 1st Aug 2025
+	- Level-7 standards							-	enforced from: 1st Jan 2026
+	- GSO / ApprenticeshipUnits / ShortCourses	-	enforced from: 28 April 2026
 
 @regression
 @e2escenarios
@@ -15,6 +16,7 @@ Scenario Outline: AP_AC_03_Validate age checks for the restricted Courses_FileUp
 	Then the provider is stopped with an error message
 
 Examples: 
-	| CourseType				| CourseLevel | StartDate  | 
-	| FoundationApprenticeship	| N/A         | 2025-08-01 | 
-	| Apprenticeship			| Level-7     | 2026-01-01 |
+	| CourseType               | CourseLevel | StartDate  |
+	| FoundationApprenticeship | N/A         | 2025-08-01 |
+	| Apprenticeship           | Level-7     | 2026-01-01 |
+	| ShortCourses             | N/A         | 2026-04-28 |
