@@ -21,11 +21,7 @@ public class RecruitmentProviderHomePageStepsHelper(ScenarioContext context)
         var page = new RecruitmentHomePage(context);
         return await page.GoToReportsPage();
     }
-    // public async Task<RecruitmentHomePage> NavigateToRecruitmentHomePage()
-    // {
-    //     await Page.
-    //     return new RecruitmentHomePage(context);
-    // }
+   
 
     public async Task<ManageYourRecruitmentEmailsPage> GoToManageYourRecruitmentEmailsPage(bool newTab = false)
     {

@@ -50,6 +50,7 @@
 
   <ItemGroup>
     <Folder Include="Project\Tests\Features\Accessibility\" />
+    <Folder Include="Project\Tests\Features\E2EJourneys\Shared Applications\" />
   </ItemGroup>
 
 </Project>
