@@ -46,4 +46,16 @@ public class ProviderCreateVacancySteps(ScenarioContext context)
         await _providerStepsHelper.CreateVacancyForLocationTypes(locationType, enterQuestion1, enterQuestion2);
     }
 
+    [Given(@"the Provider creates a foundation vacancy by using a registered name")]
+    public async Task GivenTheProviderCreatesAFoundationVacancyByUsingARegisteredName()
+    {
+        context["isFoundationAdvert"] = true;
+        await _providerStepsHelper.CreateANewVacancyForRandomEmployer();
+    }
+
+    [When(@"the Provider creates an Offline vacancy")]
+    public async Task WhenTheProviderCreatesAnOfflineVacancy() => await _providerStepsHelper.CreateOfflineVacancy();
+
+    [When(@"Provider selects '(.*)' in the first part of the journey")]
+    public async Task WhenProviderSelectsInTheFirstPartOfTheJourney(string wageType) => await _providerStepsHelper.CreateVacancyForWageType(wageType);
 }

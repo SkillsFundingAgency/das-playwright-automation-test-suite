@@ -45,10 +45,19 @@ public class RecruitmentHomePage(ScenarioContext context) : InterimProviderBaseP
 
     public async Task<ManageRecruitPage> SelectLiveVacancy() => await _searchVacancyPageHelper.SelectLiveVacancy();
 
-    // public async Task<ReferVacancyPage> SearchReferAdvertTitle()
-    // {
+    public async Task<ReferVacancyPage> SearchReferAdvertTitle()
+    {
+        await _searchVacancyPageHelper.SearchProviderVacancy();
+        await GoToReferredVacancyCheckYourAnswersPage();
+        return await VerifyPageAsync(() => new ReferVacancyPage(context));
+    }
 
-    // }
+    public async Task<ReferVacancyPage> GoToReferredVacancyCheckYourAnswersPage()
+    {
+        await page.Locator(".govuk-table__cell a").First.ClickAsync();
+
+        return await VerifyPageAsync(() => new ReferVacancyPage(context));
+    }
 
     public async Task<ManageYourRecruitmentEmailsPage> GoToManageYourRecruitmentEmailsPage()
     {
@@ -56,4 +65,45 @@ public class RecruitmentHomePage(ScenarioContext context) : InterimProviderBaseP
         return await VerifyPageAsync(() => new ManageYourRecruitmentEmailsPage(context));
     }
 
+    public async Task<ApprenticeRequestsPage> NavigateToApprenticeRequestsPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Apprentice requests" }).ClickAsync();
+        return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
+    }
+
+    public async Task<ReportsPage> GoToReportsPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Reports" }).ClickAsync();
+        return await VerifyPageAsync(() => new ReportsPage(context));
+    }
+
+    public async Task<ManageFundingPage> NavigateToManageFundingPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage funding" }).ClickAsync();
+        return await VerifyPageAsync(() => new ManageFundingPage(context));
+    }
+
+    public async Task<ManageYourApprenticePage> NavigateToManageYourApprenticesPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your apprentices" }).ClickAsync();
+        return await VerifyPageAsync(() => new ManageYourApprenticePage(context));
+    }
+    public async Task<OrganisationsAndAgreementsPage> NavigateToOrganisationsAndAgreementsPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "More" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "View employers and manage permissions" }).ClickAsync();
+        return await VerifyPageAsync(() => new OrganisationsAndAgreementsPage(context));
+    }
+    public async Task<NotificationsSettingsPage> GoToNotificationsSettingsPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Settings" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Notification settings" }).ClickAsync();
+        return await VerifyPageAsync(() => new NotificationsSettingsPage(context));
+    }
+    public async Task<ChangeYourSignInDetailsPage> GoToChangeYourSignInDetailsPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Settings" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Change your sign-in details" }).ClickAsync();
+        return await VerifyPageAsync(() => new ChangeYourSignInDetailsPage(context));
+    }
 }

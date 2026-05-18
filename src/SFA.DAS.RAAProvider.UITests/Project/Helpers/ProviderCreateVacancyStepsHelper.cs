@@ -1,6 +1,5 @@
 using SFA.DAS.RAA.Service.Project.Helpers;
 using SFA.DAS.RAAProvider.UITests.Project.Tests.Pages;
-using TechTalk.SpecFlow;
 
 namespace SFA.DAS.RAAProvider.UITests.Project.Helpers
 {
@@ -62,7 +61,7 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Helpers
         {
             var page = await createAdvertPage.EnterAdditionalQuestionsForApplicants();
 
-            return await page.CompleteAllAdditionalQuestionsForApplicants(IsFoundationAdvert, true, true);
+            return await page.CompleteAllAdditionalQuestionsForApplicants(IsFoundationAdvert, enterQuestion1, enterQuestion2);
         }
 
         protected override async Task<CreateAnApprenticeshipAdvertOrVacancyPage> SkillsAndQualifications(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage)

@@ -1,4 +1,6 @@
 ﻿
+using Azure;
+using Microsoft.Identity.Client;
 using SFA.DAS.RAAProvider.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.RAAProvider.UITests.Project.Helpers;
@@ -17,6 +19,21 @@ public class ProviderStepHelper(ScenarioContext context)
     internal async Task ApplicantInReview() => await StepsHelper.ProviderApplicantInReview(await SearchVacancyByVacancyReferenceInNewTab());
 
     internal async Task ApplicantWithdrawn() => await StepsHelper.ProviderApplicantWithdrawn(await SearchVacancyByVacancyReference());
+
+    internal async Task ViewReferVacancy()
+    {
+        var page = await _stepsHelper.GoToRecruitmentProviderHomePage(true);
+        await page.SearchReferAdvertTitle();
+    }
+
+    internal async Task VerifyWageType(string wageType) => await StepsHelper.ProviderVerifyWageType(await SearchVacancyByVacancyReference(), wageType);
+
+    internal async Task ApplicantShared() => await StepsHelper.ApplicantShared(await SearchVacancyByVacancyReference());
+
+    internal async Task ShareMutipleApplicants() => await StepsHelper.MultiShareApplicants(await SearchVacancyByVacancyReference());
+    
+    internal async Task MutipleApplicantsUnsucessful() => await StepsHelper.MultiApplicantsUnsucessful(await SearchVacancyByVacancyReference());
+
 
     private async Task<ProviderVacancySearchResultPage> SearchVacancyByVacancyReferenceInNewTab()
     {

@@ -1,4 +1,7 @@
-﻿namespace SFA.DAS.RAA.Service.Project.Pages;
+﻿using SFA.DAS.Login.Service.Project;
+using SFA.DAS.Login.Service.Project.Helpers;
+
+namespace SFA.DAS.RAA.Service.Project.Pages;
 
 public class ConfirmApplicantSucessfulPage(ScenarioContext context) : RaaBasePage(context)
 {
@@ -11,9 +14,12 @@ public class ConfirmApplicantSucessfulPage(ScenarioContext context) : RaaBasePag
 
     public async Task<ApplicationSuccessfulPage> NotifyApplicant()
     {
+        String buttonText = context.ScenarioInfo.Tags.Contains("raaemployer")
+            ? "Continue" : "Confirm";
+
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make this application" }).CheckAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = buttonText }).ClickAsync();
 
         return await VerifyPageAsync(() => new ApplicationSuccessfulPage(context));
     }
@@ -24,16 +30,26 @@ public class ConfirmApplicantUnsuccessfulPage(ScenarioContext context) : RaaBase
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = $"Are you sure you want to tell this applicant that they have not been accepted?";
+        var faaUser = context.GetUser<FAAApplyUser>();
+        string faauserFullName = $"{faaUser.FirstName} {faaUser.LastName}";
 
+        string PageTitle = context.ScenarioInfo.Tags.Contains("raaemployer")
+            ? "Are you sure you want to tell this applicant that they have not been accepted?"
+            : $"Are you sure you want to make {faauserFullName}'s application unsuccessful?";
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
 
     public async Task<ApplicationUnsuccessfulPage> NotifyApplicant()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, notify the applicant" }).CheckAsync();
+        string radioButtonText = context.ScenarioInfo.Tags.Contains("raaemployer")
+            ? "Yes, notify the applicant" : "Yes, make this application unsuccessful and notify the applicant";
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+        string buttonText = context.ScenarioInfo.Tags.Contains("raaemployer")
+            ? "Continue" : "Confirm";
+
+        await page.GetByRole(AriaRole.Radio, new() { Name = radioButtonText }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = buttonText }).ClickAsync();
 
         return await VerifyPageAsync(() => new ApplicationUnsuccessfulPage(context));
     }
@@ -52,8 +68,10 @@ public abstract class ApplicationOutcomeBasePage(ScenarioContext context, string
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = $"application has been marked as {message}";
-
+        string PageTitle = context.ScenarioInfo.Tags.Contains("raaemployer")
+            ? $"application has been marked as {message}"
+            :$"Application made {message}";
+        
         await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
     }
 }

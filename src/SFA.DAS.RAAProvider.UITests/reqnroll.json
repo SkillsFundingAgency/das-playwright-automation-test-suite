@@ -1,7 +1,12 @@
 {
-  "bindingCulture": { "feature": "en-GB" },
-  "language": { "feature": "en-GB" },
-  "stepAssemblies": [
+    "trace": {
+    "stepDefinitionSkeletonStyle": "RegexAttribute"
+  },
+
+"language": {
+      "feature": "en-GB"
+    },
+    "bindingAssemblies": [
     { "assembly": "SFA.DAS.Framework" },
     { "assembly": "SFA.DAS.FrameworkHelpers" },
     { "assembly": "SFA.DAS.ConfigurationBuilder" },
@@ -9,9 +14,17 @@
     { "assembly": "SFA.DAS.RAA.Service" },
     { "assembly": "SFA.DAS.ProviderLogin.Service" },
     { "assembly": "SFA.DAS.DfeAdmin.Service" }
-  ],
+    ],
   "generator": {
     "allowRowTests": false,
     "addNonParallelizableMarkerForTags": [ "donotexecuteinparallel" ]
+  },
+  
+    "$schema": "https://schemas.reqnroll.net/reqnroll-config-latest.json",
+
+    "formatters": {
+        "html": {
+            "outputFilePath": "bdd-report.html"
+        }
+    }
   }
-}

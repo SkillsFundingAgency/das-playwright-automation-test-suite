@@ -14,6 +14,11 @@ Scenario: RAA_P_E2E_S01_1 - Create vacancy with registered name, Approve, Apply,
 	Then Provider can make the application successful
 	And the status of the Application is shown as 'successful' in FAA
 
+@raa
+@raaprovider
+@raae2e
+@raaprovidere2e
+@regression
 Scenario: RAA_P_E2E_S01_2 - Create vacancy with registered name, Approve, Apply, share single Application and make it unsuccessful
 	Given the Provider creates a vacancy by using a registered name
 	And the Reviewer Approves the vacancy
