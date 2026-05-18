@@ -1,12 +1,12 @@
 ﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class SelectReservationPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class ChooseReservationPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         private ILocator continueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
 
         public override  async Task VerifyPage()    
         {
-            await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Select a Reservation");
+            await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Choose a Reservation");
         }
 
         internal async Task<ChooseYourMainTrainingProviderPage> SelectReservation()

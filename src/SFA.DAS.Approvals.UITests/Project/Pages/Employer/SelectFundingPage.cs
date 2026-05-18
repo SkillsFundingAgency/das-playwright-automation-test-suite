@@ -21,11 +21,11 @@
             await ClickContinueButton();
         }
 
-        internal async Task<SelectReservationPage> SelectReservedFunds()
+        internal async Task<ChooseReservationPage> SelectReservedFunds()
         {
             await page.Locator("#FundingType-2").ClickAsync();
             await ClickContinueButton();
-            return await VerifyPageAsync(() => new SelectReservationPage(context));
+            return await VerifyPageAsync(() => new ChooseReservationPage(context));
         }
 
         internal async Task<SelectFundingPage> SelectReserveNewFunds()
