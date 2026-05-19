@@ -22,7 +22,7 @@
         internal async Task<ApprenticeRequestsPage> GoToLearnerRequestsFromHome()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Learners" }).First.ClickAsync();
-            await page.GetByRole(AriaRole.Link, new() { Name = "Add a Learner or send a learner request" }).ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = "Review learner requests" }).ClickAsync();
             return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
         }
 
