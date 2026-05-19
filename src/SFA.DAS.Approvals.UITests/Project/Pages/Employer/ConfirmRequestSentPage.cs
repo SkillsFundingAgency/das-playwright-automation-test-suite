@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
+﻿using System.Text.RegularExpressions;
+
+namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
     internal class ConfirmRequestSentPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
@@ -6,7 +8,9 @@
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Request sent to training provider");
+            var heading = page.Locator("h1").First;
+
+            await Assertions.Expect(heading).ToContainTextAsync(new Regex("Add apprentice request sent to training provider|Request sent to training provider"));
         }
 
         internal async Task<string> GetCohortId() => await cohortReference.InnerTextAsync();
