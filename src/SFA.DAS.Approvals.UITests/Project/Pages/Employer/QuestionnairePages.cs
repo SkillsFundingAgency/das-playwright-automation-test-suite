@@ -27,7 +27,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
     internal class DoYouKnowWhichTrainingCourseYourLearnerWillTakePage(ScenarioContext context) : ApprovalsBasePage(context)
     {
-        public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Do you know which training course your learner will take?");
+        public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync(new Regex("Do you know which training course your learner will take\\?|Do you know which course your apprentice will take\\?"));
 
 
         internal async Task<WhenWillTheTrainingStartPage> Yes()

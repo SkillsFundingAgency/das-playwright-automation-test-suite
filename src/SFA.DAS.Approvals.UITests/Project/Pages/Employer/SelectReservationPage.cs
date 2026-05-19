@@ -6,7 +6,7 @@
 
         public override  async Task VerifyPage()    
         {
-            await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Choose a Reservation");
+            await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Choose a reservation");
         }
 
         internal async Task<ChooseYourMainTrainingProviderPage> SelectReservation()
