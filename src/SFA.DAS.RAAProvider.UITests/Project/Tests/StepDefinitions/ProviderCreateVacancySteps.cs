@@ -7,7 +7,8 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Tests.StepDefinitions;
 public class ProviderCreateVacancySteps(ScenarioContext context)
 {
     private readonly ProviderCreateVacancyStepsHelper _providerStepsHelper = new(context);
-    
+    private readonly ProviderCreateDraftVacancyStepsHelper _stepsHelper = new(context);
+
     private RecruitmentHomePage _recruitmentHomePage;
 
     [Then(@"the Provider creates anonymous vacancy through View all your vacancies page")]
@@ -58,4 +59,31 @@ public class ProviderCreateVacancySteps(ScenarioContext context)
 
     [When(@"Provider selects '(.*)' in the first part of the journey")]
     public async Task WhenProviderSelectsInTheFirstPartOfTheJourney(string wageType) => await _providerStepsHelper.CreateVacancyForWageType(wageType);
+
+    [Given("Provider cancels after saving the title of the advert")]
+    public async Task ProviderCancelsAfterSavingTheTitleOfTheAdvert() => _recruitmentHomePage = await _providerStepsHelper.CancelAdvert();
+
+    [Then(@"the vacancy is saved as a draft")]
+    public async Task ThenTheVacancyIsSavedAsADraft() => await GoToYourAdvertFromDraftAdverts();
+
+    [Given(@"the Provider creates Draft advert")]
+    public async Task TheProviderCreatesDraftAdvert() => await ReturnToApplications(await _stepsHelper.CreateDraftAdvert());
+
+    [Then(@"^the Provider can open the draft and submits the advert$")]
+    public async Task TheProviderCanOpenTheDraftAndSubmitsTheAdvert() => await _stepsHelper.SubmitDraftAdvert(await GoToYourAdvertFromDraftAdverts());
+
+    [When(@"^the Provider completes the Draft advert to cancel deleting the draft$")]
+    public async Task TheProviderCreatesCompleteDraftAdvert() => await _stepsHelper.CompleteDraftAdvert(await GoToYourAdvertFromDraftAdverts());
+
+    [Then(@"^the Provider is able to delete the draft vacancy$")]
+    public async Task ThenTheProviderIsAbleToDeleteTheDraftVacancy() => await _stepsHelper.CompleteDeleteOfDraftVacancy();
+
+    private async Task ReturnToApplications(CreateAnApprenticeshipAdvertOrVacancyPage page) { await page.ReturnToApplications(); _recruitmentHomePage = new RecruitmentHomePage(context); }
+
+    private async Task<CreateAnApprenticeshipAdvertOrVacancyPage> GoToYourAdvertFromDraftAdverts()
+    {
+        var page = await _recruitmentHomePage.GoToYourAdvertFromDraftAdverts();
+
+        return await page.CreateAnApprenticeshipVacancyPage();
+    }
 }

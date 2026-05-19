@@ -9,7 +9,11 @@ public partial class CreateAnApprenticeshipAdvertOrVacancyPage(ScenarioContext c
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
 
-    public async Task ReturnToApplications() => await page.GetByRole(AriaRole.Link, new() { Name = "Return to your applications" }).ClickAsync();
+    public async Task ReturnToApplications()
+    {
+        string linkText = isRaaEmployer ? "Return to your applications" : "Return to dashboard";
+        await page.GetByRole(AriaRole.Link, new() { Name = linkText }).ClickAsync();
+    }
 
     //public async Task ReturnToDashoard() => formCompletionHelper.ClickElement(ReturnToDashboardSelector);
 

@@ -10,7 +10,7 @@ public abstract class VacancySearchResultsPage(ScenarioContext context) : RaaBas
     {
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Draft vacancies");
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by vacancy title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by vacancy title, reference" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
