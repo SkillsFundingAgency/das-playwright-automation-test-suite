@@ -6,7 +6,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprenticeship training");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What is the training course?");
         }
 
         internal async Task<ConfirmYourReservationPage> ReserveFundsAsync(string courseName, DateTime reservationStartDate)
@@ -15,7 +15,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await page.GetByRole(AriaRole.Combobox, new() { Name = "Start typing to search" }).FillAsync(courseName.Substring(0, 3));
             await page.GetByRole(AriaRole.Option, new() { Name = courseName }).First.ClickAsync();
             await page.GetByRole(AriaRole.Radio, new() { Name = reservationStartDate.ToString("MMMM yyyy") }).CheckAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new ConfirmYourReservationPage(context));
         }
 
