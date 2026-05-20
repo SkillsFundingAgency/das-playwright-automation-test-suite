@@ -16,7 +16,7 @@ Scenario Outline: AP_AC_03_Validate age checks for the restricted Courses_FileUp
 	Then the provider is stopped with an error message
 
 Examples: 
-	| CourseType               | CourseLevel | StartDate  |
-	| FoundationApprenticeship | N/A         | 2025-08-01 |
-	| Apprenticeship           | Level-7     | 2026-01-01 |
-	| ShortCourses             | N/A         | 2026-04-28 |
+	| CourseType               | CourseLevel | StartDate  | LowerAgeLimit | UpperAgeLimit |
+	| FoundationApprenticeship | N/A         | 2025-08-01 |            15 |            25 |
+	| Apprenticeship           | Level-7     | 2026-01-01 |            15 |            25 |
+	| ShortCourses             | N/A         | 2026-04-28 |            19 |           115 |

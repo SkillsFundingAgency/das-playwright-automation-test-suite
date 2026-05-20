@@ -88,9 +88,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         [When("^Employer tries to edit live apprentice record by setting age old than 24 years$")]
         public async Task WhenEmployerTriesToEditLiveApprenticeRecordBySettingAgeOldThan24Years()
-        {
+        {            
+            var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var uln = apprentice.ApprenticeDetails.ULN.ToString();
+            var name = apprentice.ApprenticeDetails.FullName;
+            var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
+
             await employerStepsHelper.EmployerLogInToEmployerPortal();
             await new InterimApprenticesHomePage(context, false).VerifyPage();
+            var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedApprenticeRecord(new ApprenticesHomePage(context), uln, name);
+            await employerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
 
         }
 
@@ -98,13 +105,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("^the employer is stopped with an error message$")]
         public async Task ThenTheEmployerIsStoppedWithAnErrorMessage()
         {
-            var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
-            var uln = apprentice.ApprenticeDetails.ULN.ToString();
-            var name = apprentice.ApprenticeDetails.FullName;
-            var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
-
-            var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedApprenticeRecord(new ApprenticesHomePage(context), uln, name);
-            await employerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
+            //implemented in previous step
         }
 
 
