@@ -62,7 +62,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
                     if(await rplAvailable.IsVisibleAsync())
                     {
                         await rplAvailable.ClickAsync();
-                        var page1 = await new EditApprenticeDetailsPage(context).RecognitionOfPriorLearning(apprentice);
+                        var page1 = await new EditLearnerDetailsPage(context).RecognitionOfPriorLearning(apprentice);
                     }
 
                 }

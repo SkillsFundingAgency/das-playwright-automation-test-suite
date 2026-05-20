@@ -86,26 +86,28 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [When("^Employer tries to edit live apprentice record by setting age old than 24 years$")]
-        public async Task WhenEmployerTriesToEditLiveApprenticeRecordBySettingAgeOldThan24Years()
-        {            
+
+        [When(@"Employer tries to edit live apprentice record by setting age lower than (.*)")]
+        public async Task WhenEmployerTriesToEditLiveApprenticeRecordBySettingAgeLowerThan(int lowerAgeLimit)
+        {
             var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var uln = apprentice.ApprenticeDetails.ULN.ToString();
             var name = apprentice.ApprenticeDetails.FullName;
-            var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
+            var startDate = apprentice.TrainingDetails.StartDate;
+            var DoB = startDate.AddYears(-lowerAgeLimit+1);  
 
             await employerStepsHelper.EmployerLogInToEmployerPortal();
             await new InterimApprenticesHomePage(context, false).VerifyPage();
             var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedApprenticeRecord(new ApprenticesHomePage(context), uln, name);
-            await employerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
-
+            await employerStepsHelper.TryEditApprenticeAge(apprenticeDetailsPage, DoB);
         }
 
 
-        [Then("^the employer is stopped with an error message$")]
-        public async Task ThenTheEmployerIsStoppedWithAnErrorMessage()
+        [Then(@"the employer is stopped with an error message for (.*)")]
+        public async Task ThenTheEmployerIsStoppedWithAnErrorMessageFor(int ageLimit)
         {
-            //implemented in previous step
+            string errorMessage = $"The apprentice must be at least {ageLimit} years old at the start of their training";
+            await new EditLearnerDetailsPage(context).ValidateErrorMessage(errorMessage, "DateOfBirth");
         }
 
 

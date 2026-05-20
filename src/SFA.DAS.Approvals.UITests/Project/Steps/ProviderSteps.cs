@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using Azure;
+using Reqnroll.Assist;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
@@ -6,7 +8,6 @@ using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
-using Reqnroll.Assist;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -98,25 +99,30 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-
-        [When("^Provider tries to edit live apprentice record by setting age old than 24 years$")]
-        public async Task WhenProviderTriesToEditLiveApprenticeRecordBySettingAgeOldThanYears()
-        {
-            await providerHomePageStepsHelper.GoToProviderHomePage(true);
-            await UserNavigatesToManageYourApprenticesPage();
-        }
-
-        [Then("^the provider is stopped with an error message$")]
-        public async Task ThenTheProviderIsStoppedWithAnErrorMessage()
+        [When(@"Provider tries to edit live apprentice record by setting age higher than (.*)")]
+        public async Task WhenProviderTriesToEditLiveApprenticeRecordBySettingAgeHigherThan(int upperAgeLimit)
         {
             var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var uln = apprentice.ApprenticeDetails.ULN.ToString();
             var name = apprentice.ApprenticeDetails.FullName;
-            var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
+            var startDate = apprentice.TrainingDetails.StartDate;
+            var DoB = startDate.AddYears(-upperAgeLimit - 1);
+
+            await providerHomePageStepsHelper.GoToProviderHomePage(true);
+            await UserNavigatesToManageYourApprenticesPage();
 
             var apprenticeDetailsPage = await providerStepsHelper.ProviderSearchOpenApprovedApprenticeRecord(new ManageYourLearners_ProviderPage(context), uln, name);
-            await providerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
+            await providerStepsHelper.TryEditApprenticeAge(apprenticeDetailsPage, DoB);
         }
+
+
+        [Then(@"the provider is stopped with an error message for (.*)")]
+        public async Task ThenTheProviderIsStoppedWithAnErrorMessageFor(int ageLimit)
+        {
+            string errorMessage = $"The apprentice must be younger than {ageLimit} years old at the start of their training";
+            await new EditLearnerDetails_ProviderPage(context).ValidateErrorMessage(errorMessage, "DateOfBirth");
+        }
+
 
         [Then("^apprentice\\/learner record is no longer available on SelectLearnerFromILR page$")]
         public async Task ThenApprenticeLearnerRecordIsNoLongerAvailableOnSelectLearnerFromILRPage()

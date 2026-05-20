@@ -117,13 +117,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page.OpenFirstItemFromTheList(name);
         }
 
-        internal async Task TryEditApprenticeAgeAndValidateError(ApprenticeDetailsPage apprenticeDetailsPage, DateTime dateOfBirth)
+        internal async Task TryEditApprenticeAge(ApprenticeDetailsPage apprenticeDetailsPage, DateTime dateOfBirth)
         {
-            string expectedErrorMessage = "The apprentice must be younger than 25 years old at the start of their training";
             var page = await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();
             await page.EditDoB(dateOfBirth);
-            await page.ClickUpdateDetailsButton();
-            await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
+            await page.ClickUpdateDetailsButton();            
         }
 
         internal async Task AddEmptyCohort()
