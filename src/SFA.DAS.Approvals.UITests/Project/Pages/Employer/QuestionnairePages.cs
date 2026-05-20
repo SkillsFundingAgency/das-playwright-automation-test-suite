@@ -122,7 +122,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         internal async Task<CheckDetailsAndReserveFundingPage> SelectReservationDate(int offset)
         {
             await reservationStartDate(offset).ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new CheckDetailsAndReserveFundingPage(context));
         }
 
