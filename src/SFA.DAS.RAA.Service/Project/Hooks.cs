@@ -21,9 +21,13 @@ public class Hooks(ScenarioContext context)
 
         var objectContext = context.Get<ObjectContext>();
 
-        context.Set(new ProviderCreateVacancySqlDbHelper(objectContext, dbConfig));
+        // Only set up SQL helpers if this is not a RAAProvider test
+        if (!context.ScenarioInfo.Tags.Contains("raaprovider"))
+        {
+            context.Set(new ProviderCreateVacancySqlDbHelper(objectContext, dbConfig));
 
-        context.Set(new RAAProviderPermissionsSqlDbHelper(objectContext, dbConfig));
+            context.Set(new RAAProviderPermissionsSqlDbHelper(objectContext, dbConfig));
+        }
 
         var browserContext = context.Get<Driver>().BrowserContext;
 
