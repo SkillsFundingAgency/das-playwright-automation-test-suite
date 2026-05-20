@@ -170,7 +170,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Go to homepage" }).ClickAsync();
             return await VerifyPageAsync(() => new EmployerHomePage(context));
+        }
 
+        internal async Task<AddApprenticePage> SelectOptionAddLearner()
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = "Add learner" }).ClickAsync();
+            return await VerifyPageAsync(() => new AddApprenticePage(context));
         }
 
 

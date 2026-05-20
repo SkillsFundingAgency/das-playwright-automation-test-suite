@@ -225,7 +225,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page6 = await page5.SelectReservationDate(dateOffset);
             var page7 = await page6.ClickConfirmButton();
             await page7.GetReservationIdFromUrl(apprenticeship);
-            var page8 = await page7.SelectOptionAddApprenticeDetails();
+            var page8 = await page7.SelectOptionAddLearner();
             var page9 = await page8.ClickStartNowButton();
             var page10 = await page9.SubmitValidUkprn(apprenticeship.ProviderDetails.Ukprn);
             var page11 = await page10.ConfirmTrainingProviderDetails();
