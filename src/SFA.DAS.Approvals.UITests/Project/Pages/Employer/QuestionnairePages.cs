@@ -113,7 +113,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
     internal class WhenWillTheTrainingStartPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
-        public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync(new Regex("When will the training start/?|When will the apprenticeship training start/?"));
+        public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("When will the apprentice start their apprenticeship training?");
 
         private ILocator alreadyStarted => page.Locator("#StartDate-alreadyStarted");
 
