@@ -92,6 +92,7 @@ public class ProviderVacancySearchResultPage(ScenarioContext context) : VacancyS
 
     public async Task <ManageMultiApplicationsUnsuccessfulPage> NavigateToManageAllApplicantsAndMakeUnsuccessful()
     {
+        await GoToVacancyManagePage();
         await page.GetByRole(AriaRole.Link, new() { Name = "Make multiple applications unsuccessful" }).ClickAsync();
         await page.Locator("#app-checkbox-select-all").CheckAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
