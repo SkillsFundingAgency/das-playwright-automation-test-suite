@@ -12,7 +12,6 @@ Scenario: AP_AC_02_Validate Age-Checks for the restricted Courses_FileUploadJour
 	Given Provider have few apprentices to add using CSV file upload
 	And one of the apprentice on Level-7 course is above 25 years  
 	And one of the apprentice on Foundation course is above 25 years 
+	And one of the apprentice on Short GSO course
 	When Provider uploads the csv file
-	Then system does not allow to upload the file and displays an error message
-	When Provider tries to upload a short course via csv file upload route
 	Then system does not allow to upload the file and displays an error message
