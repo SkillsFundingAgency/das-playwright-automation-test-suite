@@ -7,11 +7,11 @@
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Check details and reserve funding");
         }
 
-        internal async Task<YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage> ClickConfirmButton()
+        internal async Task<YouHaveReservedFundingForTrainingPage> ClickConfirmButton()
         {
             await page.GetByRole(AriaRole.Button, new() { Name = "like to reserve funding" }).ClickAsync();
             
-            return await VerifyPageAsync(() => new YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage(context));
+            return await VerifyPageAsync(() => new YouHaveReservedFundingForTrainingPage(context));
         }
 
 

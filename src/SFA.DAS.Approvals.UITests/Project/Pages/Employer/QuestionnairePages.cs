@@ -159,25 +159,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         }
     }
 
-    internal class YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class YouHaveReservedFundingForTrainingPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator(".govuk-panel__title")).ToContainTextAsync("You have successfully reserved funding for apprenticeship training");
+            await Assertions.Expect(page.Locator(".govuk-panel__title")).ToContainTextAsync("You have reserved funding for training");
         }
 
         internal async Task<EmployerHomePage> SelectOptionGoToHomePage()
         {
-            await page.GetByRole(AriaRole.Radio, new() { Name = "Go to homepage" }).ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = "Go to homepage" }).ClickAsync();
             return await VerifyPageAsync(() => new EmployerHomePage(context));
-        }
 
-        internal async Task<AddApprenticePage> SelectOptionAddApprenticeDetails()
-        {
-            await page.GetByRole(AriaRole.Radio, new() { Name = "Add apprentice's details" }).ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-            return await VerifyPageAsync(() => new AddApprenticePage(context));
         }
 
 
