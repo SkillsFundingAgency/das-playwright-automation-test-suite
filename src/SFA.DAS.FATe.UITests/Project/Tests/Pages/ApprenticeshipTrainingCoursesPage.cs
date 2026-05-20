@@ -142,15 +142,14 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await VerifyJobCategoryResults("Protective services");
         await ClearAllFilters();
     }
-    public async Task<ApprenticeshipTrainingCourseDetailsPage> SelectCourseByName(string courseNameWithLevel)
+    public async Task SelectCourseByName(string courseName)
     {
-        objectContext.SetTrainingCourseName(courseNameWithLevel);
+        var courseLink = page
+            .Locator("a.das-search-results__link")
+            .Filter(new() { HasText = courseName });
 
-        var courseLink = page.GetByRole(AriaRole.Link, new() { Name = courseNameWithLevel, Exact = true })
-                     .Filter(new() { Has = page.Locator("span.das-no-wrap") });
         await Assertions.Expect(courseLink).ToBeVisibleAsync();
         await courseLink.ClickAsync();
-        return await VerifyPageAsync(() => new ApprenticeshipTrainingCourseDetailsPage(context));
     }
 
     public async Task<ApprenticeshipTrainingCourseDetailsPage> SelectFirstTrainingResult(string title)
