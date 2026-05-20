@@ -1,12 +1,13 @@
-﻿Feature: AP_E2E_NL_EUA_03_GSO
+﻿@approvals
+Feature: AP_E2E_NL_EUA_03_GSO
 
 A brief end-to-end journey for learners on Growth & Skills (GSO) short courses  in reservations space
 Key rules to validate:
 1) Employer can create reservations using GSO standard but cannot add learner 
 2) Provider can add GSO learners via ILR route by using existing reservations or by creating nre reservations on the fly
 
-
-@tag1
+@regression
+@e2escenarios
 Scenario: AP_E2E_NL_EUA_03_GSO_Employer led reservations journey
 	Given Provider submits ILR for following learners for a "NonLevy" employer:
 			| CourseType   | CourseLevel | StartDateOffset	| DuationInDays	| LowerAgeLimit | UpperAgeLimit |
