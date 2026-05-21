@@ -1,5 +1,4 @@
 ﻿
-using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.RAAProvider.UITests.Project.Helpers;
 
 namespace SFA.DAS.RAAProvider.UITests.Project.Tests.StepDefinitions

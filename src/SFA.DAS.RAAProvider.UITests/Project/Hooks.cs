@@ -1,6 +1,4 @@
 using System;
-using SFA.DAS.RAA.DataGenerator.Project.Helpers;
-using SFA.DAS.RAA.Service.Project.Helpers;
 
 namespace SFA.DAS.RAAProvider.UITests.Project;
 

@@ -1,6 +1,4 @@
 ﻿
-using Azure;
-using Microsoft.Identity.Client;
 using SFA.DAS.RAAProvider.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.RAAProvider.UITests.Project.Helpers;
