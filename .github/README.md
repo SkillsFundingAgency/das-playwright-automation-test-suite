@@ -129,7 +129,7 @@ We use variable groups (library) to define and declare the variables, and the va
  3. PreProd Automation Suite Variables - will hold variables for PP environment
  4. Release Automation Suite Variables - will hold variables at Release Level
  5. YAML Automation Suite Variables (Db) - will hold DB variables at Release Level
- 6. Provider Release Automation Suite Variables - will hold Provider variables at Release Level
+ 6. Provider Release Automation Suite Variables - will hold Provider login variables at Release Level
  7. Release Automation Suite Variables (AppService) - will hold AppService variables at Release Level
 ```
 
@@ -145,7 +145,7 @@ If the variables are defined in more than one place then vsts will prioritize in
 ## Core Framework Concepts
 
 ### 1. **ScenarioContext + ObjectContext Pattern**
-SpecFlow's `ScenarioContext` is the primary dependency injection container. Framework layers it with a custom `ObjectContext` (in `SFA.DAS.FrameworkHelpers`):
+Reqnroll's `ScenarioContext` is the primary dependency injection container. Framework layers it with a custom `ObjectContext` (in `SFA.DAS.FrameworkHelpers`):
 ```csharp
 // Get/Set values in scenario lifecycle
 context.Set<Driver>(driver);
@@ -180,7 +180,7 @@ All test classes must inherit from framework base classes:
 
 ### 4. **Configuration System**
 Configuration layering (priority order):
-1. `appsettings.Environment.json` (environment overrides, git-ignored)
+1. `appsettings.Environment.json` (environment overrides, committed)
 2. `appsettings.Project.json` (project-specific URLs/settings, committed)
 4. `Usings.cs` (Project-wide references)
 
