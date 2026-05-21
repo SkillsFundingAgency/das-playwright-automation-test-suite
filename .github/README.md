@@ -1,21 +1,158 @@
 # README for DAS Playwright Automation Test Suite
 
 ## Project Overview
-This is a **BDD (Behavior-Driven Development) test automation suite** using SpecFlow 3.9 and Playwright for .NET. It tests multiple DAS (Digital Apprenticeship Service) applications. The suite is organized as a monorepo with 20+ test projects, each testing a specific service/application.
+This is a **BDD (Behavior-Driven Development) test automation suite** using Reqnroll and Playwright for .NET. It tests multiple AS (Apprenticeship Service) applications. The suite is organized as a monorepo with 20+ test projects, each testing a specific service/application.
 
 ### Architecture Pattern
 - **Base Framework**: `SFA.DAS.Framework` + `SFA.DAS.FrameworkHelpers` - shared test infrastructure
 - **Project Structure**: Each test project (e.g., `SFA.DAS.Apar.UITests`, `SFA.DAS.EmployerPortal.UITests`) contains:
   - `Project/` - test code for that specific application
-  - `reqnroll.json` - test language configuration (en-GB)
+  - `reqnroll.json` - Reqnroll configuration for generated feature runners and language settings (you can use SFA.DAS.Campaigns.UITests as a template)
   - `appsettings.Environment.json` - environment/secret overrides (git-ignored)
   
+### Repo Structure
+- `.github/` - repository CI, workflows, and agent/docs files
+- `API/` - API test projects for backend/service endpoints
+- `APP_*`, `E*`, `P*` folders - application-specific test/workflow folders, each with its own `azure-pipelines.yml`
+- `pipeline-templates/` - reusable Azure DevOps pipeline templates
+- `src/` - main solution, test projects, framework libraries, and helpers
+- top-level files such as `azure-pipelines.yml`, `GitVersion.yml`, `LICENSE`, and `README.md`
+
+## Prerequisites to run the application:
+### Accounts have been created
+* FCS and CDS acces granted to education account
+* Github account created and invite to organisation accepted and confirmed
+### Setup
+* Download Githib desktop or Git for windows to clone the repo locally.
+* Download and install VS Code
+* Clone the repository using git or VS Code - Ensure you create the repo root folder directly under `C:\` on your DfE device
+* Install the madatory and recommended VS Code extensions for this repository.
+### Mandatory:
+- [Azure Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack)
+- [C# Dev Kit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit)
+### Recommended:
+- [Reqnroll/SpecFlow Steps Definition Generator (With AI Assistant)](https://marketplace.visualstudio.com/items?itemName=RajUppadhyay.specflow-steps-definition-generator)
+- [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [learn-yaml](https://marketplace.visualstudio.com/items?itemName=docsmsft.docs-yaml)
+- [Playwright Trace Viewer for VSCode](https://marketplace.visualstudio.com/items?itemName=ryanrosello-og.playwright-vscode-trace-viewer)
+#### For test leads doing code reviews
+- [GitHub Pull Requests](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github)
+
+### Account setup
+This would usually happen on opening VS Code for the first time after installation
+- Azure: Sign into your FCS andd CDS accounts (Education account for those with the newer setup)
+- Github: Sign into your github account
+
+### How to use User secrets:
+Navigate to "%APPDATA%/Microsoft" then Create Directory "UserSecrets" if you don't find it.
+Create a <YourProjectName>_<EnvironmentName>_Secrets (for project specific config) and <EnvironmentName>_Secrets (for environment specific config) folder under "%APPDATA%/Microsoft/UserSecrets". You can get project name and environment name from the "appsettings.Environment.json" file under your respective project(s). ex: For Registration project, the "appsettings.Environment.json" file will look like
+```json
+{
+  "local_EnvironmentName": "PP",
+  "ProjectName": "Registration"
+}
+```
+so you need to create a folder as Registration_PP_Secrets and PP_Secrets under "%APPDATA%/Microsoft/UserSecrets" folder
+
+Create a file named "secrets.json" and replace only those values you want to keep it as secrets (you can copy the structure from "appsettings.Project.json" file under your respective project(s)).
+The following secret folders are mandatory:
+* TestExecutionSecrets
+* MongoDbSecrets (For approvals related projects i.e. employer account creation):
+Project secrets and framework secrets can be found in the Automation Test Data confluence page (https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pages/5088477187/Automation+Test+Secrets) 
+
+### Environment Configuration
+- **Local Development**: Add `appsettings.Environment.json` to override URLs/credentials
+  - Format: same as `appsettings.json` but only your overrides
+  - Example: change target URL for test environments
+- **CI/CD**: Azure Pipelines (see `azure-pipelines.yml`) manages secrets via variable groups
+  - Builds, runs all tests, publishes artifacts to staging
+
+### Debugging / Logging
+- `ObjectContext.SetDebugInformation()` logs action descriptions
+- **Test Traces**: Enabled via `TraceStartAndStopSteps` - screenshots + Playwright trace on failure
+- **Retry Logic**: `RetryHelper` wraps waits with exponential backoff (configurable in `WaitConfigurationHelper`)
+
 ### Build System
 - **Solution**: `src/SFA.DAS.TestAutomation.sln`
 - **Build**: `dotnet build src/**/*.csproj --configuration release`
 - **Test Filter**: Unit tests use `TestCategory=Unittests`; UI tests run via NUnit
-- **Parallel Execution**: Configured via NUnit runner; some scenarios tagged `@donotexecuteinparallel`
+- **Parallel Execution**: Configured via NUnit runner; some scenarios tagged `@donotexecuteinparallel` to overide this.
 
+---
+
+## Common Workflows
+
+### Parallel Test Execution Limitations:
+
+This framework supports Feature Level parallelization (tests under different feature file will run in parallel) not Scenario Level parallelization (tests under same feature file will not execute in parallel).
+
+By default up to all available cores on the machine may be used, we can use ```/Parallel``` argument or ```MaxCpuCount``` node to restrict the no of tests to be executed in parellel. 
+
+By default we run 5 tests in parallel agent instance, we can change it using ```__NumberOfTestWorkers__```
+
+### Parallel Test Execution in your desktop:
+If LevelOfParallelism is not specified, workers defaults to the number of processors on the machine, or 2, whichever is greater.
+1. You can specify no of threads to use in the parameter : ``[assembly: LevelOfParallelism(2)]``
+2. You can specify 0 to exeute tests in sequential order : ``[assembly: LevelOfParallelism(0)]``
+
+By default we run 5 tests in parallel, you can change it under ```NUnitConfigurator.cs```
+
+### Running Tests Locally
+1. Whitelist your IP address ```(use FcS account for PP, use CDS account for AT, TEST, TEST2 and DEMO)```
+2. To execute tests in your local, change the Browser value to "local" (or desired browser) (local will execute in chrome, ref to [Supported Browsers] src\SFA.DAS.Framework\BrowserType.cs ) in ``secrets.json`` in the TestExecutionSecrets folder and run tests from the `Testing` view. You must have built the application for the tests to be discovered.
+
+OR
+
+```powershell
+# Full suite (all projects)
+dotnet build src/SFA.DAS.TestAutomation.sln --configuration release
+dotnet test src/**/*Tests.csproj --configuration release --logger "console;verbosity=detailed"
+
+# Single project
+dotnet test src/SFA.DAS.Apar.UITests/SFA.DAS.Apar.UITests.csproj --configuration release
+
+# Specific scenario (by tag)
+dotnet test src/SFA.DAS.Apar.UITests/SFA.DAS.Apar.UITests.csproj --configuration release -- --filter "TestCategory=Unittests" -t "@mytag"
+```
+
+### Supported Browsers: 
+The framework can currently work on the following browsers
+1. Chrome - use "Chromium", as values for the Browser in secrets/pipeline variable
+2. Firefox - use "Firefox" as values for the Browser in secrets/pipeline variable
+3. Safari - use "Webkit" as values for the Browser in secrets/pipeline variable
+
+To use headless (Chromium/Firefox) set the variable "headless": "true" under the TestExecutionConfig. An example of the config:
+```json
+"TestExecutionConfig": {
+    "BROWSER_TYPE": "local",
+	  "headless": "true"
+  },
+  ```
+
+## Pipelines
+You can find all the pipelines for this framework [here](https://dev.azure.com/sfa-gov-uk/Digital%20Apprenticeship%20Service/_build?definitionScope=%5CAutomation%20Test%20Suites&treeState=XEF1dG9tYXRpb24gVGVzdCBTdWl0ZXNcVUk%3D).
+They run every weekday (morning between 12 and 5) to execute against latest master which will give us an idea of the state of the appication.
+
+### Variables
+We use variable groups (library) to define and declare the variables, and the values will be shared among the piepline to avoid duplication. They are
+```
+ 1. TEST Automation Suite Variables - will hold variables for TEST environment
+ 2. TEST2 Automation Suite Variables - will hold variables for TEST2 environment
+ 3. PreProd Automation Suite Variables - will hold variables for PP environment
+ 4. Release Automation Suite Variables - will hold variables at Release Level
+ 5. YAML Automation Suite Variables (Db) - will hold DB variables at Release Level
+ 6. Provider Release Automation Suite Variables - will hold Provider variables at Release Level
+ 7. Release Automation Suite Variables (AppService) - will hold AppService variables at Release Level
+```
+
+### Variable scope
+If the variables are defined in more than one place then vsts will prioritize in following order
+
+	1. Environment specfic pipeline private variable  
+	2. Release specific pipeline private variable
+	3. Environment specfic variable group
+	4. Release specific variable group
+  
 ---
 
 ## Core Framework Concepts
@@ -56,10 +193,9 @@ All test classes must inherit from framework base classes:
 
 ### 4. **Configuration System**
 Configuration layering (priority order):
-1. `appsettings.json` (committed defaults)
-2. `appsettings.Environment.json` (environment overrides, git-ignored)
-3. `appsettings.Project.json` (project-specific URLs/settings, committed)
-4. `appsettings.AdminConfig.json`, `appsettings.TimeOutConfig.json`, etc. (feature-specific)
+1. `appsettings.Environment.json` (environment overrides, git-ignored)
+2. `appsettings.Project.json` (project-specific URLs/settings, committed)
+4. `Usings.cs` (Project-wide references)
 
 Access via:
 ```csharp
@@ -126,35 +262,6 @@ This ensures test isolation and database consistency.
 
 ---
 
-## Common Workflows
-
-### Running Tests Locally
-```powershell
-# Full suite (all projects)
-dotnet build src/SFA.DAS.TestAutomation.sln --configuration release
-dotnet test src/**/*Tests.csproj --configuration release --logger "console;verbosity=detailed"
-
-# Single project
-dotnet test src/SFA.DAS.Apar.UITests/SFA.DAS.Apar.UITests.csproj --configuration release
-
-# Specific scenario (by tag)
-dotnet test src/SFA.DAS.Apar.UITests/SFA.DAS.Apar.UITests.csproj --configuration release -- --filter "TestCategory=Unittests" -t "@mytag"
-```
-
-### Environment Configuration
-- **Local Development**: Add `appsettings.Environment.json` to override URLs/credentials
-  - Format: same as `appsettings.json` but only your overrides
-  - Example: change target URL from test to local/staging
-- **CI/CD**: Azure Pipelines (see `azure-pipelines.yml`) manages secrets via variable groups
-  - Builds, runs all tests, publishes artifacts to staging
-
-### Debugging / Logging
-- `ObjectContext.SetDebugInformation()` logs action descriptions
-- **Test Traces**: Enabled via `TraceStartAndStopSteps` - screenshots + Playwright trace on failure
-- **Retry Logic**: `RetryHelper` wraps waits with exponential backoff (configurable in `WaitConfigurationHelper`)
-
----
-
 ## Key Files & Patterns
 
 | File/Folder | Purpose |
@@ -189,7 +296,8 @@ dotnet test src/SFA.DAS.Apar.UITests/SFA.DAS.Apar.UITests.csproj --configuration
 3. Reference `SFA.DAS.Framework.csproj` and any service projects
 4. Create `Project/MyServiceBaseHooks.cs` inheriting `FrameworkBaseHooks` with project-specific setup
 5. Create `reqnroll.json` (see `SFA.DAS.Apar.UITests/reqnroll.json` template)
-6. Add to `SFA.DAS.TestAutomation.sln` by building the project
+6. Reference Reqnroll packages in the project file (`Reqnroll.Tools.MsBuild.Generation`, `Reqnroll.NUnit`, `Reqnroll.Assist.Dynamic` as needed) and ensure `global using Reqnroll;` is available in `Usings.cs` or `Project/Using.cs`
+7. Add to `SFA.DAS.TestAutomation.sln` by building the project
 
 ### Add a New Hook Order
 - If adding framework-level setup, use Order 0-3 range
@@ -206,76 +314,3 @@ This suite emphasizes:
 - **Resilience**: Retries + explicit waits prevent flakes; page verification before interaction
 - **Scalability**: 20+ projects share one framework - consistency is critical
 
-### How to use User secrets:
-Navigate to "%APPDATA%/Microsoft" then Create Directory "UserSecrets" if you don't find it.
-Create a <YourProjectName>_<EnvironmentName>_Secrets (for project specific config) and <EnvironmentName>_Secrets (for environment specific config) folder under "%APPDATA%/Microsoft/UserSecrets". You can get project name and environment name from the "appsettings.Environment.json" file under your respective project(s). ex: For Registration project, the "appsettings.Environment.json" file will look like
-```json
-{
-  "local_EnvironmentName": "PP",
-  "ProjectName": "Registration"
-}
-```
-so you need to create a folder as Registration_PP_Secrets and PP_Secrets under "%APPDATA%/Microsoft/UserSecrets" folder
-
-Create a file named "secrets.json" and replace only those values you want to keep it as secrets (you can copy the structure from "appsettings.Project.json" file under your respective project(s)).
-Project secrets and framework secrets can be found in the Automation Test Data (https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pages/5088477187/Automation+Test+Secrets) confluence page
-
-## To Execute tests in your desktop :
-1. Whitelist your IP address ```(use FcS account for PP, use CDS account for AT, TEST, TEST2 and DEMO)```
-2. To execute tests in your local, change the Browser value to "local" (will execute in chrome, ref to [Supported Browsers](https://github.com/SkillsFundingAgency/das-enterprise-automation-test-suite#supported-browsers) ) in ``secrets.json`` in your project specific secrets file (you can add the below section into it if it does not exist already).
-3. To execute tests through Zap Proxy, change the Browser value to "zapProxyChrome"
-```json
-"TestExecutionConfig": {
-    "Browser": "local"
-  }
-```
-
-## Pipelines
-Every weekday (morning between 12 to 5) most of the release pipeline is scheduled to execute against latest master which will give us an idea of the state of the appication.
-
-### Variables
-We use variable groups (library) to define and declare the variables, and the values will be shared among the piepline to avoid duplication. They are
-```
- 1. TEST Automation Suite Variables - will hold variables for TEST environment
- 2. TEST2 Automation Suite Variables - will hold variables for TEST2 environment
- 3. PreProd Automation Suite Variables - will hold variables for PP environment
- 4. Release Automation Suite Variables - will hold variables at Release Level
- 5. YAML Automation Suite Variables (Db) - will hold DB variables at Release Level
- 6. Provider Release Automation Suite Variables - will hold Provider variables at Release Level
- 7. Release Automation Suite Variables (AppService) - will hold AppService variables at Release Level
-```
-
-### Variable scope
-If the variables are defined in more than one place then vsts will prioritize in following order
-
-	1. Environment specfic pipeline private variable  
-	2. Release specific pipeline private variable
-	3. Environment specfic variable group
-	4. Release specific variable group
-
-## Framework:
-
-### Supported Browsers: 
-The framework can currently work on the following browsers
-1. Chrome - use "chrome", as values for the Browser in appsettings
-2. Firefox - use "firefox" as values for the Browser in appsettings
-3. Safari - use "safari" as values for the Browser in appsettings
-
-Note: Tests can be executed on different browsers versions using BrowserStack.
-
-## Parallel Test Execution Limitations:
-
-This framework supports Feature Level parallelization (tests under different feature file will run in parallel) not Scenario Level parallelization (tests under same feature file will not execute in parallel).
-
-Note : referenced from https://github.com/techtalk/SpecFlow/issues/1599, https://github.com/techtalk/SpecFlow/issues/1535 and https://github.com/SpecFlowOSS/SpecFlow/issues/2225
-
-By default up to all available cores on the machine may be used, we can use ```/Parallel``` argument or ```MaxCpuCount``` node to restrict the no of tests to be executed in parellel. 
-
-By default we run 5 tests in parallel per docker instance, we can change it using ```__NumberOfTestWorkers__```
-
-## Parallel Test Execution in your desktop:
-If LevelOfParallelism is not specified, workers defaults to the number of processors on the machine, or 2, whichever is greater.
-1. You can specify no of threads to use in the parameter : ``[assembly: LevelOfParallelism(2)]``
-2. You can specify 0 to exeute tests in sequential order : ``[assembly: LevelOfParallelism(0)]``
-
-By default we run 5 tests in parallel, you can change it under ```NUnitConfigurator.cs```
