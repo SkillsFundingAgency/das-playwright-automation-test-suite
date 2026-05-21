@@ -136,10 +136,9 @@ We use variable groups (library) to define and declare the variables, and the va
 ### Variable scope
 If the variables are defined in more than one place then vsts will prioritize in following order
 
-	1. Environment specfic pipeline private variable  
-	2. Release specific pipeline private variable
-	3. Environment specfic variable group
-	4. Release specific variable group
+	1. Environment specfic pipeline private variable
+	2. Environment specfic variable group
+	3. Release specific variable group
   
 ---
 
