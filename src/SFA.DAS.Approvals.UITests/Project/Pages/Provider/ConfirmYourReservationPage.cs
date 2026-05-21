@@ -4,7 +4,7 @@
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Confirm your reservation");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Check and confirm your reservation");
         }
 
         internal async Task<YouHaveReservedFundingForTrainingPage> ClickConfirmButton()
