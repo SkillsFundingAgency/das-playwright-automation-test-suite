@@ -19,11 +19,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new ChooseYourMainTrainingProviderPage(context));
         }
 
-        internal async Task<SelectFundingPage> ClickStartNowButtonNonLevyFlow()
+        internal async Task<ChooseFundingPage> ClickStartNowButtonNonLevyFlow()
         {
             await startNowButton.ClickAsync();
 
-            return await VerifyPageAsync(() => new SelectFundingPage(context));
+            return await VerifyPageAsync(() => new ChooseFundingPage(context));
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class SelectFundingPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class ChooseFundingPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         private ILocator continueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
 
         public override  async Task VerifyPage()    
         {
-            await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Select funding");
+            await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Choose funding");
         }
 
         internal async Task ClickContinueButton()
@@ -28,11 +28,11 @@
             return await VerifyPageAsync(() => new ChooseReservationPage(context));
         }
 
-        internal async Task<SelectFundingPage> SelectReserveNewFunds()
+        internal async Task<ChooseFundingPage> SelectReserveNewFunds()
         {
             await page.Locator("#FundingType-3").ClickAsync();
             await ClickContinueButton();
-            return await VerifyPageAsync(() => new SelectFundingPage(context));
+            return await VerifyPageAsync(() => new ChooseFundingPage(context));
         }
 
     }

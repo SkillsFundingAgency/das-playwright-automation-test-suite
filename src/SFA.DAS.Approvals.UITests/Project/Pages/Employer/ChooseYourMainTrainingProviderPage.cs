@@ -11,9 +11,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Choose your main training provider");
         }
 
-        public async Task<ChooseYourMainTrainingProvidePage> SubmitValidUkprn(int Ukprn)
+        public async Task<ConfirmTrainingProvidePage> SubmitValidUkprn(int Ukprn)
         {
-            var employerName = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault()?.ProviderDetails?.ProviderName 
+            var providerName = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault()?.ProviderDetails?.ProviderName 
                                ?? "Choose your main training provider";
 
             await ukprnInputBox.ClickAsync();
@@ -22,7 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await option.ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-            return await VerifyPageAsync(() => new ChooseYourMainTrainingProvidePage(context, employerName));
+            return await VerifyPageAsync(() => new ConfirmTrainingProvidePage(context, providerName));
         }
         
     }
