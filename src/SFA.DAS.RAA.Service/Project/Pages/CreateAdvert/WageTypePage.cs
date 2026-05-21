@@ -155,7 +155,12 @@ public class SubmitNoOfPositionsPage(ScenarioContext context) : RaaBasePage(cont
 
     public async Task EnterNumberOfPositionsAndContinue()
     {
-        await page.GetByRole(AriaRole.Spinbutton, new() { Name = "How many positions are there" }).FillAsync(RAADataHelper.NumberOfVacancy);
+        if (isRaaEmployer) 
+        {
+            await page.GetByRole(AriaRole.Spinbutton, new() { Name = "How many positions are there for this apprenticeship?" }).FillAsync(RAADataHelper.NumberOfVacancy);
+        } else { 
+            await page.GetByRole(AriaRole.Spinbutton, new() { Name = "How many positions are available?" }).FillAsync(RAADataHelper.NumberOfVacancy);
+        }
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
     }
