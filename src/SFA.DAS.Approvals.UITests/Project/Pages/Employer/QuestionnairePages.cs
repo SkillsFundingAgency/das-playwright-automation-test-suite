@@ -116,7 +116,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
     {
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("When will the training start?");
 
-        private ILocator reservationStartDate(int offset) => page.Locator($"#StartDate-{DateTime.Now.AddMonths(offset):yyyy-MM}");
+        private ILocator reservationStartDate(int offset)
+        {   
+            if (offset < 0)
+                return page.Locator("#StartDate-alreadyStarted");
+            else
+                return page.Locator($"#StartDate-{DateTime.Now.AddMonths(offset):yyyy-MM}");
+        }
 
 
         internal async Task<CheckDetailsAndReserveFundingPage> SelectReservationDate(int offset)
