@@ -60,18 +60,6 @@ The following secret folders are mandatory:
 * MongoDbSecrets (For approvals related projects i.e. employer account creation):
 Project secrets and framework secrets can be found in the Automation Test Data confluence page (https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pages/5088477187/Automation+Test+Secrets) 
 
-### Environment Configuration
-- **Local Development**: Add `appsettings.Environment.json` to override URLs/credentials
-  - Format: same as `appsettings.json` but only your overrides
-  - Example: change target URL for test environments
-- **CI/CD**: Azure Pipelines (see `azure-pipelines.yml`) manages secrets via variable groups
-  - Builds, runs all tests, publishes artifacts to staging
-
-### Debugging / Logging
-- `ObjectContext.SetDebugInformation()` logs action descriptions
-- **Test Traces**: Enabled via `TraceStartAndStopSteps` - screenshots + Playwright trace on failure
-- **Retry Logic**: `RetryHelper` wraps waits with exponential backoff (configurable in `WaitConfigurationHelper`)
-
 ### Build System
 - **Solution**: `src/SFA.DAS.TestAutomation.sln`
 - **Build**: `dotnet build src/**/*.csproj --configuration release`
@@ -196,6 +184,16 @@ Configuration layering (priority order):
 1. `appsettings.Environment.json` (environment overrides, git-ignored)
 2. `appsettings.Project.json` (project-specific URLs/settings, committed)
 4. `Usings.cs` (Project-wide references)
+
+#### Environment Configuration
+- **Local Development**: Add `appsettings.Environment.json` to override URLs/credentials
+- **CI/CD**: Azure Pipelines (see `azure-pipelines.yml`) manages secrets via variable groups
+  - Builds, runs all tests, publishes test results
+
+#### Debugging / Logging
+- `ObjectContext.SetDebugInformation()` logs action descriptions
+- **Test Traces**: Enabled via `TraceStartAndStopSteps` - screenshots + Playwright trace on failure
+- **Retry Logic**: `RetryHelper` wraps waits with exponential backoff (configurable in `WaitConfigurationHelper`)
 
 Access via:
 ```csharp
