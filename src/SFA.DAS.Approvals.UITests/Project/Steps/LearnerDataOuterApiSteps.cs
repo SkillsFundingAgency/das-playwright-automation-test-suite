@@ -25,22 +25,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("^Provider successfully submits (\\d+) ILR record containing a learner record for a \"(.*)\" Employer$")]
         public async Task ProviderSubmitsAnILRRecord(int NoOfApprentices, string type)
         {
-            EmployerType employerType;
-
-            switch (type.ToLower())
+            var employerType = type.ToLower() switch
             {
-                case "levy":
-                    employerType = EmployerType.Levy;
-                    break;
-                case "nonlevy":
-                    employerType = EmployerType.NonLevy;
-                    break;
-                case "nonlevyuseratmaxreservationlimit":
-                    employerType = EmployerType.NonLevyUserAtMaxReservationLimit;
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown employer type: {type}");
-            }
+                "levy" => EmployerType.Levy,
+                "nonlevy" => EmployerType.NonLevy,
+                "nonlevyuseratmaxreservationlimit" => EmployerType.NonLevyUserAtMaxReservationLimit,
+                _ => throw new ArgumentException($"Unknown employer type: {type}"),
+            };
 
             var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateApprenticeshipObject(employerType, NoOfApprentices);
 
@@ -73,7 +64,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Given(@"^Provider adds an apprentice aged (.*) years using below ""(.*)"", ""(.*)"" and ""(.*)""$")]
-        public async Task GivenProviderAddsAnApprenticeAgedYearsUsingBelowAnd(int age, string courseType, string courseLevel, string startDate)
+        public async Task GivenProviderAddsAnApprenticeAgedYearsUsingBelowAnd(int upperAgeLimit, string courseType, string courseLevel, string startDate)
         {
             var coursesDataHelper = new CoursesDataHelper();
             var employerType = EmployerType.Levy;
@@ -82,15 +73,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             DateTime trainingStartDate = parsedStartDate.AddDays(new Random().Next(daysToAdd + 1));
             TrainingFactory trainingDetails;
 
-            //create apprenticeships object for specific course and a learner aged > 25 years:
+            //create apprenticeships object for specific course and a learner aged > upperAgeLimit:
             if (courseType == "FoundationApprenticeship")
                 trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
+            else if (courseType == "ShortCourses")
+                trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomShortCourse());
             else if (courseLevel == "Level-7")
                 trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomLevel7Course());
             else
                 trainingDetails = new TrainingFactory();
 
-            var apprenticeDetails = new ApprenticeFactory(age + 1);
+            var apprenticeDetails = new ApprenticeFactory(upperAgeLimit + 1);
             var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(employerType, 1, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: trainingDetails);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
             await SLDPushDataIntoAS();
@@ -99,22 +92,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given(@"^Provider submits ILR for following learners for a ""(.*)"" employer:$")]
         public async Task GivenProviderSubmitsIlrForFollowingLearnersForAEmployer(string employer, Table table)
         {
-            EmployerType employerType;
-
-            switch (employer.ToLower())
+            var employerType = employer.ToLower() switch
             {
-                case "levy":
-                    employerType = EmployerType.Levy;
-                    break;
-                case "nonlevy":
-                    employerType = EmployerType.NonLevy;
-                    break;
-                case "nonlevyuseratmaxreservationlimit":
-                    employerType = EmployerType.NonLevyUserAtMaxReservationLimit;
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown employer type: {employer}");
-            }
+                "levy" => EmployerType.Levy,
+                "nonlevy" => EmployerType.NonLevy,
+                "nonlevyuseratmaxreservationlimit" => EmployerType.NonLevyUserAtMaxReservationLimit,
+                _ => throw new ArgumentException($"Unknown employer type: {employer}"),
+            };
 
             var learners = table.CreateSet<SpecFlowTableToApprenticeshipMapper>().ToList();
             var NoOfLearners = learners.Count;
@@ -122,11 +106,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             TrainingFactory trainingDetails;
 
             foreach (var learner in learners)
-            {                
-                DateTime parsedStartDate = DateTime.Parse(learner.StartDate);
-                var daysToAdd = (DateTime.Today - parsedStartDate).Days;
-                DateTime trainingStartDate = parsedStartDate.AddDays(new Random().Next(daysToAdd + 1));
-                
+            {          
+                DateTime trainingStartDate = DateTime.Today.AddDays(learner.StartDateOffset);                
 
                 //create apprenticeships object for specific course and a learner aged > 25 years:
                 if (learner.CourseType == "FoundationApprenticeship")
@@ -149,7 +130,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Given("^the employer has (\\d+) apprentice ready to start training$")]
         public async Task ProcessedLearnersInILR(int NoOfApprentices)
         {
-            var employerType = context.ScenarioInfo.Title.ToLower().Contains("nonlevy") ? EmployerType.NonLevy : EmployerType.Levy;
+            var employerType = context.ScenarioInfo.Title.Contains("nonlevy", StringComparison.CurrentCultureIgnoreCase) ? EmployerType.NonLevy : EmployerType.Levy;
             await ProviderSubmitsAnILRRecord(NoOfApprentices, employerType.ToString());
             await SLDPushDataIntoAS();
         }
@@ -158,7 +139,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenApprenticeLearnerRecordIsAvailableOnLearningEndpointForSLDSoTheyDoNotResubmitIt()
         {
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
             await learnerDataOuterApiHelper.CheckApprenticeIsAvailableInApprovedLearnersList(listOfApprenticeship.FirstOrDefault());
             
         }
@@ -185,7 +165,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     {     
         public string CourseType { get; set; }
         public string CourseLevel { get; set; }
-        public string StartDate { get; set; }        
+        public int StartDateOffset { get; set; }        
         public int DuationInDays { get; set; }
         public int LowerAgeLimit { get; set; }
         public int UpperAgeLimit { get; set; }
