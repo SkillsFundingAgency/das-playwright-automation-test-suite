@@ -5,6 +5,5 @@
 @employeraccountsapi
 @outerapi
 @regression
-@ignore
 Scenario: EMPACC_API_01_OuterApiHealthCheck
 	Then the employer accounts outer api is reachable
