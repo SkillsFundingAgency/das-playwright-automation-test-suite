@@ -4,7 +4,6 @@ Feature: Fin_OA_01_checkHealth
 @employerfinanceapi
 @regression
 @outerapi
-@ignore
 Scenario: Fin_OA_01 checkHealth
 
 	Then the employer finance outer api is reachable
