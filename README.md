@@ -105,17 +105,11 @@ dotnet test src/SFA.DAS.Apar.UITests/SFA.DAS.Apar.UITests.csproj --configuration
 
 ### Supported Browsers: 
 The framework can currently work on the following browsers
-1. Chrome - use "Chromium", as values for the Browser in secrets/pipeline variable
-2. Firefox - use "Firefox" as values for the Browser in secrets/pipeline variable
-3. Safari - use "Webkit" as values for the Browser in secrets/pipeline variable
+1. Chrome - use "Chromium", as values for the BROWSER_TYPE variable in local environment/pipeline variable
+2. Firefox - use "Firefox" as values for the BROWSER_TYPE variable in local environment/pipeline variable
+3. Safari - use "Webkit" as values for the BROWSER_TYPE variable user in local environment/pipeline variable
 
-To use headless (Chromium/Firefox) set the variable "headless": "true" under the TestExecutionConfig. An example of the config:
-```json
-"TestExecutionConfig": {
-    "BROWSER_TYPE": "local",
-	  "isHeadlessVar": "true"
-  },
-  ```
+To use headless (Chromium/Firefox) set a variable "headless": "true" in local environment/pipeline variable.
 
 ## Pipelines
 You can find all the pipelines for this framework [here](https://dev.azure.com/sfa-gov-uk/Digital%20Apprenticeship%20Service/_build?definitionScope=%5CAutomation%20Test%20Suites&treeState=XEF1dG9tYXRpb24gVGVzdCBTdWl0ZXNcVUk%3D).
