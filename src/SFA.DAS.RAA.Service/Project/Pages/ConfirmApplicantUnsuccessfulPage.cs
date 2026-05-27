@@ -14,14 +14,22 @@ public class ConfirmApplicantSucessfulPage(ScenarioContext context) : RaaBasePag
 
     public async Task<ApplicationSuccessfulPage> NotifyApplicant()
     {
-        String buttonText = context.ScenarioInfo.Tags.Contains("raaemployer")
-            ? "Continue" : "Confirm";
 
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make this application" }).CheckAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = buttonText }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ApplicationSuccessfulPage(context));
+    }
+
+    public async Task<ApplicationOutcomeArchivePage> NotifyApplicantAndArchive()
+    {
+
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make this application" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ApplicationOutcomeArchivePage(context));
     }
 }
 
@@ -39,17 +47,46 @@ public class ConfirmApplicantUnsuccessfulPage(ScenarioContext context) : RaaBase
 
     public async Task<ApplicationUnsuccessfulPage> NotifyApplicant()
     {
-        string radioButtonText = context.ScenarioInfo.Tags.Contains("raaemployer")
-            ? "Yes, notify the applicant" : "Yes, make this application unsuccessful and notify the applicant";
 
-        string buttonText = context.ScenarioInfo.Tags.Contains("raaemployer")
-            ? "Continue" : "Confirm";
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make this application" }).CheckAsync();
 
-        await page.GetByRole(AriaRole.Radio, new() { Name = radioButtonText }).CheckAsync();
-
-        await page.GetByRole(AriaRole.Button, new() { Name = buttonText }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ApplicationUnsuccessfulPage(context));
+    }
+
+    public async Task<ApplicationOutcomeArchivePage> NotifyApplicantAndArchive()
+    {
+
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make this application" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ApplicationOutcomeArchivePage(context));
+    }
+}
+
+public class ApplicationOutcomeArchivePage(ScenarioContext context) : RaaBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        string PageTitle = "All applicants have been notified of their outcomes. You can now archive this advert.";
+        await Assertions.Expect(page.Locator(".govuk-notification-banner__heading")).ToContainTextAsync(PageTitle);
+    }
+
+    public async Task<ArchiveConfirmationPage> ArchiveAdvert()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, archive this advert now" }).CheckAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
+        return await VerifyPageAsync(() => new ArchiveConfirmationPage(context));
+    }
+}
+
+public class ArchiveConfirmationPage(ScenarioContext context) : RaaBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator(".govuk-notification-banner__heading")).ToContainTextAsync("has been archived");
     }
 }
 

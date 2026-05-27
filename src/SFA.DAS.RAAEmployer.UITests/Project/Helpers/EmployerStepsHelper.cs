@@ -50,11 +50,15 @@ public class EmployerStepsHelper(ScenarioContext context)
 
     internal async Task ApplicantUnsucessful() => await StepsHelper.ApplicantUnsucessful(await SearchVacancyByVacancyReferenceInNewTab());
 
+    internal async Task ApplicantUnsucessfulAndArchive() => await StepsHelper.ApplicantUnsucessfulAndArchive(await SearchVacancyByVacancyReferenceInNewTab());
+
     internal async Task ApplicantInterviewing() => await StepsHelper.ApplicantMarkForInterview(await SearchVacancyByVacancyReferenceInNewTab());
 
     internal async Task ApplicantReview() => await StepsHelper.ApplicantInReview(await SearchVacancyByVacancyReferenceInNewTab());
 
     internal async Task ApplicantSucessful() => await StepsHelper.ApplicantSucessful(await SearchVacancyByVacancyReferenceInNewTab());
+
+    internal async Task ApplicantSucessfulAndArchive() => await StepsHelper.ApplicantSucessfulAndArchive(await SearchVacancyByVacancyReferenceInNewTab());
     internal async Task ApplicantWithdrawn() => await StepsHelper.ApplicantWithdrawn(await SearchVacancyByVacancyReferenceInNewTab());
 
     internal async Task VerifyWageType(string wageType) => await StepsHelper.VerifyWageType(await SearchVacancyByVacancyReference(), wageType);

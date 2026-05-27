@@ -48,6 +48,18 @@ public class StepsHelper(ScenarioContext context)
 
         await page1.NotifyApplicant();
     }
+
+    public static async Task ApplicantUnsucessfulAndArchive(EmployerVacancySearchResultPage employerVacancySearchResultPage)
+    {
+        var page = await employerVacancySearchResultPage.NavigateToManageApplicant();
+
+        var page1 = await page.MakeApplicantUnsucessful();
+
+        var page2 = await page1.NotifyApplicantAndArchive();
+        
+        await page2.ArchiveAdvert();
+    }
+
     public static async Task ApplicantSucessful(EmployerVacancySearchResultPage employerVacancySearchResultPage)
     {
         var page = await employerVacancySearchResultPage.NavigateToManageApplicant();
@@ -55,6 +67,17 @@ public class StepsHelper(ScenarioContext context)
         var page1 = await page.MakeApplicantSucessful();
 
         await page1.NotifyApplicant();
+    }
+
+    public static async Task ApplicantSucessfulAndArchive(EmployerVacancySearchResultPage employerVacancySearchResultPage)
+    {
+        var page = await employerVacancySearchResultPage.NavigateToManageApplicant();
+
+        var page1 = await page.MakeApplicantSucessful();
+
+        var page2 = await page1.NotifyApplicantAndArchive();
+        
+        await page2.ArchiveAdvert();
     }
     public static async Task ApplicantWithdrawn(EmployerVacancySearchResultPage employerVacancySearchResultPage)
     {

@@ -161,12 +161,12 @@ public class ManageMultiApplicationsUnsuccessfulPage(ScenarioContext context) : 
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Make multiple applications unsuccessful");
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Do you want to make these applications unsuccessful?");
     }
     public async Task<ApplicationUnsuccessfulPage> FeedbackForMultipleUnsuccessful()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).ClickAsync();
-        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make these applications unsuccessful and notify the applicants" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
         return await VerifyPageAsync(() => new ApplicationUnsuccessfulPage(context));
     }
 }
