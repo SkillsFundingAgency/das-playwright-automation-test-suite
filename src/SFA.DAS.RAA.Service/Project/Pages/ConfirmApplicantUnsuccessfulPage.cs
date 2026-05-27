@@ -7,7 +7,7 @@ public class ConfirmApplicantSucessfulPage(ScenarioContext context) : RaaBasePag
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = $"Are you sure you want to make {rAADataHelper.CandidateFullName}'s application successful?";
+        string PageTitle = $"Do you want to make this application successful?";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
@@ -33,9 +33,7 @@ public class ConfirmApplicantUnsuccessfulPage(ScenarioContext context) : RaaBase
         var faaUser = context.GetUser<FAAApplyUser>();
         string faauserFullName = $"{faaUser.FirstName} {faaUser.LastName}";
 
-        string PageTitle = context.ScenarioInfo.Tags.Contains("raaemployer")
-            ? "Are you sure you want to tell this applicant that they have not been accepted?"
-            : $"Are you sure you want to make {faauserFullName}'s application unsuccessful?";
+        string PageTitle = "Do you want to make this application unsuccessful?";
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
 
