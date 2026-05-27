@@ -113,14 +113,14 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     }
     public async Task<UseTransferFundsPage> ClickViewTransfersAvailableToAddApprentice()
     {
-        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfer available to add apprentice" }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfer available to add a learner" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new UseTransferFundsPage(context));
     }
 
     public async Task<MyTransferApplicationsPage> ClickViewMultipleTransfersAvailableToAddApprenticeLink()
     {
-        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfers available to add an apprentice" }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfers available to add a learner" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new MyTransferApplicationsPage(context));
     }
