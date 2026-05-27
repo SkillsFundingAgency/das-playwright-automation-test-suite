@@ -25,6 +25,9 @@ public class EmployerSteps(ScenarioContext context)
     [Then(@"^the Employer can close the vacancy$")]
     public async Task ThenTheEmployerCanCloseTheVacancy() => await _employerStepsHelper.CloseVacancy();
 
+    [Then(@"^the Employer can archive the vacancy$")]
+    public async Task ThenTheEmployerCanArchiveTheVacancy() => await _employerStepsHelper.ArchiveVacancy();
+
     [Then(@"^the Employer can edit the vacancy$")]
     public async Task ThenTheEmployerCanEditTheVacancy() => await _employerStepsHelper.EditVacancyDates();
 

@@ -18,3 +18,4 @@ Scenario: RAA_E_E2E_01 - Create an advert with registered name, disability confi
 	And the status of the Application is shown as 'successful' in FAA 
 	And the 'applicant' receives 'successful application' email notification
 	Then the Employer can close the vacancy
+	And The Employer can archive the vacancy
