@@ -37,7 +37,7 @@ public class RequestForFunding_Page(ScenarioContext context) : BasePage(context)
     {
         var reviewer1dropdown = page.Locator("[id='BulkActionInputViewModel.Reviewer1']");
         await reviewer1dropdown.WaitForAsync(new() { State = WaitForSelectorState.Visible });
-        await reviewer1dropdown.SelectOptionAsync(reviewer1);
+        await reviewer1dropdown.SelectOptionAsync(reviewer1Option);
         var reviewer2dropdown = page.Locator("[id='BulkActionInputViewModel_Reviewer2']");
         await reviewer2dropdown.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await reviewer2dropdown.SelectOptionAsync(reviewer2);
