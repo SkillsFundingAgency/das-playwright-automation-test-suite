@@ -33,13 +33,13 @@ public class RequestForFunding_Page(ScenarioContext context) : BasePage(context)
         await action.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await action.SelectOptionAsync(option);
     }
-    public async Task SelectReviewerForApplications(string reviewer1,string reviewer2)
+    public async Task SelectReviewerForApplications(string reviewer1, string reviewer2)
     {
-        var reviewer1dropdown = page.Locator("[id='BulkActionInputViewModel.Reviewer1']");
-        await reviewer1dropdown.WaitForAsync(new() { State = WaitForSelectorState.Visible });
-        await reviewer1dropdown.SelectOptionAsync(reviewer1Option);
-        var reviewer2dropdown = page.Locator("[id='BulkActionInputViewModel_Reviewer2']");
-        await reviewer2dropdown.WaitForAsync(new() { State = WaitForSelectorState.Visible });
+        var reviewer1dropdown = page.Locator("#BulkActionInputViewModel\\.Reviewer1");
+        await reviewer1dropdown.WaitForAsync(new(){State = WaitForSelectorState.Visible});
+        await reviewer1dropdown.SelectOptionAsync(reviewer1);
+        var reviewer2dropdown = page.Locator("#BulkActionInputViewModel_Reviewer2");
+        await reviewer2dropdown.WaitForAsync(new(){State = WaitForSelectorState.Visible});
         await reviewer2dropdown.SelectOptionAsync(reviewer2);
     }
 }
