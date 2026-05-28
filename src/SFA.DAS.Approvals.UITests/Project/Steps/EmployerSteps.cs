@@ -60,7 +60,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("^the Employer can access live apprentice records under Manager Your Apprentices section$")]
         public async Task ThenTheEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
         {
-            await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage();
+            await employerStepsHelper.CheckLearnerOnManageYourLearnersPage();
         }
 
 
@@ -97,8 +97,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var DoB = startDate.AddYears(-lowerAgeLimit+1);  
 
             await employerStepsHelper.EmployerLogInToEmployerPortal();
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
-            var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedApprenticeRecord(new ApprenticesHomePage(context), uln, name);
+            await new InterimLearnersHomePage(context, false).VerifyPage();
+            var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedLearnerRecord(new LearnersHomePage(context), uln, name);
             await employerStepsHelper.TryEditApprenticeAge(apprenticeDetailsPage, DoB);
         }
 
@@ -195,7 +195,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheApprenticeshipIsMarkedAsCompleted()
         {
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
-            var page = await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage(true);
+            var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
             var page1 = await page.OpenFirstItemFromTheList(apprenticeship.ApprenticeDetails.FullName);
             await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Completed, "Completion payment month", DateTime.Now);
             await page1.AssertRecordIsReadOnlyExceptEndDate();
@@ -227,14 +227,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var errorMsg1 = "You previously chose a reservation for an apprenticeship unit.";
             var errorMsg2 = "You must send a request to your training provider to add learners doing apprenticeship units.";
-            var employerSelectRoutePage = new ConfirmAddApprentices(context);
+            var employerSelectRoutePage = new HowWouldYouLikeToAddLearnersPage(context);
             await employerSelectRoutePage.VerifyErrorMessage(new[] { errorMsg1, errorMsg2 });
         }
 
         [When(@"Employer sends an empty cohort to the provider")]
         public async Task WhenEmployerSendsAnEmptyCohortToTheProvider()
         {
-            var employerSelectRoutePage = new ConfirmAddApprentices(context);
+            var employerSelectRoutePage = new HowWouldYouLikeToAddLearnersPage(context);
             var page = await employerSelectRoutePage.SelectProviderAddApprencticesAndSend();
             var cohortRef = await page.GetCohortId();
             await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
