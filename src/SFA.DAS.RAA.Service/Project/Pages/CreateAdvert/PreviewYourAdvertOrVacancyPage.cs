@@ -42,7 +42,8 @@ public class DeleteVacancyQuestionPage(ScenarioContext context) : RaaBasePage(co
 
     public async Task YesDeleteAdvert()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, delete this advert now" }).CheckAsync();
+        string linktext = isRaaEmployer ? "Yes, delete this advert now" : "Yes, delete this vacancy now";
+        await page.GetByRole(AriaRole.Radio, new() { Name = linktext }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
@@ -61,7 +62,8 @@ public class DeleteVacancyQuestionPage(ScenarioContext context) : RaaBasePage(co
 
     public async Task<CreateAnApprenticeshipAdvertOrVacancyPage> NoDeleteVacancy()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "No, do not delete this advert" }).CheckAsync();
+        string linkText = isRaaEmployer ? "No, do not delete this advert" : "No, don't delete this vacancy";
+        await page.GetByRole(AriaRole.Radio, new() { Name = linkText }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 

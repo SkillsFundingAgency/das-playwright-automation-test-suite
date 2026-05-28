@@ -20,6 +20,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<SelectLearnerFromILRPage> SelectReservation(string reservationId)
         {
+            if(string.IsNullOrEmpty(reservationId))
+                reservationId = "99999999-9999-9999-9999-999999999999";     //follow auto reservation route
+
             await page.Locator($"input[type='radio'][value='{reservationId}']").ClickAsync();
             await page.Locator("button:has-text('Continue')").ClickAsync();
             return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));

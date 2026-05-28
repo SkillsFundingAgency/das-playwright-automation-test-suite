@@ -1,10 +1,11 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using System;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class EditApprenticeDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class EditLearnerDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
 
         private ILocator NoRPlText => page.Locator("dd: has-text('This apprentice has no recognised prior learning'))");
@@ -14,7 +15,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Edit apprentice details");
+            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync(new Regex(@"Edit (learner|apprentice) details"));            
         }
 
         internal async Task EditDoB(DateTime DoB)
@@ -33,7 +34,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         {
             await Assertions.Expect(page.GetByLabel("There is a problem")).ToContainTextAsync("There is a problem " + errorMsg);
             await Assertions.Expect(page.Locator("#error-message-" + locatorId)).ToContainTextAsync(errorMsg);
-
+            await page.GetByRole(AriaRole.Link, new() { Name = "Cancel and return" }).ClickAsync();            
         }
 
         internal async Task<EmployerApproveApprenticeDetailsPage> NoRecognitionOfPriorLearning()

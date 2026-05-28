@@ -8,17 +8,13 @@
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Upload a CSV file");
         }
 
-        internal async Task UploadFile(string filePath)
+        internal async Task<ThereIsAProblemWithYourCsvFilePage> TryUploadFile(string filePath)
         {
             await page.SetInputFilesAsync("#attachment", filePath);
             await page.ClickAsync("#submit-upload-apprentices");
+            return await VerifyPageAsync(() => new ThereIsAProblemWithYourCsvFilePage(context));
         }
 
-        internal async Task ValidateErrorMessage(string errornousRow)
-        {
-            await Assertions.Expect(page.GetByLabel("There is a problem")).ToContainTextAsync("There is a problem You need to correct the errors and upload the file again");
-            await Assertions.Expect(page.Locator("tbody")).ToContainTextAsync(errornousRow);
 
-        }
     }
 }

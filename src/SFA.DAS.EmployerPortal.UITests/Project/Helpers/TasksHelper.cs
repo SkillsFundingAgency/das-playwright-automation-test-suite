@@ -88,10 +88,10 @@ public class TasksHelper(ScenarioContext context)
     {
         if (numberOfChanges == 1)
         {
-            var page = await homePage.ClickViewTransfersAvailableToAddApprentice();
+            var page = await homePage.ClickViewTransfersAvailableToAddALearner();
             return await page.GoToHomePage();  
         }
-        var multiplePage = await homePage.ClickViewMultipleTransfersAvailableToAddApprenticeLink(); 
+        var multiplePage = await homePage.ClickViewMultipleTransfersAvailableToAddALearnerLink(); 
         return await multiplePage.GoToHomePage();
     }
 
