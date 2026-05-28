@@ -70,13 +70,15 @@ public class ApplicationOutcomeArchivePage(ScenarioContext context) : RaaBasePag
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = "All applicants have been notified of their outcomes. You can now archive this advert.";
+        string text = isRaaEmployer ? "advert" : "vacancy";
+        string PageTitle = $"All applicants have been notified of their outcomes. You can now archive this {text}.";
         await Assertions.Expect(page.Locator(".govuk-notification-banner__heading")).ToContainTextAsync(PageTitle);
     }
 
     public async Task<ArchiveConfirmationPage> ArchiveAdvert()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, archive this advert now" }).CheckAsync();
+        string radioOptionText = isRaaEmployer ? "Yes, archive this advert now" : "Yes, archive this vacancy";
+        await page.GetByRole(AriaRole.Radio, new() { Name = radioOptionText }).CheckAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
         return await VerifyPageAsync(() => new ArchiveConfirmationPage(context));
     }

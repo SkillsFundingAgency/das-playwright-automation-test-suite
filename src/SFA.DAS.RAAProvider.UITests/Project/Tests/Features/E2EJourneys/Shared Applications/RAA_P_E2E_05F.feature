@@ -26,3 +26,4 @@ Scenario: RAA_P_E2E_S04 - Create foundation vacancy with registered name, Approv
 	Then Provider can make the application shared
 	Then Provider can make the application unsuccessful
 	And the status of the Application is shown as 'unsuccessful' in FAA
+	And the 'applicant' receives 'unsuccessful application' email notification

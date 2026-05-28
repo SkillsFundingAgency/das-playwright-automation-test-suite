@@ -60,7 +60,7 @@ public class CloseVacancyPage(ScenarioContext context) : RaaBasePage(context)
 
     public async Task<ManageCloseVacancyPage> YesCloseThisVacancy()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, close this advert now" }).CheckAsync();
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, close this" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
@@ -79,7 +79,7 @@ public class ArchiveVacancyPage(ScenarioContext context) : RaaBasePage(context)
 
     public async Task<ManageArchiveVacancyPage> YesArchiveThisVacancy()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, archive this advert now" }).CheckAsync();
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, archive this" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
 

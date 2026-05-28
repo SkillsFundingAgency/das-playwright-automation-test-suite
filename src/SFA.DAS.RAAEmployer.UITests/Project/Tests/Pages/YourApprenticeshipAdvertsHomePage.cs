@@ -31,6 +31,8 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
 
     public async Task<ManageRecruitPage> SelectLiveAdvert() => await _searchVacancyPageHelper.SelectLiveAdvert();
 
+    public async Task<ManageRecruitPage> SelectArchivedAdvert() => await _searchVacancyPageHelper.SelectArchivedAdvert();
+
     public async Task<EmployerVacancySearchResultPage> SearchAdvertByReferenceNumber() => await _searchVacancyPageHelper.SearchEmployerVacancy();
 
     public async Task<ManageYourEmailsEmployerPage> GoToAdvertNotificationsPage()

@@ -7,9 +7,22 @@ As a provider want to be be able to select by multiple applicant link and share 
 @raae2e
 @raaprovidere2e
 @regression
-Scenario: RAA_P_E2E_S02 - Create vacancy with registered name, Approve, Apply, share multiple Application and make them unsuccessful
+Scenario: RAA_P_E2E_S02_1 - Create vacancy with registered name, Approve, Apply, share multiple Application and make them unsuccessful
 	Given the Provider creates a vacancy by using a registered name
 	And the Reviewer Approves the vacancy
 	When multiple Applicants can apply for a Vacancy in FAA
 	Then Provider can share multiple applications 
 	Then Provider can make multiple applications unsuccessful
+
+@raa
+@raaprovider
+@raae2e
+@raaprovidere2e
+@regression
+Scenario: RAA_P_E2E_S02_2 - Create vacancy with registered name, Approve, Apply, share multiple Application, make them unsuccessful and archive the vacancy
+	Given the Provider creates a vacancy by using a registered name
+	And the Reviewer Approves the vacancy
+	When multiple Applicants can apply for a Vacancy in FAA
+	Then the Provider can close the vacancy
+	Then Provider can share multiple applications 
+	And Provider can make multiple applications unsuccessful and archive the vacancy

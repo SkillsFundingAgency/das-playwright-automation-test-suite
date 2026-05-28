@@ -14,3 +14,5 @@ Scenario: RAA_P_E2E_01 - Create vacancy with registered name, Approve, Apply, re
 	And Provider can make the application successful
 	And the status of the Application is shown as 'successful' in FAA
 	And the 'applicant' receives 'successful application' email notification
+	Then the Provider can close the vacancy
+	And the Provider can archive the vacancy

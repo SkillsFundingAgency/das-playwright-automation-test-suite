@@ -12,6 +12,10 @@ public class ProviderStepHelper(ScenarioContext context)
 
     internal async Task ApplicantUnsucessful() => await StepsHelper.ProviderApplicantUnsucessful(await SearchVacancyByVacancyReferenceInNewTab());
 
+    internal async Task ApplicantSucessfulAndArchive() => await StepsHelper.ProviderApplicantSucessfulAndArchive(await SearchVacancyByVacancyReferenceInNewTab());
+
+    internal async Task ApplicantUnsucessfulAndArchive() => await StepsHelper.ProviderApplicantUnsucessfulAndArchive(await SearchVacancyByVacancyReferenceInNewTab());
+
     internal async Task ApplicantInterviewing() => await StepsHelper.ProviderApplicantMarkForInterview(await SearchVacancyByVacancyReferenceInNewTab());
 
     internal async Task ApplicantInReview() => await StepsHelper.ProviderApplicantInReview(await SearchVacancyByVacancyReferenceInNewTab());
@@ -32,6 +36,29 @@ public class ProviderStepHelper(ScenarioContext context)
     
     internal async Task MutipleApplicantsUnsucessful() => await StepsHelper.MultiApplicantsUnsucessful(await SearchVacancyByVacancyReference());
 
+    internal async Task MutipleApplicantsUnsucessfulAndArchive() => await StepsHelper.MultiApplicantsUnsucessfulAndArchive(await SearchVacancyByVacancyReference());
+
+    internal async Task CloseVacancy()
+    {
+        var page = await SearchVacancyByVacancyReferenceInNewTab();
+
+        var page1 = await page.GoToVacancyManagePage();
+
+        var page2 = await page1.CloseAdvert();
+
+        await page2.YesCloseThisVacancy();
+    }
+
+    internal async Task ArchiveVacancy()
+    {
+        var page = await SearchVacancyByVacancyReferenceInNewTab();
+
+        var page1 = await page.GoToVacancyManagePage();
+
+        var page2 = await page1.ArchiveAdvert();
+
+        await page2.YesArchiveThisVacancy();
+    }
 
     private async Task<ProviderVacancySearchResultPage> SearchVacancyByVacancyReferenceInNewTab()
     {

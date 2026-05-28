@@ -34,6 +34,9 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
     [Given(@"^the Employer clones and creates an advert$")]
     public async Task TheEmployerClonesAndCreatesAnAdvert() => await _employerCreateVacancyStepsHelper.CloneAnAdvert();
 
+    [Given(@"^the Employer clones an archived advert and creates an advert$")]
+    public async Task TheEmployerClonesArchivedAdvertAndCreatesAnAdvert() => await _employerCreateVacancyStepsHelper.CloneAnArchivedAdvert();
+
     [Given(@"^the Employer creates an advert by selecting different work location$")]
     public async Task TheEmployerCreatesAnAdvertBySelectingDifferentWorkLocation() => await _employerCreateVacancyStepsHelper.CreateANewAdvert(RAAConst.LegalEntityName, "different");
 

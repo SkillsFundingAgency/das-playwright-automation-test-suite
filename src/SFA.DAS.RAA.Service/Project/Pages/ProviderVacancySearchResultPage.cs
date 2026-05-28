@@ -169,4 +169,11 @@ public class ManageMultiApplicationsUnsuccessfulPage(ScenarioContext context) : 
         await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
         return await VerifyPageAsync(() => new ApplicationUnsuccessfulPage(context));
     }
+
+    public async Task<ArchiveVacancyPage> FeedbackForMultipleUnsuccessfulAndArchive()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make these applications unsuccessful and notify the applicants" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
+        return await VerifyPageAsync(() => new ArchiveVacancyPage(context));
+    }
 }
