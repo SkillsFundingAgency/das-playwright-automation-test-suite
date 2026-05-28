@@ -158,3 +158,9 @@ jobs:
               filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
               arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
             condition: succeededOrFailed()
+
+          - task: PublishAllureReport@2
+            displayName: 'Allure Tab: Generate and Publish Allure Report'
+            condition: always()
+            inputs:
+              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/allure-results'  
