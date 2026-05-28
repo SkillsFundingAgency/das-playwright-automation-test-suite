@@ -102,7 +102,7 @@ public class ManageArchiveVacancyPage(ScenarioContext context) : RaaBasePage(con
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = $"'{rAADataHelper.VacancyTitle} VAC{objectContext.GetVacancyReference()}' has been archived.";
+        string PageTitle = $"'{rAADataHelper.VacancyTitle} (VAC{objectContext.GetVacancyReference()})' has been archived.";
 
         await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
     }

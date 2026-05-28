@@ -1,6 +1,7 @@
 Feature: RAA_E_E2E_05
 
 @regression
+@raae2e
 @raaemployer
 @raaapiemployer
 Scenario Outline: RAA_E_E2E_05 - Create anonymous advert using API, Approve, Apply, close the advert, mark application unsuccessful and archive the advert
