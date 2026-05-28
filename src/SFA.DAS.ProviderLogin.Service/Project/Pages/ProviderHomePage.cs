@@ -19,4 +19,6 @@ public partial class ProviderHomePage(ScenarioContext context) : InterimProvider
 
     public async Task ClickViewEmployersAndManagePermissionsLink() => await page.GetByRole(AriaRole.Link, new() { Name = "View employers and manage" }).ClickAsync();
 
+    public async Task ClickRecruitVacanciesLink() => await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Recruit apprentices" }).ClickAsync();
+
 }

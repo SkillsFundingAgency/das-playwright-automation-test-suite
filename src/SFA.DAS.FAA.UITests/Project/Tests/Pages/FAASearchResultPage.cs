@@ -20,11 +20,11 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
 
     public async Task<FAA_ApplicationOverviewPage> SaveFromSearchResultsAndApplyForVacancy()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Follow the link to   Save" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save   to your favourites" }).ClickAsync();
 
         await page.GetByRole(AriaRole.Link, new() { Name = "Saved vacancies" }).ClickAsync();
 
-        await page.GetByRole(AriaRole.Link, new() { Name = "Saved vacancies" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply now" }).ClickAsync();
 
         return await VerifyPageAsync(() => new FAA_ApplicationOverviewPage(context));
     }

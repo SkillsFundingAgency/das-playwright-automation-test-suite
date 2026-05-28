@@ -59,37 +59,49 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var foundationTrainingDetails = new TrainingFactory(DateTime.Today, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
             var apprenticeDetails = new ApprenticeFactory(ageLimit + 1);
             listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
-            context["listOfApprenticeship"] = listOfApprenticeship;
-
-            ICsvFileFactory csvFileFactory = new CsvFileFactory();
-            await csvFileFactory.CreateCsvFile(listOfApprenticeship, fileUploadHelper.CsvFileLocation());            
+            context["listOfApprenticeship"] = listOfApprenticeship;                     
         }
+
+        [Given(@"one of the apprentice on Short GSO course")]
+        public async Task GivenOneOfTheApprenticeOnShortGSOCourse()
+        {
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+
+            var shortCourseDetails = new TrainingFactory(DateTime.Today, coursesDataHelper => coursesDataHelper.GetRandomShortCourse());
+            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship, apprenticeFactory: null, trainingFactory: shortCourseDetails);
+            context["listOfApprenticeship"] = listOfApprenticeship;
+        }
+
 
         [When("^Provider uploads the csv file$")]
         public async Task WhenProviderUploadsTheCsvFile()
         {
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            ICsvFileFactory csvFileFactory = new CsvFileFactory();
+            await csvFileFactory.CreateCsvFile(listOfApprenticeship, fileUploadHelper.CsvFileLocation());
+
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
             var page = await StartBulkUploadJourney();
-            await page.UploadFile(fileUploadHelper.CsvFileLocation());
+            await page.TryUploadFile(fileUploadHelper.CsvFileLocation());
         }
 
         [Then("^system does not allow to upload the file and displays an error message$")]
         public async Task ThenSystemDoesNotAllowToUploadTheFileAndDisplaysAnErrorMessage()
         {
-            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-
-            var errorMessage = "The apprentice's date of birth must show that they are not older than 25 years old at the start of their training";
-
-            var rowsToValidate = new[] { 3, 4 };        //based on previous step, the error message will be displayed for rows 3 and 4
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);    
+            var rowsToValidate = new[] { 3, 4, 5 };        //based on previous step, the error message will be displayed for rows 3, 4 and 5
 
             foreach (var rowNumber in rowsToValidate)
             {
                 var apprentice = listOfApprenticeship[rowNumber - 1];
 
+                //the error message will be different for row 5 - short courses
+                var errorMessage = (rowNumber > 4) ? "Enter a valid standard code. Apprenticeship units must be added by ILR upload" : "The apprentice's date of birth must show that they are not older than 25 years old at the start of their training";
+
                 var erroneousRow =
                     $"{rowNumber} {apprentice.EmployerDetails.EmployerName} {apprentice.ApprenticeDetails.ULN} {apprentice.ApprenticeDetails.FullName} {errorMessage}";
 
-                await new UploadCsvFilePage(context).ValidateErrorMessage(erroneousRow);
+                await new ThereIsAProblemWithYourCsvFilePage(context).ValidateErrorMessage(erroneousRow);
             }
         }
 
