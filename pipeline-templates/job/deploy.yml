@@ -163,14 +163,17 @@ jobs:
             inputs:
               script: |
                 echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory drop:"
+                tree "$(System.DefaultWorkingDirectory)/drop" /f
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory drop/ tests:"
+                tree "$(System.DefaultWorkingDirectory)/drop/tests" /f
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName} :"
+                tree "$(System.DefaultWorkingDirectory)/drop/tests/{projectName}" /f
+                echo "*************************************************"
                 echo "Tree Structure of System DefaultWorkingDirectory:"
                 tree $(System.DefaultWorkingDirectory) /f
-                echo "*************************************************"
-                echo "Tree Structure of Allure report under System DefaultWorkingDirectory:"
-                tree "$(Agent.TempDirectory)/drop/tests" /f
-                echo "*************************************************"
-                echo "Tree Structure of Agent Project WorkFolder:"
-                tree "$(Agent.WorkFolder)/drop/tests" /f
             displayName: 'Agent Folder Structure'
             condition: always()
             continueOnError: true
