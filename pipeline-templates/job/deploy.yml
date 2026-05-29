@@ -182,4 +182,5 @@ jobs:
             displayName: 'Allure Tab: Generate and Publish Allure Report'
             condition: always()
             inputs:
+              allureVersion: '2.36.0'
               testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/allure-results'  
