@@ -1,6 +1,5 @@
 using SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages;
 using SFA.DAS.Framework.Hooks;
-using Reqnroll;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 {

@@ -1,15 +1,8 @@
-using Reqnroll;
 using SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages;
-using SFA.DAS.Framework;
 using SFA.DAS.Framework.Hooks;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 {
-    /// <summary>
-    /// Playwright replacement for the Selenium AppStepsHelper.
-    /// Extends FrameworkBaseHooks to get access to Navigate() and the Driver.
-    /// Navigation methods now return Tasks and use async/await throughout.
-    /// </summary>
     public class AppStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
     {
         // Selectors - CSS selectors are identical to the Selenium version
@@ -25,8 +18,6 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         private IPage Page => context.Get<Driver>().Page;
 
-        // ── Login flow ────────────────────────────────────────────────────────
-
         public async Task GoToHomePageAsync()
             => await new CookiePage(context).AccessHomePageAsync();
 
@@ -41,8 +32,6 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         public async Task<TasksBasePage> GoToTasksPageAsync()
             => await new WelcomePage(context).StartNowAsync();
-
-        // ── Navigation helpers ────────────────────────────────────────────────
 
         public async Task<TasksBasePage> NavigateToTasksPageAsync()
         {
