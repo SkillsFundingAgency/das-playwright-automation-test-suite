@@ -162,18 +162,18 @@ jobs:
           - task: CmdLine@2
             inputs:
               script: |
-                echo "Tree Structure of Agent TempDirectory:"
-                tree $(Agent.TempDirectory) /f
                 echo "*************************************************"
                 echo "Tree Structure of System DefaultWorkingDirectory:"
                 tree $(System.DefaultWorkingDirectory) /f
                 echo "*************************************************"
-                echo "Tree Structure of Agent WorkFolder:"
-                tree $(Agent.WorkFolder) /f
+                echo "Tree Structure of Allure report under System DefaultWorkingDirectory:"
+                tree "$(Agent.TempDirectory)/drop/tests" /f
+                echo "*************************************************"
+                echo "Tree Structure of Agent Project WorkFolder:"
+                tree "$(Agent.WorkFolder)/drop/tests" /f
             displayName: 'Agent Folder Structure'
             condition: always()
             continueOnError: true
-
 
           - task: PublishAllureReport@2
             displayName: 'Allure Tab: Generate and Publish Allure Report'
