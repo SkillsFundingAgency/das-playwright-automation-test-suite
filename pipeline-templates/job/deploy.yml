@@ -163,14 +163,14 @@ jobs:
             inputs:
               script: |
                 echo "*************************************************"
-                echo "Tree Structure of System DefaultWorkingDirectory drop:"
-                tree "$(System.DefaultWorkingDirectory)/drop" /f
-                echo "*************************************************"
                 echo "Tree Structure of System DefaultWorkingDirectory drop/ tests:"
                 tree "$(System.DefaultWorkingDirectory)/drop/tests" /f
                 echo "*************************************************"
-                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName} :"
-                tree "$(System.DefaultWorkingDirectory)/drop/tests/{projectName}" /f
+                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName}:"
+                tree "$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)" /f
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName/allure-results:"
+                tree "$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/allure-results" /f
                 echo "*************************************************"
                 echo "Tree Structure of System DefaultWorkingDirectory:"
                 tree $(System.DefaultWorkingDirectory) /f
