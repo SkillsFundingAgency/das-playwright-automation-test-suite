@@ -1,4 +1,3 @@
-using Reqnroll;
 using SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
