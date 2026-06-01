@@ -8,22 +8,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add an apprentice");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a learner or send a learner request");
         }       
 
 
-        internal async Task<AddTrainingProviderPage> ClickStartNowButton()
+        internal async Task<ChooseYourMainTrainingProviderPage> ClickStartNowButton()
         {
             await startNowButton.ClickAsync();
 
-            return await VerifyPageAsync(() => new AddTrainingProviderPage(context));
+            return await VerifyPageAsync(() => new ChooseYourMainTrainingProviderPage(context));
         }
 
-        internal async Task<SelectFundingPage> ClickStartNowButtonNonLevyFlow()
+        internal async Task<ChooseFundingPage> ClickStartNowButtonNonLevyFlow()
         {
             await startNowButton.ClickAsync();
 
-            return await VerifyPageAsync(() => new SelectFundingPage(context));
+            return await VerifyPageAsync(() => new ChooseFundingPage(context));
         }
     }
 }

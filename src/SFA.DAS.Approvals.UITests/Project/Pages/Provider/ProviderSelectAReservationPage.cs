@@ -14,7 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
                 await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             }
 
-            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Select a Reservation");
+            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Choose a reservation");
         }
 
 
