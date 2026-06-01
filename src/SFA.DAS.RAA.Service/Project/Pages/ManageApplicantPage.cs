@@ -65,17 +65,9 @@ public class ManageApplicantPage(ScenarioContext context) : RaaBasePage(context)
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Make unsuccessful and give" }).CheckAsync();
 
-        if (context.ScenarioInfo.Tags.Contains("raaprovider"))
-        {
-            await SaveAndContinue();
-            await page.Locator("#CandidateFeedback").FillAsync(rAADataHelper.OptionalMessage);
-            await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
-        }
-        else
-        {
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Feedback" }).FillAsync(rAADataHelper.OptionalMessage);
-            await SaveAndContinue();
-        }
+        await SaveAndContinue();
+        await page.Locator("#CandidateFeedback").FillAsync(rAADataHelper.OptionalMessage);
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ConfirmApplicantUnsuccessfulPage(context));
     }

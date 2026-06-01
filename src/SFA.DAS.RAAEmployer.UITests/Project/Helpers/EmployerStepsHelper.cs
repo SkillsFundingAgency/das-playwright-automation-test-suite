@@ -37,13 +37,28 @@ public class EmployerStepsHelper(ScenarioContext context)
         await page2.YesCloseThisVacancy();
     }
 
+    internal async Task ArchiveVacancy()
+    {
+        var page = await SearchVacancyByVacancyReferenceInNewTab();
+
+        var page1 = await page.GoToVacancyManagePage();
+
+        var page2 = await page1.ArchiveAdvert();
+
+        await page2.YesArchiveThisVacancy();
+    }
+
     internal async Task ApplicantUnsucessful() => await StepsHelper.ApplicantUnsucessful(await SearchVacancyByVacancyReferenceInNewTab());
+
+    internal async Task ApplicantUnsucessfulAndArchive() => await StepsHelper.ApplicantUnsucessfulAndArchive(await SearchVacancyByVacancyReferenceInNewTab());
 
     internal async Task ApplicantInterviewing() => await StepsHelper.ApplicantMarkForInterview(await SearchVacancyByVacancyReferenceInNewTab());
 
     internal async Task ApplicantReview() => await StepsHelper.ApplicantInReview(await SearchVacancyByVacancyReferenceInNewTab());
 
     internal async Task ApplicantSucessful() => await StepsHelper.ApplicantSucessful(await SearchVacancyByVacancyReferenceInNewTab());
+
+    internal async Task ApplicantSucessfulAndArchive() => await StepsHelper.ApplicantSucessfulAndArchive(await SearchVacancyByVacancyReferenceInNewTab());
     internal async Task ApplicantWithdrawn() => await StepsHelper.ApplicantWithdrawn(await SearchVacancyByVacancyReferenceInNewTab());
 
     internal async Task VerifyWageType(string wageType) => await StepsHelper.VerifyWageType(await SearchVacancyByVacancyReference(), wageType);
