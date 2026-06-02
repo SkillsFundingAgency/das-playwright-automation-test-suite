@@ -1,16 +1,40 @@
 using SFA.DAS.ApprenticeApp.UITests.Project.Helpers;
 using SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages;
+using SFA.DAS.Login.Service.Project;
+using SFA.DAS.Login.Service.Project.Helpers;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Hooks
 {
     [Binding]
     public class BeforeScenarioHooks(ScenarioContext context)
     {
-        [BeforeScenario(Order = 10)]
-        public void AppSetupHelpers()
+        private class TestApprenticeUser : ApprenticeUser
         {
+
+        }
+
+        [BeforeScenario(Order = 10)]
+        public async Task AppSetupHelpers()
+        {
+            var configSection = context.Get<ConfigSection>();
+            var appUserConfig = configSection.GetConfigSection<ApprenticeAppUserConfig>();
+
+            var testUser = new TestApprenticeUser
+            {
+                Username = appUserConfig.Username
+            };
+
+            var userList = new List<ApprenticeUser> { testUser };
+
+            await context.SetApprenticeAccountsPortalUser(userList);
+
+            if (!context.ContainsKey(typeof(ApprenticeUser).FullName) && context.ContainsKey(typeof(TestApprenticeUser).FullName))
+            {
+                context.Set<ApprenticeUser>(context.Get<TestApprenticeUser>());
+            }
+
             var objectContext = context.Get<ObjectContext>();
-            objectContext.SetConsoleAndDebugInformation("ApprenticeApp BeforeScenario setup complete.");
+            objectContext.SetConsoleAndDebugInformation($"ApprenticeApp BeforeScenario setup complete. Account context verified for user: {appUserConfig.Username}");
         }
 
         [AfterScenario(Order = 10)]
@@ -18,7 +42,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Hooks
         {
             try
             {
-                var tasksBasePage  = new TasksBasePage(context);
+                var tasksBasePage = new TasksBasePage(context);
                 var appStepsHelper = new AppStepsHelper(context);
 
                 await appStepsHelper.NavigateToTasksPageAsync();

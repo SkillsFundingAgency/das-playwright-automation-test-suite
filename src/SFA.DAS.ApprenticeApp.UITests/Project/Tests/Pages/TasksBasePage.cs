@@ -1,8 +1,23 @@
+using Microsoft.Playwright;
+using Reqnroll;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 {
-    public class TasksBasePage(ScenarioContext context) : AppBasePage(context)
+    public class TasksBasePage : AppBasePage
     {
+        private readonly ScenarioContext _context;
+        private readonly string _threadIsolationToken;
+
+        #region Constructor
+
+        public TasksBasePage(ScenarioContext context) : base(context)
+        {
+            _context = context;
+            _threadIsolationToken = Guid.NewGuid().ToString("N").Substring(0, 4).ToUpper();
+        }
+
+        #endregion
+
         #region Selectors
 
         // Tabs
@@ -10,7 +25,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         private const string DoneTab = "a.app-tabs__tab.done";
         private const string AddTaskBtn = "a.govuk-button.app-fab[href='/Tasks/Add']";
 
-        // Task form
+        // Task form fields
         private const string TaskTitleInput = "input#title, input[id*='Title']";
         private const string DateDayInput = "input[id$='day'], input[id*='date-day']";
         private const string DateMonthInput = "input[id$='month'], input[id*='date-month']";
@@ -20,20 +35,16 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         private const string ReminderNoneRadio = "label[for='ReminderValueNone']";
         private const string SaveAndContinueButton = "button.govuk-button:has-text('Save and continue')";
 
-        // Task card actions
+        // Task card deletion hooks
         private const string DeleteButton = "a[href*='/Tasks/ConfirmDelete/']";
         private const string ConfirmDeleteButton = "button.govuk-button--warning";
 
-        // Task card display
+        // Task card layout selectors
         private const string TaskTitleCards = "h2.app-card__heading";
 
-        // Target an anchor card that encloses a specific header title text
-        private ILocator TaskCardAnchor(string title) =>
-            page.Locator("a.app-card").Filter(new() { Has = page.Locator("h2", new() { HasText = title }) });
+        private ILocator TaskCardAnchor(string title) => page.Locator("a.app-card").Filter(new() { Has = page.Locator("h2", new() { HasText = title }) });
 
-        // Targets automated tasks for the current decade
-        private ILocator AnyAutomatedTaskCard =>
-            page.Locator("a.app-card").Filter(new() { Has = page.Locator("h2", new() { HasText = "Task 202" }) });
+        private ILocator AnyAutomatedTaskCard => page.Locator("a.app-card:visible").Filter(new() { Has = page.Locator("h2", new() { HasText = $"Auto-{_threadIsolationToken}" }) });
 
         #endregion
 
@@ -44,7 +55,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 
         #region Helpers
 
-        public static string GenerateTaskName() => $"Task {DateTime.Now:yyyyMMddHHmmss}";
+        public string GenerateTaskName() => $"Task Auto-{_threadIsolationToken}-{DateTime.Now:ss}";
 
         public async Task RefreshAsync()
         {
@@ -81,7 +92,6 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
             bool isToDo, string title, string date, string time,
             string ksb, string ksbId, string categoryValue, string status, string note)
         {
-            // Playwright auto-waits for clickability seamlessly
             await page.Locator(AddTaskBtn).ClickAsync();
 
             var titleLocator = page.Locator(TaskTitleInput);
@@ -112,7 +122,6 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 
             if (!string.IsNullOrEmpty(categoryValue))
             {
-                // Scopes lookup into the radio container and avoids raw XPath string generation
                 await page.Locator(".govuk-radios").GetByText(categoryValue, new() { Exact = true }).ClickAsync();
             }
 
@@ -126,7 +135,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
             }
             catch (TimeoutException)
             {
-                Console.WriteLine($"[Pipeline Error] Form failed to redirect. Currently on: {page.Url}");
+                Console.WriteLine($"[Pipeline Error] Form submission failed to redirect. Currently on: {page.Url}");
                 await ClickToDoTabAsync();
                 await RefreshAsync();
 
@@ -137,34 +146,60 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
             return this;
         }
 
-        public async Task<string> OpenTaskByTitleAsync(string taskTitle)
+        public async Task ClickOnTaskAsync(string taskTitle)
         {
             var card = TaskCardAnchor(taskTitle);
 
-            // Single precautionary refresh replace the loop if data takes a moment to persist
-            if (await card.CountAsync() == 0)
+            try
             {
+                await card.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 5_000 });
+            }
+            catch (TimeoutException)
+            {
+                Console.WriteLine($"[Sync Warning] Task '{taskTitle}' not visible yet. Attemping layout refresh...");
                 await RefreshAsync();
+                await card.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 5_000 });
             }
 
-            // Get text via the inner heading element
-            string actualTitle = await card.Locator("h2").InnerTextAsync();
             await card.ClickAsync();
-            return actualTitle;
         }
 
         public async Task SetTaskTitleAsync(string updatedName)
         {
-            await page.Locator(TaskTitleInput).ClearAsync();
-            await page.Locator(TaskTitleInput).FillAsync(updatedName);
+            var titleInput = page.Locator(TaskTitleInput);
+            await titleInput.ClearAsync();
+            await titleInput.FillAsync(updatedName);
         }
 
         public async Task ClickSaveAndContinueAsync()
             => await page.Locator(SaveAndContinueButton).ClickAsync();
 
-        public async Task DeleteTaskAsync()
+        public async Task EditTaskAndConfirmAsync(string currentTaskName)
         {
+            string updatedName = $"{currentTaskName} - Edited";
+            await SetTaskTitleAsync(updatedName);
+            _context["UpdatedTaskName"] = updatedName;
+            await ClickSaveAndContinueAsync();
+
+            try
+            {
+                await page.WaitForURLAsync(
+                    url => url.Contains("/Tasks/Index") || url.EndsWith("/Tasks") || url.Contains("status="),
+                    new PageWaitForURLOptions { Timeout = 10_000 });
+            }
+            catch (TimeoutException)
+            {
+                Console.WriteLine($"[Sync Warning] Edit submission redirect timed out. Forcing navigation reload...");
+                await ClickToDoTabAsync();
+            }
+        }
+
+        public async Task DeleteTaskAndConfirmAsync()
+        {
+            await page.Locator(DeleteButton).WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 5_000 });
             await page.Locator(DeleteButton).ClickAsync();
+
+            await page.Locator(ConfirmDeleteButton).WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 5_000 });
             await page.Locator(ConfirmDeleteButton).ClickAsync();
         }
 
@@ -191,7 +226,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
             if (await card.CountAsync() > 0)
             {
                 await card.ClickAsync();
-                await DeleteTaskAsync();
+                await DeleteTaskAndConfirmAsync();
                 await RefreshAsync();
             }
         }
@@ -200,17 +235,19 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         {
             const int safetyMax = 100;
 
-            // Phase 1: To-Do tab
+            // Phase 1: To-Do tab sweep
             Console.WriteLine("[CleanUp] Routing to 'To do' tab...");
             await ClickToDoTabAsync();
+            await RefreshAsync();
             await ExecuteSweepAsync(safetyMax);
 
-            // Phase 2: Done tab
+            // Phase 2: Done tab sweep
             Console.WriteLine("[CleanUp] Switching to 'Done' tab...");
             await ClickDoneTabAsync();
+            await RefreshAsync();
             await ExecuteSweepAsync(safetyMax);
 
-            // Phase 3: Reset to To-Do
+            // Phase 3: Session Reset
             Console.WriteLine("[CleanUp Reset] Returning session to 'To do' tab...");
             await ClickToDoTabAsync();
             await RefreshAsync();
@@ -219,23 +256,26 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         private async Task ExecuteSweepAsync(int safetyMax)
         {
             int loopCount = 0;
-            // Directly querying AnyAutomatedTaskCard ensures Playwright checks the live state on every loop condition evaluation
+
             while (await AnyAutomatedTaskCard.CountAsync() > 0 && loopCount < safetyMax)
             {
+                var targetCard = AnyAutomatedTaskCard.First;
+
                 try
                 {
-                    string text = await AnyAutomatedTaskCard.Locator("h2").InnerTextAsync();
-                    Console.WriteLine($"[CleanUp Card {loopCount + 1}] Target: '{text.Trim()}'");
+                    await targetCard.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 2_000 });
 
-                    await AnyAutomatedTaskCard.First.ClickAsync();
-                    await DeleteTaskAsync();
+                    string text = await targetCard.Locator("h2").InnerTextAsync();
+                    Console.WriteLine($"[CleanUp Card {loopCount + 1}] Sweeping visible target: '{text.Trim()}'");
+
+                    await targetCard.ClickAsync();
+                    await DeleteTaskAndConfirmAsync();
                     await RefreshAsync();
                     loopCount++;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"[CleanUp Interrupted]: {ex.Message}");
-                    await RefreshAsync();
+                    Console.WriteLine($"[CleanUp Skip] Could not process item index {loopCount + 1}: {ex.Message}");
                     break;
                 }
             }

@@ -1,5 +1,7 @@
 using SFA.DAS.ApprenticeApp.UITests.Project.Helpers;
 using SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages;
+using Reqnroll;
+using NUnit.Framework;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
 {
@@ -12,13 +14,14 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
         private string _toDoTaskName;
         private string _doneTaskName;
 
-        [When("the apprentice adds a new to do task")]
-        public async Task WhenTheApprenticeAddsANewTask()
+        [When("the apprentice adds, edits, and then deletes a to do task")]
+        public async Task WhenTheApprenticeAddsEditsAndDeletesAToDoTask()
         {
+            // 1. ADD PHASE
             await _appStepsHelper.NavigateToTasksPageAsync();
             await _tasksBasePage.RefreshAsync();
 
-            _toDoTaskName = TasksBasePage.GenerateTaskName();
+            _toDoTaskName = _tasksBasePage.GenerateTaskName();
             context["CurrentTaskName"] = _toDoTaskName;
 
             await _tasksBasePage.AddTaskAsync(
@@ -33,6 +36,17 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
                 note: "Note");
 
             await _tasksBasePage.RefreshAsync();
+
+            // 2. EDIT PHASE (Passing down tracked context string value)
+            await _tasksBasePage.ClickOnTaskAsync(_toDoTaskName);
+            await _tasksBasePage.EditTaskAndConfirmAsync(_toDoTaskName);
+            await _tasksBasePage.RefreshAsync();
+
+            // 3. DELETE PHASE
+            string updatedName = context["UpdatedTaskName"].ToString();
+            await _tasksBasePage.ClickOnTaskAsync(updatedName);
+            await _tasksBasePage.DeleteTaskAndConfirmAsync();
+            await _tasksBasePage.RefreshAsync();
         }
 
         [When("the apprentice has clicked on the done tasks tab")]
@@ -43,14 +57,15 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
             await _tasksBasePage.ClickDoneTabAsync();
         }
 
-        [When("the apprentice adds a new done task")]
-        public async Task WhenTheApprenticeAddsANewDoneTask()
+        [When("the apprentice adds, edits, and then deletes a done task")]
+        public async Task WhenTheApprenticeAddsEditsAndDeletesADoneTask()
         {
+            // 1. ADD PHASE
             await _appStepsHelper.NavigateToTasksPageAsync();
             await _tasksBasePage.RefreshAsync();
             await _appStepsHelper.NavigateToDoneTabAsync();
 
-            _doneTaskName = TasksBasePage.GenerateTaskName();
+            _doneTaskName = _tasksBasePage.GenerateTaskName();
             context["CurrentTaskName"] = _doneTaskName;
 
             await _tasksBasePage.AddTaskAsync(
@@ -65,6 +80,31 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
                 note: "Note");
 
             await _tasksBasePage.RefreshAsync();
+
+            // 2. EDIT PHASE
+            await _tasksBasePage.ClickOnTaskAsync(_doneTaskName);
+            await _tasksBasePage.EditTaskAndConfirmAsync(_doneTaskName);
+            await _tasksBasePage.RefreshAsync();
+
+            // 3. DELETE PHASE
+            string updatedName = context["UpdatedTaskName"].ToString();
+            await _tasksBasePage.ClickOnTaskAsync(updatedName);
+            await _tasksBasePage.DeleteTaskAndConfirmAsync();
+            await _tasksBasePage.RefreshAsync();
+        }
+
+        [Then("the task is completely removed from the list")]
+        public async Task ThenTheTaskIsCompletelyRemovedFromTheList()
+        {
+            string finalTargetTaskName = context.ContainsKey("UpdatedTaskName")
+                ? context["UpdatedTaskName"].ToString()
+                : (_toDoTaskName ?? _doneTaskName);
+
+            bool isPresent = await _tasksBasePage.IsTaskAddedAsync(finalTargetTaskName);
+
+            Assert.IsFalse(
+                isPresent,
+                $"Housekeeping Verification Failed: Task layout item '{finalTargetTaskName}' is still visible inside the UI viewport!");
         }
 
         [Then("the task is added to the to do tasks list")]

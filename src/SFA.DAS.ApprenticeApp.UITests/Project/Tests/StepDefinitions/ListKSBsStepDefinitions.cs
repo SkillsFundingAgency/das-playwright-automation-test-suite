@@ -1,5 +1,7 @@
 using SFA.DAS.ApprenticeApp.UITests.Project.Helpers;
 using SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages;
+using Reqnroll;
+using NUnit.Framework; // Ensured assertion framework is present
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
 {
@@ -20,7 +22,8 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
         {
             Assert.AreEqual(
                 "Knowledge, skills and behaviours (KSBs)",
-                await _ksbPage.KsbPageTitleAsync());
+                await _ksbPage.KsbPageTitleAsync(),
+                "The KSB page title did not match the expected header value.");
         }
     }
 }

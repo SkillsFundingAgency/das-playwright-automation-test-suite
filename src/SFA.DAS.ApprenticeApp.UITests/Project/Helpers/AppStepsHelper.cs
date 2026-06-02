@@ -1,5 +1,6 @@
 using SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages;
 using SFA.DAS.Framework.Hooks;
+using SFA.DAS.Login.Service.Project.Helpers;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 {
@@ -50,9 +51,9 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         public async Task<WelcomePage> GoToWelcomePageAsync()
         {
-            var appUser = context.Get<ConfigSection>().GetConfigSection<ApprenticeAppUserConfig>();
+            var activeUser = context.Get<ApprenticeUser>();
 
-            return await new StubSignInPage(context).SignInAsync(appUser.Username, appUser.Username);
+            return await new StubSignInPage(context).SignInAsync(activeUser.IdOrUserRef, activeUser.Username);
         }
 
         public async Task HandleOnboardingTourIfPresentAsync()
