@@ -25,7 +25,7 @@ public class Navigationsteps(ScenarioContext context)
     {
         await VerifyPageHelper.VerifyPageAsync(context, () => new InterimYourApprenticeshipAdvertsHomePage(context, true));
 
-        await VerifyPageHelper.VerifyPageAsync(context, () => new InterimApprenticesHomePage(context, true));
+        await VerifyPageHelper.VerifyPageAsync(context, () => new InterimLearnersHomePage(context, true));
     }
 
     [Then(@"^the employer can navigate to your team page$")]
