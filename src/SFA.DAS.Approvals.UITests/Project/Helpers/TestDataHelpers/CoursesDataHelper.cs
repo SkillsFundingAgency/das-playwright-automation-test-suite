@@ -29,10 +29,9 @@ internal class CoursesDataHelper
 
         // Short Courses
         new() { LarsCode = "ZSC00003", Title = "Mechanical fitting and assembly – Apprenticeship unit", MaxFunding = 1650, EffectiveFrom = new(2026, 04, 28), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },
-        new() { LarsCode = "ZSC00004", Title = "Welding (mechanised) – Apprenticeship unit", MaxFunding = 2100, EffectiveFrom = new(2026, 04, 28), ApprenticeshipType = LearningType.ShortCourses, Level = 2, Version = "1.0" },
         new() { LarsCode = "ZSC00006", Title = "Electric vehicle (EV) charging point installation and maintenance – Apprenticeship unit", MaxFunding = 950, EffectiveFrom = new(2026, 04, 28), ApprenticeshipType = LearningType.ShortCourses, Level = 3, Version = "1.0" },
         new() { LarsCode = "ZSC00007", Title = "Solar PV installation and maintenance – Apprenticeship unit", MaxFunding = 950, EffectiveFrom = new(2026, 04, 28), ApprenticeshipType = LearningType.ShortCourses, Level = 3, Version = "1.0" },
-        
+        new() { LarsCode = "ZSC00009", Title = "AI leadership – AI strategy and opportunity - Apprenticeship unit", MaxFunding = 750, EffectiveFrom = new(2026, 04, 28), ApprenticeshipType = LearningType.ShortCourses, Level = 5, Version = "1.0" },
 
         // Courses with Options      
         new() { LarsCode = "57", Title = "Gas network craftsperson", MaxFunding = 27000, EffectiveFrom = new(2015, 08, 01), Level = 3, Version = "1.3", Options = new() { "Emergency Response Craftsperson", "Network Pipelines Maintenance Craftsperson", "Network Maintenance Craftsperson (Pressure Management)", "Network Maintenance Craftsperson (Electrical & Instrumentation)" } },      
