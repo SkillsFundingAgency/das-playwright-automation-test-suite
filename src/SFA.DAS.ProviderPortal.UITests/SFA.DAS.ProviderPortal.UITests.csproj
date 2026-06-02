@@ -37,6 +37,9 @@
 		<None Update="appsettings.Environment.json">
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
 		</None>
+		<None Update="allureConfig.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>
