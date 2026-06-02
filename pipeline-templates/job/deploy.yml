@@ -183,4 +183,4 @@ jobs:
             condition: always()
             inputs:
               allureVersion: '2.36.0'
-              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/allure-results'  
+              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'  
