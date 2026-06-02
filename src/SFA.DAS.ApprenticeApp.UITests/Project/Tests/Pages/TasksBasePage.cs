@@ -1,5 +1,3 @@
-using Reqnroll;
-using Microsoft.Playwright;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 {

@@ -170,6 +170,27 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
         return await SubmitAndSetVacancyReference(page7);
     }
 
+    internal async Task<VacancyReferencePage> CloneAnArchivedAdvert()
+    {
+        var page = await GoToRecruitmentHomePage();
+
+        var page1 = await page.SelectArchivedAdvert();
+
+        var page2 = await page1.CloneAdvert();
+
+        var page3 = await page2.SelectYes();
+
+        var page4 = await page3.UpdateTitle();
+
+        var page5 = await page4.UpdateVacancyTitleAndGoToCheckYourAnswersPage();
+
+        var page6 = await page5.UpdateAdditionalQuestion();
+
+        var page7 = await page6.UpdateAllAdditionalQuestionsAndGoToCheckYourAnswersPage(true, true);
+
+        return await SubmitAndSetVacancyReference(page7);
+    }
+
     internal async Task<VacancyReferencePage> CreateANewAdvert_WageType(string wageType) => await CreateANewAdvert(string.Empty, "employer", false, wageType);
 
     internal async Task<VacancyReferencePage> CreateANewAdvert_LocationAndWageType(string locationType, string wageType) => await CreateANewAdvert(string.Empty, locationType, false, wageType);
