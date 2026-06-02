@@ -1,3 +1,4 @@
+using Microsoft.Playwright;
 using Reqnroll;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
@@ -12,7 +13,6 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         public async Task AcceptCookies()
         {
             await page.GetByRole(AriaRole.Button, new() { Name = "Accept additional cookies" }).ClickAsync();
-
         }
 
         public async Task ClickSignInButton()
@@ -22,12 +22,16 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 
         public async Task EnterUserId(string userId)
         {
-            await page.Locator("input#Id").FillAsync(userId);
+            var idInput = page.Locator("input#Id");
+            await idInput.ClearAsync();
+            await idInput.FillAsync(userId);
         }
 
         public async Task EnterEmail(string email)
         {
-            await page.Locator("input#Email").FillAsync(email);
+            var emailInput = page.Locator("input#Email");
+            await emailInput.ClearAsync();
+            await emailInput.FillAsync(email);
         }
 
         public async Task ClickSubmitSignInButton()

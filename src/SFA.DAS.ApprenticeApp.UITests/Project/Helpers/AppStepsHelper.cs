@@ -5,16 +5,16 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 {
     public class AppStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
     {
-        // Selectors - CSS selectors are identical to the Selenium version
-        private const string TasksNavLink      = "a.govuk-service-navigation__link[href='/Tasks/Index']";
-        private const string ToDoTabNavLink    = "a.app-tabs__tab.todo[href='#tasks-todo'][role='tab']";
-        private const string DoneTabNavLink    = "a.app-tabs__tab.done[href='#tasks-done'][role='tab']";
-        private const string KsbNavLink        = "a[href='/Ksb/Index']";
-        private const string SupportNavLink    = "a[href='/Support/Index']";
+        private const string TasksNavLink = "a.govuk-service-navigation__link[href='/Tasks/Index']";
+        private const string ToDoTabNavLink = "a.app-tabs__tab.todo[href='#tasks-todo'][role='tab']";
+        private const string DoneTabNavLink = "a.app-tabs__tab.done[href='#tasks-done'][role='tab']";
+        private const string KsbNavLink = "nav.govuk-service-navigation a[href='/Ksb/Index']";
+        private const string SkipTourNavLink = ".app-onboarding__screen:not([hidden]) .app-onboarding__skip, a.app-onboarding__skip";
+        private const string SupportNavLink = "a[href='/Support/Index']";
         private const string NotificationsNavLink = "a[href='/Notifications/Index']";
-        private const string AccountNavLink    = "a[href*='/Account/YourAccount']";
-        private const string YourProfileLink   = "a.app-stack__link[href='/Profile/Index']";
-        private const string SettingsLink      = "a.app-stack__link[href='/Settings/Index']";
+        private const string AccountNavLink = "a[href*='/Account/YourAccount']";
+        private const string YourProfileLink = "a.app-stack__link[href='/Profile/Index']";
+        private const string SettingsLink = "a.app-stack__link[href='/Settings/Index']";
 
         private IPage Page => context.Get<Driver>().Page;
 
@@ -30,8 +30,67 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
             return await new StubSignInPage(context).SignInAsync(appUser.Username);
         }
 
+        public async Task HandleOnboardingTourIfPresentAsync()
+        {
+            await Page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
+
+            try
+            {
+                var skipTourButton = Page.Locator(SkipTourNavLink).First;
+
+                await skipTourButton.WaitForAsync(new LocatorWaitForOptions
+                {
+                    State = WaitForSelectorState.Visible,
+                    Timeout = 3_000
+                });
+
+                await skipTourButton.ClickAsync();
+                Console.WriteLine("[Onboarding] Tour overlay successfully bypassed during login setup.");
+
+                await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+            }
+            catch (Exception ex) when (ex is Microsoft.Playwright.PlaywrightException || ex is TimeoutException)
+            {
+                Console.WriteLine("[Onboarding Info] No active tour overlay detected during login setup. Proceeding...");
+            }
+        }
         public async Task<TasksBasePage> GoToTasksPageAsync()
             => await new WelcomePage(context).StartNowAsync();
+
+        public async Task<KsbPage> VerifyOnKsbsTabAsync()
+        {
+            await Page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
+
+            string currentUrl = Page.Url;
+            Console.WriteLine($"[Navigation Check] Current active browser URL is: {currentUrl}");
+
+            try
+            {
+                var skipTourButton = Page.Locator(SkipTourNavLink).First;
+
+                await skipTourButton.WaitForAsync(new LocatorWaitForOptions
+                {
+                    State = WaitForSelectorState.Visible,
+                    Timeout = 3_000
+                });
+
+                await skipTourButton.ClickAsync();
+                Console.WriteLine("[Onboarding] Tour overlay successfully bypassed via centralized locator.");
+
+                await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+            }
+            catch (Exception ex) when (ex is Microsoft.Playwright.PlaywrightException || ex is TimeoutException)
+            {
+                Console.WriteLine("[Onboarding Info] Skip tour button not visible or removed from app journey. Continuing test execution...");
+            }
+
+            if (!Page.Url.Contains("/Ksb/Index") && !Page.Url.EndsWith("/Ksb"))
+            {
+                throw new Exception($"Verification Failed: Expected to land on the KSB view, but stranded on layout: {Page.Url}");
+            }
+
+            return new KsbPage(context);
+        }
 
         public async Task<TasksBasePage> NavigateToTasksPageAsync()
         {
@@ -42,7 +101,6 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
             });
             await Page.Locator(TasksNavLink).ClickAsync();
 
-            // Playwright WaitForURL replaces the manual Thread.Sleep polling loop
             await Page.WaitForURLAsync(
                 url => url.Contains("/Tasks/Index") || url.EndsWith("/Tasks"),
                 new PageWaitForURLOptions { Timeout = 15_000 });
@@ -64,6 +122,12 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         public async Task<KsbPage> NavigateToKsbPageAsync()
         {
+            if (Page.Url.Contains("/Ksb/Index") || Page.Url.EndsWith("/Ksb"))
+            {
+                Console.WriteLine("[Navigation] Already present on the KSB layout. Skipping navigation click interaction.");
+                return new KsbPage(context);
+            }
+
             await Page.Locator(KsbNavLink).ClickAsync();
             return new KsbPage(context);
         }
