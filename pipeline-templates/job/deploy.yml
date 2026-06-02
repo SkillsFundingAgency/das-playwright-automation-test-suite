@@ -120,7 +120,7 @@ jobs:
               AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
             inputs:
               testAssemblyVer2: ${{ parameters.TestAssembly }}
-              testRunTitle: 'UI Test Run - ${{ parameters.Environment }}'
+              testRunTitle: 'Test Run - ${{ parameters.Environment }}'
               searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
               testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
               runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
@@ -180,4 +180,5 @@ jobs:
             condition: always()
             inputs:
               allureVersion: '2.36.0'
+              reportName: 'Allure report - ${{ parameters.Environment }}'
               testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'  
