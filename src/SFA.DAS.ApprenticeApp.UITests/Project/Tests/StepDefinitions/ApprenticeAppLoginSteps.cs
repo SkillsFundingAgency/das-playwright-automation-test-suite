@@ -6,7 +6,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
     [Binding]
     public class ApprenticeAppLoginSteps(ScenarioContext context)
     {
-        private readonly ApprenticeAppStepsHelper _stepsHelper = new(context);
+        private readonly AppStepsHelper _stepsHelper = new(context);
         private ApprenticeAppDashboardPage _dashboardPage;
 
         [When(@"the user signs in to the Apprentice app")]

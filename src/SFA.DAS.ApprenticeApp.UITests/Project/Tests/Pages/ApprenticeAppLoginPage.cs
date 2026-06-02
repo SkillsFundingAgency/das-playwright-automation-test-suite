@@ -23,6 +23,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         public async Task EnterUserId(string userId)
         {
             var idInput = page.Locator("input#Id");
+            await idInput.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 5_000 });
             await idInput.ClearAsync();
             await idInput.FillAsync(userId);
         }
@@ -30,6 +31,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         public async Task EnterEmail(string email)
         {
             var emailInput = page.Locator("input#Email");
+            await emailInput.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 5_000 });
             await emailInput.ClearAsync();
             await emailInput.FillAsync(email);
         }
@@ -42,6 +44,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         public async Task<ApprenticeAppDashboardPage> SignInWithValidCredentials(string userId, string email)
         {
             await ClickSignInButton();
+            await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
             await EnterUserId(userId);
             await EnterEmail(email);
             await ClickSubmitSignInButton();

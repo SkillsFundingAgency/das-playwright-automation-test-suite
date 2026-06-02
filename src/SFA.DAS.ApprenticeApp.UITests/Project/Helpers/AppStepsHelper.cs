@@ -3,6 +3,11 @@ using SFA.DAS.Framework.Hooks;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 {
+    public class ApprenticeAppUserConfig
+    {
+        public string Username { get; set; }
+    }
+
     public class AppStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
     {
         private const string TasksNavLink = "a.govuk-service-navigation__link[href='/Tasks/Index']";
@@ -18,16 +23,36 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         private IPage Page => context.Get<Driver>().Page;
 
-        public async Task GoToHomePageAsync()
-            => await new CookiePage(context).AccessHomePageAsync();
+        public async Task<ApprenticeAppLoginPage> NavigateToApprenticeAppLoginPage()
+        {
+            await Navigate(UrlConfig.ApprenticeApp_BaseUrl);
 
-        public async Task<StubSignInPage> GoToStubSignInAsync()
-            => await new HomePage(context).AppSignInAsync();
+            var loginPage = new ApprenticeAppLoginPage(context);
+
+            await loginPage.AcceptCookies();
+            await loginPage.VerifyPage();
+            return loginPage;
+        }
+
+        public async Task<ApprenticeAppDashboardPage> SignInWithValidCredentials()
+        {
+            var loginPage = await NavigateToApprenticeAppLoginPage();
+
+            var appUser = context.Get<ConfigSection>().GetConfigSection<ApprenticeAppUserConfig>();
+            var email = appUser.Username;
+
+            return await loginPage.SignInWithValidCredentials(email, email);
+        }
+
+        public async Task GoToHomePageAsync() => await new CookiePage(context).AccessHomePageAsync();
+
+        public async Task<StubSignInPage> GoToStubSignInAsync() => await new HomePage(context).AppSignInAsync();
 
         public async Task<WelcomePage> GoToWelcomePageAsync()
         {
             var appUser = context.Get<ConfigSection>().GetConfigSection<ApprenticeAppUserConfig>();
-            return await new StubSignInPage(context).SignInAsync(appUser.Username);
+
+            return await new StubSignInPage(context).SignInAsync(appUser.Username, appUser.Username);
         }
 
         public async Task HandleOnboardingTourIfPresentAsync()
@@ -54,6 +79,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
                 Console.WriteLine("[Onboarding Info] No active tour overlay detected during login setup. Proceeding...");
             }
         }
+
         public async Task<TasksBasePage> GoToTasksPageAsync()
             => await new WelcomePage(context).StartNowAsync();
 
