@@ -34,7 +34,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         internal async Task<WhenWillTheTrainingStartPage> Yes()
         {
             await page.Locator("[value= 'true']").ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new WhenWillTheTrainingStartPage(context));
         }
 
@@ -44,7 +44,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await page.GetByRole(AriaRole.Combobox, new() { Name = "Start typing to search" }).ClickAsync();
             await page.GetByRole(AriaRole.Combobox, new() { Name = "Start typing to search" }).FillAsync(courseName.Substring(0, 3));
             await page.GetByRole(AriaRole.Option, new() { Name = courseName }).First.ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new WhenWillTheTrainingStartPage(context));
         }
     }
