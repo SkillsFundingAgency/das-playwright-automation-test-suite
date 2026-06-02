@@ -52,13 +52,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(employerName).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenticeship.Cohort.Reference);
             await Assertions.Expect(status).ToHaveTextAsync(cohortStatus);
-            //await Assertions.Expect(message).ToHaveTextAsync("No message added.");
 
             var expectedName = apprenticeship.ApprenticeDetails.FullName;
             var expectedULN = apprenticeship.ApprenticeDetails.ULN.ToString();
             var expectedDOB = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("d MMM yyyy", CultureInfo.InvariantCulture);
             var expectedTrainingDates = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy", CultureInfo.InvariantCulture) + " to " + apprenticeship.TrainingDetails.EndDate.ToString("MMM yyyy", CultureInfo.InvariantCulture);
-            var expectedPrice = apprenticeship.TrainingDetails.TotalPrice.ToString("C0");
+            var expectedPrice = apprenticeship.TrainingDetails.TotalPrice.ToString("F0", CultureInfo.InvariantCulture);
 
             var apprenticeRow = row(apprenticeship.ApprenticeDetails.ULN.ToString());
             await Assertions.Expect(Name(apprenticeRow)).ToHaveTextAsync(expectedName.Trim());
