@@ -57,7 +57,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             var expectedULN = apprenticeship.ApprenticeDetails.ULN.ToString();
             var expectedDOB = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("d MMM yyyy", CultureInfo.InvariantCulture);
             var expectedTrainingDates = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy", CultureInfo.InvariantCulture) + " to " + apprenticeship.TrainingDetails.EndDate.ToString("MMM yyyy", CultureInfo.InvariantCulture);
-            var expectedPrice = apprenticeship.TrainingDetails.TotalPrice.ToString("F0", CultureInfo.InvariantCulture);
+            var expectedPrice = apprenticeship.TrainingDetails.TotalPrice.ToString("C0", new CultureInfo("en-GB"));
 
             var apprenticeRow = row(apprenticeship.ApprenticeDetails.ULN.ToString());
             await Assertions.Expect(Name(apprenticeRow)).ToHaveTextAsync(expectedName.Trim());
