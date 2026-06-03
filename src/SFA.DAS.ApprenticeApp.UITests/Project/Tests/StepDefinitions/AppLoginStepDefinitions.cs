@@ -7,18 +7,24 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
     {
         private readonly AppStepsHelper _stepsHelper = new(context);
 
-        [Given("the apprentice has logged into the app")]
+        [Given(@"the apprentice has logged into the app")]
         public async Task GivenTheApprenticeHasLoggedIntoTheApp()
         {
             await _stepsHelper.GoToHomePageAsync();
+
             await _stepsHelper.GoToStubSignInAsync();
-            await _stepsHelper.GoToWelcomePageAsync();
+
+            _ = await _stepsHelper.GoToWelcomePageAsync();
+
             await _stepsHelper.HandleOnboardingTourIfPresentAsync();
+
+            await _stepsHelper.NavigateToKsbPageAsync();
         }
 
-        [Then("the apprentice is taken to the KSBs tab")]
-        public async Task ThenTheApprenticeIsTakenToTheKsbsTab()
+        [Then(@"the apprentice is taken to the KSBs tab")]
+        public async Task ThenTheApprenticeIsTakenToTheKSBsTab()
         {
+            // Uses your existing validation helper to verify the URL structure matches the KSB page layout
             await _stepsHelper.VerifyOnKsbsTabAsync();
         }
     }

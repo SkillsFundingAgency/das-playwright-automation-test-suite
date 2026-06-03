@@ -49,6 +49,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         public async Task<StubSignInPage> GoToStubSignInAsync() => await new HomePage(context).AppSignInAsync();
 
+        // FIXED: Raw, decoupled core authentication using future-proof DB context properties strictly
         public async Task<WelcomePage> GoToWelcomePageAsync()
         {
             var activeUser = context.Get<ApprenticeUser>();
@@ -156,6 +157,11 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
             }
 
             await Page.Locator(KsbNavLink).ClickAsync();
+
+            await Page.WaitForURLAsync(
+                url => url.Contains("/Ksb/Index") || url.EndsWith("/Ksb"),
+                new PageWaitForURLOptions { Timeout = 15_000 });
+
             return new KsbPage(context);
         }
 

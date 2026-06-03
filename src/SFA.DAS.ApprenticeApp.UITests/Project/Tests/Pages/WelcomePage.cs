@@ -1,4 +1,3 @@
-
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 {
     public class WelcomePage(ScenarioContext context) : AppBasePage(context)
@@ -14,10 +13,8 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         {
             await page.Locator(SkipTourLink).ClickAsync();
 
-            await page.WaitForURLAsync(url => url.Contains("/Ksb/Index"),
+            await page.WaitForURLAsync(url => url.Contains("/Tasks/Index") || url.EndsWith("/Tasks") || url.Contains("/Ksb/Index"),
                 new PageWaitForURLOptions { Timeout = 10_000 });
-
-            await page.GotoAsync(page.Url.Replace("/Ksb/Index", "/Tasks/Index"));
 
             return await VerifyPageAsync(() => new TasksBasePage(context));
         }
