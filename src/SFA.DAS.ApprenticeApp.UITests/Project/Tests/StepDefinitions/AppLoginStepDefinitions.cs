@@ -24,7 +24,6 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
         [Then(@"the apprentice is taken to the KSBs tab")]
         public async Task ThenTheApprenticeIsTakenToTheKSBsTab()
         {
-            // Uses your existing validation helper to verify the URL structure matches the KSB page layout
             await _stepsHelper.VerifyOnKsbsTabAsync();
         }
     }

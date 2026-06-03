@@ -49,7 +49,6 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         public async Task<StubSignInPage> GoToStubSignInAsync() => await new HomePage(context).AppSignInAsync();
 
-        // FIXED: Raw, decoupled core authentication using future-proof DB context properties strictly
         public async Task<WelcomePage> GoToWelcomePageAsync()
         {
             var activeUser = context.Get<ApprenticeUser>();
