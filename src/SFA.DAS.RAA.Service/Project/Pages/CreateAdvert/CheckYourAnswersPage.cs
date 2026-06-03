@@ -31,8 +31,15 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
         {
             await CheckFoundationTag();
         }
-        //await page.GetByRole(AriaRole.Button, new() { Name = "Submit advert" }).ClickAsync();
-        await page.Locator("[data-automation='continue-button']").ClickAsync();
+
+        if(isRaaEmployer)
+        {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Submit advert" }).ClickAsync();
+        }
+        else
+        {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Submit vacancy" }).ClickAsync();
+        }
 
         return await VerifyPageAsync(() => new VacancyReferencePage(context));
     }

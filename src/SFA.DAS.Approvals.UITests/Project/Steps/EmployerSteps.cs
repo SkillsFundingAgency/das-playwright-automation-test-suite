@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using Azure;
+using Microsoft.VisualBasic;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
@@ -7,6 +8,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -58,7 +60,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("^the Employer can access live apprentice records under Manager Your Apprentices section$")]
         public async Task ThenTheEmployerCanAccessLiveApprenticeRecordsUnderManagerYourApprenticesSection()
         {
-            await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage();
+            await employerStepsHelper.CheckLearnerOnManageYourLearnersPage();
         }
 
 
@@ -69,37 +71,43 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Then("^display the warning message for foundation courses$")]
-        public async Task ThenDisplayTheWarningMessageForFoundationCourses()
+        [Then(@"display the ""([^""]*)"" as per table below")]
+        public async Task ThenDisplayTheAsPerTableBelow(bool warningMessage)
         {
             var page = new EmployerApproveApprenticeDetailsPage(context);
-            var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
-            
-            await page.ValidateWarningMessageForFoundationCourses(warningMsg);
-            
+
+            if (warningMessage)
+            {
+                var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
+                await page.ValidateWarningMessageForFoundationCourses(warningMsg);
+            }            
+
             await page.EmployerApproveCohort();
         }
 
 
-        [When("^Employer tries to edit live apprentice record by setting age old than 24 years$")]
-        public async Task WhenEmployerTriesToEditLiveApprenticeRecordBySettingAgeOldThan24Years()
-        {
-            await employerStepsHelper.EmployerLogInToEmployerPortal();
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
 
-        }
-
-
-        [Then("^the employer is stopped with an error message$")]
-        public async Task ThenTheEmployerIsStoppedWithAnErrorMessage()
+        [When(@"Employer tries to edit live apprentice record by setting age lower than (.*)")]
+        public async Task WhenEmployerTriesToEditLiveApprenticeRecordBySettingAgeLowerThan(int lowerAgeLimit)
         {
             var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var uln = apprentice.ApprenticeDetails.ULN.ToString();
             var name = apprentice.ApprenticeDetails.FullName;
-            var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
+            var startDate = apprentice.TrainingDetails.StartDate;
+            var DoB = startDate.AddYears(-lowerAgeLimit+1);  
 
-            var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedApprenticeRecord(new ApprenticesHomePage(context), uln, name);
-            await employerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
+            await employerStepsHelper.EmployerLogInToEmployerPortal();
+            await new InterimLearnersHomePage(context, false).VerifyPage();
+            var apprenticeDetailsPage = await employerStepsHelper.EmployerSearchOpenApprovedLearnerRecord(new LearnersHomePage(context), uln, name);
+            await employerStepsHelper.TryEditApprenticeAge(apprenticeDetailsPage, DoB);
+        }
+
+
+        [Then(@"the employer is stopped with an error message for (.*)")]
+        public async Task ThenTheEmployerIsStoppedWithAnErrorMessageFor(int ageLimit)
+        {
+            string errorMessage = $"The apprentice must be at least {ageLimit} years old at the start of their training";
+            await new EditLearnerDetailsPage(context).ValidateErrorMessage(errorMessage, "DateOfBirth");
         }
 
 
@@ -187,7 +195,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheApprenticeshipIsMarkedAsCompleted()
         {
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
-            var page = await employerStepsHelper.CheckApprenticeOnManageYourApprenticesPage(true);
+            var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
             var page1 = await page.OpenFirstItemFromTheList(apprenticeship.ApprenticeDetails.FullName);
             await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Completed, "Completion payment month", DateTime.Now);
             await page1.AssertRecordIsReadOnlyExceptEndDate();
@@ -203,13 +211,35 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenTheNonLevyEmployerSendCohortToProvider()
         {
             var dynamicHomepageSettingAnApprenticeShip = new ContinueSettingupAnApprenticeshipDynamicHomepage(context);
-
-
             var continueSettingupAnApprenticeshipPage = await dynamicHomepageSettingAnApprenticeShip.Continue();
             await continueSettingupAnApprenticeshipPage.DoNotCreateAdvertForThisApprenticeship();
-
             await employerStepsHelper.AddEmptyCohortFromNonLevyReserveFundsAddApprenticePage();
         }
+
+        [Given(@"Employer creates a reservation with GSO standard and tries to add a learner to the reservation")]
+        public async Task GivenEmployerCreatesAReservationWithGSOStandardAndTriesToAddALearnerToTheReservation()
+        {
+            await employerStepsHelper.EmployerCreatesReservationAndAddsApprentice();
+        }
+
+        [Then(@"the Employer is blocked with error message")]
+        public async Task ThenTheEmployerIsBlockedWithErrorMessage()
+        {
+            var errorMsg1 = "You previously chose a reservation for an apprenticeship unit.";
+            var errorMsg2 = "You must send a request to your training provider to add learners doing apprenticeship units.";
+            var employerSelectRoutePage = new HowWouldYouLikeToAddLearnersPage(context);
+            await employerSelectRoutePage.VerifyErrorMessage(new[] { errorMsg1, errorMsg2 });
+        }
+
+        [When(@"Employer sends an empty cohort to the provider")]
+        public async Task WhenEmployerSendsAnEmptyCohortToTheProvider()
+        {
+            var employerSelectRoutePage = new HowWouldYouLikeToAddLearnersPage(context);
+            var page = await employerSelectRoutePage.SelectProviderAddApprencticesAndSend();
+            var cohortRef = await page.GetCohortId();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
+        }
+
 
     }
 

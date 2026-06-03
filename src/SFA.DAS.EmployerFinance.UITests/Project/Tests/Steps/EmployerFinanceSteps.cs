@@ -36,7 +36,7 @@ public class EmployerFinanceSteps(ScenarioContext context)
     {
         await new InterimFinanceHomePage(context, true).VerifyPage();
 
-        await new InterimApprenticesHomePage(context, false).VerifyPage();
+        await new InterimLearnersHomePage(context, false).VerifyPage();
     }
 
     [Then(@"^the employer can navigate to your team page$")]

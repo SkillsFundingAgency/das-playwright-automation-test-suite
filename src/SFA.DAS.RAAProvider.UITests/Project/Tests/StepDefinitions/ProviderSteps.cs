@@ -11,6 +11,12 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Tests.StepDefinitions
         [Then(@"Provider can make the application successful")]
         public async Task ThenProviderCanMakeTheApplicationSuccessful() => await _providerStepsHelper.ApplicantSucessful();
 
+        [Then(@"Provider can make the application successful and archive the vacancy")]
+        public async Task ThenProviderCanMakeTheApplicationSuccessfulAndArchive() => await _providerStepsHelper.ApplicantSucessfulAndArchive();
+
+        [Then(@"Provider can make the application unsuccessful and archive the vacancy")]
+        public async Task ThenProviderCanMakeTheApplicationUnsuccessfulAndArchive() => await _providerStepsHelper.ApplicantUnsucessfulAndArchive();
+
         [Then(@"Provider can make the application unsuccessful")]
         public async Task ThenProviderCanMakeTheApplicationUnSuccessful() => await _providerStepsHelper.ApplicantUnsucessful();
 
@@ -37,5 +43,14 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Tests.StepDefinitions
 
         [Then(@"Provider can make multiple applications unsuccessful")]
         public async Task ThenProviderCanMakeMultipleApplicationsUnsuccessful() => await _providerStepsHelper.MutipleApplicantsUnsucessful();
+
+        [Then(@"Provider can make multiple applications unsuccessful and archive the vacancy")]
+        public async Task ThenProviderCanMakeMultipleApplicationsUnsuccessfulAndArchive() => await _providerStepsHelper.MutipleApplicantsUnsucessfulAndArchive();
+
+        [Then(@"^the Provider can close the vacancy$")]
+        public async Task ThenTheEmployerCanCloseTheVacancy() => await _providerStepsHelper.CloseVacancy();
+
+        [Then(@"^the Provider can archive the vacancy$")]
+        public async Task ThenTheProviderCanArchiveTheVacancy() => await _providerStepsHelper.ArchiveVacancy();
     }
 }

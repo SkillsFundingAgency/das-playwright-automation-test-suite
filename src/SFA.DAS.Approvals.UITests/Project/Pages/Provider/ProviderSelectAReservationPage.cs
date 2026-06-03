@@ -14,12 +14,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
                 await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             }
 
-            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Select a Reservation");
+            await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Choose a reservation");
         }
 
 
         internal async Task<SelectLearnerFromILRPage> SelectReservation(string reservationId)
         {
+            if(string.IsNullOrEmpty(reservationId))
+                reservationId = "99999999-9999-9999-9999-999999999999";     //follow auto reservation route
+
             await page.Locator($"input[type='radio'][value='{reservationId}']").ClickAsync();
             await page.Locator("button:has-text('Continue')").ClickAsync();
             return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));

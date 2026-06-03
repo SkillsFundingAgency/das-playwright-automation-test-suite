@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using System;
 using System.Text.RegularExpressions;
 
 
@@ -33,7 +34,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         internal async Task<WhenWillTheTrainingStartPage> Yes()
         {
             await page.Locator("[value= 'true']").ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new WhenWillTheTrainingStartPage(context));
         }
 
@@ -43,7 +44,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await page.GetByRole(AriaRole.Combobox, new() { Name = "Start typing to search" }).ClickAsync();
             await page.GetByRole(AriaRole.Combobox, new() { Name = "Start typing to search" }).FillAsync(courseName.Substring(0, 3));
             await page.GetByRole(AriaRole.Option, new() { Name = courseName }).First.ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new WhenWillTheTrainingStartPage(context));
         }
     }
@@ -115,14 +116,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
     {
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("When will the training start?");
 
-        private ILocator alreadyStarted => page.Locator("#StartDate-alreadyStarted");
+        private ILocator reservationStartDate(int offset)
+        {   
+            if (offset < 0)
+                return page.Locator("#StartDate-alreadyStarted");
+            else
+                return page.Locator($"#StartDate-{DateTime.Now.AddMonths(offset):yyyy-MM}");
+        }
 
-        internal async Task<CheckDetailsAndReserveFundingPage> SelectAlreadyStartedDate()
+
+        internal async Task<CheckDetailsAndReserveFundingPage> SelectReservationDate(int offset)
         {
-            await alreadyStarted.ClickAsync();
+            await reservationStartDate(offset).ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             return await VerifyPageAsync(() => new CheckDetailsAndReserveFundingPage(context));
         }
+
+        internal async Task VerifyPreiousMonthIsNotAvailableToSelect() => await Assertions.Expect(reservationStartDate(-1)).Not.ToBeVisibleAsync();
+
 
     }
 
@@ -161,10 +172,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(page.Locator(".govuk-panel__title")).ToContainTextAsync("You have reserved funding for training");
         }
 
-        internal async Task<EmployerHomePage> SelectGoToHomePageAndContinue()
+        internal async Task<EmployerHomePage> SelectOptionGoToHomePage()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Go to homepage" }).ClickAsync();
             return await VerifyPageAsync(() => new EmployerHomePage(context));
+        }
+
+        internal async Task<AddApprenticePage> SelectOptionAddLearner()
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = "Add learner" }).ClickAsync();
+            return await VerifyPageAsync(() => new AddApprenticePage(context));
         }
 
 

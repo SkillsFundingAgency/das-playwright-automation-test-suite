@@ -119,38 +119,31 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task GivenALiveApprenticeRecordExistsForAnApprenticeWithAnd(string courseType, string courseLevel, string startDate)
         {
             listOfApprenticeship = new List<Apprenticeship>();
-            string additionalWhereFilter;
+            string additionalWhereFilter = $@"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
+                                            AND c.IsDeleted = 0
+                                            And c.Approvals = 3
+                                            AND c.ChangeOfPartyRequestId is null             
+                                            AND c.PledgeApplicationId is null
+                                            AND a.PaymentStatus = 1                                            
+                                            AND a.PendingUpdateOriginator is null
+                                            AND a.CloneOf is null
+                                            AND a.ContinuationOfId is null
+                                            AND a.DeliveryModel = 0
+                                            AND a.StartDate > '{startDate}'";
 
             if (courseType == "FoundationApprenticeship")
             {
-                additionalWhereFilter = @"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
-                                            AND c.IsDeleted = 0
-                                            And c.Approvals = 3
-                                            AND c.ChangeOfPartyRequestId is null             
-                                            AND c.PledgeApplicationId is null
-                                            AND a.PaymentStatus = 1
-                                            AND a.HasHadDataLockSuccess = 0
-                                            AND a.PendingUpdateOriginator is null
-                                            AND a.CloneOf is null
-                                            AND a.ContinuationOfId is null
-                                            AND a.DeliveryModel = 0
-                                            AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+                additionalWhereFilter +=   @"AND a.HasHadDataLockSuccess = 0
+                                             AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+            }
+            else if (courseType == "ShortCourses")
+            {
+                additionalWhereFilter += "AND a.TrainingCode Like 'ZSC%'";
             }
             else
             {
-                additionalWhereFilter = @$"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
-                                            AND c.IsDeleted = 0
-                                            And c.Approvals = 3
-                                            AND c.ChangeOfPartyRequestId is null             
-                                            AND c.PledgeApplicationId is null
-                                            AND a.PaymentStatus = 1
-                                            AND a.HasHadDataLockSuccess = 0
-                                            AND a.PendingUpdateOriginator is null
-                                            AND a.CloneOf is null
-                                            AND a.ContinuationOfId is null
-                                            AND a.DeliveryModel = 0
-                                            AND TrainingName like '%, Level: 7'
-					                        AND StartDate > '{startDate}'";
+                additionalWhereFilter +=   @"AND a.HasHadDataLockSuccess = 0
+                                            AND TrainingName like '%, Level: 7'";
             }
 
             await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);

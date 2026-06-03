@@ -158,3 +158,29 @@ jobs:
               filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
               arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
             condition: succeededOrFailed()
+
+          - task: CmdLine@2
+            inputs:
+              script: |
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory drop/ tests:"
+                tree "$(System.DefaultWorkingDirectory)/drop/tests" /f
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName}:"
+                tree "$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)" /f
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName/allure-results:"
+                tree "$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/allure-results" /f
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory:"
+                tree $(System.DefaultWorkingDirectory) /f
+            displayName: 'Agent Folder Structure'
+            condition: always()
+            continueOnError: true
+
+          - task: PublishAllureReport@2
+            displayName: 'Allure Tab: Generate and Publish Allure Report'
+            condition: always()
+            inputs:
+              allureVersion: '2.36.0'
+              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/allure-results'  

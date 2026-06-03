@@ -5,7 +5,7 @@
 @raae2e
 @raaemployere2e
 @regression
-Scenario: RAA_E_E2E_01 - Create an advert with registered name, disability confident, Approve, Apply, receive email notifications, make Application Successful and close the advert
+Scenario: RAA_E_E2E_01 - Create an advert with registered name, disability confident, Approve, Apply, receive email notifications, make Application Successful, close and archive the advert
 	Given the Employer creates an advert by using a registered name
 	When the Employer verify 'Fixed Wage Type' the wage option selected in the Preview page
 	When the Reviewer verifies disability confident and approves the vacancy
@@ -18,3 +18,4 @@ Scenario: RAA_E_E2E_01 - Create an advert with registered name, disability confi
 	And the status of the Application is shown as 'successful' in FAA 
 	And the 'applicant' receives 'successful application' email notification
 	Then the Employer can close the vacancy
+	And the Employer can archive the vacancy

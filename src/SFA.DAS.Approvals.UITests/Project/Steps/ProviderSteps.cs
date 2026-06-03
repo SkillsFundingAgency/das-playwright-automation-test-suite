@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using Azure;
+using Reqnroll.Assist;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
@@ -6,7 +8,6 @@ using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
-using Reqnroll.Assist;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -47,7 +48,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task WhenSendsAnApprenticeRequestCohortToTheEmployerBySelectingApprenticesFromILRListAndReservations()
         {
             var page = await providerStepsHelper.ProviderAddsFirstApprenitceUsingReservation();
-            var page1 = await providerStepsHelper.ProviderAddsOtherApprenticesUsingReservation(page);
+            var page1 = await providerStepsHelper.ProviderAddsApprenticesUsingReservation(page, 1);
             await providerStepsHelper.ProviderApproveCohort(page1);
             await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
         }
@@ -86,32 +87,42 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             return page;
         }
 
-        [Then("^system does not allow to add apprentice details if their age is below 15 years and over 25 years$")]
-        public async Task ThenSystemDoesNotAllowToAddApprenticeDetailsIfTheirAgeIsBelow15YearsAndOver25Years()
+
+        [Then(@"system stop user to add that apprentice with an error message for ""([^""]*)""")]
+        public async Task ThenSystemStopUserToAddThatApprenticeWithAnErrorMessageFor(string ageLimit)
         {
+            int age = int.Parse(ageLimit);
+            string errorMsg = age < 20 ? $"The apprentice must be at least {age} years old at the start of their training" : $"The apprentice must be {age - 1} years or under at the start of their training";
             var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDoB();
-            await page.VerfiyErrorMessage("DateOfBirth", "The apprentice must be 24 years or under at the start of their training");
+            await page.VerfiyErrorMessage("DateOfBirth", errorMsg);
             await page.NavToHomePage();
         }
 
-        [When("^Provider tries to edit live apprentice record by setting age old than 24 years$")]
-        public async Task WhenProviderTriesToEditLiveApprenticeRecordBySettingAgeOldThanYears()
-        {
-            await providerHomePageStepsHelper.GoToProviderHomePage(true);
-            await UserNavigatesToManageYourApprenticesPage();
-        }
 
-        [Then("^the provider is stopped with an error message$")]
-        public async Task ThenTheProviderIsStoppedWithAnErrorMessage()
+        [When(@"Provider tries to edit live apprentice record by setting age higher than (.*)")]
+        public async Task WhenProviderTriesToEditLiveApprenticeRecordBySettingAgeHigherThan(int upperAgeLimit)
         {
             var apprentice = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var uln = apprentice.ApprenticeDetails.ULN.ToString();
             var name = apprentice.ApprenticeDetails.FullName;
-            var DoB = apprentice.ApprenticeDetails.DateOfBirth.AddYears(-10);
+            var startDate = apprentice.TrainingDetails.StartDate;
+            var DoB = startDate.AddYears(-upperAgeLimit - 1);
+
+            await providerHomePageStepsHelper.GoToProviderHomePage(true);
+            await UserNavigatesToManageYourApprenticesPage();
 
             var apprenticeDetailsPage = await providerStepsHelper.ProviderSearchOpenApprovedApprenticeRecord(new ManageYourLearners_ProviderPage(context), uln, name);
-            await providerStepsHelper.TryEditApprenticeAgeAndValidateError(apprenticeDetailsPage, DoB);
+            await providerStepsHelper.TryEditApprenticeAge(apprenticeDetailsPage, DoB);
         }
+
+
+        [Then(@"the provider is stopped with an error message for (.*)")]
+        public async Task ThenTheProviderIsStoppedWithAnErrorMessageFor(int ageLimit)
+        {
+            string errorMessage = $"The apprentice must be younger than {ageLimit} years old at the start of their training";
+            await new EditLearnerDetails_ProviderPage(context).ValidateErrorMessage(errorMessage, "DateOfBirth");
+        }
+
 
         [Then("^apprentice\\/learner record is no longer available on SelectLearnerFromILR page$")]
         public async Task ThenApprenticeLearnerRecordIsNoLongerAvailableOnSelectLearnerFromILRPage()
@@ -253,17 +264,33 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.VerifyCohortExistsAsync(cohortRef);
         }
 
-
-        [Then("^system allows to approve apprentice details with a warning if their age is in range of (.*) - (.*) years$")]
-        public async Task ThenSystemAllowsToapproveApprenticeDetailsWithAWarningIfTheirAgeIsInRangeOf_Years(int lowerAgeLimit, int upperAgeLimit)
+        [When(@"Provider resubmits ILR with apprentice aged below ""([^""]*)""")]
+        public async Task WhenProviderResubmitsILRWithApprenticeAgedBelow(string lowerAgeLimit)
         {
-            var page = await providerStepsHelper.UpdateDobAndReprocessData(lowerAgeLimit, upperAgeLimit);
-            var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
-            await page.ValidateWarningMessageForFoundationCourses(warningMsg);
-            await providerStepsHelper.ProviderApproveCohort(page);
+            var age = int.Parse(lowerAgeLimit);
+            await providerStepsHelper.UpdateDobAndReSubmitIlrData(age-1, age);
+            var page = await providerStepsHelper.GoToSelectApprenticeFromILRPage();
+            await providerStepsHelper.TryAddFirstApprenticeFromILRList(page);
+        }
+
+
+        [Then(@"system allows to approve apprentice details with a ""([^""]*)"" if their age is in range of (.*) - (.*) years")]
+        public async Task ThenSystemAllowsToApproveApprenticeDetailsWithAIfTheirAgeIsInRangeOf_Years(bool displayWarningMsg, int lowerAgeLimit, int upperAgeLimit)
+        {
+
+            await providerStepsHelper.UpdateDobAndReSubmitIlrData(lowerAgeLimit, upperAgeLimit);
+            var page = await providerStepsHelper.GoToSelectApprenticeFromILRPage();
+            var page1 = await providerStepsHelper.AddFirstApprenticeFromILRList(page);
+            if (displayWarningMsg)
+            {
+                var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
+                await page1.ValidateWarningMessageForFoundationCourses(warningMsg);
+            }            
+            await providerStepsHelper.ProviderApproveCohort(page1);
             await commonStepsHelper.SetCohortDetails(null, "Under review with Employer", "Ready for approval");
 
         }
+
 
 
         [When("^the Provider tries to add another apprentice to an existing cohort$")]
@@ -318,11 +345,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 await page3.ClickOnCancelAndReturnLink();
                 await page2.ReturnBackToManageYourApprenticesPage();
             }
+        }
 
+        [Then(@"Provider can add learners to above cohort using existing and new reservations")]
+        public async Task ThenProviderCanAddLearnersToAboveCohortUsingExistingAndNewReservations()
+        {
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
+            var page = await providerStepsHelper.ProviderOpenTheCohort(cohortRef);
+            await providerStepsHelper.ProviderAddsApprenticesUsingReservation(page, 0);            
+        }
 
+        [Then(@"Provider can approve the cohort and send it to the employer for final approval")]
+        public async Task ThenProviderCanApproveTheCohortAndSendItToTheEmployerForFinalApproval()
+        {
+            var cohortRef = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().Cohort.Reference;
 
-        }        
+            await new ApproveApprenticeDetailsPage(context).ProviderApproveCohort();
+            await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
+        }
 
 
 

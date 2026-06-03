@@ -16,14 +16,23 @@ public class EmployerSteps(ScenarioContext context)
     [Then(@"^Employer can make the application successful$")]
     public async Task ThenEmployerCanMakeTheApplicationSuccessful() => await _employerStepsHelper.ApplicantSucessful();
 
+    [Then(@"^Employer can make the application successful and archive the advert$")]
+    public async Task ThenEmployerCanMakeTheApplicationSuccessfulAndArchive() => await _employerStepsHelper.ApplicantSucessfulAndArchive();
+
     [Then(@"^Employer can make the application unsuccessful$")]
     public async Task ThenEmployerCanMakeTheApplicationUnsuccessful() => await _employerStepsHelper.ApplicantUnsucessful();
+
+    [Then(@"^Employer can make the application unsuccessful and archive the advert$")]
+    public async Task ThenEmployerCanMakeTheApplicationUnsuccessfulAndArchive() => await _employerStepsHelper.ApplicantUnsucessfulAndArchive();
 
     [Then(@"^Employer can see the withdrawn application$")]
     public async Task ThenEmployerCanSeeTheWithdrawnApplication() => await _employerStepsHelper.ApplicantWithdrawn();
 
     [Then(@"^the Employer can close the vacancy$")]
     public async Task ThenTheEmployerCanCloseTheVacancy() => await _employerStepsHelper.CloseVacancy();
+
+    [Then(@"^the Employer can archive the vacancy$")]
+    public async Task ThenTheEmployerCanArchiveTheVacancy() => await _employerStepsHelper.ArchiveVacancy();
 
     [Then(@"^the Employer can edit the vacancy$")]
     public async Task ThenTheEmployerCanEditTheVacancy() => await _employerStepsHelper.EditVacancyDates();
