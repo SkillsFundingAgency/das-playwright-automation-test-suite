@@ -75,7 +75,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
                 await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
             }
-            catch (Exception ex) when (ex is Microsoft.Playwright.PlaywrightException || ex is TimeoutException)
+            catch (Exception ex) when (ex is PlaywrightException || ex is TimeoutException)
             {
                 Console.WriteLine("[Onboarding Info] No active tour overlay detected during login setup. Proceeding...");
             }
@@ -106,7 +106,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
                 await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
             }
-            catch (Exception ex) when (ex is Microsoft.Playwright.PlaywrightException || ex is TimeoutException)
+            catch (Exception ex) when (ex is PlaywrightException || ex is TimeoutException)
             {
                 Console.WriteLine("[Onboarding Info] Skip tour button not visible or removed from app journey. Continuing test execution...");
             }
