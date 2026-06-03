@@ -120,7 +120,7 @@ jobs:
               AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
             inputs:
               testAssemblyVer2: ${{ parameters.TestAssembly }}
-              testRunTitle: 'UI Test Run - ${{ parameters.Environment }}'
+              testRunTitle: 'Test Run - ${{ parameters.Environment }}'
               searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
               testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
               runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
@@ -163,13 +163,10 @@ jobs:
             inputs:
               script: |
                 echo "*************************************************"
-                echo "Tree Structure of System DefaultWorkingDirectory drop/ tests:"
-                tree "$(System.DefaultWorkingDirectory)/drop/tests" /f
+                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/allure-results:"
+                tree "$(System.DefaultWorkingDirectory)/drop/tests/allure-results" /f
                 echo "*************************************************"
-                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName}:"
-                tree "$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)" /f
-                echo "*************************************************"
-                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName/allure-results:"
+                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName}/allure-results:"
                 tree "$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/allure-results" /f
                 echo "*************************************************"
                 echo "Tree Structure of System DefaultWorkingDirectory:"
@@ -183,4 +180,5 @@ jobs:
             condition: always()
             inputs:
               allureVersion: '2.36.0'
-              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/allure-results'  
+              reportName: 'Allure report - ${{ parameters.Environment }}'
+              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'  
