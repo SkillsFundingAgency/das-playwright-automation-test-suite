@@ -15,7 +15,7 @@ namespace SFA.DAS.FATe.UITests.Helpers
             PartialCourseName = $"Worker";
             NoResultsCourseName = $"Selected";
             Location = $"Coventry";
-            PostCodeDetails = $"TW14 Hounslow";
+            PostCodeDetails = $"TW14 Hillingdon";
             PartialPostCode = $"TW14";
             UKPRN = $"10000528";
             ProviderDetails = $"BARKING AND DAGENHAM COLLEGE UKPRN: 10000528";
