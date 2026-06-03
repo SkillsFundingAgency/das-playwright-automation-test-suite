@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class ConfirmYourReservationPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class CheckAndConfirmYourReservationPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {
