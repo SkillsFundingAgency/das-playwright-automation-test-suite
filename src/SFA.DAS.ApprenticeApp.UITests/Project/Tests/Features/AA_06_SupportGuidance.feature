@@ -6,5 +6,6 @@ Support and guidance articles are displayed
 @regression
 Scenario: AA_06_Support and guidance articles are listed
 	Given the apprentice has logged into the app
-	When the apprentice clicks on the support and guidance tab
+	When the apprentice skips the onboarding tour if present
+	And the apprentice clicks on the support and guidance tab
 	Then the support and guidance articles are displayed
