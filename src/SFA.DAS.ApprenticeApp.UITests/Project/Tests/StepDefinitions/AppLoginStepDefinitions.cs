@@ -12,13 +12,13 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
         {
             await stepsHelper.GoToHomePageAsync();
 
-            await stepsHelper.GoToStubSignInAsync();
+            await stepsHelper.SignInViaStubAsync();
+        }
 
-            _ = await stepsHelper.GoToWelcomePageAsync();
-
+        [When(@"the apprentice skips the onboarding tour if present")]
+        public async Task WhenTheApprenticeSkipsTheOnboardingTourIfPresent()
+        {
             await stepsHelper.HandleOnboardingTourIfPresentAsync();
-
-            await stepsHelper.NavigateToKsbPageAsync();
         }
 
         [Then(@"the apprentice is taken to the KSBs tab")]

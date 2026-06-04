@@ -1,3 +1,4 @@
+using Microsoft.Playwright;
 using SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages;
 using SFA.DAS.Framework.Hooks;
 using SFA.DAS.Login.Service.Project.Helpers;
@@ -24,36 +25,19 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         private IPage Page => context.Get<Driver>().Page;
 
-        public async Task<ApprenticeAppLoginPage> NavigateToApprenticeAppLoginPage()
-        {
-            await Navigate(UrlConfig.ApprenticeApp_BaseUrl);
-
-            var loginPage = new ApprenticeAppLoginPage(context);
-
-            await loginPage.AcceptCookies();
-            await loginPage.VerifyPage();
-            return loginPage;
-        }
-
-        public async Task<ApprenticeAppDashboardPage> SignInWithValidCredentials()
-        {
-            var loginPage = await NavigateToApprenticeAppLoginPage();
-
-            var appUser = context.Get<ConfigSection>().GetConfigSection<ApprenticeAppUserConfig>();
-            var email = appUser.Username;
-
-            return await loginPage.SignInWithValidCredentials(email, email);
-        }
-
         public async Task GoToHomePageAsync() => await new CookiePage(context).AccessHomePageAsync();
 
         public async Task<StubSignInPage> GoToStubSignInAsync() => await new HomePage(context).AppSignInAsync();
 
-        public async Task<WelcomePage> GoToWelcomePageAsync()
+        public async Task SignInViaStubAsync()
         {
+            await GoToStubSignInAsync();
+
             var activeUser = context.Get<ApprenticeUser>();
 
-            return await new StubSignInPage(context).SignInAsync(activeUser.IdOrUserRef, activeUser.Username);
+            await new StubSignInPage(context).SignInAsync(activeUser.IdOrUserRef, activeUser.Username);
+
+            await Page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
         }
 
         public async Task HandleOnboardingTourIfPresentAsync()
@@ -71,54 +55,33 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
                 });
 
                 await skipTourButton.ClickAsync();
-                Console.WriteLine("[Onboarding] Tour overlay successfully bypassed during login setup.");
+                Console.WriteLine("Tour overlay successfully bypassed via centralized locator.");
 
                 await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
             }
             catch (Exception ex) when (ex is PlaywrightException || ex is TimeoutException)
             {
-                Console.WriteLine("[Onboarding Info] No active tour overlay detected during login setup. Proceeding...");
+                Console.WriteLine("Skip tour button not visible or removed from app journey. Continuing test execution...");
             }
         }
 
-        public async Task<TasksBasePage> GoToTasksPageAsync()
-            => await new WelcomePage(context).StartNowAsync();
-
-        public async Task<KsbPage> VerifyOnKsbsTabAsync()
+        public async Task VerifyOnKsbsTabAsync()
         {
             await Page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
 
             string currentUrl = Page.Url;
-            Console.WriteLine($"[Navigation Check] Current active browser URL is: {currentUrl}");
+            Console.WriteLine($"Current active browser URL is: {currentUrl}");
 
-            try
-            {
-                var skipTourButton = Page.Locator(SkipTourNavLink).First;
-
-                await skipTourButton.WaitForAsync(new LocatorWaitForOptions
-                {
-                    State = WaitForSelectorState.Visible,
-                    Timeout = 3_000
-                });
-
-                await skipTourButton.ClickAsync();
-                Console.WriteLine("[Onboarding] Tour overlay successfully bypassed via centralized locator.");
-
-                await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-            }
-            catch (Exception ex) when (ex is PlaywrightException || ex is TimeoutException)
-            {
-                Console.WriteLine("[Onboarding Info] Skip tour button not visible or removed from app journey. Continuing test execution...");
-            }
+            await HandleOnboardingTourIfPresentAsync();
 
             if (!Page.Url.Contains("/Ksb/Index") && !Page.Url.EndsWith("/Ksb"))
             {
                 throw new Exception($"Verification Failed: Expected to land on the KSB view, but stranded on layout: {Page.Url}");
             }
 
-            return new KsbPage(context);
+            var ksbPage = new KsbPage(context);
+            await ksbPage.VerifyPage();
         }
-
         public async Task<TasksBasePage> NavigateToTasksPageAsync()
         {
             await Page.Locator(TasksNavLink).WaitForAsync(new LocatorWaitForOptions
@@ -151,14 +114,13 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
         {
             if (Page.Url.Contains("/Ksb/Index") || Page.Url.EndsWith("/Ksb"))
             {
-                Console.WriteLine("[Navigation] Already present on the KSB layout. Skipping navigation click interaction.");
+                Console.WriteLine("Already present on the KSB layout. Skipping navigation click interaction.");
                 return new KsbPage(context);
             }
 
             await Page.Locator(KsbNavLink).ClickAsync();
 
-            await Page.WaitForURLAsync(
-                url => url.Contains("/Ksb/Index") || url.EndsWith("/Ksb"),
+            await Page.WaitForURLAsync(url => url.Contains("/Ksb/Index") || url.EndsWith("/Ksb"),
                 new PageWaitForURLOptions { Timeout = 15_000 });
 
             return new KsbPage(context);
