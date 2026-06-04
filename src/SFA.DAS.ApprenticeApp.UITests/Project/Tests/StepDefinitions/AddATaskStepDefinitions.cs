@@ -1,7 +1,5 @@
 using SFA.DAS.ApprenticeApp.UITests.Project.Helpers;
 using SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages;
-using Reqnroll;
-using NUnit.Framework;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
 {

@@ -5,26 +5,26 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
     [Binding]
     public class AppLoginStepDefinitions(ScenarioContext context)
     {
-        private readonly AppStepsHelper _stepsHelper = new(context);
+        private readonly AppStepsHelper stepsHelper = new(context);
 
         [Given(@"the apprentice has logged into the app")]
         public async Task GivenTheApprenticeHasLoggedIntoTheApp()
         {
-            await _stepsHelper.GoToHomePageAsync();
+            await stepsHelper.GoToHomePageAsync();
 
-            await _stepsHelper.GoToStubSignInAsync();
+            await stepsHelper.GoToStubSignInAsync();
 
-            _ = await _stepsHelper.GoToWelcomePageAsync();
+            _ = await stepsHelper.GoToWelcomePageAsync();
 
-            await _stepsHelper.HandleOnboardingTourIfPresentAsync();
+            await stepsHelper.HandleOnboardingTourIfPresentAsync();
 
-            await _stepsHelper.NavigateToKsbPageAsync();
+            await stepsHelper.NavigateToKsbPageAsync();
         }
 
         [Then(@"the apprentice is taken to the KSBs tab")]
         public async Task ThenTheApprenticeIsTakenToTheKSBsTab()
         {
-            await _stepsHelper.VerifyOnKsbsTabAsync();
+            await stepsHelper.VerifyOnKsbsTabAsync();
         }
     }
 }
