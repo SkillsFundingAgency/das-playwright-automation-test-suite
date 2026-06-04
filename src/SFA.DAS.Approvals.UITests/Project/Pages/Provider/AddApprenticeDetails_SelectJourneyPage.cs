@@ -3,15 +3,15 @@
     internal class AddApprenticeDetails_SelectJourneyPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
-        private ILocator optionToCreateANewCohort => page.GetByRole(AriaRole.Radio, new() { Name = "Create a new cohort" });
-        private ILocator optionToAddToAnExistingCohort => page.GetByRole(AriaRole.Radio, new() { Name = "Add to an existing cohort" });
+        private ILocator optionToCreateANewCohort => page.GetByRole(AriaRole.Radio, new() { Name = "Yes, create a new cohort" });
+        private ILocator optionToAddToAnExistingCohort => page.GetByRole(AriaRole.Radio, new() { Name = "No, add to an existing cohort" });
         private ILocator continueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         #endregion
         
         
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Do you want to create a new cohort?");
         }
 
         internal async Task<ChooseAnEmployerPage> SelectOptionCreateANewCohort()

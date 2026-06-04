@@ -38,7 +38,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             if (await reservationLink.IsVisibleAsync())
             {
                 await reservationLink.First.ClickAsync();
-                return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
+                return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context, apprenticeship.EmployerDetails.EmployerName));
             }
 
             // 🔁 If not, loop through pagination
@@ -62,7 +62,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             }
 
 
-            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
+            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context, apprenticeship.EmployerDetails.EmployerName));
         }
 
         internal async Task ClickOnAddApprenticeLink()

@@ -4,7 +4,7 @@
     {
 
         #region locators
-        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=/Select (learners|apprentices) from ILR/"); 
+        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=Choose details from ILR (individual learner record)"); 
         private ILocator optionToUploadACsvFile => page.Locator("text=Upload a CSV file");
         private ILocator ContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         #endregion

@@ -1,9 +1,10 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class SelectLearnerFromILRPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class SelectLearnerFromILRPage(ScenarioContext context, string employerName = null) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator entryMethod => page.GetByRole(AriaRole.Radio, new() { NameRegex = new Regex("Select (apprentices|learners) from ILR") });
@@ -17,8 +18,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
                 await entryMethod.CheckAsync();
                 await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
             }
-            
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(new Regex("Select (learner|apprentices) from ILR"));
+
+            var expectedEmployerName = employerName;
+            if (string.IsNullOrWhiteSpace(expectedEmployerName) && context.TryGetValue(ScenarioKeys.ListOfApprenticeship, out List<Apprenticeship> apprenticeships))
+            {
+                expectedEmployerName = apprenticeships.FirstOrDefault()?.EmployerDetails?.EmployerName;
+            }
+
+            var headingRegex =  new Regex($"^Select (learner|learners|apprentice|apprentices) from ILR for {Regex.Escape(expectedEmployerName)}$");
+
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(headingRegex);
         }
 
         internal async Task<CheckApprenticeDetailsPage> SelectApprenticeFromILRList(Apprenticeship apprenticeship)
