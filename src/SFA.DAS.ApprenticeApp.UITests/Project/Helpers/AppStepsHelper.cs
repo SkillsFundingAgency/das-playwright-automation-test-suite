@@ -5,7 +5,7 @@ using SFA.DAS.Login.Service.Project.Helpers;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 {
-    public class ApprenticeAppUserConfig
+    public class ApprenticeAppUser
     {
         public string Username { get; set; }
     }

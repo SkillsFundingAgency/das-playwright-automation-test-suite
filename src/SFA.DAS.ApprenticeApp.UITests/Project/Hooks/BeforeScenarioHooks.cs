@@ -17,7 +17,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Hooks
         public async Task AppSetupHelpers()
         {
             var configSection = context.Get<ConfigSection>();
-            var appUserConfig = configSection.GetConfigSection<ApprenticeAppUserConfig>();
+            var appUserConfig = configSection.GetConfigSection<ApprenticeAppUser>();
 
             var testUser = new TestApprenticeUser
             {
