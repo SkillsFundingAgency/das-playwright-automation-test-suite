@@ -30,6 +30,9 @@
     <None Update="specflow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="allureConfig.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
   </ItemGroup>
 
 </Project>
