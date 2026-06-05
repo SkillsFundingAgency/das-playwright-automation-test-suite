@@ -11,7 +11,7 @@
         
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Do you want to create a new cohort?");
         }
 
         internal async Task<ChooseAnEmployerPage> SelectOptionCreateANewCohort()
