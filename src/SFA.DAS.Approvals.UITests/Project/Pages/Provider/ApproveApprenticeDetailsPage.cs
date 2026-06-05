@@ -99,7 +99,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         {
             await AddAnotherApprenticeLink.ClickAsync();
             await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
-            var reservation = await new SelectReservationPage(context).SelectReservation();
+            var reservation = await new ChooseReservationPage(context).SelectReservation();
             return new SelectLearnerFromILRPage(context);
         }
 

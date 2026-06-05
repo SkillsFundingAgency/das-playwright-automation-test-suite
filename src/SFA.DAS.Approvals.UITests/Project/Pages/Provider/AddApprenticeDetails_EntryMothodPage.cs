@@ -4,21 +4,21 @@
     {
 
         #region locators
-        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=Choose details from ILR (individual learner record)"); 
+        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=Select apprentices from ILR"); 
         private ILocator optionToUploadACsvFile => page.Locator("text=Upload a CSV file");
         private ILocator ContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         #endregion
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Do you want to create a new cohort?");
         }
 
-        internal async Task<AddApprenticeDetails_SelectJourneyPage> SelectOptionToApprenticesFromILR()
+        internal async Task<AddLearnerDetails_SelectJourneyPage> SelectOptionToApprenticesFromILR()
         {
             var page = await SelectOptionToAddApprenticeFromILRAndContinue();
             await page.ClickOnContinueButton();
-            return await VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
+            return await VerifyPageAsync(() => new AddLearnerDetails_SelectJourneyPage(context));
         }
 
         internal async Task<UsingFileUploadPage> SelectOptionToUploadCsvFile()

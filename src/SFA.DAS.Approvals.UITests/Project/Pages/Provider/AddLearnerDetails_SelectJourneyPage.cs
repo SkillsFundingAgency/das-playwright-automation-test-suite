@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class AddApprenticeDetails_SelectJourneyPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class AddLearnerDetails_SelectJourneyPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator optionToCreateANewCohort => page.GetByRole(AriaRole.Radio, new() { Name = "Yes, create a new cohort" });

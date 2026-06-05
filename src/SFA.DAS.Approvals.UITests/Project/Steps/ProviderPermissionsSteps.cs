@@ -108,7 +108,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        private async Task<AddApprenticeDetails_SelectJourneyPage> GoToSelectOptionPage()
+        private async Task<AddLearnerDetails_SelectJourneyPage> GoToSelectOptionPage()
         {
             var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(true);
             var selectJourneyPage = await providerHomePage.GotoSelectJourneyPage();
