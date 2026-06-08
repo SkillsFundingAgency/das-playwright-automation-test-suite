@@ -116,7 +116,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private async Task<UploadCsvFilePage> StartBulkUploadJourney()
         {            
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
-            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToUploadCsvFile();
+            var page2 = await new HowDoYouWantToAddLearnerDetailsPage(context).SelectOptionToUploadCsvFile();
             return await page2.ClickContinueButton();
         }
 

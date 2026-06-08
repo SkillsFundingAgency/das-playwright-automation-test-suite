@@ -318,7 +318,7 @@ public class ProviderAddApprenticeDetailsEntryMothod(ScenarioContext context) : 
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("How do you want to add learner details?");
     }
 
     //internal async Task<ProviderAddApprenticeDetailsViaSelectJourneyPage>  SelectAddManually()

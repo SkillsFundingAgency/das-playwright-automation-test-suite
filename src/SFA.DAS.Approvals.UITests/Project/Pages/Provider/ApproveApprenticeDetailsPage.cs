@@ -98,16 +98,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task<SelectLearnerFromILRPage> ClickOnAddAnotherApprenticeLink_SelectExistingReservationRoute()
         {
             await AddAnotherApprenticeLink.ClickAsync();
-            await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
+            await new HowDoYouWantToAddLearnerDetailsPage(context).SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
             var reservation = await new SelectReservationPage(context).SelectReservation();
             return new SelectLearnerFromILRPage(context);
         }
 
 
-        internal async Task<AddApprenticeDetails_EntryMothodPage> ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage()
+        internal async Task<HowDoYouWantToAddLearnerDetailsPage> ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage()
         {
             await AddAnotherApprenticeLink.ClickAsync();
-            return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));            
+            return await VerifyPageAsync(() => new HowDoYouWantToAddLearnerDetailsPage(context));            
         }
         
         internal async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()

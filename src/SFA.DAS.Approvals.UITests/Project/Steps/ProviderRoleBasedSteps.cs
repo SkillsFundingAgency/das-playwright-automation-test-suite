@@ -205,7 +205,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             if (status ==  "can")
             {
-                await page.VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
+                await page.VerifyPageAsync(() => new DoYouWantToCreateANewCohortPage(context));
             }
             else
             {

@@ -1,24 +1,24 @@
 ﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class AddApprenticeDetails_EntryMothodPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class HowDoYouWantToAddLearnerDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
 
         #region locators
-        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=/Select (learners|apprentices) from ILR/"); 
+        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=Choose details from ILR (individual learner record)"); 
         private ILocator optionToUploadACsvFile => page.Locator("text=Upload a CSV file");
         private ILocator ContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         #endregion
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("How do you want to add learner details?");
         }
 
-        internal async Task<AddApprenticeDetails_SelectJourneyPage> SelectOptionToApprenticesFromILR()
+        internal async Task<DoYouWantToCreateANewCohortPage> SelectOptionToApprenticesFromILR()
         {
             var page = await SelectOptionToAddApprenticeFromILRAndContinue();
             await page.ClickOnContinueButton();
-            return await VerifyPageAsync(() => new AddApprenticeDetails_SelectJourneyPage(context));
+            return await VerifyPageAsync(() => new DoYouWantToCreateANewCohortPage(context));
         }
 
         internal async Task<UsingFileUploadPage> SelectOptionToUploadCsvFile()
