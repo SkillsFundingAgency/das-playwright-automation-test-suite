@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
@@ -6,19 +7,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     internal class SelectLearnerFromILRPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
-        private ILocator entryMethod => page.GetByRole(AriaRole.Radio, new() { NameRegex = new Regex("Select (apprentices|learners) from ILR") });
         private ILocator clearFilterLink => page.GetByRole(AriaRole.Link, new() { Name = "Clear search and filters" });
         #endregion
 
         public override async Task VerifyPage()
         {
-            if (await entryMethod.IsVisibleAsync())     //this condition to be removed when APPMAN-1741 feature is rolled out
-            {
-                await entryMethod.CheckAsync();
-                await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-            }
-            
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(new Regex("Select (learner|apprentices) from ILR"));
+            var employerName = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship)
+                .FirstOrDefault()?
+                .EmployerDetails?
+                .EmployerName;
+
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync($"Select learners from ILR for {employerName}");
         }
 
         internal async Task<CheckApprenticeDetailsPage> SelectApprenticeFromILRList(Apprenticeship apprenticeship)
