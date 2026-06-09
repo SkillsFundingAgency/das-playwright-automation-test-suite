@@ -9,4 +9,3 @@ Feature: Qfast_08
 Scenario: Application Validation
 	Given the ao user log in to the portal	
 	And I create a new funding application on behalf of different organisation
-	When I Sign out from the portal

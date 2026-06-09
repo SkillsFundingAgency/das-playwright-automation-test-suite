@@ -41,8 +41,6 @@ Scenario: QFAST Admin Publish Form and AO Create Funding Application
 	When I Sign out from the portal
 
 	Given the ifate user log in to the portal
-	Then I validate as an ifate application status is Withdrawn for RAD Advanced Vocational Graded Examination in Dance
-	#When I Sign out from the portal	
-	
+	Then I validate as an ifate application status is Withdrawn for RAD Advanced Vocational Graded Examination in Dance	
 
 	
