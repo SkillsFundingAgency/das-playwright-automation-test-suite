@@ -1,4 +1,3 @@
-using Microsoft.Playwright;
 using SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages;
 using SFA.DAS.Framework.Hooks;
 using SFA.DAS.Login.Service.Project.Helpers;
