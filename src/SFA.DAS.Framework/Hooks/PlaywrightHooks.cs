@@ -1,4 +1,6 @@
 ﻿
+using Allure.Net.Commons;
+
 namespace SFA.DAS.Framework.Hooks;
 
 [Binding]
@@ -85,6 +87,8 @@ public class PlaywrightHooks(ScenarioContext context)
                     });
 
                     TestContext.AddTestAttachment(tracefilePath, tracefileName);
+
+                    AllureApi.AddAttachment(tracefileName, "application/vnd.allure.playwright-trace", tracefilePath);
                 }
                 );
         }
