@@ -86,6 +86,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task<SelectLearnerFromILRPage> ClickOnAddAnotherApprenticeLink()
         {
             await AddAnotherApprenticeLink.ClickAsync();
+            await new HowDoYouWantToAddLearnerDetailsPage(context).SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
             return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
