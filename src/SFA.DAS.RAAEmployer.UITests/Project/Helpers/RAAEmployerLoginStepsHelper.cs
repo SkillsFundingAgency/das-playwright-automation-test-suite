@@ -16,7 +16,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers
 
                 if (user != null)
                 {
-                    context.Get<ObjectContext>().Set("loggedinuserobject", new LoggedInAccountUser
+                    context.Get<ObjectContext>().Replace("loggedinuserobject", new LoggedInAccountUser
                     {
                         Username = user.Username,
                         IdOrUserRef = user.IdOrUserRef,
