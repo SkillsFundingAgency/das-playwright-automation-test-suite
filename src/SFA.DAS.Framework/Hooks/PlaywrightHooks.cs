@@ -88,7 +88,7 @@ public class PlaywrightHooks(ScenarioContext context)
 
                     TestContext.AddTestAttachment(tracefilePath, tracefileName);
 
-                    AllureApi.AddAttachment(tracefilePath);
+                    AllureApi.AddAttachment(tracefileName, "application/vnd.allure.playwright-trace", tracefilePath);
                 }
                 );
         }
