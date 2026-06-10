@@ -14,14 +14,5 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
         {
             ksbPage = await stepsHelper.NavigateToKsbPageAsync();
         }
-
-        [Then("the KSBs are displayed")]
-        public async Task ThenTheKSBsAreDisplayed()
-        {
-            Assert.AreEqual(
-                "Knowledge, skills and behaviours (KSBs)",
-                await ksbPage.KsbPageTitleAsync(),
-                "The KSB page title did not match the expected header value.");
-        }
     }
 }

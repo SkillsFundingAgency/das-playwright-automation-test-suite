@@ -1,6 +1,3 @@
-using System.Threading.Tasks;
-using Microsoft.Playwright;
-using Reqnroll;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 {
@@ -29,8 +26,6 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         {
             await Assertions.Expect(KsbHeader).ToBeVisibleAsync();
         }
-
-        public async Task<string> KsbPageTitleAsync() => await KsbHeader.InnerTextAsync();
 
         #region Tab Navigation Helpers
 
