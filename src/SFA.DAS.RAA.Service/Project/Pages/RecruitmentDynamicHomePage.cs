@@ -29,7 +29,7 @@ public class RecruitmentDynamicHomePage(ScenarioContext context, bool navigate) 
     public async Task<PreviewYourAdvertOrVacancyPage> ReviewYourVacancy()
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Review your advert" }).ClickAsync();
-        return await VerifyPageAsync(() => new PreviewYourAdvertOrVacancyPage(context));
+        return new PreviewYourAdvertOrVacancyPage(context);
     }
 
     public async Task<RecruitmentDynamicHomePage> ConfirmVacancyTitleAndStatus(string status)

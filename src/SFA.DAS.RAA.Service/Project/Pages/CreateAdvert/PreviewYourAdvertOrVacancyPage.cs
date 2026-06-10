@@ -4,7 +4,7 @@ public class PreviewYourAdvertOrVacancyPage(ScenarioContext context) : RaaBasePa
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "Check your answers before submitting your advert" : "Preview your vacancy";
+        string PageTitle = isRaaEmployer ? "Preview your advert" : "Preview your vacancy";
 
         await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(PageTitle);
     }
