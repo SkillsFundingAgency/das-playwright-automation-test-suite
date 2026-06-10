@@ -7,7 +7,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     internal class SelectLearnerFromILRPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
-        private ILocator entryMethod => page.Locator("text=Choose details from ILR (individual learner record)");
+        private ILocator entryMethod => page.GetByLabel(new Regex("Choose details from ILR \\(individual learner record\\)|Select apprentices from ILR|Add apprentice details", RegexOptions.IgnoreCase));
         private ILocator clearFilterLink => page.GetByRole(AriaRole.Link, new() { Name = "Clear search and filters" });
         #endregion
 
