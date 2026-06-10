@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class EmployerHomePage(ScenarioContext context) : ApprovalsBasePage(context)
+    public class EmployerHomePage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {

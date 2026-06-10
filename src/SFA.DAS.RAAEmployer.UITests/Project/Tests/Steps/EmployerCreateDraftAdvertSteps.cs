@@ -15,6 +15,9 @@ public class EmployerCreateDraftAdvertSteps(ScenarioContext context)
     [When(@"^the Employer creates first Draft advert$")]
     public async Task TheEmployerCreatesFirstDraftAdvert() => await ReturnToApplications(await _stepsHelper.CreateFirstDraftAdvert(new CreateAnApprenticeshipAdvertOrVacancyPage(context)));
 
+    [When(@"the Employer creates first submitted advert")]
+    public async Task TheEmployerCreatesFirstSubmittedAdvert() => await _stepsHelper.CreateFirstAdvertAndSubmit(new CreateAnApprenticeshipAdvertOrVacancyPage(context));
+
     [Then(@"^the Employer is able to delete the draft vacancy$")]
     public async Task ThenTheEmployerIsAbleToDeleteTheDraftVacancy() => await _stepsHelper.CompleteDeleteOfDraftVacancy();
 
