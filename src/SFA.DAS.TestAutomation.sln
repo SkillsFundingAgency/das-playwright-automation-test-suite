@@ -89,6 +89,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Digicerts.UITests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.RAAProvider.UITests", "SFA.DAS.RAAProvider.UITests\SFA.DAS.RAAProvider.UITests.csproj", "{D8C713B6-526A-418B-9D98-C7A0BA218906}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ApprenticeCMAD.UITests", "SFA.DAS.ApprenticeCMAD.UITests\SFA.DAS.ApprenticeCMAD.UITests.csproj", "{F87DB6E6-A0E5-44FB-825A-727D277E582A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -567,6 +569,18 @@ Global
 		{D8C713B6-526A-418B-9D98-C7A0BA218906}.Release|x64.Build.0 = Release|Any CPU
 		{D8C713B6-526A-418B-9D98-C7A0BA218906}.Release|x86.ActiveCfg = Release|Any CPU
 		{D8C713B6-526A-418B-9D98-C7A0BA218906}.Release|x86.Build.0 = Release|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Debug|x64.Build.0 = Debug|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Debug|x86.Build.0 = Debug|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Release|x64.ActiveCfg = Release|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Release|x64.Build.0 = Release|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Release|x86.ActiveCfg = Release|Any CPU
+		{F87DB6E6-A0E5-44FB-825A-727D277E582A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
