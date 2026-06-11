@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class ProviderSelectAReservationPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class ProviderChooseAReservationPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         private ILocator entryMethod => page.GetByLabel(new Regex("Choose details from ILR \\(individual learner record\\)|Select apprentices from ILR|Add apprentice details", RegexOptions.IgnoreCase));
 

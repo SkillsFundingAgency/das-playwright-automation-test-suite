@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class AddApprenticeDetails_EntryMothodPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class HowDoYouWantToAddLearner_EntryMothodPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
 
         #region locators
@@ -28,11 +28,11 @@
             return await VerifyPageAsync(() => new UsingFileUploadPage(context));
         }
 
-        internal async Task<ProviderSelectAReservationPage> SelectOptionToAddApprenticesFromILRList_SelectReservationRoute()
+        internal async Task<ProviderChooseAReservationPage> SelectOptionToAddApprenticesFromILRList_SelectReservationRoute()
         {
             var page = await SelectOptionToAddApprenticeFromILRAndContinue();
             await page.ClickOnContinueButton();
-            return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
+            return await VerifyPageAsync(() => new ProviderChooseAReservationPage(context));
         }
 
         internal async Task SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute()

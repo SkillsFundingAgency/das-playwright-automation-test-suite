@@ -112,7 +112,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var providerHomePage = await providerHomePageStepsHelper.GoToProviderHomePage(true);
             var selectJourneyPage = await providerHomePage.GotoSelectJourneyPage();
-            return await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+            return await new HowDoYouWantToAddLearner_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
         }
 
         private async Task<bool> SearchEmployerToReserveNewFunding()

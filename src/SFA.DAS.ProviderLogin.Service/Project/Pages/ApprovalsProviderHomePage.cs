@@ -71,11 +71,11 @@ public partial class ProviderHomePage : InterimProviderBasePage
         return await VerifyPageAsync(() => new ProviderTermsOfUsePage(context));
     }
 
-    public async Task<ProviderAddApprenticeDetailsEntryMothod> GotoSelectJourneyPage()
+    public async Task<ProviderHowDoYouWantToAddLearnerEntryMothodPage> GotoSelectJourneyPage()
     {
         await AddNewApprentices();
 
-        return await VerifyPageAsync(() => new ProviderAddApprenticeDetailsEntryMothod(context));
+        return await VerifyPageAsync(() => new ProviderHowDoYouWantToAddLearnerEntryMothodPage(context));
     }
 
     public async Task<ProviderAddEmployerStartPage> GotoAddNewEmployerStartPage()
@@ -314,7 +314,7 @@ public class ProviderAccessDeniedPage(ScenarioContext context) : InterimProvider
     //}
 }
 
-public class ProviderAddApprenticeDetailsEntryMothod(ScenarioContext context) : InterimProviderBasePage(context)
+public class ProviderHowDoYouWantToAddLearnerEntryMothodPage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage()
     {
