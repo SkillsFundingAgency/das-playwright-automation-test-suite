@@ -4,11 +4,6 @@ using SFA.DAS.Login.Service.Project.Helpers;
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 {
-    public class ApprenticeAppUser
-    {
-        public string Username { get; set; }
-    }
-
     public class AppStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
     {
         private const string TasksNavLink = "a.govuk-service-navigation__link[href='/Tasks/Index']";
@@ -32,7 +27,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
         {
             await GoToStubSignInAsync();
 
-            var activeUser = context.Get<ApprenticeUser>();
+            var activeUser = context.Get<ApprenticeAppUser>();
 
             await new StubSignInPage(context).SignInAsync(activeUser.IdOrUserRef, activeUser.Username);
 

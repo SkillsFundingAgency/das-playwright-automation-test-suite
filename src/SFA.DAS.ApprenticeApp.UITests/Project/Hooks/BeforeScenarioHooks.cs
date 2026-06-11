@@ -8,34 +8,9 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Hooks
     [Binding]
     public class BeforeScenarioHooks(ScenarioContext context)
     {
-        private class TestApprenticeUser : ApprenticeUser
-        {
-
-        }
 
         [BeforeScenario(Order = 10)]
-        public async Task AppSetupHelpers()
-        {
-            var configSection = context.Get<ConfigSection>();
-            var appUserConfig = configSection.GetConfigSection<ApprenticeAppUser>();
-
-            var testUser = new TestApprenticeUser
-            {
-                Username = appUserConfig.Username
-            };
-
-            var userList = new List<ApprenticeUser> { testUser };
-
-            await context.SetApprenticeAccountsPortalUser(userList);
-
-            if (!context.ContainsKey(typeof(ApprenticeUser).FullName) && context.ContainsKey(typeof(TestApprenticeUser).FullName))
-            {
-                context.Set<ApprenticeUser>(context.Get<TestApprenticeUser>());
-            }
-
-            var objectContext = context.Get<ObjectContext>();
-            objectContext.SetConsoleAndDebugInformation($"ApprenticeApp BeforeScenario setup complete. Account context verified for user: {appUserConfig.Username}");
-        }
+        public async Task AppSetupHelpers() => await context.SetApprenticeAccountsPortalUser([ context.Get<ConfigSection>().GetConfigSection<ApprenticeAppUser>()]);
 
         [AfterScenario(Order = 10)]
         public async Task CleanUpTestData()
