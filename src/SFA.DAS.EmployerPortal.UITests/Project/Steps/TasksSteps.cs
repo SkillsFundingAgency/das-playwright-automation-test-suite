@@ -36,7 +36,7 @@ public class TasksSteps
         _context.Set(taskQueryResult, TaskQueryResultKey);
     }
 
-    [When("the current date is in range 16 - 19")]
+    [When("^the current date is in range 16 - 19$")]
     public async Task WhenTheCurrentDateIsInRange()
     {
         var tasks = GetTaskQueryResult();
@@ -50,7 +50,7 @@ public class TasksSteps
         await Task.CompletedTask;
     }
 
-    [Then("display task: Levy declaration due by 19 MMMM")]
+    [Then("^display task: Levy declaration due by 19 MMMM$")]
     public async Task ThenDisplayTaskLevyDeclarationDueBy()
     {
         var tasks = GetTaskQueryResult();
@@ -61,33 +61,33 @@ public class TasksSteps
         }
     }
 
-    [When("there are X apprentice changes to review")]
-    public async Task WhenThereAreApprenticeChangesToReview()
+    [When("^there are X learner changes to review$")]
+    public async Task WhenThereAreLearnerChangesToReview()
     {
         var tasks = GetTaskQueryResult();
 
-        tasks.NumberOfApprenticesToReview = await _tasksHelper.GetNumberOfApprenticesToReview();
+        tasks.NumberOfLearnersToReview = await _tasksHelper.GetNumberOfLearnersToReview();
 
         SetTaskQueryResult(tasks);
     }
 
-    [Then("display task: X apprentice changes to review")]
-    public async Task ThenDisplayApprenticeChangesToReview()
+    [Then("^display task: X learner changes to review$")]
+    public async Task ThenDisplayLearnerChangesToReview()
     {
         var tasks = GetTaskQueryResult();
 
-        await _homePage.VerifyApprenticeChangeToReviewMessageShown(tasks.NumberOfApprenticesToReview);
+        await _homePage.VerifyLearnerChangeToReviewMessageShown(tasks.NumberOfLearnersToReview);
     }
 
-    [Then("View changes link should navigate user to Manage your apprentices page")]
-    public async Task ThenViewApprenticeChangesNavigatesToManageYourApprenticesPage()
+    [Then("^View changes link should navigate user to Manage your learners page$")]
+    public async Task ThenViewApprenticeChangesNavigatesToManageYourLearnersPage()
     {
         var tasks = GetTaskQueryResult();
 
-        _homePage = await TasksHelper.ClickViewApprenticeChangesLink(_homePage, tasks.NumberOfApprenticesToReview);
+        _homePage = await TasksHelper.ClickViewLearnerChangesLink(_homePage, tasks.NumberOfLearnersToReview);
     }
 
-    [When("there are X cohorts ready for approval")]
+    [When("^there are X cohorts ready for approval$")]
     public async Task WhenThereAreCohortsReadyToReview()
     {
         var tasks = GetTaskQueryResult();
@@ -97,7 +97,7 @@ public class TasksSteps
         SetTaskQueryResult(tasks);
     }
 
-    [Then("display task: X cohorts ready for approval")]
+    [Then("^display task: X cohorts ready for approval$")]
     public async Task ThenDisplayNumberOfCohortsReadyToReview()
     {
         var tasks = GetTaskQueryResult();
@@ -105,13 +105,13 @@ public class TasksSteps
         await _homePage.VerifyCohortsReadyToReviewMessageShown(tasks.NumberOfCohortsReadyToReview);
     }
 
-    [Then("'View cohorts' link should navigate user to 'Apprentice Requests' page")]
-    public async Task ThenViewCohortsReadyToReviewNavigatesToApprenticeRequestsPage()
+    [Then("^'View cohorts' link should navigate user to 'Learner Requests' page$")]
+    public async Task ThenViewCohortsReadyToReviewNavigatesToLearnerRequestsPage()
     {
         _homePage = await TasksHelper.ClickViewCohortsToReviewLink(_homePage);
     }
 
-    [When("there is pending Transfer request ready for approval")]
+    [When("^there is pending Transfer request ready for approval$")]
     public async Task WhenThereIsAPendingTransferRequestReadyForApproval()
     {
         var tasks = GetTaskQueryResult();
@@ -121,19 +121,19 @@ public class TasksSteps
         SetTaskQueryResult(tasks);
     }
 
-    [Then("display task: Transfer request received'")]
+    [Then("^display task: Transfer request received'$")]
     public async Task ThenDisplayTransferRequestReceived()
     {
         await _homePage.VerifyTransferRequestReceivedMessageShown();
     }
 
-    [Then("'View details' for Transfer Request link should navigate user to Transfers page")]
+    [Then("^'View details' for Transfer Request link should navigate user to Transfers page$")]
     public async Task ThenViewTransferRequestDetailsNavigatesToTransferConnectionsPage()
     {
         _homePage = await TasksHelper.ClickViewDetailsForTransferRequestsLink(_homePage);
     }
 
-    [When("there are X transfer connection requests to review")]
+    [When("^there are X transfer connection requests to review$")]
     public async Task WhenThereAreTransferConnectionRequestsToReview()
     {
         var tasks = GetTaskQueryResult();
@@ -143,7 +143,7 @@ public class TasksSteps
         SetTaskQueryResult(tasks);
     }
 
-    [Then("display task: 'X connection requests to review'")]
+    [Then("^display task: 'X connection requests to review'$")]
     public async Task ThenDisplayTransferConnectionRequests()
     {
         var tasks = GetTaskQueryResult();
@@ -151,13 +151,13 @@ public class TasksSteps
         await _homePage.VerifyTransferConnectionRequestsMessageShown(tasks.NumberOfPendingTransferConnections);
     }
 
-    [Then("'View details' for Transfer Connection link should navigate user to Transfers page")]
+    [Then("^'View details' for Transfer Connection link should navigate user to Transfers page$")]
     public async Task ThenViewTransferConnectionRequestDetailsNavigatesToTransferConnectionsPage()
     {
         _homePage = await TasksHelper.ClickViewDetailsForTransferConnectionRequestsLink(_homePage);
     }
 
-    [When("there are X transfer pledge applications awaiting your approval")]
+    [When("^there are X transfer pledge applications awaiting your approval$")]
     public async Task WhenThereAreTransferPledgeApplicationsToReview()
     {
         var tasks = GetTaskQueryResult();
@@ -167,7 +167,7 @@ public class TasksSteps
         SetTaskQueryResult(tasks);
     }
 
-    [Then("display task: 'X transfer pledge applications awaiting your approval'")]
+    [Then("^display task: 'X transfer pledge applications awaiting your approval'$")]
     public async Task ThenDisplayNumberTransferPledgeApplicationsToReview()
     {
         var tasks = GetTaskQueryResult();
@@ -175,40 +175,41 @@ public class TasksSteps
         await _homePage.VerifyTransferPledgeApplicationsToReviewMessageShown(tasks.NumberTransferPledgeApplicationsToReview);
     }
 
-    [Then("'View applications' link should navigate user to 'My Transfer Pledges' page")]
+    [Then("^'View applications' link should navigate user to 'My Transfer Pledges' page$")]
     public async Task ThenViewTransferPledgeApplicationsNavigatesToMyTransfersPage()
     {
         _homePage = await TasksHelper.ClickTransferPledgeApplicationsLink(_homePage);
     }
 
-    [When("there are X transfers applications available to add an apprentice")]
-    public async Task WhenThereAreTransferPledgeApplicationsAvailableToAddAnApprentice()
+    [When("^there are X transfers applications available to add a learner$")]
+    public async Task WhenThereAreTransferPledgeApplicationsAvailableToAddALearner()
     {
         var tasks = GetTaskQueryResult();
 
-        tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices = await _tasksHelper.GetNumberOfAcceptedTransferPledgeApplicationsWithNoApprentices();
+        tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoLearners = await _tasksHelper.GetNumberOfAcceptedTransferPledgeApplicationsWithNoLearners();
 
+        SetTaskQueryResult(tasks);
     }
 
-    [Then("display task: 'X transfers available to add an apprentice'")]
-    public async Task ThenDisplayNumberTransfersAvailableToAddAnApprentice()
+    [Then("^display task: 'X transfers available to add a learner'$")]
+    public async Task ThenDisplayNumberTransfersAvailableToAddALearner()
     {
         var tasks = GetTaskQueryResult();
 
-        await _homePage.VerifyTransfersAvailableToAddAnApprenticeMessageShown(tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices);
+        await _homePage.VerifyTransfersAvailableToAddALearnerMessageShown(tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoLearners);
     }
 
-    [Then("'View details' link should navigate user to 'My applications' page")]
+    [Then("^'View details' link should navigate user to 'My applications' page$")]
     public async Task ThenViewTransferPledgeApplicationsNavigatesToUseTransferFundsPage()
     {
         var tasks = GetTaskQueryResult();
 
-        _homePage = await TasksHelper.ClickTransfersAvailableToAddApprenticeLink(_homePage, tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoApprentices);
+        _homePage = await TasksHelper.ClickTransfersAvailableToAddApprenticeLink(_homePage, tasks.NumberOfAcceptedTransferPledgeApplicationsWithNoLearners);
 
     }
 
 
-    [When("there are X transfer application has been approved")]
+    [When("^there are X transfer application has been approved$")]
     public async Task WhenTransferApplicationsHaveBeenApproved()
     {
         var tasks = GetTaskQueryResult();
@@ -216,7 +217,7 @@ public class TasksSteps
         SetTaskQueryResult(tasks);
     }
 
-    [Then("display task: 'X transfers to accept'")]
+    [Then("^display task: 'X transfers to accept'$")]
     public async Task ThenDisplayNumberOfTransferPledgeApplicationsApproved()
     {
         var tasks = GetTaskQueryResult();
@@ -224,7 +225,7 @@ public class TasksSteps
         await _homePage.VerifyTransfersToAcceptMessageShown(tasks.NumberOfTransferPledgeApplicationsApproved);
     }
 
-    [Then("'View details' link should navigate user to 'My applications' to Accept page")]
+    [Then("^'View details' link should navigate user to 'My applications' to Accept page$")]
     public async Task ThenViewNumberOfTransferPledgeApplicationsApprovedMyApplicationsPage()
     {
         var tasks = GetTaskQueryResult();

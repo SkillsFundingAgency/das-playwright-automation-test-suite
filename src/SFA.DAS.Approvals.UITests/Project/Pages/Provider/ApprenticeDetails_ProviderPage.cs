@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
+﻿using SFA.DAS.ProviderLogin.Service.Project.Pages;
+
+namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
     internal class ApprenticeDetails_ProviderPage : ApprovalsBasePage
     {
@@ -28,7 +30,17 @@
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync(pageTitle);
         }
 
-        internal async Task ClickOnEditApprenticeDetailsLink() => await EditApprenticeDetailsLink.ClickAsync();
+        internal async Task<EditLearnerDetails_ProviderPage> ClickOnEditApprenticeDetailsLink()
+        {
+            await EditApprenticeDetailsLink.ClickAsync();
+            return await VerifyPageAsync(() => new EditLearnerDetails_ProviderPage(context));
+        }
+
+        internal async Task<ProviderAccessDeniedPage> ClickOnEditApprenticeDetailsLinkLeadToAccessDeniedPage()
+        {
+            await EditApprenticeDetailsLink.ClickAsync();
+            return await VerifyPageAsync(() => new ProviderAccessDeniedPage(context));
+        }
 
         internal async Task ClickOnReviewChanges() => await ReviewChangesLink.ClickAsync();
 
@@ -38,10 +50,10 @@
 
         internal async Task ClickOnChangeEmployerLink() => await ChangeEmployerLink.ClickAsync();
 
-        internal async Task<ManageYourApprentices_ProviderPage> ReturnBackToManageYourApprenticesPage()
+        internal async Task<ManageYourLearners_ProviderPage> ReturnBackToManageYourApprenticesPage()
         {
             await ManageYourApprenticesLinks.ClickAsync();
-            return await VerifyPageAsync(() => new ManageYourApprentices_ProviderPage(context));
+            return await VerifyPageAsync(() => new ManageYourLearners_ProviderPage(context));
         }
 
         internal async Task AssertBanner(string Title, string Body) => await Assertions.Expect(Banner(Title, Body)).ToBeVisibleAsync();

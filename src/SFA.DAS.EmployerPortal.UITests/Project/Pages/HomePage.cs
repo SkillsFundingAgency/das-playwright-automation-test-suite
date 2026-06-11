@@ -72,16 +72,16 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         await VerifyTaskList(messageText);
     }
 
-    public async Task VerifyApprenticeChangeToReviewMessageShown(int numberOfChanges)
+    public async Task VerifyLearnerChangeToReviewMessageShown(int numberOfChanges)
     {
-        var messageText = numberOfChanges == 1 ? "1 apprentice change to review" : $"{numberOfChanges} apprentice changes to review";
+        var messageText = numberOfChanges == 1 ? "1 learner  change to review" : $"{numberOfChanges} learner  changes to review";
 
         await VerifyTaskList(messageText);
     }
 
     public async Task VerifyCohortsReadyToReviewMessageShown(int numberOfChanges)
     {
-        var messageText = numberOfChanges == 1 ? "1 apprentice request ready for review" : $"{numberOfChanges} apprentice requests ready for review";
+        var messageText = numberOfChanges == 1 ? "1 learner  request ready for review" : $"{numberOfChanges} learner  requests ready for review";
 
         await VerifyTaskList(messageText);
     }
@@ -93,9 +93,9 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         await VerifyTaskList(messageText);
     }
 
-    public async Task VerifyTransfersAvailableToAddAnApprenticeMessageShown(int numberOfChanges)
+    public async Task VerifyTransfersAvailableToAddALearnerMessageShown(int numberOfChanges)
     {
-        var messageText = numberOfChanges == 1 ? "1 transfer available to add an apprentice" : $"{numberOfChanges} transfers available to add an apprentice";
+        var messageText = numberOfChanges == 1 ? "1 transfer available to add a learner" : $"{numberOfChanges} transfers available to add a learner";
 
         await VerifyTaskList(messageText);
     }
@@ -111,16 +111,16 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     {
         await VerifyTaskList("Transfer request received");
     }
-    public async Task<UseTransferFundsPage> ClickViewTransfersAvailableToAddApprentice()
+    public async Task<UseTransferFundsPage> ClickViewTransfersAvailableToAddALearner()
     {
-        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfer available to add apprentice" }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfer available to add a learner" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new UseTransferFundsPage(context));
     }
 
-    public async Task<MyTransferApplicationsPage> ClickViewMultipleTransfersAvailableToAddApprenticeLink()
+    public async Task<MyTransferApplicationsPage> ClickViewMultipleTransfersAvailableToAddALearnerLink()
     {
-        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfers available to add an apprentice" }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "transfers available to add a learner" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new MyTransferApplicationsPage(context));
     }
@@ -151,13 +151,13 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         await Assertions.Expect(page.GetByLabel("Tasks").GetByRole(AriaRole.List)).ToContainTextAsync(messageText);
     }
 
-    public async Task<ManageYourApprenticesPage> ClickViewChangesForApprenticeChangesToReview(int numberOfChanges)
+    public async Task<ManageYourLearnersPage> ClickViewChangesForLearnerChangesToReview(int numberOfChanges)
     {
         var linkText = numberOfChanges == 1 ? "change" : "changes";
 
-        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = $"apprentice {linkText} to review" }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = $"learner  {linkText} to review" }).GetByRole(AriaRole.Link).ClickAsync();
 
-        return await VerifyPageAsync(() => new ManageYourApprenticesPage(context));
+        return await VerifyPageAsync(() => new ManageYourLearnersPage(context));
     }
 
     public async Task<ApprenticeRequestsPage> ClickViewCohortsForCohortsReadyToReview()
@@ -188,11 +188,11 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
         return await VerifyPageAsync(() => new MyTransferPledgesPage(context));
     }
 
-    public class ManageYourApprenticesPage(ScenarioContext context) : EmployerPortalBasePage(context)
+    public class ManageYourLearnersPage(ScenarioContext context) : EmployerPortalBasePage(context)
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprentices");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your learners");
         }
     }
 

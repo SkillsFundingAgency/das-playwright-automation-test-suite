@@ -44,17 +44,23 @@ public class ManageAnAppUnitPage(ScenarioContext context, string appUnitName) : 
     {
         await page.GetByRole(AriaRole.Row, new() { Name = "Email address" }).GetByRole(AriaRole.Link).ClickAsync();
 
-         return await VerifyPageAsync(() => new YourContactInformationForThisAppUnit(context));
+        return await VerifyPageAsync(() => new YourContactInformationForThisAppUnit(context));
     }
 
     public async Task<AnyWhereInEngland_ApprenticeshipUnitPage> EditNationalProviderDetails()
     {
         await page.GetByRole(AriaRole.Row, new() { Name = "National provider" }).GetByRole(AriaRole.Link).ClickAsync();
 
-         return await VerifyPageAsync(() => new AnyWhereInEngland_ApprenticeshipUnitPage(context));
+        return await VerifyPageAsync(() => new AnyWhereInEngland_ApprenticeshipUnitPage(context));
+    }
+
+     public async Task<WhereWillThisAppUnitBeDeliveredPage> EditFromOnlineTo()
+    {
+        await page.GetByLabel("List of training locations").GetByRole(AriaRole.Link, new() { Name = "Change" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new WhereWillThisAppUnitBeDeliveredPage(context));
     }
     
-
 }
 
 public class ManageAStandard_TeacherPage(ScenarioContext context, string standardName) : ManagingStandardsBasePage(context)

@@ -9,7 +9,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator sentTo => page.Locator("dt:has-text('Sent to') + dd");
         private ILocator messageForEmployer => page.Locator("dt:has-text('Message for employer') + dd");
 
-        private ILocator goToApprenticeRequestsLink => page.Locator("a:has-text('Go to apprentice requests')");
+        private ILocator goToLearnerRequestsLink => page.Locator("a:has-text('Go to learner requests')");
         #endregion
 
         public override async Task VerifyPage()
@@ -25,7 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         }
         internal async Task<ApprenticeRequests_ProviderPage> GoToApprenticeRequests()
         {
-            await goToApprenticeRequestsLink.ClickAsync();
+            await goToLearnerRequestsLink.ClickAsync();
             return await VerifyPageAsync(() => new ApprenticeRequests_ProviderPage(context));
         }
 

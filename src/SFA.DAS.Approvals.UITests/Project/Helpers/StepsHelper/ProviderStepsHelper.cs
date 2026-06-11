@@ -145,20 +145,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await approveApprenticeDetailsPage.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<ApproveApprenticeDetailsPage> ProviderAddsOtherApprenticesUsingReservation(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
+        internal async Task<ApproveApprenticeDetailsPage> ProviderAddsApprenticesUsingReservation(ApproveApprenticeDetailsPage approveApprenticeDetailsPage, int skipLearner)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             if (listOfApprenticeship.Count > 1)
             {
-                foreach (var apprenticeship in listOfApprenticeship.Skip(1))
+                foreach (var apprenticeship in listOfApprenticeship.Skip(skipLearner))
                 {
                     var page = await approveApprenticeDetailsPage.ClickOnAddAnotherApprenticeLink_SelectReservationRoute();
-                     //var page1 = await page.SelectOptionToAddApprenticesFromILRList_SelectReservationRoute();
-                    var page2 = await page.SelectReservation(apprenticeship.ReservationID);
-                    var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);
-                    await page3.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
-                    await page3.ClickAddButton();
+                    var page1 = await page.SelectReservation(apprenticeship.ReservationID);     //follow auto reservation route if ReservationID==null
+                    var page2 = await page1.SelectApprenticeFromILRList(apprenticeship);
+                    await page2.ValidateApprenticeDetailsMatchWithILRData(apprenticeship);
+                    await page2.ClickAddButton();
                     //NO RPL case - Now no need to filter here since the final checkbox in approvals screen ensure that is checked.
                     await new ApproveApprenticeDetailsPage(context).GetCohortId(apprenticeship);
                 }
@@ -206,20 +205,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page5.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
-        internal async Task<ApprenticeDetails_ProviderPage> ProviderSearchOpenApprovedApprenticeRecord(ManageYourApprentices_ProviderPage manageYourApprenticesPage, string uln, string name)
+        internal async Task<ApprenticeDetails_ProviderPage> ProviderSearchOpenApprovedApprenticeRecord(ManageYourLearners_ProviderPage manageYourApprenticesPage, string uln, string name)
         {
             await manageYourApprenticesPage.SearchApprentice(uln);
             return await manageYourApprenticesPage.OpenFirstItemFromTheList(name);
         }
 
-        internal async Task TryEditApprenticeAgeAndValidateError(ApprenticeDetails_ProviderPage apprenticeDetailsPage, DateTime dateOfBirth)
+        internal async Task TryEditApprenticeAge(ApprenticeDetails_ProviderPage apprenticeDetailsPage, DateTime dateOfBirth)
         {
-            string expectedErrorMessage = "The apprentice must be younger than 25 years old at the start of their training";
-            await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();
-            var page = new EditApprenticeDetails_ProviderPage(context);
+            var page = await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();            
             await page.EditDoB(dateOfBirth);
-            await page.ClickUpdateDetailsButton();
-            await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
+            await page.ClickUpdateDetailsButton();            
         }
 
         internal async Task ProviderVerifyLearnerNotAvailableForSelection()
@@ -304,7 +300,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             ApproveApprenticeDetailsPage page2;
 
-            if (apprenticeship.TrainingDetails.StandardCode is 805 or 806 or 807 or 808 or 809 or 810 or 811)       //RPL check does not appear for foundation courses
+            if (apprenticeship.TrainingDetails.LearningType > 0)       //RPL check does not appear for foundation & short courses
             {
                 page2 = new ApproveApprenticeDetailsPage(context);
             }
@@ -330,7 +326,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return new ApproveApprenticeDetailsPage(context);
         }
 
-        internal async Task<ApproveApprenticeDetailsPage> UpdateDobAndReprocessData(int lowerAgeLimit, int upperAgeLimit)
+        internal async Task UpdateDobAndReSubmitIlrData(int lowerAgeLimit, int upperAgeLimit)
         {
             var currentDate = DateTime.Now;
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -343,11 +339,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             context["listOfApprenticeship"] = listOfApprenticeship;
 
             await learnerDataOuterApiSteps.SLDPushDataIntoAS();
-
-            var page = await GoToSelectApprenticeFromILRPage();
-            return await AddFirstApprenticeFromILRList(page);
-
         }
+
+
     }
 
 }

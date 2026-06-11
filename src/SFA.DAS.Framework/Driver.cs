@@ -1,9 +1,9 @@
 ﻿namespace SFA.DAS.Framework;
 
-public class Driver(IBrowserContext browserContext, IPage page, ObjectContext objectContext)
+public class Driver(IBrowser browser, IBrowserContext context, IPage page, ObjectContext objectContext)
 {
-    public IBrowserContext BrowserContext = browserContext;
-
+    public IBrowser Browser { get; } = browser;
+    public IBrowserContext BrowserContext { get; } = context;
     public IPage Page = page;
 
     private readonly ScreenShotHelper screenShotHelper = new(objectContext);
@@ -14,8 +14,6 @@ public class Driver(IBrowserContext browserContext, IPage page, ObjectContext ob
     {
         do
         {
-            //var link = page.Locator($"a[href*='{byKey}']:has-text('{byLinkText}')");
-
             var link = Page.GetByRole(AriaRole.Row, new() { Name = byKey }).GetByRole(AriaRole.Link);
 
             if (await link.IsVisibleAsync())

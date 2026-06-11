@@ -9,7 +9,7 @@ public class MS_AddAppUnit_Steps(ScenarioContext context)
 {
     string standardName = string.Empty;
 
-    [Then(@"the provider is able to delete the new application unit")]
+    [Then(@"^the provider is able to delete the new application unit$")]
     public async Task ThenTheProviderIsAbleToDeleteNewApplicationUnit()
     {
         var page = new ManageAnAppUnitPage(context, standardName);
@@ -21,7 +21,7 @@ public class MS_AddAppUnit_Steps(ScenarioContext context)
         await page2.VerifyAppUnitIsDeleted();
     }
 
-    [Then(@"the provider is able to view the new application unit")]
+    [Then(@"^the provider is able to view the new application unit$")]
     public async Task ThenTheProviderIsAbleToViewNewApplicationUnit()
     {
         var page = new ManageAnAppUnitPage(context, standardName);
@@ -31,7 +31,7 @@ public class MS_AddAppUnit_Steps(ScenarioContext context)
         var page2 = await page1.ManageAnAppUnitPage(standardName);
     }
 
-    [Then(@"the provider is able to edit the new application unit via confirmation page")]
+    [Then(@"^the provider is able to edit the new application unit via confirmation page$")]
     public async Task ThenTheProviderIsAbleToEditNewApplicationUnit()
     {
         var page = new ApprenticeshipUnit_SavedPage(context);
@@ -52,14 +52,14 @@ public class MS_AddAppUnit_Steps(ScenarioContext context)
 
         var page7 = await page6.EditNationalProviderDetails();
 
-        var page8 = await page7.EditDeliverAnyWhereInEnglandToNo();
+        var page8 = await page7.NoDeliverAnyWhereInEngland();
 
         var page9 = await page8.SelectRegionsAndConfirm(["North Yorkshire"], standardName);
 
         await page9.VerifyUpdatedRegion("North Yorkshire");
     }
 
-    [Then(@"the provider is able to add a new application unit with different contact")]
+    [Then(@"^the provider is able to add a new application unit with different contact$")]
     public async Task ThenTheProviderIsAbleToAddANewApplicationUnitWithDifferentContact()
     {
         standardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_Electricvehicle;
@@ -91,7 +91,7 @@ public class MS_AddAppUnit_Steps(ScenarioContext context)
         await page11.Save_NewApprenticeshipUnit_Continue();
     }
 
-    [Then(@"the provider can add delivery forecast")]
+    [Then(@"^the provider can add delivery forecast$")]
     public async Task ThenTheProviderCanAddADeliveryForecast()
     {
        var page = new ApprenticeshipUnit_SavedPage(context);
@@ -108,7 +108,7 @@ public class MS_AddAppUnit_Steps(ScenarioContext context)
     }
 
 
-    [Then(@"the provider is able to add a new application unit with regions")]
+    [Then(@"^the provider is able to add a new application unit with regions$")]
     public async Task ThenTheProviderIsAbleToAddANewApplicationUnit()
     {
         standardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_Electricvehicle;

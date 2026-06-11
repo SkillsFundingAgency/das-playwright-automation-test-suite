@@ -13,25 +13,25 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         await VerifyDistanceFilterSelection("10 miles");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
-        await ClearSpecificFilter("TW14 Hounslow (within 10 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 10 miles)");
+        await ClearSpecificFilter("TW14 Hillingdon (within 10 miles)");
         await VerifyNoFiltersAreApplied();
         await SelectApprenticeTravelDistance("10 miles");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
-        await ClearSpecificFilter("TW14 Hounslow (within 10 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 10 miles)");
+        await ClearSpecificFilter("TW14 Hillingdon (within 10 miles)");
         await VerifyNoFiltersAreApplied();
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 10 miles)");
         await SelectApprenticeTravelDistance("20 miles");
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 20 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 20 miles)");
         await SelectApprenticeTravelDistance("100 miles");
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 100 miles)");
-        await ClearSpecificFilter("TW14 Hounslow (within 100 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 100 miles)");
+        await ClearSpecificFilter("TW14 Hillingdon (within 100 miles)");
         await VerifyNoFiltersAreApplied();
         await SelectExcellentReviews_EmployerRating();
         await ApplyFilters();
@@ -79,7 +79,7 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         await CheckAndVerifyCheckbox("filteritem-modes-filter-Workplace");
         await CheckAndVerifyCheckbox("filteritem-modes-filter-Provider");
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 10 miles)");
         await VerifyFilterIsSet("Above 70%");
         await VerifyFilterIsSet("Day release");
         await VerifyFilterIsSet("Block release");
@@ -111,5 +111,25 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
         {
             Assert.False(visible, $"Expected provider '{providerName}' to NOT be listed, but it was.");
         }
+    }
+    public async Task VerifyProviderTrainingLocation(List<string> locations)
+    {
+        var locator = page.Locator(".govuk-summary-card").Filter(new LocatorFilterOptions { HasTextString = locations[0] });
+
+        foreach (var location in locations)
+        {
+            await Assertions.Expect(locator).ToContainTextAsync(location, new LocatorAssertionsToContainTextOptions { IgnoreCase = true});
+        }
+    }
+
+    public async Task VerifyWithProviderLocationFilter(List<string> locations)
+    {
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "Learner's work location" }).FillAsync("southend");
+
+        await page.GetByRole(AriaRole.Option, new() { Name = "Southend-on-Sea, Essex" }).ClickAsync();
+
+        await page.Locator("#filters-submit-top").ClickAsync();
+        
+        await VerifyProviderTrainingLocation(locations);
     }
 }

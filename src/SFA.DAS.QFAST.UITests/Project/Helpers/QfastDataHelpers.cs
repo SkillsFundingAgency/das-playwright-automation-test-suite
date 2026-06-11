@@ -4,6 +4,7 @@ public class QfastDataHelpers
     public QfastDataHelpers()
     {
         FormName = "Qualification Funding Application- Test";
+        FormNameForEligibilityChanged = "Eligibility Changed Form- Test";
         FormDescription = "This is a Test Form";
         DraftStatus = "Draft";
         SectionName = "Test Section";
@@ -23,6 +24,8 @@ public class QfastDataHelpers
         Day = "01";
         Month = "08";
         Year = "2025";
+        QualificationTitleForEligibilityChanged = "RAD Level 2 Award in Solo Performance in Dance: Grade 5";
+        QualificationNumberForEligibilityChanged = "60146527";
     }
 
     public string FormName { get; }
@@ -45,4 +48,7 @@ public class QfastDataHelpers
     public string Day { get; }
     public string Month{get; }
     public string Year { get; }
+    public string QualificationTitleForEligibilityChanged { get; }
+    public string QualificationNumberForEligibilityChanged { get; }
+    public string FormNameForEligibilityChanged { get; }
 }

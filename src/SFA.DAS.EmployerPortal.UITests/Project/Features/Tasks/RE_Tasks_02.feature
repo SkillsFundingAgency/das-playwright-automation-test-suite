@@ -6,12 +6,12 @@ Scenario: RE_Tasks_02_Verify tasks menu on employer home page
 	Given the Employer logins using existing Levy Account
 	When the current date is in range 16 - 19
 	Then display task: Levy declaration due by 19 MMMM
-	When there are X apprentice changes to review
-	Then display task: X apprentice changes to review
-	And View changes link should navigate user to Manage your apprentices page
+	When there are X learner changes to review
+	Then display task: X learner changes to review
+	And View changes link should navigate user to Manage your learners page
 	When there are X cohorts ready for approval
 	Then display task: X cohorts ready for approval
-	And 'View cohorts' link should navigate user to 'Apprentice Requests' page
+	And 'View cohorts' link should navigate user to 'Learner Requests' page
 	When there is pending Transfer request ready for approval
 	Then display task: Transfer request received'
 	And 'View details' for Transfer Request link should navigate user to Transfers page
@@ -23,8 +23,8 @@ Scenario: RE_Tasks_02_Verify tasks menu on employer home page
 	When there are X transfer pledge applications awaiting your approval
 	Then display task: 'X transfer pledge applications awaiting your approval'
 	And 'View applications' link should navigate user to 'My Transfer Pledges' page
-	When there are X transfers applications available to add an apprentice
-	Then display task: 'X transfers available to add an apprentice'
+	When there are X transfers applications available to add a learner
+	Then display task: 'X transfers available to add a learner'
 	And 'View details' link should navigate user to 'My applications' page
    When there are X transfer application has been approved
 	Then display task: 'X transfers to accept'

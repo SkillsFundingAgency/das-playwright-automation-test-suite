@@ -33,7 +33,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             apprenticeDataHelper = new ApprenticeDataHelper(context);
         }
 
-        [Then("a record is created in LearnerData Db for each learner")]
+        [Then("^a record is created in LearnerData Db for each learner$")]
         public async Task ThenARecordIsCreatedInLearnerDataDbForEachLearner()
         {
             listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -52,7 +52,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        [Then("Commitments Db is updated with respective LearnerData Id")]
+        [Then("^Commitments Db is updated with respective LearnerData Id$")]
         public async Task ThenCommitmentsDbIsUpdatedWithRespectiveLearnerDataId()
         {
             listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -72,7 +72,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             
         }
 
-        [Then("LearnerData Db is updated with respective Apprenticeship Id")]
+        [Then("^LearnerData Db is updated with respective Apprenticeship Id$")]
         public async Task ThenLearnerDataDbIsUpdatedWithRespectiveApprenticeshipId()
         {
             listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -89,7 +89,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
-        [Then("Apprenticeship record is created in Learning Db")]
+        [Then("^Apprenticeship record is created in Learning Db$")]
         public async Task ThenApprenticeshipRecordIsCreatedInLearningDb()
         {
             listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
@@ -99,7 +99,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
                 var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
-                var result = await retryPolicy.ExecuteAsync(() => learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln));
+                var learningType = apprenticeship.TrainingDetails.LearningType;
+                string result = string.Empty;
+                
+                if (learningType == (int)LearningType.ShortCourses)
+                    result = await retryPolicy.ExecuteAsync(() => learningDbSqlHelper.CheckIfShortCourseLearnerRecordUpdatedInLearningDb(apprenticeshipId, uln));
+                else
+                    result = await retryPolicy.ExecuteAsync(() => learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln));
+
                 Assert.IsNotEmpty(result, $"Apprenticeship record not found in Learning Db for ApprenticeshipId: {apprenticeshipId}");
                 apprenticeship.ApprenticeDetails.LearningIdKey = result;
                 await Task.Delay(100);
@@ -108,48 +115,41 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
         }
 
-        [Given(@"A live apprentice record exists for an apprentice with ""(.*)"", ""(.*)"" and ""(.*)""")]
+        [Given(@"^A live apprentice record exists for an apprentice with ""(.*)"", ""(.*)"" and ""(.*)""$")]
         public async Task GivenALiveApprenticeRecordExistsForAnApprenticeWithAnd(string courseType, string courseLevel, string startDate)
         {
             listOfApprenticeship = new List<Apprenticeship>();
-            string additionalWhereFilter;
+            string additionalWhereFilter = $@"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
+                                            AND c.IsDeleted = 0
+                                            And c.Approvals = 3
+                                            AND c.ChangeOfPartyRequestId is null             
+                                            AND c.PledgeApplicationId is null
+                                            AND a.PaymentStatus = 1                                            
+                                            AND a.PendingUpdateOriginator is null
+                                            AND a.CloneOf is null
+                                            AND a.ContinuationOfId is null
+                                            AND a.DeliveryModel = 0
+                                            AND a.StartDate > '{startDate}'";
 
             if (courseType == "FoundationApprenticeship")
             {
-                additionalWhereFilter = @"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
-                                            AND c.IsDeleted = 0
-                                            And c.Approvals = 3
-                                            AND c.ChangeOfPartyRequestId is null             
-                                            AND c.PledgeApplicationId is null
-                                            AND a.PaymentStatus = 1
-                                            AND a.HasHadDataLockSuccess = 0
-                                            AND a.PendingUpdateOriginator is null
-                                            AND a.CloneOf is null
-                                            AND a.ContinuationOfId is null
-                                            AND a.DeliveryModel = 0
-                                            AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+                additionalWhereFilter +=   @"AND a.HasHadDataLockSuccess = 0
+                                             AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
+            }
+            else if (courseType == "ShortCourses")
+            {
+                additionalWhereFilter += "AND a.TrainingCode Like 'ZSC%'";
             }
             else
             {
-                additionalWhereFilter = @$"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
-                                            AND c.IsDeleted = 0
-                                            And c.Approvals = 3
-                                            AND c.ChangeOfPartyRequestId is null             
-                                            AND c.PledgeApplicationId is null
-                                            AND a.PaymentStatus = 1
-                                            AND a.HasHadDataLockSuccess = 0
-                                            AND a.PendingUpdateOriginator is null
-                                            AND a.CloneOf is null
-                                            AND a.ContinuationOfId is null
-                                            AND a.DeliveryModel = 0
-                                            AND TrainingName like '%, Level: 7'
-					                        AND StartDate > '{startDate}'";
+                additionalWhereFilter +=   @"AND a.HasHadDataLockSuccess = 0
+                                            AND TrainingName like '%, Level: 7'";
             }
 
             await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
         }
 
-        [Given(@"a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date")]
+        [Given(@"^a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date$")]
         public async Task GivenALiveApprenticeRecordExistsWithStartdateOfMonthsAndEndDateOfMonthsFromCurrentDate(int startDateFromNow, int endDateFromNow)
         {
             listOfApprenticeship = new List<Apprenticeship>();

@@ -2,7 +2,7 @@
 using Polly;
 using SFA.DAS.FATe.UITests.Helpers;
 using SFA.DAS.FATe.UITests.Project.Tests.Pages;
-using TechTalk.SpecFlow.CommonModels;
+using Reqnroll.CommonModels;
 
 
 namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
@@ -24,7 +24,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _trainingProvidersPage = new TrainingProvidersPage(context);    
         }
 
-        [When("the user selects a course and views training providers")]
+        [When("^the user selects a course and views training providers$")]
         public async Task WhenTheUserSelectsACourseAndViewsTrainingProviders()
         {
             var (count, _trainingProvidersPage) = await _fATeHomePage.ViewTrainingProvidersForCourse("119");
@@ -32,26 +32,26 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _expectedProviderCount = count;
         }
 
-        [Then("the training provider count should be displayed correctly")]
+        [Then("^the training provider count should be displayed correctly$")]
         public async Task ThenTheTrainingProviderCountShouldBeDisplayedCorrectly()
         {
             await _fATeHomePage.VerifyProvidersCount(_expectedProviderCount); 
         }
-        [Given("the user navigates to the training providers page")]
+        [Given("^the user navigates to the training providers page$")]
         public async Task GivenTheUserNavigatesToTheTrainingProvidersPage()
         {
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
             await _fATeHomePage.ClickStartNow();
             await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
-            await _fATeHomePage.ViewTrainingProvidersForCourse("204");
+            await _fATeHomePage.ViewTrainingProvidersForCourse("274");
         }
-        [Given("verify the filters functionality")]
+        [Given("^verify the filters functionality$")]
         public async Task GivenVerifyTheFiltersFunctionality()
         {
             await _trainingProvidersPage.VerifyAndApplySingleFilters_ProviderPage();
             await _trainingProvidersPage.VerifyAndApplyMultipleFilters_ProviderPage();
         }
-        [Then("verify default sort order results with no location")]
+        [Then("^verify default sort order results with no location$")]
         public async Task ThenVerifyDefaultSortOrderResultsWithNoLocation()
         {
             await _trainingProvidersPage.VerifyDefaultSortOrder_AchievementRate();

@@ -4,6 +4,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers.ApprenticeshipModel;
 using System;
+using Reqnroll.Assist;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -21,25 +22,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             apprenticeDataHelper = new ApprenticeDataHelper(context);
         }
 
-        [Given("Provider successfully submits (\\d+) ILR record containing a learner record for a \"(.*)\" Employer")]
+        [Given("^Provider successfully submits (\\d+) ILR record containing a learner record for a \"(.*)\" Employer$")]
         public async Task ProviderSubmitsAnILRRecord(int NoOfApprentices, string type)
         {
-            EmployerType employerType;
-
-            switch (type.ToLower())
+            var employerType = type.ToLower() switch
             {
-                case "levy":
-                    employerType = EmployerType.Levy;
-                    break;
-                case "nonlevy":
-                    employerType = EmployerType.NonLevy;
-                    break;
-                case "nonlevyuseratmaxreservationlimit":
-                    employerType = EmployerType.NonLevyUserAtMaxReservationLimit;
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown employer type: {type}");
-            }
+                "levy" => EmployerType.Levy,
+                "nonlevy" => EmployerType.NonLevy,
+                "nonlevyuseratmaxreservationlimit" => EmployerType.NonLevyUserAtMaxReservationLimit,
+                _ => throw new ArgumentException($"Unknown employer type: {type}"),
+            };
 
             var listOfApprenticeship = await new ApprenticeDataHelper(context).CreateApprenticeshipObject(employerType, NoOfApprentices);
 
@@ -52,16 +44,27 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             listOfApprenticeship ??= context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
-            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
+            var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
 
-            var listOflearnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(listOfApprenticeship);
+            foreach (var apprenticeship in listOfApprenticeship)
+            {           
+                if (apprenticeship.TrainingDetails.LearningType == (int)LearningType.ShortCourses)
+                {               
+                    var learnerData = await learnerDataOuterApiHelper.ConvertToGSOLearnerDataAPIDataModel(apprenticeship);
+                    await learnerDataOuterApiHelper.PushNewGSOLearnersDataToASViaAPI(learnerData, ukprn);
+                }
+                else
+                {
+                    await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(apprenticeship, ukprn);
 
-            await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(listOflearnerData, academicYear);
-            //await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(listOflearnerData, academicYear); 
+                    //var learnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(apprenticeship);
+                    //await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(learnerData, ukprn);
+                }              
+            }
         }
 
-        [Given(@"Provider adds an apprentice aged (.*) years using below ""(.*)"", ""(.*)"" and ""(.*)""")]
-        public async Task GivenProviderAddsAnApprenticeAgedYearsUsingBelowAnd(int age, string courseType, string courseLevel, string startDate)
+        [Given(@"^Provider adds an apprentice aged (.*) years using below ""(.*)"", ""(.*)"" and ""(.*)""$")]
+        public async Task GivenProviderAddsAnApprenticeAgedYearsUsingBelowAnd(int upperAgeLimit, string courseType, string courseLevel, string startDate)
         {
             var coursesDataHelper = new CoursesDataHelper();
             var employerType = EmployerType.Levy;
@@ -70,37 +73,77 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             DateTime trainingStartDate = parsedStartDate.AddDays(new Random().Next(daysToAdd + 1));
             TrainingFactory trainingDetails;
 
-            //create apprenticeships object for specific course and a learner aged > 25 years:
+            //create apprenticeships object for specific course and a learner aged > upperAgeLimit:
             if (courseType == "FoundationApprenticeship")
                 trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
-            else
+            else if (courseType == "ShortCourses")
+                trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomShortCourse());
+            else if (courseLevel == "Level-7")
                 trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomLevel7Course());
+            else
+                trainingDetails = new TrainingFactory();
 
-            var apprenticeDetails = new ApprenticeFactory(age + 1);
+            var apprenticeDetails = new ApprenticeFactory(upperAgeLimit + 1);
             var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(employerType, 1, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: trainingDetails);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
             await SLDPushDataIntoAS();
         }
-     
-        [Given("new learner details are processed in ILR for (\\d+) apprentices")]
-        [Given("the employer has (\\d+) apprentice ready to start training")]
+
+        [Given(@"^Provider submits ILR for following learners for a ""(.*)"" employer:$")]
+        public async Task GivenProviderSubmitsIlrForFollowingLearnersForAEmployer(string employer, Table table)
+        {
+            var employerType = employer.ToLower() switch
+            {
+                "levy" => EmployerType.Levy,
+                "nonlevy" => EmployerType.NonLevy,
+                "nonlevyuseratmaxreservationlimit" => EmployerType.NonLevyUserAtMaxReservationLimit,
+                _ => throw new ArgumentException($"Unknown employer type: {employer}"),
+            };
+
+            var learners = table.CreateSet<SpecFlowTableToApprenticeshipMapper>().ToList();
+            var NoOfLearners = learners.Count;
+            var coursesDataHelper = new CoursesDataHelper();
+            TrainingFactory trainingDetails;
+
+            foreach (var learner in learners)
+            {          
+                DateTime trainingStartDate = DateTime.Today.AddDays(learner.StartDateOffset);                
+
+                //create apprenticeships object for specific course and a learner aged > 25 years:
+                if (learner.CourseType == "FoundationApprenticeship")
+                    trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
+                else if (learner.CourseType == "ShortCourses")
+                    trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomShortCourse(), learner.DuationInDays);
+                else if (learner.CourseLevel == "Level-7")
+                    trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomLevel7Course());
+                else
+                    trainingDetails = new TrainingFactory();
+
+                var apprenticeDetails = new ApprenticeFactory(learner.LowerAgeLimit + 1);
+                var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(employerType, learners.Count, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: trainingDetails);
+                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+                await SLDPushDataIntoAS();
+            }
+        }
+
+        [Given("^new learner details are processed in ILR for (\\d+) apprentices$")]
+        [Given("^the employer has (\\d+) apprentice ready to start training$")]
         public async Task ProcessedLearnersInILR(int NoOfApprentices)
         {
-            var employerType = context.ScenarioInfo.Title.ToLower().Contains("nonlevy") ? EmployerType.NonLevy : EmployerType.Levy;
+            var employerType = context.ScenarioInfo.Title.Contains("nonlevy", StringComparison.CurrentCultureIgnoreCase) ? EmployerType.NonLevy : EmployerType.Levy;
             await ProviderSubmitsAnILRRecord(NoOfApprentices, employerType.ToString());
             await SLDPushDataIntoAS();
         }
 
-        [Then(@"apprentice\/learner record is available on Learning endpoint for SLD \(so they do not resubmit it\)")]
+        [Then(@"^apprentice\/learner record is available on Learning endpoint for SLD \(so they do not resubmit it\)$")]
         public async Task ThenApprenticeLearnerRecordIsAvailableOnLearningEndpointForSLDSoTheyDoNotResubmitIt()
         {
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-            var academicYear = listOfApprenticeship.FirstOrDefault().TrainingDetails.AcademicYear;
             await learnerDataOuterApiHelper.CheckApprenticeIsAvailableInApprovedLearnersList(listOfApprenticeship.FirstOrDefault());
             
         }
 
-        [When("Provider resubmits ILR file with changes to apprentice details")]
+        [When("^Provider resubmits ILR file with changes to apprentice details$")]
         public async Task WhenProviderResubmitsILRFileWithChangesToApprenticeDetails()
         {
             var updatedSuffix = "_UpdatedAt_" + DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -116,6 +159,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
+    }
+
+    public class SpecFlowTableToApprenticeshipMapper
+    {     
+        public string CourseType { get; set; }
+        public string CourseLevel { get; set; }
+        public int StartDateOffset { get; set; }        
+        public int DuationInDays { get; set; }
+        public int LowerAgeLimit { get; set; }
+        public int UpperAgeLimit { get; set; }
     }
 
 }

@@ -31,7 +31,7 @@ public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBase
                 break;
 
             case "employer":
-                await page.GetByRole(AriaRole.Radio, new() { Name = "At one location" }).CheckAsync();
+                await page.GetByRole(AriaRole.Radio, new() { Name = "At one location", Exact = true}).CheckAsync();
 
                 await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
@@ -46,7 +46,7 @@ public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBase
 
             case "all location types":
 
-                await page.GetByRole(AriaRole.Radio, new() { Name = "At one location" }).CheckAsync();
+                await page.GetByRole(AriaRole.Radio, new() { Name = "At one location", Exact = true }).CheckAsync();
 
                 await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 

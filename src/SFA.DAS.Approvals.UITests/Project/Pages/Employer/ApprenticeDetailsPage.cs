@@ -37,10 +37,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new ManageYourLearnersPage(context));
         }
 
-        internal async Task<EditApprenticeDetailsPage> ClickOnEditApprenticeDetailsLink()
+        internal async Task<EditLearnerDetailsPage> ClickOnEditApprenticeDetailsLink()
         { 
             await EditApprenticeDetailsLink.ClickAsync();
-            return await VerifyPageAsync(() => new EditApprenticeDetailsPage(context));
+            return await VerifyPageAsync(() => new EditLearnerDetailsPage(context));
         }
 
         internal async Task<ApprenticeDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status, string rowName, DateTime date)

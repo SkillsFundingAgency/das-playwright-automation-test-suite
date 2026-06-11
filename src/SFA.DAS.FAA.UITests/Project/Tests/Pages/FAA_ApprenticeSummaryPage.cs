@@ -15,8 +15,16 @@ public class FAA_ApprenticeSummaryPage(ScenarioContext context) : FAABasePage(co
 
     public async Task<FAA_ApplicationOverviewPage> Apply()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Apply for apprenticeship" }).ClickAsync();
+        var continueLink = page.Locator("a:has-text('Continue your application')");
 
+        if (await continueLink.CountAsync() > 0)
+        {
+            await continueLink.First.ClickAsync();
+        }
+        else
+        {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Apply for apprenticeship" }).ClickAsync();
+        }
         return await VerifyPageAsync(() => new FAA_ApplicationOverviewPage(context));
     }
 

@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
+﻿using System.Text.RegularExpressions;
+
+namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
 
 public class AnyWhereInEngland_ApprenticeshipUnitPage(ScenarioContext context) : ManagingStandardsBasePage(context)
 {
@@ -25,15 +27,6 @@ public class AnyWhereInEngland_ApprenticeshipUnitPage(ScenarioContext context) :
         return await VerifyPageAsync(() => new ManageAnAppUnitPage(context, standardName));
     }
 
-    public async Task<WhereCanYouDeliverTrainingPage> EditDeliverAnyWhereInEnglandToNo()
-    {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "No, I want to select the" }).CheckAsync();
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new WhereCanYouDeliverTrainingPage(context));
-    }
-
     public async Task<AddAstandardPage> YesDeliverAnyWhereInEngland_AddApprenticeshipUnit(string standardname)
     {
         await page.Locator("#Yes").CheckAsync();
@@ -47,7 +40,7 @@ public class AnyWhereInEngland_ApprenticeshipUnitPage(ScenarioContext context) :
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "No, I want to select the" }).CheckAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { NameRegex = new Regex("Continue|Confirm", RegexOptions.IgnoreCase) }).ClickAsync();
 
         return await VerifyPageAsync(() => new WhereCanYouDeliverTrainingPage(context));
     }

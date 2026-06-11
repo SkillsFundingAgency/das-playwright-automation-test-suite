@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.MongoDb.DataGenerator;
+﻿using Reqnroll.Assist.Dynamic;
+
+namespace SFA.DAS.MongoDb.DataGenerator;
 
 public class MongoDbDataGenerator
 {

@@ -27,41 +27,41 @@ namespace SFA.DAS.Finance.APITests.Project.Tests.StepDefinitions
             _stepHelper = new StepHelper(_scenarioContext, _objectContext, _apiHelper);
         }
 
-        [Given(@"an employer account (can|cannot) receive notifications")]
+        [Given(@"^an employer account (can|cannot) receive notifications$")]
         public async Task GivenAnEmployerAccountCanOrCannotReceiveNotifications(string canOrCannot) => await _stepHelper.PopulateExpectedUserNotification(canOrCannot);
 
-        [When(@"endpoint /Accounts/\{accountId\}/users/which-receive-notifications is called")]
+        [When(@"^endpoint /Accounts/\{accountId\}/users/which-receive-notifications is called$")]
         public Task WhenEndpointAccountsAccountIdUsersWhichReceiveNotificationsIsCalled() => _stepHelper.CallGetNotificationRequestSaveResponse();
 
-        [Then(@"the response body should contain valid account details")]
+        [Then(@"^the response body should contain valid account details$")]
         public Task ThenTheResponseBodyShouldContainValidAccountDetails() => Task.Run(() => _stepHelper.AssertApiMatchesSqlRow());
 
 
 
 
-        [Given(@"an employer account with signed version")]
+        [Given(@"^an employer account with signed version$")]
         public async System.Threading.Tasks.Task GivenAnEmployerAccountWithSignedVersion() => await _stepHelper.PopulateExpectedSignedAgreementVersion();
 
-        [When(@"endpoint /Accounts/\{accountId\}/users/minimum-signed-agreement-version is called")]
+        [When(@"^endpoint /Accounts/\{accountId\}/users/minimum-signed-agreement-version is called$")]
         public async Task WhenEndpointAccountsAccountIdUsersMinimumSignedAgreementVersionIsCalled() => await _stepHelper.CallAccountIdUsersMinimumSignedAgreement();
 
-        [Then(@"the response body should contain valid account details signed aggrement details")]
+        [Then(@"^the response body should contain valid account details signed aggrement details$")]
         public void ThenTheResponseBodyShouldContainValidAccountDetailsSignedAggrementDetails() => Task.Run(() => _stepHelper.AssertApiMatchesSqlRow());
         
 
 
 
-        [Given(@"get the user with linked accounts")]
+        [Given(@"^get the user with linked accounts$")]
         public async System.Threading.Tasks.Task GetUserWithLinkedAccounts()
         {
             await _stepHelper.PopulateExpectedUserWithLinkedAccounts();
         }
 
-        [When(@"endpoint request GET /AccountUsers/\{\{UserRef\}\}/accounts is called")]
+        [When(@"^endpoint request GET /AccountUsers/\{\{UserRef\}\}/accounts is called$")]
         public async System.Threading.Tasks.Task WhenEndpointGetAccountUsersAccountsIsCalled()  => await _stepHelper.CallGetAccountUserAccountsByUserRef();
         
 
-        [Then(@"account details should retrun for given user")]
+        [Then(@"^account details should retrun for given user$")]
         public void ThenAccountDetailsShouldRetrunForGivenUser() => Task.Run(() => _stepHelper.AssertApiMatchesSqlRow());
 
     }

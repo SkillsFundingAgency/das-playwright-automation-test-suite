@@ -46,25 +46,25 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await ClearSpecificFilter("Professional");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
-        await ClearSpecificFilter("TW14 Hounslow (within 10 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 10 miles)");
+        await ClearSpecificFilter("TW14 Hillingdon (within 10 miles)");
         await VerifyNoFiltersAreApplied();
         await SelectApprenticeTravelDistance("10 miles");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
-        await ClearSpecificFilter("TW14 Hounslow (within 10 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 10 miles)");
+        await ClearSpecificFilter("TW14 Hillingdon (within 10 miles)");
         await VerifyNoFiltersAreApplied();
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 10 miles)");
         await SelectApprenticeTravelDistance("20 miles");
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 20 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 20 miles)");
         await SelectApprenticeTravelDistance("100 miles");
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 100 miles)");
-        await ClearSpecificFilter("TW14 Hounslow (within 100 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 100 miles)");
+        await ClearSpecificFilter("TW14 Hillingdon (within 100 miles)");
         await VerifyNoFiltersAreApplied();
         await SelectJobCategory("Agriculture, environmental and animal care");
         await ApplyFilters();
@@ -89,7 +89,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await SelectApprenticeshipLevel("Level 2");
         await ApplyFilters();
         await VerifyFilterIsSet("Professional");
-        await VerifyFilterIsSet("TW14 Hounslow (within 100 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 100 miles)");
         await VerifyFilterIsSet("Agriculture, environmental and animal care");
         await VerifyFilterIsSet("Care services");
         await VerifyFilterIsSet("Digital");
@@ -129,7 +129,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await SelectApprenticeTravelDistance("50 miles");
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 50 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 50 miles)");
         await VerifyTrainingProviderWithinDistance(50);
         await ClearAllFilters();
     }
@@ -142,15 +142,14 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await VerifyJobCategoryResults("Protective services");
         await ClearAllFilters();
     }
-    public async Task<ApprenticeshipTrainingCourseDetailsPage> SelectCourseByName(string courseNameWithLevel)
+    public async Task SelectCourseByName(string courseName)
     {
-        objectContext.SetTrainingCourseName(courseNameWithLevel);
+        var courseLink = page
+            .Locator("a.das-search-results__link")
+            .Filter(new() { HasText = courseName });
 
-        var courseLink = page.GetByRole(AriaRole.Link, new() { Name = courseNameWithLevel, Exact = true })
-                     .Filter(new() { Has = page.Locator("span.das-no-wrap") });
         await Assertions.Expect(courseLink).ToBeVisibleAsync();
         await courseLink.ClickAsync();
-        return await VerifyPageAsync(() => new ApprenticeshipTrainingCourseDetailsPage(context));
     }
 
     public async Task<ApprenticeshipTrainingCourseDetailsPage> SelectFirstTrainingResult(string title)

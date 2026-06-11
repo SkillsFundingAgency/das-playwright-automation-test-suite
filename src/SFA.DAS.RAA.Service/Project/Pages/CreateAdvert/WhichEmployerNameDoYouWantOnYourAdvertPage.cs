@@ -140,9 +140,15 @@ public class EmployerDescriptionPage(ScenarioContext context) : RaaBasePage(cont
 
         if (optionalFields)
         {
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Website for organisation" }).FillAsync(rAADataHelper.EmployerWebsiteUrl);
-
-            if (!isRaaEmployer) await page.GetByRole(AriaRole.Checkbox, new() { Name = "This employer has signed up" }).CheckAsync();
+            if (!isRaaEmployer)
+            {
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "The organisation's website (" }).FillAsync(rAADataHelper.EmployerWebsiteUrl);
+                await page.GetByRole(AriaRole.Checkbox, new() { Name = "This employer has signed up" }).CheckAsync();
+            }
+            else
+            {
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "Website for organisation" }).FillAsync(rAADataHelper.EmployerWebsiteUrl);
+            }
         }
         else
         {
@@ -230,9 +236,9 @@ public class ApplicationProcessPage(ScenarioContext context) : RaaBasePage(conte
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Through a different website" }).CheckAsync();
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Application website link" }).FillAsync(rAADataHelper.EmployerWebsiteUrl);
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Enter a link about the" }).FillAsync(rAADataHelper.EmployerWebsiteUrl);
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "How to apply (optional)" }).FillAsync(rAADataHelper.OptionalMessage);
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Explain the application" }).FillAsync(rAADataHelper.OptionalMessage);
     }
 
     private async Task<PreviewYourAdvertOrVacancyPage> SaveAndContinueToPreviewPage()

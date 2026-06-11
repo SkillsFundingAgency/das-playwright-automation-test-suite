@@ -120,7 +120,7 @@ jobs:
               AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
             inputs:
               testAssemblyVer2: ${{ parameters.TestAssembly }}
-              testRunTitle: 'UI Test Run - ${{ parameters.Environment }}'
+              testRunTitle: 'Test Run - ${{ parameters.Environment }}'
               searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
               testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
               runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
@@ -158,3 +158,27 @@ jobs:
               filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
               arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
             condition: succeededOrFailed()
+
+          - task: CmdLine@2
+            inputs:
+              script: |
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/allure-results:"
+                tree "$(System.DefaultWorkingDirectory)/drop/tests/allure-results" /f
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName}/allure-results:"
+                tree "$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/allure-results" /f
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory:"
+                tree $(System.DefaultWorkingDirectory) /f
+            displayName: 'Agent Folder Structure'
+            condition: always()
+            continueOnError: true
+
+          - task: PublishAllureReport@2
+            displayName: 'Allure Tab: Generate and Publish Allure Report'
+            condition: always()
+            inputs:
+              allureVersion: '2.36.0'
+              reportName: 'Allure report - ${{ parameters.Environment }}'
+              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'  

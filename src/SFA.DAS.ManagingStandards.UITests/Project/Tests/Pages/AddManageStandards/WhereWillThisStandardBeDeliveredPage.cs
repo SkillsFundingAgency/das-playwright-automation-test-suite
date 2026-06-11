@@ -45,6 +45,25 @@ public class WhereWillThisAppUnitBeDeliveredPage(ScenarioContext context): Manag
         return await VerifyPageAsync(() => new VenueAndDelivery_ApprenticeshipUnitPage(context));
     }
 
+    public async Task<VenueAndDelivery_ApprenticeshipUnitPage> UpdateToEmpAndProLocationOnly_AprenticeshipUnit()
+    {
+        var option = page.Locator("input[type='checkbox'][value='EmployerLocation']").First;
+
+        await option.CheckAsync();
+
+        option = page.Locator("input[type='checkbox'][value='ProviderLocation']").First;
+
+        await option.CheckAsync();
+
+        option = page.Locator("input[type='checkbox'][value='Online']").First;
+
+        await option.UncheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new VenueAndDelivery_ApprenticeshipUnitPage(context));
+    }
+
     public async Task<AddAstandardPage> ConfirmOnline_AddApprenticeshipUnit(string standardname)
     {
         var option = page.Locator("input[type='checkbox'][value='Online']").First;

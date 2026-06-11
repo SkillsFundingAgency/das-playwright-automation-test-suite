@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using System;
 using System.Text.RegularExpressions;
 
 
@@ -25,26 +26,26 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
     }
 
-    internal class DoYouKnowWhichApprenticeshipTrainingYourApprenticeWillTakePage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class DoYouKnowWhichTrainingCourseYourLearnerWillTakePage(ScenarioContext context) : ApprovalsBasePage(context)
     {
-        public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Do you know which apprenticeship training your apprentice will take?");
+        public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Do you know which training course your learner will take?");
 
 
-        internal async Task<WhenWillTheApprenticeStartTheirApprenticeTraining> Yes()
+        internal async Task<WhenWillTheTrainingStartPage> Yes()
         {
             await page.Locator("[value= 'true']").ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
-            return await VerifyPageAsync(() => new WhenWillTheApprenticeStartTheirApprenticeTraining(context));
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+            return await VerifyPageAsync(() => new WhenWillTheTrainingStartPage(context));
         }
 
-        internal async Task<WhenWillTheApprenticeStartTheirApprenticeTraining> ReserveFundsAsync(string courseName)
+        internal async Task<WhenWillTheTrainingStartPage> ReserveFundsAsync(string courseName)
         {
             await page.Locator("[value= 'true']").ClickAsync();
             await page.GetByRole(AriaRole.Combobox, new() { Name = "Start typing to search" }).ClickAsync();
             await page.GetByRole(AriaRole.Combobox, new() { Name = "Start typing to search" }).FillAsync(courseName.Substring(0, 3));
             await page.GetByRole(AriaRole.Option, new() { Name = courseName }).First.ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
-            return await VerifyPageAsync(() => new WhenWillTheApprenticeStartTheirApprenticeTraining(context));
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+            return await VerifyPageAsync(() => new WhenWillTheTrainingStartPage(context));
         }
     }
 
@@ -111,18 +112,28 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         }
     }
 
-    internal class WhenWillTheApprenticeStartTheirApprenticeTraining(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class WhenWillTheTrainingStartPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
-        public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("When will the apprentice start their apprenticeship training?");
+        public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("When will the training start?");
 
-        private ILocator alreadyStarted => page.Locator("#StartDate-alreadyStarted");
-
-        internal async Task<ConfirmYourReservationPage> SelectAlreadyStartedDate()
-        {
-            await alreadyStarted.ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
-            return await VerifyPageAsync(() => new ConfirmYourReservationPage(context));
+        private ILocator reservationStartDate(int offset)
+        {   
+            if (offset < 0)
+                return page.Locator("#StartDate-alreadyStarted");
+            else
+                return page.Locator($"#StartDate-{DateTime.Now.AddMonths(offset):yyyy-MM}");
         }
+
+
+        internal async Task<CheckDetailsAndReserveFundingPage> SelectReservationDate(int offset)
+        {
+            await reservationStartDate(offset).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+            return await VerifyPageAsync(() => new CheckDetailsAndReserveFundingPage(context));
+        }
+
+        internal async Task VerifyPreiousMonthIsNotAvailableToSelect() => await Assertions.Expect(reservationStartDate(-1)).Not.ToBeVisibleAsync();
+
 
     }
 
@@ -154,19 +165,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         }
     }
 
-    internal class YouHaveSuccessfullyReservedFundingForApprenticeshipTrainingPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class YouHaveReservedFundingForTrainingPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator(".govuk-panel__title")).ToContainTextAsync("You have successfully reserved funding for apprenticeship training");
+            await Assertions.Expect(page.Locator(".govuk-panel__title")).ToContainTextAsync("You have reserved funding for training");
         }
 
-        internal async Task<EmployerHomePage> SelectGoToHomePageAndContinue()
+        internal async Task<EmployerHomePage> SelectOptionGoToHomePage()
         {
-            await page.GetByRole(AriaRole.Radio, new() { Name = "Go to homepage" }).ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = "Go to homepage" }).ClickAsync();
             return await VerifyPageAsync(() => new EmployerHomePage(context));
+        }
 
+        internal async Task<AddApprenticePage> SelectOptionAddLearner()
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = "Add learner" }).ClickAsync();
+            return await VerifyPageAsync(() => new AddApprenticePage(context));
         }
 
 

@@ -19,6 +19,8 @@ namespace SFA.DAS.LearnerData.Events // Namespace adjusted to reflect the actual
         public bool IsFlexiJob { get; set; }
         public int PlannedOTJTrainingHours { get; set; }
         public int StandardCode { get; set; }
+        public string LarsCode { get; set; }
+        public int LearningType { get; set; }
         public Guid CorrelationId { get; set; }
         public DateTime ReceivedDate { get; set; }
         public int AcademicYear { get; set; }

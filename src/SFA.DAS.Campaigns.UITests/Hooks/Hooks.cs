@@ -23,5 +23,13 @@ public class Hooks(ScenarioContext context) : FrameworkBaseHooks(context)
         mailosaurUser.AddToEmailList(email);
 
         await Navigate(UrlConfig.CA_BaseUrl);
+
+        var page = context.Get<Driver>().Page;
+
+        var acceptButton = page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" });
+
+        var closeButton = page.Locator("#fiu-cb-close-accept");
+
+        await page.AddLocatorHandlerAsync(acceptButton, async () => { await acceptButton.ClickAsync(); await closeButton.ClickAsync(); });
     }
 }

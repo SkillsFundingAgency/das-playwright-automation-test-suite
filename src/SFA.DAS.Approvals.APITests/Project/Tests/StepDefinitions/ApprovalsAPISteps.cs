@@ -17,25 +17,25 @@ public class ApprovalsAPISteps
         _restClient = _context.GetRestClient<Outer_ApprovalsAPIClient>();
     }
 
-    [When(@"the user sends (GET|POST|PUT|DELETE) request to (.*) with payload (.*)")]
+    [When(@"^the user sends (GET|POST|PUT|DELETE) request to (.*) with payload (.*)$")]
     public async Task TheUserSendsRequestTo(Method method, string endpoint, string payload)
     {
         await _restClient.CreateRestRequest(method, endpoint, payload);
     }
 
-    [Then(@"api (Accepted) response is received")]
+    [Then(@"^api (Accepted) response is received$")]
     public async Task ThenApiOKResponseIsReceived(HttpStatusCode responseCode)
     {
         _restResponse = await Execute(responseCode);
     }
 
-    [Then(@"api (Created) response is received")]
+    [Then(@"^api (Created) response is received$")]
     public async Task ThenApiCreatedResponseIsReceived(HttpStatusCode responseCode)
     {
         _restResponse = await Execute(responseCode);
     }
 
-    [Then(@"api (Bad Request) response is received")]
+    [Then(@"^api (Bad Request) response is received$")]
     public async Task ThenApiBadRequestResponseIsReceived(HttpStatusCode responseCode)
     {
         _restResponse = await Execute(responseCode);

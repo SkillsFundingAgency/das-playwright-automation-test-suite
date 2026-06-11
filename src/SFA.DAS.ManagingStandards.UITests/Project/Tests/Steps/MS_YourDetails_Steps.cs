@@ -7,10 +7,10 @@ namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Steps;
 [Binding]
 public class MS_YourDetails_Steps(ScenarioContext context)
 {
-    [Given(@"the provider logs into portal")]
+    [Given(@"^the provider logs into portal$")]
     public async Task GivenTheProviderLogsIntoPortal() => await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
 
-    [Then(@"the provider verifies organisation details")]
+    [Then(@"^the provider verifies organisation details$")]
     public async Task ThenTheProviderVerifiesOrganisationDetails()
     {
         var page = new ManagingStandardsProviderHomePage(context);
@@ -26,7 +26,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
         await page4.AccessStandards_Apprenticeships();
     }
 
-    [Then(@"the provider verifies provider overview")]
+    [Then(@"^the provider verifies provider overview$")]
     public async Task ThenTheProviderVerifiesProviderOverview()
     {
         var page = new ManageTheStandardsYouDeliverPage(context);
@@ -44,19 +44,19 @@ public class MS_YourDetails_Steps(ScenarioContext context)
         await page5.AccessStandards_Apprenticeships();
     }
 
-    [Then(@"the provider updates contact details")]
+    [Then(@"^the provider updates contact details$")]
     public async Task ThenTheProviderUpdatesContactDetails()
     {
         var page = new ManageTheStandardsYouDeliverPage(context);
 
-        var page1 = await page.AccessPodiatrist();
+        var page1 = await page.AccessTeacher();
 
         var page2 = await page1.UpdateTheseContactDetails();
 
         await page2.UpdateContactInformation();
     }
 
-    [When(@"the provider is able to approve regulated standard")]
+    [When(@"^the provider is able to approve regulated standard$")]
     public async Task WhenTheProviderIsAbleToApproveRegulatedStandard()
     {
         var page = new ManagingStandardsProviderHomePage(context);
@@ -66,7 +66,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
         var page2 = await page1.AccessTrainingTypesPage();
         var page3 = await page2.AccessStandards_Apprenticeships();
 
-        var page4 = await page3.AccessPodiatrist();
+        var page4 = await page3.AccessTeacher();
 
         var page5 = await page4.AccessApprovedByRegulationOrNot();
 
@@ -74,7 +74,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
     }
 
-    [Then(@"the provider is able to disapprove regulated standard")]
+    [Then(@"^the provider is able to disapprove regulated standard$")]
     public async Task ThenTheProviderIsAbleToDisapproveRegulatedStandard()
     {
         var page = new ManageAStandard_TeacherPage(context);
@@ -87,11 +87,11 @@ public class MS_YourDetails_Steps(ScenarioContext context)
 
         var page4 = await page3.Return_StandardsManagement();
 
-        await page4.VerifyOrangeMoreDetailsNeededTagForStandardAsync("Podiatrist (level 6)", shouldExist: true);
+        await page4.VerifyOrangeMoreDetailsNeededTagForStandardAsync("Teacher - Postgraduate (level 6)", shouldExist: true);
 
     }
 
-    [When(@"the provider is able to change the standard delivered in one of the training locations")]
+    [When(@"^the provider is able to change the standard delivered in one of the training locations$")]
     public async Task WhenTheProviderIsAbleToChangeTheStandardDeliveredInOneOfTheTrainingLocations()
     {
         var page = new ManageAStandard_TeacherPage(context);
@@ -103,7 +103,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
         await page2.ConfirmVenueDetailsAndDeliveryMethod_AtOneOFYourTrainingLocation();
     }
 
-    [When(@"the provider is able to add the training locations")]
+    [When(@"^the provider is able to add the training locations$")]
     public async Task WhenTheProviderIsAbleToAddTheTrainingLocations()
     {
         var page = new ManageAStandard_TeacherPage(context);
@@ -117,7 +117,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
         await page3.NavigateBackToStandardPage();
     }
 
-    [When(@"the provider is able to change the standard delivered at an employers location national provider")]
+    [When(@"^the provider is able to change the standard delivered at an employers location national provider$")]
     public async Task WhenTheProviderIsAbleToChangeTheStandardDeliveredAtAnEmployersLocationNationalProvider()
     {
         var page = new ManageAStandard_TeacherPage(context);
@@ -129,7 +129,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
         await page2.YesDeliverAnyWhereInEngland_ManageStandard();
     }
 
-    [When(@"the provider is able to change the standard delivered in both not a national provider")]
+    [When(@"^the provider is able to change the standard delivered in both not a national provider$")]
     public async Task WhenTheProviderIsAbleToChangeTheStandardDeliveredInBothNotANationalProvider()
     {
         var page = new ManagingStandardsProviderHomePage(context);
@@ -139,7 +139,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
         var page2 = await page1.AccessTrainingTypesPage();
         var page3 = await page2.AccessStandards_Apprenticeships();
 
-        var page4 = await page3.AccessPodiatrist();
+        var page4 = await page3.AccessTeacher();
 
         var page5 = await page4.AccessWhereYouWillDeliverThisStandard();
 
@@ -152,7 +152,7 @@ public class MS_YourDetails_Steps(ScenarioContext context)
         await page8.SelectDerbyRutlandRegionsAndConfirm();
     }
 
-    [When(@"the provider is able to edit the regions")]
+    [When(@"^the provider is able to edit the regions$")]
     public async Task WhenTheProviderIsAbleToEditTheRegions()
     {
         var page = new ManageAStandard_TeacherPage(context);

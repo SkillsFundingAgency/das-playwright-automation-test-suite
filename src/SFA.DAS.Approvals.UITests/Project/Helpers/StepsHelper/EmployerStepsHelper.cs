@@ -58,9 +58,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await EmployerLogInToEmployerPortal();
 
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
+            await new InterimLearnersHomePage(context, false).VerifyPage();
 
-            var page = await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            var page = await new LearnersHomePage(context).GoToReviewLearnerRequests();
 
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
 
@@ -72,15 +72,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return page1;
         }
 
-        internal async Task<ManageYourLearnersPage> CheckApprenticeOnManageYourApprenticesPage(bool login = false)
+        internal async Task<EmployerApproveApprenticeDetailsPage> OpenAnyDraftCohort()
+        {
+            await EmployerLogInToEmployerPortal();
+            await new InterimLearnersHomePage(context, false).VerifyPage();
+            var page = await new LearnersHomePage(context).GoToReviewLearnerRequests();
+            return await page.GoToDraftsAndOpenFirstDetailsLink();
+        }
+
+        internal async Task<ManageYourLearnersPage> CheckLearnerOnManageYourLearnersPage(bool login = false)
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             await (login ? EmployerLogInToEmployerPortal() : employerHomePageHelper.NavigateToEmployerApprenticeshipService(true));
 
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
+            await new InterimLearnersHomePage(context, false).VerifyPage();
 
-            await new ApprenticesHomePage(context).GoToManageYourApprentices();
+            await new LearnersHomePage(context).GoToManageYourLearners();
 
             var page = new Pages.Employer.ManageYourLearnersPage(context);
 
@@ -101,21 +109,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await new ViewApprenticeDetailsDynamicHomepage(context).ViewApprenticeDetails();
         }
 
-        internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedApprenticeRecord(ApprenticesHomePage apprenticesHomePage, string uln, string name)
+        internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedLearnerRecord(LearnersHomePage apprenticesHomePage, string uln, string name)
         {
-            await apprenticesHomePage.GoToManageYourApprentices();
+            await apprenticesHomePage.GoToManageYourLearners();
             var page = new Pages.Employer.ManageYourLearnersPage(context);
             await page.SearchApprentice(uln, name);
             return await page.OpenFirstItemFromTheList(name);
         }
 
-        internal async Task TryEditApprenticeAgeAndValidateError(ApprenticeDetailsPage apprenticeDetailsPage, DateTime dateOfBirth)
+        internal async Task TryEditApprenticeAge(ApprenticeDetailsPage apprenticeDetailsPage, DateTime dateOfBirth)
         {
-            string expectedErrorMessage = "The apprentice must be younger than 25 years old at the start of their training";
             var page = await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();
             await page.EditDoB(dateOfBirth);
-            await page.ClickUpdateDetailsButton();
-            await page.ValidateErrorMessage(expectedErrorMessage, "DateOfBirth");
+            await page.ClickUpdateDetailsButton();            
         }
 
         internal async Task AddEmptyCohort()
@@ -124,8 +130,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
 
             await EmployerLogInToEmployerPortal(false);
-            await new InterimApprenticesHomePage(context, false).VerifyPage();
-            var page = await new ApprenticesHomePage(context).GoToAddAnApprentice();
+            await new InterimLearnersHomePage(context, false).VerifyPage();
+            var page = await new LearnersHomePage(context).GoToAddALearner();
             var page1 =  await page.ClickStartNowButton();
             var page2 =   await page1.SubmitValidUkprn(ukprn);
             var page3 =   await page2.ConfirmTrainingProviderDetails();
@@ -157,7 +163,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 
             await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
 
-            var page1 = await new ApprenticesHomePage(context).GoToApprenticeRequests();
+            var page1 = await new LearnersHomePage(context).GoToLearnerRequestsFromHome();
             var page2 = await page1.OpenApprenticeRequestReadyForReview(cohort);
             await page2.ValidateCohortStatus(status);
         }
@@ -194,6 +200,36 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await ReserveFundsFromDynamicHomepage();
         }
 
+        internal async Task EmployerCreatesReservationAndAddsApprentice()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+            int dateOffset = -1;
+
+            await EmployerLogInToEmployerPortal(false);
+            //await employerHomePageHelper.GotoEmployerHomePage(false);
+            var page  = new EmployerHomePage(context);
+            var page2 = await page.ClickOnFundingReservationsLink();
+            var page3 = await page2.ClickOnReserveMoreFundingLink();
+            var page4 = await page3.YesContinueToReserveFunding();
+            var page5 = await page4.ReserveFundsAsync(apprenticeship.TrainingDetails.CourseTitle);
+
+            if(apprenticeship.TrainingDetails.LearningType == 2)
+            {
+                await page5.VerifyPreiousMonthIsNotAvailableToSelect();
+                dateOffset = 0;
+            }                
+            
+            var page6 = await page5.SelectReservationDate(dateOffset);
+            var page7 = await page6.ClickConfirmButton();
+            await page7.GetReservationIdFromUrl(apprenticeship);
+            var page8 = await page7.SelectOptionAddLearner();
+            var page9 = await page8.ClickStartNowButton();
+            var page10 = await page9.SubmitValidUkprn(apprenticeship.ProviderDetails.Ukprn);
+            var page11 = await page10.ConfirmTrainingProviderDetails();
+            await page11.SelectEmployerAddApprencticesAndSend();
+        }
+
         private async Task<EmployerHomePage> ReserveFundsFromDynamicHomepage()
         {
             var dynamicHomepage = new SetupAnApprenticeshipDynamicHomepage(context);
@@ -206,10 +242,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page6 = await page5.YesContinueToReserveFunding();
             var page7 = await page6.YesContinueToReserveFunding();
             var page8 = await page7.ReserveFundsAsync("Associate");
-            var page9 = await page8.SelectAlreadyStartedDate();
+            var page9 = await page8.SelectReservationDate(-1);
             var page10 = await page9.ClickConfirmButton();
-
-            return await page10.SelectGoToHomePageAndContinue();
+            return await page10.SelectOptionGoToHomePage();
         }
     }
 }

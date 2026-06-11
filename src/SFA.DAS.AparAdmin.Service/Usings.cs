@@ -2,5 +2,5 @@
 global using SFA.DAS.Framework;
 global using SFA.DAS.FrameworkHelpers;
 global using System.Threading.Tasks;
-global using TechTalk.SpecFlow;
+global using Reqnroll;
 global using Microsoft.Playwright;

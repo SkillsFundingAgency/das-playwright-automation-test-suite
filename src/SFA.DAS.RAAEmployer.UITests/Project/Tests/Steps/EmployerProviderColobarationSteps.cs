@@ -26,7 +26,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
             _rAAEmployerLoginHelper = new RAAEmployerLoginStepsHelper(_context);
         }
 
-        [Given(@"the Employer grants permission to the provider to create advert with review option")]
+        [Given(@"^the Employer grants permission to the provider to create advert with review option$")]
         public async Task GivenTheEmployerGrantsPermissionToTheProviderToCreateAdvertWithReviewOption()
         {
             _loginUser = _context.GetUser<RAAEmployerProviderPermissionUser>();
@@ -42,7 +42,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
             */
         }
 
-        [Given(@"the Employer grants permission to the provider to create advert with review option set as Yes")]
+        [Given(@"^the Employer grants permission to the provider to create advert with review option set as Yes$")]
         public async Task GivenTheEmployerGrantsPermissionToTheProviderToCreateAdvertWithReviewOptionSetAsYes()
         {
             _loginUser = _context.GetUser<RAAEmployerProviderYesPermissionUser>();
@@ -50,7 +50,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
             var homePage = await _rAAEmployerLoginHelper.GoToHomePage(_loginUser);
         }
 
-        //[When(@"the Provider submits a vacancy to the employer for review")]
+        //[When(@"^the Provider submits a vacancy to the employer for review$")]
         //public async Task WhenTheProviderSubmitsAVacancyToTheEmployerForReview()
         //{
         //    var vacancyReferencePage = new ProviderCreateVacancyStepsHelper(_context, true).CreateANewVacancyForSpecificEmployer(_loginUser.OrganisationName, _objectContext.GetHashedAccountId());
@@ -58,7 +58,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
         //    ConfirmationMessage(vacancyReferencePage, "Vacancy submitted to employer");
         //}
 
-        //[When(@"the Employer rejects the advert")]
+        //[When(@"^the Employer rejects the advert$")]
         //public async Task WhenTheEmployerRejectsTheAdvert()
         //{
         //    var vacancyReferencePage = GoToVacancyCompletedPage().RejectAdvert().SelectYes();
@@ -66,7 +66,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
         //    ConfirmationMessage(vacancyReferencePage, "You've rejected this job advert");
         //}
 
-        //[Then(@"the Provider should see the advert with status: '(.*)'")]
+        //[Then(@"^the Provider should see the advert with status: '(.*)'$")]
         //public async Task ThenTheProviderShouldSeeTheAdvertWithStatus(string expectedStatus)
         //{
         //    _resultPage = _providerStepsHelper.SearchVacancy();
@@ -74,7 +74,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
         //    _resultPage.VerifyAdvertStatus(expectedStatus);
         //}
 
-        //[When(@"Provider re-submits the advert")]
+        //[When(@"^Provider re-submits the advert$")]
         //public async Task WhenProviderRe_SubmitsTheAdvert()
         //{
         //    var page = _resultPage.GoToRejectedVacancyCompletedPage();
@@ -86,7 +86,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
         //    ConfirmationMessage(vacancyReferencePage, "Vacancy resubmitted to employer");
         //}
 
-        //[When(@"the Employer approves the advert")]
+        //[When(@"^the Employer approves the advert$")]
         //public async Task WhenTheEmployerApprovesTheAdvert()
         //{
         //    var vacancyReferencePage = GoToVacancyCompletedPage().SubmitAdvert().SelectYes();

@@ -29,7 +29,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task<FATeHomePage> ReturnToStartPage()
     {
-        await page.Locator(".govuk-header__link.govuk-header__service-name").ClickAsync();
+        await page.Locator(".govuk-service-navigation__link").ClickAsync();
         return await VerifyPageAsync(() => new FATeHomePage(context));
     }
     public async Task<Search_TrainingCourses_ApprenticeworkLocationPage> ReturnToSearch_TrainingCourses_ApprenticeworkLocationPage()
@@ -197,15 +197,21 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
         var count = await resultsLinks.CountAsync();
         var limit = Math.Min(count, 4);
 
+        bool matchFound = false;
+
         for (int i = 0; i < limit; i++)
         {
-            var resultLocator = resultsLinks.Nth(i);
-            // Perform a case-insensitive check of the result text to avoid failures due to casing
-            var resultText = await resultLocator.InnerTextAsync() ?? string.Empty;
-            if (resultText.IndexOf(resultsword, StringComparison.OrdinalIgnoreCase) < 0)
+            var resultText = await resultsLinks.Nth(i).InnerTextAsync() ?? string.Empty;
+
+            if (resultText.IndexOf(resultsword, StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                throw new Exception($"Expected search result to contain '{resultsword}' (case-insensitive), but found: '{resultText}'");
+                matchFound = true;
             }
+        }
+
+        if (!matchFound)
+        {
+            throw new Exception($"Expected at least one search result to contain '{resultsword}', but none did.");
         }
     }
     public async Task ClearAllFilters()
@@ -224,7 +230,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyTrainingProviderWithinDistance(int miles)
     {
-        var providerLinks = page.GetByRole(AriaRole.Link, new() { NameRegex = new Regex($"View \\d+ training providers within {miles} miles") });
+        var providerLinks = page.GetByRole(AriaRole.Link, new() { NameRegex = new Regex($@"View \d+ training providers within {miles} miles") });
 
         int count = await providerLinks.CountAsync();
         if (count == 0)

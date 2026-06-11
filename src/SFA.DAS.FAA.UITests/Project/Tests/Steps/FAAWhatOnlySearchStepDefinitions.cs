@@ -5,7 +5,7 @@ public class FAAWhatOnlySearchStepDefinitions(ScenarioContext context)
 {
     private readonly ScenarioContext _context = context;
 
-    [When(@"the user does a what only search '([^']*)'")]
+    [When(@"^the user does a what only search '([^']*)'$")]
     public async Task WhenTheUserDoesAWhatOnlySearch(string whatText)
     {
         var page = new FAASignedInLandingBasePage(_context);
