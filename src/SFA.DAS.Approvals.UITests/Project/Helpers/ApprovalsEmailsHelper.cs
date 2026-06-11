@@ -50,9 +50,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
                     break;
 
                 //apprentice emails below this area
-                case ("Confirm apprenticeship details", "apprentice"):
+                case ("Welcome to your apprenticeship", "apprentice"):
                     rcvrEmail = apprenticeEmail;
-                    subject = "You need to confirm your apprenticeship details";
+                    subject = "Welcome to your apprenticeship";
                     body = $"Congratulations on becoming an apprentice.";
                     break;
 

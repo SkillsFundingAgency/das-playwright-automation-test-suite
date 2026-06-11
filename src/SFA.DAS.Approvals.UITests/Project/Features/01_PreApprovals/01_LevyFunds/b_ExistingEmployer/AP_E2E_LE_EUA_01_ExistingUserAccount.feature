@@ -31,4 +31,4 @@ Scenario Outline: AP_E2E_LE_EUA_01b emails validation
 Examples:
 		| Recipient		| NotificationType								|
 		| Employer      | Apprentice details ready to approve 			|
-		| Apprentice	| Confirm apprenticeship details                |
+		| Apprentice	| Welcome to your apprenticeship                |

@@ -7,7 +7,7 @@ using System;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 {
-    internal class EmployerStepsHelper
+    public class EmployerStepsHelper
     {
         private readonly ScenarioContext context;
         private readonly CommonStepsHelper commonStepsHelper;
@@ -230,7 +230,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page11.SelectEmployerAddApprencticesAndSend();
         }
 
-        private async Task<EmployerHomePage> ReserveFundsFromDynamicHomepage()
+        public async Task<EmployerHomePage> ReserveFundsFromDynamicHomepage()
         {
             var dynamicHomepage = new SetupAnApprenticeshipDynamicHomepage(context);
 
