@@ -120,8 +120,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await new ProviderHomePage(context).GoToManageYourFunding();
             var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
-            //var page2 = await page1.SelectOptionToAddApprenticesFromILRList_NonLevyRoute();
-            var page3 = await page1.SelectApprenticeFromILRList(apprenticeship);            
+            var page2 = await page1.SelectOptionChooseDetailsFromILR();
+            var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);            
             await page3.ClickAddButton();
             //NO RPL case - Now no need to filter here since the final checkbox in approvals screen ensure that is checked.
             var page4 = new ApproveApprenticeDetailsPage(context);
@@ -246,7 +246,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await new ProviderHomePage(context).GoToManageYourFunding();
             var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
-            var page3 = await page1.SelectApprenticeFromILRList(apprenticeship);
+            var page2 = await page1.SelectOptionChooseDetailsFromILR();
+            var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);
             await page3.ClickAddButton();
             var page4 =  new ApproveApprenticeDetailsPage(context);
             await page4.GetCohortId(apprenticeship);

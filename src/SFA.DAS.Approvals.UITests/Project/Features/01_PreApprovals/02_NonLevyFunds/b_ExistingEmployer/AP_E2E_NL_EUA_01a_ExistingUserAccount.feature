@@ -25,4 +25,4 @@ Examples:
 		| Recipient		| NotificationType								|
 		| Employer      | Reservation made on your behalf 				|
 		| Employer      | Apprentice details ready to approve 			|
-		| Apprentice	| Confirm apprenticeship details                |
+		| Apprentice	| Welcome to your apprenticeship                |
