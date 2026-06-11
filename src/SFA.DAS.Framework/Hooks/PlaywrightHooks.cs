@@ -1,4 +1,6 @@
 ﻿
+//using Allure.Net.Commons;
+
 namespace SFA.DAS.Framework.Hooks;
 
 [Binding]
@@ -85,6 +87,9 @@ public class PlaywrightHooks(ScenarioContext context)
                     });
 
                     TestContext.AddTestAttachment(tracefilePath, tracefileName);
+
+                    //AllureApi.AddAttachment(tracefileName, "application/vnd.allure.playwright-trace", tracefilePath);
+                    //commented out as some of the reports are more than 512MB and allure does not support attachments of that size, so we are adding the trace file as a test attachment in test context instead which can be downloaded and viewed in playwright trace viewer
                 }
                 );
         }
