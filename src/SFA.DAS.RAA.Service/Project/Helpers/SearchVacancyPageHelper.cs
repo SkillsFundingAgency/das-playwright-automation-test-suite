@@ -94,7 +94,7 @@ public class SearchVacancyPageHelper(ScenarioContext context)
         return await VerifyPageHelper.VerifyPageAsync(context, () => new EmployerVacancySearchResultPage(context));
     }
 
-    internal async Task SearchVacancy()
+    public async Task SearchVacancy()
     {
         var vacRef = _objectContext.GetVacancyReference();
 
@@ -109,5 +109,15 @@ public class SearchVacancyPageHelper(ScenarioContext context)
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
         await Assertions.Expect(page).ToHaveURLAsync(new Regex($"searchTerm={vacRef}"), new PageAssertionsToHaveURLOptions { IgnoreCase = true, Timeout = 20000 });
+    }
+
+    public async Task NavigateToMenuItem(string name)
+    {
+        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
+    }
+
+    public async Task NavigateToHomeFromRaaDashboard(string name)
+    {
+        await page.GetByRole(AriaRole.Region, new() { Name = "Service information"}).GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
     }
 }
