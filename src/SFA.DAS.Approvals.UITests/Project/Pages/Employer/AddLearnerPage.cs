@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class AddApprenticePage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class AddLearnerPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         private ILocator startNowButton => page.GetByRole(AriaRole.Button, new() { Name = "Start now" });
 

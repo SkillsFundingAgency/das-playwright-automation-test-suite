@@ -46,10 +46,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         }
 
-        internal async Task<ApprenticeDetailsPage> OpenFirstItemFromTheList(string apprenticeName)
+        internal async Task<LearnerDetailsPage> OpenFirstItemFromTheList(string apprenticeName)
         {
             await apprenticeLink(apprenticeName).ClickAsync();
-            return await VerifyPageAsync(() => new ApprenticeDetailsPage(context, apprenticeName));
+            return await VerifyPageAsync(() => new LearnerDetailsPage(context, apprenticeName));
         }
 
         private async Task SearchApprentice(string ULN)

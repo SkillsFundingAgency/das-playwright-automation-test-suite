@@ -109,7 +109,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await new ViewApprenticeDetailsDynamicHomepage(context).ViewApprenticeDetails();
         }
 
-        internal async Task<ApprenticeDetailsPage> EmployerSearchOpenApprovedLearnerRecord(LearnersHomePage apprenticesHomePage, string uln, string name)
+        internal async Task<LearnerDetailsPage> EmployerSearchOpenApprovedLearnerRecord(LearnersHomePage apprenticesHomePage, string uln, string name)
         {
             await apprenticesHomePage.GoToManageYourLearners();
             var page = new Pages.Employer.ManageYourLearnersPage(context);
@@ -117,7 +117,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page.OpenFirstItemFromTheList(name);
         }
 
-        internal async Task TryEditApprenticeAge(ApprenticeDetailsPage apprenticeDetailsPage, DateTime dateOfBirth)
+        internal async Task TryEditApprenticeAge(LearnerDetailsPage apprenticeDetailsPage, DateTime dateOfBirth)
         {
             var page = await apprenticeDetailsPage.ClickOnEditApprenticeDetailsLink();
             await page.EditDoB(dateOfBirth);
@@ -145,7 +145,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
  
-            var page1 = await new AddApprenticePage(context).ClickStartNowButtonNonLevyFlow();
+            var page1 = await new AddLearnerPage(context).ClickStartNowButtonNonLevyFlow();
             var page2 =  await page1.SelectReservedFunds();
             var page3 = await page2.SelectReservation();
             var page4 = await page3.SubmitValidUkprn(ukprn);

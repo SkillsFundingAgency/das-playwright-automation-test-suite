@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class ApprenticeshipTrainingPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class WhatIsTheTrainingCoursePage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         public override async Task VerifyPage()
         {

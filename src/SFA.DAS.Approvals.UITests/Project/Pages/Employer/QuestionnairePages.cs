@@ -84,11 +84,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         }
 
 
-        public async Task<AddApprenticePage> DoNotCreateAdvertForThisApprenticeship()
+        public async Task<AddLearnerPage> DoNotCreateAdvertForThisApprenticeship()
         {
             await page.Locator("[value='False']").ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-            return await VerifyPageAsync(() => new AddApprenticePage(context));
+            return await VerifyPageAsync(() => new AddLearnerPage(context));
         }
     }
 
@@ -178,10 +178,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new EmployerHomePage(context));
         }
 
-        internal async Task<AddApprenticePage> SelectOptionAddLearner()
+        internal async Task<AddLearnerPage> SelectOptionAddLearner()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Add learner" }).ClickAsync();
-            return await VerifyPageAsync(() => new AddApprenticePage(context));
+            return await VerifyPageAsync(() => new AddLearnerPage(context));
         }
 
 
