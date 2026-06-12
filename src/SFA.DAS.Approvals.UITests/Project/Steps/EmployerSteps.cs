@@ -237,6 +237,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var employerSelectRoutePage = new HowWouldYouLikeToAddLearnersPage(context);
             var page = await employerSelectRoutePage.SelectProviderAddApprencticesAndSend();
             var cohortRef = await page.GetCohortId();
+            await page.VerifyTrainingStatusDetails(cohortRef, "Reserved funds");
+
             await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
         }
 
