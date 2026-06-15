@@ -120,8 +120,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await new ProviderHomePage(context).GoToManageYourFunding();
             var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
-            //var page2 = await page1.SelectOptionToAddApprenticesFromILRList_NonLevyRoute();
-            var page3 = await page1.SelectApprenticeFromILRList(apprenticeship);            
+            var page2 = await page1.SelectOptionChooseDetailsFromILR();
+            var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);            
             await page3.ClickAddButton();
             //NO RPL case - Now no need to filter here since the final checkbox in approvals screen ensure that is checked.
             var page4 = new ApproveApprenticeDetailsPage(context);
@@ -197,7 +197,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             if (login) { await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false); }
 
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
-            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+            var page2 = await new HowDoYouWantToAddLearner_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
             var page3 = await page2.SelectOptionCreateANewCohort();
             var page4 = await SelectEmployer(page3);
             var page5 = await page4.ConfirmEmployer();
@@ -246,7 +246,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await new ProviderHomePage(context).GoToManageYourFunding();
             var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship);
-            var page3 = await page1.SelectApprenticeFromILRList(apprenticeship);
+            var page2 = await page1.SelectOptionChooseDetailsFromILR();
+            var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);
             await page3.ClickAddButton();
             var page4 =  new ApproveApprenticeDetailsPage(context);
             await page4.GetCohortId(apprenticeship);
@@ -257,7 +258,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
         {
             var page = await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
-            var page2 = await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+            var page2 = await new HowDoYouWantToAddLearner_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
             var page3 = await page2.SelectOptionUseExistingCohort();
             var page4 = await SelectanExistingEmployer(page3);
             var page5 = await page4.ClickOnAddAnotherApprenticeLink();

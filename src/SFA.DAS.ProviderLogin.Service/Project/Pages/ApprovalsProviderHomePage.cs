@@ -71,11 +71,11 @@ public partial class ProviderHomePage : InterimProviderBasePage
         return await VerifyPageAsync(() => new ProviderTermsOfUsePage(context));
     }
 
-    public async Task<ProviderAddApprenticeDetailsEntryMothod> GotoSelectJourneyPage()
+    public async Task<ProviderHowDoYouWantToAddLearnerEntryMothodPage> GotoSelectJourneyPage()
     {
         await AddNewApprentices();
 
-        return await VerifyPageAsync(() => new ProviderAddApprenticeDetailsEntryMothod(context));
+        return await VerifyPageAsync(() => new ProviderHowDoYouWantToAddLearnerEntryMothodPage(context));
     }
 
     public async Task<ProviderAddEmployerStartPage> GotoAddNewEmployerStartPage()
@@ -314,11 +314,11 @@ public class ProviderAccessDeniedPage(ScenarioContext context) : InterimProvider
     //}
 }
 
-public class ProviderAddApprenticeDetailsEntryMothod(ScenarioContext context) : InterimProviderBasePage(context)
+public class ProviderHowDoYouWantToAddLearnerEntryMothodPage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("How do you want to add learner details?");
     }
 
     //internal async Task<ProviderAddApprenticeDetailsViaSelectJourneyPage>  SelectAddManually()

@@ -32,6 +32,8 @@ This is a **BDD (Behavior-Driven Development) test automation suite** using Reqn
 - [C# Dev Kit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit)
 ### Recommended:
 - [Reqnroll/SpecFlow Steps Definition Generator (With AI Assistant)](https://marketplace.visualstudio.com/items?itemName=RajUppadhyay.specflow-steps-definition-generator)
+- [BDD Guardian](https://marketplace.visualstudio.com/items?itemName=anghelll.bdd-guardian)
+- [Gherkin Step Navigator](https://marketplace.visualstudio.com/items?itemName=DannyBriskin.gherkin-step-navigator)
 - [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 - [learn-yaml](https://marketplace.visualstudio.com/items?itemName=docsmsft.docs-yaml)
 - [Playwright Trace Viewer for VSCode](https://marketplace.visualstudio.com/items?itemName=ryanrosello-og.playwright-vscode-trace-viewer)

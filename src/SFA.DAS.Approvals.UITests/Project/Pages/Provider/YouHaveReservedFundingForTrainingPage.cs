@@ -20,11 +20,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             
         }
 
-        internal async Task<AddApprenticeDetails_EntryMothodPage> SelectAddApprenticesDetailsAndContinue()
+        internal async Task<HowDoYouWantToAddLearner_EntryMothodPage> SelectAddApprenticesDetailsAndContinue()
         {
             await page.GetByRole(AriaRole.Radio, new() { Name = "Add apprentice's details" }).ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
-            return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));
+            return await VerifyPageAsync(() => new HowDoYouWantToAddLearner_EntryMothodPage(context));
         }
 
         internal async Task GetReservationIdFromUrl(Apprenticeship apprenticeship)

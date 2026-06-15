@@ -22,11 +22,11 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
     //[When(@"^the Employer creates first submitted advert$")]
     //public async Task TheEmployerCreatesFirstSubmittedAdvert() => await  _employerCreateVacancyStepsHelper.CreateFirstAdvertAndSubmit(_createAnApprenticeshipAdvertPage);
 
-    //[Given(@"^the employer continue to add advert in the Recruitment$")]
-    //public async Task TheEmployerContinueToAddAdvertInTheRecruitment()
-    //{
-    //    _createAnApprenticeshipAdvertPage = await _employerCreateVacancyStepsHelper.AddAnAdvert();
-    //}
+    [Given(@"^the employer continue to add advert in the Recruitment$")]
+    public async Task TheEmployerContinueToAddAdvertInTheRecruitment()
+    {
+        _createAnApprenticeshipAdvertPage = await _employerCreateVacancyStepsHelper.AddAnAdvert();
+    }
 
     [When(@"^Employer selects '(National Minimum Wage|National Minimum Wage For Apprentices|Fixed Wage Type|Set As Competitive)' in the first part of the journey$")]
     public async Task EmployerSelectsInTheFirstPartOfTheJourney(string wageType) => await _employerCreateVacancyStepsHelper.CreateANewAdvert_WageType(wageType);

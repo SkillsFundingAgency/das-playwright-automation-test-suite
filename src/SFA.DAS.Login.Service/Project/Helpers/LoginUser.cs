@@ -189,6 +189,8 @@ public class CocApprenticeUser : ApprenticeUser { }
 
 public class ApprenticeFeedbackUser : ApprenticeUser { }
 
+public class ApprenticeAppUser: ApprenticeUser { }
+
 public abstract class ApprenticeUser : GovSignUser
 {
     public string FirstName { get; set; }
