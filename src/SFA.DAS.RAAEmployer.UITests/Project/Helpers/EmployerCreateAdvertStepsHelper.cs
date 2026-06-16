@@ -1,4 +1,5 @@
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
+using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages.DynamicHomePageEmployer;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers;
 
@@ -127,16 +128,16 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
         await CheckAndSubmitAdvert(createAdvertPage);
     }
 
-    //internal async Task<CreateAnApprenticeshipAdvertOrVacancyPage> AddAnAdvert()
-    //{
-    //    await new RecruitmentDynamicHomePage(context, true).ContinueToCreateAdvert();
+    internal async Task<CreateAnApprenticeshipAdvertOrVacancyPage> AddAnAdvert()
+    {
+        await new RecruitmentDynamicHomePage(context, true).ContinueToCreateAdvert();
 
-    //    var page = await new DoYouNeedToCreateAnAdvertPage(context);
+        var page = new DoYouNeedToCreateAnAdvertPage(context);
 
-    //    var page1 = await page.ClickYesRadioButtonTakesToRecruitment();
+        var page1 = await page.ClickYesRadioButtonTakesToRecruitment();
 
-    //    return await page1.GoToCreateAnApprenticeshipAdvertPage();
-    //}
+        return await page1.GoToCreateAnApprenticeshipAdvertPage();
+    }
 
     internal async Task CreateOfflineVacancy()
     {

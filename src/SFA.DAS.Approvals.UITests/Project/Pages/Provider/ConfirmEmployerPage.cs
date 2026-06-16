@@ -16,13 +16,13 @@
             return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
-        internal async Task<ApprenticeshipTrainingPage> ConfirmNonLevyEmployer()
+        internal async Task<WhatIsTheTrainingCoursePage> ConfirmNonLevyEmployer()
         {
             await page.Locator("#confirm-yes").ClickAsync();
 
             await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
-            return await VerifyPageAsync(() => new ApprenticeshipTrainingPage(context));
+            return await VerifyPageAsync(() => new WhatIsTheTrainingCoursePage(context));
         }
 
         internal async Task<FundingRestrictionsPage> ConfirmNonLevyEmployerWithFundingRestrictions()

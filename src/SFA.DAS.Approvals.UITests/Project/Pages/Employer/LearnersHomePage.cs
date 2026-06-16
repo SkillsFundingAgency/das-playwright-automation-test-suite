@@ -7,10 +7,10 @@
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Learners");
         }
 
-        internal async Task<AddApprenticePage> GoToAddALearner()
+        internal async Task<AddLearnerPage> GoToAddALearner()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Add a Learner or send a learner request" }).ClickAsync();
-            return await VerifyPageAsync(() => new AddApprenticePage(context));            
+            return await VerifyPageAsync(() => new AddLearnerPage(context));            
         }
 
         internal async Task<ApprenticeRequestsPage> GoToReviewLearnerRequests()

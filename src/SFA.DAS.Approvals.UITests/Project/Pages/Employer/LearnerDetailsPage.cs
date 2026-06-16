@@ -3,7 +3,7 @@ using System;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class ApprenticeDetailsPage : ApprovalsBasePage
+    internal class LearnerDetailsPage : ApprovalsBasePage
     {
         private readonly ScenarioContext context;
         private readonly string pageTitle;
@@ -20,7 +20,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         #endregion
 
 
-        internal ApprenticeDetailsPage(ScenarioContext context, string pageTitle) : base(context)
+        internal LearnerDetailsPage(ScenarioContext context, string pageTitle) : base(context)
         {
             this.context = context;
             this.pageTitle = pageTitle;
@@ -43,7 +43,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new EditLearnerDetailsPage(context));
         }
 
-        internal async Task<ApprenticeDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status, string rowName, DateTime date)
+        internal async Task<LearnerDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status, string rowName, DateTime date)
         {
             await Assertions.Expect(ApprenticeStatusTag).ToContainTextAsync(status.ToString());
             await Assertions.Expect(StatusDateTitle).ToContainTextAsync(rowName);
@@ -51,7 +51,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return this;
         }
 
-        internal async Task<ApprenticeDetailsPage> EmployerVerifyApprenticeStatusAndDetails(ApprenticeshipStatus status, string type, string apprenticeStatus)
+        internal async Task<LearnerDetailsPage> EmployerVerifyApprenticeStatusAndDetails(ApprenticeshipStatus status, string type, string apprenticeStatus)
         {
             await Assertions.Expect(ApprenticeStatusTag).ToContainTextAsync(status.ToString());
             await Assertions.Expect(StatusDateTitle).ToContainTextAsync(type);

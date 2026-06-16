@@ -19,12 +19,12 @@ public class PreviewYourAdvertOrVacancyPage(ScenarioContext context) : RaaBasePa
         return await VerifyPageAsync(() => new CheckYourAnswersPage(context));
     }
 
-    //public async Task<ResubmittedVacancyReferencePage> ResubmitVacancy()
-    //{
-    //    await page.Locator(Submit).ClickAsync();
+    public async Task<ResubmittedVacancyReferencePage> ResubmitVacancy()
+    {
+        await page.Locator(Submit).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new PreviewYourAdvertOrVacancyPage(context));
-    //}
+        return await VerifyPageAsync(() => new ResubmittedVacancyReferencePage(context));
+    }
 
 
     private string ContactDetails() => isRaaEmployer ? "a[data-automation='link-employer-contact-details']" : "a[data-automation='link-provider-contact-details']";
@@ -68,5 +68,15 @@ public class DeleteVacancyQuestionPage(ScenarioContext context) : RaaBasePage(co
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new CreateAnApprenticeshipAdvertOrVacancyPage(context));
+    }
+}
+
+public class ResubmittedVacancyReferencePage(ScenarioContext context) : RaaBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        string PageTitle = "Advert resubmitted for approval";
+
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(PageTitle);
     }
 }
