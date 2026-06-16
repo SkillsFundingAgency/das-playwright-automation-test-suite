@@ -88,6 +88,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Digicerts.UITests", "SFA.DAS.Digicerts.UITests\SFA.DAS.Digicerts.UITests.csproj", "{7F53111F-AA76-6723-12A2-D4C8374CE185}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ApprenticeApp.UITests", "SFA.DAS.ApprenticeApp.UITests\SFA.DAS.ApprenticeApp.UITests.csproj", "{BDE4E498-6CB6-4241-8750-E35B2CFE255F}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.RAAProvider.UITests", "SFA.DAS.RAAProvider.UITests\SFA.DAS.RAAProvider.UITests.csproj", "{D8C713B6-526A-418B-9D98-C7A0BA218906}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ApprenticeCMAD.UITests", "SFA.DAS.ApprenticeCMAD.UITests\SFA.DAS.ApprenticeCMAD.UITests.csproj", "{F87DB6E6-A0E5-44FB-825A-727D277E582A}"
