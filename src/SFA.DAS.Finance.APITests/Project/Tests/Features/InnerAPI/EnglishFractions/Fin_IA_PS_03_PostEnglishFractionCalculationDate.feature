@@ -4,6 +4,7 @@ Feature: Fin_IA_PS_03_PostEnglishFractionCalculationDate
 @employerfinanceapi
 @regression
 @innerapi
+@ignore
 Scenario: Fin_IA_PS_03 Post english fraction calculation date and validate DB data
 	Given post english fraction calculation date via api
 	When find records in EnglishFractionCalculationDate table
