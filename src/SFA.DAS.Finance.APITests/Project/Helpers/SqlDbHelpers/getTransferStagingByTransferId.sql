@@ -13,4 +13,4 @@ SELECT
     CreatedBy,
     CorrelationId
 FROM [employer_financial].[TransferStaging]
-WHERE TransferId = <transferId>
+WHERE TransferId = '<transferId>'

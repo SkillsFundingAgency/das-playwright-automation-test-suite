@@ -5,7 +5,6 @@ using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Finance.APITests.Project.Models;
 using System;
 using System.Globalization;
-using System.Net;
 
 namespace SFA.DAS.Finance.APITests.Project.Tests.StepDefinitions;
 
