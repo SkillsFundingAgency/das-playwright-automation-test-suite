@@ -41,4 +41,4 @@ stages:
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
       RuleName: $(RuleName)
-      ResourceName: $(ResourceName)
+      ResourceName: $(ResourceName)aa
