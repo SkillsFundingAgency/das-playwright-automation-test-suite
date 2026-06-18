@@ -1,0 +1,16 @@
+{
+  "providerName": "Northumberland College",
+  "standardCode": 274,
+  "frameworkCode": 234,
+  "programmeType": 332,
+  "pathwayCode": 4566,
+  "pathwayName": "Payments Pathway",
+  "apprenticeshipCourseName": "Abattoir worker, Level: 2",
+  "apprenticeName": "George Hill Smith",
+  "apprenticeNINumber": "AB123456C",
+  "apprenticeshipCourseLevel": 2,
+  "apprenticeshipCourseStartDate": "2025-03-03",
+  "isHistoricProviderName": false,
+  "createdBy": "finance-system",
+  "correlationId": "a1f4c7e2-9d34-4b1e-8a9f-2c7d6e5f1234"
+}
