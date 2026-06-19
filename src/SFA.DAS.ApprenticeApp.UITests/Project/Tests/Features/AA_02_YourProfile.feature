@@ -2,7 +2,7 @@
 
 Your profile page is displayed
 
-@ApprenticeApp
+@apprenticeapp
 @regression
 Scenario: AA_02_Your profile page is displayed
 	Given the apprentice has logged into the app

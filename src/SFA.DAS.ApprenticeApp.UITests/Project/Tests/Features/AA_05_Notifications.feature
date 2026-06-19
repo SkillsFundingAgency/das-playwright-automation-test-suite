@@ -2,7 +2,7 @@
 
 Notifications are displayed
 
-@ApprenticeApp
+@apprenticeapp
 @regression
 Scenario: AA_05_Notifications are listed
 	Given the apprentice has logged into the app
