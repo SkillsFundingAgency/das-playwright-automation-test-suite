@@ -2,7 +2,7 @@
 
 Support and guidance articles are displayed
 
-@ApprenticeApp
+@apprenticeapp
 @regression
 Scenario: AA_06_Support and guidance articles are listed
 	Given the apprentice has logged into the app
