@@ -7,7 +7,7 @@ public partial class VenueAndDelivery_ApprenticeshipUnitPage
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Contact details saved");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Contact details updated");
         }
 
         public async Task<YourStandardsAndTrainingVenuesPage> ReturnToManagingStandardsDashboard()
