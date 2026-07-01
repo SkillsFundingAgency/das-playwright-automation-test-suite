@@ -13,6 +13,12 @@ public class EmployerSteps(ScenarioContext context)
     [Then(@"^Employer can mark the application as interviewing$")]
     public async Task ThenEmployerCanMarkTheApplicationAsInterviewing() => await _employerStepsHelper.ApplicantInterviewing();
 
+    [Then(@"^Employer can mark the shared application as interviewing$")]
+    public async Task ThenEmployerCanMarkTheSharedApplicationAsInterviewing() => await _employerStepsHelper.SharedApplicantInterviewing();
+
+    [Then(@"^Employer can mark the shared application as not interviewing$")]
+    public async Task ThenEmployerCanMarkTheSharedApplicationAsNotInterviewing() => await _employerStepsHelper.SharedApplicantRejection();
+
     [Then(@"^Employer can make the application successful$")]
     public async Task ThenEmployerCanMakeTheApplicationSuccessful() => await _employerStepsHelper.ApplicantSucessful();
 

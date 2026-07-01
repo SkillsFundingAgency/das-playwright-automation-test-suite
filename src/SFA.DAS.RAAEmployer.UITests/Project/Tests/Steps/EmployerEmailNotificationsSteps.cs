@@ -122,6 +122,12 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
                 userEmail = GetProviderEmail();
                 break;
 
+            case ("new application", "provider"):
+                emailText = "Your vacancy has received a new application";
+                subject = $"New application for {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
+                userEmail = GetProviderEmail();
+                break;
+
             default:
                 Assert.Fail($"Unknown notification type: {notificationType}");
                 break;

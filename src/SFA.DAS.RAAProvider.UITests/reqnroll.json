@@ -13,7 +13,8 @@
     { "assembly": "SFA.DAS.FAA.UITests" },
     { "assembly": "SFA.DAS.RAA.Service" },
     { "assembly": "SFA.DAS.ProviderLogin.Service" },
-    { "assembly": "SFA.DAS.DfeAdmin.Service" }
+    { "assembly": "SFA.DAS.DfeAdmin.Service" },
+    {"assembly": "SFA.DAS.RAAEmployer.UITests"}
     ],
   "generator": {
     "allowRowTests": false,

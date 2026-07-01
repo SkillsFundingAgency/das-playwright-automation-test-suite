@@ -16,6 +16,20 @@ public class ManageApplicantPage(ScenarioContext context) : RaaBasePage(context)
         await SaveAndContinue();
     }
 
+    private async Task OutcomeInterviewingSharedAppRadioButton()
+    {
+        await page.Locator("#outcome-interviewing").CheckAsync();
+
+        await SaveAndContinue();
+    }
+
+    private async Task OutcomeRejectingSharedAppRadioButton()
+    {
+        await page.Locator("#outcome-employer-unsuccessful").CheckAsync();
+
+        await SaveAndContinue();
+    }
+
     private async Task OutcomeReviewed()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Review" }).CheckAsync();
@@ -39,6 +53,20 @@ public class ManageApplicantPage(ScenarioContext context) : RaaBasePage(context)
     public async Task<EmployerInteviewingApplicantPage> MarkApplicantAsInterviewing()
     {
         await OutcomeInterviewingRadioButton();
+
+        return await VerifyPageAsync(() => new EmployerInteviewingApplicantPage(context));
+    }
+
+    public async Task<EmployerInteviewingApplicantPage> MarkSharedApplicationAsInterviewing()
+    {
+        await OutcomeInterviewingSharedAppRadioButton();
+
+        return await VerifyPageAsync(() => new EmployerInteviewingApplicantPage(context));
+    }
+
+    public async Task<EmployerInteviewingApplicantPage> MarkSharedApplicationAsNotInterviewing()
+    {
+        await OutcomeRejectingSharedAppRadioButton();
 
         return await VerifyPageAsync(() => new EmployerInteviewingApplicantPage(context));
     }

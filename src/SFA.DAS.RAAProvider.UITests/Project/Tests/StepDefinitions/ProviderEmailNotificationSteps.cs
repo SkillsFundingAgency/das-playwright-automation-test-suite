@@ -29,58 +29,58 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Tests.StepDefinitions
             isFoundationAdvert = context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
         }
 
-        [Then(@"the '(.*)' receives '(.*)' email notification")]
-        public async Task ThenTheProviderReceivesEmailNotification(string userType, string notificationType)
-        {
-            string emailText = null;
-            string subject = null;
-            string userEmail = null;
+        //[Then(@"the '(.*)' receives '(.*)' email notification")]
+        //public async Task ThenTheProviderReceivesEmailNotification(string userType, string notificationType)
+        //{
+        //    string emailText = null;
+        //    string subject = null;
+        //    string userEmail = null;
 
-            switch (notificationType, userType)
-            {
-                case ("new application", "provider"):
-                    emailText = "Your vacancy has received a new application";
-                    subject = $"New application for {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
-                    userEmail = providerEmail;
-                    break;
+        //    switch (notificationType, userType)
+        //    {
+        //        case ("new application", "provider"):
+        //            emailText = "Your vacancy has received a new application";
+        //            subject = $"New application for {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
+        //            userEmail = providerEmail;
+        //            break;
 
-                case ("rejected vacancy", "provider"):
-                    emailText = "DfE has rejected this vacancy. We’ve left a comment to explain why.";
-                    subject = $"Rejected by DfE: make changes to {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
-                    userEmail = providerEmail;
-                    break;
+        //        case ("rejected vacancy", "provider"):
+        //            emailText = "DfE has rejected this vacancy. We’ve left a comment to explain why.";
+        //            subject = $"Rejected by DfE: make changes to {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
+        //            userEmail = providerEmail;
+        //            break;
 
-                case ("new application", "applicant"):
-                    emailText = "We’ve received your application for:";
-                    subject = $"Application submitted: {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
-                    userEmail = isFoundationAdvert ? foundationApplicantEmail : applicantEmail;
-                    break;
+        //        case ("new application", "applicant"):
+        //            emailText = "We’ve received your application for:";
+        //            subject = $"Application submitted: {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
+        //            userEmail = isFoundationAdvert ? foundationApplicantEmail : applicantEmail;
+        //            break;
 
-                case ("successful application", "applicant"):
-                    emailText = "Congratulations, you’ve been offered an apprenticeship:";
-                    subject = $"Successful application: {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
-                    userEmail = isFoundationAdvert ? foundationApplicantEmail : applicantEmail;
-                    break;
+        //        case ("successful application", "applicant"):
+        //            emailText = "Congratulations, you’ve been offered an apprenticeship:";
+        //            subject = $"Successful application: {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
+        //            userEmail = isFoundationAdvert ? foundationApplicantEmail : applicantEmail;
+        //            break;
 
-                case ("unsuccessful application", "applicant"):
-                    emailText = "An application you’ve made has been unsuccessful:";
-                    subject = $"Unsuccessful application: read your feedback for {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
-                    userEmail = isFoundationAdvert ? foundationApplicantEmail : applicantEmail;
-                    break;
+        //        case ("unsuccessful application", "applicant"):
+        //            emailText = "An application you’ve made has been unsuccessful:";
+        //            subject = $"Unsuccessful application: read your feedback for {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
+        //            userEmail = isFoundationAdvert ? foundationApplicantEmail : applicantEmail;
+        //            break;
 
-                case ("withdrawn application", "applicant"):
-                    emailText = "You’ve withdrawn your application for";
-                    subject = $"Application withdrawn: {vacancyTitleDataHelper.VacancyTitle}";
-                    userEmail = isFoundationAdvert ? foundationApplicantEmail : applicantEmail;
-                    break;
+        //        case ("withdrawn application", "applicant"):
+        //            emailText = "You’ve withdrawn your application for";
+        //            subject = $"Application withdrawn: {vacancyTitleDataHelper.VacancyTitle}";
+        //            userEmail = isFoundationAdvert ? foundationApplicantEmail : applicantEmail;
+        //            break;
 
-                default:
-                    Assert.Fail($"Unknown notification type: {notificationType}");
-                    break;
-            }
+        //        default:
+        //            Assert.Fail($"Unknown notification type: {notificationType}");
+        //            break;
+        //    }
 
-            var emailMessage = await mailosaurApiHelper.GetEmailBody(userEmail, subject, emailText);
-            StringAssert.Contains(emailText, emailMessage.Text.Body);
-        }
+        //    var emailMessage = await mailosaurApiHelper.GetEmailBody(userEmail, subject, emailText);
+        //    StringAssert.Contains(emailText, emailMessage.Text.Body);
+        //}
     }
 }

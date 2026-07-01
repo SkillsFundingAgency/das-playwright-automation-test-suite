@@ -54,6 +54,10 @@ public class EmployerStepsHelper(ScenarioContext context)
 
     internal async Task ApplicantInterviewing() => await StepsHelper.ApplicantMarkForInterview(await SearchVacancyByVacancyReferenceInNewTab());
 
+    internal async Task SharedApplicantInterviewing() => await StepsHelper.SharedApplicationMarkForInterview(await SearchVacancyByVacancyReferenceInNewTab());
+
+    internal async Task SharedApplicantRejection() => await StepsHelper.SharedApplicationMarkForRejection(await SearchVacancyByVacancyReferenceInNewTab());
+
     internal async Task ApplicantReview() => await StepsHelper.ApplicantInReview(await SearchVacancyByVacancyReferenceInNewTab());
 
     internal async Task ApplicantSucessful() => await StepsHelper.ApplicantSucessful(await SearchVacancyByVacancyReferenceInNewTab());
