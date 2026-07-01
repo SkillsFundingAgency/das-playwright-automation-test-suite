@@ -1,4 +1,5 @@
-﻿using Azure;
+﻿using Allure.Net.Commons;
+using Azure;
 using Microsoft.VisualBasic;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
@@ -190,16 +191,47 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await employerStepsHelper.EmployerTriesToCreateReservation();
         }
 
-
-        [Then("^the apprenticeship is marked as Completed$")]
-        public async Task ThenTheApprenticeshipIsMarkedAsCompleted()
+        [Then(@"^employer verifies that record has been ""(.*)"" in Employer portal")]
+        public async Task ThenEmployerVerifiesThatRecordHasBeenInEmployerPortal(string status)
         {
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var fullName = apprenticeship.ApprenticeDetails.FullName;
             var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
-            var page1 = await page.OpenFirstItemFromTheList(apprenticeship.ApprenticeDetails.FullName);
-            await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Completed, "Completion payment month", DateTime.Now);
-            await page1.AssertRecordIsReadOnlyExceptEndDate();
-        }
+            var page1 = await page.OpenFirstItemFromTheList(fullName);
+
+            switch (status)
+            {
+                case "Completed":
+                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Completed, "Completion payment month", DateTime.Now);
+                    //Assert editiability of completed record:
+                    Assert.False(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
+                    Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
+                    Assert.False(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+                    Assert.False(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
+                    Assert.False(await page1.IsEditVersionLinkAvailable(), "IsEditVersionLinkAvailable");
+                    Assert.True(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
+                    break;
+                case "Stopped":
+                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, "Stopped date", DateTime.Now);
+                    //Assert editiability of stopped record:
+                    Assert.False(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
+                    Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
+                    Assert.True(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+                    Assert.False(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
+                    Assert.False(await page1.IsEditVersionLinkAvailable(), "IsEditVersionLinkAvailable");
+                    Assert.False(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
+                    //Check history logs:
+                    var page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "ILR Learner status changed from Live to Withdrawn", "Auto approved");
+                    break;
+                case "Paused":
+                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Paused, "Apprenticeship pause date", DateTime.Now);
+                    break;
+                default:
+                    break;
+            }
+        }        
+
 
         [When("^The nonlevyemployer follows the link from dynamicHomePage to create a new reservation$")]
         public async Task WhenTheNonLevyEmployerReservesFundingFromReservedPanel()

@@ -4,6 +4,9 @@ using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
+using SFA.DAS.ProviderLogin.Service.Project.Helpers;
+using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
@@ -146,7 +149,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                                             AND TrainingName like '%, Level: 7'";
             }
 
-            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
+            await FindApprenticeFromDbAndSaveItInTheContext(EmployerType.Levy, additionalWhereFilter);
         }
 
         [Given(@"^a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date$")]
@@ -169,7 +172,27 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                                             AND a.EndDate > DATEADD(month, {endDateFromNow}, GETDATE())
                                             AND a.TrainingCode < 800";
 
-            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
+            await FindApprenticeFromDbAndSaveItInTheContext(EmployerType.Levy, additionalWhereFilter);
+        }
+
+        [Given(@"^a Live apprenticeship record exists for learner with Firstname: ""(.*)"" and LastName: ""(.*)""")]
+        public async Task GivenALiveApprenticeshipRecordExistsForLearnerWithFirstnameAndLastName(string firstname, string lastname)
+        {
+            listOfApprenticeship = new List<Apprenticeship>();
+            var additionalWhereFilter = $"AND a.FirstName = '{firstname}' AND a.LastName = '{lastname}'";
+            await FindApprenticeFromDbAndSaveItInTheContext(EmployerType.Levy, additionalWhereFilter);
+
+            //reset the payment status to 1 (Live):
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+            await commitmentsDbSqlHelper.ResetPaymentStatus(apprenticeship.ApprenticeDetails.ApprenticeshipId);
+
+            //verify status on the UI:
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+            var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(lastname);
+            await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Live, DateTime.Now);            
+            await page.ReturnBackToManageYourApprenticesPage();
+            
         }
 
         internal async Task FindAvailableLearner()
@@ -213,7 +236,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             return apprenticeship;
         }
 
-        private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter, string ukprn = null)
+        private async Task FindApprenticeFromDbAndSaveItInTheContext(EmployerType employerType, string additionalWhereFilter, string ukprn = null)
         {
             var providerConfig = context.GetProviderConfig<ProviderConfig>();
             Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortObject(employerType, providerConfig);
@@ -234,6 +257,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                         objectContext.SetDebugInformation(
                             $"Retry {retryCount} - {value} not found in {dbName}. Waiting {timeSpan.TotalSeconds}s before next attempt.");
                     });
+        }
+
+
+        public async Task<string> DbRetryPolicy2(Func<Task<string>> getValue, string expectedValue, string dbName)
+        {
+            var policy = Policy<string>
+                .Handle<Exception>()
+                .OrResult(result => result != expectedValue)
+                .WaitAndRetryAsync(
+                    retryCount: 5,
+                    sleepDurationProvider: attempt => TimeSpan.FromSeconds(1),
+                    onRetry: (result, timeSpan, retryCount, context) =>
+                    {
+                        objectContext.SetDebugInformation(
+                            $"Retry {retryCount} - Expected '{expectedValue}' but got '{result.Result}' from {dbName}. " +
+                            $"Waiting {timeSpan.TotalSeconds}s before next attempt.");
+                    });
+
+            return await policy.ExecuteAsync(getValue);
         }
 
     }
