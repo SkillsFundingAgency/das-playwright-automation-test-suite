@@ -15,6 +15,39 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         }
     }
 
+    public async Task<ApprenticeshipTrainingCoursesPage> AddAProviderToShortlist()
+    {
+        await page.GetByRole(AriaRole.Heading, new() { Name = "Accounts or finance assistant" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "View providers for this course" }).ClickAsync();
+        await page.Locator("#add-to-shortlist-10003193").ClickAsync();
+        await Assertions.Expect(page.Locator("#remove-from-shortlist-10003193")).ToContainTextAsync("Remove from shortlist");
+
+        await page.Locator("#add-to-shortlist-10036143").ClickAsync();
+        await Assertions.Expect(page.Locator("#remove-from-shortlist-10036143")).ToContainTextAsync("Remove from shortlist");
+        await page.GetByRole(AriaRole.Link, new() { Name = "View shortlist" }).ClickAsync();
+        await page.Locator("summary").ClickAsync();
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Accounts or finance assistant (level 2)");
+        await Assertions.Expect(page.Locator("tbody")).ToContainTextAsync("HUGH BAIRD COLLEGE");
+        await Assertions.Expect(page.Locator("tbody")).ToContainTextAsync("SOUTH GLOUCESTERSHIRE AND STROUD COLLEGE");
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Search" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Browse all courses" }).ClickAsync();
+        return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
+    }
+
+    public async Task AddProviderToShortlistUsingLocation()
+    {
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "Learner's work location" }).FillAsync("L20 7EW");
+        await page.GetByRole(AriaRole.Option, new() { Name = "L20 7EW" }).ClickAsync();
+        await page.GetByLabel("Learner can travel").SelectOptionAsync(new[] { "2" });
+        await page.Locator("#filters-submit-top").ClickAsync();
+        await page.GetByRole(AriaRole.Heading, new() { Name = "Accounts or finance assistant" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "View providers for this course" }).ClickAsync();
+        await page.Locator("#add-to-shortlist-10003193").ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "View shortlist" }).ClickAsync();
+    }
+
     public async Task SearchApprenticeshipInApprenticeshipTrainingCoursesPage(string searchTerm)
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Course" }).FillAsync(searchTerm);

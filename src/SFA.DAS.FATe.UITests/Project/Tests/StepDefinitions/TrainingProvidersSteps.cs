@@ -5,19 +5,11 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions;
 [Binding, Scope(Tag = "fate")]
 public class TrainingProviderSteps(ScenarioContext context)
 {
-    private readonly FATeHomePage _fATeHomePage = new FATeHomePage(context);
-    private readonly FATeStepsHelper _stepsHelper = new FATeStepsHelper(context);
-    private readonly Search_TrainingCourses_ApprenticeworkLocationPage _search_TrainingCourses_ApprenticeworkLocationPage = new Search_TrainingCourses_ApprenticeworkLocationPage(context);
-    private readonly TrainingProvidersPage _trainingProvidersPage = new TrainingProvidersPage(context);
+    private readonly FATeHomePage _fATeHomePage = new(context);
+    private readonly FATeStepsHelper _stepsHelper = new(context);
+    private readonly Search_TrainingCourses_ApprenticeworkLocationPage _search_TrainingCourses_ApprenticeworkLocationPage = new(context);
+    private readonly TrainingProvidersPage _trainingProvidersPage = new(context);
     private int _expectedProviderCount;
-
-
-
-    [When(@"^the user applies a location filter (.*)$")]
-    public void TheUserAppliesALocationFilter(string location)
-    {
-        
-    }
 
     [When("^the user selects a course and views training providers$")]
     public async Task WhenTheUserSelectsACourseAndViewsTrainingProviders()

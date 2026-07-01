@@ -8,22 +8,10 @@ public class ShortlistSteps(ScenarioContext context)
     private readonly TrainingProvidersPage _trainingProvidersPage = new(context);
     private readonly ShortlistPage _shortlistPage = new(context);
 
-    [Then("^the shortlisted provider should display location (.*)$")]
-    public void TheShortlistedProviderShouldDisplayLocation(string location)
+    [Then(@"the shortlisted provider should display location")]
+    public async Task TheShortlistedProviderShouldDisplayLocation()
     {
-        
-    }
-
-    [When("^the user navigates to the shortlist page$")]
-    public void TheUserNavigatesToTheShortlistPage()
-    {
-        
-    }
-
-    [When("^the user adds a provider to the shortlist$")]
-    public void TheUserAddsAProviderToTheShortlist()
-    {
-        
+        await _shortlistPage.VerifyLocationFilterInShortlist();
     }
 
     [Then("^verify add remove count shortlist functionality$")]
