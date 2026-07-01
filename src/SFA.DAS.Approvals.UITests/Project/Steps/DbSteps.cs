@@ -1,5 +1,7 @@
-﻿using Polly;
+﻿using Dynamitey;
+using Polly;
 using Polly.Retry;
+using Reqnroll.CommonModels;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
@@ -183,16 +185,32 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await FindApprenticeFromDbAndSaveItInTheContext(EmployerType.Levy, additionalWhereFilter);
 
             //reset the payment status to 1 (Live):
-            var apprenticeship = listOfApprenticeship.FirstOrDefault();
-            await commitmentsDbSqlHelper.ResetPaymentStatus(apprenticeship.ApprenticeDetails.ApprenticeshipId);
+            await commitmentsDbSqlHelper.ResetPaymentStatus(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.ApprenticeshipId);            
+        }
 
-            //verify status on the UI:
-            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
-            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
-            var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(lastname);
-            await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Live, DateTime.Now);            
-            await page.ReturnBackToManageYourApprenticesPage();
-            
+        [Then(@"Commitments db is updated with the correct reason code and stop date")]
+        public async Task ThenCommitmentsDbIsUpdatedWithTheCorrectReasonCodeAndStopDate()
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault(); 
+            var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
+            var uln = apprenticeship.ApprenticeDetails.ULN;
+            List<string> result = new List<string>();
+
+            var actualPaymentStatus = await DbRetryPolicy2(
+                getValue: async () =>
+                {
+                    result = await commitmentsDbSqlHelper.GetValuesFromApprenticeshipTable("paymentstatus, stopdate, WithdrawnReasonCode, MadeRedundant", apprenticeshipId);  
+
+                    return (result as IEnumerable<string[]>)?.FirstOrDefault()[0];
+                },
+                expectedValue: "3",
+                dbName: "CommitmentsDb"
+            );
+
+            Assert.That(result[0], Is.EqualTo("3"), $"Expected payment status '3' but found '{actualPaymentStatus}'");
+            Assert.That(DateTime.Parse(result[1]).Date, Is.EqualTo(DateTime.Now.Date), $"Expected stop date '{DateTime.Now}' but found '{DateTime.Parse(result[1]).Date}'");
+            Assert.That(result[2], Is.EqualTo("29"), $"Expected WithdrawnReasonCode '29' but found '{result[2]}'");
+            Assert.That(result[3], Is.EqualTo("True"), $"Expected MadeRedundant 'True' but found '{result[3]}'");
         }
 
         internal async Task FindAvailableLearner()

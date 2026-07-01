@@ -370,6 +370,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var apprenticeName = apprenticeship.ApprenticeDetails.FullName;
+
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();            
             var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(apprenticeName);
 
             switch (status)
@@ -377,10 +380,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 case "Stopped":
                     await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, DateTime.Now);
                     //verify editability:
-                    Assert.True(await page.IsChangeHistoryLinkVisible(), "Change history link is not visible");
-                    Assert.False(await page.IsEditApprenticeDetailsLinkVisible(), "Edit apprentice details link is visible");
-                    Assert.True(await page.IsChangeOfEmployerLinkVisible(), "Change of employer link is not visible");
-                    Assert.False(await page.IsChangeOfVersionLinkVisible(), "Change version link is visible");
+                    Assert.True(await page.IsChangeHistoryLinkVisible(), "IsChangeHistoryLinkVisible");
+                    Assert.False(await page.IsEditApprenticeDetailsLinkVisible(), "IsEditApprenticeDetailsLinkVisible");
+                    Assert.True(await page.IsChangeOfEmployerLinkVisible(), "IsChangeOfEmployerLinkVisible");
+                    Assert.False(await page.IsChangeOfVersionLinkVisible(), "IsChangeOfVersionLinkVisible");
                     //verify history logs:
                     var page2 = await page.ClickOnViewChangeHistoryLink(apprenticeName);
                     await page2.AssertChangeHistoryRow(DateTime.Now, "ILR Learner status changed from Live to Withdrawn", "Auto approved");
@@ -388,10 +391,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 case "Completed":
                     await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Completed, DateTime.Now);
                     //verify editability:
-                    Assert.False(await page.IsChangeHistoryLinkVisible(), "Change history link is visible");
-                    Assert.False(await page.IsEditApprenticeDetailsLinkVisible(), "Edit apprentice details link is visible");
-                    Assert.False(await page.IsChangeOfEmployerLinkVisible(), "Change of employer link is visible");
-                    Assert.False(await page.IsChangeOfVersionLinkVisible(), "Change version link is visible");
+                    Assert.False(await page.IsChangeHistoryLinkVisible(), "IsChangeHistoryLinkVisible");
+                    Assert.False(await page.IsEditApprenticeDetailsLinkVisible(), "IsEditApprenticeDetailsLinkVisible");
+                    Assert.False(await page.IsChangeOfEmployerLinkVisible(), "IsChangeOfEmployerLinkVisible");
+                    Assert.False(await page.IsChangeOfVersionLinkVisible(), "IsChangeOfVersionLinkVisible");
                     break;
                 case "Paused":
                     await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Paused, DateTime.Now);

@@ -26,5 +26,9 @@ This test validates that event is processed correctly and the apprentice record 
 Scenario: AP_CoC_02_Verify Learning Withdrawal Event marks the apprenticeship as Stopped
     Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "ChangeStatusApprentice"
 	When LearningWithdrawnEvent is received for the apprentice
-    Then provider verifies that record is set as "Stopped" in Provider portal
-    And employer verifies that record has been "Stopped" in Employer portal    
+	Then Commitments db is updated with the correct reason code and stop date
+    And provider verifies that record is set as "Stopped" in Provider portal
+    And employer verifies that record has been "Stopped" in Employer portal
+
+
+#//Add tests to validate stop emails to employer and apprentice

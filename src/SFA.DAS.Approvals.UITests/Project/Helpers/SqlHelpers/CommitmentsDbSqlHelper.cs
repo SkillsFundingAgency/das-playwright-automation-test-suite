@@ -96,6 +96,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
 
         }
 
+        internal async Task<List<string>> GetValuesFromApprenticeshipTable(string columnName, int apprenticeshipId)
+        {
+            string query = $@"select {columnName}
+                                from Apprenticeship
+                                WHERE Id = {apprenticeshipId}";
+            return await GetData(query);
+        }
+
         internal async Task ResetPaymentStatus(int apprenticeshipId)
         { 
             string query = $@"UPDATE Apprenticeship
