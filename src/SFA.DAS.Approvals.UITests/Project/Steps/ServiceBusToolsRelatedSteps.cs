@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.IdentityModel.Tokens;
 using SFA.DAS.API.Framework.Configs;
 using SFA.DAS.Approvals.UITests.Project.Events;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
@@ -30,6 +31,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When(@"LearningWithdrawnEvent is received for the apprentice")]
         public async Task WhenLearningWithdrawnEventIsReceivedForTheApprentice()
         {
+            UpdateStopDateAndWithdrawalReasonCodeInTheContext();
             var apprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
             var learningWithdrawnEvent 
@@ -38,8 +40,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     LearningKey = Guid.NewGuid(),
                     ApprenticeshipId = apprenticeshipId,
                     Created = DateTime.Now.ToString("yyyy-MM-dd"),
-                    WithdrawalDate = DateTime.Now.ToString("yyyy-MM-dd"),
-                    withdrawalReasonCode = 29
+                    WithdrawalDate = apprenticeship.TrainingDetails.StopDate.ToString("yyyy-MM-dd"),
+                    withdrawalReasonCode = apprenticeship.TrainingDetails.WithdrawalReasonCode
                 };
 
             ServiceBusToolsApiClient serviceBusToolsApiClient = new ServiceBusToolsApiClient(context);
@@ -58,13 +60,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 default:
                     objectContext.SetDebugInformation($"Failed to publish the event due to error : {response.StatusCode} + {response.ReasonPhrase}");
                     throw new Exception($"Failed to publish the event due to error : {response.StatusCode} + {response.ReasonPhrase}");
-            }
-
-
-
-
+            }          
         }
 
+        private void UpdateStopDateAndWithdrawalReasonCodeInTheContext()
+        {
+            var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+            var startDate = apprenticeship.TrainingDetails.StartDate;
+            var existingStopDate = apprenticeship.TrainingDetails.StopDate;                    
+            var endDate = (existingStopDate > startDate) ? existingStopDate : (apprenticeship.TrainingDetails.EndDate > DateTime.Now) ? DateTime.Now : apprenticeship.TrainingDetails.EndDate;
+            var existingWithdrawalReasonCode = apprenticeship.TrainingDetails.WithdrawalReasonCode;
+
+            apprenticeship.TrainingDetails.StopDate = startDate.AddDays((endDate - startDate).TotalDays / 2);
+            apprenticeship.TrainingDetails.WithdrawalReasonCode = (existingWithdrawalReasonCode>30) ? 98 : 29;
+        }
 
     }
 }

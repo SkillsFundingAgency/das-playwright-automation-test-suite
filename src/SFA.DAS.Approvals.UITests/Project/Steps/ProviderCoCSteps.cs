@@ -36,7 +36,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             switch (status)
             {
                 case "Stopped":
-                    await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, DateTime.Now);
+                    await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, apprenticeship.TrainingDetails.StopDate);
                     //verify editability:
                     Assert.True(await page.IsChangeHistoryLinkVisible(), "IsChangeHistoryLinkVisible");
                     Assert.False(await page.IsEditApprenticeDetailsLinkVisible(), "IsEditApprenticeDetailsLinkVisible");

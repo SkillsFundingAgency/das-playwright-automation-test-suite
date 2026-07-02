@@ -1,4 +1,5 @@
 ﻿@approvals
+@postapprovals
 Feature: AP_CoC_02_LearningWithdrawnEvent
 
 Commitments receives LearningWithdrawnEvent from Learning domain for variety of reasons such as:
@@ -21,8 +22,6 @@ This test validates that event is processed correctly and the apprentice record 
 
 
 @regression
-@liveapprentice
-@postapprovals
 Scenario: AP_CoC_02_Verify Learning Withdrawal Event marks the apprenticeship as Stopped
     Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "ChangeStatusApprentice"
 	When LearningWithdrawnEvent is received for the apprentice

@@ -41,7 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     Assert.True(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
                     break;
                 case "Stopped":
-                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, "Stopped date", DateTime.Now);
+                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, "Stopped date", apprenticeship.TrainingDetails.StopDate);
                     //Assert editiability of stopped record:
                     Assert.False(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
                     Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
