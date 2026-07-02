@@ -11,7 +11,8 @@ Scenario: RAA_P_E2E_S01_1 - Create vacancy with registered name, Approve, Apply,
 	And the Reviewer Approves the vacancy
 	When the Applicant can apply for a Vacancy in FAA
 	Then Provider can make the application shared
-	And Employer can mark the shared application as interviewing
+	When the Employer navigates to 'Recruit' Page
+	Then Employer can mark the shared application as interviewing
 	Then Provider can make the application successful
 	And the status of the Application is shown as 'successful' in FAA
 
@@ -25,6 +26,7 @@ Scenario: RAA_P_E2E_S01_2 - Create vacancy with registered name, Approve, Apply,
 	And the Reviewer Approves the vacancy
 	When the Applicant can apply for a Vacancy in FAA
 	Then Provider can make the application shared
-	And Employer can mark the shared application as not interviewing
+	When the Employer navigates to 'Recruit' Page
+	Then Employer can mark the shared application as not interviewing
 	Then Provider can make the application unsuccessful
 	And the status of the Application is shown as 'unsuccessful' in FAA
