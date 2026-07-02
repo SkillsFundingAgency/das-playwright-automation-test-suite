@@ -194,6 +194,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault(); 
             var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
             var uln = apprenticeship.ApprenticeDetails.ULN;
+            var expectedStopDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).Date;     // commitments always normalises stop date to the first day of the month
             List<string> result = new List<string>();
 
             var actualPaymentStatus = await DbRetryPolicy2(
@@ -208,7 +209,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             );
 
             Assert.That(result[0], Is.EqualTo("3"), $"Expected payment status '3' but found '{actualPaymentStatus}'");
-            Assert.That(DateTime.Parse(result[1]).Date, Is.EqualTo(DateTime.Now.Date), $"Expected stop date '{DateTime.Now}' but found '{DateTime.Parse(result[1]).Date}'");
+            Assert.That(DateTime.Parse(result[1]).Date, Is.EqualTo(expectedStopDate), $"Expected stop date '{expectedStopDate}' but found '{DateTime.Parse(result[1]).Date}'");
             Assert.That(result[2], Is.EqualTo("29"), $"Expected WithdrawnReasonCode '29' but found '{result[2]}'");
             Assert.That(result[3], Is.EqualTo("True"), $"Expected MadeRedundant 'True' but found '{result[3]}'");
         }
