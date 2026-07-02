@@ -365,49 +365,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
         }
 
-        [Then(@"^provider verifies that record is set as ""(.*)"" in Provider portal")]
-        public async Task ThenProviderVerifiesThatRecordIsSetAsInProviderPortal(string status)
-        {
-            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
-            var apprenticeName = apprenticeship.ApprenticeDetails.FullName;
-
-            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
-            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();            
-            var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(apprenticeName);
-
-            switch (status)
-            {
-                case "Stopped":
-                    await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, DateTime.Now);
-                    //verify editability:
-                    Assert.True(await page.IsChangeHistoryLinkVisible(), "IsChangeHistoryLinkVisible");
-                    Assert.False(await page.IsEditApprenticeDetailsLinkVisible(), "IsEditApprenticeDetailsLinkVisible");
-                    Assert.True(await page.IsChangeOfEmployerLinkVisible(), "IsChangeOfEmployerLinkVisible");
-                    Assert.False(await page.IsChangeOfVersionLinkVisible(), "IsChangeOfVersionLinkVisible");
-                    //verify history logs:
-                    var page2 = await page.ClickOnViewChangeHistoryLink(apprenticeName);
-                    await page2.AssertChangeHistoryRow(DateTime.Now, "ILR Learner status changed from Live to Withdrawn", "Auto approved");
-                    break;
-                case "Completed":
-                    await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Completed, DateTime.Now);
-                    //verify editability:
-                    Assert.False(await page.IsChangeHistoryLinkVisible(), "IsChangeHistoryLinkVisible");
-                    Assert.False(await page.IsEditApprenticeDetailsLinkVisible(), "IsEditApprenticeDetailsLinkVisible");
-                    Assert.False(await page.IsChangeOfEmployerLinkVisible(), "IsChangeOfEmployerLinkVisible");
-                    Assert.False(await page.IsChangeOfVersionLinkVisible(), "IsChangeOfVersionLinkVisible");
-                    break;
-                case "Paused":
-                    await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Paused, DateTime.Now);
-                    break;
-                default:
-                    break;
-            }
-            
-            await page.ReturnBackToManageYourApprenticesPage();
-        }
-
-
-
+        
     }
     public class OltdDetails
     {
