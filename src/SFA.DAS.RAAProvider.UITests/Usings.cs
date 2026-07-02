@@ -1,6 +1,7 @@
 global using Microsoft.Playwright;
 global using SFA.DAS.ConfigurationBuilder;
 global using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
+global using SFA.DAS.EmployerPortal.UITests.Project;
 global using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 global using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 global using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
@@ -14,6 +15,8 @@ global using SFA.DAS.RAA.DataGenerator.Project.Helpers;
 global using SFA.DAS.RAA.Service.Project.Helpers;
 global using SFA.DAS.RAA.Service.Project.Pages;
 global using SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
+global using System;
 global using System.Collections.Generic;
+global using System.Linq;
 global using System.Threading.Tasks;
 global using Reqnroll;
