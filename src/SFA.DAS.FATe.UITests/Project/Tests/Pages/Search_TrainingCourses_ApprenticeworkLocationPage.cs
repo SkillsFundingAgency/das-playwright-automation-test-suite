@@ -7,6 +7,13 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).
         ToContainTextAsync("Find training if you’re an employer");
 
+    public async Task<ApprenticeshipTrainingCoursesPage> SearchApprenticeUnit()
+    {
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Apprenticeship units" }).CheckAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
+    }     
+
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithCourseOnly()
     {
         await page.Locator("#keyword-input").ClickAsync();

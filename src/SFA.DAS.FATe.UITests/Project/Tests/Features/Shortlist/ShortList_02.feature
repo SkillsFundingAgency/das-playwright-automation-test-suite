@@ -7,3 +7,5 @@ Scenario: Shortlist retains different location filters
     And the user shortlist a provider for a course
     When the user shorlist the same provider using a location filter
     Then the shortlisted provider should display location 
+    Given the user shortlist a provider for an apprenticeship unit course
+    Then the app unit shortlisted provider should be displayed

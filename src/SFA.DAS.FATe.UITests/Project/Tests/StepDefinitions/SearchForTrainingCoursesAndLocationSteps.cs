@@ -12,6 +12,18 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
         private readonly Search_TrainingCourses_ApprenticeworkLocationPage _search_TrainingCourses_ApprenticeworkLocationPage = new(context);
         private readonly ApprenticeshipTrainingCourseDetailsPage _apprenticeshipTrainingCourseDetailsPage = new(context);
 
+        [Given(@"^the user shortlist a provider for an apprenticeship unit course$")]
+        public async Task TheUserShortlistsAProviderForAnApprenticeshipUnitCourse()
+        {
+            await _search_TrainingCourses_ApprenticeworkLocationPage.VerifyPage();
+
+            _apprenticeshipTrainingCoursesPage = await _search_TrainingCourses_ApprenticeworkLocationPage.SearchApprenticeUnit();
+
+            var page = await _apprenticeshipTrainingCoursesPage.SelectEVProviders();
+
+            await page.AddProviderToShortList();
+        }
+
         [Given("^the user navigates to the Search for apprenticeship training courses and training providers page$")]
         public async Task GivenTheUserNavigatesToTheSearchForApprenticeshipTrainingCoursesAndTrainingProvidersPage()
         {

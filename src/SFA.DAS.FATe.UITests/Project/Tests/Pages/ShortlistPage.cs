@@ -5,6 +5,14 @@ public class ShortlistPage(ScenarioContext context) : FATeBasePage(context)
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).
         ToContainTextAsync("Shortlisted training providers");
 
+    public async Task VerifyAppUnitLocationFilterInShortlist()
+    {
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Electric vehicle (EV) charging point installation and maintenance");
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("London Fields, Greater London");
+        await page.GetByText("View 2 training providers").Nth(1).ClickAsync();
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Apprenticeship unit");
+    }    
+
     public async Task VerifyLocationFilterInShortlist()
     {
         await page.Locator("summary").Filter(new() { HasText = "View 2 training providers" }).ClickAsync();
@@ -12,6 +20,7 @@ public class ShortlistPage(ScenarioContext context) : FATeBasePage(context)
         await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("HUGH BAIRD COLLEGE");
         await Assertions.Expect(page.Locator("h3")).ToContainTextAsync("L20 7EW");
         await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Accounts or finance assistant (level 2)");
+        await page.GetByRole(AriaRole.Link, new() { Name = "Search" }).ClickAsync();
     }    
     public async Task VerifyCourseNameShortlisted(string expectedCourseName)
     {

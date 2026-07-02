@@ -15,6 +15,16 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         }
     }
 
+    public async Task<TrainingProvidersPage> SelectEVProviders()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Electric vehicle (EV)" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "View providers for this course" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new TrainingProvidersPage(context));
+    }
+     
+
     public async Task<ApprenticeshipTrainingCoursesPage> AddAProviderToShortlist()
     {
         await page.GetByRole(AriaRole.Heading, new() { Name = "Accounts or finance assistant" }).ClickAsync();
