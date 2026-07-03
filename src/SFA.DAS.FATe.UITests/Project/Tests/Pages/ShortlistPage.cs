@@ -35,7 +35,8 @@ public class ShortlistPage(ScenarioContext context) : FATeBasePage(context)
     {
         var expandSummary = page.Locator("summary:has(span.govuk-details__summary-text)");
         await expandSummary.ClickAsync();
-        var providerLink = page.GetByRole(AriaRole.Link, new() { Name = providerName });
-        await providerLink.ClickAsync();
+
+        var providerButton = page.Locator("button[id^='shortlistitem-']").GetByText(providerName, new() { Exact = true });
+        await providerButton.ClickAsync();
     }
 }
