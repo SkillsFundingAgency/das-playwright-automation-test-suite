@@ -29,6 +29,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
 
         [When(@"LearningWithdrawnEvent is received for the apprentice")]
+        [When(@"LearningWithdrawnEvent is received with different stop date and reason code for the same apprentice")]
         public async Task WhenLearningWithdrawnEventIsReceivedForTheApprentice()
         {
             UpdateStopDateAndWithdrawalReasonCodeInTheContext();
@@ -62,6 +63,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     throw new Exception($"Failed to publish the event due to error : {response.StatusCode} + {response.ReasonPhrase}");
             }          
         }
+
 
         private void UpdateStopDateAndWithdrawalReasonCodeInTheContext()
         {

@@ -1,5 +1,6 @@
 ﻿@approvals
 @postapprovals
+@linkedScenarios
 Feature: AP_CoC_02_LearningWithdrawnEvent
 
 Commitments receives LearningWithdrawnEvent from Learning domain for variety of reasons such as:
@@ -28,8 +29,17 @@ Scenario: AP_CoC_02_Verify Learning Withdrawal Event marks the apprenticeship as
 	Then Commitments db is updated with the correct reason code and stop date
     And provider verifies that record is set as "Stopped" in Provider portal
     And employer verifies that record has been "Stopped" in Employer portal
-	#When LearningWithdrawnEvent is received with different stop date and reason code for the same apprentice
-	#Then Commitments db is updated with the new stop date and reason code
+	When LearningWithdrawnEvent is received with different stop date and reason code for the same apprentice
+	Then Commitments db is updated with the new stop date and reason code
 
 
-#//Add tests to validate stop emails to employer and apprentice  <== to be completed in future after APPMAN-2733 is implemented
+##//emails validation for employer and apprentice to be implemented here in future after APPMAN-2733 is ready
+#@regression
+#Scenario Outline: AP_E2E_LE_EUA_01b emails validation
+#	Given previous test has been completed successfully
+#	Then Verify the "<Recipient>" receive "<NotificationType>" email
+#
+#Examples:
+#		| Recipient		| NotificationType								|
+#		| Employer      | ??? 			                                |
+#		| Apprentice	| ???                                           |

@@ -186,6 +186,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Then(@"Commitments db is updated with the correct reason code and stop date")]
+        [Then(@"Commitments db is updated with the new stop date and reason code")]
         public async Task ThenCommitmentsDbIsUpdatedWithTheCorrectReasonCodeAndStopDate()
         {
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault(); 
