@@ -8,7 +8,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.FileUploadModel
 
         public FileUploadHelper(ScenarioContext _context) => context = _context;
 
-        internal string CsvFileLocation() => Path.GetFullPath(@"..\..\..\") + $"{context.ScenarioInfo.Title[..8]}_BulkUpload.csv";
+        internal string CsvFileLocation() => Path.Combine(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..")), $"{context.ScenarioInfo.Title[..8]}_BulkUpload.csv");
 
 
     }

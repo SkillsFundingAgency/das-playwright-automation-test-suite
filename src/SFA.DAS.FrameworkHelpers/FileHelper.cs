@@ -14,7 +14,7 @@ namespace SFA.DAS.FrameworkHelpers
 
         public static string GetLocalSettingsFilePath(string fileName) => Path.Combine(GetLocalProjectRootFilePath(), fileName);
 
-        public static string GetLocalProjectRootFilePath() => Path.GetFullPath(Path.Combine(GetLocalExecutingAssemblyPath(), @$"..\..\..\"));
+        public static string GetLocalProjectRootFilePath() => Path.GetFullPath(Path.Combine(GetLocalExecutingAssemblyPath(), "..", "..", ".."));
 
         public static string GetAzureSrcFilesPath() => $"{GetAzureSrcPath()}\\files";
 
@@ -68,7 +68,7 @@ namespace SFA.DAS.FrameworkHelpers
 
         private static string GetLocalSrcPath() => GetSrcPath(GetLocalProjectRootFilePath());
 
-        private static string GetSrcPath(string projectPath) => Path.GetFullPath(Path.Combine(projectPath, @$"..\"));
+        private static string GetSrcPath(string projectPath) => Path.GetFullPath(Path.Combine(projectPath, ".."));
 
         public static string GetDownloadedFileName(string pageName, string format)
         {
