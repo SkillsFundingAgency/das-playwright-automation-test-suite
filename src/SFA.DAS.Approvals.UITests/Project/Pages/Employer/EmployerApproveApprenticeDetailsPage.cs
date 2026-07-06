@@ -24,7 +24,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         public override async Task VerifyPage()
         {
             var headerText = await page.Locator("h1").TextContentAsync();
-            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Check and approve learner details|Check and approve 2 learner' details"));
+            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Check and approve learner details|Check and approve 2 learners' details"));
         }
 
         internal async Task VerifyCohort(Apprenticeship apprenticeship)
