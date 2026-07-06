@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Azure;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -25,7 +26,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Common
             var expectedDateString = expectedDate.ToString("d MMM yyyy");
                 
             // Locate the row by matching all three expected values
-            var row = page.Locator("tr", new() { HasTextString = expectedDateString });
+            var row = page.Locator("tr", new() { HasTextString = expectedDateString }).Last;
             
             var dateCell = row.Locator("td[data-label='Date of changes']");
             await Assertions.Expect(dateCell).ToHaveTextAsync(expectedDateString);
@@ -36,6 +37,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Common
             var decisionCell = row.Locator("td[data-label='Decision'] strong");
             await Assertions.Expect(decisionCell).ToHaveTextAsync(expectedDecision);
         }
+
+        internal async Task ClickViewLearnerDetailsLink() => await page.GetByRole(AriaRole.Link, new() { Name = "View learner details" }).ClickAsync();
+        
 
 
     }

@@ -20,6 +20,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         private ILocator EditPlannedTrainingEndDateLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit   end date" });
         private ILocator ApprenticeStatusTag => page.Locator("tr", new() { HasTextString = "Status" }).Locator("strong.govuk-tag");
         private ILocator PaymentsStatusTag => page.Locator("tr", new() { HasTextString = "Payments" }).Locator("strong.govuk-tag");
+        private ILocator ChangePaymentsStatusLink => page.Locator("#change-payments-link");
         private ILocator StatusDateTitle => page.Locator("table:nth-of-type(1) tr:nth-of-type(2) th").First;
         private ILocator StatusDateValue => page.Locator("table:nth-of-type(1) tr:nth-of-type(2) td").First;
         #endregion
@@ -54,6 +55,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new ChangeHistoryPage(context, learnerName));
         }
 
+        internal async Task<PausePaymentsToYourTrainingProviderPage> ClickOnPausePaymentsLink()
+        {
+            await ChangePaymentsStatusLink.ClickAsync(); 
+            return await VerifyPageAsync(() => new PausePaymentsToYourTrainingProviderPage(context));
+        }
+
+        internal async Task<ResumePaymentsToTrainingProviderPage> ClickOnResumePaymentsLink()
+        {
+            await ChangePaymentsStatusLink.ClickAsync();
+            return await VerifyPageAsync(() => new ResumePaymentsToTrainingProviderPage(context));
+        }
+
         internal async Task<LearnerDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status, string rowName, DateTime date)
         {
             await Assertions.Expect(ApprenticeStatusTag).ToContainTextAsync(status.ToString());
@@ -62,6 +75,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return this;
         }
 
+        internal async Task<bool> EmployerVerifyPaymentStatus(PaymentStatus pymtStatus)
+        {
+            return await PaymentsStatusTag.InnerTextAsync() == pymtStatus.ToString();
+        }
+ 
         internal async Task<LearnerDetailsPage> EmployerVerifyApprenticeStatusAndDetails(ApprenticeshipStatus status, string type, string apprenticeStatus)
         {
             await Assertions.Expect(ApprenticeStatusTag).ToContainTextAsync(status.ToString());

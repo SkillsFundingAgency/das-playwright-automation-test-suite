@@ -9,6 +9,12 @@ internal enum ApprenticeshipStatus
     Completed
 }
 
+internal enum PaymentStatus
+{
+    Active,    
+    Paused
+}
+
 internal enum FundingType
 {
     DirectTransferFundsFromConnection,

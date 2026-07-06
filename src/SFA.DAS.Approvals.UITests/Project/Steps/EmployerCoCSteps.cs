@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using Allure.Net.Commons;
+using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
@@ -57,8 +58,48 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Paused, "Apprenticeship pause date", DateTime.Now);
                     break;
                 default:
-                    break;
+                    throw new ArgumentException($"Invalid payment status: {status}");
             }
+        }
+
+
+        [When(@"^employer ""(.*)"" payments status for the apprenticeship record")]
+        public async Task WhenEmployerPaymentsStatusForTheApprenticeshipRecord(string paymentStatus)
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var fullName = apprenticeship.ApprenticeDetails.FullName;
+            var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
+            var page1 = await page.OpenFirstItemFromTheList(fullName);
+
+            switch (paymentStatus.ToLower())
+            {
+                case "pause":
+                    await employerStepsHelper.EmployerPausePayments(page1);
+                    await page1.EmployerVerifyPaymentStatus(PaymentStatus.Paused);
+                    var page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payments paused - Learner is on a break", "Manual update");
+                    await page2.ClickViewLearnerDetailsLink();
+                    break;
+                case "unpause":
+                    await employerStepsHelper.EmployerResumePayments(page1);
+                    await page1.EmployerVerifyPaymentStatus(PaymentStatus.Active);
+                    page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payments resumed", "Manual update");
+                    await page2.ClickViewLearnerDetailsLink();
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid payment status: {paymentStatus}");                   
+            }
+
+            //Assert editiability of unpaused record:
+            Assert.True(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
+            Assert.True(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
+            Assert.True(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+            Assert.True(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
+            Assert.False(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
+            
+            
+            
         }
 
     }

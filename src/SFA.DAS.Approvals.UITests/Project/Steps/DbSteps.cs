@@ -214,6 +214,36 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             Assert.That(result[3], Is.EqualTo("True"), $"Expected MadeRedundant 'True' but found '{result[3]}'");
         }
 
+        [Then(@"^Commitments db is updated with the correct Freeze Payments Reason and Date for ""(.*)"" status")]
+        public async Task ThenCommitmentsDbIsUpdatedWithTheCorrectFreezePaymentsReasonAndDateForStatus(string status)
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
+            var uln = apprenticeship.ApprenticeDetails.ULN;
+            var expectedPaymentFreezeDate = (status == "Paused") ? DateTime.Now.ToString("dd/MM/yyyy") : "";
+            string expectedFreezePaymentsReason = (status == "Paused") ? "1" : "";            
+            List<string> result = new List<string>();
+
+            var actualPaymentStatus = await DbRetryPolicy(
+                getValue: async () =>
+                {
+                    result = await commitmentsDbSqlHelper.GetValuesFromApprenticeshipTable("Paymentstatus, PaymentFreezeDate, FreezePaymentsReason", apprenticeshipId);
+
+                    return (result as IEnumerable<string[]>)?.FirstOrDefault()[0];
+                },
+                expectedValue: 1,
+                dbName: "CommitmentsDb"
+            );
+
+
+            var actualPaymentFreezeDate = (result[1].Length > 0)? result[1].Substring(0, 10): "";
+
+            Assert.That(result[0], Is.EqualTo("1"), $"Expected payment status '1' but found '{actualPaymentStatus}'");            
+            Assert.That(actualPaymentFreezeDate, Is.EqualTo(expectedPaymentFreezeDate), $"Expected payment freeze date '{expectedPaymentFreezeDate}' but found '{actualPaymentFreezeDate}'");
+            Assert.That(result[2], Is.EqualTo(expectedFreezePaymentsReason), $"Expected FreezePaymentsReason '{expectedFreezePaymentsReason}' but found '{result[2]}'");            
+        }
+
+
         internal async Task FindAvailableLearner()
         {
             listOfApprenticeship = new List<Apprenticeship>();

@@ -107,7 +107,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
         internal async Task ResetPaymentStatus(int apprenticeshipId)
         { 
             string query = $@"UPDATE Apprenticeship
-                                Set paymentstatus = 1, stopdate = null, pausedate = null, completionDate = null, WithdrawnReasonCode = null, MadeRedundant = 0
+                                Set paymentstatus = 1, stopdate = null, pausedate = null, completionDate = null, WithdrawnReasonCode = null, MadeRedundant = 0,
+                                paymentFreezeDate = null, FreezePaymentsReason = null 
                                 WHERE Id = {apprenticeshipId};
 
                             Delete [dbo].[LearningChangeHistory] Where apprenticeshipid = {apprenticeshipId};";
