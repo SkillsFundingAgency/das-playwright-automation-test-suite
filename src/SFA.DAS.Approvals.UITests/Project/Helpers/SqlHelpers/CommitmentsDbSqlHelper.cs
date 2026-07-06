@@ -69,6 +69,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.TrainingDetails.TrainingPrice = Convert.ToInt32(details[11]);
             apprenticeship.TrainingDetails.AcademicYear = AcademicYearDatesHelper.GetCurrentAcademicYear();
             apprenticeship.TrainingDetails.ConsumerReference = details[12];
+            apprenticeship.TrainingDetails.CourseTitle = details[13];
 
             return apprenticeship;
         }
@@ -76,7 +77,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
         private async Task<List<string>> GetApprenticeDetails(int ukprn, int accountLegalEntityId, string additionalWhereFilter = null )
         {
             string query =
-                @$"SELECT TOP(1) a.Id, a.ULN, a.FirstName, a.LastName, a.DateOfBirth, a.TrainingCode, a.ReservationId, c.Reference, a.Email, a.StartDate, a.EndDate, a.Cost, a.ProviderRef
+                @$"SELECT TOP(1) a.Id, a.ULN, a.FirstName, a.LastName, a.DateOfBirth, a.TrainingCode, a.ReservationId, c.Reference, a.Email, a.StartDate, a.EndDate, a.Cost, a.ProviderRef, a.TrainingName
                     FROM [dbo].[Commitment] c
                     INNER JOIN [dbo].[Apprenticeship] a
                     ON c.id = a.CommitmentId
