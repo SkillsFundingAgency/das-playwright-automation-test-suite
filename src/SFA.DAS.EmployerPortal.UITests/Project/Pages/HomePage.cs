@@ -200,7 +200,7 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Learner requests");
         }
     }
 

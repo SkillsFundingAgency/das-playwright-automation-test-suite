@@ -4,7 +4,7 @@
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Review learner requests");
         }
 
         internal async Task<EmployerApproveApprenticeDetailsPage> OpenApprenticeRequestReadyForReview(string cohortRef)
