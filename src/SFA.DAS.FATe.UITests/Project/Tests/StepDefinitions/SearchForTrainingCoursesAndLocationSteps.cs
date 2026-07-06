@@ -7,17 +7,41 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
     public class SearchForTrainingCoursesAndLocationSteps(ScenarioContext context)
     {
         private readonly FATeStepsHelper _stepsHelper = new(context);
-        private readonly ApprenticeshipTrainingCoursesPage _apprenticeshipTrainingCoursesPage = new(context);
+        private ApprenticeshipTrainingCoursesPage _apprenticeshipTrainingCoursesPage = new(context);
         private readonly FATeHomePage _fATeHomePage = new(context);
         private readonly Search_TrainingCourses_ApprenticeworkLocationPage _search_TrainingCourses_ApprenticeworkLocationPage = new(context);
         private readonly ApprenticeshipTrainingCourseDetailsPage _apprenticeshipTrainingCourseDetailsPage = new(context);
+
+        [Given(@"^the user shortlist a provider for an apprenticeship unit course$")]
+        public async Task TheUserShortlistsAProviderForAnApprenticeshipUnitCourse()
+        {
+            await _search_TrainingCourses_ApprenticeworkLocationPage.VerifyPage();
+
+            _apprenticeshipTrainingCoursesPage = await _search_TrainingCourses_ApprenticeworkLocationPage.SearchApprenticeUnit();
+
+            var page = await _apprenticeshipTrainingCoursesPage.SelectEVProviders();
+
+            await page.AddProviderToShortList();
+        }
 
         [Given("^the user navigates to the Search for apprenticeship training courses and training providers page$")]
         public async Task GivenTheUserNavigatesToTheSearchForApprenticeshipTrainingCoursesAndTrainingProvidersPage()
         {
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
             await _fATeHomePage.ClickStartNow();
-            await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
+            _apprenticeshipTrainingCoursesPage = await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
+        }
+
+        [Given(@"^the user shortlist a provider for a course$")]
+        public async Task TheUserShortlistsAProviderForACourse()
+        {
+            _apprenticeshipTrainingCoursesPage = await _apprenticeshipTrainingCoursesPage.AddAProviderToShortlist();
+        }
+
+        [When(@"the user shorlist the same provider using a location filter")]
+        public async Task TheUserShortlistsTheSameProviderUsingALocationFilter()
+        {
+            await _apprenticeshipTrainingCoursesPage.AddProviderToShortlistUsingLocation();
         }
 
         [Given("^the user navigates to find training page$")]

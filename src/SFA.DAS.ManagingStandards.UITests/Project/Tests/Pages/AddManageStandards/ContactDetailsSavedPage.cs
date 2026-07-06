@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
 public partial class VenueAndDelivery_ApprenticeshipUnitPage
@@ -12,14 +13,17 @@ public partial class VenueAndDelivery_ApprenticeshipUnitPage
 
         public async Task<YourStandardsAndTrainingVenuesPage> ReturnToManagingStandardsDashboard()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Manage your standards" }).ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = "Manage your courses" }).ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
 
             return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
         }
 
         public async Task VerifyUpdatedContactDetails(string? expectedEmail = null, string? expectedPhone = null)
         {
-            var confirmationText = page.GetByText("You have updated your contact details", new() { Exact = false });
+            var confirmationText = page
+       .GetByText(new Regex(@"You have updated your contact details|The contact details for your chosen training is now"));
+
 
             if (!string.IsNullOrEmpty(expectedEmail))
             {

@@ -1,19 +1,25 @@
-﻿using System.Configuration.Provider;
-using System.Diagnostics;
-using Azure;
-using SFA.DAS.FATe.UITests.Project.Tests.Pages;
+﻿using SFA.DAS.FATe.UITests.Project.Tests.Pages;
+
+namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinition;
 
 [Binding, Scope(Tag = "fate")]
-public class ShortlistSteps
+public class ShortlistSteps(ScenarioContext context)
 {
-    private readonly TrainingProvidersPage _trainingProvidersPage;
-    private readonly ShortlistPage _shortlistPage;
+    private readonly TrainingProvidersPage _trainingProvidersPage = new(context);
+    private readonly ShortlistPage _shortlistPage = new(context);
 
-    public ShortlistSteps(ScenarioContext context)
+    [Then(@"^the shortlisted provider should display location$")]
+    public async Task TheShortlistedProviderShouldDisplayLocation()
     {
-        _trainingProvidersPage = new TrainingProvidersPage(context);
-        _shortlistPage = new ShortlistPage(context);
+        await _shortlistPage.VerifyLocationFilterInShortlist();
     }
+
+    [Then(@"^the app unit shortlisted provider should be displayed$")]
+    public async Task TheAppUnitShortlistedProviderShouldBeDisplayed()
+    {
+        await _shortlistPage.VerifyAppUnitLocationFilterInShortlist();
+    }
+
     [Then("^verify add remove count shortlist functionality$")]
 
     public async Task ThenVerifyAddRemoveCountShortlistFunctionality()

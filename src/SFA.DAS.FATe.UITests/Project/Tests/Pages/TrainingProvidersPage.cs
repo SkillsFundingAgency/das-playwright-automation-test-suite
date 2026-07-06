@@ -7,6 +7,19 @@ public class TrainingProvidersPage(ScenarioContext context) : FATeBasePage(conte
 
     public async Task RequestTrainingProvider() => await page.GetByRole(AriaRole.Link, new() { Name = "Ask if training providers can" }).ClickAsync();
 
+
+    public async Task AddProviderToShortList()
+    {
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "Learner's work location" }).ClickAsync();
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "Learner's work location" }).FillAsync("London fields");
+        await page.GetByRole(AriaRole.Option, new() { Name = "London Fields, Greater London" }).ClickAsync();
+        await page.Locator("#filters-submit-top").ClickAsync();
+        await Assertions.Expect(page.Locator("#course-providers-order-form")).ToContainTextAsync("results within");
+        await page.Locator("#add-to-shortlist-10005760").ClickAsync();
+        await page.Locator("#add-to-shortlist-10000028").ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "View shortlist" }).ClickAsync();
+    }
+
     public async Task VerifyAndApplySingleFilters_ProviderPage()
     {
         await VerifyNoFiltersAreApplied();
