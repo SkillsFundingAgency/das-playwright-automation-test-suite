@@ -3,23 +3,17 @@
 @linkedScenarios
 Feature: AP_CoC_02_LearningWithdrawnEvent
 
-Commitments receives LearningWithdrawnEvent from Learning domain for variety of reasons such as:
-    - 2: Learner has transferred to another provider 
-    - 3: Learner injury / illness 
-    - 7: Learner has transferred between providers due to intervention by or with the written agreement of the ESFA 
-    - 29: Learner has been made redundant 
-    - 40: Learner has transferred to a new learning aim with the same provider 
-    - 41: Learner has transferred to another provider to undertake learning that meets a specific government strategy 
-    - 42: Academic failure / left in bad standing / not permitted to progress – HE learning aims only 
-    - 43: Financial reasons 
-    - 44: Other personal reasons 
-    - 45: Written off after lapse of time – HE learning aims only 
-    - 46: Exclusion 
-    - 47: Learner has transferred to another provider due to merger 
-    - 48: Industry placement learner has withdrawn due to circumstances outside the providers' control 
-    - 97: Other 
-    - 98: Reason not known 
-This test validates that event is processed correctly and the apprentice record is updated (stopped) with correct reason code and stop date 
+Commitments receives LearningWithdrawnEvent from Learning domain for variety of reasons. This test validates that event is processed correctly and the apprentice record is updated (stopped) with correct reason code and stop date 
+
+Data Requirment:
+	- Employer Account: <LevyUser>			<--- please refer to user secrets file for the actual value
+	- Provider Account: <ProviderConfig>	<--- please refer to user secrets file for the actual value
+	- FirstName:DoNotUse_TestData
+	- LastName: ChangeStatusApprentice
+	- ULN: any
+	- StartDate: -6 months in the past
+	- EndDate: +6 months in the future
+	- Training Course: Any apprenticeship course, ideally without any course option
 
 
 @regression
