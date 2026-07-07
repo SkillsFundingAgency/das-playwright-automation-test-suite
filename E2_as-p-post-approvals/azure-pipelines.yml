@@ -1,7 +1,7 @@
 trigger: none
 pr: none
 schedules:
-- cron: '0 1 * * 1-5'
+- cron: '15 0 * * 1-5'
   displayName: ScheduledRun
   branches:
     include:
@@ -9,11 +9,11 @@ schedules:
   always: true
 
 variables:
-  - template: ../../pipeline-templates/vars.yml
+  - template: ../pipeline-templates/vars.yml
   - name: projectName
-    value: "SFA.DAS.EmployerAccounts.APITests"
+    value: "SFA.DAS.Approvals.UITests"
   - name: RuleName
-    value: "E2_as-accapi-test-suite"
+    value: "E2_as-post-approvals-test-suite"
   - name: ResourceName
     value: "$(EmployerAccountsAppWhitelistName)"
 
@@ -35,7 +35,7 @@ pool:
   vmImage: 'windows-latest'
 
 stages:
-  - template: ../../pipeline-templates/stage/environment-stage.yml
+  - template: ../pipeline-templates/stage/environment-stage.yml
     parameters:
       projectName: $(projectName)
       BuildConfiguration: $(BuildConfiguration)
