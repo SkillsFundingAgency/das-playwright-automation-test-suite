@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using SFA.DAS.EmployerPortal.UITests.Project;
 using SFA.DAS.Framework.Helpers;
 using SFA.DAS.Login.Service.Project.Helpers;
@@ -12,7 +12,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
 {
     private readonly ObjectContext objectContext = context.Get<ObjectContext>();
     private readonly MailosaurApiHelper mailosaurApiHelper = context.Get<MailosaurApiHelper>();
-    protected readonly VacancyTitleDatahelper vacancyTitleDataHelper = context.Get<VacancyTitleDatahelper>();
+    private readonly VacancyTitleDatahelper vacancyTitleDataHelper = context.Get<VacancyTitleDatahelper>();
 
     [Then(@"^the '(.*)' receives '(.*)' email notification$")]
     public async Task ThenTheEmployerReceivesEmailNotification(string userType, string notificationType)
@@ -33,7 +33,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
 
             string foundationApplicantEmail = context.GetUser<FAAFoundationUser>().Username;
 
-            return isFoundationAdvert? foundationApplicantEmail : applicantEmail;
+            return isFoundationAdvert ? foundationApplicantEmail : applicantEmail;
         }
 
         string emailText = null;
@@ -49,7 +49,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
                 break;
 
             case ("rejected advert", "employer"):
-                emailText = "DfE has rejected this advert. We’ve left a comment to explain why.";
+                emailText = "DfE has rejected this advert. We've left a comment to explain why.";
                 subject = $"Rejected by DfE: make changes to {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                 userEmail = GetEmployerEmail();
                 break;
@@ -67,13 +67,13 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
                 break;
 
             case ("approved advert", "employer"):
-                emailText = "DfE has approved this advert. It’s now live on Find an apprenticeship.";
+                emailText = "DfE has approved this advert. It's now live on Find an apprenticeship.";
                 subject = $"Approved by DfE: {vacancyTitleDataHelper.VacancyTitle} apprenticeship is now live on Find an apprenticeship";
                 userEmail = GetEmployerEmail();
                 break;
 
             case ("employer approved vacancy", "provider"):
-                emailText = "The employer has approved this vacancy. It’ll now be sent to DfE – you’ll get an email after we’ve reviewed it.";
+                emailText = "The employer has approved this vacancy. It'll now be sent to DfE – you'll get an email after we've reviewed it.";
                 subject = $"Approved by employer: {vacancyTitleDataHelper.VacancyTitle} apprenticeship now sent to DfE";
                 userEmail = GetProviderEmail();
                 break;
@@ -85,25 +85,25 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
                 break;
 
             case ("new application", "applicant"):
-                emailText = "We’ve received your application for:";
+                emailText = "We've received your application for:";
                 subject = $"Application submitted: {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                 userEmail = GetApplicantEmail();
                 break;
 
             case ("successful application", "applicant"):
-                emailText = "Congratulations, you’ve been offered an apprenticeship:";
+                emailText = "Congratulations, you've been offered an apprenticeship:";
                 subject = $"Successful application: {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                 userEmail = GetApplicantEmail();
                 break;
 
             case ("unsuccessful application", "applicant"):
-                emailText = "An application you’ve made has been unsuccessful:";
+                emailText = "An application you've made has been unsuccessful:";
                 subject = $"Unsuccessful application: read your feedback for {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                 userEmail = GetApplicantEmail();
                 break;
 
             case ("withdrawn application", "applicant"):
-                emailText = "You’ve withdrawn your application for:";
+                emailText = "You've withdrawn your application for:";
                 subject = $"Application withdrawn: {vacancyTitleDataHelper.VacancyTitle}";
                 userEmail = GetApplicantEmail();
                 break;
@@ -115,8 +115,8 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
                 break;
 
             case ("employer listed you as training provider", "provider"):
-                emailText = $"An employer’s listed you as the training provider on this vacancy. Contact the employer if you were not expecting this.";
-                subject = "An employer’s listed you as the training provider on a vacancy";
+                emailText = $"An employer's listed you as the training provider on this vacancy. Contact the employer if you were not expecting this.";
+                subject = "An employer's listed you as the training provider on a vacancy";
                 userEmail = GetProviderEmail();
                 break;
 
@@ -125,7 +125,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
                 subject = $"New application for {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                 userEmail = GetProviderEmail();
                 break;
-                
+
             default:
                 Assert.Fail($"Unknown notification type: {notificationType}");
                 break;
