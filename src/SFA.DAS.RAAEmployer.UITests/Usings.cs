@@ -14,6 +14,7 @@ global using SFA.DAS.RAA.DataGenerator.Project.Helpers;
 global using SFA.DAS.RAA.Service.Project.Helpers;
 global using SFA.DAS.RAA.Service.Project.Pages;
 global using SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
+global using SFA.DAS.RAAProvider.UITests.Project.Helpers;
 global using System.Collections.Generic;
 global using System.Threading.Tasks;
 global using Reqnroll;

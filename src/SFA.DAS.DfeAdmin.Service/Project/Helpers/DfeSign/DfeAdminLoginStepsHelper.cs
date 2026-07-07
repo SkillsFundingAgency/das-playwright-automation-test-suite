@@ -1,4 +1,5 @@
-﻿using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
+﻿using Azure;
+using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.LandingPage;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
 using SFA.DAS.Framework.Hooks;
@@ -56,7 +57,17 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context) : FrameworkBaseHo
 
     private async Task CheckAndLoginTo(ASLandingCheckBasePage landingPage, DfeAdminUser dfeAdminUser)
     {
-        if (await landingPage.IsPageDisplayed()) await landingPage.ClickStartNowButton();
+        if (await landingPage.IsPageDisplayed())
+        {
+            await landingPage.ClickStartNowButton();
+            var headingText = await landingPage.heading.TextContentAsync();
+            if (headingText?.Contains("You aren't approved to view this page") == true)
+            {
+                await landingPage.SignOut.ClickAsync();
+                await landingPage.ClickStartNowButton();
+                await SubmitValidLoginDetails(dfeAdminUser);
+            }
+        }
 
         if (await new CheckDfeSignInPage(context).IsPageDisplayed()) await SubmitValidLoginDetails(dfeAdminUser);
     }

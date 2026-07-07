@@ -6,12 +6,34 @@ public class ManageApplicantPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(rAADataHelper.CandidateFullName);
+        if(context.ScenarioInfo.Tags.Contains("raa-epc"))
+        {
+            await Assertions.Expect(page.Locator(".govuk-caption-l")).ToContainTextAsync(rAADataHelper.VacancyTitle);
+        }
+        else
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(rAADataHelper.CandidateFullName);
+        }
     }
 
     private async Task OutcomeInterviewingRadioButton()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Mark application for" }).CheckAsync();
+
+        await SaveAndContinue();
+    }
+
+    private async Task OutcomeInterviewingWithEmployerRadioButton()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
+
+        await SaveAndContinue();
+    }
+
+    private async Task OutcomeNotInterviewingWithEmployerRadioButton()
+    {
+        await page.Locator("#outcome-employer-unsuccessful").ClickAsync();
+        await page.Locator("#CandidateFeedback").FillAsync(rAADataHelper.OptionalMessage);
 
         await SaveAndContinue();
     }
@@ -43,6 +65,20 @@ public class ManageApplicantPage(ScenarioContext context) : RaaBasePage(context)
         return await VerifyPageAsync(() => new EmployerInteviewingApplicantPage(context));
     }
 
+    public async Task<EmployerInteviewingApplicantPage> MarkSharedApplicantAsInterviewing()
+    {
+        await OutcomeInterviewingWithEmployerRadioButton();
+
+        return await VerifyPageAsync(() => new EmployerInteviewingApplicantPage(context));
+    }
+
+    public async Task<ConfirmEmployerRejectedSharedAppPage> MarkSharedApplicantAsNotInterviewing()
+    {
+        await OutcomeNotInterviewingWithEmployerRadioButton();
+
+        return await VerifyPageAsync(() => new ConfirmEmployerRejectedSharedAppPage(context));
+    }
+
     private async Task OutcomeSharedWithEmployer()
     {
         await SelectRadioOptionByForAttribute("outcome-shared");
@@ -63,11 +99,15 @@ public class ManageApplicantPage(ScenarioContext context) : RaaBasePage(context)
 
     public async Task<ConfirmApplicantUnsuccessfulPage> MakeApplicantUnsucessful()
     {
+        bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
         await page.GetByRole(AriaRole.Radio, new() { Name = "Make unsuccessful and give" }).CheckAsync();
 
         await SaveAndContinue();
-        await page.Locator("#CandidateFeedback").FillAsync(rAADataHelper.OptionalMessage);
-        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+        if(!isRaaEpc)
+        {
+            await page.Locator("#CandidateFeedback").FillAsync(rAADataHelper.OptionalMessage);
+            await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+        }
 
         return await VerifyPageAsync(() => new ConfirmApplicantUnsuccessfulPage(context));
     }

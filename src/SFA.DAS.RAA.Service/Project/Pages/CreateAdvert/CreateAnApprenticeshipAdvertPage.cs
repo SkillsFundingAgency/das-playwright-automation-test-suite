@@ -126,3 +126,11 @@ public partial class CreateAnApprenticeshipAdvertOrVacancyPage(ScenarioContext c
         await page.GetByRole(AriaRole.Link, new() { Name = taskName, Exact = true }).ClickAsync();
     }
 }
+
+public class SharedApplicatinsForAVacancyPage(ScenarioContext context) : RaaBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator(".govuk-caption-l")).ToContainTextAsync("Shared applications");
+    }
+}

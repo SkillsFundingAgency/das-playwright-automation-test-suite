@@ -1,8 +1,10 @@
 ﻿using NUnit.Framework;
+using SFA.DAS.EmployerPortal.UITests.Project;
 using SFA.DAS.Login.Service.Project.Helpers;
 using SFA.DAS.RAAEmployer.UITests.Project.Helpers;
-//using EmployerStepsHelper = SFA.DAS.RAAEmployer.UITests.Project.Helpers.EmployerStepsHelper;
-//using ProviderStepsHelper = SFA.DAS.RAAProvider.UITests.Project.Helpers.ProviderStepsHelper;
+using SFA.DAS.RAAProvider.UITests.Project.Helpers;
+using EmployerStepsHelper = SFA.DAS.RAAEmployer.UITests.Project.Helpers.EmployerStepsHelper;
+using ProviderStepsHelper = SFA.DAS.RAAProvider.UITests.Project.Helpers.ProviderStepHelper;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
 {
@@ -11,18 +13,18 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
     {
         private readonly ScenarioContext _context;
         private readonly ObjectContext _objectContext;
-        //private readonly EmployerStepsHelper _employerStepsHelper;
+        private readonly EmployerStepsHelper _employerStepsHelper;
         private readonly RAAEmployerLoginStepsHelper _rAAEmployerLoginHelper;
-        //private readonly ProviderStepsHelper _providerStepsHelper;
+        private readonly ProviderStepsHelper _providerStepsHelper;
         private EasAccountUser _loginUser;
-        //private ProviderVacancySearchResultPage _resultPage;
+        private ProviderVacancySearchResultPage _resultPage;
 
         public EmployerProviderColobarationSteps(ScenarioContext context)
         {
             _context = context;
             _objectContext = context.Get<ObjectContext>();
-          //  _employerStepsHelper = new EmployerStepsHelper(context);
-            //_providerStepsHelper = new ProviderStepsHelper(context);
+            _employerStepsHelper = new EmployerStepsHelper(context);
+            _providerStepsHelper = new ProviderStepsHelper(context);
             _rAAEmployerLoginHelper = new RAAEmployerLoginStepsHelper(_context);
         }
 
@@ -50,62 +52,64 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
             var homePage = await _rAAEmployerLoginHelper.GoToHomePage(_loginUser);
         }
 
-        //[When(@"^the Provider submits a vacancy to the employer for review$")]
-        //public async Task WhenTheProviderSubmitsAVacancyToTheEmployerForReview()
-        //{
-        //    var vacancyReferencePage = new ProviderCreateVacancyStepsHelper(_context, true).CreateANewVacancyForSpecificEmployer(_loginUser.OrganisationName, _objectContext.GetHashedAccountId());
+        [When(@"^the Provider submits a vacancy to the employer for review$")]
+        public async Task WhenTheProviderSubmitsAVacancyToTheEmployerForReview()
+        {
+            var vacancyReferencePage = await new ProviderCreateVacancyStepsHelper(_context, true).CreateANewVacancyForSpecificEmployer(_loginUser.OrganisationName, _objectContext.GetHashedAccountId());
 
-        //    ConfirmationMessage(vacancyReferencePage, "Vacancy submitted to employer");
-        //}
+            await ConfirmationMessage(vacancyReferencePage, "Vacancy submitted to employer");
+        }
 
-        //[When(@"^the Employer rejects the advert$")]
-        //public async Task WhenTheEmployerRejectsTheAdvert()
-        //{
-        //    var vacancyReferencePage = GoToVacancyCompletedPage().RejectAdvert().SelectYes();
+        [When(@"^the Employer rejects the advert$")]
+        public async Task WhenTheEmployerRejectsTheAdvert()
+        {
+            var page = await GoToVacancyCompletedPage();
+            var page1 = await page.RejectAdvert();
+            var page2 = await page1.ConfirmReject();
 
-        //    ConfirmationMessage(vacancyReferencePage, "You've rejected this job advert");
-        //}
+            await ConfirmationMessage(page2, "You've rejected this job advert");
+        }
 
-        //[Then(@"^the Provider should see the advert with status: '(.*)'$")]
-        //public async Task ThenTheProviderShouldSeeTheAdvertWithStatus(string expectedStatus)
-        //{
-        //    _resultPage = _providerStepsHelper.SearchVacancy();
+        [Then(@"^the Provider should see the advert with status: '(.*)'$")]
+        public async Task ThenTheProviderShouldSeeTheAdvertWithStatus(string expectedStatus)
+        {
+            _resultPage = await _providerStepsHelper.SearchVacancyByVacancyReferenceInNewTab();
 
-        //    _resultPage.VerifyAdvertStatus(expectedStatus);
-        //}
+            await _resultPage.VerifyAdvertStatus(expectedStatus);
+        }
 
-        //[When(@"^Provider re-submits the advert$")]
-        //public async Task WhenProviderRe_SubmitsTheAdvert()
-        //{
-        //    var page = _resultPage.GoToRejectedVacancyCompletedPage();
+        [When(@"^Provider re-submits the advert$")]
+        public async Task WhenProviderRe_SubmitsTheAdvert()
+        {
+            var page = await _resultPage.GoToRejectedVacancyCompletedPage();
 
-        //    AssertMessage("has rejected this vacancy for the following reason", page.GetNotificationBanner());
+            await AssertMessage("has rejected this vacancy for the following reason", await page.GetNotificationBanner());
 
-        //    var vacancyReferencePage = page.ResubmitVacancyToEmployer();
+            var vacancyReferencePage = await page.ResubmitVacancyToEmployer();
 
-        //    ConfirmationMessage(vacancyReferencePage, "Vacancy resubmitted to employer");
-        //}
+            await ConfirmationMessage(vacancyReferencePage, "Vacancy resubmitted to employer");
+        }
 
-        //[When(@"^the Employer approves the advert$")]
-        //public async Task WhenTheEmployerApprovesTheAdvert()
-        //{
-        //    var vacancyReferencePage = GoToVacancyCompletedPage().SubmitAdvert().SelectYes();
+        [When(@"^the Employer approves the advert$")]
+        public async Task WhenTheEmployerApprovesTheAdvert()
+        {
+            var page = await GoToVacancyCompletedPage();
+            var page1 = await page.SubmitAdvert();
+            var page2 = await page1.ConfirmSubmit();
 
-        //    ConfirmationMessage(vacancyReferencePage, "You've submitted this job advert");
-        //}
+            await ConfirmationMessage(page2, "You've submitted this job advert");
+        }
 
-        //private VacancyCompletedAllSectionsPage GoToVacancyCompletedPage()
-        //{
-        //    var yourAdvert = _employerStepsHelper.YourAdvert();
+        private async Task<VacancyCompletedAllSectionsPage> GoToVacancyCompletedPage()
+        {
+            var page = await _employerStepsHelper.YourAdvert();
 
-        //    yourAdvert.VerifyAdvertStatus("Ready for review");
+            return await page.GoToVacancyCompletedPage();
+        }
 
-        //    return yourAdvert.GoToVacancyCompletedPage();
-        //}
+        private static async Task ConfirmationMessage(VacancyReferencePage vacancyReferencePage, string expected) => await AssertMessage(expected, await vacancyReferencePage.GetConfirmationMessage());
 
-        //private static async Task ConfirmationMessage(VacancyReferencePage vacancyReferencePage, string expected) => AssertMessage(expected, vacancyReferencePage.GetConfirmationMessage());
-
-        //private static async Task AssertMessage(string expected, string actual) => StringAssert.Contains(expected, actual);
+        private static async Task AssertMessage(string expected, string actual) => StringAssert.Contains(expected, actual);
 
     }
 }

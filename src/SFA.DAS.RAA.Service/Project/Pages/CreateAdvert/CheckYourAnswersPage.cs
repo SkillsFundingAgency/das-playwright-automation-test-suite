@@ -38,7 +38,7 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
         }
         else
         {
-            await page.GetByRole(AriaRole.Button, new() { Name = "Submit vacancy" }).ClickAsync();
+            await page.Locator("button[data-automation='continue-button']").ClickAsync();
         }
 
         return await VerifyPageAsync(() => new VacancyReferencePage(context));

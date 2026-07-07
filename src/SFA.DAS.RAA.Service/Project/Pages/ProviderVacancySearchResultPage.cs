@@ -30,6 +30,11 @@ public class ProviderVacancySearchResultPage(ScenarioContext context) : VacancyS
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("All vacancies");
     }
 
+    public async Task VerifyAdvertStatus(string expected)
+    {
+        await Assertions.Expect(page.Locator("td[data-label='Status'] strong")).ToContainTextAsync(expected);
+    }
+
     public async Task<CreateAnApprenticeshipAdvertOrVacancyPage> CreateAnApprenticeshipVacancyPage()
     {
         await DraftVacancy();
@@ -48,7 +53,7 @@ public class ProviderVacancySearchResultPage(ScenarioContext context) : VacancyS
 
         var newApplicationRow = page.Locator("tr.govuk-table__row", new() 
         { 
-            Has = page.Locator("strong.govuk-tag:has-text('New'), strong.govuk-tag:has-text('Shared')") 
+            Has = page.Locator("strong.govuk-tag:has-text('New'), strong.govuk-tag:has-text('Shared'), strong.govuk-tag:has-text('Employer reviewed')") 
         }).First;
 
         await newApplicationRow.Locator("a.govuk-link").ClickAsync();
@@ -74,6 +79,13 @@ public class ProviderVacancySearchResultPage(ScenarioContext context) : VacancyS
         await page.GetByRole(AriaRole.Radio, new() { Name = "Share with the employer" }).CheckAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
         return await VerifyPageAsync(() => new ProviderDoYouWantToShareAnApplicationPage(context));
+    }
+
+    public async Task<VacancyCompletedAllSectionsPage> GoToRejectedVacancyCompletedPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Edit and resubmit" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new VacancyCompletedAllSectionsPage(context));
     }
 
     public async Task CheckApplicantStatus(string status)
