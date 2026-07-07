@@ -91,7 +91,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     throw new ArgumentException($"Invalid payment status: {paymentStatus}");                   
             }
 
-            //Assert editiability of unpaused record:
+            //Assert editiability for both pause and active record:
             Assert.True(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
             Assert.True(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
             Assert.True(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");

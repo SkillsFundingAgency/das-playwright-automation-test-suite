@@ -5,7 +5,7 @@ Feature: AP_CoC_02_LearningWithdrawnEvent
 
 Commitments receives LearningWithdrawnEvent from Learning domain for variety of reasons. This test validates that event is processed correctly and the apprentice record is updated (stopped) with correct reason code and stop date 
 
-Data Requirment:
+Data Requirements:
 	- Employer Account: <LevyUser>			<--- please refer to user secrets file for the actual value
 	- Provider Account: <ProviderConfig>	<--- please refer to user secrets file for the actual value
 	- FirstName:DoNotUse_TestData

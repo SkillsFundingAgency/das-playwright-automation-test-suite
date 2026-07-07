@@ -5,7 +5,7 @@ Feature: AP_CoC_03_EmployerDrivenPause
 
 Employer can pause/freeze provider payments via UI
 
-Data Requirment:
+Data Requirements:
 	- Employer Account: <LevyUser>			<--- please refer to user secrets file for the actual value
 	- Provider Account: <ProviderConfig>	<--- please refer to user secrets file for the actual value
 	- FirstName:DoNotUse_TestData
