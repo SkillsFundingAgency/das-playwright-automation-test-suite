@@ -78,7 +78,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             if (warningMessage)
             {
-                var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
+                var warningMsg = "! Warning One or more of your learners have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
                 await page.ValidateWarningMessageForFoundationCourses(warningMsg);
             }            
 
