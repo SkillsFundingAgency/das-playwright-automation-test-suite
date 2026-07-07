@@ -16,5 +16,5 @@ Scenario: RAA_P_EPC_02 - Employer and Provider Collaboration Both Yes Permission
 	Then the Provider should see the advert with status: 'Live'
 	When the Applicant can apply for a Vacancy in FAA
 	Then Provider can make the application shared
-	#And Employer can mark the shared application as not interviewing 
-	#And Provider can make the application unsuccessful
+	And Employer can mark the shared application as not interviewing 
+	And Provider can make the application unsuccessful

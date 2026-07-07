@@ -19,12 +19,10 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
     {
         string GetProviderEmail()
         {
-
-            return RAADataHelper.ProviderEmail;
-            //var providerConfig = context.GetProviderConfig<ProviderConfig>();
-
-            //return providerConfig.Username;
+            var providerConfig = context.Get<dynamic>("providerconfigkey");
+            return providerConfig.Username;
         }
+
         string GetEmployerEmail() => objectContext.GetRegisteredEmail();
 
         string GetApplicantEmail()
@@ -63,7 +61,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
                 break;
 
             case ("employer review", "employer"):
-                emailText = $"{GetProviderEmail()} has sent you this advert";
+                emailText = $"has sent you this advert";
                 subject = "New apprenticeship advert to review";
                 userEmail = GetEmployerEmail();
                 break;
@@ -81,8 +79,8 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
                 break;
 
             case ("employer rejected vacancy", "provider"):
-                emailText = "This vacancy has been reviewed and was rejected";
-                subject = $"Rejected: Updates needed to your vacancy (VAC{objectContext.GetVacancyReference()})";
+                emailText = "The employer has rejected this vacancy";
+                subject = $"Rejected by employer: make changes to {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                 userEmail = GetProviderEmail();
                 break;
 

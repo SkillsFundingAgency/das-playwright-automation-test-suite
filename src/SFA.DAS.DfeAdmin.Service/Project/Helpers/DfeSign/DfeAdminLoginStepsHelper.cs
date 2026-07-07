@@ -60,12 +60,15 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context) : FrameworkBaseHo
         if (await landingPage.IsPageDisplayed())
         {
             await landingPage.ClickStartNowButton();
-            var headingText = await landingPage.heading.TextContentAsync();
-            if (headingText?.Contains("You aren't approved to view this page") == true)
+            if(context.ScenarioInfo.Tags.Contains("raa-epc"))
             {
-                await landingPage.SignOut.ClickAsync();
-                await landingPage.ClickStartNowButton();
-                await SubmitValidLoginDetails(dfeAdminUser);
+                var headingText = await landingPage.heading.TextContentAsync();
+                if (headingText?.Contains("You aren't approved to view this page") == true)
+                {
+                    await landingPage.SignOut.ClickAsync();
+                    await landingPage.ClickStartNowButton();
+                    await SubmitValidLoginDetails(dfeAdminUser);
+                }
             }
         }
 
