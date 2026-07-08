@@ -1,11 +1,6 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Events;
-using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 using static SFA.DAS.API.Framework.UrlConfig;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.API

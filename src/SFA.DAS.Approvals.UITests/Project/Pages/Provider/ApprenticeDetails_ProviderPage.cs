@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Common;
-using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
 

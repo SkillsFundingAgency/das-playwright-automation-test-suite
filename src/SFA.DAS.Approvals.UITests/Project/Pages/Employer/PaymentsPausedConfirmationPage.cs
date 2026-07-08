@@ -1,8 +1,4 @@
-﻿using Azure;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
     internal class PaymentsPausedConfirmationPage : ApprovalsBasePage

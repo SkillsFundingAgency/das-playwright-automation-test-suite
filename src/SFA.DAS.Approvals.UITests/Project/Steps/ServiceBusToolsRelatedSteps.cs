@@ -1,15 +1,8 @@
-﻿using Azure;
-using Microsoft.IdentityModel.Tokens;
-using SFA.DAS.API.Framework.Configs;
-using SFA.DAS.Approvals.UITests.Project.Events;
+﻿using SFA.DAS.Approvals.UITests.Project.Events;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.API;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
-using SFA.DAS.LearnerData.Events;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {

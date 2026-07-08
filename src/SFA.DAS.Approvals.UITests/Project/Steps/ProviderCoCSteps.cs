@@ -6,8 +6,6 @@ using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {

@@ -1,11 +1,8 @@
-﻿using Allure.Net.Commons;
-using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
