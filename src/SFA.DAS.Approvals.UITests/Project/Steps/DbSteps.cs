@@ -174,6 +174,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await FindApprenticeFromDbAndSaveItInTheContext(EmployerType.Levy, additionalWhereFilter);
         }
 
+        [Given(@"^a Live AU learner record exists with Firstname: ""(.*)"" and LastName: ""(.*)""")]
         [Given(@"^a Live apprenticeship record exists for learner with Firstname: ""(.*)"" and LastName: ""(.*)""")]
         public async Task GivenALiveApprenticeshipRecordExistsForLearnerWithFirstnameAndLastName(string firstname, string lastname)
         {

@@ -1,5 +1,4 @@
-﻿@approvals
-@postapprovals
+﻿@postapprovals
 Feature: AP_CoC_01_PaymentsCompletionEvent
 
 Commitments receives payment completion event from Payments team upon completion of a training.
