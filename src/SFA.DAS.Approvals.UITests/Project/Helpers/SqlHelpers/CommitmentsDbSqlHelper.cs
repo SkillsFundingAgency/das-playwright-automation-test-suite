@@ -83,6 +83,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
                     ON c.id = a.CommitmentId
                     Where ProviderId = {ukprn}                
                     AND c.AccountLegalEntityId = {accountLegalEntityId}
+                    AND a.TrainingCode NOT LIKE '%-%'
                     {additionalWhereFilter}
                     Order by c.CreatedOn DESC";
 
