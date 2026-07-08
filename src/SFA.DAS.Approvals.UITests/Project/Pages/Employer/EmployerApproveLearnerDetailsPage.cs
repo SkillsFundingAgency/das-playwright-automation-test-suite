@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class EmployerApproveApprenticeDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class EmployerApproveLearnerDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator organisation => page.Locator("dt:has-text('Organisation') + dd");
@@ -69,12 +69,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             }           
         }
 
-        internal async Task<ApprenticeRequestsPage> TryClickAddAnotherApprenticeLink()
+        internal async Task<LearnerRequestsPage> TryClickAddAnotherApprenticeLink()
         {
             await addAnotherApprenticeLink.ClickAsync();
             var page = await VerifyPageAsync(() => new YouCannotCreateAnotherFundingReservationPage(context));
             await page.ClickOnApprenticeRequestsLink();
-            return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
+            return await VerifyPageAsync(() => new LearnerRequestsPage(context));
         }
     }
 }
