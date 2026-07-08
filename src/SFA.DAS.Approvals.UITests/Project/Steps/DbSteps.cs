@@ -1,10 +1,10 @@
 ﻿using Polly;
-using Polly.Retry;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using System;
+using System.Globalization;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -37,12 +37,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenARecordIsCreatedInLearnerDataDbForEachLearner()
         {
             listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-            var retryPolicy = DbRetryPolicy("LearnerDataId", "LearnerData db");
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
-                var learnerDataId = await retryPolicy.ExecuteAsync(() => learnerDataDbSqlHelper.GetLearnerDataId(uln));
+                var learnerDataId = await DbRetryPolicy(getValue: async () => await learnerDataDbSqlHelper.GetLearnerDataId(uln) , 0, "LearnerData db");
                 Assert.IsNotEmpty(learnerDataId, $"No record found in LearnerData db for ULN: {uln}");
                 apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(learnerDataId);
                 await Task.Delay(100);
@@ -75,15 +74,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("^LearnerData Db is updated with respective Apprenticeship Id$")]
         public async Task ThenLearnerDataDbIsUpdatedWithRespectiveApprenticeshipId()
         {
-            listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-            var retryPolicy = DbRetryPolicy("ApprenticeshipId", "LearnerData db");
+            listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);            
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
                 var learnerDataId = apprenticeship.ApprenticeDetails.LearnerDataId;
                 var apprenticeshipIdExpected = apprenticeship.ApprenticeDetails.ApprenticeshipId;
-                var apprenticeshipIdActual = await retryPolicy.ExecuteAsync(() => learnerDataDbSqlHelper.GetApprenticeshipIdLinkedWithLearnerData(learnerDataId));
+                var apprenticeshipIdActual = await DbRetryPolicy(getValue: async () => await learnerDataDbSqlHelper.GetApprenticeshipIdLinkedWithLearnerData(learnerDataId), apprenticeshipIdExpected, "LearnerData db");
                 Assert.AreEqual(apprenticeshipIdExpected.ToString(), apprenticeshipIdActual, $"[Id] from LearnerData db ({apprenticeshipIdActual}) does not match with [LearnerDataId] in Apprenticeship > Commitments db ({apprenticeshipIdExpected})");
             }
 
@@ -93,7 +91,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenApprenticeshipRecordIsCreatedInLearningDb()
         {
             listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-            var retryPolicy = DbRetryPolicy("ApprenticeshipRecord", "Learning db");
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
@@ -103,9 +100,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 string result = string.Empty;
                 
                 if (learningType == (int)LearningType.ShortCourses)
-                    result = await retryPolicy.ExecuteAsync(() => learningDbSqlHelper.CheckIfShortCourseLearnerRecordUpdatedInLearningDb(apprenticeshipId, uln));
+                    result = await DbRetryPolicy(getValue: async () => await learningDbSqlHelper.CheckIfShortCourseLearnerRecordUpdatedInLearningDb(apprenticeshipId, uln), 0, "Learning db");
                 else
-                    result = await retryPolicy.ExecuteAsync(() => learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln));
+                    result = await DbRetryPolicy(getValue: async () => await learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln), 0, "Learning db");
 
                 Assert.IsNotEmpty(result, $"Apprenticeship record not found in Learning Db for ApprenticeshipId: {apprenticeshipId}");
                 apprenticeship.ApprenticeDetails.LearningIdKey = result;
@@ -146,7 +143,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                                             AND TrainingName like '%, Level: 7'";
             }
 
-            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
+            await FindApprenticeFromDbAndSaveItInTheContext(EmployerType.Levy, additionalWhereFilter);
         }
 
         [Given(@"^a live apprentice record exists with startdate of <(.*)> months and endDate of <\+(.*)> months from current date$")]
@@ -169,8 +166,79 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                                             AND a.EndDate > DATEADD(month, {endDateFromNow}, GETDATE())
                                             AND a.TrainingCode < 800";
 
-            await FindEditableApprenticeFromDbAndSaveItInContext(EmployerType.Levy, additionalWhereFilter);
+            await FindApprenticeFromDbAndSaveItInTheContext(EmployerType.Levy, additionalWhereFilter);
         }
+
+        [Given(@"^a Live AU learner record exists with Firstname: ""(.*)"" and LastName: ""(.*)""")]
+        [Given(@"^a Live apprenticeship record exists for learner with Firstname: ""(.*)"" and LastName: ""(.*)""")]
+        public async Task GivenALiveApprenticeshipRecordExistsForLearnerWithFirstnameAndLastName(string firstname, string lastname)
+        {
+            listOfApprenticeship = new List<Apprenticeship>();
+            var additionalWhereFilter = $"AND a.FirstName = '{firstname}' AND a.LastName = '{lastname}'";
+            await FindApprenticeFromDbAndSaveItInTheContext(EmployerType.Levy, additionalWhereFilter);
+
+            //reset the payment status to 1 (Live):
+            await commitmentsDbSqlHelper.ResetPaymentStatus(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.ApprenticeshipId);            
+        }
+
+        [Then(@"Commitments db is updated with the correct reason code and stop date")]
+        [Then(@"Commitments db is updated with the new stop date and reason code")]
+        public async Task ThenCommitmentsDbIsUpdatedWithTheCorrectReasonCodeAndStopDate()
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault(); 
+            var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
+            var uln = apprenticeship.ApprenticeDetails.ULN;
+            var withdrawalDate = apprenticeship.TrainingDetails.StopDate;
+            var withdrawalReasonCode = apprenticeship.TrainingDetails.WithdrawalReasonCode;
+            var expectedStopDate = new DateTime(withdrawalDate.Year, withdrawalDate.Month, 1).Date;     // commitments always normalises stop date to the first day of the month
+            List<string> result = new List<string>();
+
+            var actualPaymentStatus = await DbRetryPolicy(
+                getValue: async () =>
+                {
+                    result = await commitmentsDbSqlHelper.GetValuesFromApprenticeshipTable("paymentstatus, stopdate, WithdrawnReasonCode, MadeRedundant", apprenticeshipId);  
+
+                    return (result as IEnumerable<string[]>)?.FirstOrDefault()[0];
+                },
+                expectedValue: 3,
+                dbName: "CommitmentsDb"
+            );
+
+            Assert.That(result[0], Is.EqualTo("3"), $"Expected payment status '3' but found '{actualPaymentStatus}'");
+            Assert.That(DateTime.Parse(result[1]).Date, Is.EqualTo(expectedStopDate), $"Expected stop date '{expectedStopDate}' but found '{DateTime.Parse(result[1]).Date}'");
+            Assert.That(result[2], Is.EqualTo(withdrawalReasonCode.ToString()), $"Expected WithdrawnReasonCode '{withdrawalReasonCode}' but found '{result[2]}'");
+            Assert.That(result[3], Is.EqualTo("True"), $"Expected MadeRedundant 'True' but found '{result[3]}'");
+        }
+
+        [Then(@"^Commitments db is updated with the correct Freeze Payments Reason and Date for ""(.*)"" status")]
+        public async Task ThenCommitmentsDbIsUpdatedWithTheCorrectFreezePaymentsReasonAndDateForStatus(string status)
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
+            var uln = apprenticeship.ApprenticeDetails.ULN;
+            var expectedPaymentFreezeDate = (status == "Paused") ? DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) : "";
+            string expectedFreezePaymentsReason = (status == "Paused") ? "1" : "";            
+            List<string> result = new List<string>();
+
+            var actualPaymentStatus = await DbRetryPolicy(
+                getValue: async () =>
+                {
+                    result = await commitmentsDbSqlHelper.GetValuesFromApprenticeshipTable("Paymentstatus, PaymentFreezeDate, FreezePaymentsReason", apprenticeshipId);
+
+                    return (result as IEnumerable<string[]>)?.FirstOrDefault()[0];
+                },
+                expectedValue: 1,
+                dbName: "CommitmentsDb"
+            );
+
+
+            var actualPaymentFreezeDate = (result[1].Length < 1)? "": DateTime.Parse(result[1]).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            Assert.That(result[0], Is.EqualTo("1"), $"Expected payment status '1' but found '{actualPaymentStatus}'");            
+            Assert.That(actualPaymentFreezeDate, Is.EqualTo(expectedPaymentFreezeDate), $"Expected payment freeze date '{expectedPaymentFreezeDate}' but found '{actualPaymentFreezeDate}'");
+            Assert.That(result[2], Is.EqualTo(expectedFreezePaymentsReason), $"Expected FreezePaymentsReason '{expectedFreezePaymentsReason}' but found '{result[2]}'");            
+        }
+
 
         internal async Task FindAvailableLearner()
         {
@@ -213,7 +281,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             return apprenticeship;
         }
 
-        private async Task FindEditableApprenticeFromDbAndSaveItInContext(EmployerType employerType, string additionalWhereFilter, string ukprn = null)
+        private async Task FindApprenticeFromDbAndSaveItInTheContext(EmployerType employerType, string additionalWhereFilter, string ukprn = null)
         {
             var providerConfig = context.GetProviderConfig<ProviderConfig>();
             Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortObject(employerType, providerConfig);
@@ -222,18 +290,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
         }
 
-        private AsyncRetryPolicy<string> DbRetryPolicy(string value, string dbName)
+        private async Task<string> DbRetryPolicy(Func<Task<string>> getValue, int expectedValue, string dbName)
         {
-            return Policy
-                .HandleResult<string>(result => string.IsNullOrEmpty(result)) // Retry if result is null or empty  
+            var policy = Policy<string>
+                .Handle<Exception>()
+                .OrResult(result => (expectedValue > 0) ? result != expectedValue.ToString() : string.IsNullOrEmpty(result))
                 .WaitAndRetryAsync(
                     retryCount: 5,
                     sleepDurationProvider: attempt => TimeSpan.FromSeconds(1),
                     onRetry: (result, timeSpan, retryCount, context) =>
                     {
                         objectContext.SetDebugInformation(
-                            $"Retry {retryCount} - {value} not found in {dbName}. Waiting {timeSpan.TotalSeconds}s before next attempt.");
+                            $"Retry {retryCount} - Expected '{expectedValue}' but got '{result.Result}' from {dbName}. " +
+                            $"Waiting {timeSpan.TotalSeconds}s before next attempt.");
                     });
+
+            return await policy.ExecuteAsync(getValue);
         }
 
     }

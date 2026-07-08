@@ -1,6 +1,4 @@
-﻿using Azure;
-using Reqnroll.Assist;
-using SFA.DAS.Approvals.UITests.Project.Helpers;
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
@@ -365,8 +363,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
         }
 
-
-
+        
     }
     public class OltdDetails
     {

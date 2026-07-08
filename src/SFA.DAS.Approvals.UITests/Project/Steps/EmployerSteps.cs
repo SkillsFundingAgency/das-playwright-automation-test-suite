@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.VisualBasic;
+﻿using Microsoft.VisualBasic;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
@@ -8,7 +7,6 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages.InterimPages;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -86,7 +84,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-
         [When(@"Employer tries to edit live apprentice record by setting age lower than (.*)")]
         public async Task WhenEmployerTriesToEditLiveApprenticeRecordBySettingAgeLowerThan(int lowerAgeLimit)
         {
@@ -133,6 +130,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new EmployerApproveLearnerDetailsPage(context).EmployerApproveCohort();
         }
 
+
         [Then("^Add The employer can follow the link from dynamicHomePage to view live apprentice details$")]
         public async Task ThenTheNLEmployerViewLIveApprenticeFromDynamicHomePage()
         {
@@ -142,6 +140,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await employerStepsHelper.GoToLiveApprenticeshipPageFromDynamicHomePage();
             await new LearnerDetailsPage(context, name).EmployerVerifyApprenticeStatusAndDetails(ApprenticeshipStatus.Live, "Learner confirmation", "Unconfirmed");
         }
+
 
         [When ("the Employer approves the cohort and sends to provider")]
         public async Task ThenTheEmployerApprovesCohort()
@@ -188,24 +187,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheEmployerIsBlockedToCreateNewReservations()
         {
             await employerStepsHelper.EmployerTriesToCreateReservation();
-        }
+        }        
 
-
-        [Then("^the apprenticeship is marked as Completed$")]
-        public async Task ThenTheApprenticeshipIsMarkedAsCompleted()
-        {
-            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
-            var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
-            var page1 = await page.OpenFirstItemFromTheList(apprenticeship.ApprenticeDetails.FullName);
-            await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Completed, "Completion payment month", DateTime.Now);
-            await page1.AssertRecordIsReadOnlyExceptEndDate();
-        }
 
         [When("^The nonlevyemployer follows the link from dynamicHomePage to create a new reservation$")]
         public async Task WhenTheNonLevyEmployerReservesFundingFromReservedPanel()
         {            
             await employerStepsHelper.EmployerTriesToCreateReservationOnDynamicHomepage();
         }
+
 
         [Then("^The nonlevyemployer follows the link from dynamicHomePage to create a cohort and send it to the training Provider$")]
         public async Task WhenTheNonLevyEmployerSendCohortToProvider()
@@ -216,11 +206,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await employerStepsHelper.AddEmptyCohortFromNonLevyReserveFundsAddApprenticePage();
         }
 
+
         [Given(@"Employer creates a reservation with GSO standard and tries to add a learner to the reservation")]
         public async Task GivenEmployerCreatesAReservationWithGSOStandardAndTriesToAddALearnerToTheReservation()
         {
             await employerStepsHelper.EmployerCreatesReservationAndAddsApprentice();
         }
+
 
         [Then(@"the Employer is blocked with error message")]
         public async Task ThenTheEmployerIsBlockedWithErrorMessage()
@@ -230,6 +222,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var employerSelectRoutePage = new HowWouldYouLikeToAddLearnersPage(context);
             await employerSelectRoutePage.VerifyErrorMessage(new[] { errorMsg1, errorMsg2 });
         }
+
 
         [When(@"Employer sends an empty cohort to the provider")]
         public async Task WhenEmployerSendsAnEmptyCohortToTheProvider()

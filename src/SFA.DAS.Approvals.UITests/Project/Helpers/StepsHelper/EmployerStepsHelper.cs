@@ -246,5 +246,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page10 = await page9.ClickConfirmButton();
             return await page10.SelectOptionGoToHomePage();
         }
+
+        internal async Task<LearnerDetailsPage> EmployerPausePayments(LearnerDetailsPage learnerDetailsPage, Apprenticeship apprenticeship)
+        {
+            var page = await learnerDetailsPage.ClickOnPausePaymentsLink();
+            var page1 = await page.VerifyDetailsAndPauseRecord(apprenticeship);
+            await page1.ClickViewLearnerDetailLink();
+            return learnerDetailsPage;
+        }
+
+        internal async Task<LearnerDetailsPage> EmployerResumePayments(LearnerDetailsPage learnerDetailsPage, Apprenticeship apprenticeship)
+        {
+            var page = await learnerDetailsPage.ClickOnResumePaymentsLink();
+            var page1 = await page.VerifyDetailsAndResumeRecord(apprenticeship);
+            await page1.ClickViewLearnerDetailLink();
+            return learnerDetailsPage;
+        }
+
+
     }
 }
