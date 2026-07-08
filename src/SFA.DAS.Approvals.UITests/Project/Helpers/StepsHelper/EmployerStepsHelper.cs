@@ -52,7 +52,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return new HomePage(context);
         }
 
-        internal async Task<EmployerApproveApprenticeDetailsPage> OpenCohort(bool validateCohortDetails = true)
+        internal async Task<EmployerApproveLearnerDetailsPage> OpenCohort(bool validateCohortDetails = true)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
@@ -72,7 +72,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return page1;
         }
 
-        internal async Task<EmployerApproveApprenticeDetailsPage> OpenAnyDraftCohort()
+        internal async Task<EmployerApproveLearnerDetailsPage> OpenAnyDraftCohort()
         {
             await EmployerLogInToEmployerPortal();
             await new InterimLearnersHomePage(context, false).VerifyPage();

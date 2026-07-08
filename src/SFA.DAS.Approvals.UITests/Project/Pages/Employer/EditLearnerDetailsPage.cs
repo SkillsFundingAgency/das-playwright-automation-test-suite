@@ -37,20 +37,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await page.GetByRole(AriaRole.Link, new() { Name = "Cancel and return" }).ClickAsync();            
         }
 
-        internal async Task<EmployerApproveApprenticeDetailsPage> NoRecognitionOfPriorLearning()
+        internal async Task<EmployerApproveLearnerDetailsPage> NoRecognitionOfPriorLearning()
         {
             await Assertions.Expect(page.Locator("dd")).ToContainTextAsync("This apprentice has no recognised prior learning");
             await page.Locator("#continue-button").ClickAsync();
-            return await VerifyPageAsync(() => new EmployerApproveApprenticeDetailsPage(context));
+            return await VerifyPageAsync(() => new EmployerApproveLearnerDetailsPage(context));
         }
 
-        internal async Task<EmployerApproveApprenticeDetailsPage> RecognitionOfPriorLearning(Apprenticeship apprenticeship)
+        internal async Task<EmployerApproveLearnerDetailsPage> RecognitionOfPriorLearning(Apprenticeship apprenticeship)
         {
 
             await new CommonStepsHelper(context).VerifyText(priceReduced, apprenticeship.RPLDetails.DurationReducedBy.ToString());
 
             await page.Locator("#continue-button").ClickAsync();
-            return await VerifyPageAsync(() => new EmployerApproveApprenticeDetailsPage(context));
+            return await VerifyPageAsync(() => new EmployerApproveLearnerDetailsPage(context));
         }
     }
 }

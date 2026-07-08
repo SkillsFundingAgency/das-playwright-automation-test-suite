@@ -74,11 +74,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then(@"display the ""([^""]*)"" as per table below")]
         public async Task ThenDisplayTheAsPerTableBelow(bool warningMessage)
         {
-            var page = new EmployerApproveApprenticeDetailsPage(context);
+            var page = new EmployerApproveLearnerDetailsPage(context);
 
             if (warningMessage)
             {
-                var warningMsg = "! Warning One or more of your apprenticeships have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
+                var warningMsg = "! Warning One or more of your learners have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
                 await page.ValidateWarningMessageForFoundationCourses(warningMsg);
             }            
 
@@ -130,7 +130,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheEmployerReviewsCohortApproveFromDynamicHomePage()
         {
             await employerStepsHelper.ReadyForReviewOnDynamicHomePage("Ready for approval");
-            await new EmployerApproveApprenticeDetailsPage(context).EmployerApproveCohort();
+            await new EmployerApproveLearnerDetailsPage(context).EmployerApproveCohort();
         }
 
         [Then("^Add The employer can follow the link from dynamicHomePage to view live apprentice details$")]
@@ -146,7 +146,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When ("the Employer approves the cohort and sends to provider")]
         public async Task ThenTheEmployerApprovesCohort()
         {
-            var page = new EmployerApproveApprenticeDetailsPage(context);
+            var page = new EmployerApproveLearnerDetailsPage(context);
             await page.EmployerApproveCohort();
         }
 
@@ -155,7 +155,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheEmployerVerifyRPLDetails()
         {
            var apprenticeships = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-           var page = new EmployerApproveApprenticeDetailsPage(context);
+           var page = new EmployerApproveLearnerDetailsPage(context);
            await page.VerifyRPLDetails(apprenticeships);
         }
 
@@ -180,7 +180,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("^the Employer is blocked with a shutter page for existing cohort$")]
         public async Task ThenTheEmployerIsBlockedWithAShutterPageForExistingCohort()
         {
-            await new EmployerApproveApprenticeDetailsPage(context).TryClickAddAnotherApprenticeLink();
+            await new EmployerApproveLearnerDetailsPage(context).TryClickAddAnotherApprenticeLink();
         }
 
 

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class EmployerApproveApprenticeDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class EmployerApproveLearnerDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator organisation => page.Locator("dt:has-text('Organisation') + dd");
@@ -24,7 +24,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         public override async Task VerifyPage()
         {
             var headerText = await page.Locator("h1").TextContentAsync();
-            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Approve apprentice details|Approve 2 apprentices' details"));
+            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Check and approve learner details|Check and approve 2 learners' details"));
         }
 
         internal async Task VerifyCohort(Apprenticeship apprenticeship)
@@ -69,12 +69,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             }           
         }
 
-        internal async Task<ApprenticeRequestsPage> TryClickAddAnotherApprenticeLink()
+        internal async Task<LearnerRequestsPage> TryClickAddAnotherApprenticeLink()
         {
             await addAnotherApprenticeLink.ClickAsync();
             var page = await VerifyPageAsync(() => new YouCannotCreateAnotherFundingReservationPage(context));
             await page.ClickOnApprenticeRequestsLink();
-            return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
+            return await VerifyPageAsync(() => new LearnerRequestsPage(context));
         }
     }
 }
