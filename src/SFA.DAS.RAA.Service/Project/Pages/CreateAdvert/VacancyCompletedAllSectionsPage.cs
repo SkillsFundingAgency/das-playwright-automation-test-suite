@@ -4,7 +4,6 @@ public class VacancyCompletedAllSectionsPage(ScenarioContext context) : PreviewY
 {
     public override async Task VerifyPage()
     {
-        bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
         if (isRaaEpc)
         {
             await Assertions.Expect(page).ToHaveURLAsync(new Regex(@"check-(answers|your-answers)"), new PageAssertionsToHaveURLOptions { IgnoreCase = true, Timeout = 20000 });
@@ -56,7 +55,6 @@ public class AreYouSureYouWantToSubmitPage(ScenarioContext context) : RaaBasePag
 {
     public override async Task VerifyPage()
     {
-        bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
         string pageTitle;
         if(isRaaEpc)
         {
@@ -91,7 +89,6 @@ public class AreYouSureYouWantToSubmitPage(ScenarioContext context) : RaaBasePag
 
 public class AreYouSureYouWantToRejectPage(ScenarioContext context) : RaaBasePage(context)
 {
-    bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
     public override async Task VerifyPage()
     {
         string pageTitle;

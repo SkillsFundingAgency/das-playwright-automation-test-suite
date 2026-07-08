@@ -4,7 +4,12 @@ public partial class CreateAnApprenticeshipAdvertOrVacancyPage(ScenarioContext c
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "Create an apprenticeship advert" : "Create an apprenticeship vacancy";
+        string PageTitle = (isRaaEmployer, isRaaProvider) switch
+        {
+            (true, true) => "Create an apprenticeship",
+            (true, false) => "Create an apprenticeship advert",
+            _ => "Create an apprenticeship vacancy"
+        };
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }

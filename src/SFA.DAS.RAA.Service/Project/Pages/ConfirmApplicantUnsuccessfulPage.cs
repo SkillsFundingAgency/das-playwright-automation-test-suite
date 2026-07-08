@@ -105,7 +105,8 @@ public abstract class ApplicationOutcomeBasePage(ScenarioContext context, string
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = context.ScenarioInfo.Tags.Contains("raaemployer")
+        bool isEmpPage = page.Url.Contains("eas.apprenticeships");
+        string PageTitle = isEmpPage
             ? $"application has been marked as {message}"
             :$"Application made {message}";
         

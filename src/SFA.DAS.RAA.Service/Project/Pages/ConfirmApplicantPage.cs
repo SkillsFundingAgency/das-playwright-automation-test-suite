@@ -6,7 +6,6 @@ public abstract class ConfirmApplicantPage(ScenarioContext context, string statu
 {
     public override async Task VerifyPage()
     {
-        bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
         string PageTitle = isRaaEpc ? "You want to interview applicant" : $"{rAADataHelper.CandidateFullName}'s application status changed to '{status}'.";
 
         await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);

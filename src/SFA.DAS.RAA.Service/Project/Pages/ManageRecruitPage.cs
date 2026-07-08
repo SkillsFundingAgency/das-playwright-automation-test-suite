@@ -6,7 +6,8 @@ public class ManageRecruitPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "Manage Advert" : "Manage vacancy";
+        bool isEmpPage = page.Url.Contains("eas.apprenticeships");
+        string PageTitle = isEmpPage ? "Manage Advert" : "Manage vacancy";
 
         await Assertions.Expect(page.Locator("#vacancy-header")).ToContainTextAsync(PageTitle);
     }

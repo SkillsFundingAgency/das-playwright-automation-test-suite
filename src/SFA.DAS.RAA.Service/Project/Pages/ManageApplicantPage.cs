@@ -99,7 +99,6 @@ public class ManageApplicantPage(ScenarioContext context) : RaaBasePage(context)
 
     public async Task<ConfirmApplicantUnsuccessfulPage> MakeApplicantUnsucessful()
     {
-        bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
         await page.GetByRole(AriaRole.Radio, new() { Name = "Make unsuccessful and give" }).CheckAsync();
 
         await SaveAndContinue();

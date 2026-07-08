@@ -47,7 +47,6 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
     public async Task<ManageRecruitPage> GoToVacancyManagePage()
     {
-        bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
         string linkText = isRaaEpc ? "Review" : "Manage";
         await page.GetByRole(AriaRole.Link, new() { Name = linkText}).First.ClickAsync();
 
