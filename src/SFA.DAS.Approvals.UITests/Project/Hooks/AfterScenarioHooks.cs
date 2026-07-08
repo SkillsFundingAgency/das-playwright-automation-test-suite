@@ -49,7 +49,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
             CommitmentsDbSqlHelper commitmentsDbSqlHelper = _context.Get<CommitmentsDbSqlHelper>();
             var apprenticeships = _context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var apprenticeshipId = apprenticeships.ApprenticeDetails.ApprenticeshipId;
-            //await commitmentsDbSqlHelper.ResetPaymentStatus(apprenticeshipId);
             _objectContext.SetDebugInformation($"AfterScenario: Reset PaymentStatus to 1 for apprenticeshipId: {apprenticeshipId}");
         }
 
