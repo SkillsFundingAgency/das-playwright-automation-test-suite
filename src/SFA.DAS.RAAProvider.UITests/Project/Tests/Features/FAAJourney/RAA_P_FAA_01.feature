@@ -10,4 +10,4 @@ Scenario: RAA_P_FAA_01 - Submit An Application And Withdraw Application
 	When the Applicant can apply for a Vacancy in FAA
 	Then the Applicant can withdraw the application
 	And Provider can see the withdrawn application
-	And the 'applicant' receives 'withdrawn application' email notification
+	And the 'applicant' receive 'withdrawn application' email notification

@@ -104,7 +104,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
 
             case ("withdrawn application", "applicant"):
                 emailText = "You've withdrawn your application for:";
-                subject = $"Application withdrawn: {vacancyTitleDataHelper.VacancyTitle}";
+                subject = $"Application withdrawn: {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                 userEmail = GetApplicantEmail();
                 break;
 
