@@ -85,7 +85,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
                 break;
 
             case ("new application", "applicant"):
-                emailText = "We've received your application for:";
+                emailText = "We’ve received your application for:";
                 subject = $"Application submitted: {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                 userEmail = GetApplicantEmail();
                 break;

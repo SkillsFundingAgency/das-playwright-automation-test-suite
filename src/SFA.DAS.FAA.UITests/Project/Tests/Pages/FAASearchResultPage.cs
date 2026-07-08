@@ -24,7 +24,7 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
 
         await page.GetByRole(AriaRole.Link, new() { Name = "Saved vacancies" }).ClickAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Apply now" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply now" }).First.ClickAsync();
 
         return await VerifyPageAsync(() => new FAA_ApplicationOverviewPage(context));
     }

@@ -32,7 +32,7 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
             await CheckFoundationTag();
         }
 
-        if(isRaaEpc || isRaaProvider)
+        if(page.Url.Contains("pas.apprenticeships"))
         {
             await page.Locator("button[data-automation='continue-button']").ClickAsync(); 
         }
