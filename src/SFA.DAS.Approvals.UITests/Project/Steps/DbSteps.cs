@@ -10,6 +10,7 @@ using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
+using System.Globalization;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -221,7 +222,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
             var uln = apprenticeship.ApprenticeDetails.ULN;
-            var expectedPaymentFreezeDate = (status == "Paused") ? DateTime.Now.ToString("dd/MM/yyyy") : "";
+            var expectedPaymentFreezeDate = (status == "Paused") ? DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) : "";
             string expectedFreezePaymentsReason = (status == "Paused") ? "1" : "";            
             List<string> result = new List<string>();
 
@@ -237,7 +238,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             );
 
 
-            var actualPaymentFreezeDate = (result[1].Length > 0)? result[1].Substring(0, 10): "";
+            var actualPaymentFreezeDate = (result[1].Length < 1)? "": DateTime.Parse(result[1]).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
 
             Assert.That(result[0], Is.EqualTo("1"), $"Expected payment status '1' but found '{actualPaymentStatus}'");            
             Assert.That(actualPaymentFreezeDate, Is.EqualTo(expectedPaymentFreezeDate), $"Expected payment freeze date '{expectedPaymentFreezeDate}' but found '{actualPaymentFreezeDate}'");
