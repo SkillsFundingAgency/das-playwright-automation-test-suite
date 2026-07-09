@@ -1,0 +1,56 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Migration Agent",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-migration-agent",
+            "program": "${workspaceFolder}/src/SFA.DAS.SeleniumToPlaywrightMigration/bin/Debug/net10.0/SFA.DAS.SeleniumToPlaywrightMigration.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/SFA.DAS.SeleniumToPlaywrightMigration",
+            "stopAtEntry": false,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "env": {
+                "DOTNET_ENVIRONMENT": "Development"
+            }
+        },
+        {
+            "name": "Debug Migration Agent",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-migration-agent",
+            "program": "${workspaceFolder}/src/SFA.DAS.SeleniumToPlaywrightMigration/bin/Debug/net10.0/SFA.DAS.SeleniumToPlaywrightMigration.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/SFA.DAS.SeleniumToPlaywrightMigration",
+            "stopAtEntry": false,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "env": {
+                "DOTNET_ENVIRONMENT": "Development"
+            },
+            "sourceLanguage": "csharp"
+        },
+        {
+            "name": "Run Full Solution (Debug)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-solution-debug",
+            "program": "${workspaceFolder}/src/SFA.DAS.TestAutomation.sln",
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Migration Agent + Tests",
+            "configurations": [
+                "Run Migration Agent",
+                "Run Full Solution (Debug)"
+            ]
+        }
+    ]
+}

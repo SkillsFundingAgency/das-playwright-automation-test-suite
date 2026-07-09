@@ -1,0 +1,251 @@
+# Agent Configuration for Selenium to Playwright Migration Agent
+# Compatible with Microsoft Foundry deployment
+
+## Basic Configuration
+name: selenium-to-playwright-migration
+version: "1.0.0"
+description: "AI-powered agent for migrating Selenium C# test projects to Playwright with Reqnroll"
+
+## Agent Purpose & Capabilities
+capabilities:
+  - name: Project Analysis
+    description: "Scan and analyze Selenium test projects for migration complexity"
+  - name: Pattern Detection
+    description: "Identify Selenium patterns and map to Playwright equivalents"
+  - name: Code Generation
+    description: "Generate Playwright C# code templates and configurations"
+  - name: Migration Planning
+    description: "Create phased migration roadmaps and execution strategies"
+  - name: Best Practices Guidance
+    description: "Provide migration patterns and Playwright best practices"
+
+## Model Configuration
+models:
+  primary:
+    name: "Qwen"
+    role: "Code Analysis & Pattern Recognition"
+    purpose: "Analyze existing Selenium codebases and identify patterns"
+    configuration:
+      temperature: 0.3
+      max_tokens: 2000
+      top_p: 0.9
+    use_cases:
+      - "Project complexity assessment"
+      - "Selenium pattern detection"
+      - "Risk identification"
+      - "Effort estimation"
+  
+  secondary:
+    name: "GPT Mini (gpt-4o-mini)"
+    role: "Code Generation & Documentation"
+    purpose: "Generate production-ready Playwright C# code and templates"
+    configuration:
+      temperature: 0.5
+      max_tokens: 4000
+      top_p: 0.95
+    use_cases:
+      - "Generate .csproj files"
+      - "Create reqnroll.json configurations"
+      - "Produce Playwright hooks"
+      - "Generate step definition templates"
+      - "Create migration documentation"
+
+## Framework & Dependencies
+framework:
+  runtime: "dotnet_10"
+  target_framework: "net10.0"
+  base_framework: "SFA.DAS.Framework"
+  
+dependencies:
+  - package: "Microsoft.Agents.Sdk"
+    version: "1.0.0"
+  - package: "Azure.AI.Inference"
+    version: "0.2.0"
+  - package: "System.CommandLine"
+    version: "2.0.0-beta4.24425.7"
+  - package: "Microsoft.Playwright"
+    version: "1.48.0"
+  - package: "Reqnroll"
+    version: "3.3.4"
+
+## Input Specifications
+inputs:
+  workspace_root:
+    type: "string"
+    description: "Root path of workspace containing test projects"
+    required: true
+    default: "c:\\repos\\das-playwright-automation-test-suite"
+  
+  projects_path:
+    type: "string"
+    description: "Relative path to projects directory"
+    required: false
+    default: "src"
+  
+  analysis_depth:
+    type: "enum"
+    enum_values: ["quick", "standard", "detailed"]
+    description: "Depth of analysis - quick (patterns), standard (patterns+complexity), detailed (full assessment)"
+    required: false
+    default: "standard"
+
+## Output Specifications
+outputs:
+  analysis_report:
+    type: "object"
+    description: "Complete analysis with pattern detection and complexity assessment"
+  
+  migration_plans:
+    type: "array"
+    description: "Phased migration plans per project"
+  
+  code_templates:
+    type: "object"
+    description: "Generated .csproj, hooks, and configuration files"
+  
+  recommendations:
+    type: "object"
+    description: "Migration strategy, phasing, and best practices"
+
+## Workflow Steps
+workflow:
+  - step: 1
+    name: "Project Scanning"
+    description: "Scan workspace and identify test projects"
+    agent_capability: "Project Analysis"
+    output: "Project inventory"
+  
+  - step: 2
+    name: "Pattern Detection"
+    description: "Analyze projects for Selenium patterns using Qwen"
+    agent_capability: "Pattern Detection"
+    model_used: "Qwen"
+    output: "Pattern inventory per project"
+  
+  - step: 3
+    name: "Complexity Assessment"
+    description: "Assess migration complexity and risk using Qwen analysis"
+    agent_capability: "Project Analysis"
+    model_used: "Qwen"
+    output: "Complexity ratings and risk assessment"
+  
+  - step: 4
+    name: "Migration Planning"
+    description: "Generate migration plans and sequencing"
+    agent_capability: "Migration Planning"
+    output: "Phased migration roadmap"
+  
+  - step: 5
+    name: "Code Generation"
+    description: "Generate Playwright templates using GPT Mini"
+    agent_capability: "Code Generation"
+    model_used: "GPT Mini"
+    output: "Generated .csproj, hooks, step templates"
+  
+  - step: 6
+    name: "Documentation"
+    description: "Create migration guides and best practices"
+    agent_capability: "Best Practices Guidance"
+    model_used: "GPT Mini"
+    output: "Comprehensive migration guide and README files"
+
+## Environment Variables (for Foundry deployment)
+environment_variables:
+  AZURE_AI_PROJECT_ENDPOINT:
+    description: "Azure AI Foundry project endpoint"
+    required: true
+  
+  AZURE_AI_MODEL_DEPLOYMENT_NAME_QWEN:
+    description: "Qwen model deployment name"
+    required: true
+    default: "qwen-model"
+  
+  AZURE_AI_MODEL_DEPLOYMENT_NAME_GPT_MINI:
+    description: "GPT Mini model deployment name"
+    required: true
+    default: "gpt-4o-mini"
+  
+  AZURE_SUBSCRIPTION_ID:
+    description: "Azure subscription ID"
+    required: true
+  
+  AZURE_RESOURCE_GROUP:
+    description: "Azure resource group name"
+    required: true
+
+## Logging & Monitoring
+logging:
+  level: "Information"
+  file: "migration-agent.log"
+  verbose_output: false
+  include_model_traces: true
+
+## Evaluation Configuration (for Foundry)
+evaluation:
+  enabled: true
+  metrics:
+    - name: "analysis_accuracy"
+      description: "Accuracy of complexity assessment vs actual effort"
+    - name: "code_quality"
+      description: "Quality of generated code (compilability, test compatibility)"
+    - name: "documentation_quality"
+      description: "Clarity and completeness of generated documentation"
+  
+  trace_collection:
+    enabled: true
+    include_model_outputs: true
+    capture_patterns: ["qwen_analysis", "gpt_mini_generation", "migration_plan"]
+
+## Deployment Options
+deployment:
+  mode: "code"  # No containerization needed
+  target: "console"  # Can be extended to hosted agent
+  scalability: "single"  # Single execution per run
+  
+  hosted_deployment:
+    available: true
+    entry_point: "Program.cs"
+    runtime: "dotnet_10"
+    
+    azure_resources:
+      - type: "cognitiveservices"
+        name: "foundry-account"
+      - type: "search"
+        name: "ai-search-index" # optional for knowledge base
+      - type: "appinsights"
+        name: "monitoring"
+
+## Customization & Extension Points
+extensibility:
+  custom_patterns: "Extend PatternDetector.cs with project-specific patterns"
+  custom_analysis: "Add domain-specific complexity metrics"
+  custom_templates: "Add project-type-specific code generation"
+  model_prompts: "Modify MigrationRecommendations class for prompt tuning"
+
+## Related Resources
+resources:
+  framework_documentation: "src/SFA.DAS.Framework/README.md"
+  template_project: "src/SFA.DAS.Campaigns.UITests"
+  reference_implementation: "src/SFA.DAS.Apar.UITests"
+  playwright_docs: "https://playwright.dev/dotnet/"
+  reqnroll_docs: "https://reqnroll.net/"
+
+## Version & Status
+metadata:
+  created_date: "2026-01-09"
+  last_updated: "2026-01-09"
+  version: "1.0.0"
+  status: "Production"
+  maintainer: "DAS Test Automation Team"
+  
+## License
+license: "MIT"
+
+## Notes
+notes: |
+  - This agent is designed for C# .NET 10 environments with Playwright and Reqnroll
+  - Qwen provides deep code analysis and pattern recognition
+  - GPT Mini provides efficient code generation and documentation
+  - Compatible with Microsoft Foundry for deployment and optimization
+  - Can be deployed locally or as a hosted agent in Azure
+  - Supports continuous evaluation and prompt optimization through Foundry

@@ -1,0 +1,163 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-migration-agent",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/SFA.DAS.SeleniumToPlaywrightMigration/SFA.DAS.SeleniumToPlaywrightMigration.csproj",
+                "--configuration",
+                "Debug"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "build-solution-debug",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/SFA.DAS.TestAutomation.sln",
+                "--configuration",
+                "Debug"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "build-solution-release",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/SFA.DAS.TestAutomation.sln",
+                "--configuration",
+                "Release"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "run-migration-agent",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "run",
+                "--project",
+                "${workspaceFolder}/src/SFA.DAS.SeleniumToPlaywrightMigration/SFA.DAS.SeleniumToPlaywrightMigration.csproj",
+                "--configuration",
+                "Debug"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "run-migration-agent-release",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "run",
+                "--project",
+                "${workspaceFolder}/src/SFA.DAS.SeleniumToPlaywrightMigration/SFA.DAS.SeleniumToPlaywrightMigration.csproj",
+                "--configuration",
+                "Release",
+                "--no-build"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "clean-migration-agent",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean",
+                "${workspaceFolder}/src/SFA.DAS.SeleniumToPlaywrightMigration/SFA.DAS.SeleniumToPlaywrightMigration.csproj"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "restore-solution",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "restore",
+                "${workspaceFolder}/src/SFA.DAS.TestAutomation.sln"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            }
+        },
+        {
+            "label": "test-migration-agent",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/src/SFA.DAS.SeleniumToPlaywrightMigration/SFA.DAS.SeleniumToPlaywrightMigration.csproj",
+                "--configuration",
+                "Debug",
+                "--logger",
+                "console;verbosity=detailed"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "publish-migration-agent",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/src/SFA.DAS.SeleniumToPlaywrightMigration/SFA.DAS.SeleniumToPlaywrightMigration.csproj",
+                "-c",
+                "Release",
+                "-o",
+                "${workspaceFolder}/dist/migration-agent"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "dotnet-watch-migration-agent",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "--project",
+                "${workspaceFolder}/src/SFA.DAS.SeleniumToPlaywrightMigration/SFA.DAS.SeleniumToPlaywrightMigration.csproj",
+                "run"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "isBackground": true
+        }
+    ]
+}

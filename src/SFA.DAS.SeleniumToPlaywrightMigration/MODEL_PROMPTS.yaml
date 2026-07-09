@@ -1,0 +1,206 @@
+# Model Prompt Templates for Migration Agent
+# These prompts are used by Qwen and GPT Mini models
+
+## Qwen - Pattern Analysis Prompt
+QWEN_PATTERN_ANALYSIS: |
+  You are a C# test automation expert specializing in Selenium to Playwright migrations.
+  
+  Analyze this C# test project for migration to Playwright:
+  
+  Project Name: {ProjectName}
+  Project Type: {ProjectType}
+  Test Count: {TestCount}
+  Page Objects: {PageObjectCount}
+  Feature Files: {FeatureFileCount}
+  Current Dependencies: {Dependencies}
+  
+  Your analysis should cover:
+  1. **Selenium Patterns Identified**: List specific Selenium patterns found (FindElement, WebDriverWait, SendKeys, etc.)
+  2. **Complexity Assessment**: Rate overall migration complexity (Low/Medium/High) with justification
+  3. **Risk Identification**: Identify specific risks and challenges
+  4. **Critical Transformation Areas**: Highlight the most critical areas requiring refactoring
+  5. **Recommended Approach**: Suggest migration strategy (parallel refactoring, phased approach, etc.)
+  6. **Estimated Effort**: Provide effort estimate with breakdown by area
+  7. **Success Criteria**: Define measurable success criteria for migration
+  
+  Focus on actionable insights and specific code-level recommendations.
+
+## Qwen - Complexity Assessment Prompt
+QWEN_COMPLEXITY_ASSESSMENT: |
+  Evaluate the migration complexity for this Selenium C# test project:
+  
+  Project: {ProjectName}
+  Test Architecture: {Architecture}
+  Locator Count: {LocatorCount}
+  Wait Strategy Complexity: {WaitComplexity}
+  Custom Utilities: {UtilityCount}
+  
+  Provide a complexity score (1-10) with detailed reasoning for:
+  1. **Locator Complexity**: How complex are the current locator strategies?
+  2. **Wait Strategy Complexity**: How complex are wait implementations?
+  3. **Page Object Hierarchy**: Is the PO structure deep or wide?
+  4. **Test Data Dependencies**: How tightly coupled are tests to data?
+  5. **Custom Framework Extensions**: How many custom utilities need migration?
+  6. **Parallel Execution**: How easily can tests be parallelized?
+  7. **Overall Verdict**: Provide final complexity rating and why
+  
+  Output format should be JSON with structured scoring.
+
+## GPT Mini - Project File Generation Prompt
+GPT_MINI_CSPROJ_GENERATION: |
+  Generate a complete .csproj file for a Playwright + Reqnroll C# project.
+  
+  Project Information:
+  - Name: {ProjectName}
+  - Namespace: SFA.DAS.{ProjectName}
+  - Target Framework: net10.0
+  - Test Type: {TestType} (UITests/APITests)
+  - Dependencies to Include: Microsoft.Playwright, Reqnroll.NUnit, Microsoft.NET.Test.Sdk
+  
+  Requirements:
+  1. Include proper project structure for Reqnroll BDD tests
+  2. Reference SFA.DAS.Framework as a project dependency
+  3. Add NUnit3TestAdapter for test discovery
+  4. Include Playwright and Reqnroll packages at specified versions
+  5. Set up proper namespace and root namespace
+  6. Include content items if needed (Sample.pdf for file upload tests)
+  7. Add any project-specific configurations
+  
+  Output: Valid .csproj XML with all required elements.
+
+## GPT Mini - Hooks Implementation Prompt
+GPT_MINI_HOOKS_GENERATION: |
+  Generate a complete PlaywrightHooks.cs class for Playwright + Reqnroll tests.
+  
+  Context:
+  - Project Name: {ProjectName}
+  - Namespace: SFA.DAS.{ProjectName}.Project.Hooks
+  - Base Framework: SFA.DAS.Framework (provides Driver class)
+  - Test Type: {TestType}
+  
+  Requirements:
+  1. Create [Binding] class with dependency injection of ObjectContext
+  2. Implement [BeforeScenario] hook to:
+     - Initialize Playwright browser
+     - Create browser context with appropriate settings
+     - Create page instance
+     - Store Driver in scenario context
+  3. Implement [AfterScenario] hook to:
+     - Close page gracefully
+     - Close browser context
+     - Close browser instance
+  4. Implement [AfterStep] hook to:
+     - Capture screenshot on test failure
+     - Include helpful debugging information
+  5. Handle proper async/await patterns
+  6. Include error handling and logging
+  7. Follow SFA.DAS.Framework patterns and conventions
+  8. Add XML documentation for all public methods
+  
+  Output: Production-ready C# class ready for integration.
+
+## GPT Mini - Step Definition Template Prompt
+GPT_MINI_STEP_TEMPLATE_GENERATION: |
+  Generate step definition templates for Playwright-based BDD tests.
+  
+  Context:
+  - Feature Name: {FeatureName}
+  - Project Namespace: SFA.DAS.{ProjectName}.Project.StepDefinitions
+  - Scenarios Count: {ScenarioCount}
+  - Existing Selenium Steps: {ExistingSteps}
+  
+  Requirements:
+  1. Create [Binding] class for step definitions
+  2. Inject ObjectContext and extract Driver using extensions
+  3. For each step in {ExistingSteps}:
+     - Create method signature with proper [Given]/[When]/[Then] attribute
+     - Include async Task return type
+     - Add parameter placeholders matching step text
+     - Provide stub implementation with TODO comments
+  4. Convert Selenium selectors to Playwright locator strategies:
+     - Prefer GetByRole() and GetByLabel() for accessibility
+     - Use GetByText() for text-based locators
+     - Fall back to Locator() for complex selectors
+  5. Use async/await patterns throughout
+  6. Include XML documentation
+  7. Add comments explaining expected Playwright transformations
+  
+  Output: C# step definition class with all step method stubs.
+
+## GPT Mini - Migration README Generation Prompt
+GPT_MINI_README_GENERATION: |
+  Generate a comprehensive migration guide README for a Selenium to Playwright project.
+  
+  Project Details:
+  - Name: {ProjectName}
+  - Type: {ProjectType}
+  - Test Count: {TestCount}
+  - Complexity: {Complexity}
+  - Key Changes: {KeyChanges}
+  
+  Include Sections:
+  1. **Overview** - Project migration summary and purpose
+  2. **Key Changes** - Detailed list of framework changes (removed/added dependencies)
+  3. **Project Structure** - New folder/file organization for Playwright project
+  4. **Migration Steps** - Numbered, actionable steps to complete migration
+  5. **Configuration Files** - Explanation of reqnroll.json, appsettings, .csproj
+  6. **Framework Patterns** - Key patterns from SFA.DAS.Framework to follow
+  7. **Parallel Test Execution** - How to configure and use parallel execution
+  8. **Running Tests** - Local test execution commands
+  9. **Key Differences** - Table comparing Selenium vs Playwright concepts
+  10. **Troubleshooting** - Common issues and solutions
+  11. **Resources** - Links to documentation
+  12. **Next Steps** - Recommended actions after migration
+  
+  Style: Professional, clear, developer-friendly with code examples.
+  Output: Markdown format ready for GitHub/documentation.
+
+## Model Output Parsing Configuration
+OUTPUT_PARSING:
+  qwen_analysis:
+    format: "structured_text"
+    expected_sections: ["patterns", "complexity", "risks", "recommendations", "effort"]
+    json_fallback: true
+  
+  gpt_mini_code:
+    format: "code_only"
+    language: "csharp"
+    validation: "C# syntax check"
+  
+  gpt_mini_docs:
+    format: "markdown"
+    validation: "markdown syntax check"
+
+## Temperature & Token Settings
+MODEL_SETTINGS:
+  qwen:
+    temperature: 0.3  # Lower for consistency in analysis
+    max_tokens: 2000
+    top_p: 0.9
+    frequency_penalty: 0.0
+    presence_penalty: 0.0
+  
+  gpt_mini:
+    temperature: 0.5  # Balanced for code generation
+    max_tokens: 4000
+    top_p: 0.95
+    frequency_penalty: 0.0
+    presence_penalty: 0.0
+
+## Error Handling & Retry Strategy
+ERROR_HANDLING:
+  retry_count: 3
+  retry_delay_ms: 1000
+  timeout_seconds: 60
+  
+  fallbacks:
+    qwen_failure: "Use pattern templates and manual assessment"
+    gpt_mini_failure: "Use code generation templates"
+
+## Performance Considerations
+PERFORMANCE:
+  batch_analysis_size: 3  # Analyze 3 projects per batch
+  cache_model_responses: true
+  cache_duration_hours: 24
+  parallel_analysis: true
+  max_concurrent_requests: 2
