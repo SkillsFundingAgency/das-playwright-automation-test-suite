@@ -1,5 +1,4 @@
-﻿using Azure;
-using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
+﻿using SFA.DAS.DfeAdmin.Service.Project.Helpers.DfeSign.User;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.LandingPage;
 using SFA.DAS.DfeAdmin.Service.Project.Tests.Pages;
 using SFA.DAS.Framework.Hooks;

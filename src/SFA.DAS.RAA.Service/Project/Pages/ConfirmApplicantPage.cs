@@ -1,5 +1,4 @@
-﻿using Allure.Net.Commons;
-
+﻿
 namespace SFA.DAS.RAA.Service.Project.Pages;
 
 public abstract class ConfirmApplicantPage(ScenarioContext context, string status) : RaaBasePage(context)
