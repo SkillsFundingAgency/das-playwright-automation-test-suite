@@ -4,7 +4,7 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "Check your answers" : "Check your answers before submitting your vacancy";
+        string PageTitle = isRaaEpc ? "Check your answers before submitting your vacancy" : isRaaEmployer ? "Check your answers" : "Check your answers before submitting your vacancy";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
@@ -19,7 +19,7 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
 
     public async Task<PreviewYourAdvertOrVacancyPage> PreviewAdvert()
     {
-        string linkText = isRaaEmployer ? "Preview advert before" : "Preview vacancy before";
+        string linkText = isRaaEpc ? "Preview vacancy before" : isRaaEmployer ? "Preview advert before" : "Preview vacancy before";
         await page.GetByRole(AriaRole.Link, new() { Name = linkText }).ClickAsync();
 
         return await VerifyPageAsync(() => new PreviewYourAdvertOrVacancyPage(context));
@@ -32,13 +32,13 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
             await CheckFoundationTag();
         }
 
-        if(isRaaEmployer)
+        if(page.Url.Contains("pas.apprenticeships"))
         {
-            await page.GetByRole(AriaRole.Button, new() { Name = "Submit advert" }).ClickAsync();
+            await page.Locator("button[data-automation='continue-button']").ClickAsync(); 
         }
         else
         {
-            await page.GetByRole(AriaRole.Button, new() { Name = "Submit vacancy" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Submit advert" }).ClickAsync();
         }
 
         return await VerifyPageAsync(() => new VacancyReferencePage(context));

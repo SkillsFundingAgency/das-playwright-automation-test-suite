@@ -42,13 +42,13 @@ public class ConfirmApplicantUnsuccessfulPage(ScenarioContext context) : RaaBase
         string faauserFullName = $"{faaUser.FirstName} {faaUser.LastName}";
 
         string PageTitle = "Do you want to make this application unsuccessful?";
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
+        await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync(PageTitle);
     }
 
     public async Task<ApplicationUnsuccessfulPage> NotifyApplicant()
     {
 
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make this application" }).CheckAsync();
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
 
@@ -105,7 +105,8 @@ public abstract class ApplicationOutcomeBasePage(ScenarioContext context, string
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = context.ScenarioInfo.Tags.Contains("raaemployer")
+        bool isEmpPage = page.Url.Contains("eas.apprenticeships");
+        string PageTitle = isEmpPage
             ? $"application has been marked as {message}"
             :$"Application made {message}";
         

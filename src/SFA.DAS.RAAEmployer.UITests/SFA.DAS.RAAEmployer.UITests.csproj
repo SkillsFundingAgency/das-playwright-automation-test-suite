@@ -33,6 +33,7 @@
 		<ProjectReference Include="..\SFA.DAS.ProviderLogin.Service\SFA.DAS.ProviderLogin.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.RAA.APITests\SFA.DAS.RAA.APITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.RAA.Service\SFA.DAS.RAA.Service.csproj" />
+		<ProjectReference Include="..\SFA.DAS.RAAProvider.UITests\SFA.DAS.RAAProvider.UITests.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -4,7 +4,7 @@ public class WhatDoYouWantToCallThisAdvertPage(ScenarioContext context) : BaseVa
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "What do you want to call this advert?" : "What do you want to call this vacancy?";
+        string PageTitle = isRaaEpc ? "What do you want to call this vacancy?" : isRaaEmployer ? "What do you want to call this advert?" : "What do you want to call this vacancy?";
 
         await Assertions.Expect(page.Locator("label")).ToContainTextAsync(PageTitle);
     }

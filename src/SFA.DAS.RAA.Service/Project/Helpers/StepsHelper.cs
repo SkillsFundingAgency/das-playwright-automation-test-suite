@@ -40,6 +40,20 @@ public class StepsHelper(ScenarioContext context)
 
     }
 
+    public static async Task SharedApplicantMarkForInterview(EmployerSharedApplicationsVacanciesListPage employerVacancySearchResultPage)
+    {
+        var page = await employerVacancySearchResultPage.NavigateToManageApplicant();
+
+        await page.MarkSharedApplicantAsInterviewing();
+    }
+
+    public static async Task SharedApplicantNotMarkForInterview(EmployerSharedApplicationsVacanciesListPage employerVacancySearchResultPage)
+    {
+        var page = await employerVacancySearchResultPage.NavigateToManageApplicant();
+
+        await page.MarkSharedApplicantAsNotInterviewing();
+    }
+
     public static async Task ApplicantUnsucessful(EmployerVacancySearchResultPage employerVacancySearchResultPage)
     {
         var page = await employerVacancySearchResultPage.NavigateToManageApplicant();

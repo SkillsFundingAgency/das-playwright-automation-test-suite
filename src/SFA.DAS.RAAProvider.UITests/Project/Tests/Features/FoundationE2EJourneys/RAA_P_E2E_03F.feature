@@ -11,4 +11,4 @@ Scenario: RAA_P_E2E_03F - Create foundation vacancy by entering data for Optiona
 	When the Applicant can apply for a foundation vacancy in FAA
 	Then Provider can make the application unsuccessful
 	And the status of the Application is shown as 'unsuccessful' in FAA
-	And the 'applicant' receives 'unsuccessful application' email notification
+	And the 'applicant' receive 'unsuccessful application' email notification

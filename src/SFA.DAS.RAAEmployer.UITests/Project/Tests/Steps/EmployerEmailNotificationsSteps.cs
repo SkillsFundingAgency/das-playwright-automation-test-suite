@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using SFA.DAS.EmployerPortal.UITests.Project;
 using SFA.DAS.Framework.Helpers;
 using SFA.DAS.Login.Service.Project.Helpers;
@@ -12,19 +12,17 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
 {
     private readonly ObjectContext objectContext = context.Get<ObjectContext>();
     private readonly MailosaurApiHelper mailosaurApiHelper = context.Get<MailosaurApiHelper>();
-    protected readonly VacancyTitleDatahelper vacancyTitleDataHelper = context.Get<VacancyTitleDatahelper>();
+    private readonly VacancyTitleDatahelper vacancyTitleDataHelper = context.Get<VacancyTitleDatahelper>();
 
     [Then(@"^the '(.*)' receives '(.*)' email notification$")]
     public async Task ThenTheEmployerReceivesEmailNotification(string userType, string notificationType)
     {
         string GetProviderEmail()
         {
-
-            return RAADataHelper.ProviderEmail;
-            //var providerConfig = context.GetProviderConfig<ProviderConfig>();
-
-            //return providerConfig.Username;
+            var providerConfig = context.Get<dynamic>("providerconfigkey");
+            return providerConfig.Username;
         }
+
         string GetEmployerEmail() => objectContext.GetRegisteredEmail();
 
         string GetApplicantEmail()
@@ -35,7 +33,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
 
             string foundationApplicantEmail = context.GetUser<FAAFoundationUser>().Username;
 
-            return isFoundationAdvert? foundationApplicantEmail : applicantEmail;
+            return isFoundationAdvert ? foundationApplicantEmail : applicantEmail;
         }
 
         string emailText = null;
@@ -63,7 +61,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
                 break;
 
             case ("employer review", "employer"):
-                emailText = $"{GetProviderEmail()} has sent you this advert";
+                emailText = $"has sent you this advert";
                 subject = "New apprenticeship advert to review";
                 userEmail = GetEmployerEmail();
                 break;
@@ -81,8 +79,8 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
                 break;
 
             case ("employer rejected vacancy", "provider"):
-                emailText = "This vacancy has been reviewed and was rejected";
-                subject = $"Rejected: Updates needed to your vacancy (VAC{objectContext.GetVacancyReference()})";
+                emailText = "The employer has rejected this vacancy";
+                subject = $"Rejected by employer: make changes to {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                 userEmail = GetProviderEmail();
                 break;
 
@@ -106,7 +104,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
 
             case ("withdrawn application", "applicant"):
                 emailText = "You’ve withdrawn your application for:";
-                subject = $"Application withdrawn: {vacancyTitleDataHelper.VacancyTitle}";
+                subject = $"Application withdrawn: {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                 userEmail = GetApplicantEmail();
                 break;
 
@@ -118,7 +116,13 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
 
             case ("employer listed you as training provider", "provider"):
                 emailText = $"An employer’s listed you as the training provider on this vacancy. Contact the employer if you were not expecting this.";
-                subject = "An employer’s listed you as the training provider on a vacancy";
+                subject = "An employer's listed you as the training provider on a vacancy";
+                userEmail = GetProviderEmail();
+                break;
+
+            case ("new application", "provider"):
+                emailText = "Your vacancy has received a new application";
+                subject = $"New application for {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                 userEmail = GetProviderEmail();
                 break;
 

@@ -56,7 +56,20 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context) : FrameworkBaseHo
 
     private async Task CheckAndLoginTo(ASLandingCheckBasePage landingPage, DfeAdminUser dfeAdminUser)
     {
-        if (await landingPage.IsPageDisplayed()) await landingPage.ClickStartNowButton();
+        if (await landingPage.IsPageDisplayed())
+        {
+            await landingPage.ClickStartNowButton();
+            if(context.ScenarioInfo.Tags.Contains("raa-epc"))
+            {
+                var headingText = await landingPage.heading.TextContentAsync();
+                if (headingText?.Contains("You aren't approved to view this page") == true)
+                {
+                    await landingPage.SignOut.ClickAsync();
+                    await landingPage.ClickStartNowButton();
+                    await SubmitValidLoginDetails(dfeAdminUser);
+                }
+            }
+        }
 
         if (await new CheckDfeSignInPage(context).IsPageDisplayed()) await SubmitValidLoginDetails(dfeAdminUser);
     }

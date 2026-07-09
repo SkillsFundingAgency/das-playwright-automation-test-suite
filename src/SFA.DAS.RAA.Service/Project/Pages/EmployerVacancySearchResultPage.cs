@@ -12,11 +12,6 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
     //protected static By RejectedVacancyActionSelector => By.CssSelector("[data-label='Action']");
     //private static By SearchButton => By.CssSelector(".govuk-button.das-search-form__button");
 
-    //public void VerifyAdvertStatus(string expected)
-    //{
-    //    VerifyElement(() => tableRowHelper.GetColumn(vacancyTitleDataHelper.VacancyTitle, VacancyStatusSelector), expected, () => new SearchVacancyPageHelper(context).SearchVacancy());
-    //}
-
     protected async Task DraftVacancy()
     {
         //await page.GetByLabel("Filter adverts by").SelectOptionAsync(new[] { "All" });
@@ -32,24 +27,37 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
         await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Edit and submit" }).ClickAsync();
     }
 
-    //public VacancyCompletedAllSectionsPage GoToVacancyCompletedPage()
-    //{
-    //    formCompletionHelper.ClickElement(VacancyActionSelector);
+    protected async Task ReviewVacancy()
+    {
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Adverts with shared applications");
 
-    //    return await VerifyPageAsync(() => new VacancyCompletedAllSectionsPage(context));
-    //}
-    //public VacancyCompletedAllSectionsPage GoToRejectedVacancyCompletedPage()
-    //{
-    //    formCompletionHelper.ClickElement(RejectedVacancyActionSelector);
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
 
-    //    return await VerifyPageAsync(() => new VacancyCompletedAllSectionsPage(context));
-    //}
+        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Review" }).ClickAsync();
+    }
+
+    public async Task <VacancyCompletedAllSectionsPage> GoToVacancyCompletedPage()
+    {
+        await page.Locator("[id^='manage']").ClickAsync();
+
+        return await VerifyPageAsync(() => new VacancyCompletedAllSectionsPage(context));
+    }
 
     public async Task<ManageRecruitPage> GoToVacancyManagePage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Manage"}).First.ClickAsync();
+        string linkText = isRaaEpc ? "Review" : "Manage";
+        await page.GetByRole(AriaRole.Link, new() { Name = linkText}).First.ClickAsync();
 
         return await VerifyPageAsync(() => new ManageRecruitPage(context));
+    }
+
+    public async Task<SharedApplicatinsForAVacancyPage> GoToSharedAppsManagePage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Review" }).First.ClickAsync();
+
+        return await VerifyPageAsync(() => new SharedApplicatinsForAVacancyPage(context));
     }
 }
 
@@ -119,5 +127,24 @@ public class EmployerDraftVacanciesListPage(ScenarioContext context) : VacancySe
         await DraftVacancy();
 
         return await VerifyPageAsync(() => new CreateAnApprenticeshipAdvertOrVacancyPage(context));
+    }
+}
+
+public class EmployerSharedApplicationsVacanciesListPage(ScenarioContext context) : VacancySearchResultPage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Adverts with shared applications");
+    }
+
+    public async Task<ManageApplicantPage> NavigateToManageApplicant()
+    {
+        await GoToSharedAppsManagePage();
+
+        var newApplicationRow = page.Locator("tr.govuk-table__row", new() { Has = page.Locator("strong.govuk-tag", new() { HasTextString = "Response needed" }) }).First;
+
+        await newApplicationRow.Locator("a[data-label='application_review']").ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageApplicantPage(context));
     }
 }

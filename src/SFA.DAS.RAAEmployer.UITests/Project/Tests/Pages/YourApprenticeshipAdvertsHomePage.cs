@@ -20,6 +20,13 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
         return await VerifyPageAsync(() => new EmployerDraftVacanciesListPage(context));
     }
 
+    public async Task<EmployerSharedApplicationsVacanciesListPage> GoToYourAdvertFromSharedApplications()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Shared applications" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new EmployerSharedApplicationsVacanciesListPage(context));
+    }
+
     public async Task<CreateAnAdvertHomePage> CreateAnApprenticeshipAdvert()
     {
         await AcceptAllCookiesIfVisible();
@@ -34,6 +41,8 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
     public async Task<ManageRecruitPage> SelectArchivedAdvert() => await _searchVacancyPageHelper.SelectArchivedAdvert();
 
     public async Task<EmployerVacancySearchResultPage> SearchAdvertByReferenceNumber() => await _searchVacancyPageHelper.SearchEmployerVacancy();
+
+    public async Task<EmployerSharedApplicationsVacanciesListPage> SearchSharedAppVacancyByReferenceNumber() => await _searchVacancyPageHelper.SearchSharedAppVacancy();
 
     public async Task<ManageYourEmailsEmployerPage> GoToAdvertNotificationsPage()
     {

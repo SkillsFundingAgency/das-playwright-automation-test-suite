@@ -1,10 +1,11 @@
-﻿namespace SFA.DAS.RAA.Service.Project.Pages;
+﻿
+namespace SFA.DAS.RAA.Service.Project.Pages;
 
 public abstract class ConfirmApplicantPage(ScenarioContext context, string status) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = $"{rAADataHelper.CandidateFullName}'s application status changed to '{status}'.";
+        string PageTitle = isRaaEpc ? "You want to interview applicant" : $"{rAADataHelper.CandidateFullName}'s application status changed to '{status}'.";
 
         await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
     }
@@ -19,5 +20,15 @@ public abstract class ConfirmApplicantPage(ScenarioContext context, string statu
 
     public class EmployerInteviewingApplicantPage(ScenarioContext context) : ConfirmApplicantPage(context, "interviewing")
     {
+    }
+}
+
+public class ConfirmEmployerRejectedSharedAppPage(ScenarioContext context) : RaaBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        string PageTitle = "Application made unsuccessful";
+
+        await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
     }
 }

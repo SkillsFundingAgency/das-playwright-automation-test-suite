@@ -29,7 +29,7 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Tests.StepDefinitions
             isFoundationAdvert = context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
         }
 
-        [Then(@"the '(.*)' receives '(.*)' email notification")]
+        [Then(@"the '(.*)' receive '(.*)' email notification")]
         public async Task ThenTheProviderReceivesEmailNotification(string userType, string notificationType)
         {
             string emailText = null;
