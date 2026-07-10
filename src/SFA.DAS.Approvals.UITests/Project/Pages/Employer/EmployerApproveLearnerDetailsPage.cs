@@ -17,7 +17,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         private ILocator SubmitButton => page.Locator("button:has-text('Submit')");
         private ILocator editLink => page.Locator(".edit-apprentice");
         private ILocator editLink2 => page.Locator("table tr").Nth(1).Locator(".edit-apprentice");
-        private ILocator addAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
+        private ILocator addAnotherApprenticeLink => page.GetByRole(AriaRole.Link, new() { Name = "Add another learner" });
         #endregion
 
 
@@ -71,6 +71,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         internal async Task<LearnerRequestsPage> TryClickAddAnotherApprenticeLink()
         {
+            await Assertions.Expect(addAnotherApprenticeLink).ToBeVisibleAsync();
             await addAnotherApprenticeLink.ClickAsync();
             var page = await VerifyPageAsync(() => new YouCannotCreateAnotherFundingReservationPage(context));
             await page.ClickOnApprenticeRequestsLink();

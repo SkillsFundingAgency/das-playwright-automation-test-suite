@@ -49,7 +49,7 @@ public class RandomOrganisationNameHelper(string[] tags)
     {
         return new Dictionary<string, Dictionary<OrgType, string>>
         {
-            { "reodc01", new Dictionary<OrgType, string>() { { OrgType.Company, "COVENTRY AIRPORT LIMITED" } } },
+            { "reodc01", new Dictionary<OrgType, string>() { { OrgType.Company, "GREENPOWER PARK LIMITED" } } },
             { "flexijobapprenticeemployeraccount", new Dictionary<OrgType, string>() { { OrgType.Company, GetARandomOrganisationForFlexiJobApprentice() } } }
         };
     }
