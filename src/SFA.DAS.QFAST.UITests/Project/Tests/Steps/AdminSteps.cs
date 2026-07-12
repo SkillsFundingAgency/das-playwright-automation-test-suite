@@ -331,4 +331,10 @@ public class AdminSteps(ScenarioContext context)
                 throw new ArgumentException($"No matching case found for link: '{Link}'", nameof(Link));
         }        
     }
+
+    [Then(@"I review and approve the qualification")]
+    public async Task ThenIReviewAndApproveTheQualification()
+    {
+        await qualificationDetails_Page.ReviewAndApproveQualification();        
+    }
 }
