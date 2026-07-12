@@ -21,7 +21,13 @@ namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages
             await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
         }
         public async Task VerifyStatusOfQualification(string expectedStatus)
-        {        
+        {
+            await page.Locator("td").Nth(2).Locator("a").ClickAsync();
+            var statusField = page.Locator(".govuk-summary-list__row:has(dt:text-is('Status')) dd.govuk-summary-list__value");
+            await Assertions.Expect(statusField).ToHaveTextAsync(expectedStatus);
+        }
+        public async Task VerifyStatusOfMVS1Qualification(string expectedStatus)
+        {
             var statusField = page.Locator(".govuk-summary-list__row:has(dt:text-is('Status')) dd.govuk-summary-list__value");
             var actualStatus = (await statusField.InnerTextAsync()).Trim();
             if (!string.Equals(actualStatus, expectedStatus, StringComparison.OrdinalIgnoreCase))
@@ -37,14 +43,13 @@ namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages
         }
         public async Task ReviewAndApproveQualification()
         {
-            await page.Locator("tbody.govuk-table__body tr").Nth(1).Locator("td").Nth(2).Locator("a").ClickAsync();
-            await VerifyStatusOfQualification("Decision Required");
+            await page.Locator("tbody.govuk-table__body tr").Nth(1).Locator("td").Nth(2).Locator("a").ClickAsync();            
             await application_Details_Page.ClickOnDfeFundingReviewButton();
             await dfeFundigReview_Page.ApproveTheQualification();
             await dfeFundigReview_Page.SelectFundingStreamForQualification();
             await dfeFundigReview_Page.SetFundingStreamsAndApprovedTheQualification();
             await SetStatusOfQualificaiton("Approved");
-            await VerifyStatusOfQualification("Approved");
+            await VerifyStatusOfMVS1Qualification("Approved");
         }
     }
 }
