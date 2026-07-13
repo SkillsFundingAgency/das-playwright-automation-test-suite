@@ -95,6 +95,13 @@ jobs:
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
               ScriptArguments: '-ResourceName ${{ parameters.ResourceName }} -IPAddress $(IPAddress) -RuleName ${{ parameters.RuleName }}'
               azurePowerShellVersion: LatestVersion
+          - task: AzurePowerShell@5
+            displayName: "Whitelist agent's IP address on Function App"
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
+              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-$(Environment)-sbus-tools-fa" -RuleName "$(Build.DefinitionName)"'
+              azurePowerShellVersion: LatestVersion
 
           # 1) Bootstrap: extract Service Connection creds to pipeline variables
           - task: AzureCLI@2
