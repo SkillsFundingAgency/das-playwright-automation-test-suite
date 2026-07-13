@@ -100,7 +100,7 @@ jobs:
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
-              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-$(Environment)-sbus-tools-fa" -RuleName "$(Build.DefinitionName)"'
+              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa" -RuleName "$(Build.DefinitionName)"'
               azurePowerShellVersion: LatestVersion
 
           # 1) Bootstrap: extract Service Connection creds to pipeline variables
