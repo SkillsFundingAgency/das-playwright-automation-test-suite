@@ -55,10 +55,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 }
                 else
                 {
-                    await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(apprenticeship, ukprn);
+                    // await learnerDataOuterApiHelper.PushNewLearnersDataToAsViaNServiceBus(apprenticeship, ukprn);
 
-                    //var learnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(apprenticeship);
-                    //await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(learnerData, ukprn);
+                    var learnerData = await learnerDataOuterApiHelper.ConvertToLearnerDataAPIDataModel(apprenticeship);
+                    await learnerDataOuterApiHelper.PushNewLearnersDataToASViaAPI(learnerData, ukprn);
                 }              
             }
         }
