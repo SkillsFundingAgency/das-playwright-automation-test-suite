@@ -4,16 +4,15 @@ using NUnit.Framework;
 using SFA.DAS.Framework;
 using System;
 using System.Threading.Tasks;
-using TechTalk.SpecFlow;
+using NUnit.Framework;
 using static System.Net.Mime.MediaTypeNames;
 
 
 namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
 {
-    public class CertificatePage(ScenarioContext context) : BasePage(context)
+    public class CertificatePage(Reqnroll.ScenarioContext context) : BasePage(context)
     {
       
-
         private ILocator StartButton => page.GetByRole(AriaRole.Button, new() { Name = "Start" });
         private ILocator IdTextbox => page.GetByRole(AriaRole.Textbox, new() { Name = "Id" });
         private ILocator EmailTextbox => page.GetByRole(AriaRole.Textbox, new() { Name = "Email" });

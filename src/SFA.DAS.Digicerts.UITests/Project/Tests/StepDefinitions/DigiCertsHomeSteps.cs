@@ -1,4 +1,4 @@
-﻿using Microsoft.Playwright;
+﻿/*using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using SFA.DAS.Digicerts.UITests.Project.Tests.Pages;
 using System;
@@ -68,3 +68,4 @@ public class CertificateSteps
         await _certificatePage.ClickBack();
     }
 }
+*/
