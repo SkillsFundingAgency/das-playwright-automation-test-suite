@@ -51,7 +51,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers.Apprenticesh
                     TotalPrice = a.TrainingDetails.TotalPrice,
                     IsFlexiJob = a.TrainingDetails.IsFlexiJob,
                     PlannedOTJTrainingHours = a.TrainingDetails.PlannedOTJTrainingHours,
-                    StandardCode = a.TrainingDetails.StandardCode,
+                    LarsCode = a.TrainingDetails.LarsCode,
                     CourseTitle = a.TrainingDetails.CourseTitle,
                     ConsumerReference = a.TrainingDetails.ConsumerReference
                 },

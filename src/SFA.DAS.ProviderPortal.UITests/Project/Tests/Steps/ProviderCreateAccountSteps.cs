@@ -8,7 +8,7 @@ namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
 [Binding]
 public class ProviderCreateAccountSteps(ScenarioContext context) : ProviderPortalBaseSteps(context)
 {
-    [Given(@"a provider requests employer to create account with all permission")]
+    [Given(@"^a provider requests employer to create account with all permission$")]
     public async Task AProviderRequestsEmployerToCreateAccountWithAllPermission()
     {
         await GoToProviderAddAnEmployer();
@@ -32,7 +32,7 @@ public class ProviderCreateAccountSteps(ScenarioContext context) : ProviderPorta
         await SetRequestId(RequestType.CreateAccount);
     }
 
-    [Then(@"the employer declines the create account request")]
+    [Then(@"^the employer declines the create account request$")]
     public async Task TheEmployerDeclinesTheCreateAccountRequest()
     {
         var page = await OpenEmpInviteFromProviderAndRegister();
@@ -46,7 +46,7 @@ public class ProviderCreateAccountSteps(ScenarioContext context) : ProviderPorta
         await page3.ConfirmDoNotCreateAccount();
     }
 
-    [Then(@"the employer accepts the create account request")]
+    [Then(@"^the employer accepts the create account request$")]
     public async Task TheEmployerAcceptsTheCreateAccountRequest()
     {
         var page = await OpenEmpInviteFromProviderAndRegister();
@@ -72,7 +72,7 @@ public class ProviderCreateAccountSteps(ScenarioContext context) : ProviderPorta
     }
 
 
-    [Given("a provider requests employer to create account with updated name and requests only RecruitApprenticeButWithEmployerReview")]
+    [Given("^a provider requests employer to create account with updated name and requests only RecruitApprenticeButWithEmployerReview$")]
     public async Task GivenAProviderRequestsEmployerToCreateAccountWithUpdatedNameAndRequestsOnlyRecruitApprenticeButWithEmployerReview()
     {
         await GoToProviderAddAnEmployer();

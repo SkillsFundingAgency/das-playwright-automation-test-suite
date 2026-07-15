@@ -1,4 +1,5 @@
 ﻿namespace SFA.DAS.Framework;
+using Allure.Net.Commons;
 
 public class ScreenShotHelper(ObjectContext objectContext)
 {
@@ -26,6 +27,11 @@ public class ScreenShotHelper(ObjectContext objectContext)
             Path = screenshotPath,
             FullPage = true,
         });
+
+        if (isTestComplete)
+        {
+            AllureApi.AddAttachment(imageName,"image/png",screenshotPath);
+        }
 
         TestContext.AddTestAttachment(screenshotPath, imageName);
     }

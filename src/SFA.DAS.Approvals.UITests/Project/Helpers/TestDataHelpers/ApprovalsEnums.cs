@@ -9,6 +9,12 @@ internal enum ApprenticeshipStatus
     Completed
 }
 
+internal enum PaymentStatus
+{
+    Active,    
+    Paused
+}
+
 internal enum FundingType
 {
     DirectTransferFundsFromConnection,
@@ -40,4 +46,11 @@ public enum ProviderUserRoles
     ContributorWithApproval,
     AccountOwner,
     Viewer
+}
+
+internal enum LearningType
+{
+    Apprenticeship = 0,
+    FoundationApprenticeship = 1,
+    ShortCourses = 2
 }

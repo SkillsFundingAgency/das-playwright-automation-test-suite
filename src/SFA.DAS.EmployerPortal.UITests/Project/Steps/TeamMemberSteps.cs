@@ -24,7 +24,7 @@ public class TeamMemberSteps
         _accountCreationStepsHelper = new AccountCreationStepsHelper(context);
     }
 
-    [Then(@"Employer is able to invite a team member with Viewer access")]
+    [Then(@"^Employer is able to invite a team member with Viewer access$")]
     public async Task ThenEmployerIsAbleToInviteATeamMemberWithViewerAccess()
     {
         _invitedMemberEmailId = _employerPortalDataHelper.AnotherRandomEmail;
@@ -42,7 +42,7 @@ public class TeamMemberSteps
         _yourTeamPage = await page3.ViewAllTeamMembers();
     }
 
-    [Then(@"Employer is able to resend an invite")]
+    [Then(@"^Employer is able to resend an invite$")]
     public async Task ThenEmployerIsAbleToResendAnInvite()
     {
         var page = await _yourTeamPage.ClickViewMemberLink(_invitedMemberEmailId);
@@ -52,7 +52,7 @@ public class TeamMemberSteps
         await _yourTeamPage.VerifyInvitationResentHeaderInfoMessage();
     }
 
-    [Then(@"Employer is able abort cancelling during cancelling an invite")]
+    [Then(@"^Employer is able abort cancelling during cancelling an invite$")]
     public async Task ThenEmployerIsAbleAbortCancellingDuringCancellingAnInvite()
     {
         var page = await _yourTeamPage.ClickViewMemberLink(_invitedMemberEmailId);
@@ -62,7 +62,7 @@ public class TeamMemberSteps
         _yourTeamPage = await page1.ClickNoDontCancelInvitationLink();
     }
 
-    [Then(@"Employer is able to cancel an invite")]
+    [Then(@"^Employer is able to cancel an invite$")]
     public async Task ThenEmployerIsAbleToCancelAnInvite()
     {
         var page = await _yourTeamPage.ClickViewMemberLink(_invitedMemberEmailId);
@@ -74,7 +74,7 @@ public class TeamMemberSteps
         await _yourTeamPage.VerifyInvitationCancelledHeaderInfoMessage();
     }
 
-    [Then(@"the invited team member is able to accept the invite and login to the Employer account")]
+    [Then(@"^the invited team member is able to accept the invite and login to the Employer account$")]
     public async Task ThenTheInvitedTeamMemberIsAbleToAcceptTheInviteAndLoginToTheEmployerAccount()
     {
         await ThenEmployerIsAbleToInviteATeamMemberWithViewerAccess();
@@ -86,7 +86,7 @@ public class TeamMemberSteps
         await _accountCreationStepsHelper.AcceptUserInvite(new CreateAnAccountToManageApprenticeshipsPage(_context), _invitedMemberEmailId);
     }
 
-    [Then(@"Employer is able to Remove the team member from the account")]
+    [Then(@"^Employer is able to Remove the team member from the account$")]
     public async Task ThenEmployerIsAbleToRemoveTheTeamMemberFromTheAccount()
     {
         var page = await SignOut();

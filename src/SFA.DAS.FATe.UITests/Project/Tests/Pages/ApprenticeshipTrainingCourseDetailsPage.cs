@@ -9,6 +9,16 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(expectedCourseTitle);
     }
 
+    public async Task<bool> ProviderAvailableForThisCourse()
+    {
+        if (await page.GetByRole(AriaRole.Heading, new() { Name = "No training providers" }).IsVisibleAsync())
+        {
+            Console.WriteLine("No training providers Heading is visible");
+            return false;
+        }
+        return true;
+    }
+
     public async Task<TrainingProvidersPage> ViewProvidersForThisCourse()
     {
         var viewProvidersButton = page.GetByRole(AriaRole.Link, new() { Name = "View providers for this course" });
@@ -39,7 +49,7 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
     public async Task<TrainingProvidersPage> EnterLocationAndViewProviders_PartialPostcode_AcrossEngland()
     {
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
-        await VerifyWorkLocationAndTravelDistance("Learner's work location:", "TW14 Hounslow");
+        await VerifyWorkLocationAndTravelDistance("Learner's work location:", "TW14 Hillingdon");
         await VerifyWorkLocationAndTravelDistance("Learner can travel:", "10 miles");
         await ViewProvidersForThisCourse();
         return await VerifyPageAsync(() => new TrainingProvidersPage(context));
@@ -71,7 +81,7 @@ public class ApprenticeshipTrainingCourseDetailsPage(ScenarioContext context) : 
     {
         var ifateLink = page.Locator("a", new()
         {
-            HasTextString = "from the Institute for Apprenticeships and Technical Education"
+            HasTextString = "from Skills England"
         });
 
         var popup = await page.RunAndWaitForPopupAsync(async () =>

@@ -12,19 +12,19 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _apprenticeshipTrainingCoursesPage = new ApprenticeshipTrainingCoursesPage(context);
         }
 
-        [Then("the user is able to select and clear single filters")]
+        [Then("^the user is able to select and clear single filters$")]
         public async Task ThenTheUserIsAbleToSelectAndClearSingleFilters()
         {
             await _apprenticeshipTrainingCoursesPage.VerifyAndApplySingleFilters();
         }
 
-        [Then("the user is able to add multiple filters and clear all")]
+        [Then("^the user is able to add multiple filters and clear all$")]
         public async Task ThenTheUserIsAbleToAddMultipleFiltersAndClearAll()
         {
             await _apprenticeshipTrainingCoursesPage.ApplyMultipleFilters_ClearAtOnce();
         }
 
-        [Then("the user is able to verify results for the filters set")]
+        [Then("^the user is able to verify results for the filters set$")]
         public async Task ThenTheUserIsAbleToVerifyResultsForTheFiltersSet()
         {
             await _apprenticeshipTrainingCoursesPage.ApplyCourseFilterAndVerifyResultsForProfessional();

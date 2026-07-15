@@ -17,7 +17,7 @@ public class DisplayAdvertSteps
         _objectContext = context.Get<ObjectContext>();
     }
 
-    [When(@"the user sends a (GET) request to (.*)")]
+    [When(@"^the user sends a (GET) request to (.*)$")]
     public async Task TheUserSendsAGetRequestTo(Method method, string endpoint)
     {
         Raa_Outer_ApiAuthTokenConfig apiAuthTokenConfig = _context.ScenarioInfo.Tags.Contains("raaapiemployer")
@@ -36,19 +36,19 @@ public class DisplayAdvertSteps
         await _restClient.CreateRestRequest(method, endpoint, null);
     }
 
-    [Then(@"a (OK|Unauthorized) response status is received")]
+    [Then(@"^a (OK|Unauthorized) response status is received$")]
     public async Task ThenAOKResponseIsReceived(HttpStatusCode responseCode)
     {
         _apiResponse = await _restClient.Execute(responseCode);
     }
 
-    [Then(@"verify response body displays (.*) data")]
+    [Then(@"^verify response body displays (.*) data$")]
     public void ThenVerifyResponseBodyDisplaysVacancyInformation(string expected)
     {
         StringAssert.Contains(expected, _apiResponse.Content);
     }
 
-    [Then("verify response body displays Access denied due to invalid key")]
+    [Then("^verify response body displays Access denied due to invalid key$")]
     public void ThenVerifyResponseBodyDisplaysAccessDenied()
     {
         var expected = "Access denied due to invalid subscription key";

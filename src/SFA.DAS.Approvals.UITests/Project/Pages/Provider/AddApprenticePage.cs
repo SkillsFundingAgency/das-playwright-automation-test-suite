@@ -12,11 +12,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         }       
 
 
-        internal async Task<AddTrainingProviderPage> ClickStartNowButton()
+        internal async Task<ChooseYourMainTrainingProviderPage> ClickStartNowButton()
         {
             await startNowButton.ClickAsync();
 
-            return await VerifyPageAsync(() => new AddTrainingProviderPage(context));
+            return await VerifyPageAsync(() => new ChooseYourMainTrainingProviderPage(context));
         }
     }
 }

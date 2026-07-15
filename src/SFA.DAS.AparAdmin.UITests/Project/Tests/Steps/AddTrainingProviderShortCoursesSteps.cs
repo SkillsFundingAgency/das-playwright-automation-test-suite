@@ -16,7 +16,7 @@ public class AddTrainingProviderShortCoursesSteps
         _context = context;
     }
 
-    [Given(@"the user verifies links available in Manage Training Provider page")]
+    [Given(@"^the user verifies links available in Manage Training Provider page$")]
     public async Task GivenTheUserVerifiesLinksAvailableInManageTrainingProviderPage()
     {
         var manageTrainingProviderPage = await OpenManageTrainingProviderPage();
@@ -28,7 +28,7 @@ public class AddTrainingProviderShortCoursesSteps
         //await page5.GoBackToManageTrainingProvider();
     }
 
-    [Given("the user navigates to training providers page")]
+    [Given("^the user navigates to training providers page$")]
     public async Task GivenTheUserNavigatesToTrainingProvidersPage()
     {
         var ukprn = _context.Get<string>("ukprn");
@@ -40,7 +40,7 @@ public class AddTrainingProviderShortCoursesSteps
     }
 
 
-    [Given(@"the user updated the training provider route status to\s*""?(.*)""?")]
+    [Given(@"^the user updated the training provider route status to\s*""?(.*)""?$")]
     public async Task GivenTheUserUpdatedTheTrainingProviderRouteStatusTo(string status)
     {
         var providerName = _context.Get<string>("providerName");
@@ -74,7 +74,7 @@ public class AddTrainingProviderShortCoursesSteps
         }
     }
 
-    [Given(@"the user updated the training provider type to\s*""?(.*)""?")]
+    [Given(@"^the user updated the training provider type to\s*""?(.*)""?$")]
     public async Task GivenTheUserUpdatedTheTrainingProviderTypeTo(string providerType)
     {
         var providerDetailsPage = new ProviderDetailsPage(_context);
@@ -93,7 +93,7 @@ public class AddTrainingProviderShortCoursesSteps
         await providerDetailsPage.VerifyProviderRouteType(providerType);
     }
 
-    [Given(@"the user updated the training provider Organisation type to (.*)")]
+    [Given(@"^the user updated the training provider Organisation type to (.*)$")]
     public async Task GivenTheUserUpdatedTheTrainingProviderOrganisationTypeTo(string orgType)
     {
         var providerDetailsPage = new ProviderDetailsPage(_context);
@@ -103,7 +103,7 @@ public class AddTrainingProviderShortCoursesSteps
         await providerDetailsPage.VerifyOrganisationType(orgType);
     }
 
-    [Given(@"the user updated the training provider apprenticeship units to (Yes|No)")]
+    [Given(@"^the user updated the training provider apprenticeship units to (Yes|No)$")]
     public async Task GivenTheUserUpdatedTheTrainingProviderApprenticeshipUnitsTo(string answer)
     {
         var providerDetailsPage = new ProviderDetailsPage(_context);
@@ -120,7 +120,7 @@ public class AddTrainingProviderShortCoursesSteps
         await providerDetailsPage.VerifyApprenticeshipUnits(answer);
     }
 
-    [Given("the user cannot update the training provider type to (.*) without offering apprenticehsips or apprenticeship units")]
+    [Given("^the user cannot update the training provider type to (.*) without offering apprenticehsips or apprenticeship units$")]
     public async Task GivenTheUserCannotUpdateTheTrainingProviderTypeToMainProviderWithoutOfferingApprenticehsipsOrApprenticeshipUnits(string providerType)
     {
         var providerDetailsPage = new ProviderDetailsPage(_context);
@@ -143,7 +143,7 @@ public class AddTrainingProviderShortCoursesSteps
             .VerifyPageAsync(() => new ManageTrainingProviderInformationPage(_context));
     }
 
-    [Given("the admin initates an application as (Main provider|Employer provider|Supporting provider)")]
+    [Given("^the admin initates an application as (Main provider|Employer provider|Supporting provider)$")]
     public async Task GivenTheAdminInitatesAnApplicationAs(string providerType)
     {
         var ukprn = _context.Get<string>("ukprn");
@@ -184,7 +184,7 @@ public class AddTrainingProviderShortCoursesSteps
         await ManageTrainingProviderInformationPage.GoBackToMainDashboard();
     }
 
-    [Given(@"the provider status should be set to (.*)")]
+    [Given(@"^the provider status should be set to (.*)$")]
     public async Task GivenTheProviderStatusShouldBeSetTo(string expectedStatus)
     {
 

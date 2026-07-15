@@ -4,9 +4,7 @@
 @raaemployer
 @clonevacancy
 @regression
-Scenario: RAA_E_CL_02 - Clone an advert, Approve, Apply and make Application Unsuccessful
+Scenario: RAA_E_CL_02 - Clone, Approve and Edit an advert
 	Given the Employer clones and creates an advert
 	And the Reviewer Approves the vacancy
-	When the Applicant can apply for a Vacancy in FAA
-	Then Employer can make the application unsuccessful
-	And the status of the Application is shown as 'unsuccessful' in FAA
+	Then the Employer can edit the vacancy

@@ -8,6 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Project\Features\PublicSectorReporting\**" />
+	  <EmbeddedResource Remove="Project\Features\PublicSectorReporting\**" />
+	  <None Remove="Project\Features\PublicSectorReporting\**" />
+	  <ReqnrollFeatureFile Remove="Project\Features\PublicSectorReporting\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Compile Include="..\NUnitConfigurator.cs" Link="NUnitConfigurator.cs">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
@@ -19,11 +26,11 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.6.0" />
 		<PackageReference Include="SFA.DAS.Payments.ProviderPayments.Messages" Version="2.0.4" />
     <PackageReference Include="SFA.DAS.Payments.Messages.Common" Version="2.4.0" />
-		<PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
-		<PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
+		<PackageReference Include="Reqnroll.Tools.MsBuild.Generation" Version="3.3.4" />
+		<PackageReference Include="Reqnroll.NUnit" Version="3.3.4" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -47,8 +54,11 @@
 		<None Update="Project\AP_GnS_0_BulkUpload.csv">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="specflow.json">
+		<None Update="reqnroll.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="allureConfig.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 
@@ -68,11 +78,18 @@
 	  <Folder Include="Project\Features\05_LimitingStandards\" />
 	  <Folder Include="Project\Features\06_Navigation\" />
 	  <Folder Include="Project\Features\07_FlexiJobApprenticeshipAgency\" />
-	  <Folder Include="Project\Features\PublicSectorReporting\" />
 	  <Folder Include="Project\Features\01_PreApprovals\01_LevyFunds\a_NewEmployer\" />
 	  <Folder Include="Project\Features\01_PreApprovals\02_NonLevyFunds\a_NewEmployer\" />
 	  <Folder Include="Project\Features\01_PreApprovals\04_LTM\" />
 	  <Folder Include="Project\Features\01_PreApprovals\03_TransfersConnection\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ReqnrollObsoleteCodeBehindFiles Remove="Project\Features\PublicSectorReporting\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ReqnrollLegacyCodeBehindFiles Remove="Project\Features\PublicSectorReporting\**" />
 	</ItemGroup>
 
 </Project>

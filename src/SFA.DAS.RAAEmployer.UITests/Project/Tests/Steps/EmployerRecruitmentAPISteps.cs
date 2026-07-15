@@ -13,8 +13,8 @@ public class EmployerRecruitmentAPISteps(ScenarioContext context)
     private DisplayAdvertAPIPage _displayAdvertAPIPage;
     private RecruitmentAPIPage _recruitmentAPIPage;
 
-    [When(@"the employer selects the Recruitment API list page")]
-    [Given(@"the employer selects the Recruitment API list page")]
+    [When(@"^the employer selects the Recruitment API list page$")]
+    [Given(@"^the employer selects the Recruitment API list page$")]
     public async Task GivenTheEmployerSelectsTheRecruitmentAPIListPage()
     {
         var page = new YourApprenticeshipAdvertsHomePage(context);
@@ -26,12 +26,12 @@ public class EmployerRecruitmentAPISteps(ScenarioContext context)
         _apiListPage = await page1.ClickAPIKeysHereLink();
     }
 
-    [Then(@"the employer selects Recruitment API from the list")]
-    [When(@"the employer selects Recruitment API from the list")]
+    [Then(@"^the employer selects Recruitment API from the list$")]
+    [When(@"^the employer selects Recruitment API from the list$")]
 
     public async Task WhenTheEmployerSelectsRecruitmentAPIFromTheList() => _keyforAPIPage = await _apiListPage.ClickViewRecruitmentAPILink();
 
-    //[When(@"the Employer navigates to 'Recruit dashboard' Page")]
+    //[When(@"^the Employer navigates to 'Recruit dashboard' Page$")]
     //public async Task WhenTheEmployerNavigatesToRecruitDashboardPage()
     //{
     //    var page = new VacancyConfirmationPage(context);
@@ -45,13 +45,13 @@ public class EmployerRecruitmentAPISteps(ScenarioContext context)
     //    _apiListPage = await page2.ClickAPIKeysHereLink();
     //}
 
-    [When(@"the employer selects Recruitment Sandbox API from the list")]
+    [When(@"^the employer selects Recruitment Sandbox API from the list$")]
     public async Task WhenTheEmployerSelectsRecruitmentSandboxAPIFromTheList() => _keyforAPIPage = await _apiListPage.ClickViewRecruitmentAPISandBoxLink();
 
-    [When(@"the employer selects Display API from the list")]
+    [When(@"^the employer selects Display API from the list$")]
     public async Task WhenTheEmployerSelectsDisplayAPIFromTheList() => _keyforAPIPage = await _apiListPage.ClickViewDisplayAPILink();
 
-    [Then(@"the employer can renew the API key")]
+    [Then(@"^the employer can renew the API key$")]
     public async Task ThenTheEmployerCanRenewTheAPIKey()
     {
         var page = await _keyforAPIPage.ClickRenewKeyLink();
@@ -61,18 +61,18 @@ public class EmployerRecruitmentAPISteps(ScenarioContext context)
         await _keyforAPIPage.VerifyApikeyRenewed();
     }
 
-    [When(@"the employer navigates to Adverts page")]
+    [When(@"^the employer navigates to Adverts page$")]
     public async Task ThenTheEmployerNavigatesToAdvertsPage() => await _keyforAPIPage.ClickAdvertsLink();
 
-    [Then(@"the employer selects the 'Manage your emails' link")]
-    [When(@"the employer selects the 'Manage your emails' link")]
+    [Then(@"^the employer selects the 'Manage your emails' link$")]
+    [When(@"^the employer selects the 'Manage your emails' link$")]
     public async Task ThenTheEmployerSelectsTheManageYourEmailsLink()
     {
         var page = new YourApprenticeshipAdvertsHomePage(context);
         await page.GoToAdvertNotificationsPage();
     }
 
-    [Given(@"the employer selects the developer get started page")]
+    [Given(@"^the employer selects the developer get started page$")]
     public async Task GivenTheEmployerSelectsTheDeveloperGetStartedPage() 
     {
         var page = new YourApprenticeshipAdvertsHomePage(context);
@@ -85,7 +85,7 @@ public class EmployerRecruitmentAPISteps(ScenarioContext context)
     }
 
 
-    [When(@"the employer selects '(.*)' link")]
+    [When(@"^the employer selects '(.*)' link$")]
     public async Task WhenTheEmployerSelectsLink(string linkName)
     {
         switch (linkName)
@@ -101,7 +101,7 @@ public class EmployerRecruitmentAPISteps(ScenarioContext context)
         }
     }
 
-    [When(@"the employer signs in to dev hub")]
+    [When(@"^the employer signs in to dev hub$")]
     public async Task WhenTheEmployerSignsInToDevHub()
     {
         var page = await _apprenticeshipServiceDevHubPage.ClickDevHubSignInLink();
@@ -109,7 +109,7 @@ public class EmployerRecruitmentAPISteps(ScenarioContext context)
         await page.SignIn();
     }
 
-    [Then(@"the employer can view the '(.*)' page")]
+    [Then(@"^the employer can view the '(.*)' page$")]
     public async Task ThenTheEmployerCanViewThePage(string pageName)
     {
         switch (pageName)

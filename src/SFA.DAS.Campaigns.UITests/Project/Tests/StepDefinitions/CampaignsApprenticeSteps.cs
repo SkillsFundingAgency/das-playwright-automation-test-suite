@@ -8,13 +8,13 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
         private readonly CampaignsStepsHelper _stepsHelper = new(context);
         private ApprenticeHubPage _apprenticeHubPage;
 
-        [Then(@"the apprentice sub headings are displayed")]
+        [Then(@"^the apprentice sub headings are displayed$")]
         public async Task ThenTheApprenticeSubHeadingsAreDisplayed() => await _apprenticeHubPage.VerifySubHeadings();
 
-        [Given(@"the user navigates to Become An Apprentice page")]
+        [Given(@"^the user navigates to Become An Apprentice page$")]
         public async Task GivenTheUserNavigatesToBecomeAnApprenticePage() => _apprenticeHubPage = await GoToApprenticeshipHubPage();
 
-        [Given(@"the user navigates to apprentice How do they work Page")]
+        [Given(@"^the user navigates to apprentice How do they work Page$")]
         public async Task GivenTheUserNavigatesToApprenticeHowDoTheyWorkPage()
         {
             var page = await GoToApprenticeshipHubPage();
@@ -24,7 +24,7 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
             await page1.VerifyHowDoTheyWorkPageSubHeadings();
         }
 
-        [Given(@"the user navigates to Getting started Page")]
+        [Given(@"^the user navigates to Getting started Page$")]
         public async Task GivenTheUserNavigatesToGettingStartedPage()
         {
             var page = await GoToApprenticeshipHubPage();
@@ -32,7 +32,7 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
             await page.NavigateToGettingStarted();
         }
 
-        [Given(@"the user navigates to Are ApprenticeShip Right For You Page")]
+        [Given(@"^the user navigates to Are ApprenticeShip Right For You Page$")]
         public async Task GivenTheUserNavigatesToAreApprenticeShipRightForYouPage()
         {
             var page = await GoToApprenticeshipHubPage();
@@ -42,7 +42,7 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
             await page1.VerifyApprenticeAreTheyRightForYouPageSubHeadings();
         }
 
-        [Given(@"the user navigates to the browse apprenticeship page")]
+        [Given(@"^the user navigates to the browse apprenticeship page$")]
         public async Task GivenTheUserNavigatesToBrowseApprenticeshipPage()
         {
             var page = await GoToApprenticeshipHubPage();
@@ -50,7 +50,7 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
             await page.NavigateToBrowseApprenticeshipPage();
         }
 
-        [Given(@"the user navigates to the Set Up Service Account page")]
+        [Given(@"^the user navigates to the Set Up Service Account page$")]
         public async Task GivenTheUserNavigatesToTheSetUpServiceAccountPage()
         {
             var page = await GoToApprenticeshipHubPage();
@@ -58,7 +58,7 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
             await page.NavigateToSetUpServiceAccountPage();
         }
 
-        [Given("the user navigates to the Apprentice Stories page")]
+        [Given("^the user navigates to the Apprentice Stories page$")]
         public async Task GivenTheUserNavigatesToTheApprenticeStoriesPage()
         {
             var page = await GoToApprenticeshipHubPage();
@@ -69,7 +69,7 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
         }
 
 
-        [Given(@"the user navigates to the Site Map page")]
+        [Given(@"^the user navigates to the Site Map page$")]
         public async Task GivenTheUserNavigatesToTheSiteMapPage()
         {
             var page = await GoToApprenticeshipHubPage();

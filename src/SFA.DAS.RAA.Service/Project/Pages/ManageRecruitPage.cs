@@ -6,7 +6,8 @@ public class ManageRecruitPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "Manage Advert" : "Manage vacancy";
+        bool isEmpPage = page.Url.Contains("eas.apprenticeships");
+        string PageTitle = isEmpPage ? "Manage Advert" : "Manage vacancy";
 
         await Assertions.Expect(page.Locator("#vacancy-header")).ToContainTextAsync(PageTitle);
     }
@@ -40,6 +41,13 @@ public class ManageRecruitPage(ScenarioContext context) : RaaBasePage(context)
 
         return await VerifyPageAsync(() => new CloseVacancyPage(context));
     }
+
+    public async Task<ArchiveVacancyPage> ArchiveAdvert()
+    {
+        await page.Locator("a[href*='/archive']").ClickAsync();
+
+        return await VerifyPageAsync(() => new ArchiveVacancyPage(context));
+    }
 }
 
 public class CloseVacancyPage(ScenarioContext context) : RaaBasePage(context)
@@ -53,11 +61,30 @@ public class CloseVacancyPage(ScenarioContext context) : RaaBasePage(context)
 
     public async Task<ManageCloseVacancyPage> YesCloseThisVacancy()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, close this advert now" }).CheckAsync();
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, close this" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageCloseVacancyPage(context));
+    }
+}
+
+public class ArchiveVacancyPage(ScenarioContext context) : RaaBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        string PageTitle = isRaaEmployer ? "Do you want to archive this advert?" : "Do you want to archive this vacancy?";
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
+    }
+
+    public async Task<ManageArchiveVacancyPage> YesArchiveThisVacancy()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, archive this" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageArchiveVacancyPage(context));
     }
 }
 
@@ -67,6 +94,16 @@ public class ManageCloseVacancyPage(ScenarioContext context) : RaaBasePage(conte
     {
         string PageTitle = isRaaEmployer ? $"Advert VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed."
             : $"Vacancy VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed.";
+
+        await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
+    }
+}
+
+public class ManageArchiveVacancyPage(ScenarioContext context) : RaaBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        string PageTitle = $"'{rAADataHelper.VacancyTitle} (VAC{objectContext.GetVacancyReference()})' has been archived.";
 
         await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
     }
@@ -116,7 +153,7 @@ public class EditVacancyDatesPage(ScenarioContext context) : VacancyDatesBasePag
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Update advert" }).ClickAsync();
 
-        await Assertions.Expect(page.GetByLabel("Success").Locator("h3")).ToContainTextAsync("have been updated.");
+        await Assertions.Expect(page.Locator(".govuk-notification-banner__heading")).ToContainTextAsync("have been updated.");
 
         return await VerifyPageAsync(() => new EmployerVacancySearchResultPage(context));
     }

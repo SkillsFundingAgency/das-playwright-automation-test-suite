@@ -8,7 +8,11 @@ public abstract class RaaBasePage : BasePage
 
     protected readonly AdvertDataHelper advertDataHelper;
 
-    protected readonly bool isRaaEmployer;
+    public bool isRaaEmployer;
+
+    public bool isRaaProvider;
+
+    public bool isRaaEpc;
 
     //protected override By ContinueButton => By.CssSelector(".save-button");
 
@@ -22,6 +26,8 @@ public abstract class RaaBasePage : BasePage
     public RaaBasePage(ScenarioContext context) : base(context)
     {
         isRaaEmployer = tags.Contains("raaemployer");
+        isRaaProvider = tags.Contains("raaprovider");
+        isRaaEpc = tags.Contains("raa-epc");
 
         vacancyTitleDataHelper = context.GetValue<VacancyTitleDatahelper>();
 
@@ -56,4 +62,6 @@ public abstract class RaaBasePage : BasePage
     }
 
     public async Task EmployerCancelAdvert() => await page.GetByRole(AriaRole.Link, new() { Name = "Cancel" }).ClickAsync();
+
+    public async Task SaveAndContinue() => await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 }

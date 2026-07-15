@@ -5,7 +5,7 @@ public class FAAWhatWhereSearchStepDefinitions(ScenarioContext context)
 {
     private readonly ScenarioContext _context = context;
 
-    [When(@"the user does a what and where search '(.*)','(.*)'")]
+    [When(@"^the user does a what and where search '(.*)','(.*)'$")]
     public async Task WhenTheUserDoesAWhatAndWhereSearch(string whatText, string whereText)
     {
         var page = new FAASignedInLandingBasePage(_context);
@@ -13,19 +13,19 @@ public class FAAWhatWhereSearchStepDefinitions(ScenarioContext context)
         await page.SearchByWhatWhere(whatText, whereText);
     }
 
-    [Then(@"the user is presented with search results")]
+    [Then(@"^the user is presented with search results$")]
     public async Task ThenTheUserIsPresentedWithSearchResults()
     {
         await new FAASearchResultPage(_context).VerifySuccessfulResults();
     }
 
-    [Then(@"the user signs out")]
+    [Then(@"^the user signs out$")]
     public async Task ThenTheUserSignsOut()
     {
         await new FAASearchResultPage(_context).ClickSignout();
     }
 
-    [Then("the user is able to view NHS job displayed")]
+    [Then("^the user is able to view NHS job displayed$")]
     public async Task ThenTheUserIsAbleToViewNHSJobDisplayed()
     {
         await new FAASearchResultPage(_context).GoToNHSJobDetailsPageAndVerifyJobDisplayed();

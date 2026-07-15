@@ -9,9 +9,9 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
         await Assertions.Expect(page.Locator("#header-standards")).ToContainTextAsync("Manage your standards");
     }
 
-    public async Task<ManageAStandard_TeacherPage> AccessPodiatrist()
+    public async Task<ManageAStandard_TeacherPage> AccessTeacher()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Podiatrist (level 6)" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Teacher - Postgraduate (level 6)"}).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }

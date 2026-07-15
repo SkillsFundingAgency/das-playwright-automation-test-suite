@@ -19,33 +19,33 @@ namespace SFA.DAS.FindEPAO.UITests.Project.Tests.Steps
             _findEPAOStepsHelper = new FindEPAOStepsHelper(_context);
         }
 
-        [Given(@"the user searches a standard with '(.*)' term")]
+        [Given(@"^the user searches a standard with '(.*)' term$")]
         public async Task GivenTheUserSearchesAStandardWithTerm(string searchTerm) => _ePAOOrganisationsPage = await _findEPAOStepsHelper.SearchForApprenticeshipStandard(searchTerm);
 
-        [Given(@"the user searches a standard '(.*)' term with no EPAO")]
+        [Given(@"^the user searches a standard '(.*)' term with no EPAO$")]
         public async Task GivenTheUserSearchesAStandardTermWithNoEPAO(string searchTerm) => _zeroAssessmentOrganisationsPage = await _findEPAOStepsHelper.SearchForApprenticeshipStandardWithNoEPAO(searchTerm);
 
-        [Given(@"the user searches a standard '(.*)' term with single EPAO")]
+        [Given(@"^the user searches a standard '(.*)' term with single EPAO$")]
         public async Task GivenTheUserSearchesAStandardTermWithSingleEPAO(string searchTerm) => _ePAOOrganisationDetailsPage = await _findEPAOStepsHelper.SearchForApprenticeshipStandardWithSingleEPAO(searchTerm);
 
-        [Given(@"the user searches an integrated standard '(.*)' term")]
+        [Given(@"^the user searches an integrated standard '(.*)' term$")]
         public async Task GivenTheUserSearchesAnIntegratedStandardTerm(string searchTerm) => _ePAOOrganisationsPage = await _findEPAOStepsHelper.SearchForIntegratedApprenticeshipStandard(searchTerm);
 
-        [When(@"the user clicks on view other end point organisations")]
-        [Then(@"the user clicks on view other end point organisations")]
+        [When(@"^the user clicks on view other end point organisations$")]
+        [Then(@"^the user clicks on view other end point organisations$")]
         public async Task WhenTheUserClicksOnViewOtherEndPointOrganisations() => _ePAOOrganisationsPage = await _ePAOOrganisationDetailsPage.SelectViewOtherEndPointOrganisations();
 
-        [Then(@"the user is able to click back to the search apprenticeship page")]
+        [Then(@"^the user is able to click back to the search apprenticeship page$")]
         public async Task WhenTheUserClicksBack() => await _ePAOOrganisationDetailsPage.NavigateBackFromSingleEPAOOrganisationDetailsPage();
 
-        [When(@"the user selects an EPAO from the list")]
-        [Then(@"the user selects an EPAO from the list")]
+        [When(@"^the user selects an EPAO from the list$")]
+        [Then(@"^the user selects an EPAO from the list$")]
         public async Task WhenTheUserSelectsAnEPAOFromTheList() => _ePAOOrganisationDetailsPage = await _ePAOOrganisationsPage.SelectFirstEPAOOrganisationFromList();
 
-        [Then(@"the user is able to contact ESFA")]
+        [Then(@"^the user is able to contact ESFA$")]
         public async Task ThenTheUserIsAbleToContactESFA() => await _zeroAssessmentOrganisationsPage.IsContactESFAButtonDisplayed();
 
-        [Then(@"the user is able to click back to homepage")]
+        [Then(@"^the user is able to click back to homepage$")]
         public async Task ThenTheUserIsAbleToClickBackToHomepage()
         {
             var page = await _ePAOOrganisationsPage.NavigateBackFromEPAOOrgansationPageToDetailsPage();

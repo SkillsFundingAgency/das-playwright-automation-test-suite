@@ -15,7 +15,80 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
     {
         private string StandardName;
 
-        [When("the provider adds the Craft Plasterer course to the standards list")]
+        [When("^the provider adds the Electrical Fitting course to the App Units list$")]
+        public async Task WhenTheProviderAddsTheElectricalFittingCourseToTheAppUnitsList()
+        {
+            StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_ElectricalFitting;
+
+            var page = new ManagingStandardsProviderHomePage(context);
+
+            var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
+
+            var page2 = await page1.AccessTrainingTypesPage();
+        
+            var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
+
+            var page4 = await page3.AccessAddApprenticeshipUnit();
+
+            var page5 = await page4.SelectAStandardAndContinue(StandardName);
+
+            var page6 = await page5.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
+
+            var page7 = await page6.YesUseExistingContactDetails_ApprenticeshipUnit();
+
+            var page8 = await page7.Add_ContactInformation_ApprenticeshipUnit();
+
+            var page9 = await page8.ConfirmOnline_AddApprenticeshipUnit(StandardName);
+
+            await page9.Save_NewApprenticeshipUnit_Continue();  
+        }
+
+        [When("^the provider updates the course to be available at learners and provider location$")]
+        public async Task WhenTheProviderUpdatesTheCourseToBeAvailableAtLearnersAndProviderLocation()
+        {
+            StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_ElectricalFitting;
+
+            var page = new ManagingStandardsProviderHomePage(context);
+
+            var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
+
+            var page2 = await page1.AccessTrainingTypesPage();
+        
+            var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
+
+            var page4 = await page3.ManageAnAppUnitPage(StandardName);
+
+            var page5 = await page4.EditFromOnlineTo();
+
+            var page6 = await page5.UpdateToEmpAndProLocationOnly_AprenticeshipUnit();
+
+            var page7 = await page6.ChooseTheVenueDeliveryAndContinueToDeliver_ApprenticeshipUnit();
+
+            await page7.EditDeliverAnyWhereInEnglandToYes(StandardName);
+        }
+
+
+        [When("^the provider deletes the Electrical Fitting course from the App Units list$")]
+        public async Task WhenTheProviderDeletesTheElectricalFittingCourseFromTheAppUnitsList()
+        {
+            var page = new ManagingStandardsProviderHomePage(context);
+
+            var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
+
+            var page2 = await page1.AccessTrainingTypesPage();
+
+            var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
+
+            var page4 = await page3.ManageAnAppUnitPage(StandardName);
+
+            var page5 = await page4.ClickDeleteAnApprenticeshipUnit();
+
+            var page6 = await page5.DeleteAppUnit();
+
+            await page6.VerifyAppUnitIsDeleted();
+        }
+
+        [When("^the provider adds the Craft Plasterer course to the standards list$")]
         public async Task WhenTheProviderAddsTheCraftPlastererCourseToTheStandardsList()
         {
             StandardName = context.Get<ManagingStandardsDataHelpers>().Standard_CraftPlastererlevel;
@@ -49,7 +122,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await page12.Save_NewStandard_Continue();
         }
 
-        [When("the provider deletes the Craft Plasterer course from the standards list")]
+        [When("^the provider deletes the Craft Plasterer course from the standards list$")]
         public async Task WhenTheProviderDeletesTheCraftPlastererCourseFromTheStandardsList()
         {
             var page = new ManagingStandardsProviderHomePage(context);

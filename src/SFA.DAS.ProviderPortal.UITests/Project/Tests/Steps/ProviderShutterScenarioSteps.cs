@@ -5,10 +5,10 @@ namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
 [Binding]
 public class ProviderShutterScenarioSteps(ScenarioContext context) : ProviderPortalBaseSteps(context)
 {
-    [Then(@"the provider can not send a request to the same email")]
+    [Then(@"^the provider can not send a request to the same email$")]
     public async Task TheProviderCanNotSendARequestToTheSameEmail() => await InviteSent();
 
-    [Then(@"the provider can not send a request to a different email from the same account")]
+    [Then(@"^the provider can not send a request to a different email from the same account$")]
     public async Task TheProviderCanNotSendARequestToADifferentEmailFromTheSameAccount()
     {
         eprDataHelper.EmployerEmail = context.GetUser<EPRDeclineRequestUser>().AnotherEmail;
@@ -16,10 +16,10 @@ public class ProviderShutterScenarioSteps(ScenarioContext context) : ProviderPor
         await InviteSent();
     }
 
-    [Then(@"the provider can not re send the invite to the same email")]
+    [Then(@"^the provider can not re send the invite to the same email$")]
     public async Task TheProviderCanNotReSendTheInviteToTheSameEmail() => await InviteSent();
 
-    [Then(@"the provider can not send an invite to a different email using same aorn and paye")]
+    [Then(@"^the provider can not send an invite to a different email using same aorn and paye$")]
     public async Task TheProviderCanNotSendAnInviteToADifferentEmailUsingSameAornAndPaye()
     {
         eprDataHelper.EmployerEmail = $"A_{eprDataHelper.EmployerEmail}";
@@ -37,7 +37,7 @@ public class ProviderShutterScenarioSteps(ScenarioContext context) : ProviderPor
         await page4.ViewEmployersAndManagePermissionsPage();
     }
 
-    [Then(@"the provider should be shown a shutter page where relationship already exists")]
+    [Then(@"^the provider should be shown a shutter page where relationship already exists$")]
     public async Task TheProviderShouldBeShownAShutterPageWhereRelationshipAlreadyExists()
     {
         await GoToProviderViewEmployersAndManagePermissions();
@@ -47,7 +47,7 @@ public class ProviderShutterScenarioSteps(ScenarioContext context) : ProviderPor
         await page.VerifyAlreadyLinkedToThisEmployer();
     }
 
-    [Then(@"the provider should be shown a shutter page where an employer has multiple accounts")]
+    [Then(@"^the provider should be shown a shutter page where an employer has multiple accounts$")]
     public async Task TheProviderShouldBeShownAShutterPageWhereAnEmployerHasMultipleAccounts()
     {
         var user = context.GetUser<EPRMultiAccountUser>();
@@ -55,7 +55,7 @@ public class ProviderShutterScenarioSteps(ScenarioContext context) : ProviderPor
         await EnterEmployerEmailAndGoToShutterPage(user.Username);
     }
 
-    [Then(@"the provider should be shown a shutter page where an employer has multiple organisations")]
+    [Then(@"^the provider should be shown a shutter page where an employer has multiple organisations$")]
     public async Task ThenTheProviderShouldBeShownAShutterPageWhereAnEmployerHasMultipleOrganisations()
     {
         var user = context.GetUser<EPRMultiOrgUser>();

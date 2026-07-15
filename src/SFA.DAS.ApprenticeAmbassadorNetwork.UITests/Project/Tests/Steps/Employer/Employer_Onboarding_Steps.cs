@@ -15,7 +15,7 @@ public class Employer_Onboarding_Steps(ScenarioContext context) : Employer_BaseS
 
     protected readonly AANSqlHelper aANSqlHelper = context.Get<AANSqlHelper>();
 
-    [Given(@"an employer without onboarding logs into the AAN portal")]
+    [Given(@"^an employer without onboarding logs into the AAN portal$")]
     public async Task AnEmployerWithoutOnboardingLogsIntoTheAANPortal()
     {
         var user = context.GetUser<AanEmployerUser>();
@@ -29,7 +29,7 @@ public class Employer_Onboarding_Steps(ScenarioContext context) : Employer_BaseS
         await employerAmbassadorApplicationPage.VerifyPage();
     }
 
-    [When(@"the employer provides all the required details for the employer onboarding journey")]
+    [When(@"^the employer provides all the required details for the employer onboarding journey$")]
     public async Task WhenTheEmployerProvidesAllTheRequiredDetailsForTheEmployerOnboardingJourney()
     {
         var page = await employerAmbassadorApplicationPage.StartEmployerAmbassadorApplication();
@@ -53,19 +53,19 @@ public class Employer_Onboarding_Steps(ScenarioContext context) : Employer_BaseS
         registrationConfirmationPage = await page8.ConfirmEngagement();
     }
 
-    [Then(@"the employer onboarding process should be successfully completed")]
+    [Then(@"^the employer onboarding process should be successfully completed$")]
     public async Task ThenTheEmployerOnboardingProcessShouldBeSuccessfullyCompleted()
     {
         applicationSubmitted_EmployerPage = await registrationConfirmationPage.SubmitApplication();
     }
 
-    [Then(@"the employer should be redirected to the employer Hub page")]
+    [Then(@"^the employer should be redirected to the employer Hub page$")]
     public async Task ThenTheEmployerShouldBeRedirectedToTheEmployerHubPage()
     {
         await applicationSubmitted_EmployerPage.ContinueToAmbassadorHub();
     }
 
-    [When(@"the employer should be able to modify any of the provided answers")]
+    [When(@"^the employer should be able to modify any of the provided answers$")]
     public async Task WhenTheEmployerShouldBeAbleToModifyAnyOfTheProvidedAnswers()
     {
         var page = await employerAmbassadorApplicationPage.StartEmployerAmbassadorApplication();
@@ -93,7 +93,7 @@ public class Employer_Onboarding_Steps(ScenarioContext context) : Employer_BaseS
         registrationConfirmationPage = await page10.Add1MoreSelection();
     }
 
-    [Then(@"the user can sign back in to the AAN Employer platform to verify the hub page")]
+    [Then(@"^the user can sign back in to the AAN Employer platform to verify the hub page$")]
     public async Task ThenTheUserCanSignBackInToTheAANEmployerPlatformToVerifyTheHubPage()
     {
         var page = await applicationSubmitted_EmployerPage.ContinueToAmbassadorHub();
@@ -105,7 +105,7 @@ public class Employer_Onboarding_Steps(ScenarioContext context) : Employer_BaseS
         await new Employer_NetworkHubPage(context).VerifyPage();
     }
 
-    [Then(@"the users can reinstate their membership within fourteen days of leaving the network")]
+    [Then(@"^the users can reinstate their membership within fourteen days of leaving the network$")]
     public async Task ThenTheUsersCanReinstateTheirMembershipWithinFourteenDaysOfLeavingTheNetwork()
     {
         var page = await applicationSubmitted_EmployerPage.ContinueToAmbassadorHub();

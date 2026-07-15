@@ -79,7 +79,7 @@ public class CommitmentsSqlHelper(ObjectContext objectContext, DbConfig dbConfig
         return (int)result;
     }
 
-    public async Task<int> GetNumberOfApprenticesToReview(string employerAccountId)
+    public async Task<int> GetNumberOfLearnersToReview(string employerAccountId)
     {
         Dictionary<string, string> sqlParameters = new()
         {
@@ -123,7 +123,7 @@ public class CommitmentsSqlHelper(ObjectContext objectContext, DbConfig dbConfig
 
         return await ExecuteSqlCommand($"UPDATE [Apprenticeship] SET Email = NULL, EmailAddressConfirmed = NULL WHERE Email = '@Email'", sqlParameters);
     }
-    public async Task<List<CohortsWithPledgeApplications>> GetPledgeApplicationIdsAndNumberOfDraftApprentices(string employerAccountId)
+    public async Task<List<CohortsWithPledgeApplications>> GetPledgeApplicationIdsAndNumberOfDraftLearners(string employerAccountId)
     {
         Dictionary<string, string> sqlParameters = new()
     {
@@ -187,7 +187,7 @@ public class CommitmentsSqlHelper(ObjectContext objectContext, DbConfig dbConfig
                 var cohort = new CohortsWithPledgeApplications
                 {
                     PledgeApplicationId = int.Parse(row[0]),
-                    NumberOfDraftApprentices = int.Parse(row[1])
+                    NumberOfDraftLearners = int.Parse(row[1])
                 };
                 results.Add(cohort);
             }

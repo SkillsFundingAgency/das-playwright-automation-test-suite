@@ -1,56 +1,47 @@
 ﻿
+using Allure.Net.Commons;
+
 namespace SFA.DAS.Framework.Hooks;
 
 [Binding]
 public class PlaywrightHooks(ScenarioContext context)
-{
-    private static InitializeDriver driver;
+{   
+    private static IPlaywright _playwright;
 
-    private IBrowserContext browserContext;
+    private readonly ScenarioContext _context = context;
 
-    private static IBrowser Browser;
+    private ObjectContext _objectContext;
 
-    private static bool isCloud;
+    private static bool _isHeadless;
 
-    private static readonly DateTime Date;
-
-    static PlaywrightHooks()
-    {
-        Date = DateTime.Now;
-    }
+    private static BrowserType _browserType;
 
     [BeforeTestRun]
-    public static async Task BeforeAll()
+    public static async Task BeforeTestRun()
     {
-        driver = new InitializeDriver();
+        _playwright = await Playwright.CreateAsync();
 
-        isCloud = InitializeDriver.isCloud;
+        _isHeadless = GetheadlessFromEnv();
 
-        if (isCloud)
-            Browser = await driver.IBrowserType.ConnectAsync(CreateCloudDriver());
-
-        else
-            Browser = await driver.IBrowserType.LaunchAsync(new BrowserTypeLaunchOptions
-            {
-                Headless = false,
-                Args = ["--start-maximized"],
-            });
-    }
-
-    [AfterTestRun]
-    public static async Task AfterAll()
-    {
-        await Browser.CloseAsync();
+        _browserType = GetBrowserTypeFromEnv();
     }
 
     [BeforeScenario(Order = 8)]
-    public async Task SetupPlaywrightDriver()
+    public async Task BeforeScenario()
     {
-		var objectContext = context.Get<ObjectContext>();
+        _objectContext = _context.Get<ObjectContext>();
 
-        objectContext.SetConsoleAndDebugInformation("Entered SetupPlaywrightDriver Order = 8 hook");
-		
-        browserContext = await Browser.NewContextAsync(new BrowserNewContextOptions
+        _objectContext.SetConsoleAndDebugInformation("Entered SetupPlaywrightDriver Order = 8 hook");
+
+        var browserType = await CreateDriver(_playwright, _browserType);
+
+        var browser = await browserType.LaunchAsync(new()
+        {
+            Headless = _isHeadless,
+            Args = ["--start-maximized"]
+        });
+
+        var browserContext = await browser.NewContextAsync(new BrowserNewContextOptions
         {
             ViewportSize = ViewportSize.NoViewport
         });
@@ -59,7 +50,7 @@ public class PlaywrightHooks(ScenarioContext context)
         {
             await browserContext.Tracing.StartAsync(new()
             {
-                Title = context.ScenarioInfo.Title,
+                Title = _context.ScenarioInfo.Title,
                 Screenshots = true,
                 Snapshots = true
             });
@@ -67,86 +58,108 @@ public class PlaywrightHooks(ScenarioContext context)
 
         var page = await browserContext.NewPageAsync();
 
-        context.Set(new Driver(browserContext, page, context.Get<ObjectContext>()));
+        _context.Set(new Driver(browser, browserContext, page, _objectContext));
     }
 
-    [AfterScenario(Order = 98)]
-    public async Task StopTracing()
+    [AfterScenario(Order = 100)]
+    public async Task AfterScenario()
     {
-        var pDriver = context.Get<Driver>();
+        var x = _context.TryGetValue(out Driver driver);
 
-        await context.Get<TryCatchExceptionHelper>().AfterScenarioException(() => pDriver.ScreenshotAsync(true));
+        if (!x) return;
+
+        _objectContext.SetConsoleAndDebugInformation("Entered TearDownPlaywrightDriver Order = 100 hook");
+
+        await _context.Get<TryCatchExceptionHelper>().AfterScenarioException(() => driver.ScreenshotAsync(true));
 
         if (ShouldTrace())
         {
             var tracefileName = $"PLAYWRIGHTDATA_{DateTime.Now:HH-mm-ss-fffff}.zip";
 
-            var tracefilePath = $"{context.Get<ObjectContext>().GetDirectory()}/{tracefileName}";
+            var tracefilePath = $"{_objectContext.GetDirectory()}/{tracefileName}";
 
-            await context.Get<TryCatchExceptionHelper>().AfterScenarioException(
+            await _context.Get<TryCatchExceptionHelper>().AfterScenarioException(
                 async () =>
                 {
-                    await browserContext.Tracing.StopAsync(new()
+                    await driver.BrowserContext.Tracing.StopAsync(new()
                     {
                         Path = tracefilePath
                     });
 
                     TestContext.AddTestAttachment(tracefilePath, tracefileName);
+
+                    if (GetIncludeTraceInAllureFromEnv())
+                    {
+                        AllureApi.AddAttachment(tracefileName, "application/vnd.allure.playwright-trace", tracefilePath);
+                        //some of the pipeline allure test reports artifacts are more than 512MB and allure does not support attachments of that size, so our suggestion would be that do not enable the trace for the pipeline with more than 40 test scenarios
+                    }
+
+                    
                 }
                 );
         }
 
-        if (isCloud)
-        {
-            if (context.TestError == null)
-                await MarkTestStatus("passed", string.Empty, pDriver.Page);
-            else
-                await MarkTestStatus("failed", context.TestError.Message, pDriver.Page);
-        }
+        // Marking test status in BrowserStack if running in cloud
+        //if (isCloud)
+        //{
+        //    if (context.TestError == null)
+        //        await MarkTestStatus("passed", string.Empty, pDriver.Page);
+        //    else
+        //        await MarkTestStatus("failed", context.TestError.Message, pDriver.Page);
+        //}
 
-        await browserContext.CloseAsync();
+        await driver.BrowserContext.CloseAsync(new BrowserContextCloseOptions { Reason = $"Browser context refused to close for scenario: {_context.ScenarioInfo.Title}" });
+
+        await driver.Browser.CloseAsync(new BrowserCloseOptions { Reason = $"Browser refused to close for scenario: {_context.ScenarioInfo.Title}" });
+
     }
 
-    public static async Task MarkTestStatus(string status, string reason, IPage page)
+    [AfterTestRun]
+    public static void AfterTestRun()
     {
-        await page.EvaluateAsync("_ => {}", "browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"" + status + "\", \"reason\": \"" + reason + "\"}}");
+        _playwright?.Dispose();
     }
 
-    private bool ShouldTrace() => (context.ScenarioInfo.Tags.Contains("donottracelogin") == false || isCloud == false);
+    //public static async Task MarkTestStatus(string status, string reason, IPage page)
+    //{
+    //    await page.EvaluateAsync("_ => {}", "browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"" + status + "\", \"reason\": \"" + reason + "\"}}");
+    //}
 
-    private static string CreateCloudDriver()
+    private bool ShouldTrace() => !_context.ScenarioInfo.Tags.Contains("donottracelogin");
+
+    private static bool GetheadlessFromEnv()
     {
-        string varbrowserstackusername = Environment.GetEnvironmentVariable("BROWSERSTACKUSER");
+        string isHeadlessVar = Environment.GetEnvironmentVariable("headless");
 
-        string varbrowserstackaccessKey = Environment.GetEnvironmentVariable("BROWSERSTACKKEY");
+        return !string.IsNullOrEmpty(isHeadlessVar) && isHeadlessVar.ContainsCompareCaseInsensitive("true");
+    }
 
-        var buildDateTime = Date.ToString("ddMMMyyyy_HH:mm:ss").ToUpper();
+    private static bool GetIncludeTraceInAllureFromEnv()
+    {
+        string includeTraceInAllure = Environment.GetEnvironmentVariable("IncludeTraceInAllure");
 
-        Dictionary<string, string> browserstackOptions = new()
+        return !string.IsNullOrEmpty(includeTraceInAllure) && includeTraceInAllure.ContainsCompareCaseInsensitive("true");
+    }
+
+    private static BrowserType GetBrowserTypeFromEnv()
+    {
+        string envBrowserType = Environment.GetEnvironmentVariable("BROWSER_TYPE");
+
+        string browserType = string.IsNullOrEmpty(envBrowserType) ? "Chromium" : envBrowserType;
+
+        if (!Enum.TryParse(browserType, true, out BrowserType type))
+            type = BrowserType.Chromium;
+
+        return type;
+    }
+
+    private static async Task<IBrowserType> CreateDriver(IPlaywright playwright, BrowserType browserType)
+    {
+        return browserType switch
         {
-            { "os", "Windows" },
-            { "os_version", "11" },
-            { "browser", "chrome" },  // allowed browsers are `chrome`, `edge`, `playwright-chromium`, `playwright-firefox` and `playwright-webkit`
-            { "browser_version", "latest" },
-            { "browserstack.username", varbrowserstackusername },
-            { "browserstack.accessKey", varbrowserstackaccessKey },
-            { "geoLocation", "FR" },
-            { "project", "Playwright Campaingns project" },
-            { "build", buildDateTime },
-            { "name", "context.ScenarioInfo.Title" },
-            { "buildTag", "playwright" },
-            { "resolution", "1280x1024" },
-            { "browserstack.local", "false" },
-            { "browserstack.localIdentifier", "local_connection_name" },
-            { "browserstack.playwrightVersion", "1.latest" },
-            { "client.playwrightVersion", "1.latest" },
-            { "browserstack.debug", "true" },
-            { "browserstack.interactiveDebugging", "true" },
-            { "browserstack.console", "info" },
-            { "browserstack.networkLogs", "true" }
+            BrowserType.Webkit => playwright.Webkit,
+            BrowserType.Firefox => playwright.Firefox,
+            _ => playwright.Chromium,
         };
-        string capsJson = JsonConvert.SerializeObject(browserstackOptions);
-
-        return "wss://cdp.browserstack.com/playwright?caps=" + Uri.EscapeDataString(capsJson);
     }
 }

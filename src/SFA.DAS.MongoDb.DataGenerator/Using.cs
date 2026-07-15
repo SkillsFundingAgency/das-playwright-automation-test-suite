@@ -1,10 +1,10 @@
 ﻿global using SFA.DAS.FrameworkHelpers;
-global using TechTalk.SpecFlow;
+global using Reqnroll;
 global using SFA.DAS.MongoDb.DataGenerator.Helpers;
 global using System.Collections.Generic;
 global using System;
 global using System.Linq;
-global using TechTalk.SpecFlow.Assist;
+global using Reqnroll.Assist;
 global using System.Threading.Tasks;
 global using MongoDB.Driver;
 global using MongoDB.Bson;

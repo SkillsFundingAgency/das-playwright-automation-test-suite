@@ -1,10 +1,8 @@
 ﻿using CsvHelper;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
+using Allure.Net.Commons;
 
 namespace SFA.DAS.FrameworkHelpers
 {
@@ -40,6 +38,8 @@ namespace SFA.DAS.FrameworkHelpers
             action(filePath);
 
             TestContext.AddTestAttachment(filePath, fileName);
+
+            AllureApi.AddAttachment(filePath);
 
             TestContext.Progress.WriteLine($"***************{filePath} sucessfully created***************");
         }

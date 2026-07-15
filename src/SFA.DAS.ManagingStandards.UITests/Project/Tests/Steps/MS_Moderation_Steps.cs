@@ -9,7 +9,7 @@ public class MS_Moderation_Steps(ScenarioContext context)
     private Moderation_ProviderDetailsPage _moderation_ProviderDetailsPage;
     private Moderation_UpdateProviderPage _moderation_UpdateProviderPage;
 
-    [Given(@"the tribal user searches for provider with UKPRN")]
+    [Given(@"^the tribal user searches for provider with UKPRN$")]
     public async Task GivenTheTribalUserSearchesForProviderWithUKPRN()
     {
         await new DfeAdminLoginStepsHelper(context).NavigateAndLoginToASAdmin();
@@ -21,13 +21,13 @@ public class MS_Moderation_Steps(ScenarioContext context)
         _moderation_ProviderDetailsPage = await page1.SearchTrainingProviderByUkprn(MS_DataHelper.UKPRN);
     }
 
-    [When(@"the tribal user chooses to change the provider details")]
+    [When(@"^the tribal user chooses to change the provider details$")]
     public async Task WhenTheTribalUserChoosesToChangeTheProviderDetails()
     {
         _moderation_UpdateProviderPage = await _moderation_ProviderDetailsPage.ChangeProviderDetail();
     }
 
-    [Then(@"the tribal user is allowed to make the change")]
+    [Then(@"^the tribal user is allowed to make the change$")]
     public async Task ThenTheTribalUserIsAllowedToMakeTheChange()
     {
         var page = await _moderation_UpdateProviderPage.EnterUpdateDescriptionAndContinue();

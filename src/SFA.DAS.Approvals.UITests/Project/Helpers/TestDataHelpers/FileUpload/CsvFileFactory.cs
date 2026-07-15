@@ -14,7 +14,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.FileUploadModel
             {
                 var line = $"{apprentice.Cohort.Reference},{apprentice.EmployerDetails.AgreementId},{apprentice.ApprenticeDetails.ULN},{apprentice.ApprenticeDetails.LastName}," +
                            $"{apprentice.ApprenticeDetails.FirstName},{apprentice.ApprenticeDetails.DateOfBirth.ToString("yyyy-MM-dd")},{apprentice.ApprenticeDetails.Email}," +
-                           $"{apprentice.TrainingDetails.StandardCode},{apprentice.TrainingDetails.StartDate.ToString("yyyy-MM-dd")},{apprentice.TrainingDetails.EndDate.ToString("yyyy-MM")}," +
+                           $"{apprentice.TrainingDetails.LarsCode},{apprentice.TrainingDetails.StartDate.ToString("yyyy-MM-dd")},{apprentice.TrainingDetails.EndDate.ToString("yyyy-MM")}," +
                            $"{apprentice.TrainingDetails.TotalPrice},EPA0001,{RandomDataGenerator.GenerateRandomAlphabeticString(6)}," +
                            $"{apprentice.RPLDetails.IsDurationReducedByRPL}, {apprentice.RPLDetails.TrainingTotalHours}, {apprentice.RPLDetails.TrainingHoursReduction}," +
                            $"{apprentice.RPLDetails.IsDurationReducedByRPL}, {apprentice.RPLDetails.DurationReducedBy}, {apprentice.RPLDetails.PriceReducedBy}";

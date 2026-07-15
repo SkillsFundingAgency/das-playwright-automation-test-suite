@@ -13,11 +13,18 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
     //    return new YourApprenticeshipAdvertsHomePage(context);
     //}
 
-    public async Task<EmployerVacancySearchResultPage> GoToYourAdvertFromDraftAdverts()
+    public async Task<EmployerDraftVacanciesListPage> GoToYourAdvertFromDraftAdverts()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Draft adverts" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new EmployerVacancySearchResultPage(context));
+        return await VerifyPageAsync(() => new EmployerDraftVacanciesListPage(context));
+    }
+
+    public async Task<EmployerSharedApplicationsVacanciesListPage> GoToYourAdvertFromSharedApplications()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Shared applications" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new EmployerSharedApplicationsVacanciesListPage(context));
     }
 
     public async Task<CreateAnAdvertHomePage> CreateAnApprenticeshipAdvert()
@@ -31,7 +38,11 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
 
     public async Task<ManageRecruitPage> SelectLiveAdvert() => await _searchVacancyPageHelper.SelectLiveAdvert();
 
+    public async Task<ManageRecruitPage> SelectArchivedAdvert() => await _searchVacancyPageHelper.SelectArchivedAdvert();
+
     public async Task<EmployerVacancySearchResultPage> SearchAdvertByReferenceNumber() => await _searchVacancyPageHelper.SearchEmployerVacancy();
+
+    public async Task<EmployerSharedApplicationsVacanciesListPage> SearchSharedAppVacancyByReferenceNumber() => await _searchVacancyPageHelper.SearchSharedAppVacancy();
 
     public async Task<ManageYourEmailsEmployerPage> GoToAdvertNotificationsPage()
     {

@@ -7,7 +7,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         #region locators
         private ILocator ReserveMoreFundingLink => page.GetByRole(AriaRole.Link, new() { Name = "Reserve more funding" });
-        private ILocator AddApprenticeLink => page.GetByRole(AriaRole.Link, new() { Name = "Add apprentice" }).First;
+        private ILocator AddLearnerLink => page.GetByRole(AriaRole.Link, new() { Name = "Add learner" }).First;
         private ILocator DeleteLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete" }).First;
         private ILocator NextPageLink => page.GetByRole(AriaRole.Link, new() { Name = "Next" }).First;
         #endregion
@@ -20,7 +20,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task ClickOnReserveMoreFundingLink() => await ReserveMoreFundingLink.ClickAsync();
 
 
-        internal async Task<SelectLearnerFromILRPage> SelectReservationToAddApprentice(Apprenticeship apprenticeship )
+        internal async Task<HowDoYouWantToAddLearnerDetailsPage> SelectReservationToAddApprentice(Apprenticeship apprenticeship )
         {
             var rsrvStartDate = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
             var rsrvEndDate = apprenticeship.TrainingDetails.StartDate.AddMonths(2).ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
@@ -31,14 +31,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
 
             string partialHref = $"reservationId={apprenticeship.ReservationID}";
-            var reservationLink = page.Locator($"a[href*='{partialHref}']:text('Add apprentice')");
+            var reservationLink = page.Locator($"a[href*='{partialHref}']:text('Add learner')");
             var nextPageButton = page.GetByRole(AriaRole.Link, new() { Name = "Next page" });
 
             // ✅ First, check if link is already present and visible
             if (await reservationLink.IsVisibleAsync())
             {
                 await reservationLink.First.ClickAsync();
-                return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
+                return await VerifyPageAsync(() => new HowDoYouWantToAddLearnerDetailsPage(context));
             }
 
             // 🔁 If not, loop through pagination
@@ -62,13 +62,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             }
 
 
-            return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
+            return await VerifyPageAsync(() => new HowDoYouWantToAddLearnerDetailsPage(context));
         }
 
         internal async Task ClickOnAddApprenticeLink()
         {
             await SearchForAnyReservation();
-            await AddApprenticeLink.ClickAsync();
+            await AddLearnerLink.ClickAsync();
         }
 
         internal async Task ClickOnDeleteReservationLink()

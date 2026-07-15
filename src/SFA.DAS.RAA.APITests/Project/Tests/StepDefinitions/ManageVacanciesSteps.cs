@@ -22,7 +22,7 @@ public class ManageVacanciesSteps
         rAADataHelper = context.GetValue<RAADataHelper>();
     }
 
-    [When(@"the user sends (POST) request to (.*) with payload (.*)")]
+    [When(@"^the user sends (POST) request to (.*) with payload (.*)$")]
     public async Task TheUserSendsRequestTo(Method method, string endpoint, string payload)
     {
         bool isEmployer = _scenarioContext.ScenarioInfo.Tags
@@ -65,7 +65,7 @@ public class ManageVacanciesSteps
         await _restClient.CreateRestRequest(method, $"/managevacancies/{endpoint}/{dynamicGuid}", payload, payloadreplacement);
     }
 
-    [Then(@"a (Created|Unauthorized) response is received")]
+    [Then(@"^a (Created|Unauthorized) response is received$")]
     public async Task ThenAOKResponseIsReceived(HttpStatusCode responseCode)
     {
         _apiResponse = await _restClient.Execute(responseCode);
@@ -86,14 +86,14 @@ public class ManageVacanciesSteps
         }
     }
 
-    [Then(@"verify response body displays vacancy reference number")]
+    [Then(@"^verify response body displays vacancy reference number$")]
     public void ThenVerifyResponseBodyDisplaysVacancyReferenceNumber()
     {
         var expected = "vacancyReference";
         StringAssert.Contains(expected, _apiResponse.Content);
     }
 
-    [Then("verify response body displays Access denied due to invalid subscription key")]
+    [Then("^verify response body displays Access denied due to invalid subscription key$")]
     public async Task ThenVerifyResponseBodyDisplaysAccessDeniedDueToInvalidSubscriptionKey()
     {
         var expected = "Access denied due to invalid subscription key";

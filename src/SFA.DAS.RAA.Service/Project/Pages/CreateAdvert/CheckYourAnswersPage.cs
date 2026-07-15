@@ -4,21 +4,23 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "Check your answers" : "Check your answers before submitting your vacancy";
+        string PageTitle = isRaaEpc ? "Check your answers before submitting your vacancy" : isRaaEmployer ? "Check your answers" : "Check your answers before submitting your vacancy";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
 
     public async Task<DeleteVacancyQuestionPage> DeleteVacancy()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Delete advert" }).ClickAsync();
+        string linkText = isRaaEmployer ? "Delete advert" : "Delete vacancy";
+        await page.GetByRole(AriaRole.Link, new() { Name = linkText }).ClickAsync();
 
         return await VerifyPageAsync(() => new DeleteVacancyQuestionPage(context));
     }
 
     public async Task<PreviewYourAdvertOrVacancyPage> PreviewAdvert()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Preview advert before" }).ClickAsync();
+        string linkText = isRaaEpc ? "Preview vacancy before" : isRaaEmployer ? "Preview advert before" : "Preview vacancy before";
+        await page.GetByRole(AriaRole.Link, new() { Name = linkText }).ClickAsync();
 
         return await VerifyPageAsync(() => new PreviewYourAdvertOrVacancyPage(context));
     }
@@ -29,7 +31,15 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
         {
             await CheckFoundationTag();
         }
-        await page.GetByRole(AriaRole.Button, new() { Name = "Submit advert" }).ClickAsync();
+
+        if(page.Url.Contains("pas.apprenticeships"))
+        {
+            await page.Locator("button[data-automation='continue-button']").ClickAsync(); 
+        }
+        else
+        {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Submit advert" }).ClickAsync();
+        }
 
         return await VerifyPageAsync(() => new VacancyReferencePage(context));
     }

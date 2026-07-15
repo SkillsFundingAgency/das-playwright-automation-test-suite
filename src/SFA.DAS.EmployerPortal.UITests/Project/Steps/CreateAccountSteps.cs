@@ -44,20 +44,20 @@ public class CreateAccountSteps
         _employerHomePageStepsHelper = new EmployerHomePageStepsHelper(context);
     }
 
-    [Given(@"a User Account is created")]
-    [When(@"a User Account is created")]
+    [Given(@"^a User Account is created$")]
+    [When(@"^a User Account is created$")]
     public async Task AUserAccountIsCreated() => _addAPAYESchemePage = await _accountCreationStepsHelper.RegisterUserAccount();
 
-    [When("the User initiates Account creation")]
+    [When("^the User initiates Account creation$")]
     public async Task UserInitiatesAccountCreation() => await _accountCreationStepsHelper.RegisterUserAccount();
 
-    [Given(@"the User adds PAYE details")]
-    [When(@"the User adds PAYE details")]
-    [When(@"the User adds valid PAYE details")]
+    [Given(@"^the User adds PAYE details$")]
+    [When(@"^the User adds PAYE details$")]
+    [When(@"^the User adds valid PAYE details$")]
     public async Task<SearchForYourOrganisationPage> AddPayeDetails() => await AddPayeDetails(0);
 
-    [Given(@"the User adds PAYE details attached to a (SingleOrg|MultiOrg) through AORN route")]
-    [When(@"the User adds PAYE details attached to a (SingleOrg|MultiOrg) through AORN route")]
+    [Given(@"^the User adds PAYE details attached to a (SingleOrg|MultiOrg) through AORN route$")]
+    [When(@"^the User adds PAYE details attached to a (SingleOrg|MultiOrg) through AORN route$")]
     public async Task WhenTheUserAddsPAYEDetailsAttachedToASingleOrgThroughAORNRoute(string org)
     {
         if (org.Equals("SingleOrg"))
@@ -80,7 +80,7 @@ public class CreateAccountSteps
         _doYouAcceptTheEmployerAgreementOnBehalfOfPage = await AccountCreationStepsHelper.GoToSignAgreementPage(_checkYourDetailsPage);
     }
 
-    [When(@"the User adds Invalid PAYE details")]
+    [When(@"^the User adds Invalid PAYE details$")]
     public async Task WhenTheUserAddsInvalidPAYEDetails()
     {
         var page = await _addAPAYESchemePage.AddPaye();
@@ -90,16 +90,16 @@ public class CreateAccountSteps
         await _gGSignInPage.SignInWithInvalidDetails();
     }
 
-    [Then(@"the '(.*)' error message is shown")]
+    [Then(@"^the '(.*)' error message is shown$")]
     public async Task ThenTheErrorMessageIsShown(string error) => await _gGSignInPage.VerifyErrorMessage(error);
 
-    [When(@"the User adds valid PAYE details on Gateway Sign In Page")]
+    [When(@"^the User adds valid PAYE details on Gateway Sign In Page$")]
     public async Task WhenTheUserAddsValidPAYEDetailsOnGatewaySignInPage() => _searchForYourOrganisationPage = await _gGSignInPage.SignInTo(0);
 
-    [When(@"adds Organisation details")]
+    [When(@"^adds Organisation details$")]
     public async Task AddOrganisationDetails() => await AddOrganisationTypeDetails(OrgType.Default);
 
-    [When(@"adds (Company|PublicSector|Charity) Type Organisation details")]
+    [When(@"^adds (Company|PublicSector|Charity) Type Organisation details$")]
     public async Task AddOrganisationTypeDetails(OrgType orgType)
     {
         var page = await _searchForYourOrganisationPage.SearchForAnOrganisation(orgType);
@@ -109,7 +109,7 @@ public class CreateAccountSteps
         _doYouAcceptTheEmployerAgreementOnBehalfOfPage = await AccountCreationStepsHelper.GoToSignAgreementPage(page1);
     }
 
-    [When(@"enters an Invalid Company number for Org search")]
+    [When(@"^enters an Invalid Company number for Org search$")]
     public async Task<SelectYourOrganisationPage> WhenAnEmployerEntersAnInvalidCompanyNumberForOrgSearchInOrganisationSearchPage()
     {
         _selectYourOrganisationPage = await _searchForYourOrganisationPage.SearchForAnOrganisation(_employerPortalDataHelper.InvalidCompanyNumber);
@@ -117,14 +117,14 @@ public class CreateAccountSteps
         return _selectYourOrganisationPage = await VerifyPageHelper.VerifyPageAsync(_context, () => new SelectYourOrganisationPage(_context));
     }
 
-    [Then(@"the '(.*)' message is shown")]
+    [Then(@"^the '(.*)' message is shown$")]
     public async Task ThenTheMessageIsShown(string resultMessage) => await _selectYourOrganisationPage.GetSearchResultsText(resultMessage);
 
-    [Then(@"the Employer is able to Sign the Agreement and view the Home page")]
-    [When(@"the Employer is able to Sign the Agreement")]
-    [Then(@"the Employer is able to Sign the Agreement")]
-    [When(@"the Employer Signs the Agreement")]
-    [Then(@"the Employer Signs the Agreement")]
+    [Then(@"^the Employer is able to Sign the Agreement and view the Home page$")]
+    [When(@"^the Employer is able to Sign the Agreement$")]
+    [Then(@"^the Employer is able to Sign the Agreement$")]
+    [When(@"^the Employer Signs the Agreement$")]
+    [Then(@"^the Employer Signs the Agreement$")]
     public async Task SignTheAgreementAndAddProviderLater()
     {
         var page = await _doYouAcceptTheEmployerAgreementOnBehalfOfPage
@@ -139,8 +139,8 @@ public class CreateAccountSteps
         _homePage = await page3.SelectGoToYourEmployerAccountHomepage();
     }
 
-    [When(@"the Employer does not sign the Agreement")]
-    [Then(@"the Employer does not sign the Agreement")]
+    [When(@"^the Employer does not sign the Agreement$")]
+    [Then(@"^the Employer does not sign the Agreement$")]
     public async Task DoNotSignTheAgreementAndAddProviderLater()
     {
         var page = await _doYouAcceptTheEmployerAgreementOnBehalfOfPage
@@ -153,18 +153,18 @@ public class CreateAccountSteps
         _homePage = await page2.SelectGoToYourEmployerAccountHomepage();
     }
 
-    [Given(@"an Employer creates a Non Levy Account and Signs the Agreement")]
-    [When(@"an Employer creates a Non Levy Account and Signs the Agreement")]
+    [Given(@"^an Employer creates a Non Levy Account and Signs the Agreement$")]
+    [When(@"^an Employer creates a Non Levy Account and Signs the Agreement$")]
     public async Task EmployerCreatesANonLevyAccountAndSignsTheAgreement() =>
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType.Company);
 
-    [When(@"an Employer creates a Non Levy Account and not Signs the Agreement during registration")]
+    [When(@"^an Employer creates a Non Levy Account and not Signs the Agreement during registration$")]
     public async Task WhenAnEmployerCreatesANonLevyAccountAndNotSignsTheAgreementDuringRegistration() =>
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsNotSigned(OrgType.Company);
 
-    [Given(@"an Employer Account with (Company|PublicSector|Charity) Type Org is created and agreement is Signed")]
-    [When(@"an Employer Account with (Company|PublicSector|Charity) Type Org is created and agreement is Signed")]
-    [Then(@"a Levy Employer Account with (Company|PublicSector|Charity) Type Org is created and agreement is Signed")]
+    [Given(@"^an Employer Account with (Company|PublicSector|Charity) Type Org is created and agreement is Signed$")]
+    [When(@"^an Employer Account with (Company|PublicSector|Charity) Type Org is created and agreement is Signed$")]
+    [Then(@"^a Levy Employer Account with (Company|PublicSector|Charity) Type Org is created and agreement is Signed$")]
     public async Task GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType orgType)
     {
         _accountCreationStepsHelper.UpdateOrganisationName(orgType);
@@ -174,8 +174,8 @@ public class CreateAccountSteps
         await SignTheAgreementAndAddProviderLater();
     }
 
-    [When(@"an Employer Account with (Company|PublicSector|Charity) Type Org is created")]
-    [When(@"an Employer Account with (Company|PublicSector|Charity) Type Org is created and agreement is Not Signed")]
+    [When(@"^an Employer Account with (Company|PublicSector|Charity) Type Org is created$")]
+    [When(@"^an Employer Account with (Company|PublicSector|Charity) Type Org is created and agreement is Not Signed$")]
     public async Task GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsNotSigned(OrgType orgType)
     {
         await CreateUserAccountAndAddOrg(orgType);
@@ -183,12 +183,12 @@ public class CreateAccountSteps
         await DoNotSignTheAgreementAndAddProviderLater();
     }
 
-    [Given(@"an Employer creates a Levy Account and Signs the Agreement")]
-    [When(@"an Employer creates a Levy Account and Signs the Agreement")]
+    [Given(@"^an Employer creates a Levy Account and Signs the Agreement$")]
+    [When(@"^an Employer creates a Levy Account and Signs the Agreement$")]
     public async Task EmployerCreatesALevyAccountAndSignsTheAgreement() =>
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType.Company);
 
-    [Given("The User creates \"(.*)\" Employer account and sign an agreement")]
+    [Given("^The User creates \"(.*)\" Employer account and sign an agreement$")]
     public async Task<HomePage> GivenTheUserCreatesEmployerAccountAndSignAnAgreement(string employerType)
     {
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsSigned(OrgType.Company);
@@ -223,18 +223,18 @@ public class CreateAccountSteps
     }
 
 
-    [When(@"an Employer creates a Levy Account and not Signs the Agreement during registration")]
+    [When(@"^an Employer creates a Levy Account and not Signs the Agreement during registration$")]
     public async Task WhenAnEmployerCreatesALevyAccountAndNotSignsTheAgreementDuringRegistration() =>
         await GivenAnEmployerAccountWithSpecifiedTypeOrgIsCreatedAndAgeementIsNotSigned(OrgType.Company);
 
-    [When(@"the Employer initiates adding same Org of (Company|PublicSector|Charity) Type again")]
+    [When(@"^the Employer initiates adding same Org of (Company|PublicSector|Charity) Type again$")]
     public async Task WhenTheEmployerInitiatesAddingSameOrgTypeAgain(OrgType orgType) =>
         _selectYourOrganisationPage = await AccountCreationStepsHelper.SearchForAnotherOrg(_homePage, orgType);
 
-    [Then(@"'Already added' message is shown to the User")]
+    [Then(@"^'Already added' message is shown to the User$")]
     public async Task ThenAlreadyAddedMessageIsShownToTheUser() => await _selectYourOrganisationPage.VerifyOrgAlreadyAddedMessage();
 
-    [Then(@"ApprenticeshipEmployerType in Account table is marked as (.*)")]
+    [Then(@"^ApprenticeshipEmployerType in Account table is marked as (.*)$")]
     public async Task ThenApprenticeshipEmployerTypeInAccountTableIsMarkedAs(string expectedApprenticeshipEmployerType)
     {
         var actualApprenticeshipEmployerType = await _employerPortalSqlDataHelper.GetAccountApprenticeshipEmployerType(_employerPortalDataHelper.RandomEmail);
@@ -242,7 +242,7 @@ public class CreateAccountSteps
         Assert.AreEqual(expectedApprenticeshipEmployerType, actualApprenticeshipEmployerType);
     }
 
-    [When(@"Signs the Agreement from Account HomePage Panel")]
+    [When(@"^Signs the Agreement from Account HomePage Panel$")]
     public async Task WhenSignsTheAgreementFromAccountHomePagePanel()
     {
         var page = await AccountCreationStepsHelper.SignAgreementFromHomePage(_homePage);
@@ -250,7 +250,7 @@ public class CreateAccountSteps
         _homePage = await page.ClickOnViewYourAccount();
     }
 
-    [Then(@"'Start adding apprentices now' task link is displayed under Tasks pane")]
+    [Then(@"^'Start adding apprentices now' task link is displayed under Tasks pane$")]
     public async Task ThenTaskLinkIsDisplayedUnderTasksPane()
     {
         var page = await VerifyPageHelper.VerifyPageAsync(_context, () => new TasksHomePage(_context));
@@ -258,7 +258,7 @@ public class CreateAccountSteps
         await page.VerifyStartAddingApprenticesNowTaskLink();
     }
 
-    [Then(@"'These details are already in use' page is displayed when Another Employer tries to register the account with the same Aorn and Paye details")]
+    [Then(@"^'These details are already in use' page is displayed when Another Employer tries to register the account with the same Aorn and Paye details$")]
     public async Task ThenPageIsDisplayedWhenAnotherEmployerTriesToRegisterTheAccountWithTheSameAornAndPayeDetails()
     {
         await _accountCreationStepsHelper.SignOut();
@@ -272,12 +272,12 @@ public class CreateAccountSteps
         _theseDetailsAreAlreadyInUsePage = await AccountCreationStepsHelper.ReEnterAornDetails(_addAPAYESchemePage);
     }
 
-    [Then(@"'Add a PAYE Scheme' page is displayed when Employer clicks on 'Use different details' button")]
-    [Then(@"'AddPayeSchemeUsingGGDetails' page is displayed when Employer clicks on 'Use different details' button")]
+    [Then(@"^'Add a PAYE Scheme' page is displayed when Employer clicks on 'Use different details' button$")]
+    [Then(@"^'AddPayeSchemeUsingGGDetails' page is displayed when Employer clicks on 'Use different details' button$")]
     public async Task ThenAddAPAYESchemePageIsDisplayedWhenEmployerClicksOnUseDifferentDetailsButton() =>
         _addPayeSchemeUsingGGDetailsPage = await _theseDetailsAreAlreadyInUsePage.CickUseDifferentDetailsButtonInTheseDetailsAreAlreadyInUsePage();
 
-    [Then(@"'Add a PAYE Scheme' page is displayed when Employer clicks on Back link on the 'PAYE scheme already in use' page")]
+    [Then(@"^'Add a PAYE Scheme' page is displayed when Employer clicks on Back link on the 'PAYE scheme already in use' page$")]
     public async Task ThenAddAPAYESchemePageIsDisplayedWhenEmployerClicksOnBackLinkOnThePage()
     {
         var page = await _addPayeSchemeUsingGGDetailsPage.ClickBackButton();
@@ -290,7 +290,7 @@ public class CreateAccountSteps
     }
 
 
-    [When(@"the User is on the 'Check your details' page after adding PAYE details through AORN route")]
+    [When(@"^the User is on the 'Check your details' page after adding PAYE details through AORN route$")]
     public async Task WhenTheUserIsOnTheCheckYourDetailsPageAfterAddingPAYEDetailsThroughAORNRoute()
     {
         await _tprSqlDataHelper.CreateSingleOrgAornData();
@@ -298,7 +298,7 @@ public class CreateAccountSteps
         _checkYourDetailsPage = await AccountCreationStepsHelper.AddPayeDetailsForSingleOrgAornRoute(_addAPAYESchemePage);
     }
 
-    [Then(@"choosing to change the AORN number displays 'Enter your PAYE scheme details' page")]
+    [Then(@"^choosing to change the AORN number displays 'Enter your PAYE scheme details' page$")]
     public async Task ThenChoosingToChangeTheAORNNumberDisplaysPage()
     {
         var page = await _checkYourDetailsPage.ClickAornChangeLink();
@@ -307,7 +307,7 @@ public class CreateAccountSteps
     }
 
 
-    [Then(@"choosing to change the PAYE scheme displays 'Enter your PAYE scheme details' page")]
+    [Then(@"^choosing to change the PAYE scheme displays 'Enter your PAYE scheme details' page$")]
     public async Task ThenChoosingToChangeThePAYESchemeDisplaysEnterYourPAYESchemeDetailsPage()
     {
         var page = await _checkYourDetailsPage.ClickPayeSchemeChangeLink();
@@ -317,16 +317,16 @@ public class CreateAccountSteps
         _checkYourDetailsPage = await page1.EnterAornAndPayeDetailsForSingleOrgScenarioAndContinue();
     }
 
-    [Then(@"choosing to change the Organisation selected displays 'Search for your Organisation' page")]
+    [Then(@"^choosing to change the Organisation selected displays 'Search for your Organisation' page$")]
     public async Task ThenChoosingToChangeTheOrganisationSelectedDisplaysSearchForYourOrganisationPage()
     {
         await _checkYourDetailsPage.ClickOrganisationChangeLink();
     }
 
-    [When(@"the User is on the 'Add a PAYE Scheme' page")]
+    [When(@"^the User is on the 'Add a PAYE Scheme' page$")]
     public async Task WhenTheUserIsOnThePage() => _enterYourPAYESchemeDetailsPage = await _addAPAYESchemePage.AddAORN();
 
-    [Then(@"choosing to Continue with (BlankAornAndBlankPaye|BlankAornValidPaye|BlankPayeValidAorn|InvalidAornAndInvalidPaye) displays relevant Error text")]
+    [Then(@"^choosing to Continue with (BlankAornAndBlankPaye|BlankAornValidPaye|BlankPayeValidAorn|InvalidAornAndInvalidPaye) displays relevant Error text$")]
     public async Task ThenChoosingToContinueWithBlankAornValidPayeDisplaysRelevantErrorText(string errorCase)
     {
         string blankAornFieldErrorMessage = EnterYourPAYESchemeDetailsPage.BlankAornFieldErrorMessage;
@@ -369,7 +369,7 @@ public class CreateAccountSteps
         }
     }
 
-    [Then(@"choosing to enter AORN and PAYE details in the right format but non existing ones for 3 times displays 'Sorry Account disabled' Page")]
+    [Then(@"^choosing to enter AORN and PAYE details in the right format but non existing ones for 3 times displays 'Sorry Account disabled' Page$")]
     public async Task ThenChoosingToEnterAORNAndPAYEDetailsInTheRightFormatButNonExistingOnesForTimesDisplaysPage()
     {
         string InvalidErrorMessage1stAttempt = EnterYourPAYESchemeDetailsPage.InvalidAornAndPayeErrorMessage1stAttempt;
@@ -388,7 +388,7 @@ public class CreateAccountSteps
         _usingYourGovtGatewayDetailsPage = await new WeCouldNotVerifyYourDetailsPage(_context).ClickAddViaGGLink();
     }
 
-    [Then(@"Employer is able to complete registration through GG route")]
+    [Then(@"^Employer is able to complete registration through GG route$")]
     public async Task ThenEmployerIsAbleToCompleteRegistrationThroughGGRoute()
     {
         var page = await _usingYourGovtGatewayDetailsPage.ContinueToGGSignIn();
@@ -400,7 +400,7 @@ public class CreateAccountSteps
         await SignTheAgreementAndAddProviderLater();
     }
 
-    [Then(@"the Employer is able to rename the Account")]
+    [Then(@"^the Employer is able to rename the Account$")]
     public async Task ThenTheEmployerIsAbleToRenameTheAccount()
     {
         var newOrgName = _objectContext.GetOrganisationName() + "_Renamed";
@@ -413,7 +413,7 @@ public class CreateAccountSteps
 
     }
 
-    [When(@"the User is on the 'Check your details' page after adding PAYE and Company Type Org details")]
+    [When(@"^the User is on the 'Check your details' page after adding PAYE and Company Type Org details$")]
     public async Task WhenTheUserIsOnTheCheckYourDetailsPageAfterAddingPAYEAndCompanyTypeOrgDetails()
     {
         _searchForYourOrganisationPage = await CreateAnUserAcountAndAddPaye();
@@ -421,7 +421,7 @@ public class CreateAccountSteps
         _checkYourDetailsPage = await AccountCreationStepsHelper.SearchAndSelectOrg(_searchForYourOrganisationPage, OrgType.Company);
     }
 
-    [Then(@"the User is able to choose a different Company by clicking on Change Organisation")]
+    [Then(@"^the User is able to choose a different Company by clicking on Change Organisation$")]
     public async Task ThenTheUserIsAbleToChooseADifferentCompanyByClickingOnChangeOrganisation()
     {
         _searchForYourOrganisationPage = await _checkYourDetailsPage.ClickOrganisationChangeLink();
@@ -431,7 +431,7 @@ public class CreateAccountSteps
         await _checkYourDetailsPage.VerifyDetails(_objectContext.GetOrganisationName());
     }
 
-    [Then(@"the User is able to choose a different PAYE scheme by clicking on Change PAYE scheme and complete registation journey")]
+    [Then(@"^the User is able to choose a different PAYE scheme by clicking on Change PAYE scheme and complete registation journey$")]
     public async Task ThenTheUserIsAbleToChooseADifferentPAYESchemeByClickingOnChangePAYESchemeAndCompleteRegistationJourney()
     {
         _addAPAYESchemePage = await _checkYourDetailsPage.ClickPayeSchemeChangeLink();
@@ -443,10 +443,10 @@ public class CreateAccountSteps
         await _checkYourDetailsPage.VerifyDetails(_objectContext.GetGatewayPaye(1));
     }
 
-    [When(@"the Employer logsout of the Account")]
+    [When(@"^the Employer logsout of the Account$")]
     public async Task WhenTheEmployerLogsoutOfTheAccount() => _youveLoggedOutPage = await _accountCreationStepsHelper.SignOut();
 
-    [Then(@"an Employer is able to create another Account with the same PublicSector Type Org but with a different PAYE")]
+    [Then(@"^an Employer is able to create another Account with the same PublicSector Type Org but with a different PAYE$")]
     public async Task ThenAnEmployerIsAbleToCreateAnotherAccountWithTheSamePublicSectorTypeOrgButWithADifferentPAYE()
     {
         await _employerHomePageStepsHelper.NavigateToEmployerApprenticeshipService(false);
@@ -458,20 +458,20 @@ public class CreateAccountSteps
         await AddOrganisationTypeDetails(OrgType.PublicSector);
     }
 
-    [Then(@"the Employer is able to Add Another NonLevy PAYE scheme to the Account")]
-    [Then(@"the Employer is able to Add Another Levy PAYE scheme to the Account")]
+    [Then(@"^the Employer is able to Add Another NonLevy PAYE scheme to the Account$")]
+    [Then(@"^the Employer is able to Add Another Levy PAYE scheme to the Account$")]
     public async Task ThenTheEmployerIsAbleToAddAnotherPAYESchemeToTheAccount() =>
         _homePage = await AccountCreationStepsHelper.AddAnotherPayeSchemeToTheAccount(_homePage);
 
-    [Then(@"the Employer is able to Remove the second PAYE scheme added from the Account")]
+    [Then(@"^the Employer is able to Remove the second PAYE scheme added from the Account$")]
     public async Task ThenTheEmployerIsAbleToRemoveTheSecondPAYESchemeAddedFromTheAccount() => await
         AccountCreationStepsHelper.RemovePayeSchemeFromTheAccount(_homePage);
 
-    [Then(@"the Employer is able to add another Account with (Company|PublicSector|Charity) Type Org to the same user login")]
+    [Then(@"^the Employer is able to add another Account with (Company|PublicSector|Charity) Type Org to the same user login$")]
     public async Task ThenTheEmployerIsAbleToAddAnotherAccountToTheSameUserLogin(OrgType orgType) =>
         _homePage = await _accountCreationStepsHelper.AddNewAccount(_homePage, 1, orgType);
 
-    [Then(@"the Employer is able to switch between the Accounts")]
+    [Then(@"^the Employer is able to switch between the Accounts$")]
     public async Task ThenTheEmployerIsAbleToSwitchBetweenTheAccounts()
     {
         await OpenAccount(_objectContext.GetOrganisationName());

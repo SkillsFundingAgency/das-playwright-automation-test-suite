@@ -22,7 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [When("When payments completion event is received for the apprentice")]
+        [When("^When payments completion event is received for the apprentice$")]
         public async Task WhenWhenPaymentsCompletionEventIsReceivedForTheApprentice()
         {
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();

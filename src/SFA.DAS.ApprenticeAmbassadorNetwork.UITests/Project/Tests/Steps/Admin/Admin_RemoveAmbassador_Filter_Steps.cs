@@ -7,7 +7,7 @@ namespace SFA.DAS.ApprenticeAmbassadorNetwork.UITests.Project.Tests.Steps.Admin;
 public class Admin_RemoveAmbassador_Filter_Steps(ScenarioContext context) : AanBaseSteps(context)
 {
 
-    [Given(@"user should be able to cancel or remove the ambassador")]
+    [Given(@"^user should be able to cancel or remove the ambassador$")]
     public async Task GivenUserShouldBeAbleToCancelOrRemoveTheAmbassador()
     {
         var page = await new AdminAdministratorHubPage(context).AccessManageAmbassadors();
@@ -20,7 +20,7 @@ public class Admin_RemoveAmbassador_Filter_Steps(ScenarioContext context) : AanB
     }
 
 
-    [Then(@"the user should be able to successfully filter ambassadors by status")]
+    [Then(@"^the user should be able to successfully filter ambassadors by status$")]
     public async Task ThenTheUserShouldBeAbleToSuccessfullyFilterAmbassadorsByStatus()
     {
         var page = await new AdminAdministratorHubPage(context).AccessManageAmbassadors();
@@ -38,7 +38,7 @@ public class Admin_RemoveAmbassador_Filter_Steps(ScenarioContext context) : AanB
         await page.ClearAllFilters();
     }
 
-    [Then(@"the user should be able to successfully filter ambassadors by regions")]
+    [Then(@"^the user should be able to successfully filter ambassadors by regions$")]
     public async Task ThenTheUserShouldBeAbleToSuccessfullyFilterAmbassadorsByRegions()
     {
         var page = new ManageAmbassadorsPage(context);
@@ -50,7 +50,7 @@ public class Admin_RemoveAmbassador_Filter_Steps(ScenarioContext context) : AanB
         await page.ClearAllFilters();
     }
 
-    [Then(@"the user should be able to successfully filter ambassadors by multiple combination of filters")]
+    [Then(@"^the user should be able to successfully filter ambassadors by multiple combination of filters$")]
     public async Task ThenTheUserShouldBeAbleTosuccessfullyFilterAmbassadorsByMultipleCombinationOfFilters()
     {
         var page = new ManageAmbassadorsPage(context);

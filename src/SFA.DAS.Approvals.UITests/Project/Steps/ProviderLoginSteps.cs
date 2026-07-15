@@ -9,13 +9,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     {
         private readonly ProviderHomePageStepsHelper _providerHomePageStepsHelper = new(context);
 
-        [Given(@"the provider logs into portal")]
-        [When("Provider logs into Provider-Portal")]
+        [Given(@"^the provider logs into portal$")]
+        [When("^Provider logs into Provider-Portal$")]
         public async Task GivenTheProviderLogsIntoPortal() => await _providerHomePageStepsHelper.GoToProviderHomePage(false);
 
 
-        [Given(@"the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer)")]
-        [When(@"the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer)")]
+        [Given(@"^the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer)$")]
+        [When(@"^the provider logs in as a (Contributor|ContributorWithApproval|AccountOwner|Viewer)$")]
         public async Task GivenTheProviderLogsInAs(ProviderConfig config)
         {
             context.SetProviderConfig(config);

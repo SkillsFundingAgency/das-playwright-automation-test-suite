@@ -5,7 +5,7 @@ public class RatProviderSteps(ScenarioContext context)
 {
     private readonly ProviderHomePageStepsHelper _providerHomePageStepsHelper = new(context);
 
-    [Then(@"a provider responds to the employer request")]
+    [Then(@"^a provider responds to the employer request$")]
     public async Task AProviderRespondsToTheEmployerRequest()
     {
         var providerConfig = context.GetProviderConfig<ProviderConfig>();

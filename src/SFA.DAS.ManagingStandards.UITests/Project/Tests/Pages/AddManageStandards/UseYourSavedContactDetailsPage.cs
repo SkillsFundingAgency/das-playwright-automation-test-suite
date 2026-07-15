@@ -17,13 +17,22 @@ public class UseYourSavedContactDetailsPage(ScenarioContext context, string page
 
         return await VerifyPageAsync(() => new YourContactInformationForThisStandardPage(context));
     }
-    public async Task<YourContactInformationForThisStandardPage> YesUseExistingContactDetails_ApprenticeshipUnit()
+    public async Task<YourContactInformationForThisAppUnit> YesUseExistingContactDetails_ApprenticeshipUnit()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new YourContactInformationForThisStandardPage(context, "Your contact details for this apprenticeship unit"));
+        return await VerifyPageAsync(() => new YourContactInformationForThisAppUnit(context));
+    }
+
+    public async Task<YourContactInformationForThisAppUnit> NoDontUseExistingContactDetails_ApprenticeshipUnit()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "No" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourContactInformationForThisAppUnit(context));
     }
 
     public async Task<YourContactInformationForThisStandardPage> NoDontUseExistingContactDetails()

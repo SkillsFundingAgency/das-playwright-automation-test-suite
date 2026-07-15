@@ -12,7 +12,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
     private CheckYourDetailsPage _checkYourDetailsPage;
     private YourOrganisationsAndAgreementsPage _yourOrganisationsAndAgreementsPage;
 
-    [Then(@"the Employer is Not allowed to Remove the first Org added")]
+    [Then(@"^the Employer is Not allowed to Remove the first Org added$")]
     public async Task ThenTheEmployerIsNotAllowedToRemoveTheFirstOrgAdded()
     {
         var page = await new HomePage(context).GoToYourOrganisationsAndAgreementsPage();
@@ -20,8 +20,8 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         await page.VerifyRemoveLinkHidden();
     }
 
-    [Given(@"the Employer initiates adding another Org of (Company|PublicSector|Charity|Charity2) Type")]
-    [When(@"the Employer initiates adding another Org of (Company|PublicSector|Charity|Charity2) Type")]
+    [Given(@"^the Employer initiates adding another Org of (Company|PublicSector|Charity|Charity2) Type$")]
+    [When(@"^the Employer initiates adding another Org of (Company|PublicSector|Charity|Charity2) Type$")]
     public async Task WhenTheEmployerInitiatesAddingAnotherOrgType(OrgType orgType)
     {
         _employerPortalDataHelper.SetAccountNameAsOrgName = false;
@@ -31,7 +31,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         _checkYourDetailsPage = await page.SelectYourOrganisation(orgType);
     }
 
-    [Then(@"the new Org added is shown in the Account Organisations list")]
+    [Then(@"^the new Org added is shown in the Account Organisations list$")]
     public async Task ThenTheNewOrgAddedIsShownInTheAccountOrganisationsList()
     {
         var page = await _checkYourDetailsPage.ClickYesContinueButton();
@@ -41,7 +41,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         await _yourOrganisationsAndAgreementsPage.VerifyNewlyAddedOrgIsPresent();
     }
 
-    [Then(@"the Employer is able check the details of the Charity Org added are displayed in the 'Check your details' page and Continue")]
+    [Then(@"^the Employer is able check the details of the Charity Org added are displayed in the 'Check your details' page and Continue$")]
     public async Task ThenTheEmployerIsAbleToCheckTheDetailsOfTheCharityOrgAddedAreDisplayedInThePageAndContinue()
     {
         await VerifyOrgDetails(_employerPortalDataHelper.CharityTypeOrg1Number, _employerPortalDataHelper.CharityTypeOrg1Name);
@@ -49,7 +49,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         await ThenTheNewOrgAddedIsShownInTheAccountOrganisationsList();
     }
 
-    [Then(@"the Employer is able check the details of the 2nd Charity Org added are displayed in the 'Check your details' page and Continue")]
+    [Then(@"^the Employer is able check the details of the 2nd Charity Org added are displayed in the 'Check your details' page and Continue$")]
     public async Task ThenTheEmployerIsAbleToCheckTheDetailsOfThe2ndCharityOrgAddedAreDisplayedInThePageAndContinue()
     {
         await VerifyOrgDetails(_employerPortalDataHelper.CharityTypeOrg2Number, _employerPortalDataHelper.CharityTypeOrg2Name);
@@ -57,7 +57,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         await ThenTheNewOrgAddedIsShownInTheAccountOrganisationsList();
     }
 
-    [Then(@"Employer is Allowed to remove the second Org added from the account")]
+    [Then(@"^Employer is Allowed to remove the second Org added from the account$")]
     public async Task ThenEmployerIsAllowedToRemoveTheSecondOrgAddedFromTheAccount()
     {
         var page = await _yourOrganisationsAndAgreementsPage.ClickOnRemoveAnOrgFromYourAccountLink();
@@ -67,10 +67,10 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         await page1.VerifyOrgRemovedMessageInHeader();
     }
 
-    [When(@"the Employer adds another Org to the Account")]
+    [When(@"^the Employer adds another Org to the Account$")]
     public async Task WhenTheEmployerAddsAnotherOrgToTheAccount() => await AddOrgToTheAccount(OrgType.Company);
 
-    [Then(@"the Sign Agreement journey from the Account home page shows Accepted Agreement page")]
+    [Then(@"^the Sign Agreement journey from the Account home page shows Accepted Agreement page$")]
     public async Task ThenTheSignAgreementJourneyFromTheAccountHomePageShowsAcceptedAgreementPage()
     {
         var page = await SignAdditionalAgreementFromHomePage();
@@ -78,7 +78,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         await page.ClickOnViewYourAccount();
     }
 
-    [When(@"the Employer adds two additional Orgs to the Account")]
+    [When(@"^the Employer adds two additional Orgs to the Account$")]
     public async Task WhenTheEmployerAddsTwoAdditionalOrgsToTheAccount()
     {
         await AddOrgToTheAccount(OrgType.Company2);
@@ -86,7 +86,7 @@ public class AddOrRemoveOrgSteps(ScenarioContext context)
         await AddOrgToTheAccount(OrgType.Charity);
     }
 
-    [Then(@"the Sign Agreement journey from the Account home page shows Accepted Agreement page with link to review other pending agreements")]
+    [Then(@"^the Sign Agreement journey from the Account home page shows Accepted Agreement page with link to review other pending agreements$")]
     public async Task ThenTheSignAgreementJourneyFromTheAccountHomePageShowsAcceptedAgreementPageWithLinkToReviewOtherPendingAgreements()
     {
         var page = await SignAdditionalAgreementFromHomePage();

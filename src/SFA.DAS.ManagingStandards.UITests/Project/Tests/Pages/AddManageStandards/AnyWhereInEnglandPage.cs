@@ -4,7 +4,7 @@ public class AnyWhereInEnglandPage(ScenarioContext context) : ManagingStandardsB
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Can you deliver this training anywhere in England?");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Can you deliver this training at employers' addresses anywhere in England?");
     }
 
     public async Task<ManageAStandard_TeacherPage> YesDeliverAnyWhereInEngland_ManageStandard()

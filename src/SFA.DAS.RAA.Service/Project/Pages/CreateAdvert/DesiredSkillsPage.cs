@@ -123,7 +123,9 @@ public class ThingsToConsiderPage(ScenarioContext context) : RaaBasePage(context
 
     public async Task<CreateAnApprenticeshipAdvertOrVacancyPage> EnterThingsToConsiderAndReturnToCreateAdvert(bool optionalFields)
     {
-        if (optionalFields) await page.GetByRole(AriaRole.Textbox, new() { Name = "What other requirements are" }).FillAsync(rAADataHelper.OptionalMessage);
+        if (optionalFields)
+            //await page.GetByRole(AriaRole.Textbox, new() { Name = "What other requirements are" }).FillAsync(rAADataHelper.OptionalMessage);
+            await IFrameFillAsync("ThingsToConsider_ifr", rAADataHelper.OptionalMessage);
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 

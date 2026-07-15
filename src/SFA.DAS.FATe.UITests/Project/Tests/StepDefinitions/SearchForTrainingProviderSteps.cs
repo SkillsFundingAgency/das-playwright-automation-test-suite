@@ -19,7 +19,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _searchForTrainingProviderPage = new SearchForTrainingProviderPage(context);
         }
 
-        [Given("the user navigates to the Search for a training provider page")]
+        [Given("^the user navigates to the Search for a training provider page$")]
         public async Task GivenTheUserNavigatesToTheSearchForATrainingProviderPage()
         {   
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
@@ -27,19 +27,19 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _search_TrainingCourses_ApprenticeworkLocationPage.AccessSearchForTrainingProvider();
         }
 
-        [When("the user searches with a valid ukprn")]
+        [When("^the user searches with a valid ukprn$")]
         public async Task WhenTheUserSearchesWithAValidUkprn()
         {
             await _searchForTrainingProviderPage.SearchWithAUkprn();
         }
 
-        [When("the user should not be able to search without a UKPRN")]
+        [When("^the user should not be able to search without a UKPRN$")]
         public async Task WhenTheUserShouldNotBeAbleToSearchWithoutAUKPRN()
         {
             await _searchForTrainingProviderPage.SearchWithoutAUKPRN();
         }
 
-        [When("the user should not be able to search with an invalid UKPRN")]
+        [When("^the user should not be able to search with an invalid UKPRN$")]
         public async Task WhenTheUserShouldNotBeAbleToSearchWithAnInvalidUKPRN()
         {
             await _searchForTrainingProviderPage.SearchWithAnInvalidUkprn();

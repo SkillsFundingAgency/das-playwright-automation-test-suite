@@ -42,6 +42,8 @@ public class AuthTestUser : EasAccountUser { }
 
 public class RAAEmployerUser : EasAccountUser { }
 
+public class RAAApiEmployerUser : EasAccountUser { }
+
 public class RAAEmployerProviderPermissionUser : EasAccountUser { }
 
 public class RAAEmployerProviderYesPermissionUser : EasAccountUser { }
@@ -186,6 +188,8 @@ public class FAAFoundationUser : FAAPortalUser
 public class CocApprenticeUser : ApprenticeUser { }
 
 public class ApprenticeFeedbackUser : ApprenticeUser { }
+
+public class ApprenticeAppUser: ApprenticeUser { }
 
 public abstract class ApprenticeUser : GovSignUser
 {

@@ -16,8 +16,8 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
 
     private List<string> titles;
 
-    [Given(@"an onboarded employer logs into the AAN portal")]
-    [When(@"an onboarded employer logs into the AAN portal")]
+    [Given(@"^an onboarded employer logs into the AAN portal$")]
+    [When(@"^an onboarded employer logs into the AAN portal$")]
     public async Task AnOnboardedEmployerLogsIntoTheAANPortal()
     {
         await EmployerSign(user = context.GetUser<AanEmployerOnBoardedUser>());
@@ -27,24 +27,24 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await networkHubPage.VerifyPage();
     }
 
-    [Then(@"the user should be able to successfully verify a regional chair member profile")]
+    [Then(@"^the user should be able to successfully verify a regional chair member profile$")]
     public async Task VerifyARegionalChairMemberProfile() => await AccessNetworkDirectory(true);
 
-    [Then(@"the user should be able to successfully verify apprentice member profile")]
+    [Then(@"^the user should be able to successfully verify apprentice member profile$")]
     public async Task VerifyApprenticeMemberProfile() => await AccessNetworkDirectory(false);
 
     private async Task AccessNetworkDirectory(bool isRegionalChair) => await AccessNetworkDirectory(networkHubPage, isRegionalChair, string.Empty);
 
-    [Then(@"the user should be able to (ask for industry advice|ask for help with a network activity|request a case study|get in touch after meeting at a network event) to a regional chair member successfully")]
+    [Then(@"^the user should be able to (ask for industry advice|ask for help with a network activity|request a case study|get in touch after meeting at a network event) to a regional chair member successfully$")]
     public async Task TheUserShouldBeAbleToAskARegionalChairMemberSuccessfully(string message) => await SendMessage(networkDirectoryPage, Apprentice, message);
 
-    [Then(@"the user should be able to (ask for industry advice|ask for help with a network activity|request a case study|get in touch after meeting at a network event) to an apprentice member successfully")]
+    [Then(@"^the user should be able to (ask for industry advice|ask for help with a network activity|request a case study|get in touch after meeting at a network event) to an apprentice member successfully$")]
     public async Task TheUserShouldBeAbleToAskToTheMemberSuccessfully(string message) => await SendMessage(networkDirectoryPage, Apprentice, message);
 
-    [When(@"the user should be able to successfully verify ambassador profile")]
+    [When(@"^the user should be able to successfully verify ambassador profile$")]
     public async Task VerifyYourAmbassadorProfile() => await VerifyYourAmbassadorProfile(networkHubPage, user.Username);
 
-    [Then(@"the user should be able to update profile information")]
+    [Then(@"^the user should be able to update profile information$")]
     public async Task ThenTheUserShouldBeAbleToUpdateProfileInformation()
     {
         var page = await new YourAmbassadorProfilePage(context).AccessChangeForPersonalDetails();
@@ -60,7 +60,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await page4.ChangeLinkedlnUrlAndContinue();
     }
 
-    [When(@"the user should be able to successfully hide ambassador profile information")]
+    [When(@"^the user should be able to successfully hide ambassador profile information$")]
     public async Task WhenTheUserShouldBeAbleToSuccessfullyHideAmbassadorProfileInformation()
     {
         var page = await AccessYourAmbassadorProfile(networkHubPage);
@@ -78,7 +78,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await page5.HideLinkedlnInformation();
     }
 
-    [Then(@"the user should be able to successfully display ambassador profile information")]
+    [Then(@"^the user should be able to successfully display ambassador profile information$")]
     public async Task ThenTheUserShouldBeAbleToSuccessfullyDisplayAmbassadorProfileInformation()
     {
         var page = await new YourAmbassadorProfilePage(context).AccessChangeForPersonalDetails();
@@ -94,37 +94,37 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await page4.DisplayLinkedlnInformation();
     }
 
-    [Then(@"the user should be able to successfully signup for a future event")]
+    [Then(@"^the user should be able to successfully signup for a future event$")]
     public async Task SignupForAFutureEvent() => eventsHubPage = await SignupForAFutureEvent(networkHubPage, user.Username);
 
-    [Then(@"the user should be able to successfully Cancel the attendance for a signed up event")]
+    [Then(@"^the user should be able to successfully Cancel the attendance for a signed up event$")]
     public async Task CancelTheAttendance() => await CancelTheAttendance(eventsHubPage);
 
-    [Then(@"the user should be able to successfully filter events by date")]
+    [Then(@"^the user should be able to successfully filter events by date$")]
     public async Task FilterByDate() => await FilterByDate(networkHubPage);
 
-    [Then(@"the user should be able to successfully filter events by event format")]
+    [Then(@"^the user should be able to successfully filter events by event format$")]
     public async Task FilterByEventFormat() => await FilterByEventFormat(new SearchNetworkEventsPage(context));
 
-    [Then(@"the user should be able to successfully filter events by event type")]
+    [Then(@"^the user should be able to successfully filter events by event type$")]
     public async Task FilterByEventType() => await FilterByEventType(new SearchNetworkEventsPage(context));
 
-    [Then(@"the user should be able to successfully filter events by regions")]
+    [Then(@"^the user should be able to successfully filter events by regions$")]
     public async Task FilterByEventRegion() => await FilterByEventRegion(new SearchNetworkEventsPage(context));
 
-    [Then(@"the user should be able to successfully filter events by multiple combination of filters")]
+    [Then(@"^the user should be able to successfully filter events by multiple combination of filters$")]
     public async Task FilterByMultipleCombination() => await FilterByMultipleCombination(new SearchNetworkEventsPage(context));
 
-    [Then(@"the user should be able to successfully filter events by role Network Directory")]
+    [Then(@"^the user should be able to successfully filter events by role Network Directory$")]
     public async Task FilterByRole_NetworkDirectory() => await FilterByEventRoleNetworkDirectory(networkHubPage);
 
-    [Then(@"the user should be able to successfully filter events by regions Network Directory")]
+    [Then(@"^the user should be able to successfully filter events by regions Network Directory$")]
     public async Task FilterByEventRegion_NetworkDirectory() => await FilterByEventRegionNetworkDirectory(new NetworkDirectoryPage(context));
 
-    [Then(@"the user should be able to successfully filter events by multiple combination of filters Network Directory")]
+    [Then(@"^the user should be able to successfully filter events by multiple combination of filters Network Directory$")]
     public async Task FilterByMultipleCombination_NetworkDirectory() => await FilterByMultipleCombinationNetworkDirectory(new NetworkDirectoryPage(context));
 
-    [Given(@"the following events have been created:")]
+    [Given(@"^the following events have been created:$")]
     public async Task GivenTheFollowingEventsHaveBeenCreated(Table table)
     {
         await Navigate(UrlConfig.AAN_Admin_BaseUrl);
@@ -150,7 +150,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await Navigate(UrlConfig.AAN_Employer_BaseUrl);
     }
 
-    [When(@"the user filters events within (.*) miles of ""([^""]*)""")]
+    [When(@"^the user filters events within (.*) miles of ""([^""]*)""$")]
     public async Task WhenTheUserFiltersEventsWithinMilesOf(int radius, string location)
     {
         var page = await networkHubPage.AccessEventsHub();
@@ -165,7 +165,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         stepsHelper.ClearEventTitleCache();
     }
 
-    [When(@"the user filters events Across England centered on ""([^""]*)""")]
+    [When(@"^the user filters events Across England centered on ""([^""]*)""$")]
     public async Task WhenTheUserFiltersEventsAcrossEnglandCenteredOn(string location)
     {
         var searchNetworkEventsPage = new SearchNetworkEventsPage(context);
@@ -179,7 +179,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         stepsHelper.ClearEventTitleCache();
     }
 
-    [Then(@"the following events can be found within the search results:")]
+    [Then(@"^the following events can be found within the search results:$")]
     public async Task ThenTheFollowingEventsCanBeFoundWithinTheSearchResults(Table table)
     {
         var stepsHelper = context.Get<EmployerStepsHelper>();
@@ -193,7 +193,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         AssertListContains(titles, expectedEvents);
     }
 
-    [Then(@"the following events can not be found within the search results:")]
+    [Then(@"^the following events can not be found within the search results:$")]
     public void ThenTheFollowingEventsCanNotBeFoundWithinTheSearchResults(Table table)
     {
         var unexpectedEvents = table.CreateSet<NetworkEvent>().ToList();
@@ -204,7 +204,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         }
     }
 
-    [When(@"the user orders the results by Closest")]
+    [When(@"^the user orders the results by Closest$")]
     public async Task WhenTheUserOrdersTheResultsByClosest()
     {
         var searchNetworkEventsPage = new SearchNetworkEventsPage(context);
@@ -212,7 +212,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await searchNetworkEventsPage.SelectOrderByClosest();
     }
 
-    [Then(@"the following events can be found within the search results in the given order:")]
+    [Then(@"^the following events can be found within the search results in the given order:$")]
     public async Task ThenTheFollowingEventsCanBeFoundWithinTheSearchResultsInTheGivenOrder(Table table)
     {
         var stepsHelper = context.Get<EmployerStepsHelper>();
@@ -238,7 +238,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         }
     }
 
-    [Then(@"the heading text ""([^""]*)"" is displayed")]
+    [Then(@"^the heading text ""([^""]*)"" is displayed$")]
     public async Task ThenTheHeadingTextIsDisplayed(string expectedText)
     {
         searchNetworkEventsPage = new SearchNetworkEventsPage(context);
@@ -246,7 +246,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await searchNetworkEventsPage.VerifyHeadingText(expectedText);
     }
 
-    [Then(@"the text ""([^""]*)"" is displayed")]
+    [Then(@"^the text ""([^""]*)"" is displayed$")]
     public async Task ThenTheTextIsDisplayed(string expectedText)
     {
         searchNetworkEventsPage = new SearchNetworkEventsPage(context);
@@ -254,7 +254,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await searchNetworkEventsPage.VerifyBodyText(expectedText);
     }
 
-    [When(@"the user navigates to Network Events")]
+    [When(@"^the user navigates to Network Events$")]
     public async Task WhenTheUserNavigatesToNetworkEvents()
     {
         var page = await networkHubPage.AccessEventsHub();
@@ -262,7 +262,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         searchNetworkEventsPage = await page.AccessAllNetworkEvents();
     }
 
-    [When(@"the user filters events by Cancelled status")]
+    [When(@"^the user filters events by Cancelled status$")]
     public async Task WhenTheFiltersEventsByCancelledEventType()
     {
         searchNetworkEventsPage = new SearchNetworkEventsPage(context);
@@ -270,7 +270,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await searchNetworkEventsPage.FilterEventByEventStatus_Cancelled();
     }
 
-    [When(@"the user filters events by Training event type")]
+    [When(@"^the user filters events by Training event type$")]
     public async Task WhenTheUserFiltersEventsByTrainingEventType()
     {
         searchNetworkEventsPage = new SearchNetworkEventsPage(context);
@@ -278,7 +278,7 @@ public class Employer_Steps(ScenarioContext context) : Employer_BaseSteps(contex
         await searchNetworkEventsPage.FilterEventByEventType_TrainingEvent();
     }
 
-    [When(@"the user filters events so that there are no results")]
+    [When(@"^the user filters events so that there are no results$")]
     public async Task WhenTheUserFiltersEventsSoThatThereAreNoResults()
     {
         searchNetworkEventsPage = new SearchNetworkEventsPage(context);

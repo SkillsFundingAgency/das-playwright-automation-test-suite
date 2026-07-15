@@ -4,7 +4,7 @@ public class FAASearchApprenticeLandingPage(ScenarioContext context) : FAASigned
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h3")).ToContainTextAsync("Find an apprenticeship account created.");
+        await Assertions.Expect(page.Locator(".govuk-notification-banner--success h3")).ToContainTextAsync("Find an apprenticeship account created.");
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Search apprenticeships");
     }

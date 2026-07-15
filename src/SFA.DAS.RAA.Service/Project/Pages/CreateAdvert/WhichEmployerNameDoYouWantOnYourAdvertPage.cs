@@ -6,7 +6,8 @@ public class WhichEmployerNameDoYouWantOnYourAdvertPage(ScenarioContext context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "What employer name do you want on your advert?" : "What employer name do you want on the vacancy?";
+        string PageTitle = isRaaEpc ? "What employer name do you want on the vacancy?" : 
+            isRaaEmployer ? "What employer name do you want on your advert?" : "What employer name do you want on the vacancy?";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
@@ -140,9 +141,15 @@ public class EmployerDescriptionPage(ScenarioContext context) : RaaBasePage(cont
 
         if (optionalFields)
         {
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Website for organisation" }).FillAsync(rAADataHelper.EmployerWebsiteUrl);
-
-            if (!isRaaEmployer) await page.GetByRole(AriaRole.Checkbox, new() { Name = "This employer has signed up" }).CheckAsync();
+            if (!isRaaEmployer)
+            {
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "The organisation's website (" }).FillAsync(rAADataHelper.EmployerWebsiteUrl);
+                await page.GetByRole(AriaRole.Checkbox, new() { Name = "This employer has signed up" }).CheckAsync();
+            }
+            else
+            {
+                await page.GetByRole(AriaRole.Textbox, new() { Name = "Website for organisation" }).FillAsync(rAADataHelper.EmployerWebsiteUrl);
+            }
         }
         else
         {
@@ -159,7 +166,8 @@ public class ContactDetailsPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? $"Contact details for {objectContext.GetEmployerName()} (optional)" : "Do you want to add your contact details?";
+        string PageTitle = isRaaEpc ? "Do you want to add your contact details?" :
+            isRaaEmployer ? $"Contact details for {objectContext.GetEmployerName()} (optional)" : "Do you want to add your contact details?";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
@@ -230,9 +238,9 @@ public class ApplicationProcessPage(ScenarioContext context) : RaaBasePage(conte
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Through a different website" }).CheckAsync();
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Application website link" }).FillAsync(rAADataHelper.EmployerWebsiteUrl);
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Enter a link about the" }).FillAsync(rAADataHelper.EmployerWebsiteUrl);
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "How to apply (optional)" }).FillAsync(rAADataHelper.OptionalMessage);
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Explain the application" }).FillAsync(rAADataHelper.OptionalMessage);
     }
 
     private async Task<PreviewYourAdvertOrVacancyPage> SaveAndContinueToPreviewPage()

@@ -5,14 +5,7 @@
 @raae2e
 @raaemployere2e
 @regression
-@raaapiemployer
-
-Scenario Outline: RAA_E_EN_01 - Create an advert with registered name, reject the advert and verify email notification
-	When the user sends POST request to vacancy with payload <Payload>
-	Then a <ResponseStatus> response is received
-	And the Reviewer Refer the vacancy
-	Then the 'employer' receives 'rejected advert' email notification
-
-	Examples: 
-	| Payload              | ResponseStatus |
-	| singleLocation1.json | Created        |
+Scenario: RAA_E_EN_01 - Navigate to email settings page and set the preferences
+	Given the Employer navigates to 'Recruit' Page
+	When the employer selects the 'Manage your emails' link
+	Then the employer sets the email preferences

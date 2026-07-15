@@ -1,14 +1,13 @@
-﻿using SFA.DAS.ProviderLogin.Service.Project.Pages;
+﻿using System.Text.RegularExpressions;
+using SFA.DAS.ProviderLogin.Service.Project.Pages;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
     internal class FundingRestrictionsPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
-        private string fundingRestrictionsText = "Funding restrictions ! Warning This employer has reached their limit for active funding reservations and cannot reserve any more funding at this time. Any funding you have previously reserved for this employer is unaffected by this restriction. Return to account";
-        
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(fundingRestrictionsText);
+            await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(new Regex("Funding restrictions.*Warning.*(This employer has reached the maximum number of funding reservations\\. They cannot reserve any more funding at this time\\.|This employer has reached their limit for active funding reservations and cannot reserve any more funding at this time\\.).*Any funding you have previously reserved for this employer is unaffected by this restriction\\..*Return to account", RegexOptions.Singleline));
         }
 
         internal async Task<ProviderHomePage> ClickOnReturnToAccountButton()

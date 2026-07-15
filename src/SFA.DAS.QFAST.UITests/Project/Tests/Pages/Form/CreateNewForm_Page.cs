@@ -51,6 +51,41 @@ public class CreateNewForm_Page(ScenarioContext context) : BasePage(context)
         await editForm_Page.GoToForms();
     }
 
+    public async Task CreateFormForEligibilityUpdate()
+    {
+        await VerifyErrorMessageForEmptyFormNameAndDescription();
+        await EnterFormAndDescripitonDetailForEligibilityUpdate(); 
+        await editForm_Page.ValidateStatusAsDraftAndClickOnCreateNewSection();
+        await createSection_Page.EnterSectionName();
+        await editSection_Page.CreateNewPage();
+        await createPage_Page.EnterPageDetails();
+        await editPage_Page.CreateNewQuestion();
+        await createQuestion_Page.EnterFirstQuestionDetails();
+        await editQuestion_Page.SaveQuestion();
+        await editPage_Page.CreateNewQuestion();
+        await createQuestion_Page.EnterSecondQuestionDetails();
+        await editQuestion_Page.SaveQuestion();
+        await editPage_Page.CreateNewQuestion();
+        await createQuestion_Page.EnterThirdQuestionDetails();
+        await editQuestion_Page.SaveQuestion();
+        await editPage_Page.CreateNewQuestion();
+        await createQuestion_Page.EnterFourthQuestionDetails();
+        await editQuestion_Page.SaveQuestion();
+        await editPage_Page.CreateNewQuestion();
+        await createQuestion_Page.EnterFifthQuestionDetails();
+        await editQuestion_Page.SaveQuestion();
+        await editPage_Page.CreateNewQuestion();
+        await createQuestion_Page.EnterSixthQuestionDetails();
+        await editQuestion_Page.SaveQuestion();
+        await editPage_Page.CreateNewQuestion();
+        await createQuestion_Page.EnterSeventhQuestionDetails();
+        await editQuestion_Page.SaveQuestion();
+        await editPage_Page.GoToSection();
+        await editSection_Page.GoToForm();
+        await editForm_Page.PublishForm();
+        await editForm_Page.GoToForms();
+    }
+
     public async Task<CreateNewForm_Page> VerifyErrorMessageForEmptyFormNameAndDescription()
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
@@ -68,7 +103,12 @@ public class CreateNewForm_Page(ScenarioContext context) : BasePage(context)
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         return await VerifyPageAsync(() => new EditForm_Page(context));
     }
-
-
-
+    
+    public async Task<EditForm_Page> EnterFormAndDescripitonDetailForEligibilityUpdate()
+    {
+        await page.Locator("#Name").FillAsync(_qfastDataHelpers.FormNameForEligibilityChanged);
+        await page.Locator("#Description").FillAsync(_qfastDataHelpers.FormDescription);
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+        return await VerifyPageAsync(() => new EditForm_Page(context));
+    }
 }

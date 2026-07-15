@@ -6,10 +6,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
     {
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Set up an apprenticeship for a new employee");
 
-        internal async Task<ReserveFundingToTrainAndAssessAnApprenticePage> YesContinueToReserveFunding()
+        internal async Task<ReserveFundingPage> YesContinueToReserveFunding()
         {
             await page.Locator("#reserve-funding").ClickAsync();
-            return await VerifyPageAsync(() => new ReserveFundingToTrainAndAssessAnApprenticePage(context));
+            return await VerifyPageAsync(() => new ReserveFundingPage(context));
         }
     }
 }

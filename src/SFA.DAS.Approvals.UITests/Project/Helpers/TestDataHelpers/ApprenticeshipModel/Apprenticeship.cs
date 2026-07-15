@@ -81,9 +81,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
         public int TotalPrice { get; set; }
         public bool IsFlexiJob { get; set; }
         public int PlannedOTJTrainingHours { get; set; }
-        public int StandardCode { get; set; }
+        public string LarsCode { get; set; }
+        public int LearningType { get; set; }
         public string CourseTitle { get; set; }
         public string ConsumerReference { get; set; }
+        public DateTime StopDate { get; set; }
+        public int? WithdrawalReasonCode { get; set; }
     }
 
     public class RPL

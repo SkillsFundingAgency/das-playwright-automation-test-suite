@@ -3,7 +3,7 @@
 public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).
-        ToContainTextAsync("Apprenticeship training courses");
+        ToContainTextAsync("Training courses");
     public async Task VerifyNoResultsMessage()
     {
         var noResultsVisible = await page.Locator("p.govuk-body:has-text('No results')").IsVisibleAsync();
@@ -13,6 +13,49 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         {
             throw new Exception("Expected a no-results message but none were found.");
         }
+    }
+
+    public async Task<TrainingProvidersPage> SelectEVProviders()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Electric vehicle (EV)" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "View providers for this course" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new TrainingProvidersPage(context));
+    }
+     
+
+    public async Task<ApprenticeshipTrainingCoursesPage> AddAProviderToShortlist()
+    {
+        await page.GetByRole(AriaRole.Heading, new() { Name = "Accounts or finance assistant" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "View providers for this course" }).ClickAsync();
+        await page.Locator("#add-to-shortlist-10003193").ClickAsync();
+        await Assertions.Expect(page.Locator("#remove-from-shortlist-10003193")).ToContainTextAsync("Remove from shortlist");
+
+        await page.Locator("#add-to-shortlist-10036143").ClickAsync();
+        await Assertions.Expect(page.Locator("#remove-from-shortlist-10036143")).ToContainTextAsync("Remove from shortlist");
+        await page.GetByRole(AriaRole.Link, new() { Name = "View shortlist" }).ClickAsync();
+        await page.Locator("summary").ClickAsync();
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Accounts or finance assistant (level 2)");
+        await Assertions.Expect(page.Locator("tbody")).ToContainTextAsync("HUGH BAIRD COLLEGE");
+        await Assertions.Expect(page.Locator("tbody")).ToContainTextAsync("SOUTH GLOUCESTERSHIRE AND STROUD COLLEGE");
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Search" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Browse all courses" }).ClickAsync();
+        return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
+    }
+
+    public async Task AddProviderToShortlistUsingLocation()
+    {
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "Learner's work location" }).FillAsync("L20 7EW");
+        await page.GetByRole(AriaRole.Option, new() { Name = "L20 7EW" }).ClickAsync();
+        await page.GetByLabel("Learner can travel").SelectOptionAsync(new[] { "2" });
+        await page.Locator("#filters-submit-top").ClickAsync();
+        await page.GetByRole(AriaRole.Heading, new() { Name = "Accounts or finance assistant" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "View providers for this course" }).ClickAsync();
+        await page.Locator("#add-to-shortlist-10003193").ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "View shortlist" }).ClickAsync();
     }
 
     public async Task SearchApprenticeshipInApprenticeshipTrainingCoursesPage(string searchTerm)
@@ -46,25 +89,25 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await ClearSpecificFilter("Professional");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
-        await ClearSpecificFilter("TW14 Hounslow (within 10 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 10 miles)");
+        await ClearSpecificFilter("TW14 Hillingdon (within 10 miles)");
         await VerifyNoFiltersAreApplied();
         await SelectApprenticeTravelDistance("10 miles");
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
-        await ClearSpecificFilter("TW14 Hounslow (within 10 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 10 miles)");
+        await ClearSpecificFilter("TW14 Hillingdon (within 10 miles)");
         await VerifyNoFiltersAreApplied();
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 10 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 10 miles)");
         await SelectApprenticeTravelDistance("20 miles");
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 20 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 20 miles)");
         await SelectApprenticeTravelDistance("100 miles");
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 100 miles)");
-        await ClearSpecificFilter("TW14 Hounslow (within 100 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 100 miles)");
+        await ClearSpecificFilter("TW14 Hillingdon (within 100 miles)");
         await VerifyNoFiltersAreApplied();
         await SelectJobCategory("Agriculture, environmental and animal care");
         await ApplyFilters();
@@ -89,7 +132,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await SelectApprenticeshipLevel("Level 2");
         await ApplyFilters();
         await VerifyFilterIsSet("Professional");
-        await VerifyFilterIsSet("TW14 Hounslow (within 100 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 100 miles)");
         await VerifyFilterIsSet("Agriculture, environmental and animal care");
         await VerifyFilterIsSet("Care services");
         await VerifyFilterIsSet("Digital");
@@ -110,7 +153,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     public async Task ApplyFoundationStandardsFilterAndVerifyResultsForFoundationStandards()
     {
         await VerifyNoFiltersAreApplied();
-        await SelectApprenticeshipType("Foundation apprenticeships");
+        await SelectApprenticeshipType("FoundationApprenticeship");
         await ApplyFilters();
         await VerifyFilterIsSet("Foundation apprenticeships");
         await VerifyAllResultsHaveFoundationTag();
@@ -120,7 +163,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
     public async Task ApplyFoundationStandardsFilter()
     {
         await VerifyNoFiltersAreApplied();
-        await SelectApprenticeshipType("Foundation apprenticeships");
+        await SelectApprenticeshipType("FoundationApprenticeship");
         await ApplyFilters();
     }
     public async Task ApplyLocationFilterAndVerifyResultsForTW14_50miles()
@@ -129,7 +172,7 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await EnterApprenticeWorkLocation(fateDataHelper.PartialPostCode, fateDataHelper.PostCodeDetails);
         await SelectApprenticeTravelDistance("50 miles");
         await ApplyFilters();
-        await VerifyFilterIsSet("TW14 Hounslow (within 50 miles)");
+        await VerifyFilterIsSet("TW14 Hillingdon (within 50 miles)");
         await VerifyTrainingProviderWithinDistance(50);
         await ClearAllFilters();
     }
@@ -142,15 +185,14 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
         await VerifyJobCategoryResults("Protective services");
         await ClearAllFilters();
     }
-    public async Task<ApprenticeshipTrainingCourseDetailsPage> SelectCourseByName(string courseNameWithLevel)
+    public async Task SelectCourseByName(string courseName)
     {
-        objectContext.SetTrainingCourseName(courseNameWithLevel);
+        var courseLink = page
+            .Locator("a.das-search-results__link")
+            .Filter(new() { HasText = courseName });
 
-        var courseLink = page.GetByRole(AriaRole.Link, new() { Name = courseNameWithLevel, Exact = true })
-                     .Filter(new() { Has = page.Locator("span.das-no-wrap") });
         await Assertions.Expect(courseLink).ToBeVisibleAsync();
         await courseLink.ClickAsync();
-        return await VerifyPageAsync(() => new ApprenticeshipTrainingCourseDetailsPage(context));
     }
 
     public async Task<ApprenticeshipTrainingCourseDetailsPage> SelectFirstTrainingResult(string title)

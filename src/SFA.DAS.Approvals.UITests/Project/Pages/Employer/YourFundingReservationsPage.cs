@@ -7,6 +7,12 @@
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your funding reservations");
         }
 
+        public async Task<ReserveFundingPage> ClickOnReserveMoreFundingLink()
+        {
+            await page.Locator("a", new() { HasTextString = "Reserve more funding" }).ClickAsync();
+            return await VerifyPageAsync(() => new ReserveFundingPage(context));
+        }
+
         public async Task<YouCannotCreateAnotherFundingReservationPage> TryClickOnReserveMoreFundingLink()
         {
             await page.Locator("a", new() { HasTextString = "Reserve more funding" }).ClickAsync();

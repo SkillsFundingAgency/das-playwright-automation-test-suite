@@ -8,7 +8,7 @@ public class ProviderRolesSteps(ScenarioContext context)
 {
     private ProviderHomePage providerHomePage;
 
-    [Then(@"user can access Notification Settings page")]
+    [Then(@"^user can access Notification Settings page$")]
     public async Task UserCanAccessNotificationSettingsPage()
     {
         providerHomePage = new ProviderHomePage(context);
@@ -20,7 +20,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page1.ClickCancel();
     }
 
-    [Then("user can access Notification Settings page as viewer")]
+    [Then("^user can access Notification Settings page as viewer$")]
     public async Task ThenUserCanAccessNotificationSettingsPageAsViewer()
     {
         providerHomePage = new ProviderHomePage(context);
@@ -32,7 +32,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page1.ClickCancel();
     }
 
-    [Then(@"user can access Orgs And Agreements page")]
+    [Then(@"^user can access Orgs And Agreements page$")]
     public async Task UserCanAccessProviderOrganisationsAndAgreementsPage()
     {
         var page = await providerHomePage.GoToProviderEmployersAndPermissionsPagePage();
@@ -40,7 +40,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user can access Help page")]
+    [Then(@"^user can access Help page$")]
     public async Task UserCanAccessHelpPage()
     {
         var page = await providerHomePage.GoToManageApprenticeshipsServiceHelpPage();
@@ -48,13 +48,13 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user can access Feedback page")]
+    [Then(@"^user can access Feedback page$")]
     public async Task UserCanAccessFeedbackPage()
     {
         await providerHomePage.VerifyProviderFooterFeedbackPage();
     }
 
-    [Then(@"user can access Privacy Statement page")]
+    [Then(@"^user can access Privacy Statement page$")]
     public async Task UserCanAccessPrivacyStatementPage()
     {
         var page = await providerHomePage.GoToProviderFooterPrivacyPage();
@@ -62,7 +62,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user can access Cookies page")]
+    [Then(@"^user can access Cookies page$")]
     public async Task UserCanAccessCookiesPage()
     {
         var page = await providerHomePage.GoToProviderFooterCookiesPage();
@@ -70,7 +70,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user can access Terms Of Use page")]
+    [Then(@"^user can access Terms Of Use page$")]
     public async Task UserCanAccessTermsOfUsePage()
     {
 
@@ -79,13 +79,13 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user can signout from their account")]
+    [Then(@"^user can signout from their account$")]
     public async Task UserCanSignoutFromTheirAccount()
     {
         await providerHomePage.SignsOut();
     }
 
-    [Then(@"user can view Add New Apprentices page as defined in the table below (.*)")]
+    [Then(@"^user can view Add New Apprentices page as defined in the table below (.*)$")]
     public async Task UserCanOrCannotViewAddNewApprenticesPageAsDefinedInTable(bool canAccess)
     {
         var page = new ProviderHomePage(context);
@@ -104,7 +104,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         }
     }
 
-    [Then(@"user can view Add An Employer page as defined in the table below (.*)")]
+    [Then(@"^user can view Add An Employer page as defined in the table below (.*)$")]
     public async Task UserCanOrCannotViewAddAnEmployerPageAsDefinedInTable(bool canAccess)
     {
         if (canAccess)
@@ -125,7 +125,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         }
     }
 
-    [Then(@"user can view Get Funding For NonLevy Employers page as defined in the table below (.*)")]
+    [Then(@"^user can view Get Funding For NonLevy Employers page as defined in the table below (.*)$")]
     public async Task UserCanOrCannotViewGetFundingNonLevyEmployersPageAsDefinedInTable(bool canAccess)
     {
         if (canAccess)
@@ -146,7 +146,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         }
     }
 
-    [Then(@"user can view View Employers And Manage Permissions page")]
+    [Then(@"^user can view View Employers And Manage Permissions page$")]
     public async Task UserCanViewEmployersAndManagePermissionsPage()
     {
         await providerHomePage.ClickViewEmployersAndManagePermissionsLink();
@@ -160,7 +160,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         await providerHomePage.GoToProviderHomePage();
     }
 
-    [Then(@"user can view Apprentice Requests page")]
+    [Then(@"^user can view Apprentice Requests page$")]
     public async Task UserCanViewApprenticeRequestsPage()
     {
         var page = await providerHomePage.GoToApprenticeRequestsPage();
@@ -168,7 +168,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user can view Manage Your Funding Reserved For NonLevy Employers page")]
+    [Then(@"^user can view Manage Your Funding Reserved For NonLevy Employers page$")]
     public async Task UserCanViewManageYourFundingReservedForNonLevyEmployersPage()
     {
         var page = await providerHomePage.GoToManageYourFunding();
@@ -176,7 +176,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user can view Manage Your Apprentices page")]
+    [Then(@"^user can view Manage Your Apprentices page$")]
     public async Task UserCanViewManageYourApprenticesPage()
     {
         var page = await providerHomePage.GoToProviderManageYourApprenticePage();
@@ -184,7 +184,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user can view Recruit Apprentices page")]
+    [Then(@"^user can view Recruit Apprentices page$")]
     public async Task UserCanViewRecruitApprenticesPage()
     {
         var page = await providerHomePage.GoToProviderRecruitApprenticesHomePage();
@@ -192,7 +192,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user can view Your Standards And Training Venues page")]
+    [Then(@"^user can view Your Standards And Training Venues page$")]
     public async Task UserCanViewYourStandardsAndTrainingVenuesPage()
     {
         var page = await providerHomePage.NavigateToYourStandardsAndTrainingVenuesPage();
@@ -200,7 +200,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user cannot view Your Standards And Training Venues page")]
+    [Then(@"^user cannot view Your Standards And Training Venues page$")]
     public async Task UserCannotViewYourStandardsAndTrainingVenuesPage()
     {
         var page = await providerHomePage.NavigateToShutterPage_EmployerTypeProviderPage();
@@ -208,7 +208,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user can view Developer APIs page as defined in the table below (.*)")]
+    [Then(@"^user can view Developer APIs page as defined in the table below (.*)$")]
     public async Task UserCanViewDeveloperAPIsPage(bool canAccess)
     {
 
@@ -226,7 +226,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         }
     }
 
-    [Then(@"user can view Your Feedback page")]
+    [Then(@"^user can view Your Feedback page$")]
     public async Task UserCanViewYourFeedbackPage()
     {
         var page = await providerHomePage.NavigateToYourFeedback();
@@ -234,7 +234,7 @@ public class ProviderRolesSteps(ScenarioContext context)
         providerHomePage = await page.GoToProviderHomePage();
     }
 
-    [Then(@"user can view View Employer Requests For Training page")]
+    [Then(@"^user can view View Employer Requests For Training page$")]
     public async Task UserCanViewEmployerRequestsForTrainingPage()
     {
         var page = await providerHomePage.NavigateToViewEmployerRequestsForTrainingPage();

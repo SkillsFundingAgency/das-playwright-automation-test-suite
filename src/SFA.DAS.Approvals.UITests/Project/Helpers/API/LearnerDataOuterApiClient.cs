@@ -24,7 +24,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
 
         public async Task<RestResponse> PostNewLearners(string resource, string payload)
         {
-            await _restClient.CreateRestRequest(Method.Put, resource, payload);
+            await _restClient.CreateRestRequest(Method.Post, resource, payload);
             _restResponse = await SendRequestAsync(HttpStatusCode.Accepted);
             return _restResponse;
         }

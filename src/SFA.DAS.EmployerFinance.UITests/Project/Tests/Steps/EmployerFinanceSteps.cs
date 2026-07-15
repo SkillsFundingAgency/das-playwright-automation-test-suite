@@ -11,19 +11,19 @@ public class EmployerFinanceSteps(ScenarioContext context)
 {
     private FinancePage _financePage;
 
-    [Then(@"'Set up an apprenticeship' section is displayed")]
+    [Then(@"^'Set up an apprenticeship' section is displayed$")]
     public async Task ThenSetUpAnApprnticeshipSectionIsDisplayed() => await new HomePage(context).VerifySetupAnApprenticeshipSection();
 
-    [Then(@"'Your funding reservations' and 'Your finances' links are displayed in the Finances section")]
+    [Then(@"^'Your funding reservations' and 'Your finances' links are displayed in the Finances section$")]
     public async Task ThenAndLinksAreDisplayedInTheFinancesSection() => await new HomePageFinancesSection_YourFinance(context).VerifyYourFinancesSectionLinksForANonLevyUser();
 
-    [Then(@"'Your finances' link is displayed in the Finances section")]
+    [Then(@"^'Your finances' link is displayed in the Finances section$")]
     public async Task ThenLinkIsDisplayedInTheFinancesSection() => await new HomePageFinancesSection_YourFinance(context).VerifyYourFinancesSectionLinksForALevyUser();
 
-    [When(@"the Employer navigates to 'Finance' Page")]
+    [When(@"^the Employer navigates to 'Finance' Page$")]
     public async Task WhenTheEmployerNavigatesFinancePage() => _financePage = await new HomePageFinancesSection_YourFinance(context).NavigateToFinancePage();
 
-    [Then(@"the employer can navigate to recruitment page")]
+    [Then(@"^the employer can navigate to recruitment page$")]
     public async Task ThenTheEmployerCanNavigateToRecruitment()
     {
         await new InterimFinanceHomePage(context, true).VerifyPage();
@@ -31,15 +31,15 @@ public class EmployerFinanceSteps(ScenarioContext context)
         await new InterimYourApprenticeshipAdvertsHomePage(context, true).VerifyPage();
     }
 
-    [Then(@"the employer can navigate to apprentice page")]
+    [Then(@"^the employer can navigate to apprentice page$")]
     public async Task ThenTheEmployerCanNavigateToApprentice()
     {
         await new InterimFinanceHomePage(context, true).VerifyPage();
 
-        await new InterimApprenticesHomePage(context, false).VerifyPage();
+        await new InterimLearnersHomePage(context, false).VerifyPage();
     }
 
-    [Then(@"the employer can navigate to your team page")]
+    [Then(@"^the employer can navigate to your team page$")]
     public async Task ThenTheEmployerCanNavigateToYourTeamPage()
     {
         var page = new InterimFinanceHomePage(context, true, true);
@@ -49,7 +49,7 @@ public class EmployerFinanceSteps(ScenarioContext context)
         await page.GotoYourTeamPage();
     }
 
-    [Then(@"the employer can navigate to account settings page")]
+    [Then(@"^the employer can navigate to account settings page$")]
     public async Task ThenTheEmployerCanNavigateToAccountSettingsPage()
     {
         var page = new InterimFinanceHomePage(context, true, true);
@@ -61,7 +61,7 @@ public class EmployerFinanceSteps(ScenarioContext context)
         await page1.OpenAccount();
     }
 
-    [Then(@"the employer can navigate to rename account settings page")]
+    [Then(@"^the employer can navigate to rename account settings page$")]
     public async Task ThenTheEmployerCanNavigateToRenameAccountSettingsPage()
     {
         var page = new InterimFinanceHomePage(context, true, true);
@@ -71,7 +71,7 @@ public class EmployerFinanceSteps(ScenarioContext context)
         await page.GoToRenameAccountPage();
     }
 
-    [Then(@"the employer can navigate to notification settings page")]
+    [Then(@"^the employer can navigate to notification settings page$")]
     public async Task ThenTheEmployerCanNavigateToNotificationSettingsPage()
     {
         var page = new InterimFinanceHomePage(context, true, true);
@@ -83,7 +83,7 @@ public class EmployerFinanceSteps(ScenarioContext context)
         await page1.GoBackToHomePage();
     }
 
-    [Then(@"the employer can navigate to help settings page")]
+    [Then(@"^the employer can navigate to help settings page$")]
     public async Task ThenTheEmployerCanNavigateToHelpSettingsPage()
     {
         var page = new InterimFinanceHomePage(context, true, true);
@@ -93,7 +93,7 @@ public class EmployerFinanceSteps(ScenarioContext context)
         await page.GoToHelpPage();
     }
 
-    [Then(@"'View transactions', 'Download transactions' and 'Transfers' links are displayed")]
+    [Then(@"^'View transactions', 'Download transactions' and 'Transfers' links are displayed$")]
     public async Task ThenAndLinksAreDisplayed()
     {
         await _financePage.IsViewTransactionsLinkPresent();
@@ -103,7 +103,7 @@ public class EmployerFinanceSteps(ScenarioContext context)
         await _financePage.IsTransfersLinkPresent();
     }
 
-    [Then(@"Employer is able to navigate to 'View transactions', 'Download transactions' and 'Transfers' pages")]
+    [Then(@"^Employer is able to navigate to 'View transactions', 'Download transactions' and 'Transfers' pages$")]
     public async Task ThenEmployerIsAbleToNavigateToAndPages()
     {
         var page = await _financePage.GoToViewTransactionsPage();
@@ -120,7 +120,7 @@ public class EmployerFinanceSteps(ScenarioContext context)
 
     }
 
-    [Then(@"Funds data information is diplayed")]
+    [Then(@"^Funds data information is diplayed$")]
     public async Task ThenFundsDataInformationIsDiplayed()
     {
         await _financePage.GetCurrentFundsLabel();

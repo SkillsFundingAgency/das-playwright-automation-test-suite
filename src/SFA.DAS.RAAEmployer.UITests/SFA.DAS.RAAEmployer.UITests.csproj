@@ -19,10 +19,9 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-		<PackageReference Include="Reqnroll" Version="3.3.3" />
-		<PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
-		<PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.6.0" />
+		<PackageReference Include="Reqnroll.Tools.MsBuild.Generation" Version="3.3.4" />
+		<PackageReference Include="Reqnroll.NUnit" Version="3.3.4" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,6 +33,7 @@
 		<ProjectReference Include="..\SFA.DAS.ProviderLogin.Service\SFA.DAS.ProviderLogin.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.RAA.APITests\SFA.DAS.RAA.APITests.csproj" />
 		<ProjectReference Include="..\SFA.DAS.RAA.Service\SFA.DAS.RAA.Service.csproj" />
+		<ProjectReference Include="..\SFA.DAS.RAAProvider.UITests\SFA.DAS.RAAProvider.UITests.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -44,8 +44,11 @@
 		<None Update="appsettings.Project.json">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
-		<None Update="specflow.json">
+		<None Update="reqnroll.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="allureConfig.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 

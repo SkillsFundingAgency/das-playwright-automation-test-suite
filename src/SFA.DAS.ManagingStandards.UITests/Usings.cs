@@ -10,4 +10,4 @@ global using SFA.DAS.ProviderLogin.Service.Project;
 global using SFA.DAS.ProviderLogin.Service.Project.Pages;
 global using System.Linq;
 global using System.Threading.Tasks;
-global using TechTalk.SpecFlow;
+global using Reqnroll;

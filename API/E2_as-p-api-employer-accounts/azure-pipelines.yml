@@ -13,7 +13,7 @@ variables:
   - name: projectName
     value: "SFA.DAS.EmployerAccounts.APITests"
   - name: RuleName
-    value: "AM_das-accapi-test-suite"
+    value: "E2_as-accapi-test-suite"
   - name: ResourceName
     value: "$(EmployerAccountsAppWhitelistName)"
 

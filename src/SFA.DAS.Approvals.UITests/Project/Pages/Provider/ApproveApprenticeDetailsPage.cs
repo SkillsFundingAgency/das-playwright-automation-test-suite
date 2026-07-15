@@ -52,13 +52,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await Assertions.Expect(employerName).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(cohortReference).ToHaveTextAsync(apprenticeship.Cohort.Reference);
             await Assertions.Expect(status).ToHaveTextAsync(cohortStatus);
-            //await Assertions.Expect(message).ToHaveTextAsync("No message added.");
 
             var expectedName = apprenticeship.ApprenticeDetails.FullName;
             var expectedULN = apprenticeship.ApprenticeDetails.ULN.ToString();
             var expectedDOB = apprenticeship.ApprenticeDetails.DateOfBirth.ToString("d MMM yyyy", CultureInfo.InvariantCulture);
             var expectedTrainingDates = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy", CultureInfo.InvariantCulture) + " to " + apprenticeship.TrainingDetails.EndDate.ToString("MMM yyyy", CultureInfo.InvariantCulture);
-            var expectedPrice = apprenticeship.TrainingDetails.TotalPrice.ToString("C0");
+            var expectedPrice = apprenticeship.TrainingDetails.TotalPrice.ToString("C0", new CultureInfo("en-GB"));
 
             var apprenticeRow = row(apprenticeship.ApprenticeDetails.ULN.ToString());
             await Assertions.Expect(Name(apprenticeRow)).ToHaveTextAsync(expectedName.Trim());
@@ -90,25 +89,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
-        internal async Task<ProviderSelectAReservationPage> ClickOnAddAnotherApprenticeLink_SelectReservationRoute()
+        internal async Task<ProviderChooseAReservationPage> ClickOnAddAnotherApprenticeLink_SelectReservationRoute()
         {
             await AddAnotherApprenticeLink.ClickAsync();
-            return await VerifyPageAsync(() => new ProviderSelectAReservationPage(context));
+            return await VerifyPageAsync(() => new ProviderChooseAReservationPage(context));
         }
 
         internal async Task<SelectLearnerFromILRPage> ClickOnAddAnotherApprenticeLink_SelectExistingReservationRoute()
         {
             await AddAnotherApprenticeLink.ClickAsync();
-            await new AddApprenticeDetails_EntryMothodPage(context).SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
+            await new HowDoYouWantToAddLearner_EntryMothodPage(context).SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
             var reservation = await new SelectReservationPage(context).SelectReservation();
             return new SelectLearnerFromILRPage(context);
         }
 
 
-        internal async Task<AddApprenticeDetails_EntryMothodPage> ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage()
+        internal async Task<HowDoYouWantToAddLearner_EntryMothodPage> ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage()
         {
             await AddAnotherApprenticeLink.ClickAsync();
-            return await VerifyPageAsync(() => new AddApprenticeDetails_EntryMothodPage(context));            
+            return await VerifyPageAsync(() => new HowDoYouWantToAddLearner_EntryMothodPage(context));            
         }
         
         internal async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()

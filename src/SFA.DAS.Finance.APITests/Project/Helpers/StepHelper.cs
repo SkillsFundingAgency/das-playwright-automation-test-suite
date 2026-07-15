@@ -1,6 +1,9 @@
 using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers
@@ -27,6 +30,100 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             return await accountsHelper.ExecuteSql(sql);
         }
 
+        public async Task<string> PrepareTransferStagingPayload(string fileName)
+        {
+            var transferId = new Random().Next(1, 800000);
+            try { _scenarioContext.Set(transferId, "transferId"); } catch { _scenarioContext["transferId"] = transferId; }
+
+            var payloadTemplate = GetPayloadTemplate(fileName);
+            var payloadObject = JObject.Parse(payloadTemplate);
+            var transfer = payloadObject["transfers"]?[0] as JObject;
+            if (transfer != null)
+            {
+                transfer["transferId"] = transferId;
+            }
+
+            try { _scenarioContext.Set(transfer, "transferStagingExpectedPayload"); } catch { _scenarioContext["transferStagingExpectedPayload"] = transfer; }
+
+            return payloadObject.ToString(Formatting.None);
+        }
+
+        public async Task<string> PreparePaymentStagingPayload(string fileName)
+        {
+            var paymentId = Guid.NewGuid().ToString();
+            try { _scenarioContext.Set(paymentId, "paymentId"); } catch { _scenarioContext["paymentId"] = paymentId; }
+
+            var payloadTemplate = GetPayloadTemplate(fileName);
+            var payloadObject = JObject.Parse(payloadTemplate);
+            var payment = payloadObject["PAYMENTS"]?[0] as JObject;
+            if (payment != null)
+            {
+                payment["paymentId"] = paymentId;
+            }
+
+            try { _scenarioContext.Set(payment, "paymentStagingExpectedPayload"); } catch { _scenarioContext["paymentStagingExpectedPayload"] = payment; }
+
+            return payloadObject.ToString(Formatting.None);
+        }
+
+        public async Task<string> PreparePaymentMetaDataStagingPayload(string fileName)
+        {
+            var payloadTemplate = GetPayloadTemplate(fileName);
+            var payloadObject = JObject.Parse(payloadTemplate);
+
+            try { _scenarioContext.Set(payloadObject, "paymentMetaDataStagingExpectedPayload"); } catch { _scenarioContext["paymentMetaDataStagingExpectedPayload"] = payloadObject; }
+
+            return payloadObject.ToString(Formatting.None);
+        }
+
+        public async Task<string> PrepareEnglishFractionsPayload(string fileName, bool? updateRequiredOverride = null, string empRefOverride = null)
+        {
+            var payloadTemplate = GetPayloadTemplate(fileName);
+            var payloadObject = JObject.Parse(payloadTemplate);
+
+            if (updateRequiredOverride.HasValue)
+            {
+                payloadObject["updateRequired"] = updateRequiredOverride.Value;
+            }
+
+            if (!string.IsNullOrWhiteSpace(empRefOverride))
+            {
+                payloadObject["empRef"] = empRefOverride;
+            }
+
+            var empRef = payloadObject["empRef"]?.ToString() ?? string.Empty;
+            try { _scenarioContext.Set(empRef, "englishFractionsEmpRef"); } catch { _scenarioContext["englishFractionsEmpRef"] = empRef; }
+            try { _scenarioContext.Set(payloadObject, "englishFractionsExpectedPayload"); } catch { _scenarioContext["englishFractionsExpectedPayload"] = payloadObject; }
+
+            return payloadObject.ToString(Formatting.None);
+        }
+
+        public async Task<string> PrepareEnglishFractionCalculationDatePayload(string fileName)
+        {
+            var random = new Random();
+            var startDate = new DateTime(2020, 1, 1);
+            var endDate = new DateTime(2030, 12, 31);
+            var range = (endDate - startDate).Days;
+            var dateCalculated = startDate.AddDays(random.Next(range + 1)).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            try { _scenarioContext.Set(dateCalculated, "englishFractionCalculationDate"); } catch { _scenarioContext["englishFractionCalculationDate"] = dateCalculated; }
+
+            var payloadTemplate = GetPayloadTemplate(fileName);
+            var payloadObject = JObject.Parse(payloadTemplate);
+            payloadObject["dateCalculated"] = dateCalculated;
+
+            try { _scenarioContext.Set(payloadObject, "englishFractionCalculationDateExpectedPayload"); } catch { _scenarioContext["englishFractionCalculationDateExpectedPayload"] = payloadObject; }
+
+            return payloadObject.ToString(Formatting.None);
+        }
+
+        private static string GetPayloadTemplate(string fileName)
+        {
+            var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var payloadFilePath = Path.Combine(assemblyLocation, "Project", "Tests", "Payload", fileName);
+            return File.ReadAllText(payloadFilePath);
+        }
+
         public Dictionary<string, string> MapRowToDictionary(List<string> row, List<string> selectAliases)
         {
             var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -36,6 +133,279 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 dict[alias] = i < row.Count ? (row[i] ?? string.Empty) : string.Empty;
             }
             return dict;
+        }
+
+        public async Task CompareTransferStagingDataAgainstDb()
+        {
+            var expectedTransfer = _scenarioContext.Get<JObject>("transferStagingExpectedPayload");
+            var sqlResult = _scenarioContext.Get<List<string>>("transferStagingDbRecord");
+
+            Assert.IsNotNull(expectedTransfer, "Expected transfer payload was not found in ScenarioContext.");
+            Assert.IsNotNull(sqlResult, "Transfer staging DB record was not found in ScenarioContext.");
+
+            var aliases = new List<string>
+            {
+                "transferId",
+                "senderAccountId",
+                "receiverAccountId",
+                "receiverAccountName",
+                "amount",
+                "transferDate",
+                "periodEnd",
+                "collectionPeriodMonth",
+                "collectionPeriodYear",
+                "ukprn",
+                "courseName",
+                "createdBy",
+                "correlationId"
+            };
+
+            var sqlDict = MapRowToDictionary(sqlResult, aliases);
+            if (sqlDict.TryGetValue("transferDate", out var transferDate)) sqlDict["transferDate"] = ParseDateTime(transferDate);
+            if (sqlDict.TryGetValue("periodEnd", out var periodEnd)) sqlDict["periodEnd"] = ParseDate(periodEnd);
+
+            var expectedDict = expectedTransfer.Properties()
+                .ToDictionary(
+                    property => property.Name,
+                    property => property.Value?.ToString() ?? string.Empty,
+                    StringComparer.OrdinalIgnoreCase);
+
+            if (expectedDict.TryGetValue("transferDate", out var expectedTransferDate)) expectedDict["transferDate"] = ParseDateTime(expectedTransferDate);
+            if (expectedDict.TryGetValue("periodEnd", out var expectedPeriodEnd)) expectedDict["periodEnd"] = ParseDate(expectedPeriodEnd);
+
+            var actualObj = JObject.FromObject(sqlDict);
+            CompareApiResponseToExpectedResult(expectedDict, actualObj, null);
+        }
+
+        public async Task ComparePaymentStagingDataAgainstDb()
+        {
+            var expectedPayment = _scenarioContext.Get<JObject>("paymentStagingExpectedPayload");
+            var sqlResult = _scenarioContext.Get<List<string>>("paymentStagingDbRecord");
+
+            var aliases = new List<string>
+            {
+                "paymentId",
+                "ukprn",
+                "uln",
+                "accountId",
+                "apprenticeshipId",
+                "deliveryPeriodMonth",
+                "deliveryPeriodYear",
+                "collectionPeriodId",
+                "collectionPeriodMonth",
+                "collectionPeriodYear",
+                "fundingSource",
+                "transactionType",
+                "amount",
+                "evidenceSubmittedOn",
+                "employerAccountVersion",
+                "apprenticeshipVersion"
+            };
+
+            var sqlDict = MapRowToDictionary(sqlResult, aliases);
+            if (sqlDict.TryGetValue("evidenceSubmittedOn", out var evidenceSubmittedOn)) sqlDict["evidenceSubmittedOn"] = ParseDateTime(evidenceSubmittedOn);
+
+            var expectedDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var alias in aliases)
+            {
+                var token = expectedPayment[alias];
+                expectedDict[alias] = token?.ToString() ?? string.Empty;
+            }
+
+            if (expectedDict.TryGetValue("evidenceSubmittedOn", out var expectedEvidenceSubmittedOn)) expectedDict["evidenceSubmittedOn"] = ParseDateTime(expectedEvidenceSubmittedOn);
+
+            var actualObj = JObject.FromObject(sqlDict);
+            CompareApiResponseToExpectedResult(expectedDict, actualObj, null);
+        }
+
+        public async Task<string> PreparePeriodEndPayload(string fileName)
+        {
+            var suffix = new Random().Next(10000, 99999);
+            var periodEndId = $"1819-R0{suffix}";
+            try { _scenarioContext.Set(periodEndId, "periodEndId"); } catch { _scenarioContext["periodEndId"] = periodEndId; }
+
+            var payloadTemplate = GetPayloadTemplate(fileName);
+            var periodEnd = JObject.Parse(payloadTemplate);
+            if (periodEnd != null)
+            {
+                periodEnd["periodEndId"] = periodEndId;
+                var existingUrl = periodEnd["paymentsForPeriod"]?.ToString() ?? string.Empty;
+                var baseUrl = existingUrl.Contains("?periodId=")
+                    ? existingUrl.Substring(0, existingUrl.IndexOf("?periodId="))
+                    : existingUrl;
+                periodEnd["paymentsForPeriod"] = $"{baseUrl}?periodId={periodEndId}";
+            }
+
+            try { _scenarioContext.Set(periodEnd, "periodEndExpectedPayload"); } catch { _scenarioContext["periodEndExpectedPayload"] = periodEnd; }
+
+            return periodEnd.ToString(Formatting.None);
+        }
+
+        public async Task ComparePeriodEndDataAgainstDb()
+        {
+            var sqlResult = _scenarioContext.Get<List<string>>("periodEndDbRecord");
+
+            var aliases = new List<string>
+            {
+                "periodEndId",
+                "calendarPeriodMonth",
+                "calendarPeriodYear",
+                "accountDataValidAt",
+                "commitmentDataValidAt",
+                "completionDateTime",
+                "paymentsForPeriod"
+            };
+
+            var sqlDict = MapRowToDictionary(sqlResult, aliases);
+            if (sqlDict.TryGetValue("accountDataValidAt", out var accountDataValidAt)) sqlDict["accountDataValidAt"] = ParseDateTime(accountDataValidAt);
+            if (sqlDict.TryGetValue("commitmentDataValidAt", out var commitmentDataValidAt)) sqlDict["commitmentDataValidAt"] = ParseDateTime(commitmentDataValidAt);
+            if (sqlDict.TryGetValue("completionDateTime", out var completionDateTime)) sqlDict["completionDateTime"] = ParseDateTime(completionDateTime);
+
+            object actualResult = null;
+            try { actualResult = _scenarioContext.ContainsKey("actualResult") ? _scenarioContext["actualResult"] : null; } catch { actualResult = null; }
+
+            if (actualResult != null)
+            {
+                if (actualResult is JObject actualPeriodEnd)
+                {
+                    if (actualPeriodEnd["accountDataValidAt"] != null) actualPeriodEnd["accountDataValidAt"] = ParseDateTime(actualPeriodEnd["accountDataValidAt"]?.ToString());
+                    if (actualPeriodEnd["commitmentDataValidAt"] != null) actualPeriodEnd["commitmentDataValidAt"] = ParseDateTime(actualPeriodEnd["commitmentDataValidAt"]?.ToString());
+                    if (actualPeriodEnd["completionDateTime"] != null) actualPeriodEnd["completionDateTime"] = ParseDateTime(actualPeriodEnd["completionDateTime"]?.ToString());
+                    actualResult = actualPeriodEnd;
+                }
+
+                CompareApiResponseToExpectedResult(sqlDict, actualResult, null);
+                return;
+            }
+
+            var expectedPeriodEnd = _scenarioContext.Get<JObject>("periodEndExpectedPayload");
+
+            var expectedDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var alias in aliases)
+            {
+                var token = expectedPeriodEnd[alias];
+                expectedDict[alias] = token?.ToString() ?? string.Empty;
+            }
+
+            if (expectedDict.TryGetValue("accountDataValidAt", out var expectedAccountDataValidAt)) expectedDict["accountDataValidAt"] = ParseDateTime(expectedAccountDataValidAt);
+            if (expectedDict.TryGetValue("commitmentDataValidAt", out var expectedCommitmentDataValidAt)) expectedDict["commitmentDataValidAt"] = ParseDateTime(expectedCommitmentDataValidAt);
+            if (expectedDict.TryGetValue("completionDateTime", out var expectedCompletionDateTime)) expectedDict["completionDateTime"] = ParseDateTime(expectedCompletionDateTime);
+
+            var actualObj = JObject.FromObject(sqlDict);
+            CompareApiResponseToExpectedResult(expectedDict, actualObj, null);
+        }
+
+        public async Task ComparePaymentMetaDataStagingDataAgainstDb()
+        {
+            var expectedPaymentMetaData = _scenarioContext.Get<JObject>("paymentMetaDataStagingExpectedPayload");
+            var sqlResult = _scenarioContext.Get<List<string>>("paymentMetaDataStagingDbRecord");
+
+            var aliases = new List<string>
+            {
+                "paymentId",
+                "providerName",
+                "standardCode",
+                "frameworkCode",
+                "programmeType",
+                "pathwayCode",
+                "pathwayName",
+                "apprenticeshipCourseName",
+                "apprenticeshipCourseStartDate",
+                "apprenticeshipCourseLevel",
+                "apprenticeName",
+                "apprenticeNINumber",
+                "isHistoricProviderName",
+                "createdBy",
+                "correlationId"
+            };
+
+            var sqlDict = MapRowToDictionary(sqlResult, aliases);
+            if (sqlDict.TryGetValue("apprenticeshipCourseStartDate", out var courseStartDate)) sqlDict["apprenticeshipCourseStartDate"] = ParseDate(courseStartDate);
+
+            var expectedDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var alias in aliases)
+            {
+                if (string.Equals(alias, "paymentId", StringComparison.OrdinalIgnoreCase))
+                {
+                    expectedDict[alias] = _scenarioContext.Get<string>("paymentId");
+                    continue;
+                }
+
+                var token = expectedPaymentMetaData[alias];
+                expectedDict[alias] = token?.ToString() ?? string.Empty;
+            }
+
+            if (expectedDict.TryGetValue("apprenticeshipCourseStartDate", out var expectedCourseStartDate)) expectedDict["apprenticeshipCourseStartDate"] = ParseDate(expectedCourseStartDate);
+
+            var actualObj = JObject.FromObject(sqlDict);
+            CompareApiResponseToExpectedResult(expectedDict, actualObj, null);
+        }
+
+        public async Task CompareEnglishFractionsDataAgainstDb()
+        {
+            var expectedEnglishFractions = _scenarioContext.Get<JObject>("englishFractionsExpectedPayload");
+            var sqlResult = _scenarioContext.Get<List<string>>("englishFractionsDbRecord");
+
+            Assert.IsNotNull(expectedEnglishFractions, "Expected english fractions payload was not found in ScenarioContext.");
+            Assert.IsNotNull(sqlResult, "EnglishFraction DB record was not found in ScenarioContext.");
+
+            var aliases = new List<string>
+            {
+                "Id",
+                "DateCalculated",
+                "Amount",
+                "EmpRef",
+                "DateCreated"
+            };
+
+            var sqlDict = MapRowToDictionary(sqlResult, aliases);
+
+            var expectedEmpRef = expectedEnglishFractions["empRef"]?.ToString() ?? string.Empty;
+            var expectedAmountRaw = expectedEnglishFractions["fractions"]?[0]?["amount"]?.ToString() ?? string.Empty;
+
+            Assert.AreEqual(expectedEmpRef, sqlDict.GetValueOrDefault("EmpRef", string.Empty), "EmpRef mismatch");
+
+            var expectedAmount = decimal.Parse(expectedAmountRaw, NumberStyles.Number, CultureInfo.InvariantCulture);
+            var actualAmount = decimal.Parse(sqlDict.GetValueOrDefault("Amount", "0"), NumberStyles.Number, CultureInfo.InvariantCulture);
+            Assert.AreEqual(expectedAmount, actualAmount, "Amount mismatch");
+        }
+
+        public async Task VerifyEnglishFractionCalculationDateExistsInDb()
+        {
+            var expectedDate = _scenarioContext.Get<string>("englishFractionCalculationDate");
+            var sqlResults = _scenarioContext.Get<List<string[]>>("englishFractionCalculationDateDbRecords");
+
+            Assert.IsFalse(string.IsNullOrWhiteSpace(expectedDate), "Expected english fraction calculation date was not found in ScenarioContext.");
+            Assert.IsNotNull(sqlResults, "EnglishFractionCalculationDate DB records were not found in ScenarioContext.");
+
+            var normalizedDates = sqlResults
+                .Where(row => row != null && row.Length > 0 && !string.IsNullOrWhiteSpace(row[0]))
+                .Select(row => ParseDate(row[0]))
+                .ToList();
+
+            Assert.Contains(expectedDate, normalizedDates, $"Expected date '{expectedDate}' was not found in EnglishFractionCalculationDate records.");
+        }
+
+        private static string ParseDate(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+            DateTime parsed;
+            if (!DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out parsed))
+            {
+                parsed = DateTime.Parse(value ?? string.Empty, new CultureInfo("en-GB"), DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            }
+            return parsed.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        }
+
+        private static string ParseDateTime(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+            DateTime parsed;
+            if (!DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out parsed))
+            {
+                parsed = DateTime.Parse(value ?? string.Empty, new CultureInfo("en-GB"), DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            }
+            return parsed.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture);
         }
 
         public void SetAccountIdIfPresent(Dictionary<string, string> dict)
@@ -445,6 +815,101 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 if (string.Equals(v, expectedVal.Trim(), StringComparison.OrdinalIgnoreCase)) return true;
             }
             return false;
+        }
+
+        public async Task<string> GetPayeRefFromAccountHistory(string accountId)
+        {
+            if (string.IsNullOrWhiteSpace(accountId))
+                throw new ArgumentException("accountId is required", nameof(accountId));
+
+            var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+            
+            var query = $@"SELECT TOP (1) [PayeRef]
+                      FROM [employer_account].[AccountHistory] 
+                      WHERE AccountId = '{accountId.Replace("'", "''")}'
+                      ORDER BY [AddedDate] DESC";
+
+            var result = await accountsHelper.ExecuteSql(query);
+            
+            if (result == null || result.Count == 0)
+                throw new Exception($"No paye ref found for account id {accountId}");
+
+            var payeRef = result[0];
+            return payeRef;
+        }
+
+        public async Task VerifyPayeRefInResponse(string payeSchemesResponse, string expectedPayeRef)
+        {
+            if (string.IsNullOrWhiteSpace(payeSchemesResponse))
+                throw new ArgumentException("payeSchemesResponse is required", nameof(payeSchemesResponse));
+
+            if (string.IsNullOrWhiteSpace(expectedPayeRef))
+                throw new ArgumentException("expectedPayeRef is required", nameof(expectedPayeRef));
+
+            var responseObj = JObject.Parse(payeSchemesResponse);
+            
+            // Check if payeRef exists in response (could be in different structures depending on API response format)
+            var payeRefFound = false;
+            
+            // Check if it's an array response
+            if (responseObj["payeSchemes"] is JArray schemes)
+            {
+                foreach (var scheme in schemes)
+                {
+                    var ref_ = scheme["payeRef"]?.ToString() ?? scheme["ref"]?.ToString();
+                    if (string.Equals(ref_, expectedPayeRef, StringComparison.OrdinalIgnoreCase))
+                    {
+                        payeRefFound = true;
+                        break;
+                    }
+                }
+            }
+            
+            // Check if it's a direct object property
+            if (!payeRefFound)
+            {
+                var ref_ = responseObj["payeRef"]?.ToString() ?? responseObj["ref"]?.ToString();
+                if (string.Equals(ref_, expectedPayeRef, StringComparison.OrdinalIgnoreCase))
+                {
+                    payeRefFound = true;
+                }
+            }
+
+            Assert.That(payeRefFound, Is.True, $"PayeRef '{expectedPayeRef}' not found in response: {payeSchemesResponse}");
+        }
+
+        public Task VerifyEmpRefInPayeSchemesResponse(string responseContent, string expectedEmpRef)
+        {
+            Assert.That(!string.IsNullOrWhiteSpace(responseContent), "Response content is empty");
+            Assert.That(!string.IsNullOrWhiteSpace(expectedEmpRef), "Expected EmpRef is empty");
+
+            var empRefFound = false;
+            try
+            {
+                var token = JToken.Parse(responseContent);
+                var allEmpRefTokens = token.SelectTokens("$..empRef");
+
+                foreach (var empRefToken in allEmpRefTokens)
+                {
+                    if (string.Equals(empRefToken?.ToString(), expectedEmpRef, StringComparison.OrdinalIgnoreCase))
+                    {
+                        empRefFound = true;
+                        break;
+                    }
+                }
+            }
+            catch
+            {
+                empRefFound = false;
+            }
+
+            if (!empRefFound)
+            {
+                empRefFound = responseContent.IndexOf(expectedEmpRef, StringComparison.OrdinalIgnoreCase) >= 0;
+            }
+
+            Assert.That(empRefFound, Is.True, $"EmpRef '{expectedEmpRef}' not found in response: {responseContent}");
+            return Task.CompletedTask;
         }
 
     }

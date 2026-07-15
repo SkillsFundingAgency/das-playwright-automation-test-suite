@@ -7,10 +7,10 @@ public class CommitmentsPendingChangingSteps : CommitmentsCohortDetailsBaseSteps
 {
     public CommitmentsPendingChangingSteps(ScenarioContext context) : base(context) => cohortDetails = config.CohortWithPendingChanges;
 
-    [When(@"the User searches for a Cohort with pending changes")]
+    [When(@"^the User searches for a Cohort with pending changes$")]
     public async Task WhenTheUserSearchesForACohortWithPendingChanges() => await SearchesForACohort();
 
-    [When(@"the ULN details page is displayed with pending changes")]
+    [When(@"^the ULN details page is displayed with pending changes$")]
     public async Task ThenTheULNDetailsPageIsDisplayedWithPendingChanges()
     {
         var page = await GetUlnDetailsPage();
@@ -18,10 +18,10 @@ public class CommitmentsPendingChangingSteps : CommitmentsCohortDetailsBaseSteps
         await page.ClickPendingChangesTab();
     }
 
-    [When(@"the user chooses to view Uln of the Cohort with pending changes")]
+    [When(@"^the user chooses to view Uln of the Cohort with pending changes$")]
     public async Task WhenTheUserChoosesToViewUlnOfTheCohortWithPendingChanges() => await ViewCohortUln();
 
-    [Then(@"the pending changes are displayed")]
+    [Then(@"^the pending changes are displayed$")]
     public async Task ThePendingUpdateChangesAreDisplayed()
     {
         var page = await GetUlnDetailsPage();

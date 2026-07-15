@@ -28,7 +28,37 @@ public class SearchVacancyPageHelper(ScenarioContext context)
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Live adverts" }).ClickAsync();
 
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Your adverts");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Live adverts");
+
+        var locators = await page.GetByRole(AriaRole.Row, new() { Name = "VAC" }).Filter(new LocatorFilterOptions { HasNotTextString = "Foundation" }).GetByRole(AriaRole.Link).AllAsync();
+
+        var locator = RandomDataGenerator.GetRandom(locators);
+
+        await locator.ClickAsync();
+
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new ManageRecruitPage(context));
+    }
+
+    public async Task<ManageRecruitPage> SelectArchivedAdvert()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Archived adverts" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Archived adverts");
+
+        var locators = await page.GetByRole(AriaRole.Row, new() { Name = "VAC" }).Filter(new LocatorFilterOptions { HasNotTextString = "Foundation" }).GetByRole(AriaRole.Link).AllAsync();
+
+        var locator = RandomDataGenerator.GetRandom(locators);
+
+        await locator.ClickAsync();
+
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new ManageRecruitPage(context));
+    }
+
+    public async Task<ManageRecruitPage> SelectLiveVacancy()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Live vacancies" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Live vacancies");
 
         var locators = await page.GetByRole(AriaRole.Row, new() { Name = "VAC" }).Filter(new LocatorFilterOptions { HasNotTextString = "Foundation" }).GetByRole(AriaRole.Link).AllAsync();
 
@@ -45,11 +75,11 @@ public class SearchVacancyPageHelper(ScenarioContext context)
     //    return await VerifyPageHelper.VerifyPageAsync(() => new ProviderVacancySearchResultPage(context));
     //}
 
-    //public async Task<ProviderVacancySearchResultPage> SearchProviderVacancy()
-    //{
-    //    await SearchVacancy();
-    //    return await VerifyPageHelper.VerifyPageAsync(() => new ProviderVacancySearchResultPage(context));
-    //}
+    public async Task<ProviderVacancySearchResultPage> SearchProviderVacancy()
+    {
+       await SearchVacancy();
+       return await VerifyPageHelper.VerifyPageAsync(context, () => new ProviderVacancySearchResultPage(context));
+    }
 
     //public async Task<VacancyCompletedAllSectionsPage> SearchReferVacancy()
     //{
@@ -64,14 +94,38 @@ public class SearchVacancyPageHelper(ScenarioContext context)
         return await VerifyPageHelper.VerifyPageAsync(context, () => new EmployerVacancySearchResultPage(context));
     }
 
-    internal async Task SearchVacancy()
+    public async Task<EmployerSharedApplicationsVacanciesListPage> SearchSharedAppVacancy()
+    {
+        await SearchVacancy();
+
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new EmployerSharedApplicationsVacanciesListPage(context));
+    }
+
+    public async Task SearchVacancy()
     {
         var vacRef = _objectContext.GetVacancyReference();
-
-        await page.GetByRole(AriaRole.Combobox, new() { Name = "Search by advert title or" }).FillAsync(vacRef);
+        bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
+        if (isRaaEpc)
+        {
+            await page.Locator("#search-input").FillAsync(vacRef);
+        }
+        else
+        {
+            await page.GetByRole(AriaRole.Combobox, new() { Name = "Search by" }).FillAsync(vacRef);
+        }
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
         await Assertions.Expect(page).ToHaveURLAsync(new Regex($"searchTerm={vacRef}"), new PageAssertionsToHaveURLOptions { IgnoreCase = true, Timeout = 20000 });
+    }
+
+    public async Task NavigateToMenuItem(string name)
+    {
+        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
+    }
+
+    public async Task NavigateToHomeFromRaaDashboard(string name)
+    {
+        await page.GetByRole(AriaRole.Region, new() { Name = "Service information"}).GetByRole(AriaRole.Link, new() { Name = name }).ClickAsync();
     }
 }

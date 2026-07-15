@@ -7,24 +7,27 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
     {
         private readonly Func<CoursesDataHelper, Task<Course>> courseSelector;
         private readonly DateTime startDate;
+        private readonly int? courseDurationInDays = 450;
 
         public TrainingFactory(Func<CoursesDataHelper, Task<Course>> CourseSelector = null)
         {
             courseSelector = CourseSelector;
         }
 
-        public TrainingFactory(DateTime StartDate, Func<CoursesDataHelper, Task<Course>> CourseSelector = null)
+        public TrainingFactory(DateTime StartDate, Func<CoursesDataHelper, Task<Course>> CourseSelector = null, int? duration = null)
         {
             startDate = StartDate;
-            courseSelector = CourseSelector;            
+            courseSelector = CourseSelector;
+            courseDurationInDays = duration ?? 450;
         }
 
-        public async Task<Training> CreateTrainingAsync(EmployerType employerType, ApprenticeshipStatus? apprenticeshipStatus = null)
+        public async Task<Training> CreateTrainingAsync(EmployerType employerType, ApprenticeshipStatus? apprenticeshipStatus = null, int? duration = null)
         {
             Training training = new Training();
 
             CoursesDataHelper coursesDataHelper = new CoursesDataHelper();
             var course = courseSelector == null ? await coursesDataHelper.GetRandomStandardCourse() : await courseSelector(coursesDataHelper);
+            bool isShortCourse = course.ApprenticeshipType == LearningType.ShortCourses;
 
             if (startDate != DateTime.MinValue)
             {
@@ -39,15 +42,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
                 training.StartDate = DateTime.Now;
             }
 
-            training.EndDate = training.StartDate.AddMonths(15);
+            training.EndDate = training.StartDate.AddDays((double)courseDurationInDays);
             training.AcademicYear = AcademicYearDatesHelper.GetCurrentAcademicYear();
             training.PercentageLearningToBeDelivered = 40;
-            training.EpaoPrice = Convert.ToInt32(RandomDataGenerator.GenerateRandomNumber(3));
-            training.TrainingPrice = Convert.ToInt32("2" + RandomDataGenerator.GenerateRandomNumber(3));
+            training.EpaoPrice = (isShortCourse) ? 0 : Convert.ToInt32(RandomDataGenerator.GenerateRandomNumber(3));
+            training.TrainingPrice = (isShortCourse) ? course.MaxFunding : Convert.ToInt32("2" + RandomDataGenerator.GenerateRandomNumber(3));
             training.TotalPrice = training.EpaoPrice + training.TrainingPrice;
             training.IsFlexiJob = false;
             training.PlannedOTJTrainingHours = 1200;
-            training.StandardCode = course.StandardCode;
+            training.LarsCode = course.LarsCode;
+            training.LearningType = (int)course.ApprenticeshipType;
             training.CourseTitle = course.Title;
             training.ConsumerReference = "CR123456";
 

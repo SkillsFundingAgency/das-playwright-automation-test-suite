@@ -7,6 +7,13 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).
         ToContainTextAsync("Find training if you’re an employer");
 
+    public async Task<ApprenticeshipTrainingCoursesPage> SearchApprenticeUnit()
+    {
+        await page.GetByRole(AriaRole.Checkbox, new() { Name = "Apprenticeship units" }).CheckAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        return await VerifyPageAsync(() => new ApprenticeshipTrainingCoursesPage(context));
+    }     
+
     public async Task<ApprenticeshipTrainingCoursesPage> SearchWithCourseOnly()
     {
         await page.Locator("#keyword-input").ClickAsync();
@@ -71,13 +78,13 @@ public class Search_TrainingCourses_ApprenticeworkLocationPage(ScenarioContext c
             var checkboxLocator = type switch
             {
                 TrainingType.ApprenticeshipUnits =>
-                    page.Locator("[id='filteritem-training-types-Apprenticeship units']"),
+                    page.Locator("[id='filteritem-training-types-ApprenticeshipUnit']"),
 
                 TrainingType.FoundationApprenticeships =>
-                    page.Locator("[id='filteritem-training-types-Foundation apprenticeships']"),
+                    page.Locator("[id='filteritem-training-types-FoundationApprenticeship']"),
 
                 TrainingType.Apprenticeships =>
-                    page.Locator("[id='filteritem-training-types-Apprenticeships']"),
+                    page.Locator("[id='filteritem-training-types-Apprenticeship']"),
 
                 _ => throw new ArgumentOutOfRangeException(nameof(type))
             };

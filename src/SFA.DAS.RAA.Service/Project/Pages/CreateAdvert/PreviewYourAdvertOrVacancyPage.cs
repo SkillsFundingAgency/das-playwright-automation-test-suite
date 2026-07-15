@@ -19,12 +19,12 @@ public class PreviewYourAdvertOrVacancyPage(ScenarioContext context) : RaaBasePa
         return await VerifyPageAsync(() => new CheckYourAnswersPage(context));
     }
 
-    //public async Task<ResubmittedVacancyReferencePage> ResubmitVacancy()
-    //{
-    //    await page.Locator(Submit).ClickAsync();
+    public async Task<ResubmittedVacancyReferencePage> ResubmitVacancy()
+    {
+        await page.Locator(Submit).ClickAsync();
 
-    //    return await VerifyPageAsync(() => new PreviewYourAdvertOrVacancyPage(context));
-    //}
+        return await VerifyPageAsync(() => new ResubmittedVacancyReferencePage(context));
+    }
 
 
     private string ContactDetails() => isRaaEmployer ? "a[data-automation='link-employer-contact-details']" : "a[data-automation='link-provider-contact-details']";
@@ -42,11 +42,12 @@ public class DeleteVacancyQuestionPage(ScenarioContext context) : RaaBasePage(co
 
     public async Task YesDeleteAdvert()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, delete this advert now" }).CheckAsync();
+        string linktext = isRaaEmployer ? "Yes, delete this advert now" : "Yes, delete this vacancy now";
+        await page.GetByRole(AriaRole.Radio, new() { Name = linktext }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
-        await Assertions.Expect(page.GetByLabel("Success").Locator("h3")).ToContainTextAsync("has been deleted.");
+        await Assertions.Expect(page.Locator(".govuk-notification-banner__heading")).ToContainTextAsync("has been deleted.");
 
     }
 
@@ -61,10 +62,21 @@ public class DeleteVacancyQuestionPage(ScenarioContext context) : RaaBasePage(co
 
     public async Task<CreateAnApprenticeshipAdvertOrVacancyPage> NoDeleteVacancy()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "No, do not delete this advert" }).CheckAsync();
+        string linkText = isRaaEmployer ? "No, do not delete this advert" : "No, don't delete this vacancy";
+        await page.GetByRole(AriaRole.Radio, new() { Name = linkText }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new CreateAnApprenticeshipAdvertOrVacancyPage(context));
+    }
+}
+
+public class ResubmittedVacancyReferencePage(ScenarioContext context) : RaaBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        string PageTitle = "Advert resubmitted for approval";
+
+        await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(PageTitle);
     }
 }

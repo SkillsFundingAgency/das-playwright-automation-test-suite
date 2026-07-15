@@ -43,5 +43,6 @@ public static class UrlConfig
     public static string TransferMacthingApplyUrl(string pledgeId) => $"https://transfers.{EnvironmentConfig.EnvironmentName}-eas.apprenticeships.education.gov.uk/opportunities/{pledgeId}";
     public static string EarlyConnect_BaseUrl => $"https://{EnvironmentConfig.EnvironmentName}-earlyconnect.apprenticeships.education.gov.uk/";
     public static string QFAST_BaseUrl => $"https://{EnvironmentConfig.EnvironmentName}-qualification-funding.apprenticeships.education.gov.uk";
+    public static string ApprenticeApp_BaseUrl => $"https://{EnvironmentConfig.EnvironmentName}-apprentice-app.apprenticeships.education.gov.uk/";
 }
 

@@ -1,4 +1,5 @@
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
+using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages.DynamicHomePageEmployer;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers;
 
@@ -127,16 +128,16 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
         await CheckAndSubmitAdvert(createAdvertPage);
     }
 
-    //internal async Task<CreateAnApprenticeshipAdvertOrVacancyPage> AddAnAdvert()
-    //{
-    //    await new RecruitmentDynamicHomePage(context, true).ContinueToCreateAdvert();
+    internal async Task<CreateAnApprenticeshipAdvertOrVacancyPage> AddAnAdvert()
+    {
+        await new RecruitmentDynamicHomePage(context, true).ContinueToCreateAdvert();
 
-    //    var page = await new DoYouNeedToCreateAnAdvertPage(context);
+        var page = new DoYouNeedToCreateAnAdvertPage(context);
 
-    //    var page1 = await page.ClickYesRadioButtonTakesToRecruitment();
+        var page1 = await page.ClickYesRadioButtonTakesToRecruitment();
 
-    //    return await page1.GoToCreateAnApprenticeshipAdvertPage();
-    //}
+        return await page1.GoToCreateAnApprenticeshipAdvertPage();
+    }
 
     internal async Task CreateOfflineVacancy()
     {
@@ -170,6 +171,27 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
         return await SubmitAndSetVacancyReference(page7);
     }
 
+    internal async Task<VacancyReferencePage> CloneAnArchivedAdvert()
+    {
+        var page = await GoToRecruitmentHomePage();
+
+        var page1 = await page.SelectArchivedAdvert();
+
+        var page2 = await page1.CloneAdvert();
+
+        var page3 = await page2.SelectYes();
+
+        var page4 = await page3.UpdateTitle();
+
+        var page5 = await page4.UpdateVacancyTitleAndGoToCheckYourAnswersPage();
+
+        var page6 = await page5.UpdateAdditionalQuestion();
+
+        var page7 = await page6.UpdateAllAdditionalQuestionsAndGoToCheckYourAnswersPage(true, true);
+
+        return await SubmitAndSetVacancyReference(page7);
+    }
+
     internal async Task<VacancyReferencePage> CreateANewAdvert_WageType(string wageType) => await CreateANewAdvert(string.Empty, "employer", false, wageType);
 
     internal async Task<VacancyReferencePage> CreateANewAdvert_LocationAndWageType(string locationType, string wageType) => await CreateANewAdvert(string.Empty, locationType, false, wageType);
@@ -181,6 +203,8 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
     internal async Task<VacancyReferencePage> CreateANewAdvert(string employername, string locationType) => await CreateANewAdvert(employername, locationType, false, RAAConst.NationalMinWages);
 
     internal async Task<VacancyReferencePage> CreateANewAdvert(bool isApplicationMethodFAA) => await CreateANewAdvertOrVacancy(string.Empty, "employer", true, RAAConst.NationalMinWages, isApplicationMethodFAA, false, true, true);
+
+    internal async Task<VacancyReferencePage> CreateANewAdvert(string employername, bool disabilityConfidence) => await CreateANewAdvertOrVacancy(employername, "employer", disabilityConfidence, RAAConst.FixedWageType, true, false, true, true);
 
     internal async Task<VacancyReferencePage> CreateANewAdvert(string employername, string locationType, bool disabilityConfidence, string wageType) => await CreateANewAdvertOrVacancy(employername, locationType, disabilityConfidence, wageType, true, false, true, true);
 

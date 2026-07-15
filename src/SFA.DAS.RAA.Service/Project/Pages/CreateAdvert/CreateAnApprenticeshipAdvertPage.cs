@@ -4,12 +4,21 @@ public partial class CreateAnApprenticeshipAdvertOrVacancyPage(ScenarioContext c
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "Create an apprenticeship advert" : "Create an apprenticeship vacancy";
+        string PageTitle = (isRaaEmployer, isRaaProvider) switch
+        {
+            (true, true) => "Create an apprenticeship",
+            (true, false) => "Create an apprenticeship advert",
+            _ => "Create an apprenticeship vacancy"
+        };
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
 
-    public async Task ReturnToApplications() => await page.GetByRole(AriaRole.Link, new() { Name = "Return to your applications" }).ClickAsync();
+    public async Task ReturnToApplications()
+    {
+        string linkText = isRaaEmployer ? "Return to your applications" : "Return to dashboard";
+        await page.GetByRole(AriaRole.Link, new() { Name = linkText }).ClickAsync();
+    }
 
     //public async Task ReturnToDashoard() => formCompletionHelper.ClickElement(ReturnToDashboardSelector);
 
@@ -120,5 +129,13 @@ public partial class CreateAnApprenticeshipAdvertOrVacancyPage(ScenarioContext c
         objectContext.SetDebugInformation($"Navigating to task - '{taskName}' under section '{sectionName}' ");
 
         await page.GetByRole(AriaRole.Link, new() { Name = taskName, Exact = true }).ClickAsync();
+    }
+}
+
+public class SharedApplicatinsForAVacancyPage(ScenarioContext context) : RaaBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator(".govuk-caption-l")).ToContainTextAsync("Shared applications");
     }
 }

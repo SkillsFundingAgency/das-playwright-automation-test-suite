@@ -2,7 +2,7 @@
 
 public class SetApprenticeDetailsHelper(ScenarioContext context)
 {
-    private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
+    private readonly ObjectContext objectContext = context.Get<ObjectContext>();
 
     //public (string firstName, string lastName) SetApprenticeDetails(ApprenticeUser user)
     //{
@@ -17,12 +17,12 @@ public class SetApprenticeDetailsHelper(ScenarioContext context)
     {
         (string apprenticeId, string firstName, string lastName, string username) = (user.Id, user.FirstName, user.LastName, user.Username);
 
-        _objectContext.SetApprenticeId(apprenticeId);
-        _objectContext.SetApprenticeEmail(username);
-        _objectContext.SetApprenticePassword(user.IdOrUserRef);
+        objectContext.SetApprenticeId(apprenticeId);
+        objectContext.SetApprenticeEmail(username);
+        objectContext.SetApprenticePassword(user.IdOrUserRef);
 
-        _objectContext.SetFirstName(firstName);
-        _objectContext.SetLastName(lastName);
+        objectContext.SetFirstName(firstName);
+        objectContext.SetLastName(lastName);
 
         return (firstName, lastName);
     }

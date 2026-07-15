@@ -6,7 +6,7 @@ namespace SFA.DAS.ProviderPortal.UITests.Project.Tests.Steps;
 [Binding]
 public class EmployerRelationSteps(ScenarioContext context) : ProviderPortalBaseSteps(context)
 {
-    [Given(@"Levy employer grants all permission to a provider")]
+    [Given(@"^Levy employer grants all permission to a provider$")]
     public async Task LevyEmployerGrantsAllPermissionToAProvider()
     {
         permissions = (AddApprenticePermissions.YesAddApprenticeRecords, RecruitApprenticePermissions.YesRecruitApprentices);
@@ -16,19 +16,19 @@ public class EmployerRelationSteps(ScenarioContext context) : ProviderPortalBase
         await _employerPermissionsStepsHelper.SetAllProviderPermissions(providerConfig);
     }
 
-    [When(@"the employer changes recruit apprentice permission")]
+    [When(@"^the employer changes recruit apprentice permission$")]
     public async Task TheEmployerChangesRecruitApprenticePermission()
     {
         await EmployerUpdatePermission((AddApprenticePermissions.YesAddApprenticeRecords, RecruitApprenticePermissions.YesRecruitApprenticesButEmployerWillReview));
     }
 
-    [When(@"the employer revokes all provider permissions")]
+    [When(@"^the employer revokes all provider permissions$")]
     public async Task TheEmployerRevokesAllProviderPermissions()
     {
         await EmployerUpdatePermission((AddApprenticePermissions.NoToAddApprenticeRecords, RecruitApprenticePermissions.NoToRecruitApprentices));
     }
 
-    [Then(@"an employer has to select at least one permission")]
+    [Then(@"^an employer has to select at least one permission$")]
     public async Task ThenAnEmployerHasToSelectAtLeastOnePermission()
     {
         await EPRLevyUserLogin();
@@ -42,7 +42,7 @@ public class EmployerRelationSteps(ScenarioContext context) : ProviderPortalBase
         await page2.VerifyDoNotAllowPermissions();
     }
 
-    [Then(@"the correct permissions should be displayed in the employer portal")]
+    [Then(@"^the correct permissions should be displayed in the employer portal$")]
     public async Task TheCorrectPermissionsShouldBeDisplayedInTheEmployerPortal()
     {
         var page = await _employerPermissionsStepsHelper.OpenProviderPermissions();
@@ -59,7 +59,7 @@ public class EmployerRelationSteps(ScenarioContext context) : ProviderPortalBase
         await page.GoToHomePage();
     }
 
-    [Then(@"the employer is unable to add an existing provider")]
+    [Then(@"^the employer is unable to add an existing provider$")]
     public async Task ThenTheEmployerIsUnableToAddAnExistingProvider()
     {
         var page = await new ManageTrainingProvidersLinkHomePage(context).OpenRelationshipPermissions();
@@ -71,13 +71,13 @@ public class EmployerRelationSteps(ScenarioContext context) : ProviderPortalBase
         await page2.CannotAddExistingTrainingProvider();
     }
 
-    [Then(@"the employer accepts the add account request")]
+    [Then(@"^the employer accepts the add account request$")]
     public async Task TheEmployerAcceptsTheAddAccountRequest()
     {
         await EPRReLoginAcceptOrDeclineProviderPermissionsRequest(RequestType.AddAccount, true);
     }
 
-    [Then(@"the employer declines the add account request")]
+    [Then(@"^the employer declines the add account request$")]
     public async Task TheEmployerDeclinesTheAddAccountRequest()
     {
         eprDataHelper.EmployerEmail = context.GetUser<EPRDeclineRequestUser>().Username;
@@ -85,13 +85,13 @@ public class EmployerRelationSteps(ScenarioContext context) : ProviderPortalBase
         await EPRReLoginAcceptOrDeclineProviderPermissionsRequest(RequestType.AddAccount, false);
     }
 
-    [Then(@"the employer declines the update permission request")]
+    [Then(@"^the employer declines the update permission request$")]
     public async Task TheEmployerDeclinesTheUpdatePermissionRequest()
     {
         await EPRReLoginAcceptOrDeclineProviderPermissionsRequest(RequestType.Permission, false);
     }
 
-    [Then(@"the employer accepts the update permission request")]
+    [Then(@"^the employer accepts the update permission request$")]
     public async Task TheEmployerAcceptsTheUpdatePermissionRequest()
     {
         await EPRReLoginAcceptOrDeclineProviderPermissionsRequest(RequestType.Permission, true);

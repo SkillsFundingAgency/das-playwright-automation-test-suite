@@ -45,7 +45,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
             await page.GetByRole(AriaRole.Link, new() { Name = "Give feedback" }).ClickAsync();
         });
 
-        await Assertions.Expect(page2.Locator("legend")).ToContainTextAsync("Which of the below describes you?");
+        await Assertions.Expect(page2.GetByText("Your feedback on the Apprenticeship service")).ToBeVisibleAsync();
 
         await page2.CloseAsync();
     }
@@ -71,11 +71,11 @@ public partial class ProviderHomePage : InterimProviderBasePage
         return await VerifyPageAsync(() => new ProviderTermsOfUsePage(context));
     }
 
-    public async Task<ProviderAddApprenticeDetailsEntryMothod> GotoSelectJourneyPage()
+    public async Task<ProviderHowDoYouWantToAddLearnerEntryMothodPage> GotoSelectJourneyPage()
     {
         await AddNewApprentices();
 
-        return await VerifyPageAsync(() => new ProviderAddApprenticeDetailsEntryMothod(context));
+        return await VerifyPageAsync(() => new ProviderHowDoYouWantToAddLearnerEntryMothodPage(context));
     }
 
     public async Task<ProviderAddEmployerStartPage> GotoAddNewEmployerStartPage()
@@ -106,11 +106,11 @@ public partial class ProviderHomePage : InterimProviderBasePage
         return await VerifyPageAsync(() => new ProviderFundingForNonLevyEmployersPage(context));
     }
 
-    public async Task<ProviderManageYourApprenticesPage>  GoToProviderManageYourApprenticePage()
+    public async Task<ProviderManageYourLearnersPage>  GoToProviderManageYourApprenticePage()
     {
         await page.GetByRole(AriaRole.Heading, new() { Name = "Manage your apprentices" }).GetByRole(AriaRole.Link).ClickAsync();
 
-        return await VerifyPageAsync(() => new ProviderManageYourApprenticesPage(context));
+        return await VerifyPageAsync(() => new ProviderManageYourLearnersPage(context));
     }
 
     public async Task<ProviderRecruitApprenticesHomePage> GoToProviderRecruitApprenticesHomePage()
@@ -207,11 +207,11 @@ public class ProviderInformationNotFoundPage(ScenarioContext context) : InterimP
 }
 
 
-public class ProviderManageYourApprenticesPage(ScenarioContext context) : InterimProviderBasePage(context)
+public class ProviderManageYourLearnersPage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprentices");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your learners");
     }
 }
 
@@ -314,11 +314,11 @@ public class ProviderAccessDeniedPage(ScenarioContext context) : InterimProvider
     //}
 }
 
-public class ProviderAddApprenticeDetailsEntryMothod(ScenarioContext context) : InterimProviderBasePage(context)
+public class ProviderHowDoYouWantToAddLearnerEntryMothodPage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add apprentice details");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("How do you want to add learner details?");
     }
 
     //internal async Task<ProviderAddApprenticeDetailsViaSelectJourneyPage>  SelectAddManually()

@@ -5,7 +5,7 @@ namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages;
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Venue details and standards");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Venue details and training delivery");
         }
 
         public async Task<VenueDetailsPage> Click_ChangeVenueName()

@@ -5,8 +5,13 @@ public abstract class BaseVacancyTitlePage(ScenarioContext context) : RaaBasePag
     public async Task<SelectOrganisationPage> EnterAdvertTitleMultiOrg()
     {
         await ChangeVacancyTitle();
-
         return await VerifyPageAsync(() => new SelectOrganisationPage(context));
+    }
+
+    public async Task<ApprenticeshipTrainingPage> EnterAdvertTitleMultiOrgProvider()
+    {
+        await ChangeVacancyTitle();
+        return await VerifyPageAsync(() => new ApprenticeshipTrainingPage(context));
     }
 
     public async Task<ApprenticeshipTrainingPage> EnterVacancyTitle()

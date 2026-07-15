@@ -7,10 +7,10 @@ namespace SFA.DAS.EarlyConnectForms.UITests.Project.Tests.Steps
     {
         private readonly EarlyConnectStepsHelper _stepsHelper = new(context);
 
-        [Given(@"I am on the landing page for a region")]
+        [Given(@"^I am on the landing page for a region$")]
         public async Task GivenIAmOnTheLandingPageForARegion() => await _stepsHelper.GoToEarlyConnectHomePage();
 
-        [Given(@"I selected (.*) Advisor Page")]
+        [Given(@"^I selected (.*) Advisor Page$")]
         public async Task GivenISelectedCountyAdvisorPage(string county)
         {
             switch (county)
@@ -32,7 +32,7 @@ namespace SFA.DAS.EarlyConnectForms.UITests.Project.Tests.Steps
             }
         }
 
-        [Given(@"I enter valid details")]
+        [Given(@"^I enter valid details$")]
         public async Task GivenIEnterValidDetails()
         {
             await _stepsHelper.GoToEarlyConnectEmailPage();
@@ -44,7 +44,7 @@ namespace SFA.DAS.EarlyConnectForms.UITests.Project.Tests.Steps
             await _stepsHelper.GoToWhatYourTelephonePage();
         }
 
-        [Given(@"I answer the triage questions related to me")]
+        [Given(@"^I answer the triage questions related to me$")]
         public async Task GivenIAnswerTheTriageQuestionsRelatedToMe()
         {
             await _stepsHelper.GoToAreasOfWorkInterestPage();
@@ -55,7 +55,7 @@ namespace SFA.DAS.EarlyConnectForms.UITests.Project.Tests.Steps
             await _stepsHelper.GoToSupportPage();
         }
 
-        [Given(@"I enter invalid details for school autosearch")]
+        [Given(@"^I enter invalid details for school autosearch$")]
         public async Task GivenIEnterInvalidDetailsForSchoolAutosearch()
         {
             await _stepsHelper.GoToAreasOfWorkInterestPage();
@@ -66,7 +66,7 @@ namespace SFA.DAS.EarlyConnectForms.UITests.Project.Tests.Steps
             await _stepsHelper.GoToSupportPage();
         }
 
-        [Then(@"I check my answers, accept and submit")]
+        [Then(@"^I check my answers, accept and submit$")]
         public async Task WhenICheckMyAnswersAcceptAndSubmit() => await _stepsHelper.GoToCheckYourAnswerPage();
 
     }

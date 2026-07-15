@@ -12,7 +12,7 @@ global using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 global using SFA.DAS.EmployerPortal.UITests.Project.Tests.Pages;
 global using SFA.DAS.Framework;
 global using System.Linq;
-global using TechTalk.SpecFlow;
+global using Reqnroll;
 global using SFA.DAS.FATe.UITests.Project.Tests.Pages;
 global using SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages;
 global using SFA.DAS.RequestApprenticeshipTraining.UITests.Project.Tests.Pages;

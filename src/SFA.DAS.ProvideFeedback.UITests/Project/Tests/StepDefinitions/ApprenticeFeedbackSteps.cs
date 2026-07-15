@@ -19,7 +19,7 @@ public class ApprenticeFeedbackSteps
         _setApprenticeDetailsHelper = new SetApprenticeDetailsHelper(_context);
     }
 
-    [Given(@"the apprentice logs into apprentice portal")]
+    [Given(@"^the apprentice logs into apprentice portal$")]
     public async Task GivenTheApprenticeLogsIntoApprenticePortal()
     {
         var user = _context.GetUser<ApprenticeFeedbackUser>();
@@ -36,7 +36,7 @@ public class ApprenticeFeedbackSteps
     }
 
 
-    [Given(@"the apprentice is eligible to give feedback on their providers")]
+    [Given(@"^the apprentice is eligible to give feedback on their providers$")]
     public async Task GivenTheApprenticeIsEligibleToGiveFeedbackOnTheirProviders()
     {
         var objectContext = _context.Get<ObjectContext>();
@@ -50,7 +50,7 @@ public class ApprenticeFeedbackSteps
         await sqlHelper.ResetFeedbackEligibility(apprenticeId);
     }
 
-    [When(@"apprentice completes the feedback journey for a training provider")]
+    [When(@"^apprentice completes the feedback journey for a training provider$")]
     public async Task WhenApprenticeCompletesTheFeedbackJourneyForATrainingProvider()
     {
         var page = await new ApprenticeFeedbackSelectProviderPage(_context).SelectATrainingProvider();
@@ -74,7 +74,7 @@ public class ApprenticeFeedbackSteps
         await page8.NavigateToGiveFeedbackOnYourTrainingProvider();
     }
 
-    [Given(@"the apprentice has not provided feedback previously")]
+    [Given(@"^the apprentice has not provided feedback previously$")]
     public async Task GivenTheApprenticeHasNotProvidedFeedbackPreviously()
     {
         var objectContext = _context.Get<ObjectContext>();
@@ -86,7 +86,7 @@ public class ApprenticeFeedbackSteps
         await sqlHelper.RemoveAllFeedback(apprenticeId);
     }
 
-    [Then(@"the feedback status shows as Pending")]
+    [Then(@"^the feedback status shows as Pending$")]
     public async Task ThenTheFeedbackStatusShowsAsPending()
     {
         var feedbackCompletePage = new ApprenticeFeedbackHomePage(_context);
@@ -96,7 +96,7 @@ public class ApprenticeFeedbackSteps
         await selectProviderPage.VerifyFeedbackStatusAsPending();
     }
 
-    [Then(@"the feedback status shows as Submitted")]
+    [Then(@"^the feedback status shows as Submitted$")]
     public async Task ThenTheFeedbackStatusShowsAsSubmitted()
     {
         var selectProviderPage = new ApprenticeFeedbackSelectProviderPage(_context);

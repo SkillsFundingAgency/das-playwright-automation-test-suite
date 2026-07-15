@@ -13,11 +13,11 @@ public class ChooseTrainingTypePage(ScenarioContext context) : ManagingStandards
 
         return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }
-    public async Task<ManageYourShortCoursesPage> AccessStandards_ApprenticeshipsUnits()
+    public async Task<ManageYourAppUnitPage> AccessStandards_ApprenticeshipsUnits()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Apprenticeship units", Exact = true }).ClickAsync();
 
-        return await VerifyPageAsync(() => new ManageYourShortCoursesPage(context));
+        return await VerifyPageAsync(() => new ManageYourAppUnitPage(context));
     }
 
     public async Task<YourStandardsAndTrainingVenuesPage> NavigateBackToReviewYourDetails()

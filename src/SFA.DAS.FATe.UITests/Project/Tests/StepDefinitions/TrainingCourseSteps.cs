@@ -23,29 +23,29 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             _apprenticeshipTrainingCourseDetailsPage = new ApprenticeshipTrainingCourseDetailsPage(context);
         }
 
-        [Given("the user navigates to the Apprenticeship training course page")]
+        [Given("^the user navigates to the Apprenticeship training course page$")]
         public async Task GivenTheUserNavigatesToTheApprenticeshipTrainingCoursePage()
         {
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
             await _fATeHomePage.ClickStartNow();
             await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
-            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Accountancy or taxation professional (level 7)");
+            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Accounting finance manager (level 6)");
        }
 
-        [When("the user searches for a provider without entering a location")]
+        [When("^the user searches for a provider without entering a location$")]
         public async Task WhenTheUserSearchesForAProviderWithoutEnteringALocation()
         {
             await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
             await _fATeHomePage.ReturnToCourseDetail();
         }
 
-        [When("the user searches for a provider with a location")]
+        [When("^the user searches for a provider with a location$")]
         public async Task WhenTheUserSearchesForAProviderWithALocation()
         {
             await _apprenticeshipTrainingCourseDetailsPage.EnterLocationAndViewProviders_PartialPostcode_AcrossEngland();
         }
 
-        [Then("the user verifies that all links on the training course page are working as expected")]
+        [Then("^the user verifies that all links on the training course page are working as expected$")]
         public async Task ThenTheUserVerifiesThatAllLinksOnTheTrainingCoursePageAreWorkingAsExpected()
         {
             await _fATeHomePage.ReturnToCourseDetail();
@@ -54,35 +54,35 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCourseDetailsPage.ClickViewKnowledgeSkillsAndBehaviours();
             await _apprenticeshipTrainingCourseDetailsPage.VerifyIFATELinkOpensInNewTab();
         }
-        [When("the user enters and selects a location and verifies the selected location is displayed correctly")]
+        [When("^the user enters and selects a location and verifies the selected location is displayed correctly$")]
         public async Task WhenTheUserEntersAndSelectsALocationAndVerifiesTheSelectedLocationIsDisplayedCorrectly()
         {
             await _apprenticeshipTrainingCourseDetailsPage.EnterLocationAndViewProviders_10miles_Coventry();
         }
 
-        [When("verifies the location is stored in the filters on the results page")]
+        [When("^verifies the location is stored in the filters on the results page$")]
         public async Task WhenVerifiesTheLocationIsStoredInTheFiltersOnTheResultsPage()
         {
             await _fATeHomePage.ReturnToCourseSearchResults();
             await _fATeHomePage.VerifyFilterIsSet("Coventry, West Midlands (within 10 miles)");
         }
 
-        [When("updates the apprentice travel distance")]
+        [When("^updates the apprentice travel distance$")]
         public async Task WhenUpdatesTheApprenticeTravelDistance()
         {
             await _fATeHomePage.SelectApprenticeTravelDistance("50 miles");
             await _fATeHomePage.ApplyFilters();
-            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Accountancy or taxation professional (level 7)");
+            await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Accounting finance manager (level 6)");
         }
 
-        [When("verifies the travel distance is updated correctly")]
+        [When("^verifies the travel distance is updated correctly$")]
         public async Task WhenVerifiesTheTravelDistanceIsUpdatedCorrectly()
         {
             await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistance("Learner's work location:", "Coventry, West Midlands");
             await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistance("Learner can travel:", "50 miles");
         }
 
-        [When("removes the location")]
+        [When("^removes the location$")]
         public async Task WhenRemovesTheLocation()
         {
             await _apprenticeshipTrainingCourseDetailsPage.ClickRemoveLocation();
@@ -90,13 +90,13 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistanceNotPresent();
         }
 
-        [When("searches for a new location")]
+        [When("^searches for a new location$")]
         public async Task  WhenSearchesForANewLocation()
         {
             await _fATeHomePage.EnterApprenticeWorkLocation("shear", "Shear Brow, Lancashire");
         }
 
-        [Then("verifies the new location and travel distance are updated correctly")]
+        [Then("^verifies the new location and travel distance are updated correctly$")]
         public async Task ThenVerifiesTheNewLocationAndTravelDistanceAreUpdatedCorrectly()
         {
             await _apprenticeshipTrainingCourseDetailsPage.VerifyWorkLocationAndTravelDistance("Learner's work location:", "Shear Brow, Lancashire");

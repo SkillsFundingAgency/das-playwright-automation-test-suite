@@ -9,13 +9,14 @@ namespace SFA.DAS.ManagingStandards.UITests.Project.Hooks
         protected readonly DbConfig _dbConfig = context.Get<DbConfig>();
         private readonly ProviderConfig _config = context.GetProviderConfig<ProviderConfig>();
         private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
+        private ManagingStandardsDataHelpers _managingStandardsDataHelpers;
 
         [BeforeScenario(Order = 31)]
         public void SetUpDataHelpers()
         {
             context.Set(_managingStandardsSqlDataHelper = new ManagingStandardsSqlDataHelper(_objectContext, _dbConfig));
 
-            context.Set(new ManagingStandardsDataHelpers());
+            context.Set(_managingStandardsDataHelpers = new ManagingStandardsDataHelpers());
         }
 
         [BeforeScenario(Order = 32)]
@@ -39,8 +40,8 @@ namespace SFA.DAS.ManagingStandards.UITests.Project.Hooks
         [BeforeScenario(Order = 33)]
         public async Task ClearDownProviderSpecificApprenticeshipUnit()
         {
-            if (_tags.Any(x => x == "managingstandardsadddeleteapprenticeshipunit")) await _managingStandardsSqlDataHelper.ClearStandard(_config.Ukprn, 
-                ManagingStandardsDataHelpers.StandardsTestData.ApprenticeshipUnitLarsCode);
+            if (_tags.Any(x => x == "managingstandardsadddeleteaiapprenticeshipunit")) await _managingStandardsSqlDataHelper.ClearStandard(_config.Ukprn, 
+                _managingStandardsDataHelpers.Apprenticeshipunit_AILarsCode);
         }
 
         [BeforeScenario(Order = 33)]
@@ -48,6 +49,20 @@ namespace SFA.DAS.ManagingStandards.UITests.Project.Hooks
         {
             if (_tags.Any(x => x == "managingstandards05")) await _managingStandardsSqlDataHelper.ClearStandard(_config.Ukprn, 
                 ManagingStandardsDataHelpers.StandardsTestData.LarsCode_Delete);
+        }
+
+        [BeforeScenario(Order = 33)]
+        public async Task ClearDownProviderSpecificEVApprenticeshipUnit()
+        {
+            if (_tags.Any(x => x == "managingstandardsadddeleteevapprenticeshipunit")) await _managingStandardsSqlDataHelper.ClearStandard(_config.Ukprn, 
+                _managingStandardsDataHelpers.Apprenticeshipunit_EVLarsCode);
+        }
+
+        [BeforeScenario(Order = 33)]
+        public async Task ClearDownProviderSpecificEFApprenticeshipUnit()
+        {
+            if (_tags.Any(x => x == "managingstandardsadddeleteefapprenticeshipunit")) await _managingStandardsSqlDataHelper.ClearStandard(_config.Ukprn, 
+                _managingStandardsDataHelpers.Apprenticeshipunit_EFLarsCode);
         }
     }
 }

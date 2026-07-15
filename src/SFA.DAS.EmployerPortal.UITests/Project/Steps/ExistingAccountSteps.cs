@@ -19,8 +19,8 @@ public class ExistingAccountSteps
         _createAccountEmployerPortalLoginHelper = new CreateAccountEmployerPortalLoginHelper(_context);
     }
 
-    [Given(@"the Employer logins using existing (Levy|NonLevy) Account")]
-    [When(@"the Employer logins using existing (Levy|NonLevy) Account")]
+    [Given(@"^the Employer logins using existing (Levy|NonLevy) Account$")]
+    [When(@"^the Employer logins using existing (Levy|NonLevy) Account$")]
     public async Task GivenTheEmployerLoginsUsingExistingAccount(string employerType = "NonLevy")
     {
         if (employerType == "Levy")
@@ -29,15 +29,15 @@ public class ExistingAccountSteps
             _homePage = await _createAccountEmployerPortalLoginHelper.Login(_context.GetUser<NonLevyUser>());
     }
 
-    [Given(@"the Employer logins using existing transactor user account")]
+    [Given(@"^the Employer logins using existing transactor user account$")]
     public async Task GivenTheEmployerLoginsUsingExistingTransactorUserAccount() => _homePage = await _createAccountEmployerPortalLoginHelper.Login(_context.GetUser<TransactorUser>(), true);
 
-    [Given(@"the Employer logins using existing view user account")]
-    [When(@"the Employer logins using existing view user account")]
-    [Given(@"the levy employer login using existing view user account")]
+    [Given(@"^the Employer logins using existing view user account$")]
+    [When(@"^the Employer logins using existing view user account$")]
+    [Given(@"^the levy employer login using existing view user account$")]
     public async Task GivenTheEmployerLoginsUsingExistingViewUserAccount() => _homePage = await _createAccountEmployerPortalLoginHelper.Login(_context.GetUser<ViewOnlyUser>(), true);
 
-    [Then(@"Employer is able to navigate to all the link under Settings")]
+    [Then(@"^Employer is able to navigate to all the link under Settings$")]
     public async Task ThenEmployerIsAbleToNavigateToAllTheLinkUnderSettings()
     {
         var page = await _homePage.GoToYourAccountsPage();
@@ -53,16 +53,16 @@ public class ExistingAccountSteps
         _homePage = await page3.GoBackToHomePage();
     }
 
-    [Then(@"Employer is able to navigate to Help Page")]
+    [Then(@"^Employer is able to navigate to Help Page$")]
     public async Task ThenEmployerIsAbleToNavigateToHelpPage() => await _homePage.GoToHelpPage();
 
-    [Then(@"the employer can navigate to Accessibility statement page")]
+    [Then(@"^the employer can navigate to Accessibility statement page$")]
     public async Task ThenEmployerIsAbleToNavigateToAccessibilityStatementPage()
     {
         await _homePage.GoToAccessibilityStatementPage();
     }
 
-    [Then(@"the employer can navigate to home page")]
+    [Then(@"^the employer can navigate to home page$")]
     public async Task ThenTheEmployerCanNavigateToHomePage()
     {
         _homePage = new HomePage(_context, true);
@@ -72,7 +72,7 @@ public class ExistingAccountSteps
         await _homePage.VerifyPage();
     }
 
-    [Then(@"the user can not add an organisation")]
+    [Then(@"^the user can not add an organisation$")]
     public async Task ThenTheUserCanNotAddAnOrganisation()
     {
         var page = await _homePage.GoToYourOrganisationsAndAgreementsPage();
@@ -88,7 +88,7 @@ public class ExistingAccountSteps
         _homePage = await GoBackToTheServiceHomePage(page4);
     }
 
-    [Then(@"the user can not remove the organisation")]
+    [Then(@"^the user can not remove the organisation$")]
     public async Task ThenTheUserCanNotRemoveTheOrganisation()
     {
         var page = await _homePage.GoToYourOrganisationsAndAgreementsPage();
@@ -98,7 +98,7 @@ public class ExistingAccountSteps
         _homePage = await GoBackToTheServiceHomePage(page1);
     }
 
-    [Then(@"the user can not add Payee Scheme")]
+    [Then(@"^the user can not add Payee Scheme$")]
     public async Task ThenTheUserCanNotAddPayeeScheme()
     {
         var page = await _homePage.GotoPAYESchemesPage();
@@ -108,7 +108,7 @@ public class ExistingAccountSteps
         _homePage = await GoBackToTheServiceHomePage(page1);
     }
 
-    [Then(@"the user can not invite a team members")]
+    [Then(@"^the user can not invite a team members$")]
     public async Task ThenTheUserCanNotInviteATeamMembers()
     {
         var page = await _homePage.GotoYourTeamPage();
@@ -118,7 +118,7 @@ public class ExistingAccountSteps
         _homePage = await GoBackToTheServiceHomePage(page1);
     }
 
-    [Then(@"the user can not accept agreement")]
+    [Then(@"^the user can not accept agreement$")]
     public async Task ThenTheUserCanNotAcceptAgreement()
     {
         var page = await _homePage.ClickAcceptYourAgreementLinkInHomePagePanel();
@@ -130,7 +130,7 @@ public class ExistingAccountSteps
         _homePage = await GoBackToTheServiceHomePage(page2);
     }
 
-    [Then(@"the user can not add an apprentices")]
+    [Then(@"^the user can not add an apprentices$")]
     public async Task ThenTheUserCanNotAddAnApprentices()
     {
         await _context.Get<Driver>().Page.GetByRole(AriaRole.Link, new() { Name = "Apprentices", Exact = true }).First.ClickAsync();

@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using System.Globalization;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
@@ -43,7 +44,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             var trainingDetails = apprenticeship.TrainingDetails;
             await Assertions.Expect(PlannedTrainingStartDateValue).ToContainTextAsync(DateTimeExtension.FormatWithCustomMonth(trainingDetails.StartDate));
             await Assertions.Expect(PlannedTrainingEndDateValue).ToContainTextAsync(DateTimeExtension.FormatWithCustomMonth(trainingDetails.EndDate));
-            await Assertions.Expect(TotalPriceValue).ToContainTextAsync(trainingDetails.TotalPrice.ToString("C0"));
+            await Assertions.Expect(TotalPriceValue).ToContainTextAsync(trainingDetails.TotalPrice.ToString("C0", CultureInfo.GetCultureInfo("en-GB")));
             await Assertions.Expect(ReferenceValue).ToHaveValueAsync("");
         }
 

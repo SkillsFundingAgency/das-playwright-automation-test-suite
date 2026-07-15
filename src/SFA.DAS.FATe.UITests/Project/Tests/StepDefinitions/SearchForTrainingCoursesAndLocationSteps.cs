@@ -7,78 +7,102 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
     public class SearchForTrainingCoursesAndLocationSteps(ScenarioContext context)
     {
         private readonly FATeStepsHelper _stepsHelper = new(context);
-        private readonly ApprenticeshipTrainingCoursesPage _apprenticeshipTrainingCoursesPage = new(context);
+        private ApprenticeshipTrainingCoursesPage _apprenticeshipTrainingCoursesPage = new(context);
         private readonly FATeHomePage _fATeHomePage = new(context);
         private readonly Search_TrainingCourses_ApprenticeworkLocationPage _search_TrainingCourses_ApprenticeworkLocationPage = new(context);
         private readonly ApprenticeshipTrainingCourseDetailsPage _apprenticeshipTrainingCourseDetailsPage = new(context);
 
-        [Given("the user navigates to the Search for apprenticeship training courses and training providers page")]
+        [Given(@"^the user shortlist a provider for an apprenticeship unit course$")]
+        public async Task TheUserShortlistsAProviderForAnApprenticeshipUnitCourse()
+        {
+            await _search_TrainingCourses_ApprenticeworkLocationPage.VerifyPage();
+
+            _apprenticeshipTrainingCoursesPage = await _search_TrainingCourses_ApprenticeworkLocationPage.SearchApprenticeUnit();
+
+            var page = await _apprenticeshipTrainingCoursesPage.SelectEVProviders();
+
+            await page.AddProviderToShortList();
+        }
+
+        [Given("^the user navigates to the Search for apprenticeship training courses and training providers page$")]
         public async Task GivenTheUserNavigatesToTheSearchForApprenticeshipTrainingCoursesAndTrainingProvidersPage()
         {
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
             await _fATeHomePage.ClickStartNow();
-            await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
+            _apprenticeshipTrainingCoursesPage = await _search_TrainingCourses_ApprenticeworkLocationPage.BrowseAllCourses();
         }
 
-        [Given("the user navigates to find training page")]
+        [Given(@"^the user shortlist a provider for a course$")]
+        public async Task TheUserShortlistsAProviderForACourse()
+        {
+            _apprenticeshipTrainingCoursesPage = await _apprenticeshipTrainingCoursesPage.AddAProviderToShortlist();
+        }
+
+        [When(@"the user shorlist the same provider using a location filter")]
+        public async Task TheUserShortlistsTheSameProviderUsingALocationFilter()
+        {
+            await _apprenticeshipTrainingCoursesPage.AddProviderToShortlistUsingLocation();
+        }
+
+        [Given("^the user navigates to find training page$")]
         public async Task GivenTheUserNavigatesToFindTrainingPage()
         {
             await _stepsHelper.AcceptCookiesAndGoToFATeHomePage();
             await _fATeHomePage.ClickStartNow();
         }
 
-        [When("the user navigates to Training providers page")]
+        [When("^the user navigates to Training providers page$")]
         public async Task WhenTheUserNavigatesToTrainingProvidersPage()
         {
             await _apprenticeshipTrainingCoursesPage.SelectCourseByName("Adult care worker (level 2)");
             await _apprenticeshipTrainingCourseDetailsPage.ViewProvidersForThisCourse();
         }
 
-        [When("the user searches for a course with an apprenticeship location only")]
+        [When("^the user searches for a course with an apprenticeship location only$")]
         public async Task WhenTheUserSearchesForACourseWithAnApprenticeshipLocationOnly()
         {
             await _search_TrainingCourses_ApprenticeworkLocationPage.SearchWithApprenticeWorkLocation();
         }
 
-        [Then("the relevant training courses are displayed")]
+        [Then("^the relevant training courses are displayed$")]
         public async Task ThenTheRelevantTrainingCoursesAreDisplayed()
         {
             await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Coventry, West Midlands (within 10 miles)");
         }
 
-        [When("the user searches for a course without location")]
+        [When("^the user searches for a course without location$")]
         public async Task WhenTheUserSearchesForACourseWithoutLocation()
         {
             await _search_TrainingCourses_ApprenticeworkLocationPage.SearchWithCourseOnly();
         }
 
-        [Then("the relevant training courses are displayed with filters set")]
+        [Then("^the relevant training courses are displayed with filters set$")]
         public async Task ThenTheRelevantTrainingCoursesAreDisplayedWithFiltersSet()
         {
             await _apprenticeshipTrainingCoursesPage.VerifyFilterIsSet("Worker");
-            await _apprenticeshipTrainingCoursesPage.VerifyCourseSearchResults("worker");
+            await _apprenticeshipTrainingCoursesPage.VerifyCourseSearchResults("Worker");
         }
 
-        [When(@"the user searches for a course without location and course name")]
+        [When(@"^the user searches for a course without location and course name$")]
         public async Task WhenTheUserSearchesForACourseWithoutLocationAndCourseName()
         {
             await _search_TrainingCourses_ApprenticeworkLocationPage.SearchWithoutCourseAndApprenticeWorkLocation();
         }
 
-        [When("the user searches for a course with no results")]
+        [When("^the user searches for a course with no results$")]
         public async Task WhenTheUserSearchesForACourseWithNoResults()
         {
             await _search_TrainingCourses_ApprenticeworkLocationPage.SearchWithCourseNoResults();
         }
 
-        [Then(@"all the courses are displayed without filters set")]
+        [Then(@"^all the courses are displayed without filters set$")]
         public async Task ThenAllTheCoursesAreDisplayedWithoutFiltersSet()
         {
             await _apprenticeshipTrainingCoursesPage.VerifyNoFiltersAreApplied();
             await _apprenticeshipTrainingCoursesPage.VerifyUrlContainsWordCourses();
         }
 
-        [Then("no courses that match your search is displayed with filters set")]
+        [Then("^no courses that match your search is displayed with filters set$")]
         public async Task ThenNoCoursesThatMatchYourSearchIsDisplayedWithFiltersSet()
         {
             // The search term used for the no-results scenario is generated at runtime and stored in the object context
@@ -88,7 +112,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _apprenticeshipTrainingCoursesPage.VerifyNoresultStartAnewSearchLink();
         }
 
-        [When("I select the following training types")]
+        [When("^I select the following training types$")]
         public async Task WhenISelectTheFollowingTrainingTypes(Table table)
         {
 
@@ -101,7 +125,7 @@ namespace SFA.DAS.FATe.UITests.Project.Tests.StepDefinitions
             await _search_TrainingCourses_ApprenticeworkLocationPage.SelectTrainingTypes(trainingTypes);
         }
 
-        [Then(@"the following training type filters are applied")]
+        [Then(@"^the following training type filters are applied$")]
         public async Task ThenTheFollowingTrainingTypeFiltersAreApplied(Table table)
         {
             var expectedTypes = table.Rows

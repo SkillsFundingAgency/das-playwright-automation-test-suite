@@ -13,7 +13,7 @@ public class EmployerFeedbackSteps(ScenarioContext context)
     private readonly EmployerFeedbackSqlHelper _provideFeedbackSqlHelper = context.Get<EmployerFeedbackSqlHelper>();
     private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
 
-    [Given(@"the Employer logins into Employer Portal")]
+    [Given(@"^the Employer logins into Employer Portal$")]
     public async Task WhenTheEmployerLoginsIntoEmployerPortal()
     {
         var user = context.GetUser<EmployerFeedbackUser>();
@@ -23,8 +23,8 @@ public class EmployerFeedbackSteps(ScenarioContext context)
       // _objectContext.SetTestData(await _provideFeedbackSqlHelper.GetTestData(user.Username));
     }
 
-    [Given("the Second Employer View only User logins into Employer Portal")]
-    public async void GivenTheSecondEmployerViewOnlyUserLoginsIntoEmployerPortal()
+    [Given("^the Second Employer View only User logins into Employer Portal$")]
+    public async Task GivenTheSecondEmployerViewOnlyUserLoginsIntoEmployerPortal()
     {
         var user = context.GetUser<EmployerViewOnlyUser>();
 
@@ -34,7 +34,7 @@ public class EmployerFeedbackSteps(ScenarioContext context)
     }
        
 
-    [Given(@"the (.*) completes the feedback journey for a training provider")]
+    [Given(@"^the (.*) completes the feedback journey for a training provider$")]
     public async Task GivenTheCompletesTheFeedbackJourneyForATrainingProvider(string user)
     {
         var page = await new EmployerDashboardPage(context).ClickFeedbackLink();
@@ -49,7 +49,7 @@ public class EmployerFeedbackSteps(ScenarioContext context)
     }
    
 
-    [Given(@"completes the feedback journey for a training provider via survey code")]
+    [Given(@"^completes the feedback journey for a training provider via survey code$")]
     public async Task GivenCompletesTheFeedbackJourneyForATrainingProviderViaSurveyCode()
     {
         var page = await new EmployerDashboardPage(context).OpenFeedbackLinkWithSurveyCode();
@@ -57,7 +57,7 @@ public class EmployerFeedbackSteps(ScenarioContext context)
         _providerFeedbackCheckYourAnswers = await GoToCheckYourAnswersPage(page);
     }
 
-    [Then(@"the user can change the answers and submits")]
+    [Then(@"^the user can change the answers and submits$")]
     public async Task ThenTheUserCanChangeTheAnswersAndSubmits()
     {
         var page = await _providerFeedbackCheckYourAnswers.ChangeQuestionOne();
@@ -75,7 +75,7 @@ public class EmployerFeedbackSteps(ScenarioContext context)
         await page5.SubmitAnswersNow();
     }
 
-    [Then(@"the user can not resubmit the feedback")]
+    [Then(@"^the user can not resubmit the feedback$")]
     public async Task ThenTheUserCanNotResubmitTheFeedback() => await new EmployerFeedbackAlreadySubmittedPage(context).VerifyPage();
 
     private static async Task<EmployerFeedbackCheckYourAnswersPage> GoToCheckYourAnswersPage(EmployerFeedbackHomePage emppage)
