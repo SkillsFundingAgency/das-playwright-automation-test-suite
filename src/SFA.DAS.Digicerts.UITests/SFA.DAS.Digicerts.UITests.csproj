@@ -1,33 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-   <PropertyGroup>
+	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace>SFA.DAS.Digicerts.UITests</RootNamespace>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
-	<PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
-	<PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="NUnit.Framework" />
-  </ItemGroup>
-  <ItemGroup>
-		<Compile Include="..\NUnitConfigurator.cs" Link="NUnitConfigurator.cs">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Compile>
-  </ItemGroup>
-
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Playwright" Version="1.*" />
+		<PackageReference Include="Microsoft.Playwright.NUnit" Version="1.*" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+		<PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
+		<PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
 	</ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<Using Include="NUnit.Framework" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\NUnitConfigurator.cs" Link="NUnitConfigurator.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Update="appsettings.Environment.json">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
@@ -41,6 +40,11 @@
 		<None Update="specflow.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-	</ItemGroup>	
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Project\Helpers\" />
+		<Folder Include="Project\Models\" />
+	</ItemGroup>
 
 </Project>
