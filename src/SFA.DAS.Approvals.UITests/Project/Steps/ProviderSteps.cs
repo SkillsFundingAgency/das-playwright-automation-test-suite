@@ -49,7 +49,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Then("^Provider Check Learner DetailsPage is stopped with an error message (.*)$")]
-        public async Task WhenProviderIsStoppedWithAnErrorMessage(string errorMessage)
+        public async Task ThenProviderIsStoppedWithAnErrorMessage(string errorMessage)
         {
             await new CheckApprenticeDetailsPage(context).VerfiyErrorMessage("StartDate", errorMessage);
         }
