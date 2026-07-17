@@ -14,10 +14,7 @@ parameters:
   - name: RuleName
     type: string
     default: ''
-  - name: FaRuleName
-    type: string
-    default: ''
-
+ 
 stages:
   - stage: Build
     displayName: Build Stage
