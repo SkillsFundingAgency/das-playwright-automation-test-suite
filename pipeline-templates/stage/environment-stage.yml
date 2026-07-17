@@ -88,7 +88,8 @@ stages:
           parameters:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: das-pp-automation-test-suite-db-sc
-            RuleName: ${{ parameters.RuleName }} | {{ parameters.FaRuleName }}
+            RuleName: ${{ parameters.RuleName }}
+            FaRuleName: ${{ parameters.FaRuleName }}
             ResourceName: ${{ parameters.ResourceName }}
 
       - ${{ else }}:
@@ -97,4 +98,5 @@ stages:
             Environment: 'PP'
             ServiceConnection: das-pp-automation-test-suite-db-sc
             ResourceName: ${{ parameters.ResourceName }}
-            RuleName: ${{ parameters.RuleName }} | {{ parameters.FaRuleName }}
+            RuleName: ${{ parameters.RuleName }}
+            FaRuleName: ${{ parameters.FaRuleName }}
