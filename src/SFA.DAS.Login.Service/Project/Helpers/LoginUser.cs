@@ -185,7 +185,7 @@ public class FAAFoundationUser : FAAPortalUser
 
 #region ApprenticeAccount
 
-public class CocApprenticeUser : ApprenticeUser { }
+public class AppCMADUser : ApprenticeUser { }
 
 public class ApprenticeFeedbackUser : ApprenticeUser { }
 

@@ -8,10 +8,11 @@
 "language": {
     "feature": "en-GB"
   },
-  
+
   "stepAssemblies": [
     { "assembly": "SFA.DAS.Framework" },
-    { "assembly": "SFA.DAS.ConfigurationBuilder" }
+    { "assembly": "SFA.DAS.ConfigurationBuilder" },
+    { "assembly": "SFA.DAS.Approvals.UITests" }
   ],
   "generator": {
     "allowRowTests": false,
