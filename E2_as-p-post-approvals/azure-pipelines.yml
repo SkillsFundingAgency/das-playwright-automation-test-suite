@@ -43,5 +43,4 @@ stages:
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
       RuleName: $(RuleName)
-      FaRuleName: $(FaRuleName)
       ResourceName: $(ResourceName)
