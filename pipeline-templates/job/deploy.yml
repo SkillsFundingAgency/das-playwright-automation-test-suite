@@ -11,6 +11,9 @@ parameters:
     default: ''
   - name: RuleName
     type: string
+    default: ''  
+  - name: FaRuleName
+    type: string
     default: ''
 
 jobs:
