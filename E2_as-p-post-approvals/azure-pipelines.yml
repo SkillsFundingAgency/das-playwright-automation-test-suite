@@ -44,3 +44,4 @@ stages:
       deploy: $(Deploy)
       RuleName: $(RuleName)
       ResourceName: $(ResourceName)
+      FaRuleName: $(FaRuleName)
