@@ -41,7 +41,6 @@ stages:
           ServiceConnection: das-test-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
           RuleName: ${{ parameters.RuleName }}
-          FaRuleName: ${{ parameters.FaRuleName }}
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -57,7 +56,6 @@ stages:
           ServiceConnection: das-test2-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
           RuleName: ${{ parameters.RuleName }}
-          FaRuleName: ${{ parameters.FaRuleName }}
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -73,7 +71,6 @@ stages:
           ServiceConnection: das-demo-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
           RuleName: ${{ parameters.RuleName }}
-          FaRuleName: ${{ parameters.FaRuleName }}
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -91,9 +88,8 @@ stages:
           parameters:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: das-pp-automation-test-suite-db-sc
-            RuleName: ${{ parameters.RuleName }}
+            RuleName: ${{ parameters.RuleName }} | {{ parameters.FaRuleName }}
             ResourceName: ${{ parameters.ResourceName }}
-            FaRuleName: ${{ parameters.FaRuleName }}
 
       - ${{ else }}:
         - template: ../job/deploy.yml
@@ -101,5 +97,4 @@ stages:
             Environment: 'PP'
             ServiceConnection: das-pp-automation-test-suite-db-sc
             ResourceName: ${{ parameters.ResourceName }}
-            RuleName: ${{ parameters.RuleName }}
-            FaRuleName: ${{ parameters.FaRuleName }}
+            RuleName: ${{ parameters.RuleName }} | {{ parameters.FaRuleName }}
