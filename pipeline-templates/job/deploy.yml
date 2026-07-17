@@ -88,19 +88,21 @@ jobs:
               azurePowerShellVersion: LatestVersion
 
           - task: AzurePowerShell@5
-            displayName: 'Whitelist agent''s IP address on $(AppServiceName)'
+            displayName: "Whitelist agent's IP address on $(AppServiceName)"
             condition: ne('${{ parameters.ResourceName }}', '')
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
               ScriptArguments: '-ResourceName ${{ parameters.ResourceName }} -IPAddress $(IPAddress) -RuleName ${{ parameters.RuleName }}'
               azurePowerShellVersion: LatestVersion
+              
           - task: AzurePowerShell@5
             displayName: "Whitelist agent's IP address on Function App"
+            condition: ne('${{ parameters.FaRuleName }}', '')
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
-              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa" -RuleName "ADO-Agent-IP"'
+              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa" -RuleName "${{ parameters.FaRuleName }}"'
               azurePowerShellVersion: LatestVersion
 
           # 1) Bootstrap: extract Service Connection creds to pipeline variables
@@ -149,7 +151,7 @@ jobs:
             condition: succeededOrFailed()
 
           - task: AzurePowerShell@5
-            displayName: 'App Service - Remove Whitelisted Agent''s IP Address'
+            displayName: "App Service - Remove Whitelisted Agent's IP Address"
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
@@ -157,6 +159,16 @@ jobs:
               azurePowerShellVersion: LatestVersion
               pwsh: true
             condition: and(succeededOrFailed(), ne('${{ parameters.ResourceName }}', ''))
+          
+          - task: AzurePowerShell@5
+            displayName: "Function App- Remove Whitelisted Agent's IP Address"
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
+              ScriptArguments: '-IPAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa"'
+              azurePowerShellVersion: LatestVersion
+              pwsh: true
+            condition: and(succeededOrFailed(), ne('${{ parameters.FaRuleName }}', ''))
 
           - task: PowerShell@2
             displayName: 'Check .trx File Exists'
