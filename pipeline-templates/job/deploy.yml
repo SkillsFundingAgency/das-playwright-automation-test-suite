@@ -12,6 +12,9 @@ parameters:
   - name: RuleName
     type: string
     default: ''
+  - name: WhiteListFunction
+    type: boolean
+    default: false
 
 jobs:
 - deployment: Deploy_AutomationTests
@@ -102,6 +105,8 @@ jobs:
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
               ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa" -RuleName "${{ parameters.RuleName }}"'
               azurePowerShellVersion: LatestVersion
+            condition: and(succeeded(), eq('${{ parameters.WhiteListFunction }}', 'true'))
+
 
           # 1) Bootstrap: extract Service Connection creds to pipeline variables
           - task: AzureCLI@2
