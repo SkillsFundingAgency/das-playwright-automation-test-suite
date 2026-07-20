@@ -69,9 +69,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         internal async Task<LearnerDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status, string rowName, DateTime date)
         {
+            string expectedDate = (status == ApprenticeshipStatus.Paused) ? date.ToString("d MMM yyyy") : date.ToString("MMMM yyyy");
+            
             await Assertions.Expect(ApprenticeStatusTag).ToContainTextAsync(status.ToString());
             await Assertions.Expect(StatusDateTitle).ToContainTextAsync(rowName);
-            await Assertions.Expect(StatusDateValue).ToContainTextAsync(date.ToString("MMMM yyyy"));
+            await Assertions.Expect(StatusDateValue).ToContainTextAsync(expectedDate);
             return this;
         }
 

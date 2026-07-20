@@ -23,6 +23,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var fullName = apprenticeship.ApprenticeDetails.FullName;
+            var expectedDate = apprenticeship.TrainingDetails.StopDate;
             var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
             var page1 = await page.OpenFirstItemFromTheList(fullName);
 
@@ -39,7 +40,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     Assert.True(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
                     break;
                 case "Stopped":
-                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, "Stopped date", apprenticeship.TrainingDetails.StopDate);
+                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, "Stopped date", expectedDate);
                     //Assert editiability of stopped record:
                     Assert.False(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
                     Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
@@ -52,7 +53,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     await page2.AssertChangeHistoryRow(DateTime.Now, "ILR Learner status changed from Live to Withdrawn", "Auto approved");
                     break;
                 case "Paused":
-                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Paused, "Apprenticeship pause date", DateTime.Now);
+                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Paused, "Apprenticeship pause date", expectedDate);
+                    //Assert editiability of paused record:
+                    Assert.True(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
+                    Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
+                    Assert.True(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+                    Assert.True(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
+                    Assert.False(await page1.IsEditVersionLinkAvailable(), "IsEditVersionLinkAvailable");
+                    Assert.False(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
+                    //Check history logs:
+                    page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
+                    await page2.AssertChangeHistoryRow(DateTime.Now, $"Learning has been paused on {expectedDate.ToString("M/d/yyyy")}", "Auto approved");
                     break;
                 default:
                     throw new ArgumentException($"Invalid payment status: {status}");
