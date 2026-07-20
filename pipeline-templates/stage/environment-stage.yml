@@ -13,11 +13,11 @@ parameters:
     default: ''
   - name: RuleName
     type: string
-    default: ''  
-  - name: FaRuleName
-    type: string
     default: ''
- 
+  - name: WhiteListFunction
+    type: boolean
+    default: false
+
 stages:
   - stage: Build
     displayName: Build Stage
@@ -89,8 +89,8 @@ stages:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: das-pp-automation-test-suite-db-sc
             RuleName: ${{ parameters.RuleName }}
-            FaRuleName: ${{ parameters.FaRuleName }}
             ResourceName: ${{ parameters.ResourceName }}
+            WhiteListFunction: ${{ parameters.WhiteListFunction }}
 
       - ${{ else }}:
         - template: ../job/deploy.yml
@@ -99,4 +99,4 @@ stages:
             ServiceConnection: das-pp-automation-test-suite-db-sc
             ResourceName: ${{ parameters.ResourceName }}
             RuleName: ${{ parameters.RuleName }}
-            FaRuleName: ${{ parameters.FaRuleName }}
+            WhiteListFunction: ${{ parameters.WhiteListFunction }}

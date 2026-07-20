@@ -14,8 +14,6 @@ variables:
     value: "SFA.DAS.Approvals.UITests"
   - name: RuleName
     value: "E2_as-post-approvals-test-suite"
-  - name: FaRuleName
-    value: "E2_as-post-approvals-test-suite"
   - name: ResourceName
     value: "$(EmployerAccountsAppWhitelistName)"
 
@@ -44,4 +42,4 @@ stages:
       deploy: $(Deploy)
       RuleName: $(RuleName)
       ResourceName: $(ResourceName)
-      FaRuleName: $(FaRuleName)
+      WhiteListFunction: true
