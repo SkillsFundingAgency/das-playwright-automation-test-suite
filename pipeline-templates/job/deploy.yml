@@ -100,7 +100,7 @@ jobs:
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
-              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa" -RuleName "ADO-Agent-IP"'
+              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa" -RuleName "${{ parameters.RuleName }}"'
               azurePowerShellVersion: LatestVersion
 
           # 1) Bootstrap: extract Service Connection creds to pipeline variables
@@ -158,6 +158,16 @@ jobs:
               pwsh: true
             condition: and(succeededOrFailed(), ne('${{ parameters.ResourceName }}', ''))
 
+          - task: AzurePowerShell@5
+            displayName: 'Function App - Remove Whitelisted Agent''s IP Address'
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
+              ScriptArguments: '-IPAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa"'
+              azurePowerShellVersion: LatestVersion
+              pwsh: true
+            condition: and(succeededOrFailed(), eq('${{ parameters.WhiteListFunction }}', 'true'))
+
           - task: PowerShell@2
             displayName: 'Check .trx File Exists'
             inputs:
@@ -188,4 +198,4 @@ jobs:
             inputs:
               allureVersion: '2.36.0'
               reportName: 'Allure report - ${{ parameters.Environment }}'
-              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'  
+              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'
