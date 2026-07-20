@@ -8,11 +8,11 @@ public class ApprenticeHubPage(ScenarioContext context) : ApprenticeBasePage(con
 
     public async Task VerifySubHeadings() => await VerifyFiuCards(() => NavigateToApprenticeshipHubPage());
 
-    public async Task<SetUpServicePage> NavigateToSetUpServiceAccountPage()
+    public async Task<ApprenticeCreateAccountPage> NavigateToCreateAccountPage()
     {
-        await SetUpService.ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Create an account to search and apply for apprenticeships", Exact = false }).ClickAsync();
 
-        return await VerifyPageAsync(() => new SetUpServicePage(context));
+        return await VerifyPageAsync(() => new ApprenticeCreateAccountPage(context));
     }
 
     public async Task<CampaingnsDynamicFiuPage> NavigateToApprenticeStories()

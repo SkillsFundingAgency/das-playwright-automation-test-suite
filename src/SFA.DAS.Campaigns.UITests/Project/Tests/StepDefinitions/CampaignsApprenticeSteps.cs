@@ -14,32 +14,32 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
         [Given(@"^the user navigates to Become An Apprentice page$")]
         public async Task GivenTheUserNavigatesToBecomeAnApprenticePage() => _apprenticeHubPage = await GoToApprenticeshipHubPage();
 
-        [Given(@"^the user navigates to apprentice How do they work Page$")]
-        public async Task GivenTheUserNavigatesToApprenticeHowDoTheyWorkPage()
+        [Given(@"^the user navigates to About Apprenticeships Page$")]
+        public async Task GivenTheUserNavigatesToAboutApprenticeshipsPage()
         {
             var page = await GoToApprenticeshipHubPage();
 
-            var page1 = await page.NavigateToHowDoTheyWorkPage();
+            var aboutPage = await page.NavigateToAboutApprenticeshipsPage();
 
-            await page1.VerifyHowDoTheyWorkPageSubHeadings();
+            await aboutPage.VerifyAboutApprenticeshipsPageSubHeadings();
         }
 
-        [Given(@"^the user navigates to Getting started Page$")]
-        public async Task GivenTheUserNavigatesToGettingStartedPage()
+        [Given(@"^the user navigates to Preparing For An Apprenticeship Page$")]
+        public async Task GivenTheUserNavigatesToPreparingForAnApprenticeshipPage()
         {
             var page = await GoToApprenticeshipHubPage();
 
-            await page.NavigateToGettingStarted();
+            await page.NavigateToPreparingForAnApprenticeshipPage();
         }
 
-        [Given(@"^the user navigates to Are ApprenticeShip Right For You Page$")]
-        public async Task GivenTheUserNavigatesToAreApprenticeShipRightForYouPage()
+        [Given(@"^the user navigates to Is An Apprenticeship Right For You Page$")]
+        public async Task GivenTheUserNavigatesToIsAnApprenticeshipRightForYouPage()
         {
             var page = await GoToApprenticeshipHubPage();
 
-            var page1 = await page.NavigateToAreApprenticeShipRightForMe();
+            var rightForYouPage = await page.NavigateToIsAnApprenticeshipRightForYouPage();
 
-            await page1.VerifyApprenticeAreTheyRightForYouPageSubHeadings();
+            await rightForYouPage.VerifyIsAnApprenticeshipRightForYouPageSubHeadings();
         }
 
         [Given(@"^the user navigates to the browse apprenticeship page$")]
@@ -50,12 +50,12 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
             await page.NavigateToBrowseApprenticeshipPage();
         }
 
-        [Given(@"^the user navigates to the Set Up Service Account page$")]
-        public async Task GivenTheUserNavigatesToTheSetUpServiceAccountPage()
+        [Given(@"^the user navigates to Create An Account To Search And Apply Page$")]
+        public async Task GivenTheUserNavigatesToCreateAnAccountToSearchAndApplyPage()
         {
             var page = await GoToApprenticeshipHubPage();
 
-            await page.NavigateToSetUpServiceAccountPage();
+            await page.NavigateToCreateAccountPage();
         }
 
         [Given("^the user navigates to the Apprentice Stories page$")]

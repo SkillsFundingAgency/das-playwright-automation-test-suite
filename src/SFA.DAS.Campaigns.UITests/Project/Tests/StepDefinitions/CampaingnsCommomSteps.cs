@@ -1,12 +1,29 @@
 ﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
+using System.Text.RegularExpressions;
+using Microsoft.Playwright;
 
 namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
 {
     [Binding]
-    public class CampaingnsCommomSteps(ScenarioContext context)
+    public class CampaignsCommonSteps(ScenarioContext context)
     {
-        [Then(@"^the user can search for an apprenticeship$")]
-        public async Task ThenTheUserCanSearchForAnApprenticeship() => await new BrowseApprenticeshipPage(context).SearchForAnApprenticeship();
+        [Then(@"the user is taken to the external find an apprenticeship page")]
+        public async Task ThenTheUserIsTakenToTheExternalFindAnApprenticeshipPage()
+        {
+            var browsePage = new BrowseApprenticeshipPage(context);
 
+            var externalPage = await browsePage.ClickExternalFindAnApprenticeshipLink();
+
+            await Assertions.Expect(externalPage).ToHaveURLAsync(new Regex("https://www.gov.uk/apply-apprenticeship"));
+
+            var cookieBannerButton = externalPage.GetByRole(AriaRole.Button, new() { Name = "Accept additional cookies" });
+            if (await cookieBannerButton.IsVisibleAsync())
+            {
+                await cookieBannerButton.ClickAsync();
+            }
+
+            var heading = externalPage.GetByRole(AriaRole.Heading, new() { Name = "Find an apprenticeship", Exact = true });
+            await Assertions.Expect(heading).ToBeVisibleAsync();
+        }
     }
 }

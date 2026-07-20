@@ -4,30 +4,36 @@ public abstract class ApprenticeBasePage(ScenarioContext context) : HubBasePage(
 {
     private ILocator ApprenticeTab => page.GetByLabel("Apprentices");
 
-    public async Task<ApprenticeAreTheyRightForYouPage> NavigateToAreApprenticeShipRightForMe()
+    public async Task<ApprenticeIsAnApprenticeshipRightForYouPage> NavigateToIsAnApprenticeshipRightForYouPage()
     {
-        await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "Are they right for you?" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Is an apprenticeship right for you?" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new ApprenticeAreTheyRightForYouPage(context));
+        return await VerifyPageAsync(() => new ApprenticeIsAnApprenticeshipRightForYouPage(context));
     }
 
-    public async Task<ApprenticeHowDoTheyWorkPage> NavigateToHowDoTheyWorkPage()
+    public async Task<ApprenticeAboutApprenticeshipsPage> NavigateToAboutApprenticeshipsPage()
     {
-        await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "How do they work?" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "About apprenticeships" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new ApprenticeHowDoTheyWorkPage(context));
+        return await VerifyPageAsync(() => new ApprenticeAboutApprenticeshipsPage(context));
     }
 
-    public async Task<ApprenticeGetStartedPage> NavigateToGettingStarted()
+    public async Task<ApprenticeCreateAccountPage> NavigateToCreateAccountPage()
     {
-        await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "Get started" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Create an account to search and apply for apprenticeships", Exact = false }).ClickAsync();
 
-        return await VerifyPageAsync(() => new ApprenticeGetStartedPage(context));
+        return await VerifyPageAsync(() => new ApprenticeCreateAccountPage(context));
     }
 
+    public async Task<ApprenticePreparingForAnApprenticeshipPage> NavigateToPreparingForAnApprenticeshipPage()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Preparing for an apprenticeship", Exact = false }).First.ClickAsync();
+
+        return await VerifyPageAsync(() => new ApprenticePreparingForAnApprenticeshipPage(context));
+    }
     public async Task<BrowseApprenticeshipPage> NavigateToBrowseApprenticeshipPage()
     {
-        await ApprenticeTab.GetByRole(AriaRole.Link, new() { Name = "Browse apprenticeships" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Browse by interest", Exact = false }).ClickAsync();
 
         return await VerifyPageAsync(() => new BrowseApprenticeshipPage(context));
     }
