@@ -1,5 +1,5 @@
 ﻿@approvals
-Feature: AP_NL_E2E_EUA_03_ReservationWindowRules
+Feature: AP_NL_E2E_EUA_04_ReservationWindowRules
 
 # This test focuses on verifying cohort statuses as they move b/w employer and provider
 # this test is for non levy funding route and will cover the following scenarios
@@ -8,7 +8,7 @@ Feature: AP_NL_E2E_EUA_03_ReservationWindowRules
 
 @regression
 @e2escenarios
-Scenario: AP_NL_E2E_EUA_03 Reservations window rules validation
+Scenario: AP_NL_E2E_EUA_04 Reservations window rules validation
 	
 	# Auto reservation route
 	When The Provider tries to add a new learner using details from table below
