@@ -11,10 +11,10 @@ parameters:
     default: ''
   - name: RuleName
     type: string
-    default: ''  
-  - name: FaRuleName
-    type: string
     default: ''
+  - name: WhiteListFunction
+    type: boolean
+    default: false
 
 jobs:
 - deployment: Deploy_AutomationTests
@@ -98,15 +98,15 @@ jobs:
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
               ScriptArguments: '-ResourceName ${{ parameters.ResourceName }} -IPAddress $(IPAddress) -RuleName ${{ parameters.RuleName }}'
               azurePowerShellVersion: LatestVersion
-              
           - task: AzurePowerShell@5
             displayName: "Whitelist agent's IP address on Function App"
-            condition: ne('${{ parameters.FaRuleName }}', '')
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
-              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa" -RuleName "${{ parameters.FaRuleName }}"'
+              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa" -RuleName "${{ parameters.RuleName }}"'
               azurePowerShellVersion: LatestVersion
+            condition: and(succeeded(), eq('${{ parameters.WhiteListFunction }}', 'true'))
+
 
           # 1) Bootstrap: extract Service Connection creds to pipeline variables
           - task: AzureCLI@2
@@ -162,7 +162,7 @@ jobs:
               azurePowerShellVersion: LatestVersion
               pwsh: true
             condition: and(succeededOrFailed(), ne('${{ parameters.ResourceName }}', ''))
-          
+
           - task: AzurePowerShell@5
             displayName: "Function App- Remove Whitelisted Agent's IP Address"
             inputs:
@@ -171,7 +171,7 @@ jobs:
               ScriptArguments: '-IPAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa"'
               azurePowerShellVersion: LatestVersion
               pwsh: true
-            condition: and(succeededOrFailed(), ne('${{ parameters.FaRuleName }}', ''))
+            condition: and(succeededOrFailed(), eq('${{ parameters.WhiteListFunction }}', 'true'))
 
           - task: PowerShell@2
             displayName: 'Check .trx File Exists'
@@ -203,4 +203,4 @@ jobs:
             inputs:
               allureVersion: '2.36.0'
               reportName: 'Allure report - ${{ parameters.Environment }}'
-              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'  
+              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'
