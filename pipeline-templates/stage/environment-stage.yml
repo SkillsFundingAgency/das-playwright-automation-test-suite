@@ -41,7 +41,6 @@ stages:
           ServiceConnection: das-test-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
           RuleName: ${{ parameters.RuleName }}
-          WhiteListFunction: ${{ parameters.WhiteListFunction }}
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -57,7 +56,6 @@ stages:
           ServiceConnection: das-test2-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
           RuleName: ${{ parameters.RuleName }}
-          WhiteListFunction: ${{ parameters.WhiteListFunction }}
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -73,7 +71,6 @@ stages:
           ServiceConnection: das-demo-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
           RuleName: ${{ parameters.RuleName }}
-          WhiteListFunction: ${{ parameters.WhiteListFunction }}
 
   - stage: Deploy_PP
     dependsOn: Build
