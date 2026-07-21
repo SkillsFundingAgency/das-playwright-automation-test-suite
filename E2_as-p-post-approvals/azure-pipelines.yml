@@ -42,3 +42,4 @@ stages:
       deploy: $(Deploy)
       RuleName: $(RuleName)
       ResourceName: $(ResourceName)
+      WhiteListFunction: true
