@@ -10,9 +10,12 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
         [Then(@"the user is taken to the external find an apprenticeship page")]
         public async Task ThenTheUserIsTakenToTheExternalFindAnApprenticeshipPage()
         {
-            var browsePage = new BrowseApprenticeshipPage(context);
+            var page = context.Get<IPage>();
 
-            var externalPage = await browsePage.ClickExternalFindAnApprenticeshipLink();
+            var externalPage = await page.RunAndWaitForPopupAsync(async () =>
+            {
+                await page.GetByRole(AriaRole.Link, new() { Name = "Find an apprenticeship" }).ClickAsync();
+            });
 
             await Assertions.Expect(externalPage).ToHaveURLAsync(new Regex("https://www.gov.uk/apply-apprenticeship"));
 

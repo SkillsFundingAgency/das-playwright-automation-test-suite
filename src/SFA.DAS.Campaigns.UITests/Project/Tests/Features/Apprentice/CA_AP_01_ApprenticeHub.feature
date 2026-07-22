@@ -1,4 +1,4 @@
-﻿Feature: CA_AP_01_BecomeAnApprenticeHub
+﻿Feature: CA_AP_01_ApprenticeHub
 
 Verify navigation and ensure no broken links across all cards and key callouts on the "Become an apprentice" landing page.
 
