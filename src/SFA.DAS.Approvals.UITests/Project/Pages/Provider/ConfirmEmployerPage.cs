@@ -16,6 +16,15 @@
             return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
+        internal async Task<ChooseReservationPage> ConfirmNonLevyEmployerForReservation()
+        {
+            await page.Locator("#confirm-true").ClickAsync();
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync(new LocatorClickOptions { Timeout = 30000 });
+
+            return await VerifyPageAsync(() => new ChooseReservationPage(context));
+        }
+
         internal async Task<WhatIsTheTrainingCoursePage> ConfirmNonLevyEmployer()
         {
             await page.Locator("#confirm-yes").ClickAsync();
