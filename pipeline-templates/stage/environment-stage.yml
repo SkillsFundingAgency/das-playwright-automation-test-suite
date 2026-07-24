@@ -7,13 +7,13 @@ parameters:
     type: string
   - name: PreProdSpecificVariableGroup
     type: string
-    default: ''
+    default: ""
   - name: ResourceName
     type: string
-    default: ''
+    default: ""
   - name: RuleName
     type: string
-    default: ''
+    default: ""
   - name: WhiteListFunction
     type: boolean
     default: false
@@ -80,23 +80,23 @@ stages:
       - group: "PreProd Shared Resources"
       - group: "PreProd Automation Suite Variables"
       - ${{ if ne(parameters.PreProdSpecificVariableGroup, '') }}:
-        - group: ${{ parameters.PreProdSpecificVariableGroup }}
+          - group: ${{ parameters.PreProdSpecificVariableGroup }}
 
     jobs:
       - ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
-        - template: ../job/deploy.yml
-          parameters:
-            Environment: 'PP_AUTOMATION'
-            ServiceConnection: das-pp-automation-test-suite-db-sc
-            RuleName: ${{ parameters.RuleName }}
-            ResourceName: ${{ parameters.ResourceName }}
-            WhiteListFunction: ${{ parameters.WhiteListFunction }}
+          - template: ../job/deploy.yml
+            parameters:
+              Environment: "PP_AUTOMATION"
+              ServiceConnection: das-pp-automation-test-suite-db-sc
+              RuleName: ${{ parameters.RuleName }}
+              ResourceName: ${{ parameters.ResourceName }}
+              WhiteListFunction: ${{ parameters.WhiteListFunction }}
 
       - ${{ else }}:
-        - template: ../job/deploy.yml
-          parameters:
-            Environment: 'PP'
-            ServiceConnection: das-pp-automation-test-suite-db-sc
-            ResourceName: ${{ parameters.ResourceName }}
-            RuleName: ${{ parameters.RuleName }}
-            WhiteListFunction: ${{ parameters.WhiteListFunction }}
+          - template: ../job/deploy.yml
+            parameters:
+              Environment: "PP"
+              ServiceConnection: das-pp-automation-test-suite-db-sc
+              ResourceName: ${{ parameters.ResourceName }}
+              RuleName: ${{ parameters.RuleName }}
+              WhiteListFunction: ${{ parameters.WhiteListFunction }}
