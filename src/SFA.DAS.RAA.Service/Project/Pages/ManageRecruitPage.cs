@@ -6,9 +6,10 @@ public class ManageRecruitPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = rAADataHelper.VacancyTitle;
+        bool isEmpPage = page.Url.Contains("eas.apprenticeships");
+        string PageTitle = isEmpPage ? "Manage Advert - Apprenticeship service - GOV.UK" : "Manage vacancy";
 
-        await Assertions.Expect(page.Locator(".govuk-heading-l")).ToContainTextAsync(PageTitle);
+        await Assertions.Expect(page).ToHaveTitleAsync(PageTitle);
     }
 
     //protected static By CloseAdvertActionSelector => By.CssSelector("a[href*='/close']");
