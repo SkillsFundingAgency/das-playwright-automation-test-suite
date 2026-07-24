@@ -104,7 +104,7 @@ jobs:
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
-              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa" -RuleName "${{ parameters.RuleName }}"'
+              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa" -RuleName "${{ parameters.RuleName }}"'
               azurePowerShellVersion: LatestVersion
             condition: and(succeeded(), eq('${{ parameters.WhiteListFunction }}', 'true'))
 
@@ -169,7 +169,7 @@ jobs:
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
-              ScriptArguments: '-IPAddress $(IPAddress) -ResourceNames "das-${{ parameters.Environment }}-sbus-tools-fa"'
+              ScriptArguments: '-IPAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa"'
               azurePowerShellVersion: LatestVersion
               pwsh: true
             condition: and(succeededOrFailed(), eq('${{ parameters.WhiteListFunction }}', 'true'))
