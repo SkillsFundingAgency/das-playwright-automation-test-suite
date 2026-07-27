@@ -14,23 +14,17 @@ Scenario Outline: Verify all navigation links on the Hire an apprentice page - <
 		| CardName                                            |
 		# Considering hiring an apprentice?
 		| Choose the right training for your business        |
-		| Check who can do apprenticeship training           |
-		| Understanding apprenticeship benefits and funding  |
+		| Check who can do apprenticeship training            |
+		| Understanding apprenticeship benefits and funding   |
 		| Find funding and support                            |
-		| Check what you’re responsible for                  |
-
+		| Check what you’re responsible for                   |
 		# Get started
-		| Find the right training                            |
+		| Find the right training                             |
 		| Choose a training provider                          |
-		| Create an apprenticeship service account           |
+		| Create an apprenticeship service account            |
 		| Recruit your apprentice                             |
-
 		# What's next?
 		| Have an initial assessment                          |
 		| Support your apprentice                             |
-		| Plan what's next for your apprentice               |
+		| Plan what's next for your apprentice                |
 		| Celebrate apprenticeships and upcoming events       |
-
-		# Help Panel & Promos
-		| employer support help centre                       |
-		| Sign up to emails                                  |

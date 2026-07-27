@@ -10,13 +10,13 @@ public class EmployerHubPage(ScenarioContext context) : EmployerBasePage(context
 
     public async Task<UnderstandingApprenticeshipBenefitsFundingPage> NavigateToUnderstandingApprenticeshipBenefitsAndFunding()
     {
-        await NavigateToCard("Understanding apprenticeship benefits and funding");
+        await NavigateToEmployerCard("Understanding apprenticeship benefits and funding");
         return new UnderstandingApprenticeshipBenefitsFundingPage(context);
     }
 
     public async Task<SignUpPage> NavigateToSignUpPage()
     {
-        await NavigateToCard("Sign up to emails");
+        await NavigateToEmployerCard("Sign up to emails");
         return await VerifyPageAsync(() => new SignUpPage(context));
     }
 }
