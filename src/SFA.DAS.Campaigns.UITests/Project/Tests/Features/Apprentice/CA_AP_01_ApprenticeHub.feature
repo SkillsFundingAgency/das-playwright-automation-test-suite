@@ -11,19 +11,21 @@ Scenario Outline: Verify all navigation links on the Become an apprentice page -
 	Then the links are not broken
 
 	Examples:
-		| CardName                                                    |
-		# Main Callout Panel
-		| Find an apprenticeship                                      |
-		# First Steps Cards
-		| About apprenticeships                                       |
-		| Is an apprenticeship right for you?                         |
-		| Apprentice pay and future salary                            |
-		| Create an account to search and apply for apprenticeships   |
-		| Browse by interest                                          |
-		# What to Expect Cards
-		| Apprenticeship assessments: what you need to know           |
-		| Off-the-job (OTJ) training: what you need to know           |
-		| Apprentice training                                         |
-		| Preparing for an apprenticeship                             |
-		# Support Cards
-		| Join the Apprenticeship Ambassador Network as an apprentice |
+		| CardName                                   |
+		# First steps to becoming an apprentice
+		| Is an apprenticeship right for you?        |
+		| Browse by interest                         |
+		| Getting an apprenticeship                  |
+		| Apprentice pay and future salary           |
+		| Get £3,000 if you've been in care          |
+		| Find an apprenticeship                     |
+		# What to expect during your apprenticeship
+		| Preparing for your apprenticeship          |
+		| Off-the-job (OTJ) training                 |
+		| Knowledge, skills and behaviours (KSBs)    |
+		| Apprenticeship assessments                 |
+		# Support to achieve your apprenticeship
+		| Get support with your apprenticeship       |
+		| Apprenticeship rights and responsibilities |
+		| Connect and network with other apprentices |
+		| Download Your Apprenticeship app           |

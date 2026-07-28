@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages;
-
-namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions;
+﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions;
 
 [Binding]
 public class CampaignsHomeSteps(ScenarioContext context)

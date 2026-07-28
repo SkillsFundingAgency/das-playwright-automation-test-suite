@@ -1,6 +1,4 @@
-﻿using Microsoft.Playwright;
-
-namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
+﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
 
 public abstract class CampaignsBasePage(ScenarioContext context) : BasePage(context)
 {

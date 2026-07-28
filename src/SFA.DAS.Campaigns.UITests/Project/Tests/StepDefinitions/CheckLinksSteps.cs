@@ -1,5 +1,4 @@
-﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages;
-using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
+﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
 
 namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions;
 
