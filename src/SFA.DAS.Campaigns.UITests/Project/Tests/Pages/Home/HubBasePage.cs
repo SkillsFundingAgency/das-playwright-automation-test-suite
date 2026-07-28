@@ -1,5 +1,4 @@
-﻿using Microsoft.Playwright;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
 

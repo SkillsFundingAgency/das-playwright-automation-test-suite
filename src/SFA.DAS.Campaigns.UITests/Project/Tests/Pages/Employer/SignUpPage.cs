@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Microsoft.Playwright;
 using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
 
 namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;

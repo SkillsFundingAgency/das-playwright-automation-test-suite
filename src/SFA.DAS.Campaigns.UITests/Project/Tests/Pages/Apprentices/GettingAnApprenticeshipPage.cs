@@ -1,6 +1,4 @@
-﻿using Microsoft.Playwright;
-
-namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
+﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
 
 public class GettingAnApprenticeshipPage(ScenarioContext context) : ApprenticeBasePage(context)
 {
