@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Microsoft.Playwright;
 using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
 
 namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
@@ -30,24 +29,18 @@ public class SignUpPage(ScenarioContext context) : CampaignsVerifyLinks(context)
         await locator.CheckAsync();
     }
 
-    public async Task SelectCompanySizeOption1() => await page.Locator("#SizeOfYourCompany").CheckAsync();
-    public async Task SelectCompanySizeOption2() => await page.Locator("#between10and49employees").CheckAsync();
-    public async Task SelectCompanySizeOption3() => await page.Locator("#between50and249employees").CheckAsync();
-    public async Task SelectCompanySizeOption4() => await page.Locator("#over250employees").CheckAsync();
-
     public async Task<ThanksForSubscribingPage> RegisterInterest()
     {
         var industryAllOptions = await page.GetByLabel("Industry").Locator("option").AllTextContentsAsync();
-        var industryoption = GetRandomOption(industryAllOptions.Where(x => x != "Choose your industry").ToList());
-        await page.GetByLabel("Industry").SelectOptionAsync([industryoption]);
+        var industryOption = GetRandomOption(industryAllOptions.Where(x => x != "Choose your industry").ToList());
+        await page.GetByLabel("Industry").SelectOptionAsync([industryOption]);
 
         var regionAllOptions = await page.GetByLabel("Region").Locator("option").AllTextContentsAsync();
-        var regionoption = GetRandomOption(regionAllOptions.Where(x => x != "Choose your location").ToList());
-        await page.GetByLabel("Region").SelectOptionAsync([regionoption]);
+        var regionOption = GetRandomOption(regionAllOptions.Where(x => x != "Choose your location").ToList());
+        await page.GetByLabel("Region").SelectOptionAsync([regionOption]);
 
         await page.Locator("#IncludeInUR").CheckAsync();
 
-        // Click and wait for the URL to change to the thank you page
         await Task.WhenAll(
             page.WaitForURLAsync("**/thank-you-for-signing-up**"),
             page.GetByRole(AriaRole.Button, new() { Name = "Sign up" }).ClickAsync()

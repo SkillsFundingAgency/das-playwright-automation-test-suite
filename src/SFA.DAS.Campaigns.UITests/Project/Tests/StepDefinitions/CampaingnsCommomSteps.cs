@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
-using System.Text.RegularExpressions;
-using Microsoft.Playwright;
+﻿using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
 {

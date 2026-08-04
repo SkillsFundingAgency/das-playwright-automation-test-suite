@@ -21,17 +21,17 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
         [When(@"^selects company size ""([^""]*)""$")]
         public async Task WhenSelectsCompanySize(string companySize) => await _signUpPage.SelectCompanySize(companySize);
 
-        [When(@"^Your Company by selecting radiobutton Less than Ten employees$")]
-        public async Task WhenYourCompanyBySelectingRadiobuttonLessThanTenEmployees() => await _signUpPage.SelectCompanySizeOption1();
+        [When(@"Your Company by selecting radiobutton Less than Ten employees$")]
+        public async Task WhenYourCompanyBySelectingRadiobuttonLessThanTenEmployees() => await _signUpPage.SelectCompanySize("10");
 
-        [When(@"^Your Company by selecting radiobutton Between Ten and FourtyNine employees$")]
-        public async Task WhenYourCompanyBySelectingRadiobuttonBetweenTenAndFourtyNineEmployees() => await _signUpPage.SelectCompanySizeOption2();
+        [When(@"Your Company by selecting radiobutton Between Ten and FourtyNine employees$")]
+        public async Task WhenYourCompanyBySelectingRadiobuttonBetweenTenAndFourtyNineEmployees() => await _signUpPage.SelectCompanySize("10 and 49");
 
-        [When(@"^Your Company by selecting radiobutton Between Fifty and TwoFourtyNine employees$")]
-        public async Task WhenYourCompanyBySelectingRadiobuttonBetweenFiftyAndTwoFourtyNineEmployees() => await _signUpPage.SelectCompanySizeOption3();
+        [When(@"Your Company by selecting radiobutton Between Fifty and TwoFourtyNine employees$")]
+        public async Task WhenYourCompanyBySelectingRadiobuttonBetweenFiftyAndTwoFourtyNineEmployees() => await _signUpPage.SelectCompanySize("50 and 249");
 
-        [When(@"^Your Company by selecting radiobutton Over TwoHundredandFifty employees$")]
-        public async Task WhenYourCompanyBySelectingRadiobuttonOverTwoHundredandFiftyEmployees() => await _signUpPage.SelectCompanySizeOption4();
+        [When(@"Your Company by selecting radiobutton Over TwoHandredAndFifty employees$")]
+        public async Task WhenYourCompanyBySelectingRadiobuttonOverTwoHandredAndFiftyEmployees() => await _signUpPage.SelectCompanySize("250");
 
         [Then(@"^an employer registers interest$")]
         public async Task ThenAnEmployerRegistersInterest() => await _signUpPage.RegisterInterest();

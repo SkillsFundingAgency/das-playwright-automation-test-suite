@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
-
-namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
+﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
 {
     [Binding, Scope(Tag = "employer")]
     public class CampaignsEmployerSteps(ScenarioContext context)
