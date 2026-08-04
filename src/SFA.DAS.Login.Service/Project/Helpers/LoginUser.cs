@@ -231,6 +231,23 @@ public class EPRMultiOrgUser : EPRBaseUser { }
 
 public class EPRMultiAccountUser : MultipleEasAccountUser { }
 
+public abstract class DigitalCertUser : GovSignUser
+{
+    public string Id { get; set; }
+
+    public string Email { get; set; }
+
+    public string Phone { get; set; }
+}
+
+public class DigiCertStandardUser : DigitalCertUser { }
+
+public class DigiCertMultiStandardUser : DigitalCertUser { }
+
+public class DigiCertMultiFrameworkUser : DigitalCertUser { }
+
+public class DigiCertFrameworkUser : DigitalCertUser { }
+
 #endregion
 
 #endregion

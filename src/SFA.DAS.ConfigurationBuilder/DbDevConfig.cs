@@ -40,5 +40,6 @@
         public string TPRDbName { get; set; }
         public string UsersDbName { get; set; }
         public string QfastDbName { get; set; }
+        public string DigiCertDbName { get; set; }
     }
 }

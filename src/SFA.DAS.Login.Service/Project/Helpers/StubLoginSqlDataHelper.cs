@@ -54,3 +54,30 @@ public class CandidateAccountStubLoginSqlDataHelper(ObjectContext objectContext,
 
     private static string GetSqlQuery(string email) => $"select GovUkIdentifier, FirstName, LastName, PhoneNumber from dbo.Candidate where email = '{email}'";
 }
+
+public class DigiCertSqlDataHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.DigiCertDbConnectionString)
+{
+    internal async Task<List<(string id, string email, string phoneNo)>> GetDigiCertUserDetails(List<string> ids)
+    {
+        var query = ids.Select(GetSqlQuery).ToList();
+
+        var digiCertDetails = new List<(string, string, string)>();
+
+        var results = await GetListOfMultipleData(query);
+
+        foreach (var data in results)
+        {
+            digiCertDetails.Add(
+            (
+                Func(data.ListOfArrayToList(0)),
+                Func(data.ListOfArrayToList(1)),
+                Func(data.ListOfArrayToList(2))
+            ));
+        }
+
+        return digiCertDetails;
+    }
+
+    private static string GetSqlQuery(string id) =>
+        $"SELECT GovUkIdentifier, EmailAddress, PhoneNumber FROM [dbo].[User] WHERE GovUkIdentifier = '{id}'";
+}

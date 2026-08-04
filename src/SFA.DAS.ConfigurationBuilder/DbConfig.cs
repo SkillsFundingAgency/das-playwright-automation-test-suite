@@ -37,5 +37,7 @@
         public string TPRDbConnectionString { get; set; }
         public string UsersDbConnectionString { get; set; }
         public string QfastDbConnectionString { get; set; }
+        public string DigiCertDbConnectionString { get; set; }
+        
     }
 }
