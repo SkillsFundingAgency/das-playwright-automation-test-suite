@@ -17,7 +17,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator row(string ULN) => page.Locator($"table tbody tr:has-text('{ULN}')");
         private ILocator viewLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"View{name}" }).First;
         private ILocator deleteLink(string name) => page.Locator(".delete-apprentice").First;
-        private ILocator AddAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
+        private ILocator AddAnotherApprenticeLink => page.Locator("a:has-text('Add another learner')");
         private ILocator DeleteThisCohortLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete this cohort" }).First;
         private ILocator approveRadioOption => page.Locator("label:has-text('Yes, approve and notify employer')");
         private ILocator firstRadioOption => page.Locator("div.govuk-radios__item input[type='radio']").First;
@@ -41,7 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         public override async Task VerifyPage()
         {
             var headerText = await page.Locator(".govuk-heading-xl").First.TextContentAsync();
-            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Check apprentice details|Check 2 apprentices' details"));
+            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Check learner details|Check 2 learner' details"));
         }
 
         public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
