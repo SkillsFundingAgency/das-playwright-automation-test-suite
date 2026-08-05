@@ -41,7 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         public override async Task VerifyPage()
         {
             var headerText = await page.Locator(".govuk-heading-xl").First.TextContentAsync();
-            Assert.IsTrue(Regex.IsMatch(headerText ?? "", |"Check apprentice details|Check 2 apprentices' details"));
+            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Check apprentice details|Check 2 apprentices' details"));
         }
 
         public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
