@@ -6,7 +6,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToHaveTextAsync(new Regex(@"^View(?:\s\d+)?\s(?:apprentice|apprentices') details$"));
+            await Assertions.Expect(page.Locator("h1")).ToHaveTextAsync(new Regex(@"^View(?:\s\d+)?\s(?:apprentice|apprentices|learner|learners') details$"));
         }
 
         public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
