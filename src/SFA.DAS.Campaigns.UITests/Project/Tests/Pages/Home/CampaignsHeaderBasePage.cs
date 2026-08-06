@@ -1,44 +1,35 @@
 ﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
 using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
-using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Influencers;
 
-namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages;
+namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
 
-public abstract class CampaingnsHeaderBasePage(ScenarioContext context) : CampaingnsVerifyLinks(context)
+public abstract class CampaignsHeaderBasePage(ScenarioContext context) : CampaignsVerifyLinks(context)
 {
     protected ILocator Apprentice => page.GetByLabel("Main navigation").GetByRole(AriaRole.Link, new() { Name = "Apprentices" });
-
     protected ILocator Employer => page.GetByLabel("Main navigation").GetByRole(AriaRole.Link, new() { Name = "Employers" });
-
-    protected ILocator Influencers => page.GetByLabel("Main navigation").GetByRole(AriaRole.Link, new() { Name = "Influencers" });
-
     protected ILocator SiteMap => page.GetByRole(AriaRole.Link, new() { Name = "Sitemap" });
 
     public async Task<ApprenticeHubPage> NavigateToApprenticeshipHubPage()
     {
         await Apprentice.ClickAsync();
-
-        return await VerifyPageAsync(() => new ApprenticeHubPage(context));
+        var hubPage = new ApprenticeHubPage(context);
+        await hubPage.VerifyPage();
+        return hubPage;
     }
 
     public async Task<EmployerHubPage> NavigateToEmployerHubPage()
     {
         await Employer.ClickAsync();
-
-        return await VerifyPageAsync(() => new EmployerHubPage(context));
-    }
-
-    public async Task<InfluencersHubPage> NavigateToInfluencersHubPage()
-    {
-        await Influencers.ClickAsync();
-
-        return await VerifyPageAsync(() => new InfluencersHubPage(context));
+        var hubPage = new EmployerHubPage(context);
+        await hubPage.VerifyPage();
+        return hubPage;
     }
 
     public async Task<SiteMapPage> NavigateToSiteMapPage()
     {
         await SiteMap.ClickAsync();
-
-        return await VerifyPageAsync(() => new SiteMapPage(context));
+        var siteMap = new SiteMapPage(context);
+        await siteMap.VerifyPage();
+        return siteMap;
     }
 }
