@@ -41,14 +41,20 @@ public class ConfirmApplicantUnsuccessfulPage(ScenarioContext context) : RaaBase
         var faaUser = context.GetUser<FAAApplyUser>();
         string faauserFullName = $"{faaUser.FirstName} {faaUser.LastName}";
 
-        string PageTitle = "Do you want to make this application unsuccessful?";
+        string PageTitle = "Give feedback to the unsuccessful applicant";
         await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync(PageTitle);
     }
 
     public async Task<ApplicationUnsuccessfulPage> NotifyApplicant()
     {
 
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
+        if (!isRaaEpc)
+        {
+            await page.Locator("#CandidateFeedback").FillAsync(rAADataHelper.OptionalMessage);
+            //await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+        }
+
+        //await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
 
@@ -57,8 +63,13 @@ public class ConfirmApplicantUnsuccessfulPage(ScenarioContext context) : RaaBase
 
     public async Task<ApplicationOutcomeArchivePage> NotifyApplicantAndArchive()
     {
+        if (!isRaaEpc)
+        {
+            await page.Locator("#CandidateFeedback").FillAsync(rAADataHelper.OptionalMessage);
+            //await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+        }
 
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make this application" }).CheckAsync();
+        //await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make this application" }).CheckAsync();
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
 
@@ -93,23 +104,25 @@ public class ArchiveConfirmationPage(ScenarioContext context) : RaaBasePage(cont
 }
 
 
-public class ApplicationSuccessfulPage(ScenarioContext context) : ApplicationOutcomeBasePage(context, "successful")
-{
-}
-
-public class ApplicationUnsuccessfulPage(ScenarioContext context) : ApplicationOutcomeBasePage(context, "unsuccessful")
-{
-}
-
-public abstract class ApplicationOutcomeBasePage(ScenarioContext context, string message) : RaaBasePage(context)
+public class ApplicationSuccessfulPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
         bool isEmpPage = page.Url.Contains("eas.apprenticeships");
         string PageTitle = isEmpPage
-            ? $"application has been marked as {message}"
-            :$"Application made {message}";
-        
+            ? $"application has been marked as successful"
+            : $"Application made successful";
+
+        await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
+    }
+}
+
+public class ApplicationUnsuccessfulPage(ScenarioContext context) : RaaBasePage(context)
+{
+    public override async Task VerifyPage()
+    {
+        string PageTitle = "Feedback sent to applicant";
+
         await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
     }
 }
