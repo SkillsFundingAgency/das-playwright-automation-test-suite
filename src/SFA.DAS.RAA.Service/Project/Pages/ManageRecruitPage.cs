@@ -7,9 +7,9 @@ public class ManageRecruitPage(ScenarioContext context) : RaaBasePage(context)
     public override async Task VerifyPage()
     {
         bool isEmpPage = page.Url.Contains("eas.apprenticeships");
-        string PageTitle = isEmpPage ? "Manage Advert" : "Manage vacancy";
+        string PageTitle = isEmpPage ? "Manage Advert - Apprenticeship service - GOV.UK" : "Manage vacancy";
 
-        await Assertions.Expect(page.Locator("#vacancy-header")).ToContainTextAsync(PageTitle);
+        await Assertions.Expect(page).ToHaveTitleAsync(PageTitle);
     }
 
     //protected static By CloseAdvertActionSelector => By.CssSelector("a[href*='/close']");
@@ -95,7 +95,7 @@ public class ManageCloseVacancyPage(ScenarioContext context) : RaaBasePage(conte
         string PageTitle = isRaaEmployer ? $"Advert VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed."
             : $"Vacancy VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed.";
 
-        await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
+        await Assertions.Expect(page.Locator(".govuk-notification-banner--success").GetByRole(AriaRole.Heading, new() { Level = 3 })).ToContainTextAsync(PageTitle);
     }
 }
 
@@ -105,7 +105,7 @@ public class ManageArchiveVacancyPage(ScenarioContext context) : RaaBasePage(con
     {
         string PageTitle = $"'{rAADataHelper.VacancyTitle} (VAC{objectContext.GetVacancyReference()})' has been archived.";
 
-        await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
+        await Assertions.Expect(page.Locator(".govuk-notification-banner--success h3")).ToContainTextAsync(PageTitle);
     }
 }
 

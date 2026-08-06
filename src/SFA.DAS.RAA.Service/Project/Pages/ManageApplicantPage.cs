@@ -99,14 +99,9 @@ public class ManageApplicantPage(ScenarioContext context) : RaaBasePage(context)
 
     public async Task<ConfirmApplicantUnsuccessfulPage> MakeApplicantUnsucessful()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Make unsuccessful and give" }).CheckAsync();
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Make unsuccessful" }).CheckAsync();
 
         await SaveAndContinue();
-        if(!isRaaEpc)
-        {
-            await page.Locator("#CandidateFeedback").FillAsync(rAADataHelper.OptionalMessage);
-            await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
-        }
 
         return await VerifyPageAsync(() => new ConfirmApplicantUnsuccessfulPage(context));
     }
