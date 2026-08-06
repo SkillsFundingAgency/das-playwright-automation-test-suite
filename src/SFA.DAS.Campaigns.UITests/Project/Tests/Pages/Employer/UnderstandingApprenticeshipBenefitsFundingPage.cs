@@ -14,7 +14,11 @@ public class UnderstandingApprenticeshipBenefitsFundingPage(ScenarioContext cont
     {
         await page.GetByLabel(isOver3Million ? "Over £3 million" : "Under £3 million").CheckAsync();
 
-        await page.Locator("#StandardUid").SelectOptionAsync(new[] { new SelectOptionValue { Label = "Software developer (Level 4)" } });
+        var autocompleteInput = page.Locator("#StandardUid");
+
+        await autocompleteInput.FillAsync("Software developer");
+
+        await page.GetByRole(AriaRole.Option, new() { Name = "Software developer (Level 4)", Exact = false }).First.ClickAsync();
 
         await page.GetByLabel("How many roles do you have").FillAsync("2");
 
