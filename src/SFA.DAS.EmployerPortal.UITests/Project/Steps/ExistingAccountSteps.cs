@@ -130,8 +130,8 @@ public class ExistingAccountSteps
         _homePage = await GoBackToTheServiceHomePage(page2);
     }
 
-    [Then(@"^the user can not add an apprentices$")]
-    public async Task ThenTheUserCanNotAddAnApprentices()
+    [Then(@"^the user can not add an learners$")]
+    public async Task ThenTheUserCanNotAddLearners()
     {
         await _context.Get<Driver>().Page.GetByRole(AriaRole.Link, new() { Name = "Learners", Exact = true }).First.ClickAsync();
 
