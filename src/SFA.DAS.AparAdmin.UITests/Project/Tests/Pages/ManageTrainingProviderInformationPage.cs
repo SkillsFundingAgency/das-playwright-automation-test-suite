@@ -7,12 +7,12 @@ public class ManageTrainingProviderInformationPage(ScenarioContext context) : Ba
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training provider information");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training provider information and restricted courses");
     }
 
     public async Task<SearchforATrainingProviderPage> ClickSearchForATrainingProvider()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Search for a training provider" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage training provider information and delivery" }).ClickAsync();
         return await VerifyPageAsync(() => new SearchforATrainingProviderPage(context));
     }
 
