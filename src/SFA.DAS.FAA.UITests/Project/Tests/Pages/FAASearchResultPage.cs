@@ -9,6 +9,7 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
     //private static By ApplyNow => By.CssSelector(".das-button--inline-link");
     //private static By FirstApplicationDisplayed => By.CssSelector("[id^='VAC'][id$='-vacancy-title']");
 
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-l")).ToContainTextAsync("results found");
     private static string ClickFirstNHSLinkInResult => ("[id$='-vacancy-title']:first-of-type");
 
     public async Task VerifySuccessfulResults()
@@ -53,6 +54,27 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
         await page.Locator(ClickFirstNHSLinkInResult).First.ClickAsync();
 
         return await VerifyPageAsync(() => new NHSJobsDetailsPage(context));
+    }
+
+    public async Task VerifySortOrder(string expectedSortOrder)
+    {
+        var selectedOptionText = await page.Locator("#sort-results option:checked").TextContentAsync();
+
+        Assert.That(
+            selectedOptionText?.Trim(),
+            Is.EqualTo(expectedSortOrder),
+            $"Expected sort order to be '{expectedSortOrder}' but found '{selectedOptionText}'");
+    }
+
+    public async Task SearchByWhereOnSearchResultsPage(string whereText)
+    {
+        await page.GetByRole(AriaRole.Combobox, new() { Name = "Where" }).FillAsync(whereText);
+
+        await page.GetByRole(AriaRole.Option, new() { Name = whereText, Exact = false }).First.ClickAsync();
+
+        await page.Locator("#within").SelectOptionAsync("40");
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).First.ClickAsync();
     }
 }
 
