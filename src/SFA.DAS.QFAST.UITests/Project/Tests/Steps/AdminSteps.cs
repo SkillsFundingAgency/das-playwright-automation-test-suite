@@ -2,6 +2,7 @@
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Application;
 using SFA.DAS.QFAST.UITests.Project.Tests.Pages.Form;
+using SFA.DAS.QFAST.UITests.Project.Tests.Pages.RollOver;
 namespace SFA.DAS.QFAST.UITests.Project.Tests.Steps;
 
 [Binding]
@@ -20,6 +21,14 @@ public class AdminSteps(ScenarioContext context)
     private readonly QualificationDetails_Page qualificationDetails_Page = new(context);
     private readonly RequestForFunding_Page requestForFunding_Page = new(context);
     private readonly DfeFundigReview_Page dfeFundigReview_Page = new(context);
+    private readonly RollOverFunding_Page rollOverFunding_Page = new(context);
+    private readonly DoYouNeedToUpdateAnyData_Page doYouNeedToUpdateAnyData_Page = new(context);
+    private readonly HowDoYouWantToSelectCandidates_Page howDoYouWantToSelectCandidates_Page = new(context);
+    private readonly SelectLevel_Page selectLevel_Page = new(context);
+    private readonly SelectTypes_Page selectTypes_Page = new(context);
+    private readonly SelectSSA_Page selectSSA_Page = new(context);
+    private readonly SelectAO_Page selectAO_Page = new(context);
+    private readonly CheckYourAnswer_Page checkYourAnswer_Page = new(context);
 
     [Given(@"^the (.*) user log in to the portal$")]
     public async Task GivenTheAdminUserLogInToThePortal(string user)
@@ -116,6 +125,10 @@ public class AdminSteps(ScenarioContext context)
                 await VerifyPageHelper.VerifyPageAsync(context, () => new SearchForQualification_Page(context));
                 break;
 
+            case "Rollover funding":
+                await _qfastAdminPage.SelectOptions(option);
+                await VerifyPageHelper.VerifyPageAsync(context, () => new RollOverFunding_Page(context));
+                break;
 
             default:
                 throw new ArgumentException($"No matching case found for option: '{option}'", nameof(option));
@@ -316,7 +329,7 @@ public class AdminSteps(ScenarioContext context)
        switch(Link)
         {
             case "Dashboard":
-                 await _qfastAdminPage.ClickDashboard();
+                await _qfastAdminPage.ClickDashboard();
                 break;
             case "Import data":
                 await _qfastAdminPage.ClickImportData();
@@ -329,12 +342,55 @@ public class AdminSteps(ScenarioContext context)
                 break;
             default:
                 throw new ArgumentException($"No matching case found for link: '{Link}'", nameof(Link));
-        }        
+        }
     }
 
     [Then(@"I review and approve the qualification")]
     public async Task ThenIReviewAndApproveTheQualification()
     {
-        await qualificationDetails_Page.ReviewAndApproveQualification();        
+        await qualificationDetails_Page.ReviewAndApproveQualification();
+    }
+
+    [Then(@"I review and approve the C1 process for rollover")]
+    public async Task ThenIReviewAndApproveTheRolloverFundingForAQualifications()
+    {
+        await rollOverFunding_Page.ClickContinueButton();
+        await rollOverFunding_Page.ValidateSelectStageErrorMessage();
+        await rollOverFunding_Page.SelectInitialSelectionStage();
+        await doYouNeedToUpdateAnyData_Page.ClickContinueButton();
+        await rollOverFunding_Page.ClickContinueButton();
+        await howDoYouWantToSelectCandidates_Page.ValidateSelectCandidateErrorMessage();
+        await howDoYouWantToSelectCandidates_Page.SelectWithQuerybuilder();
+        await selectLevel_Page.ClickContinueButton();
+        await selectLevel_Page.VerifySelectLevelErrorMessage();
+        await selectLevel_Page.ClickSelectAllButton();
+        await rollOverFunding_Page.VerifyAllCheckboxesAreSelected();
+        await selectLevel_Page.ClickContinueButton();
+        await selectTypes_Page.ClickContinueButton();
+        await selectTypes_Page.VerifySelectTypesErrorMessage();
+        await selectTypes_Page.ClickSelectAllButton();
+        await rollOverFunding_Page.VerifyAllCheckboxesAreSelected();
+        await selectTypes_Page.ClickContinueButton();
+        await selectSSA_Page.ClickContinueButton();
+        await selectSSA_Page.VerifySelectAllSSAErrorMessage();
+        await selectSSA_Page.ClickSelectionOfSSAOption();
+        await selectSSA_Page.ClickContinueButton();
+        await selectSSA_Page.VerifySelectSSAErrorMessage();
+        await selectSSA_Page.ClickSelectAllButton();
+        await rollOverFunding_Page.VerifyAllCheckboxesAreSelected();
+        await selectSSA_Page.ClickContinueButton();
+        await selectAO_Page.ClickContinueButton();
+        await selectAO_Page.VerifySelectAllAOErrorMessage();
+        await selectAO_Page.ClickSelectionOfAoOption();
+        await selectAO_Page.ClickContinueButton();
+        await selectAO_Page.VerifySelectAOErrorMessage();
+        await selectAO_Page.ClickSelectAllButton();
+        await rollOverFunding_Page.VerifyAllCheckboxesAreSelected();
+        await selectAO_Page.ClickContinueButton();
+        await checkYourAnswer_Page.VerifyLevelSelection();
+        await checkYourAnswer_Page.VerifyTypeSelection();
+        await checkYourAnswer_Page.VerifySSASelection();
+        await checkYourAnswer_Page.VerifyAOSelection();
+        await checkYourAnswer_Page.ClickContinueButton();
     }
 }
