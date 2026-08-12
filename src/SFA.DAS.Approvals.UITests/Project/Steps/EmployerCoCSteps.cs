@@ -48,7 +48,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     //Assert editiability of stopped record:
                     Assert.False(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
                     Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
-                    Assert.True(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+                    Assert.False(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
                     Assert.False(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
                     Assert.False(await page1.IsEditVersionLinkAvailable(), "IsEditVersionLinkAvailable");
                     Assert.False(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");

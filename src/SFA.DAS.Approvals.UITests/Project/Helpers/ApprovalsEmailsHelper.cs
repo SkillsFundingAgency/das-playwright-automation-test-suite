@@ -17,8 +17,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
         {
             var apprentice = listOfApprenticeship.FirstOrDefault();
             var employerEmail = apprentice.EmployerDetails.Email;
-            var apprenticeName = $"{apprentice.ApprenticeDetails.FirstName}";
+            var apprenticeName = $"{apprentice.ApprenticeDetails.FullName}";
             var apprenticeEmail = apprentice.ApprenticeDetails.Email;
+            var providerName = apprentice.ProviderDetails.ProviderName;
             var providerEmail = apprentice.ProviderDetails.Email;
             var cohortReference = apprentice.Cohort.Reference;
             var mailosaurApiHelper = context.Get<MailosaurApiHelper>();
@@ -41,6 +42,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
                     subject = "funding reservation made on your behalf";
                     body = $" reserved apprenticeship funding on your behalf for the following:";
                     break;
+
+                case ("Learner record stopped", "employer"):
+                    rcvrEmail = employerEmail;
+                    subject = "Learner record stopped";
+                    body = $"Your learner {apprenticeName} has been withdrawn from ";
+                    break; 
+
+                case ("Learner record has been paused", "employer"):
+                    rcvrEmail = employerEmail;
+                    subject = "Learner record has been paused";
+                    body = $"{providerName} has changed the status of a learner record to paused.";
+                    break; 
 
                 //provider emails below this area
                 case ("cohort ready for review", "provider"):
