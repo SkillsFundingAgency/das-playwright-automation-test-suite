@@ -1,4 +1,6 @@
-﻿using Polly;
+﻿using Allure.Net.Commons;
+using Polly;
+using Reqnroll.CommonModels;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
@@ -237,6 +239,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             Assert.That(result[0], Is.EqualTo("1"), $"Expected payment status '1' but found '{actualPaymentStatus}'");            
             Assert.That(actualPaymentFreezeDate, Is.EqualTo(expectedPaymentFreezeDate), $"Expected payment freeze date '{expectedPaymentFreezeDate}' but found '{actualPaymentFreezeDate}'");
             Assert.That(result[2], Is.EqualTo(expectedFreezePaymentsReason), $"Expected FreezePaymentsReason '{expectedFreezePaymentsReason}' but found '{result[2]}'");            
+        }
+
+        [Then(@"it does not change the status of AU record to paused")]
+        public async Task ThenItDoesNotChangeTheStatusOfAURecordToPaused()
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
+            var uln = apprenticeship.ApprenticeDetails.ULN;
+            var result = await commitmentsDbSqlHelper.GetValuesFromApprenticeshipTable("Paymentstatus", apprenticeshipId);
+            Assert.That(result[0], Is.EqualTo("2"), $"Expected payment status '2' but found '{result[0]}'");            
         }
 
 

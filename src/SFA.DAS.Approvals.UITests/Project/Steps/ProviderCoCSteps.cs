@@ -21,6 +21,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             providerStepsHelper = new ProviderStepsHelper(context);            
         }
 
+        [Then(@"^Provider verifies that recrod status stays as ""(.*)""")]
         [Then(@"^provider verifies that record is set as ""(.*)"" in Provider portal")]
         public async Task ThenProviderVerifiesThatRecordIsSetAsInProviderPortal(string status)
         {
@@ -34,6 +35,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             switch (status)
             {
+                case "Live":
+                    await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Live, null);
+                      break;
                 case "Stopped":
                     await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, expectedDate);
                     //verify editability:
@@ -62,7 +66,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     Assert.False(await page.IsChangeOfVersionLinkVisible(), "IsChangeOfVersionLinkVisible");
                     //verify history logs:
                     page2 = await page.ClickOnViewChangeHistoryLink(apprenticeName);
-                    await page2.AssertChangeHistoryRow(DateTime.Now, $"Learning has been paused on {expectedDate.ToString("M/d/yyyy")} ", "Auto approved");
+                    await page2.AssertChangeHistoryRow(DateTime.Now, $"Learning has been paused on {expectedDate.ToString("d MMM yyyy")}", "Auto approved");
                     break;
                 default:
                     break;
