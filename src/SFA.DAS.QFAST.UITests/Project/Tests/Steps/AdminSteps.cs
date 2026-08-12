@@ -29,6 +29,10 @@ public class AdminSteps(ScenarioContext context)
     private readonly SelectSSA_Page selectSSA_Page = new(context);
     private readonly SelectAO_Page selectAO_Page = new(context);
     private readonly CheckYourAnswer_Page checkYourAnswer_Page = new(context);
+    private readonly SelectFundingStream_Page selectFundingStream_Page = new (context);
+    private readonly EnterThresholdDates_Page enterThresholdDates_Page = new(context);
+    private readonly SetTheFundingEndDate_Page setTheFundingEndDate_Page = new(context);
+    private readonly InitialChecksAndExportComplete_Page initialChecksAndExportComplete_Page = new(context);
 
     [Given(@"^the (.*) user log in to the portal$")]
     public async Task GivenTheAdminUserLogInToThePortal(string user)
@@ -391,6 +395,19 @@ public class AdminSteps(ScenarioContext context)
         await checkYourAnswer_Page.VerifyTypeSelection();
         await checkYourAnswer_Page.VerifySSASelection();
         await checkYourAnswer_Page.VerifyAOSelection();
+        await checkYourAnswer_Page.ValidateChangeYourAnswerLinkPresent();
         await checkYourAnswer_Page.ClickContinueButton();
+        await selectFundingStream_Page.ClickContinueButton();
+        await selectFundingStream_Page.VerifySelectFundingStreamErrorMessage();
+        await selectFundingStream_Page.ClickSelectAllButton();
+        await rollOverFunding_Page.VerifyAllCheckboxesAreSelected();
+        await selectFundingStream_Page.ClickContinueButton();
+        await enterThresholdDates_Page.ClickContinueButton();
+        await enterThresholdDates_Page.VerifyThresholdDatesErrorMessage();
+        await enterThresholdDates_Page.EnterAcademicYearAndOperationalEndDates();
+        await enterThresholdDates_Page.ClickContinueButton();
+        await setTheFundingEndDate_Page.EnterMaxApprovalEndDate();
+        await setTheFundingEndDate_Page.ClickContinueButton();
+        await initialChecksAndExportComplete_Page.ValidateProcessCompleteText();
     }
 }

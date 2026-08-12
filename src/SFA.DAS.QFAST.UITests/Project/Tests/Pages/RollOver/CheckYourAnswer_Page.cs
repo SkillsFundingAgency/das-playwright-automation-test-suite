@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages.RollOver;
+﻿using CsvHelper;
+
+namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages.RollOver;
 public class CheckYourAnswer_Page(ScenarioContext context) : BasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Check your answers" })).ToBeVisibleAsync();
@@ -89,5 +91,9 @@ public class CheckYourAnswer_Page(ScenarioContext context) : BasePage(context)
                 $"Incorrect AO selection. Expected '{expectedMessage}', " +
                 $"but the actual message was '{actualMessage}'.");
         }
+    }
+    public async Task ValidateChangeYourAnswerLinkPresent()
+    {
+        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Change your answers" })).ToBeVisibleAsync();
     }
 }
