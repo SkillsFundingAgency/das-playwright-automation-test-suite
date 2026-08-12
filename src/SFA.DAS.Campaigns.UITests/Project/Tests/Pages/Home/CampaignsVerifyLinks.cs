@@ -1,6 +1,6 @@
-﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages;
+﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
 
-public class CampaingnsVerifyLinks(ScenarioContext context) : CampaingnsBasePage(context)
+public class CampaignsVerifyLinks(ScenarioContext context) : CampaignsBasePage(context)
 {
     public override async Task VerifyPage() => await Task.CompletedTask;
 
@@ -26,8 +26,6 @@ public class CampaingnsVerifyLinks(ScenarioContext context) : CampaingnsBasePage
 
             if (string.IsNullOrEmpty(attributeValue) && !string.IsNullOrEmpty(text))
                 throw new Exception($"{msg} is broken");
-
-            //objectContext.SetDebugInformation(msg);
         }
     }
 }

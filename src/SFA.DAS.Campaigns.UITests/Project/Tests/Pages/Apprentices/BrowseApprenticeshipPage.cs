@@ -2,16 +2,20 @@
 
 public class BrowseApprenticeshipPage(ScenarioContext context) : ApprenticeBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Browse apprenticeships before you apply");
+    private IPage Page => context.Get<IPage>();
 
-    public async Task<BrowseApprenticeshipResultsPage> SearchForAnApprenticeship()
+    public override async Task VerifyPage() => await Assertions.Expect(Page.Locator("h1")).ToContainTextAsync("Browse by interest", new() { IgnoreCase = true });
+
+    public async Task<IPage> ClickExternalFindAnApprenticeshipLink()
     {
-        await page.GetByLabel("Select an interest").SelectOptionAsync(["Digital"]);
+        var waitForPageTask = Page.Context.WaitForPageAsync();
 
-        await page.GetByLabel("Enter your postcode").FillAsync("CV1 2WT");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Find an apprenticeship" }).ClickAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        var externalPage = await waitForPageTask;
 
-        return await VerifyPageAsync(() => new BrowseApprenticeshipResultsPage(context));
+        await externalPage.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
+
+        return externalPage;
     }
 }

@@ -107,7 +107,7 @@ public class ProviderVacancySearchResultPage(ScenarioContext context) : VacancyS
         await page.Locator("#app-checkbox-select-all").CheckAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
         await page.Locator("#provider-multiple-candidate-feedback").FillAsync(rAADataHelper.OptionalMessage);
-        await page.GetByRole(AriaRole.Button, new() { Name = "Confirm" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
         return await VerifyPageAsync(() => new ManageMultiApplicationsUnsuccessfulPage(context));
     }
 
@@ -173,19 +173,19 @@ public class ManageMultiApplicationsUnsuccessfulPage(ScenarioContext context) : 
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Do you want to make these applications unsuccessful?");
+        await Assertions.Expect(page.Locator(".govuk-notification-banner__title").First).ToContainTextAsync("Success");
     }
-    public async Task<ApplicationUnsuccessfulPage> FeedbackForMultipleUnsuccessful()
-    {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make these applications unsuccessful and notify the applicants" }).ClickAsync();
-        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
-        return await VerifyPageAsync(() => new ApplicationUnsuccessfulPage(context));
-    }
+    //public async Task<ApplicationUnsuccessfulPage> FeedbackForMultipleUnsuccessful()
+    //{
+    //    await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make these applications unsuccessful and notify the applicants" }).ClickAsync();
+    //    await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
+    //    return await VerifyPageAsync(() => new ApplicationUnsuccessfulPage(context));
+    //}
 
     public async Task<ArchiveVacancyPage> FeedbackForMultipleUnsuccessfulAndArchive()
     {
-        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make these applications unsuccessful and notify the applicants" }).ClickAsync();
-        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
+        //await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, make these applications unsuccessful and notify the applicants" }).ClickAsync();
+        //await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
         return await VerifyPageAsync(() => new ArchiveVacancyPage(context));
     }
 }

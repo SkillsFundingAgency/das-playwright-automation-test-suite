@@ -187,8 +187,8 @@ public class StepsHelper(ScenarioContext context)
 
     public static async Task MultiApplicantsUnsucessful(ProviderVacancySearchResultPage providerVacancySearchResultPage)
     {
-        var page = await providerVacancySearchResultPage.NavigateToManageAllApplicantsAndMakeUnsuccessful();
-        await page.FeedbackForMultipleUnsuccessful();
+        await providerVacancySearchResultPage.NavigateToManageAllApplicantsAndMakeUnsuccessful();
+        //await page.FeedbackForMultipleUnsuccessful();
     }
 
     public static async Task MultiApplicantsUnsucessfulAndArchive(ProviderVacancySearchResultPage providerVacancySearchResultPage)
