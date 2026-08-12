@@ -90,7 +90,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenSystemStopUserToAddThatApprenticeWithAnErrorMessageFor(string ageLimit)
         {
             int age = int.Parse(ageLimit);
-            string errorMsg = age < 20 ? $"The apprentice must be at least {age} years old at the start of their training" : $"The apprentice must be {age - 1} years or under at the start of their training";
+            string errorMsg = age < 20 ? $"The learner must be at least {age} years old at the start of their training" : $"The learner must be {age - 1} years or under at the start of their training";
             var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDoB();
             await page.VerfiyErrorMessage("DateOfBirth", errorMsg);
             await page.NavToHomePage();
