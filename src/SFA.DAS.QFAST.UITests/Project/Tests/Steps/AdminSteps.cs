@@ -33,6 +33,10 @@ public class AdminSteps(ScenarioContext context)
     private readonly EnterThresholdDates_Page enterThresholdDates_Page = new(context);
     private readonly SetTheFundingEndDate_Page setTheFundingEndDate_Page = new(context);
     private readonly InitialChecksAndExportComplete_Page initialChecksAndExportComplete_Page = new(context);
+    private readonly ListOfCandidatesFound_Page listOfCandidatesFound_Page = new(context);
+    private readonly UploadCandidatesToRollOver_Page uploadCandidatesToRollOver_Page = new(context);
+    private readonly RollOverSummary_Page rollOverSummary_Page = new(context);
+    private readonly ImportListOfCandidatesForRollOver_Page importListOfCandidatesForRollOver_Page = new(context);   
 
     [Given(@"^the (.*) user log in to the portal$")]
     public async Task GivenTheAdminUserLogInToThePortal(string user)
@@ -355,14 +359,15 @@ public class AdminSteps(ScenarioContext context)
         await qualificationDetails_Page.ReviewAndApproveQualification();
     }
 
-    [Then(@"I review and approve the C1 process for rollover")]
+    [Then(@"I review and complete the rollover process using query builder")]
     public async Task ThenIReviewAndApproveTheRolloverFundingForAQualifications()
     {
         await rollOverFunding_Page.ClickContinueButton();
         await rollOverFunding_Page.ValidateSelectStageErrorMessage();
         await rollOverFunding_Page.SelectInitialSelectionStage();
         await doYouNeedToUpdateAnyData_Page.ClickContinueButton();
-        await rollOverFunding_Page.ClickContinueButton();
+        await listOfCandidatesFound_Page.SelectRemovePreviousIfDisplayed();
+        await howDoYouWantToSelectCandidates_Page.ClickContinueButton();
         await howDoYouWantToSelectCandidates_Page.ValidateSelectCandidateErrorMessage();
         await howDoYouWantToSelectCandidates_Page.SelectWithQuerybuilder();
         await selectLevel_Page.ClickContinueButton();
@@ -409,5 +414,53 @@ public class AdminSteps(ScenarioContext context)
         await setTheFundingEndDate_Page.EnterMaxApprovalEndDate();
         await setTheFundingEndDate_Page.ClickContinueButton();
         await initialChecksAndExportComplete_Page.ValidateProcessCompleteText();
+        await initialChecksAndExportComplete_Page.ClickGoToQFASTHomePage();
+        await _qfastAdminPage.SelectOptions("Rollover funding");
+        await rollOverFunding_Page.SelectFinalUploadStage();        
+        await uploadCandidatesToRollOver_Page.ClickContinueButton();
+        await uploadCandidatesToRollOver_Page.ValidateSelectCSVFileErrorMessage();
+        await rollOverFunding_Page.UploadCsvFile("RolloverCandidates_SystemDraft.csv");
+        await uploadCandidatesToRollOver_Page.ClickContinueButton();
+        await rollOverSummary_Page.ClickSubmitRollOverButton();
+        await rollOverSummary_Page.ValidateRollOverSuccessBanner();
+    }
+
+    [Then(@"I review and complete the rollover process using import file")]
+    public async Task ThenIReviewAndCompleteTheRolloverProcessUsingImportFile()
+    {
+        await rollOverFunding_Page.ClickContinueButton();
+        await rollOverFunding_Page.ValidateSelectStageErrorMessage();
+        await rollOverFunding_Page.SelectInitialSelectionStage();
+        await doYouNeedToUpdateAnyData_Page.ClickContinueButton();
+        await listOfCandidatesFound_Page.SelectRemovePreviousIfDisplayed();
+        await howDoYouWantToSelectCandidates_Page.ClickContinueButton();
+        await howDoYouWantToSelectCandidates_Page.ValidateSelectCandidateErrorMessage();
+        await howDoYouWantToSelectCandidates_Page.SelectWithImportList();
+        await importListOfCandidatesForRollOver_Page.ClickContinueButton();
+        await importListOfCandidatesForRollOver_Page.ValidateSelectCSVFileErrorMessage();
+        await rollOverFunding_Page.UploadCsvFile("Rollover-Importlist.csv");
+        await importListOfCandidatesForRollOver_Page.ClickContinueButton();
+        await selectFundingStream_Page.ClickContinueButton();
+        await selectFundingStream_Page.VerifySelectFundingStreamErrorMessage();
+        await selectFundingStream_Page.ClickSelectAllButton();
+        await rollOverFunding_Page.VerifyAllCheckboxesAreSelected();
+        await selectFundingStream_Page.ClickContinueButton();
+        await selectFundingStream_Page.ClickContinueButton();
+        await enterThresholdDates_Page.ClickContinueButton();
+        await enterThresholdDates_Page.VerifyThresholdDatesErrorMessage();
+        await enterThresholdDates_Page.EnterAcademicYearAndOperationalEndDates();
+        await enterThresholdDates_Page.ClickContinueButton();
+        await setTheFundingEndDate_Page.EnterMaxApprovalEndDate();
+        await setTheFundingEndDate_Page.ClickContinueButton();
+        await initialChecksAndExportComplete_Page.ValidateProcessCompleteText();
+        await initialChecksAndExportComplete_Page.ClickGoToQFASTHomePage();
+        await _qfastAdminPage.SelectOptions("Rollover funding");
+        await rollOverFunding_Page.SelectFinalUploadStage();
+        await uploadCandidatesToRollOver_Page.ClickContinueButton();
+        await uploadCandidatesToRollOver_Page.ValidateSelectCSVFileErrorMessage();
+        await rollOverFunding_Page.UploadCsvFile("RolloverCandidates_SystemDraft.csv");
+        await uploadCandidatesToRollOver_Page.ClickContinueButton();
+        await rollOverSummary_Page.ClickSubmitRollOverButton();
+        await rollOverSummary_Page.ValidateRollOverSuccessBanner();
     }
 }

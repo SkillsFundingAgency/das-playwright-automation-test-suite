@@ -1,9 +1,9 @@
-﻿namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages.RollOver;
+﻿using System.IO;
+namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages.RollOver;
 public class RollOverFunding_Page(ScenarioContext context) : BasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Rollover funding");
-    public async Task ClickContinueButton() => await page.Locator("button:has-text('Continue')").ClickAsync();
-    public async Task ClickGoBackLink() => await page.GetByRole(AriaRole.Link, new() { Name = "Back" }).ClickAsync();
+    public async Task ClickContinueButton() => await page.Locator("button:has-text('Continue')").ClickAsync();    
     public async Task ValidateSelectStageErrorMessage()
     {
         var errorMessageLocator = page.Locator("a[href='#SelectedProcess']");
@@ -39,6 +39,7 @@ public class RollOverFunding_Page(ScenarioContext context) : BasePage(context)
                 $"The rollover stage '{stageValue}' is not available on the page.");
         }
         await stageLocator.CheckAsync();
+        await ClickContinueButton();
     }
     public async Task VerifyAllCheckboxesAreSelected()
     {
@@ -52,5 +53,21 @@ public class RollOverFunding_Page(ScenarioContext context) : BasePage(context)
                     $"Checkbox at position {i + 1} is NOT selected.");
             }
         }
+    }
+    public async Task UploadCsvFile(string fileName)
+    {
+        var filePath = Path.Combine(
+            AppContext.BaseDirectory,
+            "Project",
+            "TestFiles",
+            fileName
+        );
+        if (!File.Exists(filePath))
+        {
+            throw new FileNotFoundException(
+                $"CSV file was not found: {filePath}"
+            );
+        }
+        await page.Locator("#fileUpload").SetInputFilesAsync(filePath);
     }
 }

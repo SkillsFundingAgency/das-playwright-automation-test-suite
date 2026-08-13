@@ -2,7 +2,7 @@
 
 public class SetTheFundingEndDate_Page(ScenarioContext context) : BasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Select the level of rollover you want to do" })).ToBeVisibleAsync();
+    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Set the end date for funding extension" })).ToBeVisibleAsync();
     public async Task ClickContinueButton() => await page.Locator("button:has-text('Continue')").ClickAsync();
     private DateTime GetNextAcademicYearEndDate()
     {
