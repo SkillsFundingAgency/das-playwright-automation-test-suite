@@ -38,7 +38,7 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).First.ClickAsync();
 
-        await page.GetByRole(AriaRole.Heading, new() { Name = contextVacancyTitle }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Heading, new() { Name = contextVacancyTitle }).First.GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new FAA_ApprenticeSummaryPage(context));
     }
@@ -80,6 +80,6 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
 
 public class NHSJobsDetailsPage(ScenarioContext context) : FAASignedInLandingBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("See more details about this apprenticeship on NHS Jobs");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Apply on NHS Jobs");
 
 }
