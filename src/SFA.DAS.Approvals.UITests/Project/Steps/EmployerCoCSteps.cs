@@ -25,6 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var fullName = apprenticeship.ApprenticeDetails.FullName;
             var expectedDate = apprenticeship.TrainingDetails.StopDate;
+            int trainingType = apprenticeship.TrainingDetails.LearningType;
             var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
             var page1 = await page.OpenFirstItemFromTheList(fullName);
 
@@ -47,11 +48,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, "Stopped date", expectedDate);
                     //Assert editiability of stopped record:
                     Assert.False(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
-                    Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
-                    Assert.False(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+                    Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");                    
                     Assert.False(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
                     Assert.False(await page1.IsEditVersionLinkAvailable(), "IsEditVersionLinkAvailable");
                     Assert.False(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
+                    if(trainingType == 2)
+                        Assert.False(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+                    else
+                        Assert.True(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+
                     //Check history logs:
                     var page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
                     await page2.AssertChangeHistoryRow(DateTime.Now, "ILR Learner status changed from Live to Withdrawn", "Auto approved");
