@@ -6,20 +6,12 @@ namespace SFA.DAS.Campaigns.UITests.Helpers;
 
 public class CampaignsStepsHelper(ScenarioContext context)
 {
-    public async Task<CampaignsHomePage> GoToCampaingnsHomePage() =>
+    public async Task<CampaignsHomePage> GoToCampaignsHomePage() =>
         await new CampaignsHomePage(context).AcceptCookieAndAlert();
 
-    public async Task<ApprenticeHubPage> GoToApprenticeshipHubPage()
-    {
-        var homePage = new CampaignsHomePage(context);
+    public Task<ApprenticeHubPage> GoToApprenticeshipHubPage() =>
+        new CampaignsHomePage(context).NavigateToApprenticeshipHubPage();
 
-        return await homePage.NavigateToApprenticeshipHubPage();
-    }
-
-    public async Task<EmployerHubPage> GoToEmployerHubPage()
-    {
-        var homePage = new CampaignsHomePage(context);
-
-        return await homePage.NavigateToEmployerHubPage();
-    }
+    public Task<EmployerHubPage> GoToEmployerHubPage() =>
+        new CampaignsHomePage(context).NavigateToEmployerHubPage();
 }
