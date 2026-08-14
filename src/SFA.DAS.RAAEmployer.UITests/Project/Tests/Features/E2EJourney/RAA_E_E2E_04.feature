@@ -11,6 +11,7 @@ Scenario Outline: RAA_E_E2E_04 - Create anonymous advert using API, Approve, App
 	When the Reviewer Approves the vacancy
 	Then the Applicant can apply for a Vacancy in FAA
 	Then the Employer can close the vacancy
+	And the applicant navigates to closed vacancy page in FAA
 	And Employer can make the application successful and archive the advert
 
 	Examples: 

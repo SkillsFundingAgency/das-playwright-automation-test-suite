@@ -1,7 +1,10 @@
-﻿namespace SFA.DAS.FAA.UITests.Project.Helpers;
+﻿using SFA.DAS.RAA.DataGenerator.Project;
+
+namespace SFA.DAS.FAA.UITests.Project.Helpers;
 
 public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
 {
+    private readonly ObjectContext _objectContext = context.Get<ObjectContext>();
     public async Task<FAASignedInLandingBasePage> GoToFAAHomePage() => await GoToFAAHomePage(context.GetUser<FAAApplyUser>());
 
     public async Task<FAASignedInLandingBasePage> GoToFAAHomePage(FAAPortalUser user)
@@ -18,6 +21,19 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
         }
 
         return await VerifyPageHelper.VerifyPageAsync(context, () => new FAASignedInLandingBasePage(context));
+    }
+
+    public async Task GoToFAAClosedVacancyPage(FAAApplyUser user)
+    {
+        var page = await GoToFAAHomePage(user);
+
+        await page.ClickSignOut();
+
+        var vacancyRef = _objectContext.GetVacancyReference();
+
+        await Navigate(UrlConfig.FAA_BaseUrl + $"apprenticeship/{vacancyRef}");
+
+        await page.VerifyClosedVacancyPage();
     }
 
     public async Task IneligibleUserApplyForAVacancy(FAAApplyUser user)

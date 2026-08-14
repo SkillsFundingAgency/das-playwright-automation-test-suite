@@ -10,4 +10,10 @@ public class FAAWhereOnlySearchStepDefinitions(ScenarioContext context)
     {
         await new FAASignedInLandingBasePage(_context).SearchByWhere(whereText);
     }
+
+    [When(@"^the user does a where only search on search results page for '([^']*)'$")]
+    public async Task WhenTheUserDoesAWhereOnlySearchOnSearchResultsPageFor(string whereText)
+    {
+        await new FAASearchResultPage(_context).SearchByWhereOnSearchResultsPage(whereText);
+    }
 }

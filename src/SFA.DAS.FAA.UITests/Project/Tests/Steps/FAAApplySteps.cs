@@ -99,4 +99,14 @@ public class FAAApplySteps(ScenarioContext context)
 
         await page4.SubmitApplication();
     }
+
+    [Then(@"^the applicant navigates to closed vacancy page in FAA$")]
+    public async Task SecondApplicantNavigatesToClosedVacancyPageInFAA()
+    {
+        var user = context.GetUser<FAAApplyUser>();
+
+        var page = await _faaStepsHelper.GoToFAAHomePage(user);
+
+        await _faaStepsHelper.GoToFAAClosedVacancyPage(user);
+    }
 }
