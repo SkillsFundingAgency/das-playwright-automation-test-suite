@@ -8,200 +8,199 @@ parameters:
     default: '**\**\SFA.DAS*tests*.dll'
   - name: ResourceName
     type: string
-    default: ''
+    default: ""
   - name: RuleName
     type: string
-    default: ''
+    default: ""
   - name: WhiteListFunction
     type: boolean
     default: false
 
 jobs:
-- deployment: Deploy_AutomationTests
-  displayName: 'Deploy Automation Tests to ${{ parameters.Environment }}'
-  environment: ${{ parameters.Environment }}
-  timeoutInMinutes: 90
-  variables:
-    projectName: $[ stageDependencies.Build.CodeBuild.outputs['buildProjectPaths.projectName'] ]
-    headless: 'false'
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-          - checkout: self
-            displayName: 'Checkout current branch'
+  - deployment: Deploy_AutomationTests
+    displayName: "Deploy Automation Tests to ${{ parameters.Environment }}"
+    environment: ${{ parameters.Environment }}
+    timeoutInMinutes: 90
+    variables:
+      projectName: $[ stageDependencies.Build.CodeBuild.outputs['buildProjectPaths.projectName'] ]
+      headless: "false"
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+              displayName: "Checkout current branch"
 
-          - checkout: das-platform-automation
-            displayName: 'Checkout das-platform-automation'
+            - checkout: das-platform-automation
+              displayName: "Checkout das-platform-automation"
 
-          - task: DownloadBuildArtifacts@0
-            displayName: 'Download build artifacts'
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'drop'
-              downloadPath: '$(System.DefaultWorkingDirectory)'
+            - task: DownloadBuildArtifacts@0
+              displayName: "Download build artifacts"
+              inputs:
+                buildType: "current"
+                downloadType: "single"
+                artifactName: "drop"
+                downloadPath: "$(System.DefaultWorkingDirectory)"
 
-          - task: ExtractFiles@1
-            displayName: 'Extract files'
-            inputs:
-              archiveFilePatterns: 'drop/tests.zip'
-              destinationFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
+            - task: ExtractFiles@1
+              displayName: "Extract files"
+              inputs:
+                archiveFilePatterns: "drop/tests.zip"
+                destinationFolder: "$(System.DefaultWorkingDirectory)/drop/tests"
 
-          - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
-            displayName: 'Tokenization: Transform file *.json'
-            inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests'
-              TargetFileNames: '*.json'
+            - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
+              displayName: "Tokenization: Transform file *.json"
+              inputs:
+                SourcePath: "$(System.DefaultWorkingDirectory)/drop/tests"
+                TargetFileNames: "*.json"
 
-          - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
-            displayName: 'Tokenization: Transform file *.runsettings'
-            inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
-              TargetFileNames: '*.runsettings'
+            - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
+              displayName: "Tokenization: Transform file *.runsettings"
+              inputs:
+                SourcePath: "$(System.DefaultWorkingDirectory)/drop/runsettings/src/"
+                TargetFileNames: "*.runsettings"
 
-          - task: PowerShell@2
-            displayName: 'Install Playwright Browsers'
-            inputs:
-              targetType: 'filePath'
-              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
-              arguments: install $(BROWSER_TYPE)
+            - task: PowerShell@2
+              displayName: "Install Playwright Browsers"
+              inputs:
+                targetType: "filePath"
+                filePath: "$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1"
+                arguments: install $(BROWSER_TYPE)
 
-          - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
-            displayName: 'Set Screen Resolution'
-            inputs:
-              displaySettings: specific
-              width: 1920
-              height: 1080
+            - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
+              displayName: "Set Screen Resolution"
+              inputs:
+                displaySettings: specific
+                width: 1920
+                height: 1080
 
-          - task: AzurePowerShell@5
-            displayName: "Get Agent's IP Address"
-            inputs:
-              azureSubscription: ${{ parameters.ServiceConnection }}
-              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Get-MyIpAddress.ps1'
-              ScriptArguments: '-WhatsMyIpUrl "https://ifconfig.me/ip"'
-              azurePowerShellVersion: LatestVersion
+            - task: AzurePowerShell@5
+              displayName: "Get Agent's IP Address"
+              inputs:
+                azureSubscription: ${{ parameters.ServiceConnection }}
+                ScriptPath: "$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Get-MyIpAddress.ps1"
+                ScriptArguments: '-WhatsMyIpUrl "https://ifconfig.me/ip"'
+                azurePowerShellVersion: LatestVersion
 
-          - task: AzurePowerShell@5
-            displayName: "Whitelist agent's IP address"
-            inputs:
-              azureSubscription: ${{ parameters.ServiceConnection }}
-              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AzSqlIpException.ps1'
-              ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
-              azurePowerShellVersion: LatestVersion
+            - task: AzurePowerShell@5
+              displayName: "Whitelist agent's IP address"
+              inputs:
+                azureSubscription: ${{ parameters.ServiceConnection }}
+                ScriptPath: "$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AzSqlIpException.ps1"
+                ScriptArguments: "-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)"
+                azurePowerShellVersion: LatestVersion
 
-          - task: AzurePowerShell@5
-            displayName: "Whitelist agent's IP address on $(AppServiceName)"
-            condition: ne('${{ parameters.ResourceName }}', '')
-            inputs:
-              azureSubscription: ${{ parameters.ServiceConnection }}
-              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
-              ScriptArguments: '-ResourceName ${{ parameters.ResourceName }} -IPAddress $(IPAddress) -RuleName ${{ parameters.RuleName }}'
-              azurePowerShellVersion: LatestVersion
-              
-          - task: AzurePowerShell@5
-            displayName: "Whitelist agent's IP address on Function App"
-            inputs:
-              azureSubscription: ${{ parameters.ServiceConnection }}
-              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
-              ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa" -RuleName "${{ parameters.RuleName }}"'
-              azurePowerShellVersion: LatestVersion
-            condition: and(succeeded(), eq('${{ parameters.WhiteListFunction }}', 'true'))
+            - task: AzurePowerShell@5
+              displayName: "Whitelist agent's IP address on $(AppServiceName)"
+              condition: ne('${{ parameters.ResourceName }}', '')
+              inputs:
+                azureSubscription: ${{ parameters.ServiceConnection }}
+                ScriptPath: "$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1"
+                ScriptArguments: "-ResourceName ${{ parameters.ResourceName }} -IPAddress $(IPAddress) -RuleName ${{ parameters.RuleName }}"
+                azurePowerShellVersion: LatestVersion
 
+            - task: AzurePowerShell@5
+              displayName: "Whitelist agent's IP address on Function App"
+              inputs:
+                azureSubscription: ${{ parameters.ServiceConnection }}
+                ScriptPath: "$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1"
+                ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa" -RuleName "${{ parameters.RuleName }}"'
+                azurePowerShellVersion: LatestVersion
+              condition: and(succeeded(), eq('${{ parameters.WhiteListFunction }}', 'true'))
 
-          # 1) Bootstrap: extract Service Connection creds to pipeline variables
-          - task: AzureCLI@2
-            displayName: 'Bootstrap Azure SP credentials'
-            inputs:
-              azureSubscription: ${{ parameters.ServiceConnection }}
-              addSpnToEnvironment: true
-              scriptType: ps
-              scriptLocation: inlineScript
-              inlineScript: |
-                # Promote SP credentials from the service connection to pipeline variables
-                Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID;issecret=false]$env:servicePrincipalId"
-                Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID;issecret=false]$env:tenantId"
-                Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
+            # 1) Bootstrap: extract Service Connection creds to pipeline variables
+            - task: AzureCLI@2
+              displayName: "Bootstrap Azure SP credentials"
+              inputs:
+                azureSubscription: ${{ parameters.ServiceConnection }}
+                addSpnToEnvironment: true
+                scriptType: ps
+                scriptLocation: inlineScript
+                inlineScript: |
+                  # Promote SP credentials from the service connection to pipeline variables
+                  Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID;issecret=false]$env:servicePrincipalId"
+                  Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID;issecret=false]$env:tenantId"
+                  Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
 
-          # 2) VSTest: run multiple assemblies; DefaultAzureCredential picks up env vars
+            # 2) VSTest: run multiple assemblies; DefaultAzureCredential picks up env vars
 
-          - task: VSTest@3
-            displayName: 'VsTest - Test Execution'
-            env:
-              AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
-              AZURE_TENANT_ID: $(AZURE_TENANT_ID)
-              AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
-            inputs:
-              testAssemblyVer2: ${{ parameters.TestAssembly }}
-              testRunTitle: 'Test Run - ${{ parameters.Environment }}'
-              searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
-              testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
-              runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
-              runInParallel: true
-              otherConsoleOptions: '/logger:trx'
-              rerunFailedTests: true
-              rerunType: basedontestfailurepercentage
-              rerunFailedTestsMaxPercent: 30
-              rerunMaxAttempts: 1
-            continueOnError: true
+            - task: VSTest@3
+              displayName: "VsTest - Test Execution"
+              env:
+                AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+                AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+                AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+              inputs:
+                testAssemblyVer2: ${{ parameters.TestAssembly }}
+                testRunTitle: "Test Run - ${{ parameters.Environment }}"
+                searchFolder: "$(System.DefaultWorkingDirectory)/drop/tests/"
+                testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
+                runSettingsFile: "$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings"
+                runInParallel: true
+                otherConsoleOptions: "/logger:trx"
+                rerunFailedTests: true
+                rerunType: basedontestfailurepercentage
+                rerunFailedTestsMaxPercent: 30
+                rerunMaxAttempts: 1
+              continueOnError: true
 
-          - task: AzurePowerShell@5
-            displayName: "SQL - Remove Whitelisted Agent's IP Address"
-            inputs:
-              azureSubscription: ${{ parameters.ServiceConnection }}
-              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AzSqlIpException.ps1'
-              ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
-              azurePowerShellVersion: LatestVersion
-            condition: succeededOrFailed()
+            - task: AzurePowerShell@5
+              displayName: "SQL - Remove Whitelisted Agent's IP Address"
+              inputs:
+                azureSubscription: ${{ parameters.ServiceConnection }}
+                ScriptPath: "$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AzSqlIpException.ps1"
+                ScriptArguments: "-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)"
+                azurePowerShellVersion: LatestVersion
+              condition: succeededOrFailed()
 
-          - task: AzurePowerShell@5
-            displayName: "App Service - Remove Whitelisted Agent's IP Address"
-            inputs:
-              azureSubscription: ${{ parameters.ServiceConnection }}
-              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
-              ScriptArguments: '-IPAddress $(IPAddress) -ResourceName ${{ parameters.ResourceName }}'
-              azurePowerShellVersion: LatestVersion
-              pwsh: true
-            condition: and(succeededOrFailed(), ne('${{ parameters.ResourceName }}', ''))
+            - task: AzurePowerShell@5
+              displayName: "App Service - Remove Whitelisted Agent's IP Address"
+              inputs:
+                azureSubscription: ${{ parameters.ServiceConnection }}
+                ScriptPath: "$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1"
+                ScriptArguments: "-IPAddress $(IPAddress) -ResourceName ${{ parameters.ResourceName }}"
+                azurePowerShellVersion: LatestVersion
+                pwsh: true
+              condition: and(succeededOrFailed(), ne('${{ parameters.ResourceName }}', ''))
 
-          - task: AzurePowerShell@5
-            displayName: "Function App- Remove Whitelisted Agent's IP Address"
-            inputs:
-              azureSubscription: ${{ parameters.ServiceConnection }}
-              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
-              ScriptArguments: '-IPAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa"'
-              azurePowerShellVersion: LatestVersion
-              pwsh: true
-            condition: and(succeededOrFailed(), eq('${{ parameters.WhiteListFunction }}', 'true'))
+            - task: AzurePowerShell@5
+              displayName: "Function App- Remove Whitelisted Agent's IP Address"
+              inputs:
+                azureSubscription: ${{ parameters.ServiceConnection }}
+                ScriptPath: "$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1"
+                ScriptArguments: '-IPAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa"'
+                azurePowerShellVersion: LatestVersion
+                pwsh: true
+              condition: and(succeededOrFailed(), eq('${{ parameters.WhiteListFunction }}', 'true'))
 
-          - task: PowerShell@2
-            displayName: 'Check .trx File Exists'
-            inputs:
-              targetType: 'filePath'
-              filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
-              arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
-            condition: succeededOrFailed()
+            - task: PowerShell@2
+              displayName: "Check .trx File Exists"
+              inputs:
+                targetType: "filePath"
+                filePath: "$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1"
+                arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
+              condition: succeededOrFailed()
 
-          - task: CmdLine@2
-            inputs:
-              script: |
-                echo "*************************************************"
-                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/allure-results:"
-                tree "$(System.DefaultWorkingDirectory)/drop/tests/allure-results" /f
-                echo "*************************************************"
-                echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName}/allure-results:"
-                tree "$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/allure-results" /f
-                echo "*************************************************"
-                echo "Tree Structure of System DefaultWorkingDirectory:"
-                tree $(System.DefaultWorkingDirectory) /f
-            displayName: 'Agent Folder Structure'
-            condition: always()
-            continueOnError: true
-
-          - task: PublishAllureReport@2
-            displayName: 'Allure Tab: Generate and Publish Allure Report'
-            condition: always()
-            inputs:
-              allureVersion: '2.36.0'
-              reportName: 'Allure report - ${{ parameters.Environment }}'
-              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'
+            # - task: CmdLine@2
+            #   inputs:
+            #     script: |
+            #       echo "*************************************************"
+            #       echo "Tree Structure of System DefaultWorkingDirectory drop/tests/allure-results:"
+            #       tree "$(System.DefaultWorkingDirectory)/drop/tests/allure-results" /f
+            #       echo "*************************************************"
+            #       echo "Tree Structure of System DefaultWorkingDirectory drop/tests/{projectName}/allure-results:"
+            #       tree "$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/allure-results" /f
+            #       echo "*************************************************"
+            #       echo "Tree Structure of System DefaultWorkingDirectory:"
+            #       tree $(System.DefaultWorkingDirectory) /f
+            #   displayName: "Agent Folder Structure"
+            #   condition: always()
+            #   continueOnError: true
+#
+# - task: PublishAllureReport@2
+#   displayName: 'Allure Tab: Generate and Publish Allure Report'
+#   condition: always()
+#   inputs:
+#     allureVersion: '2.36.0'
+#     reportName: 'Allure report - ${{ parameters.Environment }}'
+#     testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'
