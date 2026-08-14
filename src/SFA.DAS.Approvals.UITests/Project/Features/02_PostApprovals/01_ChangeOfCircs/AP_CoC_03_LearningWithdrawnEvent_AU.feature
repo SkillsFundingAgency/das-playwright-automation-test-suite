@@ -16,7 +16,7 @@ Data Requirements:
 
 
 @regression
-Scenario: AP_CoC_03_Verify Learning Withdrawal Event marks the AU learner as Stopped
+Scenario: AP_CoC_03a_Verify Learning Withdrawal Event marks the AU learner as Stopped
 	Given a Live AU learner record exists with Firstname: "DoNotUse_TestData" and LastName: "ChangeStatusAuLearner"
 	When LearningWithdrawnEvent is received for the apprentice
 	Then Commitments db is updated with the correct reason code and stop date
@@ -26,13 +26,12 @@ Scenario: AP_CoC_03_Verify Learning Withdrawal Event marks the AU learner as Sto
 	Then Commitments db is updated with the new stop date and reason code
 
 
-##//emails validation for employer and apprentice to be implemented here in future after APPMAN-2733 is ready
-#@regression
-#Scenario Outline: AP_E2E_LE_EUA_03 emails validation
-#	Given previous test has been completed successfully
-#	Then Verify the "<Recipient>" receive "<NotificationType>" email
-#
-#Examples:
-#		| Recipient		| NotificationType								|
-#		| Employer      | ??? 			                                |
-#		| Apprentice	| ???                                           |
+@regression
+Scenario Outline: AP_E2E_LE_EUA_03b emails validation
+	Given previous test has been completed successfully
+	Then Verify the "<Recipient>" receive "<NotificationType>" email
+
+Examples:
+		| Recipient | NotificationType       |
+		| Employer  | Learner record stopped |
+
