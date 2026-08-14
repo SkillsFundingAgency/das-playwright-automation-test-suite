@@ -1,6 +1,4 @@
-﻿using Allure.Net.Commons;
-using Polly;
-using Reqnroll.CommonModels;
+﻿using Polly;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
@@ -14,7 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
     internal class DbSteps
     {
         protected readonly ScenarioContext context;
-        protected readonly ObjectContext objectContext; 
+        protected readonly ObjectContext objectContext;
         private readonly AccountsDbSqlHelper accountsDbSqlHelper;
         private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
         private readonly LearningDbSqlHelper learningDbSqlHelper;
@@ -43,7 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             foreach (var apprenticeship in listOfApprenticeship)
             {
                 var uln = apprenticeship.ApprenticeDetails.ULN;
-                var learnerDataId = await DbRetryPolicy(getValue: async () => await learnerDataDbSqlHelper.GetLearnerDataId(uln) , 0, "LearnerData db");
+                var learnerDataId = await DbRetryPolicy(getValue: async () => await learnerDataDbSqlHelper.GetLearnerDataId(uln), 0, "LearnerData db");
                 Assert.IsNotEmpty(learnerDataId, $"No record found in LearnerData db for ULN: {uln}");
                 apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(learnerDataId);
                 await Task.Delay(100);
@@ -70,13 +68,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 context.Set(apprenticeship, "Apprenticeship");
                 objectContext.SetDebugInformation($"[{apprenticehipId} set as AprenticeshipID for ULN: {uln}]");
             }
-            
+
         }
 
         [Then("^LearnerData Db is updated with respective Apprenticeship Id$")]
         public async Task ThenLearnerDataDbIsUpdatedWithRespectiveApprenticeshipId()
         {
-            listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);            
+            listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
             foreach (var apprenticeship in listOfApprenticeship)
             {
@@ -100,7 +98,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
                 var learningType = apprenticeship.TrainingDetails.LearningType;
                 string result = string.Empty;
-                
+
                 if (learningType == (int)LearningType.ShortCourses)
                     result = await DbRetryPolicy(getValue: async () => await learningDbSqlHelper.CheckIfShortCourseLearnerRecordUpdatedInLearningDb(apprenticeshipId, uln), 0, "Learning db");
                 else
@@ -132,7 +130,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             if (courseType == "FoundationApprenticeship")
             {
-                additionalWhereFilter +=   @"AND a.HasHadDataLockSuccess = 0
+                additionalWhereFilter += @"AND a.HasHadDataLockSuccess = 0
                                              AND a.TrainingCode IN('803','804','805','806','807','808','809', '810', '811')";
             }
             else if (courseType == "ShortCourses")
@@ -141,7 +139,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
             else
             {
-                additionalWhereFilter +=   @"AND a.HasHadDataLockSuccess = 0
+                additionalWhereFilter += @"AND a.HasHadDataLockSuccess = 0
                                             AND TrainingName like '%, Level: 7'";
             }
 
@@ -180,14 +178,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await FindApprenticeFromDbAndSaveItInTheContext(EmployerType.Levy, additionalWhereFilter);
 
             //reset the payment status to 1 (Live):
-            await commitmentsDbSqlHelper.ResetPaymentStatus(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.ApprenticeshipId);            
+            await commitmentsDbSqlHelper.ResetPaymentStatus(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.ApprenticeshipId);
         }
 
         [Then(@"Commitments db is updated with the correct reason code and stop date")]
         [Then(@"Commitments db is updated with the new stop date and reason code")]
         public async Task ThenCommitmentsDbIsUpdatedWithTheCorrectReasonCodeAndStopDate()
         {
-            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault(); 
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
             var uln = apprenticeship.ApprenticeDetails.ULN;
             var withdrawalDate = apprenticeship.TrainingDetails.StopDate;
@@ -198,7 +196,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var actualPaymentStatus = await DbRetryPolicy(
                 getValue: async () =>
                 {
-                    result = await commitmentsDbSqlHelper.GetValuesFromApprenticeshipTable("paymentstatus, stopdate, WithdrawnReasonCode, MadeRedundant", apprenticeshipId);  
+                    result = await commitmentsDbSqlHelper.GetValuesFromApprenticeshipTable("paymentstatus, stopdate, WithdrawnReasonCode, MadeRedundant", apprenticeshipId);
 
                     return (result as IEnumerable<string[]>)?.FirstOrDefault()[0];
                 },
@@ -219,7 +217,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
             var uln = apprenticeship.ApprenticeDetails.ULN;
             var expectedPaymentFreezeDate = (status == "Paused") ? DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) : "";
-            string expectedFreezePaymentsReason = (status == "Paused") ? "1" : "";            
+            string expectedFreezePaymentsReason = (status == "Paused") ? "1" : "";
             List<string> result = new List<string>();
 
             var actualPaymentStatus = await DbRetryPolicy(
@@ -234,11 +232,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             );
 
 
-            var actualPaymentFreezeDate = (result[1].Length < 1)? "": DateTime.Parse(result[1]).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+            var actualPaymentFreezeDate = (result[1].Length < 1) ? "" : DateTime.Parse(result[1]).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-            Assert.That(result[0], Is.EqualTo("1"), $"Expected payment status '1' but found '{actualPaymentStatus}'");            
+            Assert.That(result[0], Is.EqualTo("1"), $"Expected payment status '1' but found '{actualPaymentStatus}'");
             Assert.That(actualPaymentFreezeDate, Is.EqualTo(expectedPaymentFreezeDate), $"Expected payment freeze date '{expectedPaymentFreezeDate}' but found '{actualPaymentFreezeDate}'");
-            Assert.That(result[2], Is.EqualTo(expectedFreezePaymentsReason), $"Expected FreezePaymentsReason '{expectedFreezePaymentsReason}' but found '{result[2]}'");            
+            Assert.That(result[2], Is.EqualTo(expectedFreezePaymentsReason), $"Expected FreezePaymentsReason '{expectedFreezePaymentsReason}' but found '{result[2]}'");
         }
 
         [Then(@"it does not change the status of AU record to paused")]
@@ -248,7 +246,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
             var uln = apprenticeship.ApprenticeDetails.ULN;
             var result = await commitmentsDbSqlHelper.GetValuesFromApprenticeshipTable("Paymentstatus", apprenticeshipId);
-            Assert.That(result[0], Is.EqualTo("2"), $"Expected payment status '2' but found '{result[0]}'");            
+            Assert.That(result[0], Is.EqualTo("2"), $"Expected payment status '2' but found '{result[0]}'");
         }
 
 
@@ -288,7 +286,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             apprenticeship.ApprenticeDetails.LearnerDataId = Convert.ToInt32(details[1]);
             apprenticeship.ApprenticeDetails.FirstName = details[2].ToString();
             apprenticeship.ApprenticeDetails.LastName = details[3].ToString();
-            
+
             apprenticeship = await learnerDataDbSqlHelper.GetLearnerDetailsFromLearnerDataId(apprenticeship);
             return apprenticeship;
         }
