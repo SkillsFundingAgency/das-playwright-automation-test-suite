@@ -9,7 +9,7 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
     //private static By ApplyNow => By.CssSelector(".das-button--inline-link");
     //private static By FirstApplicationDisplayed => By.CssSelector("[id^='VAC'][id$='-vacancy-title']");
 
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-l")).ToContainTextAsync("results found");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-l")).ToContainTextAsync(new Regex(@"results?\sfound"));
     private static string ClickFirstNHSLinkInResult => ("[id$='-vacancy-title']:first-of-type");
 
     public async Task VerifySuccessfulResults()
