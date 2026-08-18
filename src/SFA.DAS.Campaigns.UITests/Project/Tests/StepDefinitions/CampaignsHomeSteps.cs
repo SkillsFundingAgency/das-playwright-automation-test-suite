@@ -5,16 +5,14 @@ public class CampaignsHomeSteps(ScenarioContext context)
 {
     private readonly CampaignsStepsHelper _stepsHelper = new(context);
 
-    [Given(@"the user navigates to (?:the )?Home page$")]
-    [Given(@"the user navigates to Home page and verifies the content$")]
+    [Given(@"the user navigates to the Home page")]
     public async Task GivenTheUserNavigatesToTheHomePage() =>
-        await _stepsHelper.GoToCampaingnsHomePage();
+        await _stepsHelper.GoToCampaignsHomePage();
 
-    [When(@"the user clicks on the homepage card ""(.*)""$")]
+    [When(@"the user clicks on the homepage card ""(.*)""")]
     public async Task WhenTheUserClicksOnTheHomepageCard(string cardName)
     {
-        var page = await _stepsHelper.GoToCampaingnsHomePage();
-
+        var page = await _stepsHelper.GoToCampaignsHomePage();
         await page.NavigateToCard(cardName);
     }
 }
