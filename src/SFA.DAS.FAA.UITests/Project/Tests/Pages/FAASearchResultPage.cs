@@ -21,13 +21,34 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
 
     public async Task<FAA_ApplicationOverviewPage> SaveFromSearchResultsAndApplyForVacancy()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Save   to your favourites" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save   to your favourites" }).First.ClickAsync();
 
         await page.GetByRole(AriaRole.Link, new() { Name = "Saved vacancies" }).ClickAsync();
+
+        var vacancyCount = await page.Locator("ol.das-search-results__list")
+            .GetByRole(AriaRole.Link, new() { Name = vacancyTitleDataHelper.VacancyTitle }).CountAsync();
+
+        Assert.That(vacancyCount, Is.EqualTo(1));
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Apply now" }).First.ClickAsync();
 
         return await VerifyPageAsync(() => new FAA_ApplicationOverviewPage(context));
+    }
+
+    public async Task<FAASearchResultPage> RemoveSavedVacancyFromSearchResultsAndApplyForVacancy()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Saved   to your favourites, click again to remove" }).First.ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Saved vacancies" }).ClickAsync();
+
+        var vacancyCount = await page.Locator("ol.das-search-results__list")
+            .GetByRole(AriaRole.Link, new() { Name = vacancyTitleDataHelper.VacancyTitle }).CountAsync();
+
+        Assert.That(vacancyCount, Is.EqualTo(0));
+
+        await SearchUsingVacancyTitle();
+
+        return await VerifyPageAsync(() => new FAASearchResultPage(context));
     }
 
     public async Task<FAA_ApprenticeSummaryPage> ClickFirstApprenticeshipThatCanBeAppliedFor()

@@ -381,7 +381,9 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
 
         var page2 = await page1.SaveAndApplyForVacancy();
 
-        return await page2.Apply();
+        var page3 = await page2.RemoveSavedVacancy();
+
+        return await page3.Apply();
     }
 
     public async Task<FAA_ApplicationOverviewPage> GoToSearchResultsPagePageAndSaveBeforeApplying()
@@ -391,6 +393,16 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
         var page1 = await page.SearchAndSaveVacancyByReferenceNumber();
 
         return await page1.SaveFromSearchResultsAndApplyForVacancy();
+
+    }
+
+    public async Task<FAASearchResultPage> GoToSearchResultsPagePageAndRemoveSavedVacancy()
+    {
+        var page = await GoToFAAHomePage();
+
+        var page1 = await page.SearchAndSaveVacancyByReferenceNumber();
+
+        return await page1.RemoveSavedVacancyFromSearchResultsAndApplyForVacancy();
 
     }
 
