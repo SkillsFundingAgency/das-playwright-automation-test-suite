@@ -32,7 +32,11 @@ public abstract class VerifyDetailsBasePage(ScenarioContext context) : RaaBasePa
 
             if (text.ContainsCompareCaseInsensitive("Pick an account"))
             {
-                await page.Locator("[aria-label*='Sign out']").ClickAsync();
+                //await page.Locator("[aria-label*='Sign out']").ClickAsync();
+                await page.Locator(".table-row").First.ClickAsync();
+                await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+                await page.Locator("h1").Filter(new() { HasTextString = "Apprenticeship service vacancy QA" }).WaitForAsync(new() { Timeout = 60000 });
             }
         }
     }
