@@ -47,7 +47,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     Assert.False(await page.IsChangeOfVersionLinkVisible(), "IsChangeOfVersionLinkVisible");
                     //verify history logs:
                     var page2 = await page.ClickOnViewChangeHistoryLink(apprenticeName);
-                    await page2.AssertChangeHistoryRow(DateTime.Now, "ILR Learner status changed from Live to Withdrawn", "Auto approved");
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "Status change from Live to Stopped", "Auto approved");
                     break;
                 case "Completed":
                     await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Completed, DateTime.Now);
