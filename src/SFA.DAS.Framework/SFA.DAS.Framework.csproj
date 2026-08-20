@@ -8,6 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="BrowserStack.TestAdapter" Version="0.42.*" />
 		<PackageReference Include="Mailosaur" Version="9.0.*" />
 	</ItemGroup>
 
