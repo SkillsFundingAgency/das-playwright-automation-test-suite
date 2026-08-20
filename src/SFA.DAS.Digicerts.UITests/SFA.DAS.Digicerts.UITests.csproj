@@ -26,14 +26,11 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.Framework\SFA.DAS.Framework.csproj" />
+		<ProjectReference Include="..\SFA.DAS.ConfigurationBuilder\SFA.DAS.ConfigurationBuilder.csproj" />
 		<ProjectReference Include="..\SFA.DAS.Login.Service\SFA.DAS.Login.Service.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="appsettings.Environment.json">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
-		</None>
 		<None Update="appsettings.Project.BrowserStack.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

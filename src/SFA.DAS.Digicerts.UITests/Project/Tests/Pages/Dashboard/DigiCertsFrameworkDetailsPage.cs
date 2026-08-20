@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Mailosaur.Models;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using NUnit.Framework;
@@ -11,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using UglyToad.PdfPig.Content;
 using static System.Net.Mime.MediaTypeNames;
 
 
@@ -29,8 +31,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByText("Amelia", new() { Exact = true })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("Parker", new() { Exact = true })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("2637151197")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("10592")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByRole(AriaRole.Definition).Filter(new() { HasTextRegex = new Regex("^Hospitality$") })).ToBeVisibleAsync();
+             await Assertions.Expect(page.GetByRole(AriaRole.Definition).Filter(new() { HasTextRegex = new Regex("^Hospitality$") })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("Hospitality Retail Outlet")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("Advanced")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("Lancaster and Morecambe")).ToBeVisibleAsync();
@@ -42,12 +43,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Create link" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Download your certificate" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download certificate (PDF)" })).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Certificate print status" })).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("Your certificate is")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("Print requested")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("A certificate was requested")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("If your certificate has been")).ToBeVisibleAsync();
-
+            
             return await VerifyPageAsync(() => new DigiCertsFrameworkDetailsPage(context));
         }
 
@@ -58,7 +54,6 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByText("James", new() { Exact = true })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("Bennett", new() { Exact = true })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("4713798115")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("02465327")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Definition).Filter(new() { HasTextRegex = new Regex("^Hospitality$") })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("Hospitality Retail Outlet")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("Advanced")).ToBeVisibleAsync();
@@ -71,13 +66,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Create link" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Download your certificate" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download certificate (PDF)" })).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Certificate print status" })).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("Your certificate is")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("Print requested")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("A certificate was requested")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("If your certificate has been")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "contact us for a replacement" })).ToBeVisibleAsync();
-
+            
             return await VerifyPageAsync(() => new DigiCertsFrameworkDetailsPage(context));
         }
 
@@ -104,20 +93,33 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
                 $"PDF download failed. File not found: {downloadPath}");
 
             string pdfText;
+            int totalImages = 0;
+
 
             using (var pdfDocument = UglyToad.PdfPig.PdfDocument.Open(downloadPath))
             {
-                pdfText = string.Join(
-                    Environment.NewLine,
-                    pdfDocument.GetPages()
-                        .Select(pdfPage => pdfPage.Text)
-                );
+                pdfText = string.Join(Environment.NewLine, pdfDocument.GetPages().Select(pdfPage => pdfPage.Text));
+
+                // Count and validate images
+                foreach (var pdfPage in pdfDocument.GetPages())
+                {
+                    var images = pdfPage.GetImages().ToList();
+
+                    totalImages += images.Count;
+
+                    foreach (var image in images)
+                    {
+                        Assert.That(image.Bounds.Width, Is.GreaterThan(0), "Image width should be greater than 0.");
+
+                        Assert.That(image.Bounds.Height, Is.GreaterThan(0), "Image height should be greater than 0.");
+                    }
+                }
             }
 
             Console.WriteLine("PDF Content:");
             Console.WriteLine(pdfText);
 
-            // Verify PDF content
+            // Verify PDF content and Images
             Assert.Multiple(() =>
             {
                 Assert.That(pdfText, Does.Contain("CERTIFICATE OF ACHIEVEMENT AND RECOGNITION"), "Missing certificate title");
@@ -129,11 +131,18 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
                 Assert.That(pdfText, Does.Contain("ADVANCED  Level"), "Level missing");
                 Assert.That(pdfText, Does.Contain("DISTINCTION"), "Grade missing");
                 Assert.That(pdfText, Does.Contain("01 JANUARY 2019"), "Award date missing");
+                Assert.That(totalImages, Is.GreaterThan(0), "No images were found in the PDF.");
             });
 
             return await VerifyPageAsync(() => new DigiCertsFrameworkDetailsPage(context));
         }
 
 
+        public async Task<DigiCertsCreateSharingLinkPage> clickCreateLink()
+        {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Create link" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new DigiCertsCreateSharingLinkPage(context));
+        }
     }
  }

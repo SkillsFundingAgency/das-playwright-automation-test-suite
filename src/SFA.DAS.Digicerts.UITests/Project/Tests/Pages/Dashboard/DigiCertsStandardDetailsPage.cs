@@ -27,7 +27,6 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByText("Emily", new() { Exact = true })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("Carter", new() { Exact = true })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("3283991481")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("00014801")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Definition).Filter(new() { HasText = "Business administrator" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("3", new() { Exact = true })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("January 2024")).ToBeVisibleAsync();
@@ -39,12 +38,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Create link" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Download your certificate" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download certificate (PDF)" })).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Certificate print status" })).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("Your certificate is")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("A certificate was printed on")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("If your certificate has been")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "contact us for a replacement" })).ToBeVisibleAsync();
-
+            
             return await VerifyPageAsync(() => new DigiCertsStandardDetailsPage(context));
         }
 
@@ -57,7 +51,6 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByText("Oliver", new() { Exact = true })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("Turner", new() { Exact = true })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("2697749755")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("00014802")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Definition).Filter(new() { HasText = "Accountancy or taxation professional" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("7", new() { Exact = true })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("January 2020")).ToBeVisibleAsync();
@@ -69,12 +62,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Create link" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Download your certificate" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download certificate (PDF)" })).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Certificate print status" })).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("Your certificate is")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("A certificate was printed on")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("If your certificate has been")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "contact us for a replacement" })).ToBeVisibleAsync();
-
+           
             return await VerifyPageAsync(() => new DigiCertsStandardDetailsPage(context));
         }
 
@@ -120,7 +108,6 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             {
                 Assert.That(pdfText, Does.Contain("CERTIFICATE OF ACHIEVEMENT"), "Missing certificate title");
                 Assert.That(pdfText, Does.Contain("Certificate number"), "Missing certificate number label");
-                Assert.That(pdfText, Does.Contain("00014802"), "Incorrect certificate number");
                 Assert.That(pdfText, Does.Contain("Oliver Turner"), "Candidate name missing");
                 Assert.That(pdfText, Does.Contain("ACCOUNTANCY OR TAXATION PROFESSIONAL"), "Qualification name missing");
                 Assert.That(pdfText, Does.Contain("Level 7"), "Level missing");

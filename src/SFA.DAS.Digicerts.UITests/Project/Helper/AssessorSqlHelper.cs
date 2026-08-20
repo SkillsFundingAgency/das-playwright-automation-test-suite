@@ -65,7 +65,7 @@ public class AssessorSqlHelper(ObjectContext objectContext, DbConfig config) : S
             $"FROM [dbo].[Certificates] " +
             $"WHERE LearnerGivenNames = '{firstname}' " +
             $"AND LearnerFamilyName = '{lastname}' " +
-            $"ORDER BY CertificateReference");
+            $"ORDER BY achievementDate desc");
 
         return (
             data[0],

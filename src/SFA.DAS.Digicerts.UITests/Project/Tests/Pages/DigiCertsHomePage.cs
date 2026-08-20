@@ -10,6 +10,7 @@ using SFA.DAS.Login.Service.Project;
 using SFA.DAS.Login.Service.Project.Helpers;
 using SFA.DAS.ProvideFeedback.UITests.Project.Helpers;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 using static System.Net.Mime.MediaTypeNames;
@@ -31,7 +32,6 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
 
         public async Task<DigiCertsSignedInPage> enterLogin(DigitalCertUser user)
         {
-           
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Id" }).ClickAsync();
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Id" }).FillAsync(user.Id);
 
