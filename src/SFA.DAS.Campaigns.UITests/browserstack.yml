@@ -1,0 +1,21 @@
+userName: Environment.GetEnvironmentVariable("BROWSERSTACK_USERNAME");
+accessKey: Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY");
+buildName: Campaigns
+projectName: AS_Accessibility
+platforms:
+  - os: Windows
+    osVersion: 11
+    browserName: Chrome
+    browserVersion: latest
+    # accessibility: $(BROWSERSTACK_ACCESSIBILITY)
+    accessibility: true
+browserstackLocal: false
+accessibilityOptions:
+  wcagVersion: wcag22aa
+# browserstackAutomation: $(BROWSERSTACK_ACCESSIBILITY)
+browserstackAutomation: true
+parallelsPerPlatform: 2
+CUSTOM_TAG_1: ""
+# Use CUSTOM_TAG_<N> and set more build tags as you need.
+debug: true
+consoleLogs: info
