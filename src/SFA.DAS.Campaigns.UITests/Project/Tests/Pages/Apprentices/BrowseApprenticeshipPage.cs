@@ -2,16 +2,21 @@
 
 public class BrowseApprenticeshipPage(ScenarioContext context) : ApprenticeBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Browse apprenticeships before you apply");
+    public override async Task VerifyPage() =>
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Browse by interests", new() { IgnoreCase = true });
 
-    public async Task<BrowseApprenticeshipResultsPage> SearchForAnApprenticeship()
+    public async Task NavigateToSectorCard(string sectorName) =>
+        await page.GetByRole(AriaRole.Link, new() { Name = sectorName, Exact = false }).First.ClickAsync();
+
+    public async Task VerifyHeading(string sectorName) =>
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(sectorName, new() { IgnoreCase = true });
+
+    public async Task<IPage> ClickExternalFindAnApprenticeshipLink()
     {
-        await page.GetByLabel("Select an interest").SelectOptionAsync(["Digital"]);
-
-        await page.GetByLabel("Enter your postcode").FillAsync("CV1 2WT");
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new BrowseApprenticeshipResultsPage(context));
+        var waitForPageTask = page.Context.WaitForPageAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Find an apprenticeship" }).ClickAsync();
+        var externalPage = await waitForPageTask;
+        await externalPage.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
+        return externalPage;
     }
 }

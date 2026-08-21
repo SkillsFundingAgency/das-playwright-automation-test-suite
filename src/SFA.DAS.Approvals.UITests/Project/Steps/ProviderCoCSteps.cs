@@ -21,11 +21,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             providerStepsHelper = new ProviderStepsHelper(context);            
         }
 
+        [Then(@"^Provider verifies that recrod status stays as ""(.*)""")]
         [Then(@"^provider verifies that record is set as ""(.*)"" in Provider portal")]
         public async Task ThenProviderVerifiesThatRecordIsSetAsInProviderPortal(string status)
         {
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var apprenticeName = apprenticeship.ApprenticeDetails.FullName;
+            var expectedDate = apprenticeship.TrainingDetails.StopDate;
 
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
             await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
@@ -33,8 +35,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             switch (status)
             {
+                case "Live":
+                    await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Live, null);
+                      break;
                 case "Stopped":
-                    await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, apprenticeship.TrainingDetails.StopDate);
+                    await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, expectedDate);
                     //verify editability:
                     Assert.True(await page.IsChangeHistoryLinkVisible(), "IsChangeHistoryLinkVisible");
                     Assert.False(await page.IsEditApprenticeDetailsLinkVisible(), "IsEditApprenticeDetailsLinkVisible");
@@ -53,7 +58,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     Assert.False(await page.IsChangeOfVersionLinkVisible(), "IsChangeOfVersionLinkVisible");
                     break;
                 case "Paused":
-                    await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Paused, DateTime.Now);
+                    await page.ProviderVerifyApprenticeStatus(ApprenticeshipStatus.Paused, expectedDate);
+                    //verify editability:
+                    Assert.True(await page.IsChangeHistoryLinkVisible(), "IsChangeHistoryLinkVisible");
+                    Assert.True(await page.IsEditApprenticeDetailsLinkVisible(), "IsEditApprenticeDetailsLinkVisible");
+                    Assert.True(await page.IsChangeOfEmployerLinkVisible(), "IsChangeOfEmployerLinkVisible");
+                    Assert.False(await page.IsChangeOfVersionLinkVisible(), "IsChangeOfVersionLinkVisible");
+                    //verify history logs:
+                    page2 = await page.ClickOnViewChangeHistoryLink(apprenticeName);
+                    await page2.AssertChangeHistoryRow(DateTime.Now, $"Learning has been paused on {expectedDate.ToString("d MMM yyyy")}", "Auto approved");
                     break;
                 default:
                     break;

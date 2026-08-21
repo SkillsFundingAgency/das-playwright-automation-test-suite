@@ -6,7 +6,7 @@ namespace SFA.DAS.QFAST.UITests.Project.Helpers;
 
 public class QfastHelpers(ScenarioContext context)
 {    
-    protected readonly ScenarioContext context = context;
+    protected readonly ScenarioContext context = context;  
 
     public async Task<Admin_Page> GoToQfastAdminHomePage()
     {
@@ -17,13 +17,13 @@ public class QfastHelpers(ScenarioContext context)
     public async Task<AO_Page> GoToQfastAOHomePage()
     {
         await new DfeAdminLoginStepsHelper(context).LoginToQfastAsAOUser();
-
+        await new AO_Page(context).AcceptPrivacyNotice();
         return await VerifyPageHelper.VerifyPageAsync(context, () => new AO_Page(context));
     }
     public async Task<AO_Page> GoToQfastAOHomePage1()
     {
         await new DfeAdminLoginStepsHelper(context).LoginToQfastAsAOUser2();
-
+        await new AO_Page(context).AcceptPrivacyNotice();
         return await VerifyPageHelper.VerifyPageAsync(context, () => new AO_Page(context));
     }
     public async Task<IFATE_Page> GoToQfastIFATEHomePage()

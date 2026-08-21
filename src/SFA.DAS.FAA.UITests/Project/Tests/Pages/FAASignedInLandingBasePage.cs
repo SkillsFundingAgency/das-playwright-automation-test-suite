@@ -164,4 +164,15 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
 
         return await VerifyPageAsync(() => new FAABrowseByInterestsPage(context));
     }
+
+    public async Task ClickSignOut()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
+
+    }
+
+    public async Task VerifyClosedVacancyPage()
+    {
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("You can no longer apply for this apprenticeship");
+    }
 }

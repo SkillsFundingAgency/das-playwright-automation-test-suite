@@ -83,7 +83,7 @@ public class MailosaurApiHelper(ScenarioContext context)
             Body = emailText
         };
 
-        var message = await mailosaur.Messages.GetAsync(mailosaurAPIUser.ServerId, criteria, timeout: 20000, receivedAfter: dateTime);
+        var message = await mailosaur.Messages.GetAsync(mailosaurAPIUser.ServerId, criteria, timeout: 40000, receivedAfter: dateTime);
 
         SetDebugInformation($"Message found with ID '{message?.Id}' at {message?.Received:HH:mm:ss} with body {Environment.NewLine}{message.Text.Body}");
 

@@ -41,11 +41,11 @@
             await ContinueButton.ClickAsync();
         }
 
-        internal async Task<BeforeContinuePage> SelectOptionToAddApprenticeFromILRAndContinue()
+        internal async Task<ILRAddLearnersPage> SelectOptionToAddApprenticeFromILRAndContinue()
         {
             await optionToSelectApprenticesFromILR.CheckAsync();
             await ContinueButton.ClickAsync();
-            return await VerifyPageAsync(() => new BeforeContinuePage(context));
+            return await VerifyPageAsync(() => new ILRAddLearnersPage(context));
         }
 
         internal async Task<FundingRestrictionsPage> SelectOptionToAddApprenticesFromILRList_FundingRestrictionsRoute()

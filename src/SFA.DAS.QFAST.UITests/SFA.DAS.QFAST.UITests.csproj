@@ -29,7 +29,11 @@
 		<ProjectReference Include="..\SFA.DAS.DfeAdmin.Service\SFA.DAS.DfeAdmin.Service.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerPortal.UITests\SFA.DAS.EmployerPortal.UITests.csproj" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<None Update="Project\TestFiles\**\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 	<ItemGroup>
 		<None Update="appsettings.Environment.json">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>

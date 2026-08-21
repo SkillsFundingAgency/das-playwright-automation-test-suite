@@ -42,6 +42,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await providerStepsHelper.ProviderReserveFunds();
         }
 
+        [When("^provider use above reservation and learner details to create a cohort$")]
+        public async Task WhenProviderUseAboveReservationAndLearnerDetailsToCreateACohort()
+        {
+            await providerStepsHelper.ProviderAddsFirstLearnerUsingReservationErrorCase();
+        }
+
+        [Then("^Provider Check Learner DetailsPage is stopped with an error message (.*)$")]
+        public async Task ThenProviderIsStoppedWithAnErrorMessage(string errorMessage)
+        {
+            await new CheckApprenticeDetailsPage(context).VerfiyErrorMessage("StartDate", errorMessage);
+        }
+
+        [Then(@"the provider is stopped with an error message for (.*)")]
+        public async Task ThenTheProviderIsStoppedWithAnErrorMessageFor(int ageLimit)
+        {
+            string errorMessage = $"The apprentice must be younger than {ageLimit} years old at the start of their training";
+            await new EditLearnerDetails_ProviderPage(context).ValidateErrorMessage(errorMessage, "DateOfBirth");
+        }
+
         [When(@"^sends an apprentice request \(cohort\) to the employer by selecting apprentices from ILR list and reservations$")]
         public async Task WhenSendsAnApprenticeRequestCohortToTheEmployerBySelectingApprenticesFromILRListAndReservations()
         {
@@ -90,7 +109,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenSystemStopUserToAddThatApprenticeWithAnErrorMessageFor(string ageLimit)
         {
             int age = int.Parse(ageLimit);
-            string errorMsg = age < 20 ? $"The apprentice must be at least {age} years old at the start of their training" : $"The apprentice must be {age - 1} years or under at the start of their training";
+            string errorMsg = age < 20 ? $"The learner must be at least {age} years old at the start of their training" : $"The learner must be {age - 1} years or under at the start of their training";
             var page = await new ProviderStepsHelper(context).ProviderCreateACohortViaIlrRouteWithInvalidDoB();
             await page.VerfiyErrorMessage("DateOfBirth", errorMsg);
             await page.NavToHomePage();
@@ -114,12 +133,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Then(@"the provider is stopped with an error message for (.*)")]
-        public async Task ThenTheProviderIsStoppedWithAnErrorMessageFor(int ageLimit)
-        {
-            string errorMessage = $"The apprentice must be younger than {ageLimit} years old at the start of their training";
-            await new EditLearnerDetails_ProviderPage(context).ValidateErrorMessage(errorMessage, "DateOfBirth");
-        }
 
 
         [Then("^apprentice\\/learner record is no longer available on SelectLearnerFromILR page$")]
@@ -165,6 +178,39 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     await page1.VerfiyErrorMessage("EndDate", oltdErrorMsg);
                 else
                     await page1.VerfiyErrorMessage("EndDate", "");
+
+            }
+
+        }
+
+
+        [When("^The Provider tries to add a new learner using details from table below$")]
+        public async Task TheProviderTriesToAddANewLearnerUsingDetailsFromTableBelow(Table table)
+        {
+            if (!context.ContainsKey(ScenarioKeys.ListOfApprenticeship))
+            {
+                await learnerDataOuterApiSteps.ProviderSubmitsAnILRRecord(1, EmployerType.NonLevy.ToString());
+            }
+
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var apprentice = listOfApprenticeship.FirstOrDefault();
+            var originalStartDate = apprentice.TrainingDetails.StartDate;
+            var originalEndDate = apprentice.TrainingDetails.EndDate;
+            var OltdDetails = table.CreateSet<OltdDetails>().ToList();
+
+            foreach (var item in OltdDetails)
+            {
+                //Update valid apprentice object with new start and end dates. Then push it as new apprentice details on SLD endpoint
+                apprentice.TrainingDetails.StartDate = originalStartDate.AddMonths(Convert.ToInt32(item.NewStartDate));
+                apprentice.TrainingDetails.EndDate = originalEndDate.AddMonths(Convert.ToInt32(item.NewEndDate));
+
+                listOfApprenticeship[0] = apprentice;
+                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+
+                // Push data on SLD end point  
+                await new LearnerDataOuterApiSteps(context).SLDPushDataIntoAS();
+                var page = await providerStepsHelper.GoToNonLevySelectLearnerPageViaAutoReservation();
+                await providerStepsHelper.TryAddFirstApprenticeFromILRList(page);
 
             }
 

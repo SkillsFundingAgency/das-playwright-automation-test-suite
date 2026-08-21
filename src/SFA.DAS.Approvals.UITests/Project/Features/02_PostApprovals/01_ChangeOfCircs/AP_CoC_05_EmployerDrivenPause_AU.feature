@@ -18,7 +18,4 @@ Data Requirements:
 @regression
 Scenario: AP_CoC_05_Verify employer can pause/freeze provider payments for AU learner via UI    
 	Given a Live AU learner record exists with Firstname: "DoNotUse_TestData" and LastName: "EmployerDrivenPauseAuLearner"
-	When employer "pause" payments status for the apprenticeship record
-	Then Commitments db is updated with the correct Freeze Payments Reason and Date for "Paused" status
-	When employer "unpause" payments status for the apprenticeship record
-	Then Commitments db is updated with the correct Freeze Payments Reason and Date for "Active" status
+	Then employer cannot pause this AU record

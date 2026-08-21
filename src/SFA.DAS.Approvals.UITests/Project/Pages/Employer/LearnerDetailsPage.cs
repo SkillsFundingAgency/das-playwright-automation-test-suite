@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
+﻿using MongoDB.Driver.Linq;
+using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Common;
 using System;
 
@@ -67,11 +68,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new ResumePaymentsToTrainingProviderPage(context));
         }
 
-        internal async Task<LearnerDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status, string rowName, DateTime date)
-        {
+        internal async Task<LearnerDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status, string rowName, DateTime? date)
+        {           
             await Assertions.Expect(ApprenticeStatusTag).ToContainTextAsync(status.ToString());
-            await Assertions.Expect(StatusDateTitle).ToContainTextAsync(rowName);
-            await Assertions.Expect(StatusDateValue).ToContainTextAsync(date.ToString("MMMM yyyy"));
+
+            if (date.HasValue)
+            {
+                string expectedDate = (status == ApprenticeshipStatus.Paused) ? date.Value.ToString("d MMM yyyy") : date.Value.ToString("MMMM yyyy");
+                await Assertions.Expect(StatusDateTitle).ToContainTextAsync(rowName);
+                await Assertions.Expect(StatusDateValue).ToContainTextAsync(expectedDate);
+            }
+            
             return this;
         }
 
@@ -94,7 +101,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         internal async Task<bool> IsEditApprenticeDetailsLinkAvailable() => await EditApprenticeDetailsLink.IsVisibleAsync();
         internal async Task<bool> IsEditVersionLinkAvailable() => await ChangeVersionLink.IsVisibleAsync();
         internal async Task<bool> IsEditPlannedTrainingEndDateLinkAvailable() => await EditPlannedTrainingEndDateLink.IsVisibleAsync();
-
-
+        internal async Task<bool> IsPymtStatusVisible() => await PaymentsStatusTag.IsVisibleAsync();
     }
+
 }
