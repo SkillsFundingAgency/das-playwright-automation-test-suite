@@ -47,6 +47,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
             return await client.PostAsJsonAsync(url + apiRoute, payload);
         }
 
+        internal async Task<HttpResponseMessage> PostLearningResumedEvent(LearningResumedEvent payload)
+        {
+            var functionKey = context.GetApprovalsConfig<ApprovalsConfig>().LearningResumedEventFunctionKey;
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("x-functions-key", functionKey);
+            var apiRoute = "LearningResumed";
+
+            return await client.PostAsJsonAsync(url + apiRoute, payload);
+        }
 
     }
 }
