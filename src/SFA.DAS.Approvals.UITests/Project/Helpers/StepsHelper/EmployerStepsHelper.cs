@@ -137,6 +137,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page3 =   await page2.ConfirmTrainingProviderDetails();
             var page4 = await page3.SelectProviderAddApprencticesAndSend();
             var cohortRef = await page4.GetCohortId();
+
+            await page4.VerifyTrainingStatusDetails(cohortRef, "Reserved funds");
             await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
         }
 
