@@ -69,7 +69,7 @@ public class certificateDetailsSteps(ScenarioContext context)
         var sqlHelper = new AssessorSqlHelper(objectContext, dbConfig);
         var dataHelper = new DigiCertsDataHelper();
 
-        await new DigiCertsClearMatchesPage(context).NavigatetoClearCache();
+     //   await new DigiCertsClearMatchesPage(context).NavigatetoClearCache();
 
         var authorisationPage = await new DigiCertsAuthorisationStartPage(context).clickContinue();
 
