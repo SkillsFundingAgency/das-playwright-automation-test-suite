@@ -1,57 +1,41 @@
-﻿using Azure;
-using Microsoft.Playwright;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using Reqnroll;
-using Reqnroll.Formatters.PayloadProcessing.Cucumber;
 using SFA.DAS.ConfigurationBuilder;
 using SFA.DAS.Digicerts.UITests.Project.Helpers;
 using SFA.DAS.Digicerts.UITests.Project.Tests.Pages;
 using SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Authorisation;
 using SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard;
-using SFA.DAS.Framework;
 using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.Login.Service.Project;
 using SFA.DAS.Login.Service.Project.Helpers;
 using SFA.DAS.ProvideFeedback.UITests.Project.Helpers;
-using System;
-using System.Net.Security;
-using System.Threading.Tasks;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 
 [Binding]
 public class certificateDetailsSteps(ScenarioContext context)
 {
+    private readonly IDistributedCache _distributedCache =
+        context.Get<IDistributedCache>();
 
     [Given(@"^The (.*) is logged into Apprenticeship Certificate Service after valid authentication$")]
     public async Task GivenTheApprenticeIsLoggedIntoApprenticeshipCertificateServiceAfterValidAuthentication(string user)
     {
         var homePage = await new DigiCertsHomePage(context).clickStart();
 
-        DigitalCertUser digiCertUser;
-
-        switch (user)
+        DigitalCertUser digiCertUser = user switch
         {
-            case "MultiStandardUser":
-                digiCertUser = context.GetUser<DigiCertMultiStandardUser>();
-                break;
-
-            case "MultiFrameworkUser":
-                digiCertUser = context.GetUser<DigiCertMultiFrameworkUser>();
-                break;
-
-            case "FrameworkUser":
-                digiCertUser = context.GetUser<DigiCertFrameworkUser>();
-                break;
-
-            case "StandardUser":
-                digiCertUser = context.GetUser<DigiCertStandardUser>();
-                break;
-
-            default:
-                throw new ArgumentException($"Invalid user type: {user}");
-        }
+            "StandardUser" => context.GetUser<DigiCertStandardUser>(),
+            "FrameworkUser" => context.GetUser<DigiCertFrameworkUser>(),
+            "MultiStandardUser" => context.GetUser<DigiCertMultiStandardUser>(),
+            "MultiFrameworkUser" => context.GetUser<DigiCertMultiFrameworkUser>(),
+            _ => throw new ArgumentException($"Invalid user type: {user}")
+        };
 
         await homePage.RemoveAuthenticationAsync(digiCertUser);
+
+        await ClearCacheMatches(digiCertUser.Id);
 
         var signedInPage = await homePage.enterLogin(digiCertUser);
 
@@ -59,7 +43,6 @@ public class certificateDetailsSteps(ScenarioContext context)
 
         await authorisationStartPage.verifyAuthorisationJourney();
     }
-
 
     [When(@"^(.*) answers the correct questions related to apprenticeship$")]
     public async Task WhenUserAnswersTheCorrectQuestionsRelatedToApprenticeship(string user)
@@ -69,18 +52,21 @@ public class certificateDetailsSteps(ScenarioContext context)
         var sqlHelper = new AssessorSqlHelper(objectContext, dbConfig);
         var dataHelper = new DigiCertsDataHelper();
 
-     //   await new DigiCertsClearMatchesPage(context).NavigatetoClearCache();
 
         var authorisationPage = await new DigiCertsAuthorisationStartPage(context).clickContinue();
 
-        (string firstName, string lastName) = user switch
+        DigitalCertUser digiCertUser = user switch
         {
-            "StandardUser" => GetUserName(context.GetUser<DigiCertStandardUser>().Email),
-            "FrameworkUser" => GetUserName(context.GetUser<DigiCertFrameworkUser>().Email),
-            "MultiStandardUser" => GetUserName(context.GetUser<DigiCertMultiStandardUser>().Email),
-            "MultiFrameworkUser" => GetUserName(context.GetUser<DigiCertMultiFrameworkUser>().Email),
+            "StandardUser" => context.GetUser<DigiCertStandardUser>(),
+            "FrameworkUser" => context.GetUser<DigiCertFrameworkUser>(),
+            "MultiStandardUser" => context.GetUser<DigiCertMultiStandardUser>(),
+            "MultiFrameworkUser" => context.GetUser<DigiCertMultiFrameworkUser>(),
             _ => throw new ArgumentException($"Invalid user type: {user}")
-        };            
+        };
+
+        var (firstName, lastName) = GetUserName(digiCertUser.Email);
+
+        await ClearCacheMatches(digiCertUser.Id);
 
         switch (user)
         {
@@ -120,7 +106,6 @@ public class certificateDetailsSteps(ScenarioContext context)
             dataHelper.GetNameFromEmail(email);
             return (dataHelper.UserFirstName, dataHelper.UserLastName);
         }
-
     }
 
     [Then(@"User is able to view the correct Standard learner certificate details")]
@@ -161,8 +146,6 @@ public class certificateDetailsSteps(ScenarioContext context)
     {
         await new DigiCertsSignedInPage(context).ClickSignOut();
 
-        await new DigiCertsClearMatchesPage(context).NavigatetoHomePage();
-
         var homePage = await new DigiCertsHomePage(context).clickStart();
 
         DigitalCertUser digiCertUser = user switch
@@ -173,6 +156,8 @@ public class certificateDetailsSteps(ScenarioContext context)
             "StandardUser" => context.GetUser<DigiCertStandardUser>(),
             _ => throw new ArgumentException($"Invalid user type: {user}")
         };
+
+        await ClearCacheMatches(digiCertUser.Id);
 
         var signedInPage = await homePage.enterLogin(digiCertUser);
 
@@ -196,8 +181,14 @@ public class certificateDetailsSteps(ScenarioContext context)
             default:
                 throw new ArgumentException($"Invalid user type: {user}");
         }
-
     }
 
+    private async Task ClearCacheMatches(string govUkIdentifier)
+    {
+        var matchesCacheKey = $"DigitalCertificates:Matches:{govUkIdentifier}";
+        var matchFailCountCacheKey = $"DigitalCertificates:MatchFailCount:{govUkIdentifier}";
 
+        await _distributedCache.RemoveAsync(matchesCacheKey);
+        await _distributedCache.RemoveAsync(matchFailCountCacheKey);
+    }
 }

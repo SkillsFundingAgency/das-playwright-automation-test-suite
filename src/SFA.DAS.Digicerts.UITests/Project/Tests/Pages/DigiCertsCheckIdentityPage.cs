@@ -1,16 +1,8 @@
-﻿using Microsoft.Playwright;
-using Microsoft.Playwright.NUnit;
-using NUnit.Framework;
-using NUnit.Framework;
+﻿using System.Threading.Tasks;
+using Microsoft.Playwright;
 using SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Authorisation;
 using SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard;
 using SFA.DAS.Framework;
-using SFA.DAS.Login.Service.Project;
-using SFA.DAS.Login.Service.Project.Helpers;
-using System;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-
 
 namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
 {
@@ -18,11 +10,11 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
     {
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Check you've proved your identity");
 
-        public async Task<DigiCertsClearMatchesPage> verifyAuthorisationJourney()
+        public async Task<DigiCertsAuthorisationStartPage> verifyAuthorisationJourney()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
 
-            return await VerifyPageAsync(() => new DigiCertsClearMatchesPage(context));
+            return await VerifyPageAsync(() => new DigiCertsAuthorisationStartPage(context));
         }
 
         public async Task<DigiCertsDashboardPage> verifyDashBoardPage()
