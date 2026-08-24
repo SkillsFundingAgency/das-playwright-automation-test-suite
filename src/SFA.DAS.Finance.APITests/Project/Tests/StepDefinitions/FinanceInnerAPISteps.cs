@@ -281,7 +281,7 @@ public class FinanceInnerAPISteps
     public async Task GivenPostEnglishFractionsViaApi()
     {
         // Generate a unique EmpRef for this scenario to avoid parallel test conflicts
-        var uniqueEmpRef = $"777/GDS{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
+        var uniqueEmpRef = @"^\d{3}/[A-Z]{3}\d{2}[A-Z]$";
         var payloadContent = await _stepHelper.PrepareEnglishFractionsPayload("EnglishFractionsTemplate.json", empRefOverride: uniqueEmpRef);
         var response = await _innerApiRestClient.PostEnglishFractions(payloadContent);
 
@@ -292,7 +292,7 @@ public class FinanceInnerAPISteps
     public async Task GivenPostEnglishFractionsViaApiWithUpdateRequiredFalse()
     {
         // Generate a unique EmpRef for this scenario to avoid parallel interference
-        var uniqueEmpRef = $"777/GDS{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
+        var uniqueEmpRef = @"^\d{3}/[A-Z]{3}\d{2}[A-Z]$";
 
         // Seed the record so it already exists in DB (updateRequired=true)
         var seedPayload = await _stepHelper.PrepareEnglishFractionsPayload("EnglishFractionsTemplate.json", empRefOverride: uniqueEmpRef);
