@@ -10,6 +10,9 @@ SELECT
     CollectionPeriodYear,
     Ukprn,
     CourseName,
+    ApprenticeshipId,
+    Type,
+    RequiredPaymentId,
     CreatedBy,
     CorrelationId
 FROM [employer_financial].[TransferStaging]

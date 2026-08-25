@@ -156,6 +156,9 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
                 "collectionPeriodYear",
                 "ukprn",
                 "courseName",
+                "apprenticeshipId",
+                "type",
+                "requiredPaymentId",
                 "createdBy",
                 "correlationId"
             };

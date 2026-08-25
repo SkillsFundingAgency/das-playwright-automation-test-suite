@@ -138,7 +138,13 @@ public class FinanceInnerAPISteps
     public async Task GivenPostNewTransfersToTransferStagingTableViaApi()
     {
         var payloadContent = await _stepHelper.PrepareTransferStagingPayload("TransferStagingTemplate.json");
-        await _innerApiRestClient.PostTransferStaging(payloadContent);
+        var response = await _innerApiRestClient.PostTransferStaging(payloadContent);
+
+        Assert.That(response, Is.Not.Null, "Transfer staging POST response was null.");
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Conflict), $"Unexpected transfer staging response status: {response.StatusCode}. Body: {response.Content}");
+        Assert.That(response.Content, Does.Not.Contain("ApprenticeshipId must be greater than 0"), $"Transfer staging validation error returned: {response.Content}");
+        Assert.That(response.Content, Does.Not.Contain("Type is required"), $"Transfer staging validation error returned: {response.Content}");
+        Assert.That(response.Content, Does.Not.Contain("RequiredPaymentId is required"), $"Transfer staging validation error returned: {response.Content}");
     }
 
     [When(@"find record in TransferStaging table")]

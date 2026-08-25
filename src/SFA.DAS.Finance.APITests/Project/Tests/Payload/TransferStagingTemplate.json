@@ -12,6 +12,9 @@
       "collectionPeriodYear": 2026,
       "ukprn": 10012345,
       "courseName": "Level 3 Engineering Technician",
+      "ApprenticeshipId": 25474,
+      "Type": "Levy",
+      "RequiredPaymentId": "bf541a9a-d5e5-41cd-9893-ddcef2c033e8",
       "createdBy": "finance-system",
       "correlationId": "a1f4c7e2-9d34-4b1e-8a9f-2c7d6e5f1234"
     }
