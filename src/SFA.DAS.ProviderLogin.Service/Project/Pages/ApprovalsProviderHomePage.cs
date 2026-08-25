@@ -108,7 +108,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
 
     public async Task<ProviderManageYourLearnersPage>  GoToProviderManageYourApprenticePage()
     {
-        await page.GetByRole(AriaRole.Heading, new() { Name = "Manage your apprentices" }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Heading, new() { Name = "Manage your learners" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderManageYourLearnersPage(context));
     }
@@ -219,7 +219,7 @@ public class ProviderApprenticeRequestsPage(ScenarioContext context) : InterimPr
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Learner requests");
     }
 
     public async Task SelectCohort(string cohortReference)
