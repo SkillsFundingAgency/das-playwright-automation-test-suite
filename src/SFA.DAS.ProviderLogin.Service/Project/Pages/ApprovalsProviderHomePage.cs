@@ -94,7 +94,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
 
     public async Task<ProviderApprenticeRequestsPage> GoToApprenticeRequestsPage()
     {
-        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Apprentice requests" }).ClickAsync();
+        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Learner requests" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderApprenticeRequestsPage(context));
     }
@@ -108,7 +108,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
 
     public async Task<ProviderManageYourLearnersPage>  GoToProviderManageYourApprenticePage()
     {
-        await page.GetByRole(AriaRole.Heading, new() { Name = "Manage your learners" }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Heading, new() { Name = "Manage learners" }).GetByRole(AriaRole.Link).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderManageYourLearnersPage(context));
     }
