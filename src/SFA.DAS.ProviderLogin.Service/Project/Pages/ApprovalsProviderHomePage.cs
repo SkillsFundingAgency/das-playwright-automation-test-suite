@@ -219,7 +219,7 @@ public class ProviderApprenticeRequestsPage(ScenarioContext context) : InterimPr
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Learner requests");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
     }
 
     public async Task SelectCohort(string cohortReference)
