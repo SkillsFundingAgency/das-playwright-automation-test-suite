@@ -59,7 +59,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
                     //Check history logs:
                     var page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
-                    await page2.AssertChangeHistoryRow(DateTime.Now, "ILR Learner status changed from Live to Withdrawn", "Auto approved");
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "Status change from Live to Stopped", "Auto approved");
                     break;
                 case "Paused":
                     await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Paused, "Apprenticeship pause date", expectedDate);
