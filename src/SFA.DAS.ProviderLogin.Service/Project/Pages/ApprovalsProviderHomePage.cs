@@ -108,7 +108,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
 
     public async Task<ProviderManageYourLearnersPage>  GoToProviderManageYourApprenticePage()
     {
-        await page.GetByRole(AriaRole.Heading, new() { Name = "Manage learners" }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage learners" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderManageYourLearnersPage(context));
     }
