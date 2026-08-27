@@ -12,7 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         #region Locators        
         private ILocator EditApprenticeDetailsLink => page.Locator("#edit-apprentice-link");
-        private ILocator ManageYourApprenticesLinks => page.GetByRole(AriaRole.Link, new() { Name = "Manage your learners" });
+        private ILocator ManageYourApprenticesLinks => page.GetByRole(AriaRole.Link, new() { Name = "Manage learners" });
         private ILocator Banner(string Header, string Body) => page.GetByLabel(Header).Locator("div").Filter(new() { HasText = Body });
         private ILocator ReviewChangesLink => page.GetByRole(AriaRole.Link, new() { Name = "Review changes" });
         private ILocator ViewChangesLink => page.GetByRole(AriaRole.Link, new() { Name = "View changes" });
