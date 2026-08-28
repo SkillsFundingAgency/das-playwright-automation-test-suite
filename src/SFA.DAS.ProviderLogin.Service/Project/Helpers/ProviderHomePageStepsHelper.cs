@@ -11,7 +11,18 @@ public class ProviderHomePageStepsHelper(ScenarioContext context) : FrameworkBas
 
     private static string Provider_BaseUrl => UrlConfig.Provider_BaseUrl;
 
-    public async Task<ProviderHomePage> GoToProviderHomePage(bool newTab) => await GoToProviderHomePage(context.GetProviderConfig<ProviderConfig>(), newTab);
+    public async Task<ProviderHomePage> GoToProviderHomePage(bool newTab)
+    {
+        bool isRaaTransfer = context.ScenarioInfo.Tags.Contains("raatransfer");
+        if (isRaaTransfer)
+        {
+            return await GoToProviderHomePage(context.GetProviderNoPermissionConfig<ProviderNoPermissionsConfig>(), newTab);
+        }
+        else
+        {
+            return await GoToProviderHomePage(context.GetProviderConfig<ProviderConfig>(), newTab);
+        }
+    }
 
     public async Task<ProviderHomePage> GoToProviderHomePage(ProviderLoginUser login, bool newTab)
     {

@@ -33,6 +33,15 @@ public class EmployerCreateDraftAdvertSteps(ScenarioContext context)
     [Then(@"^the advert is saved as a draft$")]
     public async Task ThenTheVacancyIsSavedAsADraft() => await GoToYourAdvertFromDraftAdverts();
 
+    [Then(@"^the transferred advert is saved as a closed$")]
+    public async Task ThenTheVacancyIsSavedAsAClosed() => await GoToYourAdvertFromClosedAdverts();
+
+    [Then(@"^the transferred advert is saved as a rejected$")]
+    public async Task ThenTheVacancyIsSavedAsARejected() => await GoToYourAdvertFromRejectedAdverts();
+
+    [Then(@"^the transferred advert is saved as a archived$")]
+    public async Task ThenTheVacancyIsSavedAsAArchived() => await GoToYourAdvertFromArchivedAdverts();
+
     [When(@"^Employer cancels after saving the title of the advert$")]
     public async Task EmployerCancelsAfterSavingTheTitleOfTheAdvert() => _yourApprenticeshipAdvertsHomePage = await _stepsHelper.CancelAdvert();
 
@@ -43,6 +52,33 @@ public class EmployerCreateDraftAdvertSteps(ScenarioContext context)
         var page = await _yourApprenticeshipAdvertsHomePage.GoToYourAdvertFromDraftAdverts();
 
         return await page.CreateAnApprenticeshipAdvertPage();
+    }
+
+    private async Task GoToYourAdvertFromClosedAdverts()
+    {
+        _yourApprenticeshipAdvertsHomePage = new YourApprenticeshipAdvertsHomePage(context);
+
+        var page = await _yourApprenticeshipAdvertsHomePage.GoToYourAdvertFromClosedAdverts();
+
+        await page.ManageClosedAdvert();
+    }
+
+    private async Task GoToYourAdvertFromRejectedAdverts()
+    {
+        _yourApprenticeshipAdvertsHomePage = new YourApprenticeshipAdvertsHomePage(context);
+
+        var page = await _yourApprenticeshipAdvertsHomePage.GoToYourAdvertFromRejectedAdverts();
+
+        await page.ManageRejectedAdvert();
+    }
+
+    private async Task GoToYourAdvertFromArchivedAdverts()
+    {
+        _yourApprenticeshipAdvertsHomePage = new YourApprenticeshipAdvertsHomePage(context);
+
+        var page = await _yourApprenticeshipAdvertsHomePage.GoToYourAdvertFromArchivedAdverts();
+
+        await page.ManageArchivedAdvert();
     }
 }
 

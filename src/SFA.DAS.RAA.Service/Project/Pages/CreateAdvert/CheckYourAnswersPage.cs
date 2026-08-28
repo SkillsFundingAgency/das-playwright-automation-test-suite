@@ -4,7 +4,7 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEpc ? "Check your answers before submitting your vacancy" : isRaaEmployer ? "Check your answers" : "Check your answers before submitting your vacancy";
+        string PageTitle = (isRaaEpc || isRaaTransfer) ? "Check your answers before submitting your vacancy" : isRaaEmployer ? "Check your answers" : "Check your answers before submitting your vacancy";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
@@ -19,7 +19,7 @@ public class CheckYourAnswersPage(ScenarioContext context) : RaaBasePage(context
 
     public async Task<PreviewYourAdvertOrVacancyPage> PreviewAdvert()
     {
-        string linkText = isRaaEpc ? "Preview vacancy before" : isRaaEmployer ? "Preview advert before" : "Preview vacancy before";
+        string linkText = (isRaaEpc || isRaaTransfer) ? "Preview vacancy before" : isRaaEmployer ? "Preview advert before" : "Preview vacancy before";
         await page.GetByRole(AriaRole.Link, new() { Name = linkText }).ClickAsync();
 
         return await VerifyPageAsync(() => new PreviewYourAdvertOrVacancyPage(context));
@@ -71,4 +71,6 @@ public class VacancyReferencePage(ScenarioContext context) : RaaBasePage(context
     }
 
     public async Task<string> GetConfirmationMessage() => await page.Locator(VacancyConfirmationSelector).TextContentAsync();
+
+    public async Task ClickSignout() => await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();
 }

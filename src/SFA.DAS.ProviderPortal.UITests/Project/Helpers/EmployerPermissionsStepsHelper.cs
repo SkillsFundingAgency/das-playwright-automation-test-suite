@@ -85,6 +85,25 @@ public class EmployerPermissionsStepsHelper(ScenarioContext context)
         return await page2.GoToHomePage();
     }
 
+    public async Task<HomePage> UpdateProviderRecruitPermission(ProviderConfig providerConfig, (AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permissions, bool addPermissions)
+    {
+        var page = await OpenProviderPermissions();
+
+        var shouldUpdatePermissions = (addPermissions && await page.IsRecruitPermissionsSetToNo()) || (!addPermissions && await page.IsRecruitPermissionsSetToYes());
+
+        if (shouldUpdatePermissions)
+        {
+            var permissionsPage = await page.SelectChangePermissions(providerConfig.Ukprn);
+            var confirmationPage = await permissionsPage.AddOrSetPermissions(permissions);
+
+            await confirmationPage.VerifyYouHaveSetPermissionNotification();
+
+            return await confirmationPage.GoToHomePage();
+        }
+
+        return await page.GoToHomePage();
+    }
+
     internal async Task<ManageTrainingProvidersPage> OpenProviderPermissions() => await new ManageTrainingProvidersLinkHomePage(context).OpenRelationshipPermissions();
 
 }

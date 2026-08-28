@@ -12,6 +12,7 @@ public static class ScenarioContextExtension
     private const string ApprovalsProjectConfigKey = "approvalsprojectconfigkey";
     private const string FAAProjectConfigKey = "faaprojectconfigkey";
     private const string ProviderPermissionConfigKey = "providerpermissionconfigkey";
+    private const string ProviderNoPermissionConfigKey = "providernopermissionconfigkey";
     private const string PerfTestProviderPermissionsConfigKey = "perftestproviderpermissionconfigkey";
     private const string TransfersProjectConfigKey = "transfersprojectconfigkey";
     private const string ChangeOfPartyConfigKey = "changeofpartyconfigkey";
@@ -27,6 +28,7 @@ public static class ScenarioContextExtension
     public static void SetApprovalsConfig<T>(this ScenarioContext context, T value) => Set(context, value, ApprovalsProjectConfigKey);
     public static void SetProviderConfig<T>(this ScenarioContext context, T value) => Set(context, value, ProviderConfigKey);
     public static void SetProviderPermissionConfig<T>(this ScenarioContext context, T value) => Set(context, value, ProviderPermissionConfigKey);
+    public static void SetProviderNoPermissionConfig<T>(this ScenarioContext context, T value) => Set(context, value, ProviderNoPermissionConfigKey);
     public static void SetPerfTestProviderPermissionsConfig<T>(this ScenarioContext context, T value) => Set(context, value, PerfTestProviderPermissionsConfigKey);
     public static void SetTransfersConfig<T>(this ScenarioContext context, T value) => Set(context, value, TransfersProjectConfigKey);
     public static void SetChangeOfPartyConfig<T>(this ScenarioContext context, T value) => Set(context, value, ChangeOfPartyConfigKey);
@@ -50,6 +52,7 @@ public static class ScenarioContextExtension
     public static T GetApprovalsConfig<T>(this ScenarioContext context) => Get<T>(context, ApprovalsProjectConfigKey);
     public static T GetProviderConfig<T>(this ScenarioContext context) => Get<T>(context, ProviderConfigKey);
     public static T GetProviderPermissionConfig<T>(this ScenarioContext context) => Get<T>(context, ProviderPermissionConfigKey);
+    public static T GetProviderNoPermissionConfig<T>(this ScenarioContext context) => Get<T>(context, ProviderNoPermissionConfigKey);
     public static T GetChangeOfPartyConfig<T>(this ScenarioContext context) => Get<T>(context, ChangeOfPartyConfigKey);
     public static T GetPortableFlexiJobProviderConfig<T>(this ScenarioContext context) => Get<T>(context, PortableFlexiJobProviderConfigKey);
     public static T GetPerfTestProviderPermissionsConfig<T>(this ScenarioContext context) => Get<T>(context, PerfTestProviderPermissionsConfigKey);
