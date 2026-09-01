@@ -2,8 +2,8 @@
 
 public class Application_Details_Page (ScenarioContext context) : BasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Application details" })).ToBeVisibleAsync();
-    
+    public override async Task VerifyPage() =>   await Assertions.Expect(page.GetByRole(AriaRole.Heading, new(){Name = "Application details",Exact = true })).ToBeVisibleAsync();
+
     public async Task<Application_Details_Page> SelectApplicationAsQfauOfqualAndIfateUser(string application)
     {
         var rows = page.Locator($"tr:has-text('{application}')");
@@ -47,15 +47,15 @@ public class Application_Details_Page (ScenarioContext context) : BasePage(conte
     {
         // A user cannot be assigned as Reviewer 1 and Reviewer 2 for the same application.
         await page.SelectOptionAsync("#Reviewer1", new[] { reviewer1 });
-        await page.Locator("form:has(#Reviewer1)").GetByRole(AriaRole.Button, new() { Name = "Change" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         await page.SelectOptionAsync("#Reviewer2", new[] { reviewer1 });
-        await page.Locator("form:has(#Reviewer2)").GetByRole(AriaRole.Button, new() { Name = "Change" }).ClickAsync();
-        var reviewerError = page.Locator("a[href='#Reviewer2']");        
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+        var reviewerError = page.Locator("a[href='#Reviewer1']");        
         await Assertions.Expect(reviewerError).ToContainTextAsync("Reviewer 1 and 2 must be different people");
         await page.SelectOptionAsync("#Reviewer1", new[] { reviewer1 });
-        await page.Locator("form:has(#Reviewer1)").GetByRole(AriaRole.Button, new() { Name = "Change" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         await page.SelectOptionAsync("#Reviewer2", new[] { reviewer2 });
-        await page.Locator("form:has(#Reviewer2)").GetByRole(AriaRole.Button, new() { Name = "Change" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         return await VerifyPageAsync(() => new Application_Details_Page(context));
     }
 
