@@ -26,7 +26,7 @@ public class Admin_Page(ScenarioContext context) : BasePage(context)
     public async Task SelectOptions(string option)
     {
         var optionLocator = page.Locator($"a.govuk-link:has-text(\"{option}\")");
-        await optionLocator.First.ClickAsync();
+        await optionLocator.ClickAsync();
     }
 
     public async Task<CheckDfeSignInPage> ClickLogOut()
