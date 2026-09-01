@@ -26,7 +26,7 @@ public class Admin_Page(ScenarioContext context) : BasePage(context)
     public async Task SelectOptions(string option)
     {
         var optionLocator = page.Locator($"a.govuk-link:has-text(\"{option}\")");
-        await optionLocator.ClickAsync();
+        await optionLocator.First.ClickAsync();
     }
 
     public async Task<CheckDfeSignInPage> ClickLogOut()
@@ -37,7 +37,7 @@ public class Admin_Page(ScenarioContext context) : BasePage(context)
 
     public async Task<Admin_Page> ClickDashboard()
     {
-        await page.GetByRole(AriaRole.Link, new() {Name = "Dashboard",Exact = true}).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() {Name = "Homepage",Exact = true}).ClickAsync();
         return await VerifyPageAsync(() => new Admin_Page(context));
     }
 
