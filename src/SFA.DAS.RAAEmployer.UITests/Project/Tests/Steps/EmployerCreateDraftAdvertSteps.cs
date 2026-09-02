@@ -49,6 +49,7 @@ public class EmployerCreateDraftAdvertSteps(ScenarioContext context)
 
     private async Task<CreateAnApprenticeshipAdvertOrVacancyPage> GoToYourAdvertFromDraftAdverts()
     {
+        _yourApprenticeshipAdvertsHomePage = new YourApprenticeshipAdvertsHomePage(context);
         var page = await _yourApprenticeshipAdvertsHomePage.GoToYourAdvertFromDraftAdverts();
 
         return await page.CreateAnApprenticeshipAdvertPage();

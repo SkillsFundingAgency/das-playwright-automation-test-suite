@@ -20,9 +20,10 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Draft adverts");
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
+        //await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        //await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        await SearchVacancyMultipleTimes();
 
         await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Edit and submit" }).ClickAsync();
     }
@@ -31,11 +32,9 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
     {
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Closed adverts");
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
+        await SearchVacancyMultipleTimes();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
-
-        if(isRaaTransfer)
+        if (isRaaTransfer)
         {
             await Assertions.Expect(page.Locator(".govuk-tag--purple")).ToContainTextAsync("Transferred from provider");
         }
@@ -52,9 +51,11 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
     {
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Rejected adverts");
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
+        //await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        //await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+        await SearchVacancyMultipleTimes();
 
         if (isRaaTransfer)
         {
@@ -75,9 +76,11 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
     {
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Archived adverts");
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
+        //await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        //await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+        await SearchVacancyMultipleTimes();
 
         if (isRaaTransfer)
         {
@@ -123,6 +126,31 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
         await page.GetByRole(AriaRole.Link, new() { Name = "Review" }).First.ClickAsync();
 
         return await VerifyPageAsync(() => new SharedApplicatinsForAVacancyPage(context));
+    }
+
+    protected async Task SearchVacancyMultipleTimes()
+    {
+        var advertCountMessage = page.Locator(".govuk-body.govuk-\\!-font-weight-bold");
+
+        for (int attempt = 1; attempt <= 15; attempt++)
+        {
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" })
+                .FillAsync(vacancyTitleDataHelper.VacancyTitle);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Search" })
+                .ClickAsync();
+
+            var messageText = await advertCountMessage.TextContentAsync();
+
+            if (!string.IsNullOrWhiteSpace(messageText) &&
+                messageText.Contains($"{vacancyTitleDataHelper.VacancyTitle}") &&
+                messageText.Trim().StartsWith('1'))
+            {
+                break;
+            }
+
+            await page.WaitForTimeoutAsync(2000);
+        }
     }
 }
 

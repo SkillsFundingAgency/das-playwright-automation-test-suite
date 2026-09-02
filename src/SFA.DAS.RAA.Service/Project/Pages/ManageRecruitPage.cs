@@ -74,7 +74,7 @@ public class ArchiveVacancyPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "Do you want to archive this advert?" : "Do you want to archive this vacancy?";
+        string PageTitle = isRaaTransfer ? "Do you want to archive this vacancy?" : isRaaEmployer ? "Do you want to archive this advert?" : "Do you want to archive this vacancy?";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }

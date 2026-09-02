@@ -61,7 +61,7 @@ Scenario: RAA_Transferred_01_5 - Transfer an archived vacancy from provider to e
 	Then the Provider can close the vacancy
 	And the Provider can archive the vacancy
 	When the Employer revokes permission to the provider to create advert
-	Then the advert is saved as a archived
+	Then the transferred advert is saved as a archived
 
 @raa
 @raa-epc

@@ -15,6 +15,7 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
 
     public async Task<EmployerDraftVacanciesListPage> GoToYourAdvertFromDraftAdverts()
     {
+        await page.Locator("nav[aria-label='Menu']").GetByRole(AriaRole.Link, new() { Name = "Adverts" }).ClickAsync();
         await page.GetByRole(AriaRole.Link, new() { Name = "Draft adverts" }).ClickAsync();
 
         return await VerifyPageAsync(() => new EmployerDraftVacanciesListPage(context));

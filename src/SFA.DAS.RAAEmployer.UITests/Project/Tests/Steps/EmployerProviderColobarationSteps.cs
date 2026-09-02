@@ -41,7 +41,14 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
         [Given(@"^the Employer grants permission to the provider to create advert with review option$")]
         public async Task GivenTheEmployerGrantsPermissionToTheProviderToCreateAdvertWithReviewOption()
         {
-            _loginUser = _context.GetUser<RAAEmployerProviderPermissionUser>();
+            if (_context.ScenarioInfo.Tags.Contains("raatransfer"))
+            {
+                _loginUser = _context.GetUser<RAAEmployerProviderNoPermissionUser>();
+            }
+            else
+            {
+                _loginUser = _context.GetUser<RAAEmployerProviderPermissionUser>();
+            }
 
             await _rAAEmployerLoginHelper.GoToHomePage(_loginUser);
 
@@ -52,6 +59,11 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
 
             _employerPermissionsStepsHelper.SetRecruitApprenticesPermission(_providerPermissionConfig.Ukprn, loginUser.PermissionOrganisationName);
             */
+
+            if (_context.ScenarioInfo.Tags.Contains("raatransfer"))
+            {
+                await _employerPermissionsStepsHelper.UpdateProviderRecruitPermission(_providerConfig, (AddApprenticePermissions.NoToAddApprenticeRecords, RecruitApprenticePermissions.YesRecruitApprenticesButEmployerWillReview), true);
+            }
         }
 
         [Given(@"^the Employer grants permission to the provider to create advert with review option set as Yes$")]
@@ -67,7 +79,11 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
             }
 
             await _rAAEmployerLoginHelper.GoToHomePage(_loginUser);
-            await _employerPermissionsStepsHelper.UpdateProviderRecruitPermission(_providerConfig, (AddApprenticePermissions.NoToAddApprenticeRecords, RecruitApprenticePermissions.YesRecruitApprentices), true);
+
+            if(_context.ScenarioInfo.Tags.Contains("raatransfer"))
+            {
+                await _employerPermissionsStepsHelper.UpdateProviderRecruitPermission(_providerConfig, (AddApprenticePermissions.NoToAddApprenticeRecords, RecruitApprenticePermissions.YesRecruitApprentices), true);
+            }
         }
 
         [When(@"^the Employer revokes permission to the provider to create advert$")]
