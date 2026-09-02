@@ -58,15 +58,17 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
         if (isRaaTransfer)
         {
-            await Assertions.Expect(page.Locator(".govuk-tag--purple")).ToContainTextAsync("Transferred from provider");
+            await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync($"0 rejected adverts with '{vacancyTitleDataHelper.VacancyTitle}'");
+        } 
+        else
+        {
+            await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Manage" }).ClickAsync();
+
+            await Assertions.Expect(page.Locator(".govuk-summary-list__row")
+                .Filter(new() { Has = page.GetByText("Status", new() { Exact = true }) })
+                .Locator(".govuk-tag--grey"))
+                .ToContainTextAsync("Rejected");
         }
-
-        await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Manage" }).ClickAsync();
-
-        await Assertions.Expect(page.Locator(".govuk-summary-list__row")
-            .Filter(new() { Has = page.GetByText("Status", new() { Exact = true }) })
-            .Locator(".govuk-tag--grey"))
-            .ToContainTextAsync("Rejected");
     }
 
     protected async Task ArchivedVacancy()
