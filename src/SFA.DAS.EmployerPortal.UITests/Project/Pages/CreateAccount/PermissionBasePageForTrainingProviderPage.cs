@@ -96,17 +96,17 @@ public class ManageTrainingProvidersPage(ScenarioContext context) : EmployerPort
 
     private static string NotificationBanner => ".govuk-notification-banner";
 
-    private ILocator RecruitApprenticesCell => page.Locator("td[headers='recruit-apprentices']");
-
+    private ILocator RecruitApprenticesCell() => page.Locator($"tr:has(td:has-text('CHICHESTER COLLEGE GROUP'))")
+        .Locator("td[headers='recruit-apprentices']");
     public async Task<bool> IsRecruitPermissionsSetToNo()
     {
-        var text = await RecruitApprenticesCell.TextContentAsync();
+        var text = await RecruitApprenticesCell().TextContentAsync();
         return text?.Trim() != "Yes";
     }
 
     public async Task<bool> IsRecruitPermissionsSetToYes()
     {
-        var text = await RecruitApprenticesCell.TextContentAsync();
+        var text = await RecruitApprenticesCell().TextContentAsync();
         return text?.Trim() == "Yes";
     }
 
