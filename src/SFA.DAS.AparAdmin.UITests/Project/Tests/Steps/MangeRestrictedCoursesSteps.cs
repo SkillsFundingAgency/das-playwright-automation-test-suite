@@ -12,6 +12,7 @@ public class MangeRestrictedCoursesSteps
 {
     private readonly ScenarioContext _context;
 
+
     public MangeRestrictedCoursesSteps(ScenarioContext context)
     {
         _context = context;
@@ -31,5 +32,19 @@ public class MangeRestrictedCoursesSteps
         return await new ManageTrainingProviderInformationPage(_context)
             .VerifyPageAsync(() => new ManageTrainingProviderInformationPage(_context));
     }
+
+    [When(@"the user searches and filters for a course")]
+    public async Task WhenTheUserSearchesAndFiltersForACourse()
+    {
+        await ManageTrainingProviderInformationPage.SearchCourse();
+    }
+    
+    [Then(@"the user is able to verify results for the filters set")]
+    public async Task ThenTheUserIsAbleToVerifyResultsForTheFilterSet()
+    {
+        await ManageTrainingProviderInformationPage.ApplyCouresAndVerifyResult();
+    }
+
+    
 }
 
