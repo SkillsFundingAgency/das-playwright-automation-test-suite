@@ -85,11 +85,13 @@ public class EmployerPermissionsStepsHelper(ScenarioContext context)
         return await page2.GoToHomePage();
     }
 
-    public async Task<HomePage> UpdateProviderRecruitPermission(ProviderConfig providerConfig, (AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permissions, bool addPermissions)
+    public async Task<HomePage> UpdateProviderRecruitPermission(ProviderConfig providerConfig, (AddApprenticePermissions cohortpermission, RecruitApprenticePermissions recruitpermission) permissions)
     {
         var page = await OpenProviderPermissions();
 
-        var shouldUpdatePermissions = (addPermissions && await page.IsRecruitPermissionsSetToNo()) || (!addPermissions && await page.IsRecruitPermissionsSetToYes());
+        var shouldUpdatePermissions = (permissions.recruitpermission == RecruitApprenticePermissions.YesRecruitApprentices && !await page.IsRecruitPermissionsSetToYes()) ||
+            (permissions.recruitpermission == RecruitApprenticePermissions.YesRecruitApprenticesButEmployerWillReview && !await page.IsRecruitPermissionsSetToReview()) ||
+            (permissions.recruitpermission == RecruitApprenticePermissions.NoToRecruitApprentices && !await page.IsRecruitPermissionsSetToNo());
 
         if (shouldUpdatePermissions)
         {

@@ -36,6 +36,9 @@ public class EmployerCreateDraftAdvertSteps(ScenarioContext context)
     [Then(@"^the transferred advert is saved as a closed$")]
     public async Task ThenTheVacancyIsSavedAsAClosed() => await GoToYourAdvertFromClosedAdverts();
 
+    [Then(@"^the transferred advert is saved as a draft")]
+    public async Task ThenTheTransferredVacancyIsSavedAsADraft() => await GoToYourAdvertFromDraftAdvertsTransferred();
+
     [Then(@"^the transferred advert is saved as a rejected$")]
     public async Task ThenTheVacancyIsSavedAsARejected() => await GoToYourAdvertFromRejectedAdverts();
 
@@ -53,6 +56,14 @@ public class EmployerCreateDraftAdvertSteps(ScenarioContext context)
         var page = await _yourApprenticeshipAdvertsHomePage.GoToYourAdvertFromDraftAdverts();
 
         return await page.CreateAnApprenticeshipAdvertPage();
+    }
+
+    private async Task GoToYourAdvertFromDraftAdvertsTransferred()
+    {
+        _yourApprenticeshipAdvertsHomePage = new YourApprenticeshipAdvertsHomePage(context);
+        var page = await _yourApprenticeshipAdvertsHomePage.GoToYourAdvertFromDraftAdverts();
+
+        await page.ManageDraftAdvert();
     }
 
     private async Task GoToYourAdvertFromClosedAdverts()

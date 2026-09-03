@@ -62,7 +62,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
 
             if (_context.ScenarioInfo.Tags.Contains("raatransfer"))
             {
-                await _employerPermissionsStepsHelper.UpdateProviderRecruitPermission(_providerConfig, (AddApprenticePermissions.NoToAddApprenticeRecords, RecruitApprenticePermissions.YesRecruitApprenticesButEmployerWillReview), true);
+                await _employerPermissionsStepsHelper.UpdateProviderRecruitPermission(_providerConfig, (AddApprenticePermissions.NoToAddApprenticeRecords, RecruitApprenticePermissions.YesRecruitApprenticesButEmployerWillReview));
             }
         }
 
@@ -82,7 +82,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
 
             if(_context.ScenarioInfo.Tags.Contains("raatransfer"))
             {
-                await _employerPermissionsStepsHelper.UpdateProviderRecruitPermission(_providerConfig, (AddApprenticePermissions.NoToAddApprenticeRecords, RecruitApprenticePermissions.YesRecruitApprentices), true);
+                await _employerPermissionsStepsHelper.UpdateProviderRecruitPermission(_providerConfig, (AddApprenticePermissions.NoToAddApprenticeRecords, RecruitApprenticePermissions.YesRecruitApprentices));
             }
         }
 
@@ -101,7 +101,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
             await _employerHomePageStepsHelper.NavigateToEmployerApprenticeshipService(true);
 
             //await _rAAEmployerLoginHelper.GoToHomePage(_loginUser);
-            await _employerPermissionsStepsHelper.UpdateProviderRecruitPermission(_providerConfig, (AddApprenticePermissions.NoToAddApprenticeRecords, RecruitApprenticePermissions.NoToRecruitApprentices), false);
+            await _employerPermissionsStepsHelper.UpdateProviderRecruitPermission(_providerConfig, (AddApprenticePermissions.NoToAddApprenticeRecords, RecruitApprenticePermissions.NoToRecruitApprentices));
         }
 
         [When(@"^the Provider submits a vacancy to the employer for review$")]

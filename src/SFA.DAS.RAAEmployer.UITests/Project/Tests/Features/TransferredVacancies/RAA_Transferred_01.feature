@@ -47,7 +47,7 @@ Scenario: RAA_Transferred_01_4 - Transfer a pending DfE review vacancy from prov
 	Given the Employer grants permission to the provider to create advert with review option set as Yes
 	When the Provider submits a vacancy to the DfE for review
 	And the Employer revokes permission to the provider to create advert
-	Then the advert is saved as a draft
+	Then the transferred advert is saved as a draft
 
 @raa
 @raatransfer
@@ -73,16 +73,15 @@ Scenario: RAA_Transferred_01_6 - Transfer a pending employer review vacancy from
 	Given the Employer grants permission to the provider to create advert with review option
 	When the Provider submits a vacancy to the employer for review
 	And the Employer revokes permission to the provider to create advert
-	Then the advert is saved as a draft
+	Then the transferred advert is saved as a draft
 
 @raa
-@raa-epc
 @raatransfer
 @regression
 @raaprovider
 @raaemployer
 Scenario: RAA_Transferred_01_7 - Transfer a draft vacancy from provider to employer
-	Given the Employer grants permission to the provider to create advert with review option
+	Given the Employer grants permission to the provider to create advert with review option set as Yes
 	When Provider cancels after saving the title of the advert
 	And the Employer revokes permission to the provider to create advert
 	Then the advert is saved as a draft

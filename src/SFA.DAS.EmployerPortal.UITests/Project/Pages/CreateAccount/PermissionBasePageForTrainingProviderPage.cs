@@ -101,13 +101,18 @@ public class ManageTrainingProvidersPage(ScenarioContext context) : EmployerPort
     public async Task<bool> IsRecruitPermissionsSetToNo()
     {
         var text = await RecruitApprenticesCell().TextContentAsync();
-        return text?.Trim() != "Yes";
+        return text?.Trim() == "No";
     }
 
     public async Task<bool> IsRecruitPermissionsSetToYes()
     {
         var text = await RecruitApprenticesCell().TextContentAsync();
         return text?.Trim() == "Yes";
+    }
+    public async Task<bool> IsRecruitPermissionsSetToReview()
+    {
+        var text = await RecruitApprenticesCell().TextContentAsync();
+        return text?.Trim() == "Yes, employer will review adverts";
     }
 
     public async Task VerifyYouHaveAddedNotification(string providerName)
