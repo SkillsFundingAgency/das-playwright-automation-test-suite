@@ -1,5 +1,7 @@
 ﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ManageRestrictedCourses;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Steps;
 
@@ -97,4 +99,10 @@ public class MangeRestrictedCoursesSteps
         return await new ManageTrainingProviderInformationPage(_context)
             .VerifyPageAsync( () => new ManageTrainingProviderInformationPage(_context));
     }
+
+    [Then(@"the user verifies pagination links are working as expected")]
+        public async Task ThenTheUserVerifiesPaginationLinksAreWorkingAsExpected()
+        {
+            await _viewMangeRestrictedCoursesPage.VerifyPaginationLinks(new List<int> { 2, 4, 3, 1 });
+        }
 }

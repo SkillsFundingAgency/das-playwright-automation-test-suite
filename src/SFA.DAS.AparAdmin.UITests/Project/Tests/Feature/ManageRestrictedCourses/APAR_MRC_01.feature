@@ -42,3 +42,4 @@ Scenario: APAR_MRC_01_Select multiple filters and verify restricted courses
     And the user is able to verify the restricted course results
     When the user clears all selected filters
     Then the user is able to verify that no filters are selected
+    And the user verifies pagination links are working as expected
