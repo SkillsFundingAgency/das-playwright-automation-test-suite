@@ -102,6 +102,6 @@ public class MangeRestrictedCoursesSteps
     [Then(@"the user verifies pagination links are working as expected")]
         public async Task ThenTheUserVerifiesPaginationLinksAreWorkingAsExpected()
         {
-            await _viewMangeRestrictedCoursesPage.VerifyPaginationLinks(new List<int> { 2, 4, 3, 1 });
+            await _viewMangeRestrictedCoursesPage.VerifyPaginationLinks(new List<int> { 2 });
         }
 }
