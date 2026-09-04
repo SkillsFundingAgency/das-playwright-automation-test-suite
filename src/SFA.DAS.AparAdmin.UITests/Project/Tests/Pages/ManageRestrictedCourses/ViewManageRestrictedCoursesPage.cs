@@ -37,5 +37,4 @@ public class ViewMangeRestrictedCoursesPage(ScenarioContext context)
             throw new Exception("No restricted course results were displayed.");
         }
     }
-
 }
