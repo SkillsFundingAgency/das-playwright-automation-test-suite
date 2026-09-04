@@ -113,7 +113,7 @@ public class ApplicationSuccessfulPage(ScenarioContext context) : RaaBasePage(co
             ? $"application has been marked as successful"
             : $"Application made successful";
 
-        await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
+        await Assertions.Expect(page.Locator("h3").First).ToContainTextAsync(PageTitle);
     }
 }
 
@@ -123,6 +123,6 @@ public class ApplicationUnsuccessfulPage(ScenarioContext context) : RaaBasePage(
     {
         string PageTitle = "Feedback sent to applicant";
 
-        await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
+        await Assertions.Expect(page.Locator("h3").First).ToContainTextAsync(PageTitle);
     }
 }

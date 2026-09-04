@@ -29,6 +29,6 @@ public class ConfirmEmployerRejectedSharedAppPage(ScenarioContext context) : Raa
     {
         string PageTitle = "Feedback sent to applicant";
 
-        await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
+        await Assertions.Expect(page.Locator("h3").First).ToContainTextAsync(PageTitle);
     }
 }
