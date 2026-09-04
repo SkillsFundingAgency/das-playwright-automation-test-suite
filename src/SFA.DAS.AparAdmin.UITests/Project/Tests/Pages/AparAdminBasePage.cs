@@ -10,7 +10,7 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
     {
         foreach (var pageNumber in pageNumbers)
         {
-            var pageLink = page.Locator($".das-flex-space-around.app-pagination-nav.das-pagination-links a:has-text('{pageNumber}')");
+            var pageLink = page.Locator($".navigation-flexbox a:has-text('{pageNumber}')");
             await pageLink.ClickAsync();
             await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
             var currentUrl = page.Url;
@@ -19,13 +19,13 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
                 throw new Exception($"URL does not contain expected PageNumber={pageNumber}");
             }
         }
-        var nextLink = page.Locator(".das-flex-space-around.app-pagination-nav.das-pagination-links a:has-text('Next »')");
+        var nextLink = page.Locator(".navigation-flexbox a:has-text('Next »')");
         if (await nextLink.IsVisibleAsync())
         {
             await nextLink.ClickAsync();
             await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         }
-        var previousLink = page.Locator(".das-flex-space-around.app-pagination-nav.das-pagination-links a:has-text('« Previous')");
+        var previousLink = page.Locator(".navigation-flexbox a:has-text('« Previous')");
         if (await previousLink.IsVisibleAsync())
         {
             await previousLink.ClickAsync();
