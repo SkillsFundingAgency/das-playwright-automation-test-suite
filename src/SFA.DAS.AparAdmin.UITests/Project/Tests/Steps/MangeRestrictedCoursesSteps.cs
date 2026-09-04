@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ManageRestrictedCourses;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Steps;

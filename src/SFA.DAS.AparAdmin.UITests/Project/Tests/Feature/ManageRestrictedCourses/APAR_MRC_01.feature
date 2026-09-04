@@ -27,7 +27,7 @@ Scenario: APAR_MRC_01_Select a single filter and verify restricted courses
 @aparmrc01
 @apar
 @regression
-Scenario: APAR_MRC_01_Select multiple filters and verify restricted courses
+Scenario: APAR_MRC_01_Select multiple filters and verify restricted courses and pagination
     Given the provider logs into old apar admin portal
     When the user navigates to restricted courses
     And the user selects the following training type filters:
