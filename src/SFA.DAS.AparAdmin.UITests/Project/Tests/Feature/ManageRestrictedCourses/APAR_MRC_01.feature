@@ -3,11 +3,15 @@ Feature: APAR_MRC_01
 @aparmrc01
 @apar
 @regression
-Scenario: APAR_MRC_01_Search and verify restricted courses
+Scenario: APAR_MRC_01_Search and verify restricted courses select a course and search amongst the providers
     Given the provider logs into old apar admin portal
     When the user navigates to restricted courses
     And the user searches for "Leadership"
     Then the user is able to verify the restricted course results
+    And the user selects Manage providers on course with LARS Code "ZSC00010"
+    And the user navigates to providers of course LARS Code "ZSC00010"
+    And the user seaches for provider with UKPRN "10001143"
+    And the user is able to verify the provider results
 
 
 @aparmrc01

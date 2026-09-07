@@ -104,4 +104,35 @@ public class MangeRestrictedCoursesSteps
         {
             await _viewMangeRestrictedCoursesPage.VerifyPaginationLinks(new List<int> { 2 });
         }
+
+    [Then(@"the user selects Manage providers on course with LARS Code ""(.*)""")]
+
+        public async Task ThenTheUserSelectsManageProvidersOnCourseWithLARSCode(string larsCode)
+        {
+            await _viewMangeRestrictedCoursesPage.SelectManageProviders(larsCode);
+        
+        }
+
+    [Then(@"the user navigates to providers of course LARS Code ""(.*)""")]
+
+        public async Task ThenTheUserNavigatesToProvidersOfCourseLARSCode(string larsCode)
+        {
+            await _viewMangeRestrictedCoursesPage.ThenTheUserNavigatesToProvidersOfCourseLARSCode(larsCode);
+        
+        }
+
+    [Then(@"the user seaches for provider with UKPRN ""(.*)""")]
+    
+        public async Task ThenTheUserSearchesForProviderWithUKPRN(string UKPRN)
+        {
+            await _viewMangeRestrictedCoursesPage.ThenTheUserSearchesForProviderWithUKPRN(UKPRN);
+            
+        }
+
+    [Then(@"the user is able to verify the results")]
+
+        public async Task ThenTheUserIsAbleToVerifyTheProviderResults()
+        {
+            await _viewMangeRestrictedCoursesPage.ThenTheUserIsAbleToVerifyTheProviderResults();
+        }
 }
