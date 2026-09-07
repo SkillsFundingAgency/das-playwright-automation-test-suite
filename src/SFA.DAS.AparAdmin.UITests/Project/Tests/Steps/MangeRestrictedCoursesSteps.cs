@@ -105,34 +105,40 @@ public class MangeRestrictedCoursesSteps
             await _viewMangeRestrictedCoursesPage.VerifyPaginationLinks(new List<int> { 2 });
         }
 
-    [Then(@"the user selects Manage providers on course with LARS Code ""(.*)""")]
+    [When(@"the user selects Manage providers on course with LARS Code ""(.*)""")]
 
-        public async Task ThenTheUserSelectsManageProvidersOnCourseWithLARSCode(string larsCode)
+        public async Task WhenTheUserSelectsManageProvidersOnCourseWithLARSCode(string larsCode)
         {
             await _viewMangeRestrictedCoursesPage.SelectManageProviders(larsCode);
         
         }
 
-    [Then(@"the user navigates to providers of course LARS Code ""(.*)""")]
+    [When(@"the user navigates to providers of course LARS Code ""(.*)""")]
 
-        public async Task ThenTheUserNavigatesToProvidersOfCourseLARSCode(string larsCode)
+        public async Task WhenTheUserNavigatesToProvidersOfCourseLARSCode(string larsCode)
         {
-            await _viewMangeRestrictedCoursesPage.ThenTheUserNavigatesToProvidersOfCourseLARSCode(larsCode);
+            await _viewMangeRestrictedCoursesPage.NavigateOnLarsCode(larsCode);
         
         }
 
-    [Then(@"the user seaches for provider with UKPRN ""(.*)""")]
+    [When(@"the user seaches for provider with UKPRN ""(.*)""")]
     
-        public async Task ThenTheUserSearchesForProviderWithUKPRN(string UKPRN)
+        public async Task WhenTheUserSearchesForProviderWithUKPRN(string UKPRN)
         {
-            await _viewMangeRestrictedCoursesPage.ThenTheUserSearchesForProviderWithUKPRN(UKPRN);
+            await _viewMangeRestrictedCoursesPage.SearchProviderWithUKPRN(UKPRN);
             
         }
 
-    [Then(@"the user is able to verify the results")]
+    [Then(@"the user is able to verify the provider results")]
 
         public async Task ThenTheUserIsAbleToVerifyTheProviderResults()
         {
             await _viewMangeRestrictedCoursesPage.ThenTheUserIsAbleToVerifyTheProviderResults();
+        }
+    [Then(@"the user selects the filter ""(.*)""")]
+
+        public async Task ThenTheUserSelectsTheFilters(string filterName)
+        {
+            await _viewMangeRestrictedCoursesPage.SelectProviderFilter(filterName);
         }
 }

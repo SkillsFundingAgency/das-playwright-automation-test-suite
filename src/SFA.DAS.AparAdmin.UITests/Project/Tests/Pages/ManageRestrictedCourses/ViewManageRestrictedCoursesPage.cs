@@ -43,7 +43,7 @@ public class ViewMangeRestrictedCoursesPage(ScenarioContext context)
         await  page.Locator($"//a[contains(@href, '{larsCode}')]").ClickAsync();
     }
 
-    public async Task ThenTheUserNavigatesToProvidersOfCourseLARSCode(string larsCode)
+    public async Task NavigateOnLarsCode(string larsCode)
     {
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
             var currentUrl = page.Url;
@@ -53,7 +53,7 @@ public class ViewMangeRestrictedCoursesPage(ScenarioContext context)
             }
     }
 
-    public async Task ThenTheUserSearchesForProviderWithUKPRN(string UKPRN)
+    public async Task SearchProviderWithUKPRN(string UKPRN)
     {
 
         await page.Locator("#search-term-input").FillAsync(UKPRN);
@@ -70,5 +70,16 @@ public class ViewMangeRestrictedCoursesPage(ScenarioContext context)
         {
             throw new Exception("No providers were found.");
         }
+    }
+
+    public async Task SelectProviderFilter(string filterName)
+    {
+        await page.GetByRole(AriaRole.Checkbox,
+            new()
+            {
+                Name = filterName,
+                Exact = true
+            })
+           .CheckAsync();
     }
 }
