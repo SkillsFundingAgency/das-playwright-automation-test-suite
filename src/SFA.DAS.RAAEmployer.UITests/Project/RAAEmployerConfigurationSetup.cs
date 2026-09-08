@@ -17,6 +17,8 @@ public class RAAEmployerConfigurationSetup(ScenarioContext context)
             _configSection.GetConfigSection<RAAEmployerProviderPermissionUser>(),
 
             _configSection.GetConfigSection<RAAEmployerProviderYesPermissionUser>(),
+
+            _configSection.GetConfigSection<RAAEmployerProviderNoPermissionUser>()
         ]);
     }
 }
