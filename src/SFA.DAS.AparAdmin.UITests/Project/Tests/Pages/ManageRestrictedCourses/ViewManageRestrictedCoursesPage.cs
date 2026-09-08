@@ -12,7 +12,9 @@ public class ViewMangeRestrictedCoursesPage(ScenarioContext context)
 
     public async Task SelectManageProviders(string larsCode)
     {
-        await  page.Locator($"//a[contains(@href, '{larsCode}')]").ClickAsync();
+        var link = "/restricted-courses/";
+        var fullLink = $"{link}{larsCode}";
+        await  page.Locator($"a[href='{fullLink}']").ClickAsync();
     }
 
     public async Task NavigateOnLarsCode(string larsCode)
