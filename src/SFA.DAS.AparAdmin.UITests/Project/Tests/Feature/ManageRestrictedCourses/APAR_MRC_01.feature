@@ -3,7 +3,7 @@ Feature: APAR_MRC_01
 @aparmrc01
 @apar
 @regression
-Scenario: APAR_MRC_01_Search and verify restricted courses select a course and search amongst the providers
+Scenario: APAR_MRC_01_Search and verify restricted courses
     Given the provider logs into old apar admin portal
     When the user navigates to restricted courses
     And the user searches for "Leadership"
