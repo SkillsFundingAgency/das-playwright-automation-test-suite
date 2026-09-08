@@ -39,7 +39,11 @@ public class certificateDetailsSteps(ScenarioContext context)
 
         var signedInPage = await homePage.enterLogin(digiCertUser);
 
+        Console.WriteLine($"Signed IN:");
+       
         var authorisationStartPage = await signedInPage.clickContinue();
+
+        Console.WriteLine($"Continue:");
 
         await authorisationStartPage.verifyAuthorisationJourney();
     }

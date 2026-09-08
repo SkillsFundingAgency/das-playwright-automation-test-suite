@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Playwright;
+﻿using Microsoft.Playwright;
 using SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Authorisation;
 using SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard;
 using SFA.DAS.Framework;
+using System;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
 {
@@ -13,6 +14,8 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
         public async Task<DigiCertsAuthorisationStartPage> verifyAuthorisationJourney()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
+
+            Console.WriteLine($"Identity");
 
             return await VerifyPageAsync(() => new DigiCertsAuthorisationStartPage(context));
         }
