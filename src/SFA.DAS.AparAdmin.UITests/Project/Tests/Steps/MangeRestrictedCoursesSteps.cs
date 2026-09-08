@@ -109,7 +109,7 @@ public class MangeRestrictedCoursesSteps
 
         public async Task WhenTheUserSelectsManageProvidersOnCourseWithLARSCode(string larsCode)
         {
-            await _viewMangeRestrictedCoursesPage.SelectManageProviders(larsCode);
+            await _viewMangeRestrictedCoursesPage.SelectRestrictedManageProviders(larsCode);
         
         }
 

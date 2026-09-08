@@ -10,7 +10,7 @@ public class ViewMangeRestrictedCoursesPage(ScenarioContext context)
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("View and manage restricted courses");
     }
 
-    public async Task SelectManageProviders(string larsCode)
+    public async Task SelectRestrictedManageProviders(string larsCode)
     {
         var link = "/restricted-courses/";
         var fullLink = $"{link}{larsCode}";
