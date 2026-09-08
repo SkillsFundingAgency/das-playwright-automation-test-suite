@@ -68,6 +68,11 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
 
             var jsonFilePath = Path.Combine(stubJsonFilesPath,jsonFileName);
 
+            Console.WriteLine($"DEBUG stubJsonFilesPath: {stubJsonFilesPath}");
+            Console.WriteLine($"DEBUG jsonFileName: {jsonFileName}");
+            Console.WriteLine($"DEBUG jsonFilePath: {jsonFilePath}");
+            Console.WriteLine($"DEBUG file exists: {File.Exists(jsonFilePath)}");
+
             if (!File.Exists(jsonFilePath))
             {
                 throw new FileNotFoundException(
