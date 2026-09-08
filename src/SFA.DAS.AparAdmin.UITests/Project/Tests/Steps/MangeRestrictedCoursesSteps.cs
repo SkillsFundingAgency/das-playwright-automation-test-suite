@@ -28,19 +28,19 @@ public class MangeRestrictedCoursesSteps
     [When(@"the user searches for ""(.*)""")]
     public async Task WhenTheUserSearchesFor(string courseName)
     {
-        await _viewMangeRestrictedCoursesPage.SearchCourse(courseName);
+        await _viewMangeRestrictedCoursesPage.SearchFunctionality(courseName);
     }
 
     [Then(@"the user is able to verify the restricted course results")]
     public async Task ThenTheUserIsAbleToVerifyTheRestrictedCourseResults()
     {
-        await _viewMangeRestrictedCoursesPage.VerifyCourseResults();
+        await _viewMangeRestrictedCoursesPage.VerifyResults();
     }
 
     [When(@"the user selects the ""(.*)"" training type filter")]
     public async Task WhenTheUserSelectsTheTrainingTypeFilter(string trainingType)
     {
-        await _viewMangeRestrictedCoursesPage.SelectTrainingType(trainingType);
+        await _viewMangeRestrictedCoursesPage.SelectFilter(trainingType);
     }
 
     [When(@"the user selects the following training type filters:")]
@@ -48,7 +48,7 @@ public class MangeRestrictedCoursesSteps
     {
         foreach (var row in table.Rows)
         {
-            await _viewMangeRestrictedCoursesPage.SelectTrainingType(row["Training Type"]);
+            await _viewMangeRestrictedCoursesPage.SelectFilter(row["Training Type"]);
         }
     }
 
@@ -125,7 +125,7 @@ public class MangeRestrictedCoursesSteps
     
         public async Task WhenTheUserSearchesForProviderWithUKPRN(string UKPRN)
         {
-            await _viewMangeRestrictedCoursesPage.SearchProviderWithUKPRN(UKPRN);
+            await _viewMangeRestrictedCoursesPage.SearchFunctionality(UKPRN);
             
         }
 
@@ -133,12 +133,12 @@ public class MangeRestrictedCoursesSteps
 
         public async Task ThenTheUserIsAbleToVerifyTheProviderResults()
         {
-            await _viewMangeRestrictedCoursesPage.ThenTheUserIsAbleToVerifyTheProviderResults();
+            await _viewMangeRestrictedCoursesPage.VerifyResults();
         }
     [Then(@"the user selects the filter ""(.*)""")]
 
         public async Task ThenTheUserSelectsTheFilters(string filterName)
         {
-            await _viewMangeRestrictedCoursesPage.SelectProviderFilter(filterName);
+            await _viewMangeRestrictedCoursesPage.SelectFilter(filterName);
         }
 }
