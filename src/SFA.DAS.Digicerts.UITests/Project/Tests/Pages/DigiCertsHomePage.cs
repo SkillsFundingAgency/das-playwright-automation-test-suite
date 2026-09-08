@@ -47,19 +47,19 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
 
             if (user is DigiCertStandardUser)
             {
-                jsonFileName = "Oliver_Turner_Verify.json";
+                jsonFileName = "OliverTurnerVerify.json";
             }
             else if (user is DigiCertFrameworkUser)
             {
-                jsonFileName = "Amelia_Parker_Verify.json";
+                jsonFileName = "AmeliaParkerVerify.json";
             }
             else if (user is DigiCertMultiStandardUser)
             {
-                jsonFileName = "Emily_Carter_Verify.json";
+                jsonFileName = "EmilyCarterVerify.json";
             }
             else if (user is DigiCertMultiFrameworkUser)
             {
-                jsonFileName = "James_Bennett_Verify.json";
+                jsonFileName = "JamesBennettVerify.json";
             }
             else
             {
