@@ -1,6 +1,7 @@
 Feature: Certificate Details (Standard and Framework)
 
 @digicerts
+@samplesmoketest
 Scenario: View Standard Certificate details
   Given The StandardUser is logged into Apprenticeship Certificate Service after valid authentication
   When StandardUser answers the correct questions related to apprenticeship

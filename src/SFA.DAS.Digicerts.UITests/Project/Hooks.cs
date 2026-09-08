@@ -17,16 +17,19 @@ public class Hooks(ScenarioContext context) : FrameworkBaseHooks(context)
 {
     private static ServiceProvider _serviceProvider;
 
-    [BeforeTestRun]
-    public static async Task ConfigureRedisAsync()
+    [BeforeScenario(Order = 22)]
+    public async Task Navigate() => await Navigate(UrlConfig.DigiCerts_BaseUrl);
+
+    [BeforeScenario(Order = 23)]
+    public async Task SetUpRedisCache()
     {
-        var configSection = new ConfigSection(Configurator.GetConfig());
-        var config = configSection.GetConfigSection<DigiCertConfig>();
+        var configSection = context.Get<ConfigSection>();
+
+        var config = configSection.GetConfigSection<string>("DefaultSessionRedisConnectionString");
 
         var services = new ServiceCollection();
 
-        var redisConfiguration = ConfigurationOptions.Parse(
-            config.RedisConnectionString);
+        var redisConfiguration = ConfigurationOptions.Parse(config);
 
         redisConfiguration.AbortOnConnectFail = true;
 
@@ -45,20 +48,14 @@ public class Hooks(ScenarioContext context) : FrameworkBaseHooks(context)
         });
 
         _serviceProvider = services.BuildServiceProvider();
-    }
 
-    [BeforeScenario()]
-    public async Task SetUp()
-    {
         var distributedCache =
             _serviceProvider.GetRequiredService<IDistributedCache>();
 
         context.Set(distributedCache);
-
-        await Navigate(UrlConfig.DigiCerts_BaseUrl);
     }
 
-    [AfterTestRun]
+    [AfterScenario]
     public static async Task DisposeRedisAsync()
     {
         if (_serviceProvider is IAsyncDisposable asyncDisposable)
