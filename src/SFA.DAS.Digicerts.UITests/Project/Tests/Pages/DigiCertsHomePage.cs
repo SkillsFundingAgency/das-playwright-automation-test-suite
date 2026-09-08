@@ -41,7 +41,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Phone" }).ClickAsync();
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Phone" }).FillAsync(user.Phone);
 
-            var stubJsonFilesPath = Path.Combine(AppContext.BaseDirectory,"StubJsonfiles");
+            var stubJsonFilesPath = Path.Combine(AppContext.BaseDirectory,"Project","StubJsonfiles");
 
             string jsonFileName;
 
