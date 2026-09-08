@@ -62,7 +62,7 @@
 
 	
 	<ItemGroup>
-		<None Update="Project\StubJsonfiles\**\*.json">
+		<None Update="StubJsonfiles\**\*.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
