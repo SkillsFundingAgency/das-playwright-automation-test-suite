@@ -60,8 +60,13 @@
 		</None>
 	</ItemGroup>
 
+	
 	<ItemGroup>
-	  <Folder Include="Project\StubJsonfiles\" />
+		<None Update="Project\StubJsonfiles\**\*.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
+	
+
 
 </Project>

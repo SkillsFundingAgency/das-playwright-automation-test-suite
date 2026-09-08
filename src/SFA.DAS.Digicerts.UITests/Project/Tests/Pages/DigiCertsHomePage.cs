@@ -41,7 +41,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Phone" }).ClickAsync();
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Phone" }).FillAsync(user.Phone);
 
-            var stubJsonFilesPath = Path.Combine(AppContext.BaseDirectory,"..", "..", "..", "Project","StubJsonfiles");
+            var stubJsonFilesPath = Path.Combine(AppContext.BaseDirectory,"StubJsonfiles");
 
             string jsonFileName;
 
@@ -66,11 +66,19 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
                 throw new ArgumentException($"Unsupported user type: {user.GetType().Name}");
             }
 
-            var jsonFilePath = Path.GetFullPath(Path.Combine(stubJsonFilesPath, jsonFileName));
+            var jsonFilePath = Path.Combine(stubJsonFilesPath,jsonFileName);
 
-            await page.GetByRole(AriaRole.Button,new() { Name = "Upload a JSON file that" }).SetInputFilesAsync(jsonFilePath);
-    
-            await page.GetByRole(AriaRole.Button, new() { Name = "Authenticate" }).ClickAsync();
+            if (!File.Exists(jsonFilePath))
+            {
+                throw new FileNotFoundException(
+                    $"Stub JSON file could not be found. " +
+                    $"Expected path: {jsonFilePath}",
+                    jsonFilePath);
+            }
+
+            await page.GetByRole(AriaRole.Button,  new() { Name = "Upload a JSON file that" }).SetInputFilesAsync(jsonFilePath);
+
+            await page.GetByRole(AriaRole.Button,  new() { Name = "Authenticate" }).ClickAsync();
 
             return await VerifyPageAsync(() => new DigiCertsSignedInPage(context));
         }
