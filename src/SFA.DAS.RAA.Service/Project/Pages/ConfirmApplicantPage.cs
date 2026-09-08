@@ -5,7 +5,7 @@ public abstract class ConfirmApplicantPage(ScenarioContext context, string statu
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEpc ? "You want to interview applicant" : $"{rAADataHelper.CandidateFullName}'s application status changed to '{status}'.";
+        string PageTitle = (isRaaEpc || isRaaTransfer) ? "You want to interview applicant" : $"{rAADataHelper.CandidateFullName}'s application status changed to '{status}'.";
 
         await Assertions.Expect(page.Locator("h3").First).ToContainTextAsync(PageTitle);
     }
@@ -29,6 +29,6 @@ public class ConfirmEmployerRejectedSharedAppPage(ScenarioContext context) : Raa
     {
         string PageTitle = "Feedback sent to applicant";
 
-        await Assertions.Expect(page.Locator("h3")).ToContainTextAsync(PageTitle);
+        await Assertions.Expect(page.Locator("h3").First).ToContainTextAsync(PageTitle);
     }
 }

@@ -22,8 +22,8 @@ public class SelectEmployersPage(ScenarioContext context) : RaaBasePage(context)
         {
             objectContext.SetDebugInformation($"No valid employers found for hashed id '{empHashedId}'. Selecting first available employer.");
 
-            var firstEmployer = _values.First();
-            await page.Locator($".govuk-table .das-button--inline-link[value='{firstEmployer.Value}']").ClickAsync();
+                var firstEmployer = _values.First();
+                await page.Locator($".govuk-table .das-button--inline-link[value='{firstEmployer.Value}']").ClickAsync();
             await page.Locator("#confirm-yes").ClickAsync();
             await SaveAndContinue();
 
@@ -42,8 +42,16 @@ public class SelectEmployersPage(ScenarioContext context) : RaaBasePage(context)
 
         var value = GetRandomElementFromListOfElements(legalEntity).Value;
 
-        await page.Locator($".govuk-table .das-button--inline-link[value='{value}']").ClickAsync();
-
+        if (isRaaTransfer)
+        {
+            await page.Locator("tr").Filter(new() { Has = page.Locator("td[data-label='Legal Entity'] div:text-is('WITHOUT PERMISSION LTD')") })
+                .GetByRole(AriaRole.Button, new() { Name = "Select" }).ClickAsync();
+        }
+        else
+        {
+            await page.Locator($".govuk-table .das-button--inline-link[value='{value}']").ClickAsync();
+        }
+        
         if (noOfLegalEntity > 1) noOfLegalEntity = legalEntity.Count;
 
         objectContext.SetDebugInformation($"Selected employer with hashed id '{value}' who has {noOfLegalEntity} legal entities with provider permission");

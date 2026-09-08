@@ -138,7 +138,7 @@ public class AddTrainingProviderShortCoursesSteps
     private async Task<ManageTrainingProviderInformationPage> OpenManageTrainingProviderPage()
     {
         var home = new AparAdminHomePage(_context);
-        await home.ClickAddOrSearchForProvider();
+        await home.ClickManageTrainingProvidersAndRestrictedCourses();
         return await new ManageTrainingProviderInformationPage(_context)
             .VerifyPageAsync(() => new ManageTrainingProviderInformationPage(_context));
     }

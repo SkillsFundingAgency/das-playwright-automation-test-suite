@@ -134,7 +134,7 @@ public class SubmitNoOfPositionsPage(ScenarioContext context) : RaaBasePage(cont
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEpc ? "How many positions are available?" : isRaaEmployer ? "How many positions are there for this apprenticeship?" : "How many positions are available?";
+        string PageTitle = (isRaaEpc || isRaaTransfer) ? "How many positions are available?" : isRaaEmployer ? "How many positions are there for this apprenticeship?" : "How many positions are available?";
 
         await Assertions.Expect(page.Locator("label")).ToContainTextAsync(PageTitle);
     }
@@ -155,7 +155,7 @@ public class SubmitNoOfPositionsPage(ScenarioContext context) : RaaBasePage(cont
 
     public async Task EnterNumberOfPositionsAndContinue()
     {
-        string labelText = isRaaEpc ? "How many positions are available?" :
+        string labelText = (isRaaEpc || isRaaTransfer) ? "How many positions are available?" :
             isRaaEmployer ? "How many positions are there for this apprenticeship?" : "How many positions are available?";
 
         await page.GetByRole(AriaRole.Spinbutton, new() { Name = labelText }).FillAsync(RAADataHelper.NumberOfVacancy);

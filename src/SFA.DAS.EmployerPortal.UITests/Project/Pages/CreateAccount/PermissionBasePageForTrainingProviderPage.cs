@@ -96,6 +96,25 @@ public class ManageTrainingProvidersPage(ScenarioContext context) : EmployerPort
 
     private static string NotificationBanner => ".govuk-notification-banner";
 
+    private ILocator RecruitApprenticesCell() => page.Locator($"tr:has(td:has-text('CHICHESTER COLLEGE GROUP'))")
+        .Locator("td[headers='recruit-apprentices']");
+    public async Task<bool> IsRecruitPermissionsSetToNo()
+    {
+        var text = await RecruitApprenticesCell().TextContentAsync();
+        return text?.Trim() == "No";
+    }
+
+    public async Task<bool> IsRecruitPermissionsSetToYes()
+    {
+        var text = await RecruitApprenticesCell().TextContentAsync();
+        return text?.Trim() == "Yes";
+    }
+    public async Task<bool> IsRecruitPermissionsSetToReview()
+    {
+        var text = await RecruitApprenticesCell().TextContentAsync();
+        return text?.Trim() == "Yes, employer will review adverts";
+    }
+
     public async Task VerifyYouHaveAddedNotification(string providerName)
     {
         await Assertions.Expect(page.Locator(NotificationBanner)).ToContainTextAsync($"You've added {providerName} and set their permissions.");
