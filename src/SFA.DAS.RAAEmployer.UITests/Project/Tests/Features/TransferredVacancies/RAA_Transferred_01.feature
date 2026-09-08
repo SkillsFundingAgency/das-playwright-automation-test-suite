@@ -22,6 +22,7 @@ Scenario: RAA_Transferred_01_2 - Transfer a closed vacancy from provider to empl
 	Given the Employer grants permission to the provider to create advert with review option set as Yes
 	When the Provider submits a vacancy to the DfE for review
 	And the Reviewer Approves the vacancy
+	And the Reviewer sign out
 	Then the Provider can close the vacancy
 	When the Employer revokes permission to the provider to create advert
 	Then the transferred advert is saved as a closed
@@ -58,6 +59,7 @@ Scenario: RAA_Transferred_01_5 - Transfer an archived vacancy from provider to e
 	Given the Employer grants permission to the provider to create advert with review option set as Yes
 	When the Provider submits a vacancy to the DfE for review
 	And the Reviewer Approves the vacancy
+	And the Reviewer sign out
 	Then the Provider can close the vacancy
 	And the Provider can archive the vacancy
 	When the Employer revokes permission to the provider to create advert
