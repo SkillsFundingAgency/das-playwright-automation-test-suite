@@ -81,7 +81,7 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
         await ApplyFilter();
     }
 
-    public async Task VerifyResults()
+    public async Task VerifyResults(string searchWord)
     {
         var results = page.Locator(".app-results-list__item");
         var resultCount = await results.CountAsync();
@@ -89,6 +89,18 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
         if (resultCount == 0)
         {
             throw new Exception("No results were displayed.");
+        }
+
+        else
+        {
+            for (int i = 0; i < resultCount; i++)
+        {
+            string text = (await results.Nth(i).InnerTextAsync()).Trim();
+            if (!(text.Contains(searchWord)))
+            {
+                throw new Exception("Results are not correct.");
+            }
+        }
         }
     }
 

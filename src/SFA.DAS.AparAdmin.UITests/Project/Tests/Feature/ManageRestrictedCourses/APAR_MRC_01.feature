@@ -6,8 +6,8 @@ Feature: APAR_MRC_01
 Scenario: APAR_MRC_01_Search and verify restricted courses
     Given the provider logs into old apar admin portal
     When the user navigates to restricted courses
-    And the user searches for "Leadership"
-    Then the user is able to verify the restricted course results
+    And the user searches for "leadership"
+    Then the user is able to verify the restricted course results contain "leadership"
 
 
 @aparmrc01
@@ -19,7 +19,7 @@ Scenario: APAR_MRC_01_Select a single filter and verify restricted courses
     And the user selects the "Apprenticeship" training type filter
     And the user applies the filter
     Then the user is able to verify the "Apprenticeship" filter is selected
-    And the user is able to verify the restricted course results
+    And the user is able to verify the restricted course results contain "Apprenticeship"
     When the user clears the selected filter
     Then the user is able to verify that no filters are selected
 
@@ -39,7 +39,6 @@ Scenario: APAR_MRC_01_Select multiple filters and verify restricted courses and 
         | Training Type       |
         | Apprenticeship      |
         | Apprenticeship unit |
-    And the user is able to verify the restricted course results
     When the user clears all selected filters
     Then the user is able to verify that no filters are selected
     And the user verifies pagination links are working as expected
@@ -54,7 +53,10 @@ Scenario: APAR_MRC_01_Navigate to manage providers and filter results
     And the user selects Manage providers on course with LARS Code "272"
     And the user navigates to providers of course LARS Code "272"
     And the user seaches for provider with UKPRN "10001143"
-    Then the user is able to verify the provider results
+    Then the user is able to verify the "10001143" filter is selected
+    And the user is able to verify the provider results contain "10001143"
     When the user clears all selected filters
     Then the user selects the filter "Open to new starts"
-    And the user is able to verify the provider results
+    And the user applies the filter
+    And the user is able to verify the "Open to new starts" filter is selected
+    And the user is able to verify the provider results contain "Open to new starts"

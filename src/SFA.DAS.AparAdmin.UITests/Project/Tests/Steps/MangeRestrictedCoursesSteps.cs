@@ -31,10 +31,10 @@ public class MangeRestrictedCoursesSteps
         await _viewMangeRestrictedCoursesPage.SearchFunctionality(courseName);
     }
 
-    [Then(@"the user is able to verify the restricted course results")]
-    public async Task ThenTheUserIsAbleToVerifyTheRestrictedCourseResults()
+    [Then(@"the user is able to verify the (?:provider|restricted course) results contain ""(.*)""")]
+    public async Task ThenTheUserIsAbleToVerifyTheRestrictedCourseResults(string searchWord)
     {
-        await _viewMangeRestrictedCoursesPage.VerifyResults();
+        await _viewMangeRestrictedCoursesPage.VerifyResults(searchWord);
     }
 
     [When(@"the user selects the ""(.*)"" training type filter")]
@@ -129,11 +129,11 @@ public class MangeRestrictedCoursesSteps
             
         }
 
-    [Then(@"the user is able to verify the provider results")]
+    [Then(@"the user is able to verify the provider results contains ""(.*)""")]
 
-        public async Task ThenTheUserIsAbleToVerifyTheProviderResults()
+        public async Task ThenTheUserIsAbleToVerifyTheProviderResults(string searchWord)
         {
-            await _viewMangeRestrictedCoursesPage.VerifyResults();
+            await _viewMangeRestrictedCoursesPage.VerifyResults(searchWord);
         }
     [Then(@"the user selects the filter ""(.*)""")]
 
@@ -141,4 +141,9 @@ public class MangeRestrictedCoursesSteps
         {
             await _viewMangeRestrictedCoursesPage.SelectFilter(filterName);
         }
+    [Then(@"the user applies the filter")]
+    public async Task ThenTheUserAppliesTheFilter()
+    {
+        await _viewMangeRestrictedCoursesPage.ApplyFilter();
+    }
 }
