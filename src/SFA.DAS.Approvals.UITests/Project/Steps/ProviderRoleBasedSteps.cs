@@ -91,7 +91,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteApprenticeLink("");
             var page1 = await page.ConfirmDeletion();
-            await page1.VerifyBanner("Apprentice record deleted");
+            await page1.VerifyBanner("Learner record removed");
         }
 
         [Then("^the user can delete a cohort$")]
