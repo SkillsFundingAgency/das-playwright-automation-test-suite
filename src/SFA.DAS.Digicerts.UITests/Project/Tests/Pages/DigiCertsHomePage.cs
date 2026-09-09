@@ -32,12 +32,13 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
 
         public async Task<DigiCertsSignedInPage> enterLogin(DigitalCertUser user)
         {
+            Console.WriteLine($"user.Id: {user.Id}");
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Id" }).ClickAsync();
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Id" }).FillAsync(user.Id);
-
+            Console.WriteLine($"user.Id: {user.Email}");
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).ClickAsync();
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).FillAsync(user.Email);
-
+            Console.WriteLine($"user.Id: {user.Phone}");
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Phone" }).ClickAsync();
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Phone" }).FillAsync(user.Phone);
 
@@ -96,6 +97,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
 
             var sqlHelper = new DigiCertsSqlHelper(objectContext, dbConfig);
 
+            Console.WriteLine($"RemoveAuthenticationAsyncuser.Id: {user.Id}");
             await sqlHelper.RemoveAuthentication(user.Id);
         }
 
