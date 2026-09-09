@@ -83,10 +83,10 @@ public class RecruitmentHomePage(ScenarioContext context) : InterimProviderBaseP
         return await VerifyPageAsync(() => new ManageFundingPage(context));
     }
 
-    public async Task<ManageYourApprenticePage> NavigateToManageYourApprenticesPage()
+    public async Task<ManageLearnersPage> NavigateToManageYourApprenticesPage()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Manage learners" }).ClickAsync();
-        return await VerifyPageAsync(() => new ManageYourApprenticePage(context));
+        return await VerifyPageAsync(() => new ManageLearnersPage(context));
     }
     public async Task<OrganisationsAndAgreementsPage> NavigateToOrganisationsAndAgreementsPage()
     {

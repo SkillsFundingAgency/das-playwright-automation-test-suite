@@ -89,7 +89,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("^the user can remove the learner in a cohort$")]
         public async Task ThenTheUserCanRemoveALearnerInACohort()
         {
-            var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteApprenticeLink("");
+            var page = await new ApproveApprenticeDetailsPage(context).ClickOnRemoveLearnerLink("");
             var page1 = await page.ConfirmRemoval();
             await page1.VerifyBanner("Learner record removed");
         }
@@ -97,7 +97,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [Then("^the user can remove a cohort$")]
         public async Task ThenTheUserCanRemoveACohort()
         {
-            var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteCohortLink();
+            var page = await new ApproveApprenticeDetailsPage(context).ClickOnRemoveCohortLink();
             await page.ConfirmRemoval();
         }
 

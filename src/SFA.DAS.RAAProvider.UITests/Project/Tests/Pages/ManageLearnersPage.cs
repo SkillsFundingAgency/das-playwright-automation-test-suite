@@ -1,7 +1,7 @@
 
 namespace SFA.DAS.RAAProvider.UITests.Project.Tests.Pages;
 
-public class ManageYourApprenticePage(ScenarioContext context) : RaaBasePage(context)
+public class ManageLearnersPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {

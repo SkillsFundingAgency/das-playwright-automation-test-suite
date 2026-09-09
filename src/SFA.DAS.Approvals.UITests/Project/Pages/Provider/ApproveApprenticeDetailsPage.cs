@@ -152,13 +152,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         }
 
-        internal async Task<ConfirmLearnerRemovalPage> ClickOnDeleteApprenticeLink(string name)
+        internal async Task<ConfirmLearnerRemovalPage> ClickOnRemoveLearnerLink(string name)
         {
             await deleteLink("  " + name).ClickAsync();
             return await VerifyPageAsync(() => new ConfirmLearnerRemovalPage(context));
         }
 
-        internal async Task<ConfirmCohortRemovalPage> ClickOnDeleteCohortLink()
+        internal async Task<ConfirmCohortRemovalPage> ClickOnRemoveCohortLink()
         {
             await DeleteThisCohortLink.ClickAsync();
             return await VerifyPageAsync(() => new ConfirmCohortRemovalPage(context));
