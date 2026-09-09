@@ -51,7 +51,6 @@ Scenario: APAR_MRC_01C_Navigate to manage providers and filter results
     Given the provider logs into old apar admin portal
     When the user navigates to restricted courses
     And the user selects Manage providers on course with LARS Code "272"
-    And the user navigates to providers of course LARS Code "272"
     And the user seaches for provider with UKPRN "10001143"
     Then the user is able to verify the "10001143" filter is selected
     And the user is able to verify the provider results contain "10001143"

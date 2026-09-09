@@ -9,12 +9,14 @@ public class MangeRestrictedCoursesSteps
 {
     private readonly ScenarioContext _context;
     private readonly ViewMangeRestrictedCoursesPage _viewMangeRestrictedCoursesPage;
+    private readonly AcademicProfessionalPage _academicProfessionalPage;
 
     public MangeRestrictedCoursesSteps(ScenarioContext context)
     {
         _context = context;
         _viewMangeRestrictedCoursesPage =
             new ViewMangeRestrictedCoursesPage(context);
+        _academicProfessionalPage = new AcademicProfessionalPage(context);
     }
 
     [When(@"the user navigates to restricted courses")]
@@ -99,6 +101,14 @@ public class MangeRestrictedCoursesSteps
             .VerifyPageAsync( () => new ManageTrainingProviderInformationPage(_context));
     }
 
+    private async Task<AcademicProfessionalPage>OpenAcademicProfessionalPage(string larsCode)
+    {
+        var home = new ViewMangeRestrictedCoursesPage(_context);
+        await home.SelectRestrictedManageProviders(larsCode);
+        return await new AcademicProfessionalPage(_context)
+            .VerifyPageAsync( () => new AcademicProfessionalPage(_context));
+    }
+
     [Then(@"the user verifies pagination links are working as expected")]
         public async Task ThenTheUserVerifiesPaginationLinksAreWorkingAsExpected()
         {
@@ -109,23 +119,15 @@ public class MangeRestrictedCoursesSteps
 
         public async Task WhenTheUserSelectsManageProvidersOnCourseWithLARSCode(string larsCode)
         {
-            await _viewMangeRestrictedCoursesPage.SelectRestrictedManageProviders(larsCode);
-        
-        }
-
-    [When(@"the user navigates to providers of course LARS Code ""(.*)""")]
-
-        public async Task WhenTheUserNavigatesToProvidersOfCourseLARSCode(string larsCode)
-        {
-            await _viewMangeRestrictedCoursesPage.NavigateOnLarsCode(larsCode);
-        
+            await OpenAcademicProfessionalPage(larsCode);
+            await _academicProfessionalPage.VerifyPage();
         }
 
     [When(@"the user seaches for provider with UKPRN ""(.*)""")]
     
         public async Task WhenTheUserSearchesForProviderWithUKPRN(string UKPRN)
         {
-            await _viewMangeRestrictedCoursesPage.SearchFunctionality(UKPRN);
+            await _academicProfessionalPage.SearchFunctionality(UKPRN);
             
         }
 
@@ -133,7 +135,7 @@ public class MangeRestrictedCoursesSteps
 
         public async Task ThenTheUserIsAbleToVerifyTheProviderResults(string searchWord)
         {
-            await _viewMangeRestrictedCoursesPage.VerifyResults(searchWord);
+            await _academicProfessionalPage.VerifyResults(searchWord);
         }
     [Then(@"the user selects the filter ""(.*)""")]
 
