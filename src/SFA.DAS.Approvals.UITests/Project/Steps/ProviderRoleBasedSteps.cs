@@ -86,19 +86,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new ApproveApprenticeDetailsPage(context).CanCohortBeApproved(true);
         }
 
-        [Then("^the user can delete an apprentice in a cohort$")]
-        public async Task ThenTheUserCanDeleteAnApprenticeInACohort()
+        [Then("^the user can remove the learner in a cohort$")]
+        public async Task ThenTheUserCanRemoveALearnerInACohort()
         {
             var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteApprenticeLink("");
-            var page1 = await page.ConfirmDeletion();
+            var page1 = await page.ConfirmRemoval();
             await page1.VerifyBanner("Learner record removed");
         }
 
-        [Then("^the user can delete a cohort$")]
-        public async Task ThenTheUserCanDeleteACohort()
+        [Then("^the user can remove a cohort$")]
+        public async Task ThenTheUserCanRemoveACohort()
         {
             var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteCohortLink();
-            await page.ConfirmDeletion();
+            await page.ConfirmRemoval();
         }
 
         [Then("^the user cannot start add apprentice journey$")]

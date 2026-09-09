@@ -7,7 +7,7 @@
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Confirm cohort removal");
         }
 
-        internal async Task<ApprenticeRequests_ProviderPage> ConfirmDeletion()
+        internal async Task<ApprenticeRequests_ProviderPage> ConfirmRemoval()
         {
             await page.GetByRole(AriaRole.Radio, new() { Name = "Yes, remove cohort" }).CheckAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
