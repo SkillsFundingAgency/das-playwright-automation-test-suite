@@ -16,9 +16,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator message => page.Locator("h2:has-text('Message') + div.govuk-inset-text");
         private ILocator row(string ULN) => page.Locator($"table tbody tr:has-text('{ULN}')");
         private ILocator viewLink(string name) => page.GetByRole(AriaRole.Link, new() { Name = $"View{name}" }).First;
-        private ILocator deleteLink(string name) => page.Locator(".delete-apprentice").First;
-        private ILocator AddAnotherApprenticeLink => page.Locator("a:has-text('Add another apprentice')");
-        private ILocator DeleteThisCohortLink => page.GetByRole(AriaRole.Link, new() { Name = "Delete this cohort" }).First;
+        private ILocator removeLink(string name) => page.Locator(".delete-apprentice").First;
+        private ILocator AddAnotherLearnerLink => page.Locator("a:has-text('Add another learner')");
+        private ILocator RemoveThisCohortLink => page.GetByRole(AriaRole.Link, new() { Name = "Remove this cohort" }).First;
         private ILocator approveRadioOption => page.Locator("label:has-text('Yes, approve and notify employer')");
         private ILocator firstRadioOption => page.Locator("div.govuk-radios__item input[type='radio']").First;
         private ILocator doNotApproveRadioOption => page.Locator("label:has-text('No, save and return to apprentice requests')");
@@ -41,7 +41,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         public override async Task VerifyPage()
         {
             var headerText = await page.Locator(".govuk-heading-xl").First.TextContentAsync();
-            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Check apprentice details|Check 2 apprentices' details"));
+            Assert.IsTrue(Regex.IsMatch(headerText ?? "", "Check learner details|Check 2 learner's details"));
         }
 
         public async Task ClickOnBackLinkAsync() => await page.Locator("a.govuk-back-link").ClickAsync();
@@ -85,19 +85,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<SelectLearnerFromILRPage> ClickOnAddAnotherApprenticeLink()
         {
-            await AddAnotherApprenticeLink.ClickAsync();
+            await AddAnotherLearnerLink.ClickAsync();
             return await VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
         internal async Task<ProviderChooseAReservationPage> ClickOnAddAnotherApprenticeLink_SelectReservationRoute()
         {
-            await AddAnotherApprenticeLink.ClickAsync();
+            await AddAnotherLearnerLink.ClickAsync();
             return await VerifyPageAsync(() => new ProviderChooseAReservationPage(context));
         }
 
         internal async Task<SelectLearnerFromILRPage> ClickOnAddAnotherApprenticeLink_SelectExistingReservationRoute()
         {
-            await AddAnotherApprenticeLink.ClickAsync();
+            await AddAnotherLearnerLink.ClickAsync();
             await new HowDoYouWantToAddLearner_EntryMothodPage(context).SelectOptionToAddApprenticesFromILRList_InsufficientPermissionsRoute();
             var reservation = await new SelectReservationPage(context).SelectReservation();
             return new SelectLearnerFromILRPage(context);
@@ -106,7 +106,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<HowDoYouWantToAddLearner_EntryMothodPage> ClickOnAddAnotherApprenticeLink_ToSelectEntryMthodPage()
         {
-            await AddAnotherApprenticeLink.ClickAsync();
+            await AddAnotherLearnerLink.ClickAsync();
             return await VerifyPageAsync(() => new HowDoYouWantToAddLearner_EntryMothodPage(context));            
         }
         
@@ -154,13 +154,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<ConfirmLearnerRemovalPage> ClickOnRemoveLearnerLink(string name)
         {
-            await deleteLink("  " + name).ClickAsync();
+            await removeLink("  " + name).ClickAsync();
             return await VerifyPageAsync(() => new ConfirmLearnerRemovalPage(context));
         }
 
         internal async Task<ConfirmCohortRemovalPage> ClickOnRemoveCohortLink()
         {
-            await DeleteThisCohortLink.ClickAsync();
+            await RemoveThisCohortLink.ClickAsync();
             return await VerifyPageAsync(() => new ConfirmCohortRemovalPage(context));
         }
 
