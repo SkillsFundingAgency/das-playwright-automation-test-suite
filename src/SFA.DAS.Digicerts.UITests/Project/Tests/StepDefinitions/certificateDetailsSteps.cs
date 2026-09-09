@@ -150,6 +150,8 @@ public class certificateDetailsSteps(ScenarioContext context)
     {
         await new DigiCertsSignedInPage(context).ClickSignOut();
 
+        await new DigiCertsWelcomePage(context).NavigatetoHomePage();
+
         var homePage = await new DigiCertsHomePage(context).clickStart();
 
         DigitalCertUser digiCertUser = user switch
