@@ -14,4 +14,14 @@ public class FAARandomSearchStepDefinitions(ScenarioContext context)
 
         await page.SearchAtRandom();
     }
+
+    [Then(@"^the user is presented with sort order as '([^']*)'$")]
+    public async Task ThenTheUserIsPresentedWithSortOrderAsNew(string expectedSortOrder)
+    {
+        var page = new FAASearchResultPage(_context);
+
+        await page.VerifyPage();
+
+        await page.VerifySortOrder(expectedSortOrder);
+    }
 }

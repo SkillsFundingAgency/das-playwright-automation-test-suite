@@ -7,4 +7,10 @@ public class ApprenticeHubPage(ScenarioContext context) : ApprenticeBasePage(con
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Become an apprentice");
 
     public async Task VerifySubHeadings() => await VerifyLinks();
+
+    public async Task<BrowseApprenticeshipPage> NavigateToBrowseByInterests()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Browse by interests", Exact = false }).First.ClickAsync();
+        return await VerifyPageAsync(() => new BrowseApprenticeshipPage(context));
+    }
 }

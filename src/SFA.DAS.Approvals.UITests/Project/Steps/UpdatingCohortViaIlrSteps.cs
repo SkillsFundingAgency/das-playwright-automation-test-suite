@@ -123,7 +123,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var page = new ApproveApprenticeDetailsPage(context);
             await page.ClickOnLink(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.FullName);
             
-            var page2 = new ViewApprenticeDetails_ProviderPage(context);
+            var page2 = new ViewDetails_ProviderPage(context);
             await page2.VerifyBanner("Important", "Apprentice details have been changed in the ILR. To continue you need to update now");
             await page2.ClickOnButton("update now");
             await page2.VerifyBanner("Success", "Learner data has been successfully updated.");

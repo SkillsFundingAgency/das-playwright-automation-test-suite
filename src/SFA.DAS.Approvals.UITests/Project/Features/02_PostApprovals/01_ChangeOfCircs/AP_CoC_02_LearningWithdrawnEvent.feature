@@ -26,13 +26,11 @@ Scenario: AP_CoC_02_Verify Learning Withdrawal Event marks the apprenticeship as
 	Then Commitments db is updated with the new stop date and reason code
 
 
-##//emails validation for employer and apprentice to be implemented here in future after APPMAN-2733 is ready
-#@regression
-#Scenario Outline: AP_E2E_LE_EUA_02 emails validation
-#	Given previous test has been completed successfully
-#	Then Verify the "<Recipient>" receive "<NotificationType>" email
-#
-#Examples:
-#		| Recipient		| NotificationType								|
-#		| Employer      | ??? 			                                |
-#		| Apprentice	| ???                                           |
+@regression
+Scenario Outline: AP_CoC_02_WithdrawalEvent emails validation
+	Given previous test has been completed successfully
+	Then Verify the "<Recipient>" receive "<NotificationType>" email
+
+Examples:
+		| Recipient		| NotificationType			|
+		| Employer      | Learner record stopped	|

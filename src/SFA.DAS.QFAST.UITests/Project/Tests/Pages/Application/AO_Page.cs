@@ -109,4 +109,15 @@ public class AO_Page(ScenarioContext context) : BasePage(context)
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
         return await VerifyPageAsync(() => new Application_Overview_Page(context));
     }
+
+    public async Task AcceptPrivacyNotice()
+    {
+        var privacyCheckbox = page.Locator("#HasAccepted");
+        if (await privacyCheckbox.IsVisibleAsync())
+        {
+            await privacyCheckbox.CheckAsync();
+            await page.GetByRole(AriaRole.Button,new() { Name = "Agree and continue" }
+            ).ClickAsync();
+        }
+    }
 }

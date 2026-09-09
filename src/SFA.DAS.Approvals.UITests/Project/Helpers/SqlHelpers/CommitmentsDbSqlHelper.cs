@@ -60,6 +60,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.ApprenticeDetails.LastName = details[3].ToString();
             apprenticeship.ApprenticeDetails.DateOfBirth = Convert.ToDateTime(details[4].ToString());
             apprenticeship.TrainingDetails.LarsCode = details[5];
+            apprenticeship.TrainingDetails.LearningType = details[5].ToString().Contains("ZSC") ? 2 : 0;
             apprenticeship.ReservationID = details[6];
             apprenticeship.Cohort.Reference = details[7];
             apprenticeship.ApprenticeDetails.Email = details[8];
@@ -69,7 +70,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.TrainingDetails.TrainingPrice = Convert.ToInt32(details[11]);
             apprenticeship.TrainingDetails.AcademicYear = AcademicYearDatesHelper.GetCurrentAcademicYear();
             apprenticeship.TrainingDetails.ConsumerReference = details[12];
-            apprenticeship.TrainingDetails.CourseTitle = details[13];
+            apprenticeship.TrainingDetails.CourseTitle = details[13];            
 
             return apprenticeship;
         }

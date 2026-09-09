@@ -1,4 +1,4 @@
-Feature: QFAT_02
+Feature: QFAT_11
 
 @regression
 @qfast

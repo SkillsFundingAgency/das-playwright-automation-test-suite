@@ -68,7 +68,7 @@ public class InterimYourApprenticeshipAdvertsHomePage(ScenarioContext context, b
 
 public class InterimLearnersHomePage(ScenarioContext context, bool gotourl) : InterimEmployerBasePage(context, true, gotourl)
 {
-    protected override string Linktext => "Apprentices";
+    protected override string Linktext => "Learners";
 
     public override async Task VerifyPage()
     {

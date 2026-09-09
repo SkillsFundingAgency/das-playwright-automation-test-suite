@@ -14,6 +14,7 @@ Scenario: QFAST Admin User login in to the portal
 		| Import data                           |
 		| Review newly regulated qualifications |
 		| Create a form                         |
+		| Rollover funding                      |
 	
 @regression
 @qfast

@@ -6,7 +6,7 @@ namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages.Form;
 public class EditForm_Page(ScenarioContext context) : BasePage(context)
 {
     protected readonly QfastDataHelpers _qfastDataHelpers = context.Get<QfastDataHelpers>();
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Edit Form");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Edit form");
 
     public async Task<CreateSection_Page> ValidateStatusAsDraftAndClickOnCreateNewSection()
     {
