@@ -94,7 +94,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     await employerStepsHelper.EmployerPausePayments(page1, apprenticeship);
                     await page1.EmployerVerifyPaymentStatus(PaymentStatus.Paused);
                     var page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
-                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payments paused - Learner is on a break", "Manual update");
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payment changed from Active to Paused - Learner is on a break", "Manual update");
                     await page2.ClickViewLearnerDetailsLink();
                     break;
                 case "unpause":
