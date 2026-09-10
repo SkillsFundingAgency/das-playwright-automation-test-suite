@@ -20,11 +20,99 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Draft adverts");
 
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
+        //await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        //await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        await SearchVacancyMultipleTimes();
 
         await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Edit and submit" }).ClickAsync();
+    }
+
+    protected async Task TransferredDraftVacancy()
+    {
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Draft adverts");
+
+        await SearchVacancyMultipleTimes();
+
+        if (isRaaTransfer)
+        {
+            await Assertions.Expect(page.Locator(".govuk-tag--purple")).ToContainTextAsync("Transferred from provider");
+        }
+
+        await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Edit and submit" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Check your answers before submitting your advert");
+    }
+
+    protected async Task ClosedVacancy()
+    {
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Closed adverts");
+
+        await SearchVacancyMultipleTimes();
+
+        if (isRaaTransfer)
+        {
+            await Assertions.Expect(page.Locator(".govuk-tag--purple")).ToContainTextAsync("Transferred from provider");
+        }
+
+        await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Manage" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator(".govuk-summary-list__row")
+            .Filter(new() { Has = page.GetByText("Status", new() { Exact = true }) })
+            .Locator(".govuk-tag--grey"))
+            .ToContainTextAsync("Closed");
+    }
+
+    protected async Task RejectedVacancy()
+    {
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Rejected adverts");
+
+        //await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
+
+        //await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+        await SearchVacancyMultipleTimes();
+
+        if (isRaaTransfer)
+        {
+            await Assertions.Expect(page.Locator(".govuk-tag--purple")).ToContainTextAsync("Transferred from provider");
+
+            await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Edit and resubmit" }).ClickAsync();
+
+            await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Check your answers before submitting your advert");
+        } 
+        else
+        {
+            await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Manage" }).ClickAsync();
+
+            await Assertions.Expect(page.Locator(".govuk-summary-list__row")
+                .Filter(new() { Has = page.GetByText("Status", new() { Exact = true }) })
+                .Locator(".govuk-tag--grey"))
+                .ToContainTextAsync("Rejected");
+        }
+    }
+
+    protected async Task ArchivedVacancy()
+    {
+        await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Archived adverts");
+
+        //await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
+
+        //await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+        await SearchVacancyMultipleTimes();
+
+        if (isRaaTransfer)
+        {
+            await Assertions.Expect(page.Locator(".govuk-tag--purple")).ToContainTextAsync("Transferred from provider");
+        }
+
+        await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Manage" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator(".govuk-summary-list__row")
+            .Filter(new() { Has = page.GetByText("Status", new() { Exact = true }) })
+            .Locator(".govuk-tag--grey"))
+            .ToContainTextAsync("Archived");
     }
 
     protected async Task ReviewVacancy()
@@ -47,7 +135,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
     public async Task<ManageRecruitPage> GoToVacancyManagePage()
     {
-        string linkText = isRaaEpc ? "Review" : "Manage";
+        string linkText = (isRaaEpc || isRaaTransfer) ? "Review" : "Manage";
         await page.GetByRole(AriaRole.Link, new() { Name = linkText}).First.ClickAsync();
 
         return await VerifyPageAsync(() => new ManageRecruitPage(context));
@@ -58,6 +146,33 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
         await page.GetByRole(AriaRole.Link, new() { Name = "Review" }).First.ClickAsync();
 
         return await VerifyPageAsync(() => new SharedApplicatinsForAVacancyPage(context));
+    }
+
+    protected async Task SearchVacancyMultipleTimes()
+    {
+        var advertCountMessage = page.Locator(".govuk-body.govuk-\\!-font-weight-bold");
+
+        for (int attempt = 1; attempt <= 20; attempt++)
+        {
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).ClearAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" })
+                .FillAsync(vacancyTitleDataHelper.VacancyTitle);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+            var messageText = await advertCountMessage.TextContentAsync();
+
+            if (!string.IsNullOrWhiteSpace(messageText) &&
+                messageText.Contains($"{vacancyTitleDataHelper.VacancyTitle}") &&
+                messageText.Trim().StartsWith('1'))
+            {
+                break;
+            }
+
+            await page.WaitForTimeoutAsync(2000);
+        }
     }
 }
 
@@ -127,6 +242,50 @@ public class EmployerDraftVacanciesListPage(ScenarioContext context) : VacancySe
         await DraftVacancy();
 
         return await VerifyPageAsync(() => new CreateAnApprenticeshipAdvertOrVacancyPage(context));
+    }
+
+    public async Task ManageDraftAdvert()
+    {
+        await TransferredDraftVacancy();
+    }
+}
+
+public class EmployerClosedVacanciesListPage(ScenarioContext context) : VacancySearchResultPage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Closed adverts");
+    }
+
+    public async Task ManageClosedAdvert()
+    {
+        await ClosedVacancy();
+    }
+}
+
+public class EmployerRejectedVacanciesListPage(ScenarioContext context) : VacancySearchResultPage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Rejected adverts");
+    }
+
+    public async Task ManageRejectedAdvert()
+    {
+        await RejectedVacancy();
+    }
+}
+
+public class EmployerArchivedVacanciesListPage(ScenarioContext context) : VacancySearchResultPage(context)
+{
+    public override async Task VerifyPage()
+    {
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Archived adverts");
+    }
+
+    public async Task ManageArchivedAdvert()
+    {
+        await ArchivedVacancy();
     }
 }
 

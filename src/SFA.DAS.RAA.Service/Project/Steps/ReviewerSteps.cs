@@ -17,6 +17,8 @@ public class ReviewerSteps(ScenarioContext context)
     public async Task TheReviewerSignOut() => await _reviewerStepsHelper.RAAQASignOut();
 
     [Given(@"^the Reviewer Refer the vacancy$")]
+    [When(@"^the Reviewer Refer the vacancy$")]
+    [Then(@"^the Reviewer Refer the vacancy$")]
     public async Task GivenTheReviewerReferTheVacancy() => await _reviewerStepsHelper.Refer();
 
     [When(@"^the Reviewer verifies disability confident and approves the vacancy$")]

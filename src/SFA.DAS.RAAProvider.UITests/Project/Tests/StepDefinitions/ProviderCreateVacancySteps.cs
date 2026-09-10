@@ -61,6 +61,7 @@ public class ProviderCreateVacancySteps(ScenarioContext context)
     public async Task WhenProviderSelectsInTheFirstPartOfTheJourney(string wageType) => await _providerStepsHelper.CreateVacancyForWageType(wageType);
 
     [Given("Provider cancels after saving the title of the advert")]
+    [When("Provider cancels after saving the title of the advert")]
     public async Task ProviderCancelsAfterSavingTheTitleOfTheAdvert() => _recruitmentHomePage = await _providerStepsHelper.CancelAdvert();
 
     [Then(@"the vacancy is saved as a draft")]

@@ -41,6 +41,8 @@ public class ProviderConfigurationSetup(ScenarioContext context) : ProviderConfi
 
         _context.SetProviderPermissionConfig(SetProviderCreds<ProviderPermissionsConfig>());
 
+        _context.SetProviderNoPermissionConfig(SetProviderCreds<ProviderNoPermissionsConfig>());
+
         _context.SetChangeOfPartyConfig(SetProviderCreds<ChangeOfPartyConfig>());
 
         _context.SetPortableFlexiJobProviderConfig(SetProviderCreds<PortableFlexiJobProviderConfig>());
