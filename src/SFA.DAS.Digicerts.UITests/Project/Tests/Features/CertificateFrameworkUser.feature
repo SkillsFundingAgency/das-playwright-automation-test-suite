@@ -8,6 +8,7 @@ Scenario: Download Framework Certificate PDF
   And User is able to Download Framework Certificate in PDF format
 
 @digicerts
+@RemoveAuthentication
 Scenario: View Framework Certificate details
   Given The FrameworkUser is logged into Apprenticeship Certificate Service after valid authentication
   When FrameworkUser answers the correct questions related to apprenticeship

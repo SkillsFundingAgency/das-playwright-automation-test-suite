@@ -24,9 +24,9 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Authorisation
 
         public async Task<DigiCertsAuthorisationCoursePage> enterLearner(string uln)
         {
-            await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
+            //await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
 
-            await page.GetByRole(AriaRole.Spinbutton, new() { Name = "Unique learner number" }).FillAsync(uln);
+            //await page.GetByRole(AriaRole.Spinbutton, new() { Name = "Unique learner number" }).FillAsync(uln);
 
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 

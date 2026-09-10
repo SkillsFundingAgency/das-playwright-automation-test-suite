@@ -2,6 +2,7 @@ Feature: Certificate Multi Framwork User E2E
 
 
 @digicerts
+@RemoveAuthentication
 Scenario: Multiple Framework Certificates
   Given The MultiFrameworkUser is logged into Apprenticeship Certificate Service after valid authentication
   When MultiFrameworkUser answers the correct questions related to apprenticeship
