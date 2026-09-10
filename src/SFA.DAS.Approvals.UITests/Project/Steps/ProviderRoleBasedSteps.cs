@@ -86,19 +86,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new ApproveApprenticeDetailsPage(context).CanCohortBeApproved(true);
         }
 
-        [Then("^the user can delete an apprentice in a cohort$")]
-        public async Task ThenTheUserCanDeleteAnApprenticeInACohort()
+        [Then("^the user can remove the learner in a cohort$")]
+        public async Task ThenTheUserCanRemoveALearnerInACohort()
         {
-            var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteApprenticeLink("");
-            var page1 = await page.ConfirmDeletion();
-            await page1.VerifyBanner("Apprentice record deleted");
+            var page = await new ApproveApprenticeDetailsPage(context).ClickOnRemoveLearnerLink("");
+            var page1 = await page.ConfirmRemoval();
+            await page1.VerifyBanner("Learner record removed");
         }
 
-        [Then("^the user can delete a cohort$")]
-        public async Task ThenTheUserCanDeleteACohort()
+        [Then("^the user can remove a cohort$")]
+        public async Task ThenTheUserCanRemoveACohort()
         {
-            var page = await new ApproveApprenticeDetailsPage(context).ClickOnDeleteCohortLink();
-            await page.ConfirmDeletion();
+            var page = await new ApproveApprenticeDetailsPage(context).ClickOnRemoveCohortLink();
+            await page.ConfirmRemoval();
         }
 
         [Then("^the user cannot start add apprentice journey$")]
@@ -131,17 +131,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.NavigateBrowserBack();
         }
 
-        [Then("^the user cannot delete an apprentice in an existing cohort$")]
-        public async Task ThenTheUserCannotDeleteAnApprenticeInAnExistingCohort()
+        [Then("^the user cannot remove a learner in an existing cohort$")]
+        public async Task ThenTheUserCannotRemoveAnLearnerInAnExistingCohort()
         {
-            var page1 = await new ApproveApprenticeDetailsPage(context).TryOpenLink("Delete");
+            var page1 = await new ApproveApprenticeDetailsPage(context).TryOpenLink("Remove");
             await page1.NavigateBrowserBack();
         }
 
-        [Then("^the user cannot delete an existing cohort$")]
-        public async Task ThenTheUserCannotDeleteAnExistingCohort()
+        [Then("^the user cannot remove an existing cohort$")]
+        public async Task ThenTheUserCannotRemoveAnExistingCohort()
         {
-            var page1 = await new ApproveApprenticeDetailsPage(context).TryOpenLink("Delete this cohort");
+            var page1 = await new ApproveApprenticeDetailsPage(context).TryOpenLink("Remove this cohort");
             await page1.NavigateBrowserBack();
         }
 

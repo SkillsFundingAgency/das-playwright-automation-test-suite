@@ -39,7 +39,7 @@ public class RecruitmentProviderHomePageStepsHelper(ScenarioContext context)
         return await page.NavigateToManageFundingPage();
     }
 
-    public async Task<ManageYourApprenticePage> GoToManageYourApprenticesPage(bool newTab = false)
+    public async Task<ManageLearnersPage> GoToManageYourApprenticesPage(bool newTab = false)
     {
         var page = await GoToRecruitmentProviderHomePage(newTab);
         return await page.NavigateToManageYourApprenticesPage();
