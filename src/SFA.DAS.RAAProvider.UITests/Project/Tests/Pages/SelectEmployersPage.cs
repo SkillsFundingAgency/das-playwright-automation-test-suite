@@ -41,10 +41,10 @@ public class SelectEmployersPage(ScenarioContext context) : RaaBasePage(context)
         objectContext.SetDebugInformation($"Employer with hashed id '{hashedidvalue}' has {legalEntity.Count} legal entities with provider permission");
 
         var value = GetRandomElementFromListOfElements(legalEntity).Value;
-
+      
         if (isRaaTransfer)
         {
-            await page.Locator("tr").Filter(new() { Has = page.Locator("td[data-label='Legal Entity'] div:text-is('WITHOUT PERMISSION LTD')") })
+            await page.Locator("tr").Filter(new() { Has = page.Locator($"td[data-label='Legal Entity'] div:text-is('{RAADataHelper.EmployerNameWithNoPermissions}')") })
                 .GetByRole(AriaRole.Button, new() { Name = "Select" }).ClickAsync();
         }
         else

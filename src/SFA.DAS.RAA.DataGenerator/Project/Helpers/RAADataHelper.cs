@@ -35,6 +35,8 @@ public class RAADataHelper
 
     public string VacancyTitle => $"{_vacancyTitleDatahelper.VacancyTitle} apprenticeship";
 
+    public static string EmployerNameWithNoPermissions => "WITHOUT PERMISSION LTD";
+
     public static string TrainingTitle => "Abattoir Worker, Level 2 (GCSE)";
 
     public static string FoundationTrainingTitle => "Engineering and manufacturing foundation apprenticeship, Level 2 (GCSE)";
