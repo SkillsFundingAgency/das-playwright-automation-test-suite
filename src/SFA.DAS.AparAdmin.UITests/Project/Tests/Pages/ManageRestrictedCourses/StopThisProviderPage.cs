@@ -6,7 +6,7 @@ public class StopThisProviderPage(ScenarioContext context) : AparAdminBasePage(c
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Stop this provider from delivering Academic professional (Level 7)");
+        await Assertions.Expect(page.Locator(".govuk-caption-xl")).ToContainTextAsync("last start date");
     }
 
     public async Task EnterDate(string fullDate)

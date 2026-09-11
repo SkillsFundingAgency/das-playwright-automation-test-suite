@@ -113,10 +113,10 @@ public class MangeRestrictedCoursesSteps
             .VerifyPageAsync( () => new AcademicProfessionalPage(_context));
     }
 
-    private async Task<StopThisProviderPage>OpenStopThisProviderPage(string UKPRN)
+    private async Task<StopThisProviderPage>OpenStopThisProviderPage(string firstTime,string UKPRN)
     {
         var home = new AcademicProfessionalPage(_context);
-        await home.ClickChange(UKPRN);
+        await home.ClickChange(firstTime, UKPRN);
         return await new StopThisProviderPage(_context)
             .VerifyPageAsync( () => new StopThisProviderPage(_context));
     }
@@ -166,8 +166,17 @@ public class MangeRestrictedCoursesSteps
 
         public async Task GivenTheUserClicksToChangeTheDetailsOfProviderWithUKPRN(string UKPRN)
         {
-            await OpenStopThisProviderPage(UKPRN);
+            await OpenStopThisProviderPage("yes",UKPRN);
             await _stopThisProviderPage.VerifyPage();
+        }
+
+    [When(@"the user clicks to change the details of provider with UKPRN ""(.*)""")]
+
+        public async Task WhenTheUserClicksToChangeTheDetailsOfProviderWithUKPRN(string UKPRN)
+        {
+            await OpenStopThisProviderPage("no",UKPRN);
+            await _stopThisProviderPage.VerifyPage();
+            
         }
 
     [When(@"the user enters a date in the future ""(.*)""")]
