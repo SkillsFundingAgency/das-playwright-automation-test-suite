@@ -152,7 +152,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
     {
         var advertCountMessage = page.Locator(".govuk-body.govuk-\\!-font-weight-bold");
 
-        for (int attempt = 1; attempt <= 20; attempt++)
+        for (int attempt = 1; attempt <= 8; attempt++)
         {
             await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).ClearAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
@@ -171,7 +171,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
                 break;
             }
 
-            await page.WaitForTimeoutAsync(2000);
+            await page.WaitForTimeoutAsync(5000);
         }
     }
 }
