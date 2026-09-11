@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ManageRestrictedCourses;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Steps;
 
@@ -10,6 +11,7 @@ public class MangeRestrictedCoursesSteps
     private readonly ScenarioContext _context;
     private readonly ViewMangeRestrictedCoursesPage _viewMangeRestrictedCoursesPage;
     private readonly AcademicProfessionalPage _academicProfessionalPage;
+    private readonly StopThisProviderPage _stopThisProviderPage;
 
     public MangeRestrictedCoursesSteps(ScenarioContext context)
     {
@@ -17,8 +19,10 @@ public class MangeRestrictedCoursesSteps
         _viewMangeRestrictedCoursesPage =
             new ViewMangeRestrictedCoursesPage(context);
         _academicProfessionalPage = new AcademicProfessionalPage(context);
+        _stopThisProviderPage = new StopThisProviderPage(context);
     }
 
+    [Given(@"the user navigates to restricted courses")]
     [When(@"the user navigates to restricted courses")]
     public async Task WhenTheUserNavigatesToRestrictedCourses()
     {
@@ -109,6 +113,14 @@ public class MangeRestrictedCoursesSteps
             .VerifyPageAsync( () => new AcademicProfessionalPage(_context));
     }
 
+    private async Task<StopThisProviderPage>OpenStopThisProviderPage(string firstTime,string UKPRN)
+    {
+        var home = new AcademicProfessionalPage(_context);
+        await home.ClickChange(firstTime, UKPRN);
+        return await new StopThisProviderPage(_context)
+            .VerifyPageAsync( () => new StopThisProviderPage(_context));
+    }
+
     [Then(@"the user verifies pagination links are working as expected")]
         public async Task ThenTheUserVerifiesPaginationLinksAreWorkingAsExpected()
         {
@@ -116,6 +128,7 @@ public class MangeRestrictedCoursesSteps
         }
 
     [When(@"the user selects Manage providers on course with LARS Code ""(.*)""")]
+    [Given(@"the user selects Manage providers on course with LARS Code ""(.*)""")]
 
         public async Task WhenTheUserSelectsManageProvidersOnCourseWithLARSCode(string larsCode)
         {
@@ -124,7 +137,7 @@ public class MangeRestrictedCoursesSteps
         }
 
     [When(@"the user seaches for provider with UKPRN ""(.*)""")]
-    
+
         public async Task WhenTheUserSearchesForProviderWithUKPRN(string UKPRN)
         {
             await _academicProfessionalPage.SearchFunctionality(UKPRN);
@@ -134,7 +147,7 @@ public class MangeRestrictedCoursesSteps
     [Then(@"the user is able to verify the provider results contains ""(.*)""")]
 
         public async Task ThenTheUserIsAbleToVerifyTheProviderResults(string searchWord)
-        {
+    {
             await _academicProfessionalPage.VerifyResults(searchWord);
         }
     [Then(@"the user selects the filter ""(.*)""")]
@@ -147,5 +160,70 @@ public class MangeRestrictedCoursesSteps
     public async Task ThenTheUserAppliesTheFilter()
     {
         await _viewMangeRestrictedCoursesPage.ApplyFilter();
+    }
+
+    [Given(@"the user clicks to change the details of provider with UKPRN ""(.*)""")]
+
+        public async Task GivenTheUserClicksToChangeTheDetailsOfProviderWithUKPRN(string UKPRN)
+        {
+            await OpenStopThisProviderPage("yes",UKPRN);
+            await _stopThisProviderPage.VerifyPage();
+        }
+
+    [When(@"the user clicks to change the details of provider with UKPRN ""(.*)""")]
+
+        public async Task WhenTheUserClicksToChangeTheDetailsOfProviderWithUKPRN(string UKPRN)
+        {
+            await OpenStopThisProviderPage("no",UKPRN);
+            await _stopThisProviderPage.VerifyPage();
+            
+        }
+
+    [When(@"the user enters a date in the future ""(.*)""")]
+
+        public async Task WhenTheUserEntersADateInTheFuture(string date)
+        {
+            await _stopThisProviderPage.EnterDate(date);
+        }
+
+    [When(@"the user enters a date before Sept 2014 ""(.*)""")]
+    public async Task WhenTheUserEntersADateBeforeSept2014(string date)
+    {
+        await WhenTheUserEntersADateInTheFuture(date);
+    }
+
+    [When(@"the user enters a date after Sept 2014 ""(.*)""")]
+
+    public async Task WhenTheUserEntersADateAfterSept2014(string date)
+    {
+        await WhenTheUserEntersADateInTheFuture(date);
+    }
+
+    [Then(@"the last date for new starts is updated for ""(.*)"" to ""(.*)"" and success banner is displayed")]
+
+    public async Task ThenTheLastDateForNewStartsIsUpdatedForToAndSuccessBannerISDisplayed(string UKPRN, string date)
+    {
+        await _academicProfessionalPage.VerifyDateUpdate(UKPRN,date);
+    }
+
+    [When(@"the user confirms they want to ""(.*)""")]
+
+    public async Task WhenTheUserConfirmsTheyWantTo(string actionToTake)
+    {
+        await _stopThisProviderPage.ChangeRestriction(actionToTake);
+    }
+
+    [Then(@"the user sees the message ""(.*)""")]
+
+    public async Task ThenTheUserSeesTheMessage(string message)
+    {
+        await _stopThisProviderPage.LastStartDateErrorMessage(message);
+    }
+
+    [Then(@"the banner for UKPRN ""(.*)"" displays ""(.*)""")]
+
+    public async Task ThenTheBannerForUKPRNDisplays(string UKPRN, string bannerMessage)
+    {
+        await _academicProfessionalPage.AssertBanner(UKPRN, bannerMessage);
     }
 }
