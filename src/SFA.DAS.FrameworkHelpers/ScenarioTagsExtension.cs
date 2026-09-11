@@ -21,4 +21,6 @@ public static class ScenarioTagsExtension
     public static bool IsPortableFlexiJob(this string[] tags) => tags.Contains("portableflexijob");
 
     public static bool IsAsListedEmployer(this string[] tags) => tags.Contains("aslistedemployer");
+
+    public static bool IsRaaTransfer(this string[] tags) => tags.Contains("raatransfer");
 }
