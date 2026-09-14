@@ -50,13 +50,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<CheckApprenticeDetailsPage> TryAddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
+        internal async Task<CheckLearnerDetailsPage> TryAddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
             await page.ClickAddButton();
-            return await page.VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));
+            return await page.VerifyPageAsync(() => new CheckLearnerDetailsPage(context));
         }
 
         internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRList(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
@@ -177,12 +177,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await approveApprenticeDetailsPage.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<CheckApprenticeDetailsPage> ProviderCreateACohortViaIlrRouteWithInvalidDoB()
+        internal async Task<CheckLearnerDetailsPage> ProviderCreateACohortViaIlrRouteWithInvalidDoB()
         {
             var page = await GoToSelectApprenticeFromILRPage();
             var page1 = await TryAddFirstApprenticeFromILRList(page);
 
-            return await page1.VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));
+            return await page1.VerifyPageAsync(() => new CheckLearnerDetailsPage(context));
         }
 
         internal async Task<ApprenticeRequests_ProviderPage> ProviderCreateAndApproveACohortViaIlrRoute()
