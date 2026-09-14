@@ -9,7 +9,7 @@ public class AcademicProfessionalPage(ScenarioContext context) : AparAdminBasePa
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Academic professional (Level 7)");
     }
 
-    public async Task ClickChange(string firstTime, string UKPRN)
+    public async Task ClickChangeDate(string firstTime, string UKPRN)
     {
         var link = "/restricted-courses/272/providers/";
         string lastPartOfLink = firstTime switch
