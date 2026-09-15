@@ -64,6 +64,46 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
         }
     }
 
+    public async Task SelectFilter(string filterChoice)
+    {
+        await page.GetByRole(AriaRole.Checkbox,
+            new()
+            {
+                Name = filterChoice,
+                Exact = true
+            })
+           .CheckAsync();
+    }
+
+    public async Task SearchFunctionality(string searchKeyWord)
+    {
+        await page.Locator("#search-term-input").FillAsync(searchKeyWord);
+        await ApplyFilter();
+    }
+
+    public async Task VerifyResults(string searchWord)
+    {
+        var results = page.Locator(".app-results-list__item");
+        var resultCount = await results.CountAsync();
+
+        if (resultCount == 0)
+        {
+            throw new Exception("No results were displayed.");
+        }
+
+        else
+        {
+            for (int i = 0; i < resultCount; i++)
+        {
+            string text = (await results.Nth(i).InnerTextAsync()).Trim();
+            if (!(text.Contains(searchWord)))
+            {
+                throw new Exception("Results are not correct.");
+            }
+        }
+        }
+    }
+
     public async Task VerifyNoFiltersSelected()
     {
         var selectedFilters = page.Locator(".das-filter__tag");
