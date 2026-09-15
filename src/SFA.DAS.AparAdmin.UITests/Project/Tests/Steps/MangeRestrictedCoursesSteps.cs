@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ManageRestrictedCourses;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Steps;
 
@@ -19,6 +20,7 @@ public class MangeRestrictedCoursesSteps
         _academicProfessionalPage = new AcademicProfessionalPage(context);
     }
 
+    [Given(@"the user navigates to restricted courses")]
     [When(@"the user navigates to restricted courses")]
     public async Task WhenTheUserNavigatesToRestrictedCourses()
     {
@@ -116,6 +118,7 @@ public class MangeRestrictedCoursesSteps
         }
 
     [When(@"the user selects Manage providers on course with LARS Code ""(.*)""")]
+    [Given(@"the user selects Manage providers on course with LARS Code ""(.*)""")]
 
         public async Task WhenTheUserSelectsManageProvidersOnCourseWithLARSCode(string larsCode)
         {
@@ -124,7 +127,7 @@ public class MangeRestrictedCoursesSteps
         }
 
     [When(@"the user seaches for provider with UKPRN ""(.*)""")]
-    
+
         public async Task WhenTheUserSearchesForProviderWithUKPRN(string UKPRN)
         {
             await _academicProfessionalPage.SearchFunctionality(UKPRN);
@@ -134,7 +137,7 @@ public class MangeRestrictedCoursesSteps
     [Then(@"the user is able to verify the provider results contains ""(.*)""")]
 
         public async Task ThenTheUserIsAbleToVerifyTheProviderResults(string searchWord)
-        {
+    {
             await _academicProfessionalPage.VerifyResults(searchWord);
         }
     [Then(@"the user selects the filter ""(.*)""")]
