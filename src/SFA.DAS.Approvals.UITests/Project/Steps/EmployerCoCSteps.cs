@@ -101,7 +101,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     await employerStepsHelper.EmployerResumePayments(page1, apprenticeship);
                     await page1.EmployerVerifyPaymentStatus(PaymentStatus.Active);
                     page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
-                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payments resumed", "Manual update");
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payment changed from Paused to Active", "Manual update");
                     await page2.ClickViewLearnerDetailsLink();
                     break;
                 default:
