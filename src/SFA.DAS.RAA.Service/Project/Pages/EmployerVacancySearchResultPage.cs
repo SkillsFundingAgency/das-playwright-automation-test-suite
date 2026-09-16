@@ -1,4 +1,5 @@
-﻿using SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
+﻿using NUnit.Framework;
+using SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 
 namespace SFA.DAS.RAA.Service.Project.Pages;
 
@@ -150,29 +151,33 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
     protected async Task SearchVacancyMultipleTimes()
     {
+        var searchBox = page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" });
+
+        var searchButton = page.GetByRole(AriaRole.Button, new() { Name = "Search" });
+
         var advertCountMessage = page.Locator(".govuk-body.govuk-\\!-font-weight-bold");
 
-        for (int attempt = 1; attempt <= 8; attempt++)
+        for (var attempt = 0; attempt < 8; attempt++)
         {
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).ClearAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+            await searchBox.ClearAsync();
+            await searchButton.ClickAsync();
 
-            await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" })
-                .FillAsync(vacancyTitleDataHelper.VacancyTitle);
+            await searchBox.FillAsync(vacancyTitleDataHelper.VacancyTitle);
+            await searchButton.ClickAsync();
 
-            await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+            var messageText = await advertCountMessage.TextContentAsync() ?? string.Empty;
 
-            var messageText = await advertCountMessage.TextContentAsync();
-
-            if (!string.IsNullOrWhiteSpace(messageText) &&
-                messageText.Contains($"{vacancyTitleDataHelper.VacancyTitle}") &&
+            if (messageText.Contains(vacancyTitleDataHelper.VacancyTitle) &&
                 messageText.Trim().StartsWith('1'))
             {
-                break;
+                return;
             }
 
             await page.WaitForTimeoutAsync(5000);
         }
+
+        Assert.Fail(
+            $"Vacancy '{vacancyTitleDataHelper.VacancyTitle} apprenticeship' was not found after 8 attempts.");
     }
 }
 

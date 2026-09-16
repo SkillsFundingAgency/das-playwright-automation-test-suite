@@ -1,4 +1,5 @@
 
+using SFA.DAS.EmployerPortal.UITests.Project;
 using System.Linq;
 
 namespace SFA.DAS.RAAProvider.UITests.Project.Tests.Pages;
@@ -41,10 +42,12 @@ public class SelectEmployersPage(ScenarioContext context) : RaaBasePage(context)
         objectContext.SetDebugInformation($"Employer with hashed id '{hashedidvalue}' has {legalEntity.Count} legal entities with provider permission");
 
         var value = GetRandomElementFromListOfElements(legalEntity).Value;
+
+        var organisationName = objectContext.GetOrganisationName();
       
         if (isRaaTransfer)
         {
-            await page.Locator("tr").Filter(new() { Has = page.Locator($"td[data-label='Legal Entity'] div:text-is('{RAADataHelper.EmployerNameWithNoPermissions}')") })
+            await page.Locator("tr").Filter(new() { Has = page.Locator($"td[data-label='Legal Entity'] div:text-is('{organisationName}')") })
                 .GetByRole(AriaRole.Button, new() { Name = "Select" }).ClickAsync();
         }
         else

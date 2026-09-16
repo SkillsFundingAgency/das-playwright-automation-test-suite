@@ -90,7 +90,11 @@ public class ManageTrainingProvidersLinkHomePage(ScenarioContext context) : Home
 
 public class ManageTrainingProvidersPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
-    private const string ProviderNameWithNoPermissions = "CHICHESTER COLLEGE GROUP";
+    string GetProviderName()
+    {
+        var providerConfig = context.Get<dynamic>("providerconfigkey");
+        return providerConfig.Name;
+    }
 
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training providers");
 
@@ -98,7 +102,7 @@ public class ManageTrainingProvidersPage(ScenarioContext context) : EmployerPort
 
     private static string NotificationBanner => ".govuk-notification-banner";
 
-    private ILocator RecruitApprenticesCell() => page.Locator($"tr:has(td:has-text('{ProviderNameWithNoPermissions}'))")
+    private ILocator RecruitApprenticesCell() => page.Locator($"tr:has(td:has-text('{GetProviderName()}'))")
         .Locator("td[headers='recruit-apprentices']");
     public async Task<bool> IsRecruitPermissionsSetToNo()
     {
