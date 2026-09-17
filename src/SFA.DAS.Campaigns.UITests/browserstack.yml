@@ -5,8 +5,8 @@ projectName: AS_Accessibility
 platforms:
   - os: Windows
     osVersion: 11
-    browserName: Chrome
-    browserVersion: v141.0
+    browserName: Edge
+    browserVersion: latest
     # accessibility: $(BROWSERSTACK_ACCESSIBILITY)
     accessibility: true
 browserstackLocal: false
