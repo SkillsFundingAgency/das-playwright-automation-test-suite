@@ -12,12 +12,14 @@ public class ChangeCourseDetailsSteps
     private readonly ScenarioContext _context;
     private readonly AcademicProfessionalPage _academicProfessionalPage;
     private readonly StopThisProviderPage _stopThisProviderPage;
+    private readonly AddATrainingProviderPage _addATrainingProviderPage;
 
     public ChangeCourseDetailsSteps(ScenarioContext context)
     {
         _context = context;
         _academicProfessionalPage = new AcademicProfessionalPage(context);
         _stopThisProviderPage = new StopThisProviderPage(context);
+        _addATrainingProviderPage = new AddATrainingProviderPage(context);
     }
 
     private async Task<StopThisProviderPage>OpenStopThisProviderPage(string firstTime,string UKPRN)
@@ -26,6 +28,14 @@ public class ChangeCourseDetailsSteps
         await home.ClickChangeDate(firstTime, UKPRN);
         return await new StopThisProviderPage(_context)
             .VerifyPageAsync( () => new StopThisProviderPage(_context));
+    }
+
+    private async Task<AddATrainingProviderPage>ConfirmAddAProviderPage(string UKPRN)
+    {
+        var home = new StopThisProviderPage(_context);
+        await home.ProviderToRestrict(UKPRN);
+        return await new AddATrainingProviderPage(_context)
+            .VerifyPageAsync( () => new AddATrainingProviderPage(_context));
     }
 
     [Given(@"the user clicks to change the details of provider with UKPRN ""(.*)""")]
@@ -91,5 +101,53 @@ public class ChangeCourseDetailsSteps
     public async Task ThenTheBannerForUKPRNDisplays(string UKPRN, string bannerMessage)
     {
         await _academicProfessionalPage.AssertBanner(UKPRN, bannerMessage);
+    }
+
+    [Given(@"the user clicks to add a training provider")]
+    [When(@"the user clicks to add a training provider")]
+    
+    public async Task GivenTheUserClicksToAddATrainingProvider()
+    {
+        await _academicProfessionalPage.AddTrainingProvider();
+    }
+
+    [When(@"the user submits the UKPRN ""(.*)"" to add")]
+
+    public async Task WhenTheUserSubmitsTheUKPRNToAdd(string UKPRN)
+    {
+        await ConfirmAddAProviderPage(UKPRN);
+    }
+
+    [Then(@"the user is asked to confirm that they want to allow this provider to offer this course")]
+
+    public async Task ThenTheUserIsAskedToConfirmThatTheyWantToAllowThisProviderToOfferThisCourse()
+    {
+        await _addATrainingProviderPage.VerifyPage();
+        await _addATrainingProviderPage.ConfirmAddATrainingProvider();
+    }
+
+    [Then(@"the user is asked to confirm that they want to allow this provider to offer this course and they click cancel")]
+
+    public async Task ThenTheUserIsAskedToConfirmThatTheyWantToAllowThisProviderToOfferThisCourseAndTheyClickCancel()
+    {
+                await _addATrainingProviderPage.VerifyPage();
+                await _addATrainingProviderPage.CancelAddATrainingProvider();
+        
+    }
+
+    [Then(@"it is confirmed that the provider with UKPRN ""(.*)"" has not been added to the list")]
+
+    public async Task ThenItIsConfirmedThatTheProviderWithUKPRNHasNotBeenAddedToTheList(string UKPRN)
+    {
+        await _academicProfessionalPage.SearchFunctionality(UKPRN);
+        await _academicProfessionalPage.VerifyResults(UKPRN,"no");
+    }
+
+    [Then(@"it is confirmed that the provider with UKPRN ""(.*)"" has been added to the list")]
+
+    public async Task ThenItIsConfirmedThatTheProviderWithUKPRNHasBeenAddedToTheList(string UKPRN)
+    {
+        await _academicProfessionalPage.SearchFunctionality(UKPRN);
+        await _academicProfessionalPage.VerifyResults(UKPRN,"yes");
     }
 }

@@ -44,4 +44,9 @@ public class AcademicProfessionalPage(ScenarioContext context) : AparAdminBasePa
         };
         await Assertions.Expect(listItem.Locator(banner)).ToContainTextAsync(bannerMessage);   
     }
+
+    public async Task AddTrainingProvider()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Add a training provider"}).ClickAsync();
+    }
 }
