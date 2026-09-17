@@ -1,6 +1,6 @@
 Feature: APAR_MRC_02_ChangeDate
 
-
+@restrictedcourses
 @aparmrc02
 @apar
 @regression

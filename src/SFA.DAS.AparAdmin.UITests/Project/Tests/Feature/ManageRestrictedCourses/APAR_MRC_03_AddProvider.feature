@@ -1,7 +1,7 @@
 Feature: APAR_MRC_03_AddProvider
 
-
-@aparmrc02
+@restrictedcourses
+@aparmrc03
 @apar
 @regression
 Scenario: APAR_MRC_03_Add a provider to a restricted course
