@@ -32,7 +32,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
     {
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Draft adverts");
 
-        await SearchTransferredVacancy();
+        await SearchVacancy();
 
         if (isRaaTransfer)
         {
@@ -48,7 +48,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
     {
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Closed adverts");
 
-        await SearchTransferredVacancy();
+        await SearchVacancy();
 
         if (isRaaTransfer)
         {
@@ -71,7 +71,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
         //await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
-        await SearchTransferredVacancy();
+        await SearchVacancy();
 
         if (isRaaTransfer)
         {
@@ -100,7 +100,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
         //await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
-        await SearchTransferredVacancy();
+        await SearchVacancy();
 
         if (isRaaTransfer)
         {
@@ -148,7 +148,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
         return await VerifyPageAsync(() => new SharedApplicatinsForAVacancyPage(context));
     }
 
-    protected async Task SearchTransferredVacancy()
+    protected async Task SearchVacancy()
     {
         var searchBox = page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" });
 
@@ -160,8 +160,8 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
         await searchButton.ClickAsync();    
 
-        await retryHelper.RetryOnTransferredAdvertsPage(
-            async () => await Assertions.Expect(advertCountMessage).ToContainTextAsync($"1.*'{vacancyTitleDataHelper.VacancyTitle}'"), ReloadPageAsync);
+        await retryHelper.RetryOnSearchAdvertsPage(
+            async () => await Assertions.Expect(advertCountMessage).ToContainTextAsync(new Regex($"1.*'{vacancyTitleDataHelper.VacancyTitle}'")), ReloadPageAsync);
 
     }
 }
