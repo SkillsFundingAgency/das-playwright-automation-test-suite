@@ -21,10 +21,9 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Draft adverts");
 
-        //await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" }).FillAsync(vacancyTitleDataHelper.VacancyTitle);
 
-        //await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
-        await SearchVacancyMultipleTimes();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
         await page.GetByRole(AriaRole.Row, new() { Name = vacancyTitleDataHelper.VacancyTitle }).GetByRole(AriaRole.Link, new() { Name = "Edit and submit" }).ClickAsync();
     }
@@ -33,7 +32,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
     {
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Draft adverts");
 
-        await SearchVacancyMultipleTimes();
+        await SearchTransferredVacancy();
 
         if (isRaaTransfer)
         {
@@ -49,7 +48,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
     {
         await Assertions.Expect(page.Locator(".govuk-heading-xl")).ToContainTextAsync("Closed adverts");
 
-        await SearchVacancyMultipleTimes();
+        await SearchTransferredVacancy();
 
         if (isRaaTransfer)
         {
@@ -72,7 +71,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
         //await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
-        await SearchVacancyMultipleTimes();
+        await SearchTransferredVacancy();
 
         if (isRaaTransfer)
         {
@@ -101,7 +100,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
         //await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
 
-        await SearchVacancyMultipleTimes();
+        await SearchTransferredVacancy();
 
         if (isRaaTransfer)
         {
@@ -149,7 +148,7 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
         return await VerifyPageAsync(() => new SharedApplicatinsForAVacancyPage(context));
     }
 
-    protected async Task SearchVacancyMultipleTimes()
+    protected async Task SearchTransferredVacancy()
     {
         var searchBox = page.GetByRole(AriaRole.Textbox, new() { Name = "Search by advert title or" });
 
@@ -157,27 +156,13 @@ public abstract class VacancySearchResultPage(ScenarioContext context) : RaaBase
 
         var advertCountMessage = page.Locator(".govuk-body.govuk-\\!-font-weight-bold");
 
-        for (var attempt = 0; attempt < 8; attempt++)
-        {
-            await searchBox.ClearAsync();
-            await searchButton.ClickAsync();
+        await searchBox.FillAsync(vacancyTitleDataHelper.VacancyTitle);
 
-            await searchBox.FillAsync(vacancyTitleDataHelper.VacancyTitle);
-            await searchButton.ClickAsync();
+        await searchButton.ClickAsync();    
 
-            var messageText = await advertCountMessage.TextContentAsync() ?? string.Empty;
+        await retryHelper.RetryOnTransferredAdvertsPage(
+            async () => await Assertions.Expect(advertCountMessage).ToContainTextAsync($"1.*'{vacancyTitleDataHelper.VacancyTitle}'"), ReloadPageAsync);
 
-            if (messageText.Contains(vacancyTitleDataHelper.VacancyTitle) &&
-                messageText.Trim().StartsWith('1'))
-            {
-                return;
-            }
-
-            await page.WaitForTimeoutAsync(5000);
-        }
-
-        Assert.Fail(
-            $"Vacancy '{vacancyTitleDataHelper.VacancyTitle} apprenticeship' was not found after 8 attempts.");
     }
 }
 

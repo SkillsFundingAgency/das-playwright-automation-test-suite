@@ -14,6 +14,11 @@ public class RetryHelper(ScenarioInfo scenarioInfo, ObjectContext objectContext)
         await RetryOnException(func, RetryTimeOut.GetTimeSpan([5, 8, 13]), retryfunc);
     }
 
+    public async Task RetryOnTransferredAdvertsPage<T>(Func<Task> func, Func<Task<T>> retryfunc)
+    {
+        await RetryOnException(func, RetryTimeOut.GetTimeSpan([10, 10, 10, 10, 10, 10]), retryfunc);
+    }
+
     public async Task RetryOnDfeSignMFAAuthCode(Func<Task> func)
     {
         var logging = GetRetryLogging();

@@ -92,7 +92,7 @@ public class ManageTrainingProvidersPage(ScenarioContext context) : EmployerPort
 {
     string GetProviderName()
     {
-        var providerConfig = context.Get<dynamic>("providerconfigkey");
+        var providerConfig = context.GetProviderConfig<ProviderConfig>();
         return providerConfig.Name;
     }
 
