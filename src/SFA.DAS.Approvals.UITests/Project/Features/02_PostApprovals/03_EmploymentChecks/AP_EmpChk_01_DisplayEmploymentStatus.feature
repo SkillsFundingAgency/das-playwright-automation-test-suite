@@ -1,4 +1,5 @@
-﻿Feature: AP_EmpChk_01_DisplayEmploymentStatus
+﻿@postapprovals
+Feature: AP_EmpChk_01_DisplayEmploymentStatus
 
 This test verify (part of) employment verification checks. 
 
@@ -12,7 +13,7 @@ Important:
 - Commitments job is currently scheduled to run every 5 mins in test environments
 - Integration b/w Employment Checks service and HMRC api is only available in PROD. 
 
-@tag1
+@regression
 Scenario: AP_EmpChk_01_Display Employment Verfication Status
 	Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "EmploymentChecks"
 	When Employement verification checks are "pending" for the apprentice
