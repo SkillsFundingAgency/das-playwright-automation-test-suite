@@ -92,11 +92,11 @@ public partial class ProviderHomePage : InterimProviderBasePage
         return await VerifyPageAsync(() => new ProviderReserveFundingForNonLevyEmployersPage(context));
     }
 
-    public async Task<ProviderApprenticeRequestsPage> GoToApprenticeRequestsPage()
+    public async Task<ProviderLearnerRequestsPage> GoToApprenticeRequestsPage()
     {
-        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Apprentice requests" }).ClickAsync();
+        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Learner requests" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new ProviderApprenticeRequestsPage(context));
+        return await VerifyPageAsync(() => new ProviderLearnerRequestsPage(context));
     }
 
     public async Task<ProviderFundingForNonLevyEmployersPage> GoToManageYourFunding()
@@ -108,7 +108,7 @@ public partial class ProviderHomePage : InterimProviderBasePage
 
     public async Task<ProviderManageYourLearnersPage>  GoToProviderManageYourApprenticePage()
     {
-        await page.GetByRole(AriaRole.Heading, new() { Name = "Manage your apprentices" }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage learners" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderManageYourLearnersPage(context));
     }
@@ -215,7 +215,7 @@ public class ProviderManageYourLearnersPage(ScenarioContext context) : InterimPr
     }
 }
 
-public class ProviderApprenticeRequestsPage(ScenarioContext context) : InterimProviderBasePage(context)
+public class ProviderLearnerRequestsPage(ScenarioContext context) : InterimProviderBasePage(context)
 {
     public override async Task VerifyPage()
     {

@@ -16,5 +16,5 @@ Scenario: AP_PR_AO_Provider Roles Account Owner Apprentice Requests
 	Then the user can create a cohort by selecting learners from ILR
 	Then the user can edit email address of the apprentice before approval
 	And the user can send a cohort to employer 
-	And the user can delete an apprentice in a cohort
-	And the user can delete a cohort
+	And the user can remove the learner in a cohort
+	And the user can remove a cohort
