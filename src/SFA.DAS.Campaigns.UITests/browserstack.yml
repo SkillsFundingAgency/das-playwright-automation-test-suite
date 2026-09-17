@@ -6,14 +6,14 @@ platforms:
   - os: Windows
     osVersion: 11
     browserName: Chrome
-    browserVersion: latest
+    browserVersion: v141.0
     # accessibility: $(BROWSERSTACK_ACCESSIBILITY)
-    accessibility: "false"
-browserstackLocal: "false"
+    accessibility: true
+browserstackLocal: false
 accessibilityOptions:
   wcagVersion: wcag22aa
 # browserstackAutomation: $(BROWSERSTACK_ACCESSIBILITY)
-browserstackAutomation: "false"
+browserstackAutomation: false
 parallelsPerPlatform: 2
 CUSTOM_TAG_1: ""
 # Use CUSTOM_TAG_<N> and set more build tags as you need.
