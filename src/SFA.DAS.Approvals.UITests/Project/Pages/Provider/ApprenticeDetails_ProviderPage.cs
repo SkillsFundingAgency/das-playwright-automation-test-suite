@@ -20,6 +20,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator ViewChangeHistoryLink => page.GetByRole(AriaRole.Link, new() { Name = "View change history for this learner." });
         private ILocator ChangeEmployerLink => page.Locator("#change-employer-link");
         private ILocator ChangeVersionLink => page.Locator("#change-version-link");
+        private ILocator EmploymentStatus => page.Locator("id=employment-status");
 
         #endregion
 
@@ -100,6 +101,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task<bool> IsChangeOfEmployerLinkVisible() => await ChangeEmployerLink.IsVisibleAsync();
         internal async Task<bool> IsChangeOfVersionLinkVisible() => await ChangeVersionLink.IsVisibleAsync();
         internal async Task<bool> IsEditApprenticeDetailsLinkVisible() => await EditApprenticeDetailsLink.IsVisibleAsync();
+        internal async Task<bool> IsEmploymentStatusVisible() => await EmploymentStatus.IsVisibleAsync();
+        internal async Task<string> GetEmploymentStatus() => await EmploymentStatus.InnerTextAsync();
+        
 
     }
 }

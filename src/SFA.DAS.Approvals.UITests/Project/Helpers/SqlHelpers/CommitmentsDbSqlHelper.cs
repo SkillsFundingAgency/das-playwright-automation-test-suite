@@ -119,6 +119,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             await ExecuteSqlCommand(query);
         }
 
+        internal async Task<List<string>> GetEmploymentCheckValuesFromCommitmentsDb(int apprenticeshipId)
+        {
+            string query = $"SELECT * FROM [dbo].[EmployerVerificationRequest] WHERE ApprenticeshipId = {apprenticeshipId}";
+            var result = await GetData(query);
+            return result ?? new List<string>();
+        }
+
+        internal async Task ResetEmploymentCheckValuesInCommitmentsDb(int apprenticeshipId)
+        {
+            var date = DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd");
+            string query = $@"UPDATE [dbo].[EmployerVerificationRequest]
+                            SET Created = '{date}', Updated = '{date}', LastCheckedDate = '{date}', Employed = NULL, Status = 0, Notes = NULL
+                            WHERE apprenticeshipid = {apprenticeshipId}";
+            await ExecuteSqlCommand(query);
+        }
 
     }
 }

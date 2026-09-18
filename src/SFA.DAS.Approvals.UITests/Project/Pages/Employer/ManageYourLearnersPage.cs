@@ -9,6 +9,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         private ILocator statusLocator => page.Locator("tbody.govuk-table__body tr.govuk-table__row:first-of-type td[data-label='Status'] strong");
         private ILocator searchBox => page.Locator("input#searchTerm[name='searchTerm']");
         private ILocator searchButton => page.Locator("button.govuk-button.das-search-form__button", new() { HasTextString = "Search" });
+        private ILocator cell(string label) => page.Locator($"td[data-label='{label}']").First;
         private ILocator apprenticeLink(string apprenticeName) => page.GetByRole(AriaRole.Link, new () { Name = apprenticeName });
         #endregion
 
@@ -51,6 +52,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await apprenticeLink(apprenticeName).ClickAsync();
             return await VerifyPageAsync(() => new LearnerDetailsPage(context, apprenticeName));
         }
+
+        internal async Task<string> GetEmploymentStatus() => await cell("Employment status").InnerTextAsync();
+ 
 
         private async Task SearchApprentice(string ULN)
         {
