@@ -21,7 +21,7 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Tests.StepDefinitions
             _context = context;
             objectContext = context.Get<ObjectContext>();
             mailosaurApiHelper = context.Get<MailosaurApiHelper>();
-            var providerConfig = context.Get<dynamic>("providerconfigkey");
+            var providerConfig = context.GetProviderConfig<ProviderConfig>();
             providerEmail = providerConfig.Username;
             vacancyTitleDataHelper = context.Get<VacancyTitleDatahelper>();
             applicantEmail = context.GetUser<FAAApplyUser>().Username;
