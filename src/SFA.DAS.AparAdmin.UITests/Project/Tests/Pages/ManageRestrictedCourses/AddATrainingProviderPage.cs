@@ -11,12 +11,28 @@ public class AddATrainingProviderPage(ScenarioContext context) : BasePage(contex
 
     public async Task ConfirmAddATrainingProvider()
     {
-        await page.Locator("button:text('Confirm)").ClickAsync();
+        await page.Locator("button:text('Confirm')").ClickAsync();
     }
 
     public async Task CancelAddATrainingProvider()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Cancel"}).ClickAsync();
+    }
+
+    public async Task ErrorMessage()
+    {
+        await Assertions.Expect(page.Locator(".govuk-error-summary__title")).ToBeVisibleAsync();
+    }
+
+    public async Task ProviderToRestrict(string UKPRN)
+    {
+        await page.Locator("#SelectedUkprn").FillAsync(UKPRN);
+        bool valid = await page.Locator("#SelectedUkprn__option--0").IsVisibleAsync();
+        if(valid)
+        {
+            await page.Locator("#SelectedUkprn__option--0").ClickAsync();
+        }
+        await page.Locator("#continue").ClickAsync();
     }
 
 

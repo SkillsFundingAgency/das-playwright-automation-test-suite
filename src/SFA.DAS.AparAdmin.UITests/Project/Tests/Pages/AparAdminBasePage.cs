@@ -105,7 +105,7 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
 
         else if (resultCount == 0 && expected == "no")
         {
-            await Assertions.Expect(page.Locator(".govuk-heading-l")).ToContainTextAsync("No results");
+            await Assertions.Expect(page.Locator(".govuk-grid-column-two-thirds >> .govuk-heading-l")).ToContainTextAsync("No results");
         }
 
         else

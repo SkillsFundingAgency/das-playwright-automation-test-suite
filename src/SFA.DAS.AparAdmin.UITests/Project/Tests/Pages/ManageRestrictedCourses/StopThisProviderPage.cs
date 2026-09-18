@@ -37,11 +37,4 @@ public class StopThisProviderPage(ScenarioContext context) : AparAdminBasePage(c
     {
         await Assertions.Expect(page.Locator(".govuk-error-summary__body")).ToContainTextAsync(message);
     }
-
-    public async Task ProviderToRestrict(string UKPRN)
-    {
-        await page.Locator("#SelectedUkprn").FillAsync(UKPRN);
-        await page.Locator("#SelectedUkprn__option--0").ClickAsync();
-        await page.Locator("#continue").ClickAsync();
-    }
 }

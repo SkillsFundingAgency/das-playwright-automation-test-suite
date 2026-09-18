@@ -32,7 +32,7 @@ public class ChangeCourseDetailsSteps
 
     private async Task<AddATrainingProviderPage>ConfirmAddAProviderPage(string UKPRN)
     {
-        var home = new StopThisProviderPage(_context);
+        var home = new AcademicProfessionalPage(_context);
         await home.ProviderToRestrict(UKPRN);
         return await new AddATrainingProviderPage(_context)
             .VerifyPageAsync( () => new AddATrainingProviderPage(_context));
@@ -112,13 +112,14 @@ public class ChangeCourseDetailsSteps
     }
 
     [When(@"the user submits the UKPRN ""(.*)"" to add")]
+    [Then(@"the user submits the UKPRN ""(.*)"" to add")]
 
     public async Task WhenTheUserSubmitsTheUKPRNToAdd(string UKPRN)
     {
         await ConfirmAddAProviderPage(UKPRN);
     }
 
-    [Then(@"the user is asked to confirm that they want to allow this provider to offer this course")]
+    [Then(@"the user is asked to confirm that they want to allow this provider to offer this course and they click confirm")]
 
     public async Task ThenTheUserIsAskedToConfirmThatTheyWantToAllowThisProviderToOfferThisCourse()
     {
@@ -149,5 +150,20 @@ public class ChangeCourseDetailsSteps
     {
         await _academicProfessionalPage.SearchFunctionality(UKPRN);
         await _academicProfessionalPage.VerifyResults(UKPRN,"yes");
+    }
+
+    [When(@"the user adds a UKPRN that does not exist ""(.*)")]
+
+    public async Task WhenTheUserAddsAUKPRNThatDoesNotExist( string UKPRN)
+    {
+        var home = new AddATrainingProviderPage(_context);
+        await home.ProviderToRestrict(UKPRN);
+    }
+
+    [Then(@"the user gets an errror message")]
+
+    public async Task ThenTheUserGetsAnErrorMessage()
+    {
+        await _addATrainingProviderPage.ErrorMessage();
     }
 }

@@ -49,4 +49,15 @@ public class AcademicProfessionalPage(ScenarioContext context) : AparAdminBasePa
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Add a training provider"}).ClickAsync();
     }
+
+    public async Task ProviderToRestrict(string UKPRN)
+    {
+        await page.Locator("#SelectedUkprn").FillAsync(UKPRN);
+        bool valid = await page.Locator("#SelectedUkprn__option--0").IsVisibleAsync();
+        if(valid)
+        {
+            await page.Locator("#SelectedUkprn__option--0").ClickAsync();
+        }
+        await page.Locator("#continue").ClickAsync();
+    }
 }
