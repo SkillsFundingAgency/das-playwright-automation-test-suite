@@ -38,7 +38,7 @@ public class MangeRestrictedCoursesSteps
     [Then(@"the user is able to verify the (?:provider|restricted course) results contain ""(.*)""")]
     public async Task ThenTheUserIsAbleToVerifyTheRestrictedCourseResults(string searchWord)
     {
-        await _viewMangeRestrictedCoursesPage.VerifyResults(searchWord);
+        await _viewMangeRestrictedCoursesPage.VerifyResults(searchWord, "yes");
     }
 
     [When(@"the user selects the ""(.*)"" training type filter")]
@@ -138,7 +138,7 @@ public class MangeRestrictedCoursesSteps
 
         public async Task ThenTheUserIsAbleToVerifyTheProviderResults(string searchWord)
     {
-            await _academicProfessionalPage.VerifyResults(searchWord);
+            await _academicProfessionalPage.VerifyResults(searchWord, "yes");
         }
     [Then(@"the user selects the filter ""(.*)""")]
 
