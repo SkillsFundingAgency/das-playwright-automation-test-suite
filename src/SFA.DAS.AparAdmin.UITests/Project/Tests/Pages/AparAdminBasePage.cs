@@ -64,6 +64,56 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
         }
     }
 
+    public async Task SelectFilter(string filterChoice)
+    {
+        await page.GetByRole(AriaRole.Checkbox,
+            new()
+            {
+                Name = filterChoice,
+                Exact = true
+            })
+           .CheckAsync();
+    }
+
+    public async Task SearchFunctionality(string searchKeyWord)
+    {
+        await page.Locator("#search-term-input").FillAsync(searchKeyWord);
+        await ApplyFilter();
+    }
+
+    public async Task VerifyResults(string searchWord, string expected)
+    {
+        var results = page.Locator(".app-results-list__item");
+        var resultCount = await results.CountAsync();
+
+        if (resultCount == 0 && expected == "yes")
+        {
+            throw new Exception("No results were displayed.");
+        }
+
+        else if (resultCount > 0 && expected == "yes")
+        {
+            for (int i = 0; i < resultCount; i++)
+            {
+                string text = (await results.Nth(i).InnerTextAsync()).Trim();
+                if (!(text.Contains(searchWord)))
+                {
+                    throw new Exception("Results are not correct.");
+                }
+            }
+        }
+
+        else if (resultCount == 0 && expected == "no")
+        {
+            await Assertions.Expect(page.Locator(".govuk-grid-column-two-thirds >> .govuk-heading-l")).ToContainTextAsync("No results");
+        }
+
+        else
+        {
+            throw new Exception("Search returned results.");
+        }
+    }
+
     public async Task VerifyNoFiltersSelected()
     {
         var selectedFilters = page.Locator(".das-filter__tag");

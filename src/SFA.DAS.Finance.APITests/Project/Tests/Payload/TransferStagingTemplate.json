@@ -1,6 +1,9 @@
 {
   "transfers": [
     {
+        "ApprenticeshipId": 25474,
+       "Type": "Levy",
+       "RequiredPaymentId": "bf541a9a-d5e5-41cd-9893-ddcef2c033e8",
       "transferId": 0,
       "senderAccountId": 243,
       "receiverAccountId": 8766,

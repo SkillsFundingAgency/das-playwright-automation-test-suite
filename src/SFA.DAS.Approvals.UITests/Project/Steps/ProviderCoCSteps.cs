@@ -75,6 +75,31 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.ReturnBackToManageYourApprenticesPage();
         }
 
+        [Then(@"^provider verifies that Employment Status is ""(.*)""$")]
+        public async Task ThenProviderVerifiesThatEmploymentStatusIs(string expectedEmploymentStatus)
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var apprenticeName = apprenticeship.ApprenticeDetails.FullName;
+
+            //verify Employment Verification status on 'Manage your learners' page:
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            await new ProviderHomePage(context).GoToProviderManageYourApprenticePage();
+            var page = await new ManageYourLearners_ProviderPage(context).SearchApprentice(apprenticeName);            
+            Assert.IsTrue(await page.GetEmploymentStatus() == expectedEmploymentStatus, "Employment Verification status on 'Manage your learners' page");
+
+            //verify Employment Verification status on 'Learner details' page:
+            var page1 = await page.OpenFirstItemFromTheList(apprenticeName);
+            if (expectedEmploymentStatus == "blank")
+            {
+                Assert.IsFalse(await page1.IsEmploymentStatusVisible(), "Employment Verification status is not visible on 'Learner details' page");
+            }
+            else
+            {
+                Assert.IsTrue(await page1.GetEmploymentStatus() == expectedEmploymentStatus, "Employment Verification status on 'Learner details' page");
+            }
+
+
+        }
 
 
 

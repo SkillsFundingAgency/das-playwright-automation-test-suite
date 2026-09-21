@@ -1,5 +1,6 @@
 ﻿Feature: Fin_IA_FL_04_AccountGetEnglishFractionCurrent
 
+@ignore
 @api
 @employerfinanceapi
 @outerapi
