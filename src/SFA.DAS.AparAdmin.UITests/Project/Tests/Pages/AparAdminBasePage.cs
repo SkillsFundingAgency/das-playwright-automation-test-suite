@@ -81,26 +81,36 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
         await ApplyFilter();
     }
 
-    public async Task VerifyResults(string searchWord)
+    public async Task VerifyResults(string searchWord, string expected)
     {
         var results = page.Locator(".app-results-list__item");
         var resultCount = await results.CountAsync();
 
-        if (resultCount == 0)
+        if (resultCount == 0 && expected == "yes")
         {
             throw new Exception("No results were displayed.");
         }
 
-        else
+        else if (resultCount > 0 && expected == "yes")
         {
             for (int i = 0; i < resultCount; i++)
-        {
-            string text = (await results.Nth(i).InnerTextAsync()).Trim();
-            if (!(text.Contains(searchWord)))
             {
-                throw new Exception("Results are not correct.");
+                string text = (await results.Nth(i).InnerTextAsync()).Trim();
+                if (!(text.Contains(searchWord)))
+                {
+                    throw new Exception("Results are not correct.");
+                }
             }
         }
+
+        else if (resultCount == 0 && expected == "no")
+        {
+            await Assertions.Expect(page.Locator(".govuk-grid-column-two-thirds >> .govuk-heading-l")).ToContainTextAsync("No results");
+        }
+
+        else
+        {
+            throw new Exception("Search returned results.");
         }
     }
 

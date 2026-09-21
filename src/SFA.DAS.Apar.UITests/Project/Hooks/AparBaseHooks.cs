@@ -10,6 +10,7 @@ public abstract class AparBaseHooks : FrameworkBaseHooks
     private readonly AparApplyAndQnASqlDbHelper _roatpApplyAndQnASqlDbHelper;
     private readonly RoatpQnASqlDbHelper _roatpQnASqlDbHelper;
     private readonly AparAdminSqlDbHelper _adminClearDownDataHelpers;
+    private readonly ManagingStandardsSqlDbHelper _maanagingStandardsSqlDbHelper;
     protected readonly DbConfig _dbConfig;
 
     private readonly AparApplyUkprnDataHelpers _roatpApplyUkprnDataHelpers;
@@ -32,6 +33,7 @@ public abstract class AparBaseHooks : FrameworkBaseHooks
         _roatpAdminUkprnDataHelpers = new NewAparAdminUkprnDataHelpers();
         _roatpOldAdminUkprnDataHelpers = new OldAparAdminUkprnDataHelpers();
         _roatpFullUkprnDataHelpers = new AparFullUkprnDataHelpers();
+        _maanagingStandardsSqlDbHelper = new ManagingStandardsSqlDbHelper(_objectContext, _dbConfig);
     }
 
     protected async Task GoToUrl(string url) => await Navigate(url);
@@ -63,6 +65,16 @@ public abstract class AparBaseHooks : FrameworkBaseHooks
     protected async Task AllowListProviders(string ukprn = null) => await _roatpApplyAndQnASqlDbHelper.AllowListProviders(ukprn);
 
     protected async Task DeleteTrainingProvider() => await _adminClearDownDataHelpers.DeleteTrainingProvider(GetUkprn());
+    protected async Task ResetLastStartDate()
+    {
+        await _maanagingStandardsSqlDbHelper.ResetLastStartDate();
+    }
+    protected async Task ResetTrainingProviderFromCourse()
+    {
+        await _maanagingStandardsSqlDbHelper.ResetTrainingProviderFromCourse();
+    }
+    
+
     protected async Task ResetTrainingProvider() => await _adminClearDownDataHelpers.ResetProviderDetails(GetUkprn());
 
     protected async Task GetRoatpAppplyData() => await SetDetails(_roatpApplyUkprnDataHelpers.GetRoatpAppplyData(GetTag("rp")));
