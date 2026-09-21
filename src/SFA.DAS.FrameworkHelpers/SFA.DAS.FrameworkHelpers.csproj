@@ -19,10 +19,6 @@
 		<PackageReference Include="SFA.DAS.NServiceBus" Version="17.0.49" />
 		<PackageReference Include="Microsoft.Playwright" Version="1.60.0" />
 		<PackageReference Include="Microsoft.Playwright.NUnit" Version="1.60.0" />
-		<PackageReference Include="BrowserStack.TestAdapter" Version="*" />
-		<None Update="..\..\browserstack.yml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 
 </Project>
