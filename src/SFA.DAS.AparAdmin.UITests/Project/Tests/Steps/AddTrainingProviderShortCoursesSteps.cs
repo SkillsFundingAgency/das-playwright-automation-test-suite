@@ -192,5 +192,14 @@ public class AddTrainingProviderShortCoursesSteps
 
         await providerDetailsPage.VerifyProviderStatus(expectedStatus);
     }
+
+    [When(@"the admin initates an application with an invalid UKPRN ""(.*)"", error message is displayed")]
+
+    public async Task GivenTheAdminInitiatesAnApplicationWithAnImvalidUKPRN(string UKPRN)
+    {
+        var manageTrainingProviderPage = await OpenManageTrainingProviderPage();
+        var addPage = await manageTrainingProviderPage.ClickAddNewTrainingProvider();
+        await addPage.EnterInvalidProviderDetails(UKPRN);
+    }
 }
 
