@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Common
@@ -21,7 +22,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Common
 
         public async Task AssertChangeHistoryRow(DateTime expectedDate, string expectedChangeMade, string expectedDecision)
         {
-            var expectedDateString = expectedDate.ToString("d MMM yyyy");
+            var expectedDateString = expectedDate.ToString("d MMM yyyy", CultureInfo.InvariantCulture);
                 
             // Locate the row by matching all three expected values
             var row = page.Locator("tr", new() { HasTextString = expectedDateString }).Last;
