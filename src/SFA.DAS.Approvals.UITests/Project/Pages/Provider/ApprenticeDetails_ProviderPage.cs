@@ -2,7 +2,7 @@
 using SFA.DAS.Approvals.UITests.Project.Pages.Common;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
-
+using System.Globalization;
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
     internal class ApprenticeDetails_ProviderPage : ApprovalsBasePage
@@ -69,19 +69,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<ApprenticeDetails_ProviderPage> ProviderVerifyApprenticeStatus(ApprenticeshipStatus status, DateTime? date)
         {
-             
 
             switch (status)
             {
                 case ApprenticeshipStatus.Paused:
-                    await Assertions.Expect(page.Locator("th:has-text('Payments') + td")).ToContainTextAsync(status.ToString());
+                    await Assertions.Expect(page.Locator("th:has-text('Status') + td")).ToContainTextAsync(status.ToString());
                     // await Assertions.Expect(page.Locator("tr", new() { HasTextString = "Apprenticeship pause date" }).Locator("#apprenticeship-pause-date")).ToHaveTextAsync(date.Value.ToString("d MMM yyyy"));
                     break;
                 case ApprenticeshipStatus.Stopped:
-                    await Assertions.Expect(page.Locator("tr", new() { HasTextString = "Stop applies from" }).Locator("#apprenticeship-stop-date")).ToHaveTextAsync(date.Value.ToString("MMM yyyy"));
+                    await Assertions.Expect(page.Locator("tr", new() { HasTextString = "Stop applies from" }).Locator("#apprenticeship-stop-date")).ToHaveTextAsync(date.Value.ToString("MMM yyyy", CultureInfo.InvariantCulture));
                     break;
                 case ApprenticeshipStatus.Completed: 
-                    await Assertions.Expect(page.Locator("tr", new() { HasTextString = "Completion payment month" }).Locator("#apprenticeship-completed-date")).ToHaveTextAsync(date.Value.ToString("MMM yyyy"));
+                    await Assertions.Expect(page.Locator("tr", new() { HasTextString = "Completion payment month" }).Locator("#apprenticeship-completed-date")).ToHaveTextAsync(date.Value.ToString("MMM yyyy", CultureInfo.InvariantCulture));
                     break;
                 default:
                     break;

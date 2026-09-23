@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using System;
+using System.Globalization;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
@@ -36,7 +37,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             Assert.That(await ApprenticeName.InnerTextAsync(), Is.EqualTo(apprenticeship.ApprenticeDetails.FullName));
             Assert.That(await ULN.InnerTextAsync(), Is.EqualTo(apprenticeship.ApprenticeDetails.ULN));
             Assert.That(await TrainingCourse.InnerTextAsync(), Is.EqualTo(apprenticeship.TrainingDetails.CourseTitle));
-            Assert.That(await PauseDate.InnerTextAsync(), Is.EqualTo(DateTime.Now.ToString("MMM yyyy")));
+            Assert.That(await PauseDate.InnerTextAsync(), Is.EqualTo(DateTime.Now.ToString("MMM yyyy", CultureInfo.InvariantCulture)));
         }
 
     }

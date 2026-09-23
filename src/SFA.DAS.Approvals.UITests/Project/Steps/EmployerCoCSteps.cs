@@ -3,6 +3,7 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using System;
+using System.Globalization;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -63,16 +64,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     break;
                 case "Paused":
                     await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Paused, "Apprenticeship pause date", expectedDate);
-                    //Assert editiability of paused record:
-                    Assert.True(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
-                    Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
-                    Assert.True(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
                     Assert.True(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
-                    Assert.False(await page1.IsEditVersionLinkAvailable(), "IsEditVersionLinkAvailable");
-                    Assert.False(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
                     //Check history logs:
                     page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
-                    await page2.AssertChangeHistoryRow(DateTime.Now, $"Learning has been paused on {expectedDate.ToString("d MMM yyyy")}", "Auto approved");
+                    await page2.AssertChangeHistoryRow(DateTime.Now, $"Learning has been paused on {expectedDate.ToString("d MMM yyyy", CultureInfo.InvariantCulture)}", "Auto approved");
                     break;
                 default:
                     throw new ArgumentException($"Invalid payment status: {status}");

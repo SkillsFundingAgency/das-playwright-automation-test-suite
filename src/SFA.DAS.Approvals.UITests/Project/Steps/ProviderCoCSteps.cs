@@ -67,7 +67,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     Assert.False(await page.IsChangeOfVersionLinkVisible(), "IsChangeOfVersionLinkVisible");
                     //verify history logs:
                     page2 = await page.ClickOnViewChangeHistoryLink(apprenticeName);
-                    // await page2.AssertChangeHistoryRow(DateTime.Now, $"Learning has been paused on {expectedDate.ToString("d MMM yyyy", CultureInfo.InvariantCulture)}", "Auto approved");
+                    await page2.AssertChangeHistoryRow(DateTime.Now, $"Learning has been paused on {expectedDate.ToString("d MMM yyyy", CultureInfo.InvariantCulture)}", "Auto approved");
                     break;
                 default:
                     break;

@@ -2,6 +2,7 @@
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using SFA.DAS.Approvals.UITests.Project.Pages.Common;
 using System;
+using System.Globalization;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
@@ -15,9 +16,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         private ILocator ViewChangeHistoryLink => page.GetByRole(AriaRole.Link, new() { Name = "View change history for this learner." });
         private ILocator EditStatusLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit status" });
         private ILocator ChangePymtStatusLink => page.Locator("#change-payments-link");
-        private ILocator ChangeProviderLink => page.GetByRole(AriaRole.Link, new() { Name = "Change   training provider" });
+        private ILocator ChangeProviderLink => page.GetByRole(AriaRole.Link, new() { Name = "Change" });
         private ILocator ChangeVersionLink => page.Locator("a", new () { HasTextString = "Change version" });
-        private ILocator EditApprenticeDetailsLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit   apprentice details" });
+        private ILocator EditApprenticeDetailsLink => page.Locator("[id*='edit-apprentice-link']");
         private ILocator EditPlannedTrainingEndDateLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit   end date" });
         private ILocator ApprenticeStatusTag => page.Locator("tr", new() { HasTextString = "Status" }).Locator("strong.govuk-tag");
         private ILocator PaymentsStatusTag => page.Locator("tr", new() { HasTextString = "Payments" }).Locator("strong.govuk-tag");
@@ -75,7 +76,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
             if (date.HasValue)
             {
-                string expectedDate = (status == ApprenticeshipStatus.Paused) ? date.Value.ToString("d MMM yyyy") : date.Value.ToString("MMMM yyyy");
+                string expectedDate = (status == ApprenticeshipStatus.Paused) ? date.Value.ToString("d MMM yyyy", CultureInfo.InvariantCulture) : date.Value.ToString("MMMM yyyy", CultureInfo.InvariantCulture);
                 await Assertions.Expect(StatusDateTitle).ToContainTextAsync(rowName);
                 await Assertions.Expect(StatusDateValue).ToContainTextAsync(expectedDate);
             }
