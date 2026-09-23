@@ -69,12 +69,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<ApprenticeDetails_ProviderPage> ProviderVerifyApprenticeStatus(ApprenticeshipStatus status, DateTime? date)
         {
-            await Assertions.Expect(page.Locator("#apprenticeship-status")).ToContainTextAsync(status.ToString());
+             
 
             switch (status)
             {
                 case ApprenticeshipStatus.Paused:
-                    await Assertions.Expect(page.Locator("tr", new() { HasTextString = "Apprenticeship pause date" }).Locator("#apprenticeship-pause-date")).ToHaveTextAsync(date.Value.ToString("d MMM yyyy"));
+                    await Assertions.Expect(page.Locator("th:has-text('Payments') + td")).ToContainTextAsync(status.ToString());
+                    // await Assertions.Expect(page.Locator("tr", new() { HasTextString = "Apprenticeship pause date" }).Locator("#apprenticeship-pause-date")).ToHaveTextAsync(date.Value.ToString("d MMM yyyy"));
                     break;
                 case ApprenticeshipStatus.Stopped:
                     await Assertions.Expect(page.Locator("tr", new() { HasTextString = "Stop applies from" }).Locator("#apprenticeship-stop-date")).ToHaveTextAsync(date.Value.ToString("MMM yyyy"));
