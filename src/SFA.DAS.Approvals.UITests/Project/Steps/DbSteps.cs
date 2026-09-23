@@ -1,7 +1,10 @@
-﻿using Polly;
+﻿using Microsoft.VisualBasic;
+using Polly;
+using Reqnroll.CommonModels;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
 using System;
 using System.Globalization;
@@ -18,6 +21,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private readonly LearningDbSqlHelper learningDbSqlHelper;
         private readonly LearnerDataDbSqlHelper learnerDataDbSqlHelper;
         private readonly ApprenticeDataHelper apprenticeDataHelper;
+        private readonly EmploymentCheckSqlHelper employmentCheckSqlHelper;
         private List<Apprenticeship> listOfApprenticeship;
 
 
@@ -31,6 +35,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             learnerDataDbSqlHelper = context.Get<LearnerDataDbSqlHelper>();
             accountsDbSqlHelper = context.Get<AccountsDbSqlHelper>();
             apprenticeDataHelper = new ApprenticeDataHelper(context);
+            employmentCheckSqlHelper = context.Get<EmploymentCheckSqlHelper>();
         }
 
         [Then("^a record is created in LearnerData Db for each learner$")]
@@ -249,6 +254,63 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             Assert.That(result[0], Is.EqualTo("2"), $"Expected payment status '2' but found '{result[0]}'");
         }
 
+        [Then(@"Employment Verification request is created in Commitments Db")]
+        public async Task ThenEmploymentVerificationRequestIsCreatedInCommitmentsDb()
+        {
+            var apprenticeshipId = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().ApprenticeDetails.ApprenticeshipId;
+            var result = await commitmentsDbSqlHelper.GetEmploymentCheckValuesFromCommitmentsDb(apprenticeshipId);
+            Assert.That(result is not null, $"No Employment Verification request found in Commitments Db for ApprenticeshipId: {apprenticeshipId}");
+        }
+
+        [When(@"^Employement verification checks are ""(.*)"" for the apprentice")]
+        [Given(@"^Employement verification checks are ""(.*)"" for the apprentice")]
+        public async Task GivenEmployementVerificationChecksAreForTheApprentice(string status)
+        {
+            var apprenticeshipId = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().ApprenticeDetails.ApprenticeshipId;
+
+            await commitmentsDbSqlHelper.ResetEmploymentCheckValuesInCommitmentsDb(apprenticeshipId);
+
+            switch (status)
+            {
+                case "pending":
+                    await employmentCheckSqlHelper.SetEmploymentChecksData(apprenticeshipId, null, 1, null);
+                    break;
+                case "failed":
+                    await employmentCheckSqlHelper.SetEmploymentChecksData(apprenticeshipId, null, 2, "NinoAndPAYENotFound");
+                    break;
+                case "completed":
+                    await employmentCheckSqlHelper.SetEmploymentChecksData(apprenticeshipId, 0, 2, "NinoFailure");
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid status '{status}' provided. Valid values are 'pending', 'completed', or 'failed'.");                   
+            }            
+            
+        }
+
+        [When(@"^EmployerVerificationSyncSchedule job is executed and value of employment status remains (.*) in commitments db")]
+        [When(@"^EmployerVerificationSyncSchedule job is executed and set value of employment status as (.*) into commitments db")]
+        public async Task WhenEmployerVerificationSyncScheduleJobIsExecutedAndSetValueOfEmploymentStatusAsIntoCommitmentsDb(int status)
+        {
+            var apprenticeshipId = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().ApprenticeDetails.ApprenticeshipId;
+            List<string> result = new List<string>();
+
+            var actualEmploymentStatus = await DbRetryPolicy(
+                getValue: async () =>
+                {
+                    result = await commitmentsDbSqlHelper.GetEmploymentCheckValuesFromCommitmentsDb(apprenticeshipId);
+
+                    return result[5];
+                },
+                expectedValue: status,
+                dbName: "CommitmentsDb",
+                timeout: 300        //EmployerVerificationSyncSchedule job runs every 5 minutes, so we need to wait for 5 minutes for the job to run and update the employment status in commitments db
+            );
+
+            Assert.That(result[5], Is.EqualTo($"{status}"), $"Expected employment status '{status}' but found '{actualEmploymentStatus}'");
+        }
+
+
+
 
         internal async Task FindAvailableLearner()
         {
@@ -300,14 +362,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
         }
 
-        private async Task<string> DbRetryPolicy(Func<Task<string>> getValue, int expectedValue, string dbName)
-        {
+        private async Task<string> DbRetryPolicy(Func<Task<string>> getValue, int expectedValue, string dbName, int timeout=30)
+        {            
+            var _sleepDuration = timeout / 10;
+            var _retryCount = _sleepDuration * 10;
+
             var policy = Policy<string>
                 .Handle<Exception>()
                 .OrResult(result => (expectedValue > 0) ? result != expectedValue.ToString() : string.IsNullOrEmpty(result))
                 .WaitAndRetryAsync(
-                    retryCount: 5,
-                    sleepDurationProvider: attempt => TimeSpan.FromSeconds(1),
+                    retryCount: _retryCount,
+                    sleepDurationProvider: attempt => TimeSpan.FromSeconds(_sleepDuration),
                     onRetry: (result, timeSpan, retryCount, context) =>
                     {
                         objectContext.SetDebugInformation(

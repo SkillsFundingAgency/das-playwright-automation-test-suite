@@ -19,6 +19,14 @@ public class UKPRNPage(ScenarioContext context) : BasePage(context)
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
         return await VerifyPageAsync(() => new OrganisationsDetailPage(context));
     }
+
+    public async Task EnterInvalidProviderDetails(string UKPRN)
+    {
+        await page.Locator("#Ukprn").ClickAsync();
+        await page.Locator("#Ukprn").FillAsync(UKPRN);
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+        await Assertions.Expect(page).ToHaveURLAsync("chrome-error://chromewebdata/");
+    }
     public async Task SelectAutocompleteOption(string optionText)
     {
         var autocompleteOption = page.Locator($"text={optionText}");
