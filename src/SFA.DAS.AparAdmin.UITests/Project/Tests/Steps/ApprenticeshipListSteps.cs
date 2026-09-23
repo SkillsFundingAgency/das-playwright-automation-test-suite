@@ -35,7 +35,7 @@ public ApprenticeshipListSteps(ScenarioContext context)
 
     [Then(@"the user uses the search and filter functionality and results are displayed as expected")]
 
-    public async Task ThenTheUserUsesTheSearxhAndFilterFunctionalityAndResultsAreDisplayedAsExpected()
+    public async Task ThenTheUserUsesTheSearchAndFilterFunctionalityAndResultsAreDisplayedAsExpected()
     {
         await _providerRestrictedCoursesPage.SearchFunctionality("professional");
         await _providerRestrictedCoursesPage.VerifyResults("professional", "yes");
