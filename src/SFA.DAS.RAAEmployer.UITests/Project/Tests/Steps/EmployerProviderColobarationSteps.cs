@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.EmployerPortal.UITests.Project;
-using SFA.DAS.Login.Service.Project.Helpers;
+using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
+using SFA.DAS.ProviderPortal.UITests.Project.Helpers;
 using SFA.DAS.RAAEmployer.UITests.Project.Helpers;
 using SFA.DAS.RAAProvider.UITests.Project.Helpers;
 using EmployerStepsHelper = SFA.DAS.RAAEmployer.UITests.Project.Helpers.EmployerStepsHelper;
@@ -49,7 +50,7 @@ namespace SFA.DAS.RAAEmployer.UITests.Project.Tests.StepDefinitions
         {
             _loginUser = _context.GetUser<RAAEmployerProviderYesPermissionUser>();
 
-            var homePage = await _rAAEmployerLoginHelper.GoToHomePage(_loginUser);
+            await _rAAEmployerLoginHelper.GoToHomePage(_loginUser);
         }
 
         [When(@"^the Provider submits a vacancy to the employer for review$")]

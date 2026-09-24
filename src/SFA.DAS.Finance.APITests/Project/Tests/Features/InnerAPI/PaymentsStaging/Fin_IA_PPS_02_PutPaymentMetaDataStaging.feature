@@ -1,10 +1,10 @@
-Feature: Fin_IA_PS_02_PutPaymentMetaDataStaging
+Feature: Fin_IA_PPS_02_PutPaymentMetaDataStaging
 
 @api
 @employerfinanceapi
 @regression
 @innerapi
-Scenario: Fin_IA_PS_02 Put payment metadata staging and validate DB data
+Scenario: Fin_IA_PPS_02 Put payment metadata staging and validate DB data
 	Given post new payments to PaymentStaging table via api
 	When put payment metadata in PaymentMetaDataStaging table via api
 	And find record in PaymentMetaDataStaging table

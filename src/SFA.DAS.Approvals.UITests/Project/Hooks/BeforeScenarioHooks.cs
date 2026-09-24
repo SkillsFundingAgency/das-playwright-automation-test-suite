@@ -37,6 +37,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
 
             context.Set(new CommitmentsDbSqlHelper(_objectcontext, _dbConfig));
 
+            context.Set(new EmploymentCheckSqlHelper(_objectcontext, _dbConfig));
+
             context.Set(new LearningDbSqlHelper(_objectcontext, _dbConfig));
 
             context.Set(new LearnerDataDbSqlHelper(_objectcontext, _dbConfig));

@@ -19,7 +19,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
     {
         string GetProviderEmail()
         {
-            var providerConfig = context.Get<dynamic>("providerconfigkey");
+            var providerConfig = context.GetProviderConfig<ProviderConfig>();
             return providerConfig.Username;
         }
 

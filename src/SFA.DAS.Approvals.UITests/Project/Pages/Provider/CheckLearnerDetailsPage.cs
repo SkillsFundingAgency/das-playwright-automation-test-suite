@@ -4,7 +4,7 @@ using System.Globalization;
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
 
-    internal class CheckApprenticeDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class CheckLearnerDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator EmployerNameValue => page.Locator("#employer-value");
@@ -25,7 +25,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Check apprentice details");
+            await Assertions.Expect(page.Locator(".govuk-heading-xl").First).ToContainTextAsync("Check learner details");
         }
 
         internal async Task ValidateApprenticeDetailsMatchWithILRData(Apprenticeship apprenticeship)

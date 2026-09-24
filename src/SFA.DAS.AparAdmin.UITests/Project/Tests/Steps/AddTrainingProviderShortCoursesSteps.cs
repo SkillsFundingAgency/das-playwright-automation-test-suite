@@ -138,7 +138,7 @@ public class AddTrainingProviderShortCoursesSteps
     private async Task<ManageTrainingProviderInformationPage> OpenManageTrainingProviderPage()
     {
         var home = new AparAdminHomePage(_context);
-        await home.ClickAddOrSearchForProvider();
+        await home.ClickManageTrainingProvidersAndRestrictedCourses();
         return await new ManageTrainingProviderInformationPage(_context)
             .VerifyPageAsync(() => new ManageTrainingProviderInformationPage(_context));
     }
@@ -191,6 +191,15 @@ public class AddTrainingProviderShortCoursesSteps
         var providerDetailsPage = new ProviderDetailsPage(_context);
 
         await providerDetailsPage.VerifyProviderStatus(expectedStatus);
+    }
+
+    [When(@"the admin initates an application with an invalid UKPRN ""(.*)"", error message is displayed")]
+
+    public async Task GivenTheAdminInitiatesAnApplicationWithAnImvalidUKPRN(string UKPRN)
+    {
+        var manageTrainingProviderPage = await OpenManageTrainingProviderPage();
+        var addPage = await manageTrainingProviderPage.ClickAddNewTrainingProvider();
+        await addPage.EnterInvalidProviderDetails(UKPRN);
     }
 }
 

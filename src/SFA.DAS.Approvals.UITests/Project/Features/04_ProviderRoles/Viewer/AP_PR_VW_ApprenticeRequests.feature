@@ -14,6 +14,6 @@ Scenario: AP_PR_VW_Provider Roles Viewer Apprentice Requests
 	Then the user cannot start add apprentice journey
 	Then the user cannot edit apprentice details in an existing cohort
 	Then the user cannot add another apprentice to a cohort
-	Then the user cannot delete an apprentice in an existing cohort
-	Then the user cannot delete an existing cohort
+	Then the user cannot remove a learner in an existing cohort
+	Then the user cannot remove an existing cohort
 	Then the user cannot send an existing cohort to employer
