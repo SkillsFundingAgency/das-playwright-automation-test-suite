@@ -409,7 +409,46 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
         }
 
-        
+        [When("^Provider tries to add a new apprentice for existing ILR Withdrawn apprentice using details from table below$")]
+        public async Task WhenProviderTriesToAddANewApprenticeForExistingILRWithdrawnApprenticeUsingDetailsFromTableBelow(Table table)
+        {
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var apprentice = listOfApprenticeship.FirstOrDefault();
+            var originalStartDate = apprentice.TrainingDetails.StartDate;
+            var originalEndDate = apprentice.TrainingDetails.EndDate;
+            var OltdDetails = table.CreateSet<OltdDetails>().ToList();
+
+            foreach (var item in OltdDetails)
+            {
+                //Update valid apprentice object with new start and end dates. Then push it as new apprentice details on SLD endpoint
+                apprentice.TrainingDetails.StartDate = originalStartDate.AddMonths(Convert.ToInt32(item.NewStartDate));
+                apprentice.TrainingDetails.EndDate = originalEndDate.AddMonths(Convert.ToInt32(item.NewEndDate));
+                apprentice.ApprenticeDetails.Email = "Test@email.com";
+
+                listOfApprenticeship[0] = apprentice;
+                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+
+                // Push data on SLD end point  
+                await new LearnerDataOuterApiSteps(context).SLDPushDataIntoAS();
+
+                // Try to add above apprentice and validate error message  
+                var page = await providerStepsHelper.GoToSelectApprenticeFromILRPage();
+                var page1 = await providerStepsHelper.TryAddFirstApprenticeFromILRList(page);
+                var page2 = await providerStepsHelper.ConfirmDetailsAfterApprenticeAddFromIlRList(page1);
+
+                await page2.ClickOnButton("Continue");
+            }
+
+        }
+
+        [Then(@"Provider can view the draft apprentice overlap options")]
+        public async Task ThenProviderCanViewTheDraftApprenticeOverlapOptions()
+        {
+            var page = new DraftApprenticeshipOverlapOptionsPage(context);
+            await page.VerifyPage();
+            await page.VerifyButtonText();
+        }
+
     }
     public class OltdDetails
     {
