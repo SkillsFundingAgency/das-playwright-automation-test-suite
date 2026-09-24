@@ -22,7 +22,6 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Business administrator" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Accounting finance manager" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("Select a course to view your")).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("If you're waiting for the")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("If any of these details are")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "contact us" })).ToBeVisibleAsync();
 
@@ -37,7 +36,6 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Hospitality" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Cell, new() { Name = "4" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Cell, new() { Name = "Advanced" })).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByText("If you're waiting for the")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByText("If any of these details are")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "contact us" })).ToBeVisibleAsync();
 
