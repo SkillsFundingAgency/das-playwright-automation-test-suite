@@ -1,0 +1,224 @@
+trigger: none
+pr: none
+
+schedules:
+- cron: '0 3 * * 1-5'
+  displayName: ScheduledRun
+  branches:
+    include:
+    - master
+  always: true
+
+variables:
+  - template: ../../pipeline-templates/vars.yml
+  - name: projectName
+    value: "SFA.DAS.Campaigns.UITests"
+
+resources:
+  repositories:
+    - repository: self
+    - repository: das-platform-building-blocks
+      type: github
+      name: SkillsFundingAgency/das-platform-building-blocks
+      ref: refs/tags/3.0.17
+      endpoint: SkillsFundingAgency
+    - repository: das-platform-automation
+      type: github
+      name: SkillsFundingAgency/das-platform-automation
+      ref: refs/tags/5.1.17
+      endpoint: SkillsFundingAgency
+
+pool:
+  vmImage: 'windows-latest'
+
+stages:
+- stage: BuildDeployAndTestPP
+  displayName: Build, deploy and test PP on one machine
+  variables:
+    - group: "PreProd Management Resources"
+    - group: "PreProd Shared Resources"
+    - group: "PreProd Automation Suite Variables"
+  jobs:
+  - job: BuildDeployAndTestPP
+    displayName: Build, deploy and test PP
+    timeoutInMinutes: 120
+    workspace:
+      clean: all
+    variables:
+      headless: 'false'
+    steps:
+    - powershell: |
+        $projects = @('$(projectName)' -split "`r?`n" | ForEach-Object { $_.Trim().Replace('"','') } | Where-Object { $_ -ne "" })
+        $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
+        $joined = @($paths -join "%0D%0A")
+        Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
+      displayName: Build project file path
+
+    - task: DotNetCoreCLI@2
+      displayName: dotnet build
+      inputs:
+        arguments: '--configuration $(BuildConfiguration)'
+        projects: |
+          $(projectsToBuild)
+
+    - task: DotNetCoreCLI@2
+      displayName: dotnet unit test
+      inputs:
+        command: test
+        arguments: '--filter "TestCategory=Unittests" --logger trx;logfilename=UnittestResults.trx'
+        projects: |
+          $(projectsToBuild)
+
+    - task: DotNetCoreCLI@2
+      displayName: dotnet publish
+      inputs:
+        command: publish
+        publishWebProjects: false
+        zipAfterPublish: false
+        projects: |
+          $(projectsToBuild)
+        arguments: '--configuration $(BuildConfiguration) --output $(System.DefaultWorkingDirectory)/drop/tests --no-restore --no-build'
+
+    - task: CopyFiles@2
+      displayName: Copy test configuration files
+      inputs:
+        Contents: |
+          src/**/*.sql
+          src/**/appsettings.Config.json
+          src/**/appsettings.AdminConfig.json
+          src/**/appsettings.ProviderConfig.json
+          src/**/appsettings.TimeOutConfig.json
+          src/**/appsettings.TestExecution.json
+          src/**/appsettings.NServiceBusConfig.json
+          src/**/appsettings.ApiFramework.json
+        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/files'
+        flattenFolders: true
+        OverWrite: true
+
+    - task: CopyFiles@2
+      displayName: Copy project configuration files
+      inputs:
+        Contents: src/**/appsettings.Project.json
+        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
+        flattenFolders: false
+        OverWrite: true
+
+    - task: CopyFiles@2
+      displayName: Copy runsettings
+      inputs:
+        Contents: src/**/*.runsettings
+        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/runsettings/src'
+        OverWrite: true
+
+    - task: CopyFiles@2
+      displayName: Copy test result checker
+      inputs:
+        Contents: src/**/Check-TestResults.ps1
+        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/src'
+        OverWrite: true
+
+    - checkout: das-platform-automation
+      displayName: Checkout das-platform-automation
+
+    - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
+      displayName: 'Tokenization: Transform test JSON'
+      inputs:
+        SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests'
+        TargetFileNames: '*.json'
+
+    - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
+      displayName: 'Tokenization: Transform runsettings'
+      inputs:
+        SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
+        TargetFileNames: '*.runsettings'
+    
+    - task: BrowserStackConfig@0
+      inputs:
+       browserstackServiceEndPoint: 'AS-Browserstack'
+
+    - task: PowerShell@2
+      displayName: Install Playwright browsers
+      inputs:
+        targetType: filePath
+        filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
+        arguments: install $(BROWSER_TYPE)
+
+    - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
+      displayName: Set screen resolution
+      inputs:
+        displaySettings: specific
+        width: 1920
+        height: 1080
+
+    - task: AzurePowerShell@5
+      displayName: Get agent IP address
+      inputs:
+        azureSubscription: das-pp-automation-test-suite-db-sc
+        ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Get-MyIpAddress.ps1'
+        ScriptArguments: '-WhatsMyIpUrl "https://ifconfig.me/ip"'
+        azurePowerShellVersion: LatestVersion
+
+    - task: AzurePowerShell@5
+      displayName: Whitelist agent IP address
+      inputs:
+        azureSubscription: das-pp-automation-test-suite-db-sc
+        ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AzSqlIpException.ps1'
+        ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
+        azurePowerShellVersion: LatestVersion
+
+    - task: AzureCLI@2
+      displayName: Bootstrap Azure service principal credentials
+      inputs:
+        azureSubscription: das-pp-automation-test-suite-db-sc
+        addSpnToEnvironment: true
+        scriptType: ps
+        scriptLocation: inlineScript
+        inlineScript: |
+          Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID;issecret=false]$env:servicePrincipalId"
+          Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID;issecret=false]$env:tenantId"
+          Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
+
+    - task: VSTest@3
+      displayName: VSTest - PP test execution
+      env:
+        AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+        AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+        AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+        BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
+        BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
+      inputs:
+        testAssemblyVer2: '**\**\SFA.DAS.Campaigns.UITests.dll'
+        testRunTitle: Test Run - PP
+        searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
+        testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
+        runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
+        runInParallel: true
+        otherConsoleOptions: /logger:trx
+        rerunFailedTests: true
+        rerunType: basedontestfailurepercentage
+        rerunFailedTestsMaxPercent: 30
+        rerunMaxAttempts: 1
+      continueOnError: true
+        
+
+    - task: AzurePowerShell@5
+      displayName: Remove whitelisted agent IP address
+      condition: succeededOrFailed()
+      inputs:
+        azureSubscription: das-pp-automation-test-suite-db-sc
+        ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AzSqlIpException.ps1'
+        ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
+        azurePowerShellVersion: LatestVersion
+
+    - task: PowerShell@2
+      displayName: Check test results
+      condition: succeededOrFailed()
+      inputs:
+        targetType: filePath
+        filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
+        arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
+
+    - task: BrowserStackResults@0
+      inputs:
+       browserstackProduct: 'observability'
+

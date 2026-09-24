@@ -5,6 +5,7 @@ Verify navigation and ensure no broken links across all cards, panels, and callo
 @campaigns
 @employer
 @regression
+@accessibilitytest
 Scenario Outline: Verify all navigation links on the Hire an apprentice page - <CardName>
 	Given the user navigates to the Hire An Apprentice page
 	When the user clicks on the employer card "<CardName>"

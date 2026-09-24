@@ -259,3 +259,4 @@ src/.idea/.idea.SFA.DAS.TestAutomation/.idea/
 .vscode/settings.json
 src/.vscode/settings.json
 /allure*
+**/*/dotnet-tools.json
