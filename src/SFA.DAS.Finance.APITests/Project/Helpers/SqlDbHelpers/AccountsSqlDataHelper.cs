@@ -169,12 +169,47 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers
             return result;
         }
 
-        // Public wrapper to execute an arbitrary SQL string from test step definitions.
-        public async Task<List<string>> ExecuteSql(string sql)
+        // Public wrapper to execute an arbitrary SQL string.
+        // By default uses Accounts DB; pass useFinanceDb=true to run against Finance DB.
+        public async Task<List<string>> ExecuteSql(string sql, bool useFinanceDb = false)
         {
             if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentException("sql must be provided", nameof(sql));
 
+            if (useFinanceDb)
+            {
+                return await GetData(sql, _dbConfig.FinanceDbConnectionString);
+            }
+
             return await GetData(sql);
+        }
+
+        public async Task<List<string[]>> ExecuteMultipleSql(string sql, bool useFinanceDb = false)
+        {
+            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentException("sql must be provided", nameof(sql));
+
+            var connectionString = useFinanceDb ? _dbConfig.FinanceDbConnectionString : _dbConfig.AccountsDbConnectionString;
+            var (data, noOfColumns) = await GetListOfData(sql, connectionString, null);
+
+            var returnItems = new List<string[]>();
+
+            if (data.Count == 0)
+            {
+                returnItems.Add(new string[noOfColumns]);
+                return returnItems;
+            }
+
+            foreach (var row in data)
+            {
+                var items = new string[noOfColumns];
+                for (int i = 0; i < noOfColumns; i++)
+                {
+                    items[i] = row[i]?.ToString() ?? string.Empty;
+                }
+
+                returnItems.Add(items);
+            }
+
+            return returnItems;
         }
     }
 }

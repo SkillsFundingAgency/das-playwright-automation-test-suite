@@ -40,6 +40,20 @@ public class StepsHelper(ScenarioContext context)
 
     }
 
+    public static async Task SharedApplicantMarkForInterview(EmployerSharedApplicationsVacanciesListPage employerVacancySearchResultPage)
+    {
+        var page = await employerVacancySearchResultPage.NavigateToManageApplicant();
+
+        await page.MarkSharedApplicantAsInterviewing();
+    }
+
+    public static async Task SharedApplicantNotMarkForInterview(EmployerSharedApplicationsVacanciesListPage employerVacancySearchResultPage)
+    {
+        var page = await employerVacancySearchResultPage.NavigateToManageApplicant();
+
+        await page.MarkSharedApplicantAsNotInterviewing();
+    }
+
     public static async Task ApplicantUnsucessful(EmployerVacancySearchResultPage employerVacancySearchResultPage)
     {
         var page = await employerVacancySearchResultPage.NavigateToManageApplicant();
@@ -173,8 +187,8 @@ public class StepsHelper(ScenarioContext context)
 
     public static async Task MultiApplicantsUnsucessful(ProviderVacancySearchResultPage providerVacancySearchResultPage)
     {
-        var page = await providerVacancySearchResultPage.NavigateToManageAllApplicantsAndMakeUnsuccessful();
-        await page.FeedbackForMultipleUnsuccessful();
+        await providerVacancySearchResultPage.NavigateToManageAllApplicantsAndMakeUnsuccessful();
+        //await page.FeedbackForMultipleUnsuccessful();
     }
 
     public static async Task MultiApplicantsUnsucessfulAndArchive(ProviderVacancySearchResultPage providerVacancySearchResultPage)

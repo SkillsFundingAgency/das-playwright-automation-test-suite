@@ -7,10 +7,10 @@
             await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("You cannot create another funding reservation");
         }
 
-        public async Task<ApprenticeRequestsPage> ClickOnApprenticeRequestsLink()
+        public async Task<LearnerRequestsPage> ClickOnApprenticeRequestsLink()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Apprentice requests" }).First.ClickAsync();
-            return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
+            return await VerifyPageAsync(() => new LearnerRequestsPage(context));
         }
 
     }

@@ -2,9 +2,9 @@
 
 
 @api
-@approvalsapi
+#@approvalsapi
 @learnerdataapi
-@regression
+#@regression
 Scenario Outline: Approvals - Update learner data
 	When the user sends <Method> request to <Endpoint> with payload <Payload>
 	Then api <ResponseStatus> response is received

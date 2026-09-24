@@ -19,12 +19,12 @@ public class AreYouSureDeleteStandardPage(ScenarioContext context) : ManagingSta
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Are you sure you want to delete this standard?");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Are you sure you want to delete this apprenticeship?");
     }
 
     public async Task<ManageTheStandardsYouDeliverPage> DeleteStandard()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Delete standard" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Delete apprenticeship" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
     }

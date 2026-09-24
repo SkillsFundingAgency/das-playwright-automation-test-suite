@@ -33,10 +33,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
     {
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#call-to-action-your-apprentice-status")).ToContainTextAsync("Your apprentice");
 
-        internal async Task<EmployerApproveApprenticeDetailsPage> ReviewApprenticeDetails()
+        internal async Task<EmployerApproveLearnerDetailsPage> ReviewApprenticeDetails()
         {
             await page.Locator("//a[contains(.,'Review apprentice details')]").ClickAsync();
-            return await VerifyPageAsync(() => new EmployerApproveApprenticeDetailsPage(context));
+            return await VerifyPageAsync(() => new EmployerApproveLearnerDetailsPage(context));
         }
 
     }

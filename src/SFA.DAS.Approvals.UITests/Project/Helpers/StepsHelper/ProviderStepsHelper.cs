@@ -50,13 +50,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<CheckApprenticeDetailsPage> TryAddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
+        internal async Task<CheckLearnerDetailsPage> TryAddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
             await page.ClickAddButton();
-            return await page.VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));
+            return await page.VerifyPageAsync(() => new CheckLearnerDetailsPage(context));
         }
 
         internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRList(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
@@ -130,6 +130,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return page4;
         }
 
+        internal async Task ProviderAddsFirstLearnerUsingReservationErrorCase()
+        {
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+            var page = await new ProviderHomePage(context).GoToManageYourFunding();
+            var page1 = await new FundingForNonLevyEmployersPage(context).SelectReservationToAddApprentice(apprenticeship, false);
+            var page2 = await page1.SelectOptionChooseDetailsFromILR();
+            var page3 = await page2.SelectApprenticeFromILRList(apprenticeship);            
+            await page3.ClickAddButton();
+        }
+
         internal async Task<ApproveApprenticeDetailsPage> ProviderAddApprencticesFromIlrRouteUseExistingReservation(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
         {
 
@@ -166,12 +177,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await approveApprenticeDetailsPage.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<CheckApprenticeDetailsPage> ProviderCreateACohortViaIlrRouteWithInvalidDoB()
+        internal async Task<CheckLearnerDetailsPage> ProviderCreateACohortViaIlrRouteWithInvalidDoB()
         {
             var page = await GoToSelectApprenticeFromILRPage();
             var page1 = await TryAddFirstApprenticeFromILRList(page);
 
-            return await page1.VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));
+            return await page1.VerifyPageAsync(() => new CheckLearnerDetailsPage(context));
         }
 
         internal async Task<ApprenticeRequests_ProviderPage> ProviderCreateAndApproveACohortViaIlrRoute()
@@ -203,6 +214,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page5 = await page4.ConfirmEmployer();
 
             return await page5.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
+        }
+
+        internal async Task<SelectLearnerFromILRPage> GoToNonLevySelectLearnerPageViaAutoReservation(bool login=true)
+        {
+            if (login) { await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false); }
+
+            var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
+            var page2 = await new HowDoYouWantToAddLearner_EntryMothodPage(context).SelectOptionToApprenticesFromILR();
+            var page3 = await page2.SelectOptionCreateANewCohort();
+            var page4 = await SelectEmployer(page3);
+            var page5 = await page4.ConfirmNonLevyEmployerForReservation();
+            var page6 = await page5.SelectNewReservation();
+
+            return await page6.VerifyPageAsync(() => new SelectLearnerFromILRPage(context));
         }
 
         internal async Task<ApprenticeDetails_ProviderPage> ProviderSearchOpenApprovedApprenticeRecord(ManageYourLearners_ProviderPage manageYourApprenticesPage, string uln, string name)

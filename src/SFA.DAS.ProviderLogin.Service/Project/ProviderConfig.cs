@@ -35,6 +35,11 @@ public class ProviderPermissionsConfig : ProviderConfig
 
 }
 
+public class ProviderNoPermissionsConfig : ProviderConfig
+{
+
+}
+
 public class PortableFlexiJobProviderConfig : ProviderConfig { }
 
 public class PerfTestProviderPermissionsConfig : ProviderConfig { }

@@ -2,7 +2,7 @@
 
 KSBs are listed!
 
-@ApprenticeApp
+@apprenticeapp
 @regression
 Scenario: AA_04_KSBs are listed
 	Given the apprentice has logged into the app

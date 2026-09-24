@@ -70,11 +70,11 @@ public class Specific_TrainingProviderPage(ScenarioContext context, string provi
         // List of all tab labels in the order they appear
         var tabLabels = new[]
         {
-        "2025 to today",
+        "2026 to today",
+        "2025 to 2026",
         "2024 to 2025",
         "2023 to 2024",
         "2022 to 2023",
-        "2021 to 2022",
         "Overall reviews"
     };
 

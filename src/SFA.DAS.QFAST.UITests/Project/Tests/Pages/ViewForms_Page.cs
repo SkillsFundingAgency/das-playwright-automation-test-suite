@@ -7,7 +7,7 @@ namespace SFA.DAS.QFAST.UITests.Project.Tests.Pages;
 
 public class ViewForms_Page(ScenarioContext context) : BasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("View Forms");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("View forms");
     protected readonly QfastDataHelpers _qfastDataHelpers = context.Get<QfastDataHelpers>();
 
     public async Task<CreateNewForm_Page> ClickCreateNewFormButton()

@@ -13,7 +13,8 @@ public class CheckDfeSignInPage(ScenarioContext context) : CheckPage(context)
 public abstract class ASLandingCheckBasePage(ScenarioContext context) : CheckPage(context)
 {
     protected override ILocator PageLocator => page.Locator("h1");
-
+    public ILocator SignOut => page.Locator("a[data-automation='sign-out']");
+    public ILocator heading => page.Locator("h1");
     public abstract Task ClickStartNowButton();
 }
 

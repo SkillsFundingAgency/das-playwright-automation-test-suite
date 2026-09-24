@@ -21,7 +21,7 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Tests.StepDefinitions
             _context = context;
             objectContext = context.Get<ObjectContext>();
             mailosaurApiHelper = context.Get<MailosaurApiHelper>();
-            var providerConfig = context.Get<dynamic>("providerconfigkey");
+            var providerConfig = context.GetProviderConfig<ProviderConfig>();
             providerEmail = providerConfig.Username;
             vacancyTitleDataHelper = context.Get<VacancyTitleDatahelper>();
             applicantEmail = context.GetUser<FAAApplyUser>().Username;
@@ -29,7 +29,7 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Tests.StepDefinitions
             isFoundationAdvert = context.ContainsKey("isFoundationAdvert") && (bool)context["isFoundationAdvert"];
         }
 
-        [Then(@"the '(.*)' receives '(.*)' email notification")]
+        [Then(@"the '(.*)' receive '(.*)' email notification")]
         public async Task ThenTheProviderReceivesEmailNotification(string userType, string notificationType)
         {
             string emailText = null;
@@ -45,7 +45,7 @@ namespace SFA.DAS.RAAProvider.UITests.Project.Tests.StepDefinitions
                     break;
 
                 case ("rejected vacancy", "provider"):
-                    emailText = "DfE has rejected this vacancy. We’ve left a comment to explain why.";
+                    emailText = "DfE has rejected this vacancy.";
                     subject = $"Rejected by DfE: make changes to {vacancyTitleDataHelper.VacancyTitle} apprenticeship";
                     userEmail = providerEmail;
                     break;

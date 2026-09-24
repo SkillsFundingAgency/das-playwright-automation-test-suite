@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
+﻿using Microsoft.Playwright;
+
+namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
 
 public class UnderstandingApprenticeshipBenefitsFundingPage(ScenarioContext context) : EmployerBasePage(context)
 {
@@ -8,16 +10,20 @@ public class UnderstandingApprenticeshipBenefitsFundingPage(ScenarioContext cont
 
     public async Task SelectOver3Million() => await CalculateFunding(true);
 
-    private async Task CalculateFunding(bool IsOver3Million)
+    private async Task CalculateFunding(bool isOver3Million)
     {
-        await driver.Page.GetByLabel(IsOver3Million ? "Over £3 million" : "Under £3 million").CheckAsync();
+        await page.GetByLabel(isOver3Million ? "Over £3 million" : "Under £3 million").CheckAsync();
 
-        await page.Locator("#StandardUid").FillAsync("Software developer (Level 4)");
+        var autocompleteInput = page.Locator("#StandardUid");
 
-        await driver.Page.GetByLabel("How many roles do you have").FillAsync("2");
+        await autocompleteInput.FillAsync("Software developer");
 
-        await driver.Page.GetByRole(AriaRole.Button, new() { Name = "Calculate funding" }).ClickAsync();
+        await page.GetByRole(AriaRole.Option, new() { Name = "Software developer (Level 4)", Exact = false }).First.ClickAsync();
 
-        await Assertions.Expect(driver.Page.Locator("#funding")).ToContainTextAsync("Your estimated funding");
+        await page.GetByLabel("How many roles do you have").FillAsync("2");
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Calculate funding" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator("#funding")).ToContainTextAsync("Your estimated funding");
     }
 }

@@ -60,6 +60,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.ApprenticeDetails.LastName = details[3].ToString();
             apprenticeship.ApprenticeDetails.DateOfBirth = Convert.ToDateTime(details[4].ToString());
             apprenticeship.TrainingDetails.LarsCode = details[5];
+            apprenticeship.TrainingDetails.LearningType = details[5].ToString().Contains("ZSC") ? 2 : 0;
             apprenticeship.ReservationID = details[6];
             apprenticeship.Cohort.Reference = details[7];
             apprenticeship.ApprenticeDetails.Email = details[8];
@@ -69,6 +70,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.TrainingDetails.TrainingPrice = Convert.ToInt32(details[11]);
             apprenticeship.TrainingDetails.AcademicYear = AcademicYearDatesHelper.GetCurrentAcademicYear();
             apprenticeship.TrainingDetails.ConsumerReference = details[12];
+            apprenticeship.TrainingDetails.CourseTitle = details[13];            
 
             return apprenticeship;
         }
@@ -76,12 +78,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
         private async Task<List<string>> GetApprenticeDetails(int ukprn, int accountLegalEntityId, string additionalWhereFilter = null )
         {
             string query =
-                @$"SELECT TOP(1) a.Id, a.ULN, a.FirstName, a.LastName, a.DateOfBirth, a.TrainingCode, a.ReservationId, c.Reference, a.Email, a.StartDate, a.EndDate, a.Cost, a.ProviderRef
+                @$"SELECT TOP(1) a.Id, a.ULN, a.FirstName, a.LastName, a.DateOfBirth, a.TrainingCode, a.ReservationId, c.Reference, a.Email, a.StartDate, a.EndDate, a.Cost, a.ProviderRef, a.TrainingName
                     FROM [dbo].[Commitment] c
                     INNER JOIN [dbo].[Apprenticeship] a
                     ON c.id = a.CommitmentId
                     Where ProviderId = {ukprn}                
                     AND c.AccountLegalEntityId = {accountLegalEntityId}
+                    AND a.TrainingCode NOT LIKE '%-%'
                     {additionalWhereFilter}
                     Order by c.CreatedOn DESC";
 
@@ -96,12 +99,41 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
 
         }
 
-        internal async Task SetPaymentStatus(int apprenticeshipId, int pymtStatus)
+        internal async Task<List<string>> GetValuesFromApprenticeshipTable(string columnName, int apprenticeshipId)
+        {
+            string query = $@"select {columnName}
+                                from Apprenticeship
+                                WHERE Id = {apprenticeshipId}";
+            return await GetData(query);
+        }
+
+        internal async Task ResetPaymentStatus(int apprenticeshipId)
         { 
-            string query = $"UPDATE [dbo].[Apprenticeship] SET PaymentStatus = {pymtStatus} WHERE Id = {apprenticeshipId}";
+            string query = $@"UPDATE Apprenticeship
+                                Set paymentstatus = 1, stopdate = null, pausedate = null, completionDate = null, WithdrawnReasonCode = null, MadeRedundant = 0,
+                                paymentFreezeDate = null, FreezePaymentsReason = null 
+                                WHERE Id = {apprenticeshipId};
+
+                            Delete [dbo].[LearningChangeHistory] Where apprenticeshipid = {apprenticeshipId};";
+
             await ExecuteSqlCommand(query);
         }
 
+        internal async Task<List<string>> GetEmploymentCheckValuesFromCommitmentsDb(int apprenticeshipId)
+        {
+            string query = $"SELECT * FROM [dbo].[EmployerVerificationRequest] WHERE ApprenticeshipId = {apprenticeshipId}";
+            var result = await GetData(query);
+            return result ?? new List<string>();
+        }
+
+        internal async Task ResetEmploymentCheckValuesInCommitmentsDb(int apprenticeshipId)
+        {
+            var date = DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd");
+            string query = $@"UPDATE [dbo].[EmployerVerificationRequest]
+                            SET Created = '{date}', Updated = '{date}', LastCheckedDate = '{date}', Employed = NULL, Status = 0, Notes = NULL
+                            WHERE apprenticeshipid = {apprenticeshipId}";
+            await ExecuteSqlCommand(query);
+        }
 
     }
 }

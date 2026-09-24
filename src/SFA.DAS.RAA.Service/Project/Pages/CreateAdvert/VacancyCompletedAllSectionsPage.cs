@@ -4,7 +4,13 @@ public class VacancyCompletedAllSectionsPage(ScenarioContext context) : PreviewY
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator(".govuk-notification-banner__heading")).ToBeVisibleAsync();
+        if (isRaaEpc)
+        {
+            await Assertions.Expect(page).ToHaveURLAsync(new Regex(@"check-(answers|your-answers)"), new PageAssertionsToHaveURLOptions { IgnoreCase = true, Timeout = 20000 });
+        } else
+        {
+            await Assertions.Expect(page.Locator(".govuk-notification-banner__heading")).ToBeVisibleAsync();
+        }
     }
 
     private ILocator NotificationBanner => page.Locator(".govuk-notification-banner__heading");
@@ -49,13 +55,28 @@ public class AreYouSureYouWantToSubmitPage(ScenarioContext context) : RaaBasePag
 {
     public override async Task VerifyPage()
     {
-        string pageTitle = isRaaEmployer ? "Are you sure you want to submit this advert?" : "Are you sure you want to submit this vacancy?";
+        string pageTitle;
+        if(isRaaEpc)
+        {
+            pageTitle = "Are you sure you want to submit this job advert?";
+        } else if (isRaaEmployer)
+        {
+            pageTitle = "Are you sure you want to submit this advert?";
+        }
+        else
+        {
+            pageTitle = "Are you sure you want to submit this vacancy?";
+        }
+
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(pageTitle);
     }
 
     public async Task<VacancyReferencePage> ConfirmSubmit()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Yes, submit" }).ClickAsync();
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
         return await VerifyPageAsync(() => new VacancyReferencePage(context));
     }
 
@@ -70,13 +91,33 @@ public class AreYouSureYouWantToRejectPage(ScenarioContext context) : RaaBasePag
 {
     public override async Task VerifyPage()
     {
-        string pageTitle = isRaaEmployer ? "Are you sure you want to reject this advert?" : "Are you sure you want to reject this vacancy?";
+        string pageTitle;
+        
+        if (isRaaEpc)
+        {
+            pageTitle = "Are you sure you want to reject this job advert?";
+        } else if (isRaaEmployer)
+        {
+            pageTitle = "Are you sure you want to reject this advert?";
+        } else
+        {
+            pageTitle = "Are you sure you want to reject this vacancy?";
+        }
+         
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(pageTitle);
     }
 
     public async Task<VacancyReferencePage> ConfirmReject()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Yes, reject" }).ClickAsync();
+        if (isRaaEpc)
+        {
+            await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).ClickAsync();
+        } else
+        {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Yes, reject" }).ClickAsync();
+        }
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
         return await VerifyPageAsync(() => new VacancyReferencePage(context));
     }
 

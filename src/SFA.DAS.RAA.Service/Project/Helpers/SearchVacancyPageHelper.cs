@@ -94,16 +94,24 @@ public class SearchVacancyPageHelper(ScenarioContext context)
         return await VerifyPageHelper.VerifyPageAsync(context, () => new EmployerVacancySearchResultPage(context));
     }
 
+    public async Task<EmployerSharedApplicationsVacanciesListPage> SearchSharedAppVacancy()
+    {
+        await SearchVacancy();
+
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new EmployerSharedApplicationsVacanciesListPage(context));
+    }
+
     public async Task SearchVacancy()
     {
         var vacRef = _objectContext.GetVacancyReference();
-
-        if(context.ScenarioInfo.Tags.Contains("raaemployer"))
+        bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
+        if (isRaaEpc)
         {
-            await page.GetByRole(AriaRole.Combobox, new() { Name = "Search by advert title or" }).FillAsync(vacRef);
-        } else
+            await page.Locator("#search-input").FillAsync(vacRef);
+        }
+        else
         {
-            await page.GetByRole(AriaRole.Combobox, new() { Name = "Search by vacancy title" }).FillAsync(vacRef);
+            await page.GetByRole(AriaRole.Combobox, new() { Name = "Search by" }).FillAsync(vacRef);
         }
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();

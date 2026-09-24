@@ -1,0 +1,171 @@
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
+using System;
+
+namespace SFA.DAS.Approvals.UITests.Project.Steps
+{
+    [Binding]
+    internal class EmployerCoCSteps
+    {
+        private readonly ScenarioContext context;
+        private readonly EmployerStepsHelper employerStepsHelper;
+
+        public EmployerCoCSteps(ScenarioContext _context)
+        {
+            context = _context;
+            employerStepsHelper = new EmployerStepsHelper(context);
+        }
+
+        [Then(@"^Employer verifies that recrod status stays as ""(.*)""")]
+        [Then(@"^employer verifies that record has been ""(.*)"" in Employer portal")]
+        public async Task ThenEmployerVerifiesThatRecordHasBeenInEmployerPortal(string status)
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var fullName = apprenticeship.ApprenticeDetails.FullName;
+            var expectedDate = apprenticeship.TrainingDetails.StopDate;
+            int trainingType = apprenticeship.TrainingDetails.LearningType;
+            var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
+            var page1 = await page.OpenFirstItemFromTheList(fullName);
+
+            switch (status)
+            {
+                case "Live":
+                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Live, null, null);
+                    break;
+                case "Completed":
+                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Completed, "Completion payment month", DateTime.Now);
+                    //Assert editiability of completed record:
+                    Assert.False(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
+                    Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
+                    Assert.False(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+                    Assert.False(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
+                    Assert.False(await page1.IsEditVersionLinkAvailable(), "IsEditVersionLinkAvailable");
+                    Assert.True(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
+                    break;
+                case "Stopped":
+                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Stopped, "Stopped date", expectedDate);
+                    //Assert editiability of stopped record:
+                    Assert.False(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
+                    Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");                    
+                    Assert.False(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
+                    Assert.False(await page1.IsEditVersionLinkAvailable(), "IsEditVersionLinkAvailable");
+                    Assert.False(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
+                    if(trainingType == 2)
+                        Assert.False(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+                    else
+                        Assert.True(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+
+                    //Check history logs:
+                    var page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "Status change from Live to Stopped", "Auto approved");
+                    break;
+                case "Paused":
+                    await page1.EmployerVerifyApprenticeStatus(ApprenticeshipStatus.Paused, "Apprenticeship pause date", expectedDate);
+                    //Assert editiability of paused record:
+                    Assert.True(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
+                    Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
+                    Assert.True(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+                    Assert.True(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
+                    Assert.False(await page1.IsEditVersionLinkAvailable(), "IsEditVersionLinkAvailable");
+                    Assert.False(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
+                    //Check history logs:
+                    page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
+                    await page2.AssertChangeHistoryRow(DateTime.Now, $"Learning has been paused on {expectedDate.ToString("d MMM yyyy")}", "Auto approved");
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid payment status: {status}");
+            }
+        }
+
+
+        [When(@"^employer ""(.*)"" payments status for the apprenticeship record")]
+        public async Task WhenEmployerPaymentsStatusForTheApprenticeshipRecord(string paymentStatus)
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var fullName = apprenticeship.ApprenticeDetails.FullName;
+            var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
+            var page1 = await page.OpenFirstItemFromTheList(fullName);
+
+            switch (paymentStatus.ToLower())
+            {
+                case "pause":
+                    await employerStepsHelper.EmployerPausePayments(page1, apprenticeship);
+                    await page1.EmployerVerifyPaymentStatus(PaymentStatus.Paused);
+                    var page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payment changed from Active to Paused - Learner is on a break", "Manual update");
+                    await page2.ClickViewLearnerDetailsLink();
+                    break;
+                case "unpause":
+                    await employerStepsHelper.EmployerResumePayments(page1, apprenticeship);
+                    await page1.EmployerVerifyPaymentStatus(PaymentStatus.Active);
+                    page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payment changed from Paused to Active", "Manual update");
+                    await page2.ClickViewLearnerDetailsLink();
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid payment status: {paymentStatus}");                   
+            }
+
+            //Assert editiability for both pause and active record:
+            Assert.True(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");
+            Assert.True(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
+            Assert.True(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+            Assert.True(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
+            Assert.False(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");  
+        }
+
+        [Then(@"employer cannot pause this AU record")]
+        public async Task ThenEmployerCannotPauseThisAURecord()
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var fullName = apprenticeship.ApprenticeDetails.FullName;
+            
+            var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
+            var page1 = await page.OpenFirstItemFromTheList(fullName);
+            Assert.False(await page1.IsPymtStatusVisible(), "IsPymtStatusVisible");
+            Assert.False(await page1.IsEditPaymentStatusLinkAvailable(), "IsEditPaymentStatusLinkAvailable");
+            Assert.False(await page1.IsEditStatusLinkAvailable(), "IsEditStatusLinkAvailable");            
+            Assert.False(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
+            Assert.True(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
+            Assert.False(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
+        }
+
+
+        [Then(@"^employer verifies that Employment Status is ""(.*)""$")]
+        [Then(@"^employer verifies that Employment Verification section is ""(.*)""$")]
+        public async Task ThenEmployerVerifiesThatEmploymentVerificationSectionIs(string expectedEmploymentStatus)
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var fullName = apprenticeship.ApprenticeDetails.FullName;
+
+            //verify employment status on manage your learners page:
+            var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
+            var actualEmploymentStatus = await page.GetEmploymentStatus();            
+            
+            if (expectedEmploymentStatus == "blank")
+            {
+                Assert.IsTrue(await page.GetEmploymentStatus() == "", "Employment Verification status on 'Manage your learners' page");
+            }
+            else
+            {
+                Assert.IsTrue(await page.GetEmploymentStatus() == expectedEmploymentStatus, "Employment Verification status on 'Manage your learners' page");
+            }
+
+            //verify employment status on learner details page:
+            var page1 = await page.OpenFirstItemFromTheList(fullName);
+            if (expectedEmploymentStatus == "blank")
+            {
+                Assert.IsFalse(await page1.IsEmploymentStatusVisible(), "Employment Verification status is not visible on 'Learner details' page");
+            }
+            else
+            {
+                Assert.IsTrue(await page1.GetEmploymentStatus() == expectedEmploymentStatus, "Employment Verification status on 'Learner details' page");
+            }
+
+        }
+
+
+    }
+}

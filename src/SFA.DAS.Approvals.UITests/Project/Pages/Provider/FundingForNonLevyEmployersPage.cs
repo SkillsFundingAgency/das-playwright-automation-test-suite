@@ -20,14 +20,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task ClickOnReserveMoreFundingLink() => await ReserveMoreFundingLink.ClickAsync();
 
 
-        internal async Task<HowDoYouWantToAddLearnerDetailsPage> SelectReservationToAddApprentice(Apprenticeship apprenticeship )
+        internal async Task<HowDoYouWantToAddLearnerDetailsPage> SelectReservationToAddApprentice(Apprenticeship apprenticeship, bool skipDateFilter = true)
         {
             var rsrvStartDate = apprenticeship.TrainingDetails.StartDate.ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
             var rsrvEndDate = apprenticeship.TrainingDetails.StartDate.AddMonths(2).ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
             var rsrvWindow = $"{rsrvStartDate} to {rsrvEndDate}";
             
             await page.GetByLabel("Employer", new() { Exact = true }).SelectOptionAsync(new[] { apprenticeship.EmployerDetails.EmployerName });
-            await page.GetByLabel("Start date", new() { Exact = true }).SelectOptionAsync(new[] { rsrvWindow });
+            if (skipDateFilter) await page.GetByLabel("Start date", new() { Exact = true }).SelectOptionAsync(new[] { rsrvWindow });
             await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).ClickAsync();
 
             string partialHref = $"reservationId={apprenticeship.ReservationID}";

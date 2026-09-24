@@ -1,4 +1,4 @@
-﻿@ApprenticeApp
+﻿@apprenticeapp
 @regression
 Feature: AA_03_TaskAddEditDelete
 

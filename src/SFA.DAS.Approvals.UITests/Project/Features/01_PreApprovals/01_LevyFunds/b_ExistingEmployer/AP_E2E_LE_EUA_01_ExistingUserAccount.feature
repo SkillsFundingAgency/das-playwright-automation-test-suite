@@ -17,6 +17,7 @@ Scenario: AP_E2E_LE_EUA_01a Provider creates cohort from ILR data Employer appro
 	When the Employer approves the apprentice request (cohort)
 	Then LearnerData Db is updated with respective Apprenticeship Id
 	And Apprenticeship record is created in Learning Db
+	And Employment Verification request is created in Commitments Db
 	Then Provider can access live apprentice records under Manager Your Apprentices section
 	And apprentice/learner record is no longer available on SelectLearnerFromILR page
 	#And apprentice/learner record is available on Learning endpoint for SLD (so they do not resubmit it)  <--- commented this step as its covered by Payments-2 team. 

@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
+using System.Linq;
 
 namespace SFA.DAS.RAAEmployer.UITests.Project.Helpers;
 
@@ -54,6 +55,10 @@ public class EmployerStepsHelper(ScenarioContext context)
 
     internal async Task ApplicantInterviewing() => await StepsHelper.ApplicantMarkForInterview(await SearchVacancyByVacancyReferenceInNewTab());
 
+    internal async Task SharedApplicantInterviewing() => await StepsHelper.SharedApplicantMarkForInterview(await NavigateToSharedAppVacancy());
+
+    internal async Task SharedApplicantNotInterviewing() => await StepsHelper.SharedApplicantNotMarkForInterview(await NavigateToSharedAppVacancy());
+
     internal async Task ApplicantReview() => await StepsHelper.ApplicantInReview(await SearchVacancyByVacancyReferenceInNewTab());
 
     internal async Task ApplicantSucessful() => await StepsHelper.ApplicantSucessful(await SearchVacancyByVacancyReferenceInNewTab());
@@ -70,6 +75,17 @@ public class EmployerStepsHelper(ScenarioContext context)
         return await SearchVacancyByVacancyReference();
     }
 
+    private async Task<EmployerSharedApplicationsVacanciesListPage> NavigateToSharedAppVacancy()
+    {
+        await _rAAEmployerLoginHelper.GotoEmployerHomePage();
+
+        var page = await _rAAEmployerLoginHelper.NavigateToRecruitmentHomePage();
+
+        await page.GoToYourAdvertFromSharedApplications();
+
+        return await SearchSharedAppVacancyByVacancyReference();
+    }
+
     private async Task<EmployerVacancySearchResultPage> SearchVacancyByVacancyReference()
     {
         YourApprenticeshipAdvertsHomePage page;
@@ -79,7 +95,9 @@ public class EmployerStepsHelper(ScenarioContext context)
         
         try
         {
-            await Assertions.Expect(playwrightPage.Locator("h1")).ToContainTextAsync("Recruitment dashboard", new LocatorAssertionsToContainTextOptions { Timeout = 2000 });
+            bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
+            string text = isRaaEpc ? "Adverts with shared applications" : "Recruitment dashboard";
+            await Assertions.Expect(playwrightPage.Locator("h1")).ToContainTextAsync(text, new LocatorAssertionsToContainTextOptions { Timeout = 2000 });
             page = new YourApprenticeshipAdvertsHomePage(context, false); 
         }
         catch
@@ -88,5 +106,27 @@ public class EmployerStepsHelper(ScenarioContext context)
         }
 
         return await page.SearchAdvertByReferenceNumber();
+    }
+
+    private async Task<EmployerSharedApplicationsVacanciesListPage> SearchSharedAppVacancyByVacancyReference()
+    {
+        YourApprenticeshipAdvertsHomePage page;
+
+        var driver = context.Get<Driver>();
+        var playwrightPage = driver.Page;
+
+        try
+        {
+            bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
+            string text = isRaaEpc ? "Adverts with shared applications" : "Recruitment dashboard";
+            await Assertions.Expect(playwrightPage.Locator("h1")).ToContainTextAsync(text, new LocatorAssertionsToContainTextOptions { Timeout = 2000 });
+            page = new YourApprenticeshipAdvertsHomePage(context, false);
+        }
+        catch
+        {
+            page = await _rAAEmployerLoginHelper.NavigateToRecruitmentHomePage();
+        }
+
+        return await page.SearchSharedAppVacancyByReferenceNumber();
     }
 }

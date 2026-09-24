@@ -15,9 +15,41 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
 
     public async Task<EmployerDraftVacanciesListPage> GoToYourAdvertFromDraftAdverts()
     {
+        await page.Locator("nav[aria-label='Menu']").GetByRole(AriaRole.Link, new() { Name = "Adverts" }).ClickAsync();
         await page.GetByRole(AriaRole.Link, new() { Name = "Draft adverts" }).ClickAsync();
 
         return await VerifyPageAsync(() => new EmployerDraftVacanciesListPage(context));
+    }
+
+    public async Task<EmployerClosedVacanciesListPage> GoToYourAdvertFromClosedAdverts()
+    {
+        await page.Locator("nav[aria-label='Menu']").GetByRole(AriaRole.Link, new() { Name = "Adverts" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Closed adverts" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new EmployerClosedVacanciesListPage(context));
+    }
+
+    public async Task<EmployerRejectedVacanciesListPage> GoToYourAdvertFromRejectedAdverts()
+    {
+        await page.Locator("nav[aria-label='Menu']").GetByRole(AriaRole.Link, new() { Name = "Adverts" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Rejected adverts" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new EmployerRejectedVacanciesListPage(context));
+    }
+
+    public async Task<EmployerArchivedVacanciesListPage> GoToYourAdvertFromArchivedAdverts()
+    {
+        await page.Locator("nav[aria-label='Menu']").GetByRole(AriaRole.Link, new() { Name = "Adverts" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Archived adverts" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new EmployerArchivedVacanciesListPage(context));
+    }
+
+    public async Task<EmployerSharedApplicationsVacanciesListPage> GoToYourAdvertFromSharedApplications()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Shared applications" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new EmployerSharedApplicationsVacanciesListPage(context));
     }
 
     public async Task<CreateAnAdvertHomePage> CreateAnApprenticeshipAdvert()
@@ -34,6 +66,8 @@ public class YourApprenticeshipAdvertsHomePage(ScenarioContext context, bool nav
     public async Task<ManageRecruitPage> SelectArchivedAdvert() => await _searchVacancyPageHelper.SelectArchivedAdvert();
 
     public async Task<EmployerVacancySearchResultPage> SearchAdvertByReferenceNumber() => await _searchVacancyPageHelper.SearchEmployerVacancy();
+
+    public async Task<EmployerSharedApplicationsVacanciesListPage> SearchSharedAppVacancyByReferenceNumber() => await _searchVacancyPageHelper.SearchSharedAppVacancy();
 
     public async Task<ManageYourEmailsEmployerPage> GoToAdvertNotificationsPage()
     {

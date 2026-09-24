@@ -1,5 +1,5 @@
 ﻿
-//using Allure.Net.Commons;
+using Allure.Net.Commons;
 
 namespace SFA.DAS.Framework.Hooks;
 
@@ -88,8 +88,13 @@ public class PlaywrightHooks(ScenarioContext context)
 
                     TestContext.AddTestAttachment(tracefilePath, tracefileName);
 
-                    //AllureApi.AddAttachment(tracefileName, "application/vnd.allure.playwright-trace", tracefilePath);
-                    //commented out as some of the reports are more than 512MB and allure does not support attachments of that size, so we are adding the trace file as a test attachment in test context instead which can be downloaded and viewed in playwright trace viewer
+                    if (GetIncludeTraceInAllureFromEnv())
+                    {
+                        AllureApi.AddAttachment(tracefileName, "application/vnd.allure.playwright-trace", tracefilePath);
+                        //some of the pipeline allure test reports artifacts are more than 512MB and allure does not support attachments of that size, so our suggestion would be that do not enable the trace for the pipeline with more than 40 test scenarios
+                    }
+
+                    
                 }
                 );
         }
@@ -127,6 +132,13 @@ public class PlaywrightHooks(ScenarioContext context)
         string isHeadlessVar = Environment.GetEnvironmentVariable("headless");
 
         return !string.IsNullOrEmpty(isHeadlessVar) && isHeadlessVar.ContainsCompareCaseInsensitive("true");
+    }
+
+    private static bool GetIncludeTraceInAllureFromEnv()
+    {
+        string includeTraceInAllure = Environment.GetEnvironmentVariable("IncludeTraceInAllure");
+
+        return !string.IsNullOrEmpty(includeTraceInAllure) && includeTraceInAllure.ContainsCompareCaseInsensitive("true");
     }
 
     private static BrowserType GetBrowserTypeFromEnv()

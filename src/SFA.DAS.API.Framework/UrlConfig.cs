@@ -39,6 +39,8 @@ public static class UrlConfig
 
         public static string LevyTransferMatchingJobs_BaseUrl => $"https://das-{EnvironmentConfig.EnvironmentName}-ltmwkr-fa.azurewebsites.net/";
 
+        public static string ServiceBusToolsBaseUrl => $"https://das-{EnvironmentConfig.EnvironmentName}-sbus-tools-fa.azurewebsites.net/";
+
         private static string GetInner_ApiBaseUrl(string apiname) => $"https://{EnvironmentConfig.EnvironmentName}-{apiname}-api.apprenticeships.education.gov.uk/";
 
 

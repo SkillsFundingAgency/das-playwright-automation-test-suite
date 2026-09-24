@@ -1,27 +1,36 @@
-﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions;
+﻿using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
+
+namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions;
 
 [Binding]
 public class CampaignsFundingSteps(ScenarioContext context)
 {
     private readonly CampaignsStepsHelper _stepsHelper = new(context);
+    private UnderstandingApprenticeshipBenefitsFundingPage _fundingPage;
 
-    [Given(@"^the user navigates to the Understanding Apprentice benefit and funding page make selection under three million$")]
-    public async Task GivenTheUserNavigatesToTheUnderstandingApprenticeBenefitAndFundingPage()
+    [Given(@"the employer is on the Understanding apprenticeship benefits and funding page")]
+    public async Task GivenTheEmployerIsOnTheUnderstandingApprenticeshipBenefitsAndFundingPage()
     {
-        var page = await _stepsHelper.GoToEmployerHubPage();
-
-        var page1 = await page.NavigateToUnderstandingApprenticeshipBenefitsAndFunding();
-
-        await page1.SelectUnder3Million();
+        var hubPage = await _stepsHelper.GoToEmployerHubPage();
+        _fundingPage = await hubPage.NavigateToUnderstandingApprenticeshipBenefitsAndFunding();
     }
 
-    [Given(@"^the user navigates to the Understanding Apprentice benefit and funding page make selection over three million$")]
-    public async Task GivenTheUserNavigatesToTheUnderstandingApprenticeBenefitAndFundingPageMakeSelectionOverThreeMillion()
+    [When(@"the employer calculates funding selecting ""(.*)""")]
+    public async Task WhenTheEmployerCalculatesFundingSelecting(string payrollOption)
     {
-        var page = await _stepsHelper.GoToEmployerHubPage();
+        if (payrollOption.Equals("Over £3 million", StringComparison.OrdinalIgnoreCase))
+        {
+            await _fundingPage.SelectOver3Million();
+        }
+        else
+        {
+            await _fundingPage.SelectUnder3Million();
+        }
+    }
 
-        var page1 = await page.NavigateToUnderstandingApprenticeshipBenefitsAndFunding();
-
-        await page1.SelectOver3Million();
+    [Then(@"the estimated funding result should be calculated successfully")]
+    public async Task ThenTheEstimatedFundingResultShouldBeCalculatedSuccessfully()
+    {
+        await _fundingPage.VerifyLinks();
     }
 }

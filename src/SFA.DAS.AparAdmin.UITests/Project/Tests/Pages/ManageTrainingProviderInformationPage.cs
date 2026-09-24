@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.AddJourney;
+using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ManageRestrictedCourses;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
@@ -7,12 +8,12 @@ public class ManageTrainingProviderInformationPage(ScenarioContext context) : Ba
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training provider information");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training provider information and restricted courses");
     }
 
     public async Task<SearchforATrainingProviderPage> ClickSearchForATrainingProvider()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Search for a training provider" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage training provider information and delivery" }).ClickAsync();
         return await VerifyPageAsync(() => new SearchforATrainingProviderPage(context));
     }
 
@@ -32,5 +33,10 @@ public class ManageTrainingProviderInformationPage(ScenarioContext context) : Ba
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Apprenticeship service admin" }).ClickAsync();
         return await VerifyPageAsync(() => new AparAdminHomePage(context));
+    }
+    public async Task<ViewMangeRestrictedCoursesPage> NavigateToRestrictedCourses()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "View and manage restricted courses" }).ClickAsync();
+        return await VerifyPageAsync(() => new ViewMangeRestrictedCoursesPage(context));
     }
 }

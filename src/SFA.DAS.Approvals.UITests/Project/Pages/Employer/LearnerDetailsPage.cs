@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
+﻿using MongoDB.Driver.Linq;
+using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
+using SFA.DAS.Approvals.UITests.Project.Pages.Common;
 using System;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
@@ -10,13 +12,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         #region Locators
         private ILocator BackPageLink => page.GetByRole(AriaRole.Link, new() { Name = "Back to manage your apprentices" });
+        private ILocator ViewChangeHistoryLink => page.GetByRole(AriaRole.Link, new() { Name = "View change history for this learner." });
         private ILocator EditStatusLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit status" });
+        private ILocator ChangePymtStatusLink => page.Locator("#change-payments-link");
         private ILocator ChangeProviderLink => page.GetByRole(AriaRole.Link, new() { Name = "Change   training provider" });
+        private ILocator ChangeVersionLink => page.Locator("a", new () { HasTextString = "Change version" });
         private ILocator EditApprenticeDetailsLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit   apprentice details" });
         private ILocator EditPlannedTrainingEndDateLink => page.GetByRole(AriaRole.Link, new() { Name = "Edit   end date" });
-        private ILocator ApprenticeStatusTag => page.Locator(".govuk-tag");
+        private ILocator ApprenticeStatusTag => page.Locator("tr", new() { HasTextString = "Status" }).Locator("strong.govuk-tag");
+        private ILocator PaymentsStatusTag => page.Locator("tr", new() { HasTextString = "Payments" }).Locator("strong.govuk-tag");
+        private ILocator ChangePaymentsStatusLink => page.Locator("#change-payments-link");
         private ILocator StatusDateTitle => page.Locator("table:nth-of-type(1) tr:nth-of-type(2) th").First;
         private ILocator StatusDateValue => page.Locator("table:nth-of-type(1) tr:nth-of-type(2) td").First;
+        private ILocator EmploymentStatus => page.Locator("id=employment-status");
         #endregion
 
 
@@ -43,14 +51,43 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new EditLearnerDetailsPage(context));
         }
 
-        internal async Task<LearnerDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status, string rowName, DateTime date)
+        internal async Task<ChangeHistoryPage> ClickOnViewChangeHistoryLink(string learnerName)
         {
+            await ViewChangeHistoryLink.ClickAsync();
+            return await VerifyPageAsync(() => new ChangeHistoryPage(context, learnerName));
+        }
+
+        internal async Task<PausePaymentsToYourTrainingProviderPage> ClickOnPausePaymentsLink()
+        {
+            await ChangePaymentsStatusLink.ClickAsync(); 
+            return await VerifyPageAsync(() => new PausePaymentsToYourTrainingProviderPage(context));
+        }
+
+        internal async Task<ResumePaymentsToTrainingProviderPage> ClickOnResumePaymentsLink()
+        {
+            await ChangePaymentsStatusLink.ClickAsync();
+            return await VerifyPageAsync(() => new ResumePaymentsToTrainingProviderPage(context));
+        }
+
+        internal async Task<LearnerDetailsPage> EmployerVerifyApprenticeStatus(ApprenticeshipStatus status, string rowName, DateTime? date)
+        {           
             await Assertions.Expect(ApprenticeStatusTag).ToContainTextAsync(status.ToString());
-            await Assertions.Expect(StatusDateTitle).ToContainTextAsync(rowName);
-            await Assertions.Expect(StatusDateValue).ToContainTextAsync(date.ToString("MMMM yyyy"));
+
+            if (date.HasValue)
+            {
+                string expectedDate = (status == ApprenticeshipStatus.Paused) ? date.Value.ToString("d MMM yyyy") : date.Value.ToString("MMMM yyyy");
+                await Assertions.Expect(StatusDateTitle).ToContainTextAsync(rowName);
+                await Assertions.Expect(StatusDateValue).ToContainTextAsync(expectedDate);
+            }
+            
             return this;
         }
 
+        internal async Task<bool> EmployerVerifyPaymentStatus(PaymentStatus pymtStatus)
+        {
+            return await PaymentsStatusTag.InnerTextAsync() == pymtStatus.ToString();
+        }
+ 
         internal async Task<LearnerDetailsPage> EmployerVerifyApprenticeStatusAndDetails(ApprenticeshipStatus status, string type, string apprenticeStatus)
         {
             await Assertions.Expect(ApprenticeStatusTag).ToContainTextAsync(status.ToString());
@@ -59,22 +96,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return this;
         }
 
-        internal async Task AssertRecordIsReadOnlyExceptEndDate()
-        { 
-            if (await EditStatusLink.IsVisibleAsync())
-                throw new Exception("Edit Status link is visible, expected to be hidden in read-only mode.");
-            
-            if (await ChangeProviderLink.IsVisibleAsync())
-                throw new Exception("Change Provider link is visible, expected to be hidden in read-only mode.");
-            
-            if (await EditApprenticeDetailsLink.IsVisibleAsync())
-                throw new Exception("Edit Apprentice Details link is visible, expected to be hidden in read-only mode.");
-            
-            if (!await EditPlannedTrainingEndDateLink.IsVisibleAsync())
-                throw new Exception("Edit Planned Training End Date link is not visible, expected to be visible in read-only mode.");
-
-        }
-
-
+        internal async Task<bool> IsEditStatusLinkAvailable() => await EditStatusLink.IsVisibleAsync();
+        internal async Task<bool> IsEditPaymentStatusLinkAvailable() => await ChangePymtStatusLink.IsVisibleAsync();   
+        internal async Task<bool> IsChangeProviderLinkAvailable() => await ChangeProviderLink.IsVisibleAsync();
+        internal async Task<bool> IsEditApprenticeDetailsLinkAvailable() => await EditApprenticeDetailsLink.IsVisibleAsync();
+        internal async Task<bool> IsEditVersionLinkAvailable() => await ChangeVersionLink.IsVisibleAsync();
+        internal async Task<bool> IsEditPlannedTrainingEndDateLinkAvailable() => await EditPlannedTrainingEndDateLink.IsVisibleAsync();
+        internal async Task<bool> IsPymtStatusVisible() => await PaymentsStatusTag.IsVisibleAsync();
+        internal async Task<bool> IsEmploymentStatusVisible() => await EmploymentStatus.IsVisibleAsync();
+        internal async Task<string> GetEmploymentStatus() => await EmploymentStatus.InnerTextAsync();
     }
+
 }

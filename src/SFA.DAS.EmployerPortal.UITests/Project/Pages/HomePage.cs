@@ -74,7 +74,7 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
 
     public async Task VerifyLearnerChangeToReviewMessageShown(int numberOfChanges)
     {
-        var messageText = numberOfChanges == 1 ? "1 learner  change to review" : $"{numberOfChanges} learner  changes to review";
+        var messageText = numberOfChanges == 1 ? "1 learner change to review" : $"{numberOfChanges} learner changes to review";
 
         await VerifyTaskList(messageText);
     }
@@ -200,7 +200,7 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     {
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Apprentice requests");
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Learner requests");
         }
     }
 

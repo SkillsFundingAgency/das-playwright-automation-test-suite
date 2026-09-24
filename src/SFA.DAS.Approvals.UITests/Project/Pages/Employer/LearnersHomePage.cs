@@ -13,17 +13,17 @@
             return await VerifyPageAsync(() => new AddLearnerPage(context));            
         }
 
-        internal async Task<ApprenticeRequestsPage> GoToReviewLearnerRequests()
+        internal async Task<LearnerRequestsPage> GoToReviewLearnerRequests()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Review learner requests" }).ClickAsync();
-            return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
+            return await VerifyPageAsync(() => new LearnerRequestsPage(context));
         }
 
-        internal async Task<ApprenticeRequestsPage> GoToLearnerRequestsFromHome()
+        internal async Task<LearnerRequestsPage> GoToLearnerRequestsFromHome()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Learners" }).First.ClickAsync();
             await page.GetByRole(AriaRole.Link, new() { Name = "Review learner requests" }).ClickAsync();
-            return await VerifyPageAsync(() => new ApprenticeRequestsPage(context));
+            return await VerifyPageAsync(() => new LearnerRequestsPage(context));
         }
 
         internal async Task<ManageYourLearnersPage> GoToManageYourLearners()

@@ -46,6 +46,8 @@ public class RAAApiEmployerUser : EasAccountUser { }
 
 public class RAAEmployerProviderPermissionUser : EasAccountUser { }
 
+public class RAAEmployerProviderNoPermissionUser : EasAccountUser { }
+
 public class RAAEmployerProviderYesPermissionUser : EasAccountUser { }
 
 public class ProviderPermissionLevyUser : EasAccountUser { }

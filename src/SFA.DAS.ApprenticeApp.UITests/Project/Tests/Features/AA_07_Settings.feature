@@ -2,7 +2,7 @@
 
 Settings are displayed
 
-@ApprenticeApp
+@apprenticeapp
 @regression
 Scenario: AA_07_Settings page is displayed
 	Given the apprentice has logged into the app

@@ -60,7 +60,7 @@ public class ProviderStepHelper(ScenarioContext context)
         await page2.YesArchiveThisVacancy();
     }
 
-    private async Task<ProviderVacancySearchResultPage> SearchVacancyByVacancyReferenceInNewTab()
+    public async Task<ProviderVacancySearchResultPage> SearchVacancyByVacancyReferenceInNewTab()
     {
         await _stepsHelper.GoToRecruitmentProviderHomePage(true);
 

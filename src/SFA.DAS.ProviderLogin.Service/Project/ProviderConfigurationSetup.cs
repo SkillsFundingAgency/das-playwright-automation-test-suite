@@ -41,6 +41,8 @@ public class ProviderConfigurationSetup(ScenarioContext context) : ProviderConfi
 
         _context.SetProviderPermissionConfig(SetProviderCreds<ProviderPermissionsConfig>());
 
+        _context.SetProviderNoPermissionConfig(SetProviderCreds<ProviderNoPermissionsConfig>());
+
         _context.SetChangeOfPartyConfig(SetProviderCreds<ChangeOfPartyConfig>());
 
         _context.SetPortableFlexiJobProviderConfig(SetProviderCreds<PortableFlexiJobProviderConfig>());
@@ -63,6 +65,8 @@ public class ProviderConfigurationSetup(ScenarioContext context) : ProviderConfi
         var providerConfig = SetProviderCreds<ProviderConfig>();
 
         if (_tags.IsAddRplDetails()) providerConfig = SetProviderCreds<RplProviderConfig>();
+
+        if (_tags.IsRaaTransfer())  providerConfig = SetProviderCreds<ProviderNoPermissionsConfig>();
 
         if (_tags.IsTestDataDeleteCohortViaProviderPortal()) _context.Set(SetProviderCreds<DeleteCohortProviderConfig>());
 

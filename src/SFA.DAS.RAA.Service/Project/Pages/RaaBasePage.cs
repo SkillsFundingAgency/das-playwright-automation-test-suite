@@ -10,6 +10,12 @@ public abstract class RaaBasePage : BasePage
 
     public bool isRaaEmployer;
 
+    public bool isRaaProvider;
+
+    public bool isRaaEpc;
+
+    public bool isRaaTransfer;
+
     //protected override By ContinueButton => By.CssSelector(".save-button");
 
     //protected override By PageHeader => By.CssSelector($"{PageHeaderSelector}, .govuk-label--xl");
@@ -22,6 +28,9 @@ public abstract class RaaBasePage : BasePage
     public RaaBasePage(ScenarioContext context) : base(context)
     {
         isRaaEmployer = tags.Contains("raaemployer");
+        isRaaProvider = tags.Contains("raaprovider");
+        isRaaEpc = tags.Contains("raa-epc");
+        isRaaTransfer = tags.Contains("raatransfer");
 
         vacancyTitleDataHelper = context.GetValue<VacancyTitleDatahelper>();
 

@@ -52,7 +52,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return new HomePage(context);
         }
 
-        internal async Task<EmployerApproveApprenticeDetailsPage> OpenCohort(bool validateCohortDetails = true)
+        internal async Task<EmployerApproveLearnerDetailsPage> OpenCohort(bool validateCohortDetails = true)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
 
@@ -72,7 +72,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return page1;
         }
 
-        internal async Task<EmployerApproveApprenticeDetailsPage> OpenAnyDraftCohort()
+        internal async Task<EmployerApproveLearnerDetailsPage> OpenAnyDraftCohort()
         {
             await EmployerLogInToEmployerPortal();
             await new InterimLearnersHomePage(context, false).VerifyPage();
@@ -248,5 +248,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page10 = await page9.ClickConfirmButton();
             return await page10.SelectOptionGoToHomePage();
         }
+
+        internal async Task<LearnerDetailsPage> EmployerPausePayments(LearnerDetailsPage learnerDetailsPage, Apprenticeship apprenticeship)
+        {
+            var page = await learnerDetailsPage.ClickOnPausePaymentsLink();
+            var page1 = await page.VerifyDetailsAndPauseRecord(apprenticeship);
+            await page1.ClickViewLearnerDetailLink();
+            return learnerDetailsPage;
+        }
+
+        internal async Task<LearnerDetailsPage> EmployerResumePayments(LearnerDetailsPage learnerDetailsPage, Apprenticeship apprenticeship)
+        {
+            var page = await learnerDetailsPage.ClickOnResumePaymentsLink();
+            var page1 = await page.VerifyDetailsAndResumeRecord(apprenticeship);
+            await page1.ClickViewLearnerDetailLink();
+            return learnerDetailsPage;
+        }
+
+
     }
 }
