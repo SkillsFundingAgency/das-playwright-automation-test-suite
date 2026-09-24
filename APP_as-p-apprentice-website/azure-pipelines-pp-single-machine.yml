@@ -38,6 +38,7 @@ stages:
     - group: "PreProd Management Resources"
     - group: "PreProd Shared Resources"
     - group: "PreProd Automation Suite Variables"
+    - group: BUILD Management Resources
   jobs:
   - job: BuildDeployAndTestPP
     displayName: Build, deploy and test PP
