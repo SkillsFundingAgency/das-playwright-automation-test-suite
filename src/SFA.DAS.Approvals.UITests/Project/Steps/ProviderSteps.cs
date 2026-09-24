@@ -423,7 +423,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 //Update valid apprentice object with new start and end dates. Then push it as new apprentice details on SLD endpoint
                 apprentice.TrainingDetails.StartDate = originalStartDate.AddMonths(Convert.ToInt32(item.NewStartDate));
                 apprentice.TrainingDetails.EndDate = originalEndDate.AddMonths(Convert.ToInt32(item.NewEndDate));
-                apprentice.ApprenticeDetails.Email = "Test@email.com";
+                apprentice.ApprenticeDetails.Email = "Test12345@email.com";
 
                 listOfApprenticeship[0] = apprentice;
                 context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
