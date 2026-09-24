@@ -32,6 +32,20 @@ public class DigiCertsSqlHelper(ObjectContext objectContext, DbConfig config) : 
             $"IF @UserId IS NULL " +
             $"THROW 50000, '@UserId must be set.', 1;" +
 
+            $"-- Always unlock the user first " +
+            $"UPDATE [dbo].[User] " +
+            $"SET IsLocked = 0 " +
+            $"WHERE Id = @UserId; " +
+
+            $"-- Verify that the user is definitely unlocked before proceeding " +
+            $"IF EXISTS ( " +
+            $"SELECT 1 " +
+            $"FROM [dbo].[User] " +
+            $"WHERE Id = @UserId " +
+            $"AND IsLocked <> 0 " +       
+            $") " +
+            $"THROW 50001, 'User must be unlocked before authentication can be removed.', 1; " +
+
             $"DECLARE @SharingIds TABLE (Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY);" +
 
             $"DECLARE @SharingEmailIds TABLE (Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY);" +
