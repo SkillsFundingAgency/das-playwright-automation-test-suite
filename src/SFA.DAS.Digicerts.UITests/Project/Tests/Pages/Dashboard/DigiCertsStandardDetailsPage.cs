@@ -73,7 +73,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             var download = await page.RunAndWaitForDownloadAsync(async () =>
             {
                 await page
-                    .GetByRole(AriaRole.Link, new() { Name = "Download certificate (PDF)" })
+                    .GetByRole(AriaRole.Link, new() { Name = "Download printable certificate (PDF)" })
                     .ClickAsync();
             });
 
