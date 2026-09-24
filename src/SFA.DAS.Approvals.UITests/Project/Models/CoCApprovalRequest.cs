@@ -8,7 +8,7 @@
         public string ukprn { get; set; }
         public string uln { get; set; }
         public string approvedUri { get; set; }
-        public CoCApprovalFieldRequest changes { get; set; }
+        public List<CoCApprovalFieldRequest> changes { get; set; }
     }
 
     internal class CoCApprovalFieldRequest

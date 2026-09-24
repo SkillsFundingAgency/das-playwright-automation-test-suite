@@ -21,14 +21,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
         internal async Task<RestResponse> PutCoCApprovalRequest(CoCApprovalRequest payload, string learningKey)
         {
             var (tokenType, accessToken) = await GetAADAuthToken();
-
-            //await CreateRestRequest(Method.Put, $"/approvals/{learningKey}", payload.ToString(Formatting.None));
-            //Addheader("Authorization", $"{tokenType} {accessToken}");
-
-            //var response = await Execute(HttpStatusCode.OK);
-
-            return await Execute(Method.Put, $"/approvals/{learningKey}", payload, HttpStatusCode.OK);
-            //return response;
+            return await Execute(Method.Put, $"/approvals/{learningKey}", payload, null);
         }
 
 
