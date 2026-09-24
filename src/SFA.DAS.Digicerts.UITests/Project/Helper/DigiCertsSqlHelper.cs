@@ -32,12 +32,10 @@ public class DigiCertsSqlHelper(ObjectContext objectContext, DbConfig config) : 
             $"IF @UserId IS NULL " +
             $"THROW 50000, '@UserId must be set.', 1;" +
 
-            $"-- Always unlock the user first " +
             $"UPDATE [dbo].[User] " +
             $"SET IsLocked = 0 " +
             $"WHERE Id = @UserId; " +
 
-            $"-- Verify that the user is definitely unlocked before proceeding " +
             $"IF EXISTS ( " +
             $"SELECT 1 " +
             $"FROM [dbo].[User] " +
