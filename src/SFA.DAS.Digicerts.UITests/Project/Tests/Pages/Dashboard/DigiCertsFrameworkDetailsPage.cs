@@ -42,7 +42,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByText("You can create a secure link")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Create link" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Download your certificate" })).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download certificate (PDF)" })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download printable certificate (PDF)" })).ToBeVisibleAsync();
             
             return await VerifyPageAsync(() => new DigiCertsFrameworkDetailsPage(context));
         }
@@ -65,7 +65,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             await Assertions.Expect(page.GetByText("You can create a secure link")).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Create link" })).ToBeVisibleAsync();
             await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Download your certificate" })).ToBeVisibleAsync();
-            await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download certificate (PDF)" })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download printable certificate (PDF)" })).ToBeVisibleAsync();
             
             return await VerifyPageAsync(() => new DigiCertsFrameworkDetailsPage(context));
         }
