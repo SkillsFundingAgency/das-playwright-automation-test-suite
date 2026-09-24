@@ -74,7 +74,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
                 await Assertions.Expect(newPage.GetByText("Lancaster and Morecambe")).ToBeVisibleAsync();
                 await Assertions.Expect(newPage.GetByText("January 2019")).ToBeVisibleAsync();
                 await Assertions.Expect(newPage.GetByRole(AriaRole.Heading, new() { Name = "Download certificate" })).ToBeVisibleAsync();
-                await Assertions.Expect(newPage.GetByRole(AriaRole.Link, new() { Name = "Download certificate (PDF)" })).ToBeVisibleAsync();
+                await Assertions.Expect(newPage.GetByRole(AriaRole.Link, new() { Name = "Download printable certificate (PDF)" })).ToBeVisibleAsync();
             } else if(certificate == "Standard")
             {
                 await Assertions.Expect(newPage.GetByText("Oliver Turner")).ToBeVisibleAsync();
@@ -87,7 +87,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
                 await Assertions.Expect(newPage.GetByText("KAPLAN FINANCIAL LIMITED")).ToBeVisibleAsync();
                 await Assertions.Expect(newPage.GetByText("January 2020")).ToBeVisibleAsync();
                 await Assertions.Expect(newPage.GetByRole(AriaRole.Heading, new() { Name = "Download certificate" })).ToBeVisibleAsync();
-                await Assertions.Expect(newPage.GetByRole(AriaRole.Link, new() { Name = "Download certificate (PDF)" })).ToBeVisibleAsync();
+                await Assertions.Expect(newPage.GetByRole(AriaRole.Link, new() { Name = "Download printable certificate (PDF)" })).ToBeVisibleAsync();
             }
             
            
