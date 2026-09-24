@@ -59,6 +59,10 @@ jobs:
             inputs:
               SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
               TargetFileNames: '*.runsettings'
+          
+          - task: BrowserStackConfig@0
+            inputs:
+            browserstackServiceEndPoint: 'AS-Browserstack'
 
           - task: PowerShell@2
             displayName: 'Install Playwright Browsers'
@@ -198,10 +202,14 @@ jobs:
             condition: always()
             continueOnError: true
 
-          - task: PublishAllureReport@2
-            displayName: 'Allure Tab: Generate and Publish Allure Report'
-            condition: always()
+          - task: BrowserStackResults@0
             inputs:
-              allureVersion: '2.44.1'
-              reportName: 'Allure report - ${{ parameters.Environment }}'
-              testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'
+            browserstackProduct: 'observability'
+
+          # - task: PublishAllureReport@2
+          #   displayName: 'Allure Tab: Generate and Publish Allure Report'
+          #   condition: always()
+          #   inputs:
+          #     allureVersion: '2.44.1'
+          #     reportName: 'Allure report - ${{ parameters.Environment }}'
+          #     testResultsDir: '$(System.DefaultWorkingDirectory)/drop/tests/allure-results'
