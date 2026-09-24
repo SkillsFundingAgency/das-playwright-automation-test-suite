@@ -62,7 +62,7 @@ jobs:
           
           - task: BrowserStackConfig@0
             inputs:
-            browserstackServiceEndPoint: 'AS-Browserstack'
+              browserstackServiceEndPoint: 'AS-Browserstack'
 
           - task: PowerShell@2
             displayName: 'Install Playwright Browsers'
@@ -204,7 +204,7 @@ jobs:
 
           - task: BrowserStackResults@0
             inputs:
-            browserstackProduct: 'observability'
+              browserstackProduct: 'observability'
 
           # - task: PublishAllureReport@2
           #   displayName: 'Allure Tab: Generate and Publish Allure Report'
