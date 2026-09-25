@@ -433,7 +433,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
                 // Try to add above apprentice and validate error message  
                 var page = await providerStepsHelper.GoToSelectApprenticeFromILRPage();
-                var page1 = await providerStepsHelper.TryAddFirstApprenticeFromILRList(page);
+                var page1 = await providerStepsHelper.AddFirstApprenticeFromILRListForExistingWithdrawnApprentice(page);
                 var page2 = await providerStepsHelper.ConfirmDetailsAfterApprenticeAddFromIlRList(page1);
 
                 await page2.ClickOnButton("Continue");

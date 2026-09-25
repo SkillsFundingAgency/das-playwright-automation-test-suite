@@ -56,7 +56,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
-           // await page.ClickAddButton();
+            await page.ClickAddButton();
             return await page.VerifyPageAsync(() => new CheckLearnerDetailsPage(context));
         }
 
@@ -374,6 +374,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await learnerDataOuterApiSteps.SLDPushDataIntoAS();
         }
 
+        internal async Task<CheckLearnerDetailsPage> AddFirstApprenticeFromILRListForExistingWithdrawnApprentice(SelectLearnerFromILRPage selectApprenticeFromILRPage)
+        {
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+            var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
+            return await page.VerifyPageAsync(() => new CheckLearnerDetailsPage(context));
+        }
 
     }
 
