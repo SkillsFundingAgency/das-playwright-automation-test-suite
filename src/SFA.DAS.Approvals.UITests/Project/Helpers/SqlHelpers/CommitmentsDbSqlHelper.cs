@@ -28,18 +28,18 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
                     FROM [dbo].[Commitment] c
                     INNER JOIN [dbo].[Apprenticeship] a
                     ON c.id = a.CommitmentId
-                    Where ProviderId = {ukprn}                
+                    Where ProviderId = {ukprn}
                     AND c.AccountLegalEntityId = {accountLegalEntityId}
                     --and count(a.id) <2
                     And a.LearnerDataId is not null
                     --And c.TransferSenderId is not null
-                    And c.IsDraft = {isDraft}   
+                    And c.IsDraft = {isDraft}
                     And c.IsFullApprovalProcessed = 0
                     And c.IsDeleted = 0
                     And c.Approvals = {approvals}
                     And c.WithParty = {withParty}
                     AND c.CreatedOn < DATEADD(DAY, -1, GETDATE())
-                    AND c.ChangeOfPartyRequestId is null             
+                    AND c.ChangeOfPartyRequestId is null
                     AND c.PledgeApplicationId is null
                     AND a.PaymentStatus = 0
                     AND a.CloneOf is null
@@ -70,25 +70,25 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.TrainingDetails.TrainingPrice = Convert.ToInt32(details[11]);
             apprenticeship.TrainingDetails.AcademicYear = AcademicYearDatesHelper.GetCurrentAcademicYear();
             apprenticeship.TrainingDetails.ConsumerReference = details[12];
-            apprenticeship.TrainingDetails.CourseTitle = details[13];            
+            apprenticeship.TrainingDetails.CourseTitle = details[13];
 
             return apprenticeship;
         }
 
-        private async Task<List<string>> GetApprenticeDetails(int ukprn, int accountLegalEntityId, string additionalWhereFilter = null )
+        private async Task<List<string>> GetApprenticeDetails(int ukprn, int accountLegalEntityId, string additionalWhereFilter = null)
         {
             string query =
                 @$"SELECT TOP(1) a.Id, a.ULN, a.FirstName, a.LastName, a.DateOfBirth, a.TrainingCode, a.ReservationId, c.Reference, a.Email, a.StartDate, a.EndDate, a.Cost, a.ProviderRef, a.TrainingName
                     FROM [dbo].[Commitment] c
                     INNER JOIN [dbo].[Apprenticeship] a
                     ON c.id = a.CommitmentId
-                    Where ProviderId = {ukprn}                
+                    Where ProviderId = {ukprn}
                     AND c.AccountLegalEntityId = {accountLegalEntityId}
                     AND a.TrainingCode NOT LIKE '%-%'
                     {additionalWhereFilter}
                     Order by c.CreatedOn DESC";
 
-            return await GetData(query);            
+            return await GetData(query);
         }
 
         internal async Task<string> GetValueFromApprenticeshipTable(string columnName, string ULN)
@@ -96,7 +96,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             string query = $"SELECT TOP(1) {columnName} FROM [dbo].[Apprenticeship] WHERE ULN = '{ULN}'";
             var result = await GetData(query);
             return result.FirstOrDefault() ?? string.Empty;
-
         }
 
         internal async Task<List<string>> GetValuesFromApprenticeshipTable(string columnName, int apprenticeshipId)
@@ -108,10 +107,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
         }
 
         internal async Task ResetPaymentStatus(int apprenticeshipId)
-        { 
+        {
             string query = $@"UPDATE Apprenticeship
                                 Set paymentstatus = 1, stopdate = null, pausedate = null, completionDate = null, WithdrawnReasonCode = null, MadeRedundant = 0,
-                                paymentFreezeDate = null, FreezePaymentsReason = null 
+                                paymentFreezeDate = null, FreezePaymentsReason = null
                                 WHERE Id = {apprenticeshipId};
 
                             Delete [dbo].[LearningChangeHistory] Where apprenticeshipid = {apprenticeshipId};";
@@ -135,5 +134,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             await ExecuteSqlCommand(query);
         }
 
+        internal async Task UpdateApprenticeshipStopDateAndWithdrawnCode(int apprenticeshipId, DateTime stopDate)
+        {
+            string query = $"UPDATE Apprenticeship SET StopDate = '{stopDate.ToString("yyyy-MM-dd")}', WithdrawnReasonCode = 29 WHERE Id = {apprenticeshipId}";
+            await ExecuteSqlCommand(query);
+        }
     }
 }
