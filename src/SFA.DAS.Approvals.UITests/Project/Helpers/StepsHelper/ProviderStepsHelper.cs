@@ -1,10 +1,9 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+﻿using System;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.Approvals.UITests.Project.Steps;
-using SFA.DAS.EmployerPortal.UITests.Project.Pages.CreateAccount;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
-using System;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 {
