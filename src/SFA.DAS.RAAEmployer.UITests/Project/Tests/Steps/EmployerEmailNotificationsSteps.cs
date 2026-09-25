@@ -116,7 +116,7 @@ public class EmployerEmailNotificationsSteps(ScenarioContext context)
 
             case ("employer listed you as training provider", "provider"):
                 emailText = $"An employer’s listed you as the training provider on this vacancy. Contact the employer if you were not expecting this.";
-                subject = "An employer's listed you as the training provider on a vacancy";
+                subject = "An employer’s listed you as the training provider on a vacancy";
                 userEmail = GetProviderEmail();
                 break;
 
