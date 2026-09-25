@@ -23,4 +23,6 @@ public static class ScenarioTagsExtension
     public static bool IsAsListedEmployer(this string[] tags) => tags.Contains("aslistedemployer");
 
     public static bool IsRaaTransfer(this string[] tags) => tags.Contains("raatransfer");
+
+    public static bool IsRaaEpc(this string[] tags) => tags.Contains("raa-epc");
 }
