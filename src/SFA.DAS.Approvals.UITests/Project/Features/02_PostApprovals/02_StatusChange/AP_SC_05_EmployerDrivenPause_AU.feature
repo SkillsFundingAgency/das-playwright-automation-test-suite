@@ -1,6 +1,6 @@
 ﻿@postapprovals
 @linkedScenarios
-Feature: AP_CoC_05_EmployerDrivenPause_AU
+Feature: AP_SC_05_EmployerDrivenPause_AU
 
 Employer can pause/freeze provider payments via UI
 
@@ -16,6 +16,6 @@ Data Requirements:
 
 
 @regression
-Scenario: AP_CoC_05_Verify employer can pause/freeze provider payments for AU learner via UI    
+Scenario: AP_SC_05_Verify employer can pause/freeze provider payments for AU learner via UI    
 	Given a Live AU learner record exists with Firstname: "DoNotUse_TestData" and LastName: "EmployerDrivenPauseAuLearner"
 	Then employer cannot pause this AU record
