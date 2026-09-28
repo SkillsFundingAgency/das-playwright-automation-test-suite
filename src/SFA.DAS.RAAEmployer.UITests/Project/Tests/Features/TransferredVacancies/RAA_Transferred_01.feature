@@ -66,7 +66,6 @@ Scenario: RAA_Transferred_01_5 - Transfer an archived vacancy from provider to e
 	Then the transferred advert is saved as a archived
 
 @raa
-@raa-epc
 @raatransfer
 @regression
 @raaprovider
