@@ -135,5 +135,41 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             await ExecuteSqlCommand(query);
         }
 
+        internal async Task ClearCocRequestInCommitmentsDb(int apprenticeshipId)
+        {
+            string query = $@"DELETE [dbo].[ApprovalFieldRequest]
+                                WHERE ApprovalRequestId IN (SELECT Id from [dbo].[ApprovalRequest] WHERE ApprenticeshipId = {apprenticeshipId})";
+            await ExecuteSqlCommand(query);
+
+            string query2 = $@"DELETE [dbo].[ApprovalRequest] 
+                                WHERE ApprenticeshipId = {apprenticeshipId}";
+            await ExecuteSqlCommand(query2);
+        }
+
+        internal async Task<string> GetApprovalRequestStatusFromCommitmentsDb(int apprenticeshipId)
+        {
+            string query = $@"SELECT TOP(1) [Status] 
+                                FROM [dbo].[ApprovalRequest] 
+                                WHERE ApprenticeshipId = {apprenticeshipId}
+                                ORDER BY Created DESC";
+            var result = await GetData(query);
+            return result.FirstOrDefault() ?? string.Empty;
+        }
+
+        internal async Task<string> GetApprovalFieldRequestStatusFromCommitmentsDb(int apprenticeshipId)
+        {
+            string query = $@"SELECT TOP (1) [Status] 
+                                FROM [dbo].[ApprovalFieldRequest]
+                                WHERE ApprovalRequestId = 
+                                    (
+                                        SELECT TOP(1) [Id] FROM [dbo].[ApprovalRequest] 
+                                        WHERE ApprenticeshipId = {apprenticeshipId} 
+                                        ORDER BY Created DESC
+                                    )";
+            var result = await GetData(query);
+            return result.FirstOrDefault() ?? string.Empty;
+        }
+
+
     }
 }

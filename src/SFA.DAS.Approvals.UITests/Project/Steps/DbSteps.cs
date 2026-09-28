@@ -184,6 +184,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             //reset the payment status to 1 (Live):
             await commitmentsDbSqlHelper.ResetPaymentStatus(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.ApprenticeshipId);
+
+            //clear CoC requests:
+            await commitmentsDbSqlHelper.ClearCocRequestInCommitmentsDb(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.ApprenticeshipId);
         }
 
         [Then(@"Commitments db is updated with the correct reason code and stop date")]
@@ -309,6 +312,21 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             Assert.That(result[5], Is.EqualTo($"{status}"), $"Expected employment status '{status}' but found '{actualEmploymentStatus}'");
         }
 
+        [Then(@"^ApprovalRequest is created in commitments db with ""(.*)""$")]
+        public async Task ThenApprovalRequestIsCreatedInCommitmentsDbWith(string expectedStatus)
+        {
+            var apprenticeshipId = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().ApprenticeDetails.ApprenticeshipId;
+            var actualApprovalStatus = await commitmentsDbSqlHelper.GetApprovalRequestStatusFromCommitmentsDb(apprenticeshipId);
+            Assert.That(actualApprovalStatus, Is.EqualTo(expectedStatus), $"Expected ApprovalRequest status '{expectedStatus}' but found '{actualApprovalStatus}'");
+        }
+
+        [Then(@"^ApprovalFieldRequest is created in commitments db with ""(.*)""$")]
+        public async Task ThenApprovalFieldRequestIsCreatedInCommitmentsDbWith(string expectedStatus)
+        {
+            var apprenticeshipId = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().ApprenticeDetails.ApprenticeshipId;
+            var actualApprovalStatus = await commitmentsDbSqlHelper.GetApprovalFieldRequestStatusFromCommitmentsDb(apprenticeshipId);
+            Assert.That(actualApprovalStatus, Is.EqualTo(expectedStatus), $"Expected ApprovalFieldRequest status '{expectedStatus}' but found '{actualApprovalStatus}'");
+        }
 
 
 

@@ -1,6 +1,6 @@
 ﻿@postapprovals
 @linkedScenarios
-Feature: AP_CoC_03_LearningWithdrawnEvent_AU
+Feature: AP_SC_03_LearningWithdrawnEvent_AU
 
 Commitments receives LearningWithdrawnEvent from Learning domain for variety of reasons. This test validates that event is processed correctly and the apprentice record is updated (stopped) with correct reason code and stop date 
 
@@ -16,7 +16,7 @@ Data Requirements:
 
 
 @regression
-Scenario: AP_CoC_03a_Verify Learning Withdrawal Event marks the AU learner as Stopped
+Scenario: AP_SC_03a_Verify Learning Withdrawal Event marks the AU learner as Stopped
 	Given a Live AU learner record exists with Firstname: "DoNotUse_TestData" and LastName: "ChangeStatusAuLearner"
 	When LearningWithdrawnEvent is received for the apprentice
 	Then Commitments db is updated with the correct reason code and stop date
@@ -27,7 +27,7 @@ Scenario: AP_CoC_03a_Verify Learning Withdrawal Event marks the AU learner as St
 
 
 @regression
-Scenario Outline: AP_E2E_LE_EUA_03b emails validation
+Scenario Outline: AP_SC_03b emails validation
 	Given previous test has been completed successfully
 	Then Verify the "<Recipient>" receive "<NotificationType>" email
 
