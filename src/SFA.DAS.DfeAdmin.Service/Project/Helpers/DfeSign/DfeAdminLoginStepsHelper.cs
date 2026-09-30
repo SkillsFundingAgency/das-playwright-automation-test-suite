@@ -59,7 +59,7 @@ public class DfeAdminLoginStepsHelper(ScenarioContext context) : FrameworkBaseHo
         if (await landingPage.IsPageDisplayed())
         {
             await landingPage.ClickStartNowButton();
-            if(context.ScenarioInfo.Tags.Contains("raa-epc"))
+            if(context.ScenarioInfo.Tags.IsRaaEpc())
             {
                 var headingText = await landingPage.heading.TextContentAsync();
                 if (headingText?.Contains("You aren't approved to view this page") == true)

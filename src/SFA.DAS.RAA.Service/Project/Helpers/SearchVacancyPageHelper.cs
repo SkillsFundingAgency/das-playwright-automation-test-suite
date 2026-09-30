@@ -104,7 +104,7 @@ public class SearchVacancyPageHelper(ScenarioContext context)
     public async Task SearchVacancy()
     {
         var vacRef = _objectContext.GetVacancyReference();
-        bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
+        bool isRaaEpc = context.ScenarioInfo.Tags.IsRaaEpc();
         if (isRaaEpc)
         {
             await page.Locator("#search-input").FillAsync(vacRef);

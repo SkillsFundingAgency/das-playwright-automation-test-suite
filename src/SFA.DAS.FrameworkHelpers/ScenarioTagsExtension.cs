@@ -24,5 +24,5 @@ public static class ScenarioTagsExtension
 
     public static bool IsRaaTransfer(this string[] tags) => tags.Contains("raatransfer");
 
-    public static bool IsRaaEpc(this string[] tags) => tags.Contains("raa-epc");
+    public static bool IsRaaEpc(this string[] tags) => tags.Contains("raaepc");
 }
