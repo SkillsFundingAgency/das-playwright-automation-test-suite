@@ -9,7 +9,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
     {
         #region locators
-        private ILocator banner => page.Locator("#main-content");
+        private ILocator mainContent => page.Locator("#main-content");
+        private ILocator banner => page.Locator(".govuk-notification-banner__content");
         private ILocator employerName => page.Locator("dt:has-text('Employer') + dd");
         private ILocator cohortReference => page.Locator("dt:has-text('Cohort reference') + dd");
         private ILocator status => page.Locator("dt:has-text('Status') + dd");
@@ -175,9 +176,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new AddRecognitionOfPriorLearningDetailsPage(context));
         }
 
-        internal async Task VerifyBanner(string text) => await Assertions.Expect(banner).ToContainTextAsync(text);
+        internal async Task VerifyConfirmationPanel(string text) => await Assertions.Expect(mainContent).ToContainTextAsync(text);
 
         internal async Task VerifyBanner(string title, string content) => await Assertions.Expect(page.GetByLabel(title)).ToContainTextAsync(content);
+
+        internal async Task VerifyBanner(string content) => await Assertions.Expect(banner).ToContainTextAsync(content);
 
         internal async Task SelectFirstRadioButtonAndSubmit(string optionalMsg=null)
         {

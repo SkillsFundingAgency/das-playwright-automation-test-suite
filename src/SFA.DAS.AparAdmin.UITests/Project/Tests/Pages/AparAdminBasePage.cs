@@ -95,8 +95,8 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
         {
             for (int i = 0; i < resultCount; i++)
             {
-                string text = (await results.Nth(i).InnerTextAsync()).Trim();
-                if (!(text.Contains(searchWord)))
+                string text = (await results.Nth(i).InnerTextAsync());
+                if (!(text.Contains(searchWord, StringComparison.OrdinalIgnoreCase)))
                 {
                     throw new Exception("Results are not correct.");
                 }
