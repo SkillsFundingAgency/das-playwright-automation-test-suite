@@ -39,6 +39,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         }
 
+        [When("^Provider add (.*) apprentice details using bulkupload$")]
+        public async Task WhenProviderHaveFewLearnerToAddUsingCSVFileUpload(int numberOfApprentices)
+        {
+            var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
+            List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
+
+            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, numberOfApprentices, null, listOfApprenticeship);
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+        }
+
         [Given("^one of the apprentice on Level-7 course is above (.*) years$")]
         public async Task GivenOneOfTheApprenticeOnLevelCourseIsAboveYears(int ageLimit)
         {
@@ -59,7 +69,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var foundationTrainingDetails = new TrainingFactory(DateTime.Today, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
             var apprenticeDetails = new ApprenticeFactory(ageLimit + 1);
             listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship, apprenticeFactory: apprenticeDetails, trainingFactory: foundationTrainingDetails);
-            context["listOfApprenticeship"] = listOfApprenticeship;                     
+            context["listOfApprenticeship"] = listOfApprenticeship;
         }
 
         [Given(@"one of the apprentice on Short GSO course")]
@@ -85,10 +95,88 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.TryUploadFile(fileUploadHelper.CsvFileLocation());
         }
 
+        [When("^Provider uploads the updated csv file$")]
+        public async Task WhenProviderUploadsUpdatedCsvFile()
+        {
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            ICsvFileFactory csvFileFactory = new CsvFileFactory();
+            await csvFileFactory.CreateCsvFile(listOfApprenticeship, fileUploadHelper.CsvFileLocation());
+
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            var page = await StartBulkUploadJourney();
+            await page.UploadFile(fileUploadHelper.CsvFileLocation());
+        }
+
+        [Then("^Correct Information is displayed on review apprentices details page$")]
+        public async Task ThenCorrectInformationIsDisplayedOnReviewApprenticeDetailsPage()
+        {
+            var apprenticeships = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var page = new ReviewApprenticeDetailsBulkUploadPage(context);
+
+            await page.VerifyPage();
+            await page.VerifyCorrectInformationIsDisplayed(apprenticeships);
+        }
+
+        // [Then(@"Provider approves the cohorts and send them to employer to approve")]
+        // public async Task WhenProviderApprovesTheCohortsAndSendThemToEmployerToApprove()
+        // {
+        //     var apprenticeList = GetBulkuploadData();
+        //     await new ReviewApprenticeDetailsBulkUploadPage(_context)
+        //         .SelectToApproveAllAndSendToEmployer()
+        //         .VerifyCorrectInformationIsDisplayed(apprenticeList);
+        // }
+
+        [When(@"User selects to upload an amended file")]
+        public async Task UserSelectsToUploadAnAmendedFile()
+        {
+            await new ReviewApprenticeDetailsBulkUploadPage(context).SelectToUploadAnAmendedFile();
+        }
+
+        [When(@"Provider uploads another file")]
+        public async Task ProviderUploadsAnotherFile()
+        {
+            var listOfApprenticeships = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+
+            ICsvFileFactory csvFileFactory = new CsvFileFactory();
+            await csvFileFactory.CreateCsvFile(listOfApprenticeships, fileUploadHelper.CsvFileLocation());
+
+            await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+            var page = await StartBulkUploadJourney();
+            await page.UploadFile(fileUploadHelper.CsvFileLocation());
+        }
+
+        [When(@"User selects to upload an amended file through link")]
+        public async Task UserSelectsToUploadAnAmendedFileThroughLink()
+        {
+            await new ReviewApprenticeDetailsBulkUploadPage(context).SelectToUploadAnAmendedFileThroughLink();
+        }
+
+
+        [When(@"Provider selects No on confirmation for upload an amended file")]
+        public async Task ProviderSelectsNoOnConfirmationForUploadAmendedFile()
+        {
+            await new AreYouSureYouWantToUploadAmendedFilePage(context).SelectNoAndContinue();
+        }
+
+        [Given(@"Provider selects Yes on confirmation for upload an amended file")]
+        [When(@"Provider selects Yes on confirmation for upload an amended file")]
+        public async Task ProviderSelectsYesOnConfirmationForUploadAmendedFile()
+        {
+            await new AreYouSureYouWantToUploadAmendedFilePage(context).SelectYesAndContinue();
+        }
+
+        [Given(@"Provider selects to save all but don't send to employer")]
+        [When(@"Provider selects to save all but don't send to employer")]
+        public async Task ProviderSelectsToSaveAllButDontSendToEmployer()
+        {
+            await new ReviewApprenticeDetailsBulkUploadPage(context)
+                .SelectToSaveAllButDontSendToEmployer();
+        }
+
         [Then("^system does not allow to upload the file and displays an error message$")]
         public async Task ThenSystemDoesNotAllowToUploadTheFileAndDisplaysAnErrorMessage()
         {
-            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);    
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var rowsToValidate = new[] { 3, 4, 5 };        //based on previous step, the error message will be displayed for rows 3, 4 and 5
 
             foreach (var rowNumber in rowsToValidate)
@@ -114,7 +202,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         private async Task<UploadCsvFilePage> StartBulkUploadJourney()
-        {            
+        {
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
             var page2 = await new HowDoYouWantToAddLearner_EntryMothodPage(context).SelectOptionToUploadCsvFile();
             return await page2.ClickContinueButton();
