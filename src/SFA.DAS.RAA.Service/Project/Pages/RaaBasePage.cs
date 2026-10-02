@@ -29,7 +29,7 @@ public abstract class RaaBasePage : BasePage
     {
         isRaaEmployer = tags.Contains("raaemployer");
         isRaaProvider = tags.Contains("raaprovider");
-        isRaaEpc = tags.Contains("raa-epc");
+        isRaaEpc = tags.Contains("raaepc");
         isRaaTransfer = tags.Contains("raatransfer");
 
         vacancyTitleDataHelper = context.GetValue<VacancyTitleDatahelper>();
