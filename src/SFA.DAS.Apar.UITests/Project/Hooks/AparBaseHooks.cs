@@ -73,6 +73,11 @@ public abstract class AparBaseHooks : FrameworkBaseHooks
     {
         await _maanagingStandardsSqlDbHelper.ResetTrainingProviderFromCourse();
     }
+
+    protected async Task ClearProviderRestrictedCourses()
+    {
+        await _maanagingStandardsSqlDbHelper.ClearProviderRestrictedCourses();
+    }
     
 
     protected async Task ResetTrainingProvider() => await _adminClearDownDataHelpers.ResetProviderDetails(GetUkprn());

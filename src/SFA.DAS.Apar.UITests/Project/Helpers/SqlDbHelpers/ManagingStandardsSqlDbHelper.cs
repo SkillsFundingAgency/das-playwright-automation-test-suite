@@ -7,4 +7,7 @@ public class ManagingStandardsSqlDbHelper(ObjectContext objectContext, DbConfig 
     
     public async Task ResetTrainingProviderFromCourse() => await ExecuteSqlCommand
         ($"Delete from ProviderAllowedCourse where ukprn = '10043565'");
+    
+    public async Task ClearProviderRestrictedCourses() => await ExecuteSqlCommand
+        ($"delete from ProviderAllowedCourse where ukprn = '10000536' and  larscode = '287'");
 }
