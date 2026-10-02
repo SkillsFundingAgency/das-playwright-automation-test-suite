@@ -14,8 +14,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             List<Apprenticeship>? apprenticeships = null,
             IApprenticeFactory? apprenticeFactory = null,
             ITrainingFactory? trainingFactory = null,
-            IRPLFactory? rplFactory = null)
-
+            IRPLFactory? rplFactory = null,
+            Cohort? cohort = null
+        )
         {
             apprenticeFactory ??= new ApprenticeFactory();
             trainingFactory ??= new TrainingFactory();
@@ -44,6 +45,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
                     ApprenticeDetails = apprenticeDetails,
                     TrainingDetails = training,
                     RPLDetails = rpl,
+                    Cohort = cohort ?? new Cohort(),
                 };
 
 

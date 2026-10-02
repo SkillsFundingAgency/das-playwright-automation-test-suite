@@ -18,11 +18,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private readonly CommonStepsHelper commonStepsHelper;
         private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
 
+        private ApprenticeDataHelper apprenticeDataHelper;
 
         public EmployerSteps(ScenarioContext context)
         {
             this.context = context;
             employerStepsHelper = new EmployerStepsHelper(context);
+            apprenticeDataHelper = new ApprenticeDataHelper(context);
             commonStepsHelper = new CommonStepsHelper(context);
             commitmentsDbSqlHelper = context.Get<CommitmentsDbSqlHelper>();
         }
@@ -112,9 +114,23 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When(@"^the employer create and send an empty cohort to the training provider to add learner details$")]
         public async Task GivenEmployerCreatesEmptyRequestCohort()
         {
+            List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
+            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship);
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+            
             await employerStepsHelper.AddEmptyCohort();
         }    
 
+
+        [Given(@"the Employer creates (.*) cohorts and sends them to provider to add apprentices")]
+        [When(@"the Employer creates (.*) cohorts and sends them to provider to add apprentices")]
+        public async Task TheEmployerCreateACohortAndSendToProviderToAddApprentices(int numberOfCohorts) {
+            List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
+            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship);
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+
+            await  employerStepsHelper.EmployerCreateMultipleCohortsViaLevyFundsAndSendsToProvider(numberOfCohorts);
+        } 
 
         [Then ("the Employer sees the cohort in Ready to review with status of (.*)")]
         public async Task ThenTheEmployerReviewsCohort(string status)

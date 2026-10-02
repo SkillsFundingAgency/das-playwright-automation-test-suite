@@ -124,7 +124,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page.ClickUpdateDetailsButton();            
         }
 
-        internal async Task AddEmptyCohort()
+        internal async Task<Cohort> AddEmptyCohort()
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
@@ -137,7 +137,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page3 =   await page2.ConfirmTrainingProviderDetails();
             var page4 = await page3.SelectProviderAddApprencticesAndSend();
             var cohortRef = await page4.GetCohortId();
+
+            var cohortDetails = new Cohort
+            {
+                Reference = cohortRef,
+                Status_Provider = "Ready for review",
+                Status_Employer = "Under review with Provider"
+            };
             await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
+            return cohortDetails;
+        }
+
+        public async Task EmployerCreateMultipleCohortsViaLevyFundsAndSendsToProvider(int numberOfCohorts = 1)
+        {
+            for (var i = 1; i <= numberOfCohorts; i++)
+            {
+                var cohortReference = await AddEmptyCohort();
+                await commonStepsHelper.SetCohortReferenceList(cohortReference);
+            }
         }
 
         internal async Task AddEmptyCohortFromNonLevyReserveFundsAddApprenticePage()

@@ -17,12 +17,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private ProviderStepsHelper providerStepsHelper;
         private ApprenticeDataHelper apprenticeDataHelper;
         private FileUploadHelper fileUploadHelper;
+        private readonly CommonStepsHelper commonStepsHelper;
+
 
         public FileUploadSteps(ScenarioContext _context)
         {
             context = _context;
             providerStepsHelper = new ProviderStepsHelper(context);
             apprenticeDataHelper = new ApprenticeDataHelper(context);
+            commonStepsHelper = new CommonStepsHelper(context);
             fileUploadHelper = new FileUploadHelper(context);
         }
 
@@ -42,11 +45,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When("^Provider add (.*) apprentice details using bulkupload$")]
         public async Task WhenProviderHaveFewLearnerToAddUsingCSVFileUpload(int numberOfApprentices)
         {
-            var foundationTrainingDetails = new TrainingFactory(coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
             List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
 
-            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, numberOfApprentices, null, listOfApprenticeship);
-            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+            var cohortReferences = await commonStepsHelper.GetCohortReferenceList();
+
+            if (cohortReferences?.Count > 1)
+            {
+                foreach (var cohort in cohortReferences)
+                {
+                  listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, numberOfApprentices, null, listOfApprenticeship, null,  null, null, cohort);              
+                  context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+                }
+            }
+            else
+            {
+               listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+               context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+            }
+
         }
 
         [Given("^one of the apprentice on Level-7 course is above (.*) years$")]
