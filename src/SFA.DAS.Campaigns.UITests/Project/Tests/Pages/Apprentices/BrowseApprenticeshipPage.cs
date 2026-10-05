@@ -3,7 +3,7 @@
 public class BrowseApprenticeshipPage(ScenarioContext context) : ApprenticeBasePage(context)
 {
     public override async Task VerifyPage() =>
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Browse by interests", new() { IgnoreCase = true });
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Browse by the type of work you’re interested in", new() { IgnoreCase = true });
 
     public async Task NavigateToSectorCard(string sectorName) =>
         await page.GetByRole(AriaRole.Link, new() { Name = sectorName, Exact = false }).First.ClickAsync();

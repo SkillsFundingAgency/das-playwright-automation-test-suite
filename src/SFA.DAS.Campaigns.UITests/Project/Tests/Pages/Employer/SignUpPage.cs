@@ -6,7 +6,7 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
 public class SignUpPage(ScenarioContext context) : CampaignsVerifyLinks(context)
 {
     public override async Task VerifyPage() =>
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Get emails about taking on your first apprentice");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Get tailored advice on hiring an apprentice");
 
     public async Task YourDetails()
     {
@@ -42,7 +42,7 @@ public class SignUpPage(ScenarioContext context) : CampaignsVerifyLinks(context)
         await page.Locator("#IncludeInUR").CheckAsync();
 
         await Task.WhenAll(
-            page.WaitForURLAsync("**/thank-you-for-signing-up**"),
+            page.WaitForURLAsync("**/thank-you**"),
             page.GetByRole(AriaRole.Button, new() { Name = "Sign up" }).ClickAsync()
         );
 

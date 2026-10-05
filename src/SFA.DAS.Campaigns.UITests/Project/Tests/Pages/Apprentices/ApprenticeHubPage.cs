@@ -8,9 +8,28 @@ public class ApprenticeHubPage(ScenarioContext context) : ApprenticeBasePage(con
 
     public async Task VerifySubHeadings() => await VerifyLinks();
 
-    public async Task<BrowseApprenticeshipPage> NavigateToBrowseByInterests()
+    public override async Task<IPage> NavigateToApprenticeCard(string cardName)
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Browse by interests", Exact = false }).First.ClickAsync();
+        if (cardName.Equals("Find an apprenticeship", StringComparison.OrdinalIgnoreCase))
+        {
+            var ctaLink = page.Locator("a.fiu-cta-panel");
+            await ctaLink.ScrollIntoViewIfNeededAsync();
+            await ctaLink.ClickAsync();
+            return page;
+        }
+
+        var cardLink = page.Locator(".fiu-stepper__link")
+                           .Filter(new() { HasText = cardName })
+                           .First;
+
+        await cardLink.ScrollIntoViewIfNeededAsync();
+        await cardLink.ClickAsync();
+        return page;
+    }
+
+    public async Task<BrowseApprenticeshipPage> NavigateToBrowseByTypeOfWork()
+    {
+        await NavigateToApprenticeCard("Browse by the type of work you’re interested in");
         return await VerifyPageAsync(() => new BrowseApprenticeshipPage(context));
     }
 }
