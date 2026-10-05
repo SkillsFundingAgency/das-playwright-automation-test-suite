@@ -8,4 +8,9 @@ public class ProviderRestrictedCoursesPage(ScenarioContext context) : AparAdminB
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage the apprenticeships this provider cannot deliver");
     }
+
+    public async Task ClickRestrictACourse()
+    {
+        await page.GetByRole(AriaRole.Link, new() {Name = "Restrict a course", Exact = true}).ClickAsync();
+    }
 }

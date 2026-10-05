@@ -38,7 +38,7 @@ public class OldAparAdminUkprnDataHelpers : AparUkprnBaseDataHelpers
                    new(providernamekey, "METRO BANK PLC"),
                new(ukprnkey, "10056801"),
            ]);
-        _data.Add("rpalup02",
+        _data.Add("rpadalup02",
            [
                    new(providernamekey, "CENTRAL TRAINING ACADEMY LIMITED"),
                new(ukprnkey, "10001259"),
