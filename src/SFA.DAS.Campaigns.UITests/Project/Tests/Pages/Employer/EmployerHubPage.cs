@@ -10,7 +10,7 @@ public class EmployerHubPage(ScenarioContext context) : EmployerBasePage(context
 
     public async Task<ExploreFundingOptionsPage> NavigateToExploreFundingOptions()
     {
-        var cardLink = page.Locator(".fiu-stepper__link, a")
+        var cardLink = page.Locator(".fiu-stepper__link, .fiu-cta-panel, a")
                            .Filter(new() { HasText = "Explore funding options" })
                            .First;
 
@@ -24,7 +24,7 @@ public class EmployerHubPage(ScenarioContext context) : EmployerBasePage(context
 
     public async Task<SignUpPage> NavigateToSignUpPage()
     {
-        var signUpLink = page.Locator(".fiu-stepper__link, .fiu-card, a")
+        var signUpLink = page.Locator(".fiu-stepper__link, .fiu-cta-panel, a")
                            .Filter(new() { HasText = "Get tailored advice on hiring an apprentice" })
                            .First;
 
@@ -46,7 +46,7 @@ public class EmployerHubPage(ScenarioContext context) : EmployerBasePage(context
             return page;
         }
 
-        var cardLink = page.Locator(".fiu-stepper__link, .fiu-card, a")
+        var cardLink = page.Locator(".fiu-stepper__link, .fiu-cta-panel, .fiu-card, a")
                            .Filter(new() { HasText = cardName })
                            .First;
 

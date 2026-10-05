@@ -14,7 +14,7 @@
       | Compare apprenticeship training types                    |
       | Explore funding options                                  |
       | Understand your responsibilities as an employer          |
-      | Get £2,000 for hiring an apprentice                      |
+      | Get up to £2,000 for hiring an apprentice                |
 
       # Section 2: How to hire an apprentice
       | Find and choose training for your apprentice             |
