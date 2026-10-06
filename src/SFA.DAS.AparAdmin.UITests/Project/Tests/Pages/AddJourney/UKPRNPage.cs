@@ -24,6 +24,10 @@ public class UKPRNPage(ScenarioContext context) : BasePage(context)
     {
         await page.Locator("#Ukprn").ClickAsync();
         await page.Locator("#Ukprn").FillAsync(UKPRN);
+    }
+
+    public async Task ErrorMessageIsDisplayed()
+    {
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
         await Assertions.Expect(page).ToHaveURLAsync("chrome-error://chromewebdata/");
     }

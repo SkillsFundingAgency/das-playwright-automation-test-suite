@@ -15,7 +15,7 @@ public class StopThisProviderPage(ScenarioContext context) : AparAdminBasePage(c
         string day = parts[0];
         string month = parts[1];
         string year = parts[2];
-        await page.Locator("#Day").FillAsync(day);
+        await page.Locator("#last-date-starts-day").FillAsync(day);
         await page.Locator("#Month").FillAsync(month);
         await page.Locator("#Year").FillAsync(year);
         await page.Locator("[type='submit']").ClickAsync();
