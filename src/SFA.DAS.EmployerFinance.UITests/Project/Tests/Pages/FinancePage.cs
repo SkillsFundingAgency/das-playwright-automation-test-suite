@@ -1,7 +1,7 @@
 ﻿using Microsoft.Playwright;
 using SFA.DAS.Framework;
-using System;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.UITests.Project.Tests.Pages;
@@ -85,24 +85,42 @@ public class FinancePage(ScenarioContext context) : HomePage(context)
         return await VerifyPageAsync(() => new TransfersPage(context));
     }
 
-    public static string ExpectedFundsSpentLabelConstant()
+    // Levy summary section (FAI-3628/3629/3630/3631), replacing the old single-month
+    // "Total levy" / "Levy declared in {month}" / "Paid from the levy in {month}" labels,
+    // which the redesigned page no longer renders. Each figure's value element carries
+    // aria-labelledby pointing at the adjacent title's id - there is no id on the value itself.
+    private static readonly Regex CurrencyFormat = new(@"^£[\d,]+$");
+
+    public ILocator LevySummaryHeading => page.GetByRole(AriaRole.Heading, new() { Name = "Levy summary", Exact = true });
+
+    public ILocator CommitmentsHeading => page.GetByRole(AriaRole.Heading, new() { Name = "Commitments", Exact = true });
+
+    public ILocator CurrentLevyFundsValue => page.Locator("[aria-labelledby='lbl-current-funds']");
+
+    public ILocator LevyInValue => page.Locator("[aria-labelledby='lbl-levy-in']");
+
+    public ILocator LevySpentValue => page.Locator("[aria-labelledby='lbl-levy-spent']");
+
+    public ILocator ExpiredLevyValue => page.Locator("[aria-labelledby='lbl-expired-levy']");
+
+    public async Task VerifyLevySummarySectionStructure()
     {
-        DateTime dt = DateTime.Now.AddMonths(-1);
-        return $"Levy declared in {dt:MMMM yyyy}";
+        await Assertions.Expect(LevySummaryHeading).ToBeVisibleAsync();
+
+        await Assertions.Expect(CommitmentsHeading).ToBeVisibleAsync();
     }
 
-    public static string ExpectedFundsPaidLabelConstant()
-    {
-        DateTime dt = DateTime.Now.AddMonths(-1);
-        return $"Paid from the levy in {dt:MMMM yyyy}";
-    }
+    public async Task VerifyCurrentLevyFundsIsDisplayed() => await Assertions.Expect(CurrentLevyFundsValue).ToContainTextAsync(CurrencyFormat);
 
+    public async Task VerifyLevyInIsDisplayed() => await Assertions.Expect(LevyInValue).ToContainTextAsync(CurrencyFormat);
 
-    public async Task GetCurrentFundsLabel() => await Assertions.Expect(page.Locator("#lbl-total-levy-funds-label")).ToContainTextAsync("Total levy");
+    public async Task VerifyLevySpentIsDisplayed() => await Assertions.Expect(LevySpentValue).ToContainTextAsync(CurrencyFormat);
 
-    public async Task GetFundsSpentLabel() => await Assertions.Expect(page.Locator("#lbl-last-month-levy-label")).ToContainTextAsync(ExpectedFundsSpentLabelConstant());
+    public async Task VerifyExpiredLevyIsDisplayed() => await Assertions.Expect(ExpiredLevyValue).ToContainTextAsync(CurrencyFormat);
 
-    public async Task GetEstimatedPlannedSpendingText() => await Assertions.Expect(page.Locator("#lbl-last-month-payments-label")).ToContainTextAsync(ExpectedFundsPaidLabelConstant());
+    public async Task VerifyCurrentLevyFundsIsNotZero() => await Assertions.Expect(CurrentLevyFundsValue).Not.ToContainTextAsync("£0", new() { IgnoreCase = false });
+
+    public async Task VerifyLevyInIsNotZero() => await Assertions.Expect(LevyInValue).Not.ToContainTextAsync("£0", new() { IgnoreCase = false });
 }
 
 public abstract class EmployerFinanceBasePage(ScenarioContext context) : BasePage(context)
