@@ -16,7 +16,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
     {
         protected override string ApiBaseUrl => DAS.API.Framework.UrlConfig.InnerApiUrlConfig.Inner_CommitmentsApiBaseUrl;
 
-        protected override string AppServiceName => $"{config.config.CommitmentsAppServiceName}-ar";
+        protected override string AppServiceName => $"{config.config.CommitmentsAppServiceName}";
 
         internal async Task<RestResponse> PutCoCApprovalRequest(CoCApprovalRequest payload, string learningKey)
         {
@@ -26,5 +26,5 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.API
 
 
 
-    }    
+    }
 }
