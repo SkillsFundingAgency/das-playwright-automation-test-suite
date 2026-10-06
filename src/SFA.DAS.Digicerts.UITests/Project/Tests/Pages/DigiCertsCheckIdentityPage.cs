@@ -22,21 +22,21 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
 
         public async Task<DigiCertsDashboardPage> verifyDashBoardPage()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
             return await VerifyPageAsync(() => new DigiCertsDashboardPage(context));
         }
 
         public async Task<DigiCertsStandardDetailsPage> verifyStandardDetailsPage()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
             return await VerifyPageAsync(() => new DigiCertsStandardDetailsPage(context));
         }
 
         public async Task<DigiCertsFrameworkDetailsPage> verifyFrameworkDetailsPage()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
             return await VerifyPageAsync(() => new DigiCertsFrameworkDetailsPage(context));
         }
