@@ -81,6 +81,9 @@ public ApprenticeshipListSteps(ScenarioContext context)
     {
         await _providerRestrictedCoursesPage.ClickRestrictACourse();
         await _restrictACoursePage.SelectCourse(courseName);
+        await _restrictACoursePage.EnterDate("20-08-2027");
+        await _restrictACoursePage.ConfirmSelection();
+        await _restrictACoursePage.ErrorMessage();
         await _restrictACoursePage.EnterDate("20-08-2020");
         await _restrictACoursePage.ConfirmSelection();
         await _providerRestrictedCoursesPage.SearchFunctionality(courseName);
