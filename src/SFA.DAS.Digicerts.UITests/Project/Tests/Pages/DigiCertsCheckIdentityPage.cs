@@ -13,7 +13,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
 
         public async Task<DigiCertsAuthorisationStartPage> verifyAuthorisationJourney()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Continue" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
             Console.WriteLine($"Identity");
 
