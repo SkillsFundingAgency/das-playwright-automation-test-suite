@@ -51,7 +51,7 @@ public abstract class InterimProviderBasePage(ScenarioContext context) : BasePag
 
     public async Task<ProviderHomePage> GoToProviderHomePage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
+        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderHomePage(context));
     }
