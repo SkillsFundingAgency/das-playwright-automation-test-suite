@@ -44,9 +44,11 @@ public class HomePageFinancesSection_YourFinance(ScenarioContext context) : Home
 
 public class FinancePage(ScenarioContext context) : HomePage(context)
 {
+    private static readonly Regex FinancePageHeading = new("^(Funding and payments|Your current and estimated levy funds)$");
+
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Funding and payments");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(FinancePageHeading);
     }
 
     public async Task IsViewTransactionsLinkPresent()
@@ -85,10 +87,7 @@ public class FinancePage(ScenarioContext context) : HomePage(context)
         return await VerifyPageAsync(() => new TransfersPage(context));
     }
 
-    // Levy summary section (FAI-3628/3629/3630/3631), replacing the old single-month
-    // "Total levy" / "Levy declared in {month}" / "Paid from the levy in {month}" labels,
-    // which the redesigned page no longer renders. Each figure's value element carries
-    // aria-labelledby pointing at the adjacent title's id - there is no id on the value itself.
+
     private static readonly Regex CurrencyFormat = new(@"^£[\d,]+$");
 
     public ILocator LevySummaryHeading => page.GetByRole(AriaRole.Heading, new() { Name = "Levy summary", Exact = true });
