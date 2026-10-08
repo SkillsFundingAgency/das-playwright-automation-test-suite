@@ -1,4 +1,7 @@
-﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
+﻿using Microsoft.Playwright;
+using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
+
+namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
 
 public class ApprenticeHubPage(ScenarioContext context) : ApprenticeBasePage(context)
 {
@@ -10,20 +13,24 @@ public class ApprenticeHubPage(ScenarioContext context) : ApprenticeBasePage(con
 
     public override async Task<IPage> NavigateToApprenticeCard(string cardName)
     {
+        ILocator cardLink;
+
         if (cardName.Equals("Find an apprenticeship", StringComparison.OrdinalIgnoreCase))
         {
-            var ctaLink = page.Locator("a.fiu-cta-panel");
-            await ctaLink.ScrollIntoViewIfNeededAsync();
-            await ctaLink.ClickAsync();
-            return page;
+            cardLink = page.Locator("a.fiu-cta-panel").Filter(new() { HasText = "Find an apprenticeship" }).First;
         }
-
-        var cardLink = page.Locator(".fiu-stepper__link")
+        else
+        {
+            cardLink = page.Locator(".fiu-stepper__link, .fiu-card, .fiu-cta-panel")
                            .Filter(new() { HasText = cardName })
                            .First;
+        }
 
+        await Assertions.Expect(cardLink).ToBeVisibleAsync();
         await cardLink.ScrollIntoViewIfNeededAsync();
         await cardLink.ClickAsync();
+
+        await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
         return page;
     }
 
