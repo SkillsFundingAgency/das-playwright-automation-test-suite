@@ -13,6 +13,17 @@ Important:
 - Commitments job is currently scheduled to run every 5 mins in test environments
 - Integration b/w Employment Checks service and HMRC api is only available in PROD. 
 
+Data Requirements:
+	- Employer Account: <LevyUser>			<--- please refer to user secrets file for the actual value
+	- Provider Account: <ProviderConfig>	<--- please refer to user secrets file for the actual value
+	- FirstName:DoNotUse_TestData
+	- LastName: EmploymentChecks
+	- ULN: any
+	- StartDate: -6 months in the past
+	- EndDate: +6 months in the future
+	- Training Course: Any GSO/short-course/AU
+	- insert a row in [echk-db] > [Business].[EmploymentCheck]
+
 @regression
 Scenario: AP_EmpChk_01_Display Employment Verfication Status
 	Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "EmploymentChecks"
