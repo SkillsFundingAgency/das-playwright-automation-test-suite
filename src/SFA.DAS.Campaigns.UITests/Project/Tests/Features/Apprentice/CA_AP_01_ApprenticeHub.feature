@@ -1,31 +1,39 @@
 ﻿Feature: CA_AP_01_ApprenticeHub
+Verify navigation and ensure no broken links across all stepper cards and callouts on the "Become an apprentice" landing page.
 
-Verify navigation and ensure no broken links across all cards and key callouts on the "Become an apprentice" landing page.
-
-@campaigns
-@apprentice
-@regression
+@campaigns @apprentice @regression
 Scenario Outline: Verify all navigation links on the Become an apprentice page - <CardName>
 	Given the user navigates to the Become An Apprentice page
 	When the user clicks on the apprentice card "<CardName>"
 	Then the links are not broken
 
 	Examples:
-		| CardName                                   |
-		# First steps to becoming an apprentice
-		| Is an apprenticeship right for you?        |
-		| Browse by interest                         |
-		| Getting an apprenticeship                  |
-		| Apprentice pay and future salary           |
-		| Get £3,000 if you've been in care          |
-		| Find an apprenticeship                     |
-		# What to expect during your apprenticeship
-		| Preparing for your apprenticeship          |
-		| Off-the-job (OTJ) training                 |
-		| Knowledge, skills and behaviours (KSBs)    |
-		| Apprenticeship assessments                 |
-		# Support to achieve your apprenticeship
-		| Get support with your apprenticeship       |
-		| Apprenticeship rights and responsibilities |
-		| Connect and network with other apprentices |
-		| Download Your Apprenticeship app           |
+		| CardName                                                 |
+		# Section 1: Is an apprenticeship right for you?
+		| Check if an apprenticeship is right for you              |
+		| Browse by the type of work you’re interested in          |
+		| See what you’ll be paid and your future salary           |
+		| Understand what experience you need                      |
+		| Get £3,000 if you've been in care                        |
+		| Find an apprenticeship                                   |
+
+		# Section 2: Getting an apprenticeship
+		| Getting an apprenticeship                                |
+		| Find help if you can’t get hired                         |
+
+		# Section 3: Get ready for your apprenticeship
+		| Prepare for your apprenticeship                          |
+		| Get ready for off-the-job (OTJ) training                 |
+		| Understand knowledge, skills and behaviours (KSBs)       |
+		| Apprenticeship assessments                               |
+
+		# Section 4: Help during your apprenticeship
+		| Thinking about dropping out?                             |
+		| Connect and network with other apprentices               |
+		| Apprenticeship rights and responsibilities               |
+		| Your Apprenticeship app                                  |
+		| I have a problem at work or training                     |
+		| Help with money                                          |
+		| Mental health support                                    |
+		| Get support for a disability or learning need            |
+		| What comes after my apprenticeship?                      |

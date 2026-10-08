@@ -1,30 +1,28 @@
 ﻿Feature: CA_EM_01_EmployerHub
+  Verify navigation across all stepper cards and callout panels on the Employers landing page ("Hire an apprentice").
 
-Verify navigation and ensure no broken links across all cards, panels, and callouts on the "Employers" landing page.
+  @campaigns @employer @regression
+  Scenario Outline: Verify card and panel navigation links
+    Given the user navigates to the Hire An Apprentice page
+    When the user clicks on the employer card "<CardName>"
+    Then the links are not broken
 
-@campaigns
-@employer
-@regression
-Scenario Outline: Verify all navigation links on the Hire an apprentice page - <CardName>
-	Given the user navigates to the Hire An Apprentice page
-	When the user clicks on the employer card "<CardName>"
-	Then the links are not broken
+    Examples:
+      # Section 1: Considering hiring an apprentice?
+      | CardName                                                 |
+      | Find out if an apprentice is right for your business     |
+      | Compare apprenticeship training types                    |
+      | Explore funding options                                  |
+      | Understand your responsibilities as an employer          |
+      | Get up to £2,000 for hiring an apprentice                |
 
-	Examples:
-		| CardName                                            |
-		# Considering hiring an apprentice?
-		| Choose the right training for your business        |
-		| Check who can do apprenticeship training            |
-		| Understanding apprenticeship benefits and funding   |
-		| Find funding and support                            |
-		| Check what you’re responsible for                   |
-		# Get started
-		| Find the right training                             |
-		| Choose a training provider                          |
-		| Create an apprenticeship service account            |
-		| Recruit your apprentice                             |
-		# What's next?
-		| Have an initial assessment                          |
-		| Support your apprentice                             |
-		| Plan what's next for your apprentice                |
-		| Celebrate apprenticeships and upcoming events       |
+      # Section 2: How to hire an apprentice
+      | Find and choose training for your apprentice             |
+      | Create an apprenticeship service account                 |
+      | Recruit your apprentice                                  |
+
+      # Section 3: During an apprenticeship
+      | Complete an initial assessment                           |
+      | Support your apprentice                                  |
+      | Plan what's next for your apprentice                     |
+      | Become an apprenticeship ambassador as an employer       |

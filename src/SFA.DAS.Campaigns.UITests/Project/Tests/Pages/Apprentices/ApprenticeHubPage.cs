@@ -1,4 +1,7 @@
-﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
+﻿using Microsoft.Playwright;
+using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
+
+namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Apprentices;
 
 public class ApprenticeHubPage(ScenarioContext context) : ApprenticeBasePage(context)
 {
@@ -8,9 +11,32 @@ public class ApprenticeHubPage(ScenarioContext context) : ApprenticeBasePage(con
 
     public async Task VerifySubHeadings() => await VerifyLinks();
 
-    public async Task<BrowseApprenticeshipPage> NavigateToBrowseByInterests()
+    public override async Task<IPage> NavigateToApprenticeCard(string cardName)
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Browse by interests", Exact = false }).First.ClickAsync();
+        ILocator cardLink;
+
+        if (cardName.Equals("Find an apprenticeship", StringComparison.OrdinalIgnoreCase))
+        {
+            cardLink = page.Locator("a.fiu-cta-panel").Filter(new() { HasText = "Find an apprenticeship" }).First;
+        }
+        else
+        {
+            cardLink = page.Locator(".fiu-stepper__link, .fiu-card, .fiu-cta-panel")
+                           .Filter(new() { HasText = cardName })
+                           .First;
+        }
+
+        await Assertions.Expect(cardLink).ToBeVisibleAsync();
+        await cardLink.ScrollIntoViewIfNeededAsync();
+        await cardLink.ClickAsync();
+
+        await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
+        return page;
+    }
+
+    public async Task<BrowseApprenticeshipPage> NavigateToBrowseByTypeOfWork()
+    {
+        await NavigateToApprenticeCard("Browse by the type of work you’re interested in");
         return await VerifyPageAsync(() => new BrowseApprenticeshipPage(context));
     }
 }

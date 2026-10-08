@@ -3,16 +3,16 @@
 namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions;
 
 [Binding]
-public class CampaignsBrowseByInterestsSteps(ScenarioContext context)
+public class CampaignsBrowseByTypeOfWork(ScenarioContext context)
 {
     private readonly CampaignsStepsHelper _stepsHelper = new(context);
     private BrowseApprenticeshipPage _browsePage;
 
-    [Given(@"the user is on the Browse by interests page")]
-    public async Task GivenTheUserIsOnTheBrowseByInterestsPage()
+    [Given(@"the user is on the Browse by type of work page")]
+    public async Task GivenTheUserIsOnTheBrowseByTypeOfWorkPage()
     {
         var apprenticeHubPage = await _stepsHelper.GoToApprenticeshipHubPage();
-        _browsePage = await apprenticeHubPage.NavigateToBrowseByInterests();
+        _browsePage = await apprenticeHubPage.NavigateToBrowseByTypeOfWork();
     }
 
     [When(@"the user selects the ""(.*)"" sector")]
