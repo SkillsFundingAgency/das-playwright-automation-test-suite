@@ -91,7 +91,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var page = await new ApproveApprenticeDetailsPage(context).ClickOnRemoveLearnerLink("");
             var page1 = await page.ConfirmRemoval();
-            await page1.VerifyBanner("Learner record removed");
+            await page1.VerifyConfirmationPanel("Learner record removed");
         }
 
         [Then("^the user can remove a cohort$")]
@@ -329,7 +329,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheUserCanViewViewChangesNonCoEPageViaViewChangesLinkInTheBanner()
         {
             var page = await new ManageYourLearners_ProviderPage(context).SelectViewCurrentApprenticeDetails(ChangesPendingApprentice);
-            await page.AssertBanner2("Changes to this apprenticeship", $"You have made a change which needs to be approved by the employer.");
+            await page.AssertBanner2("Changes to this training", $"You have made a change which needs to be approved by the employer.");
             await page.ClickOnViewChanges();
         }
 
