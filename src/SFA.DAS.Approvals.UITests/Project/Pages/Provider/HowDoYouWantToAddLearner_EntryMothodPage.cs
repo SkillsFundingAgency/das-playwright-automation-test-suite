@@ -4,8 +4,9 @@
     {
 
         #region locators
-        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=Add 1 or more learners from ILR (individual learner record)"); 
-        private ILocator optionToUploadACsvFile => page.Locator("text=Upload a CSV file");
+        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=Choose details from ILR (individual learner record)");
+        private ILocator optionToSelectApprenticesFromILR2 => page.Locator("text=Add 1 or more learners from ILR (individual learner record)");
+                private ILocator optionToUploadACsvFile => page.Locator("text=Upload a CSV file");
         private ILocator ContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         #endregion
 
@@ -45,7 +46,7 @@
 
         internal async Task<HowManyLearnersWouldYouLikeToAddPage> SelectOptionToAddApprenticeFromILRAndContinue()
         {
-            await optionToSelectApprenticesFromILR.CheckAsync();
+            await optionToSelectApprenticesFromILR2.CheckAsync();
             await ContinueButton.ClickAsync();
             return await VerifyPageAsync(() => new HowManyLearnersWouldYouLikeToAddPage(context));
         }
