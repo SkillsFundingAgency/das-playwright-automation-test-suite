@@ -49,6 +49,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             var cohortReferences = await commonStepsHelper.GetCohortReferenceList();
 
+            // morethan one cohort
             if (cohortReferences?.Count > 1)
             {
                 foreach (var cohort in cohortReferences)
@@ -57,7 +58,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                   context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
                 }
             }
-            else
+            else // single cohort
             {
                listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
@@ -121,6 +122,31 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
             var page = await StartBulkUploadJourney();
             await page.UploadFile(fileUploadHelper.CsvFileLocation());
+        }
+
+        [When("^Provider uses BulkUpload to add 2 apprentice details into existing cohort and 2 apprentice details into a non-existing cohort for all employers$")]
+        public async Task WhenAddAProviderUploadsUpdatedCsvFileForAllEmployers()
+        {
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var listOfApprenticeshipNew = new List<Apprenticeship>();
+
+
+            for (int i = 0; i < listOfApprenticeship.Count; i++)
+            {
+              DateTime trainingStartDate = DateTime.Today.AddMonths(1);      
+              TrainingFactory trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
+              var apprenticeDetails = new ApprenticeFactory(24);
+
+              var newApprenticeships = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 2, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: trainingDetails);
+
+
+                newApprenticeships[0].EmployerDetails = listOfApprenticeship[i].EmployerDetails;
+                newApprenticeships[1].EmployerDetails = listOfApprenticeship[i].EmployerDetails;
+                listOfApprenticeshipNew.AddRange(newApprenticeships);
+            }
+
+            listOfApprenticeship = listOfApprenticeshipNew;
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
         }
 
         [Then("^Correct Information is displayed on review apprentices details page$")]

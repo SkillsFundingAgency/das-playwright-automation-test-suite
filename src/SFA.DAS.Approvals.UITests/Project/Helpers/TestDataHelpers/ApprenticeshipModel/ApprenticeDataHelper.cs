@@ -98,6 +98,36 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             return employer;
         }
 
+        public Task<Employer> GetEmployerDetails(
+            string orgName,
+            List<AccountDetails> accountDetails,
+            string employerUser,
+            EmployerType employerType)
+        {
+            if (accountDetails == null || accountDetails.Count == 0)
+            {
+                throw new InvalidOperationException($"No account details were loaded for user '{employerUser}'. Check the user's username setting and that the user has accounts in the Accounts DB.");
+            }
+
+            var account = accountDetails.FirstOrDefault(a =>
+                string.Equals(a.OrgName, orgName, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(a.Alename, orgName, StringComparison.OrdinalIgnoreCase));
+
+            if (account == null)
+            {
+                throw new InvalidOperationException($"No account details found for organisation '{orgName}'.");
+            }
+
+            return Task.FromResult(new Employer
+            {
+                EmployerName = account.Alename,
+                EmployerType = employerType,
+                Email = employerUser,
+                AgreementId = account.AleAgreementid,
+                AccountLegalEntityId = Convert.ToInt32(account.Aleid)
+            });
+        }
+
         private Task<Provider> GetProviderDetails(ProviderConfig providerConfig)
         {            
             Provider provider = new Provider()

@@ -18,11 +18,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private readonly CommonStepsHelper commonStepsHelper;
         private readonly CommitmentsDbSqlHelper commitmentsDbSqlHelper;
 
+        private readonly ObjectContext _objectContext;
+
+        private readonly EmployerWithMultipleAccountsUser _employerWithMultipleAccountsUser;
+
         private ApprenticeDataHelper apprenticeDataHelper;
 
         public EmployerSteps(ScenarioContext context)
         {
             this.context = context;
+            _objectContext = context.Get<ObjectContext>();
+            _employerWithMultipleAccountsUser = context.GetUser<EmployerWithMultipleAccountsUser>();
             employerStepsHelper = new EmployerStepsHelper(context);
             apprenticeDataHelper = new ApprenticeDataHelper(context);
             commonStepsHelper = new CommonStepsHelper(context);
@@ -80,7 +86,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             {
                 var warningMsg = "! Warning One or more of your learners have age eligibility criteria. Check the date of birth is correct or go to the funding rules to check who is eligible.";
                 await page.ValidateWarningMessageForFoundationCourses(warningMsg);
-            }            
+            }
 
             await page.EmployerApproveCohort();
         }
@@ -93,7 +99,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var uln = apprentice.ApprenticeDetails.ULN.ToString();
             var name = apprentice.ApprenticeDetails.FullName;
             var startDate = apprentice.TrainingDetails.StartDate;
-            var DoB = startDate.AddYears(-lowerAgeLimit+1);  
+            var DoB = startDate.AddYears(-lowerAgeLimit + 1);
 
             await employerStepsHelper.EmployerLogInToEmployerPortal();
             await new InterimLearnersHomePage(context, false).VerifyPage();
@@ -117,25 +123,81 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
             listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
-            
+
             await employerStepsHelper.AddEmptyCohort();
-        }    
+        }
 
 
-        [Given(@"the Employer creates (.*) cohorts and sends them to provider to add apprentices")]
-        [When(@"the Employer creates (.*) cohorts and sends them to provider to add apprentices")]
-        public async Task TheEmployerCreateACohortAndSendToProviderToAddApprentices(int numberOfCohorts) {
-            List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
-            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship);
+        [Given(@"the Employer(.*) creates (.*) cohorts and sends them to provider to add apprentices")]
+        [When(@"the Employer(.*) creates (.*) cohorts and sends them to provider to add apprentices")]
+        public async Task TheEmployerCreateACohortAndSendToProviderToAddApprentices(int? employerIndex, int numberOfCohorts)
+        {
+            employerIndex ??= 1;
+
+            var listOfApprenticeship = context.ContainsKey(ScenarioKeys.ListOfApprenticeship)
+                ? context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship) ?? new List<Apprenticeship>()
+                : new List<Apprenticeship>();
+
+
+            var newApprenticeships = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, numberOfCohorts);
+
+            // Pages read the apprenticeship list from context while the cohorts are being created
+            listOfApprenticeship.AddRange(newApprenticeships);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
 
-            await  employerStepsHelper.EmployerCreateMultipleCohortsViaLevyFundsAndSendsToProvider(numberOfCohorts);
-        } 
+            for (var i = 1; i <= numberOfCohorts; i++)
+            {
+                var apprenticeship = newApprenticeships[i - 1];
 
-        [Then ("the Employer sees the cohort in Ready to review with status of (.*)")]
+                if (employerIndex == 1)
+                { // Levy transfer
+
+                    var employer = await apprenticeDataHelper.GetEmployerDetails(
+                    _employerWithMultipleAccountsUser.OrganisationName,
+                    _employerWithMultipleAccountsUser.AccountDetails,
+                    _employerWithMultipleAccountsUser.Username,
+                    EmployerType.Levy);
+                    apprenticeship.EmployerDetails = employer;
+
+                   var cohort = await employerStepsHelper.EmployerCreateMultipleCohortsViaLevyFundsAndSendsToProvider(apprenticeship);
+                   apprenticeship.Cohort = cohort;
+                }
+                else if (employerIndex == 2)
+                { // Direct Transfer
+
+                    var employer = await apprenticeDataHelper.GetEmployerDetails(
+                    _employerWithMultipleAccountsUser.SecondOrganisationName,
+                    _employerWithMultipleAccountsUser.AccountDetails,
+                    _employerWithMultipleAccountsUser.Username,
+                    EmployerType.Levy);
+                    apprenticeship.EmployerDetails = employer;
+
+                    var cohort = await employerStepsHelper.EmployerCreateCohortsViaDirectTransferAndSendsToProvider(apprenticeship,_employerWithMultipleAccountsUser.OrganisationName);
+                    apprenticeship.Cohort = cohort;
+                }
+                else if (employerIndex == 3)
+                { // New reservation
+
+                    var employer = await apprenticeDataHelper.GetEmployerDetails(
+                    _employerWithMultipleAccountsUser.ThirdOrganisationName,
+                    _employerWithMultipleAccountsUser.AccountDetails,
+                    _employerWithMultipleAccountsUser.Username,
+                    EmployerType.Levy);
+                    apprenticeship.EmployerDetails = employer;
+
+                    var cohort = await employerStepsHelper.EmployerCreateCohortsViaReserveNewFundsOptionAndSendsToProvider(apprenticeship);
+                    apprenticeship.Cohort = cohort;
+                }
+            }
+
+    
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+        }
+
+        [Then("the Employer sees the cohort in Ready to review with status of (.*)")]
         public async Task ThenTheEmployerReviewsCohort(string status)
         {
-             await employerStepsHelper.ReadyForReviewCohort(status);
+            await employerStepsHelper.ReadyForReviewCohort(status);
         }
 
 
@@ -158,7 +220,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [When ("the Employer approves the cohort and sends to provider")]
+        [When("the Employer approves the cohort and sends to provider")]
         public async Task ThenTheEmployerApprovesCohort()
         {
             var page = new EmployerApproveLearnerDetailsPage(context);
@@ -166,32 +228,32 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
-        [Then ("verify RPL details")]
+        [Then("verify RPL details")]
         public async Task ThenTheEmployerVerifyRPLDetails()
         {
-           var apprenticeships = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-           var page = new EmployerApproveLearnerDetailsPage(context);
-           await page.VerifyRPLDetails(apprenticeships);
+            var apprenticeships = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var page = new EmployerApproveLearnerDetailsPage(context);
+            await page.VerifyRPLDetails(apprenticeships);
         }
 
-        
+
         [Given("^the Employer logins using an existing NonLevy Account which has reached it max reservations limit$")]
         public async Task GivenTheEmployerLoginsUsingAnExistingNonLevyAccountWhichHasReachedItMaxReservationsLimit()
         {
             var listOfApprenticeship = new List<Apprenticeship>();
             Apprenticeship apprenticeship = await new ApprenticeDataHelper(context).CreateEmptyCohortObject(EmployerType.NonLevyUserAtMaxReservationLimit);
             listOfApprenticeship.Add(apprenticeship);
-            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);           
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
         }
 
-        
+
         [When("^the Employer tries to add another apprentice to an existing cohort$")]
         public async Task WhenTheEmployerTriesToAddAnotherApprenticeToAnExistingCohort()
         {
-            await employerStepsHelper.OpenAnyDraftCohort();            
+            await employerStepsHelper.OpenAnyDraftCohort();
         }
 
-        
+
         [Then("^the Employer is blocked with a shutter page for existing cohort$")]
         public async Task ThenTheEmployerIsBlockedWithAShutterPageForExistingCohort()
         {
@@ -203,12 +265,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task ThenTheEmployerIsBlockedToCreateNewReservations()
         {
             await employerStepsHelper.EmployerTriesToCreateReservation();
-        }        
+        }
 
 
         [When("^The nonlevyemployer follows the link from dynamicHomePage to create a new reservation$")]
         public async Task WhenTheNonLevyEmployerReservesFundingFromReservedPanel()
-        {            
+        {
             await employerStepsHelper.EmployerTriesToCreateReservationOnDynamicHomepage();
         }
 

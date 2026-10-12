@@ -5,7 +5,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
     internal class ChooseYourMainTrainingProviderPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
-        private ILocator ukprnInputBox => page.Locator("#Ukprn");
+        private ILocator ukprnInputBox => page.Locator("input#Ukprn, input.autocomplete__input");
         public override async Task VerifyPage()
         {
             await Assertions.Expect(page.Locator(".govuk-heading-l").First).ToContainTextAsync("Choose your main training provider");
@@ -13,11 +13,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 
         public async Task<ConfirmTrainingProvidePage> SubmitValidUkprn(int Ukprn)
         {
-            var providerName = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault()?.ProviderDetails?.ProviderName 
+            var providerName = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship)?.FirstOrDefault()?.ProviderDetails?.ProviderName 
                                ?? "Choose your main training provider";
 
-            await ukprnInputBox.ClickAsync();
-            await ukprnInputBox.FillAsync(Ukprn.ToString());
+            await ukprnInputBox.First.ClickAsync();
+            await ukprnInputBox.First.FillAsync(Ukprn.ToString());
             var option = page.Locator($"li[role='option']:has-text(\"{Ukprn}\")");
             await option.ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
