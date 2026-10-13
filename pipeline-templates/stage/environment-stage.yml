@@ -17,6 +17,9 @@ parameters:
   - name: WhiteListFunction
     type: boolean
     default: false
+  - name: ApplyAppRoleAssignments
+    type: boolean
+    default: false
 
 stages:
   - stage: Build
@@ -32,6 +35,8 @@ stages:
     condition: succeeded()
     displayName: Deploy to TEST
     variables:
+      - ${{ if parameters.ApplyAppRoleAssignments }}:
+        - group: "DevTest Management Resources"
       - group: "TEST DevTest Shared Resources"
       - group: "TEST Automation Suite Variables"
     jobs:
@@ -41,12 +46,16 @@ stages:
           ServiceConnection: das-test-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
           RuleName: ${{ parameters.RuleName }}
+          ${{ if parameters.ApplyAppRoleAssignments }}:
+            AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
 
   - stage: Deploy_TEST2
     dependsOn: Build
     condition: succeeded()
     displayName: Deploy to TEST2
     variables:
+      - ${{ if parameters.ApplyAppRoleAssignments }}:
+        - group: "DevTest Management Resources"
       - group: "TEST2 DevTest Shared Resources"
       - group: "TEST2 Automation Suite Variables"
     jobs:
@@ -56,12 +65,16 @@ stages:
           ServiceConnection: das-test2-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
           RuleName: ${{ parameters.RuleName }}
+          ${{ if parameters.ApplyAppRoleAssignments }}:
+            AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
 
   - stage: Deploy_DEMO
     dependsOn: Build
     condition: succeeded()
     displayName: Deploy to DEMO
     variables:
+      - ${{ if parameters.ApplyAppRoleAssignments }}:
+        - group: "DevTest Management Resources"
       - group: "DEMO DevTest Shared Resources"
       - group: "DEMO Automation Suite Variables"
     jobs:
@@ -71,6 +84,8 @@ stages:
           ServiceConnection: das-demo-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
           RuleName: ${{ parameters.RuleName }}
+          ${{ if parameters.ApplyAppRoleAssignments }}:
+            AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -91,6 +106,8 @@ stages:
             RuleName: ${{ parameters.RuleName }}
             ResourceName: ${{ parameters.ResourceName }}
             WhiteListFunction: ${{ parameters.WhiteListFunction }}
+            ${{ if parameters.ApplyAppRoleAssignments }}:
+              AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
 
       - ${{ else }}:
         - template: ../job/deploy.yml
@@ -100,3 +117,5 @@ stages:
             ResourceName: ${{ parameters.ResourceName }}
             RuleName: ${{ parameters.RuleName }}
             WhiteListFunction: ${{ parameters.WhiteListFunction }}
+            ${{ if parameters.ApplyAppRoleAssignments }}:
+              AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
