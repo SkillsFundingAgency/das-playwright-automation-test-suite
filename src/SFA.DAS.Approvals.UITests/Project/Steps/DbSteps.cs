@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualBasic;
+using System;
+using System.Globalization;
 using Polly;
 using Reqnroll.CommonModels;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
@@ -6,8 +8,6 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
-using System;
-using System.Globalization;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -184,6 +184,32 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             //reset the payment status to 1 (Live):
             await commitmentsDbSqlHelper.ResetPaymentStatus(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.ApprenticeshipId);
+        }
+
+        [Given(@"a learner record stopped via ILR with startdate of <(.*)> months and endDate of <\+(.*)> months from current date$")]
+        public async Task GivenALearnerRecordStoppedViaILRExistsWithStartdateOfMonthsAndEndDateOfMonthsFromCurrentDate(int startDateFromNow, int endDateFromNow)
+        {
+            listOfApprenticeship = new List<Apprenticeship>();
+          
+            var additionalWhereFilter = @$"AND c.CreatedOn > DATEADD(month, -12, GETDATE())
+                                            AND c.IsDeleted = 0
+                                            And c.Approvals = 3
+                                            AND c.ChangeOfPartyRequestId is null             
+                                            AND c.PledgeApplicationId is null
+                                            AND a.PaymentStatus = 1
+                                            AND a.HasHadDataLockSuccess = 0
+                                            AND a.PendingUpdateOriginator is null
+                                            AND a.CloneOf is null
+                                            AND a.ContinuationOfId is null
+                                            AND a.DeliveryModel = 0
+                                            AND a.StartDate < DATEADD(month, {startDateFromNow}, GETDATE()) 
+                                            AND a.EndDate > DATEADD(month, {endDateFromNow}, GETDATE())
+                                            AND a.TrainingCode < 800";
+
+            await FindApprenticeFromDbAndSaveItInTheContext(EmployerType.Levy, additionalWhereFilter);
+
+            var apprenticeshipId = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().ApprenticeDetails.ApprenticeshipId;
+            await commitmentsDbSqlHelper.UpdateApprenticeshipStopDateAndWithdrawnCode(apprenticeshipId, DateTime.UtcNow);
         }
 
         [Then(@"Commitments db is updated with the correct reason code and stop date")]

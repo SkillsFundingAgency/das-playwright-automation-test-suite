@@ -136,6 +136,6 @@ public class SharedApplicatinsForAVacancyPage(ScenarioContext context) : RaaBase
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator(".govuk-caption-l")).ToContainTextAsync("Shared applications");
+        await Assertions.Expect(page.Locator(".govuk-heading-m")).ToContainTextAsync("Shared applications");
     }
 }
