@@ -7,7 +7,7 @@ public class ApiAssertHelper(ObjectContext objectContext)
     public async Task<RestResponse> ExecuteAndAssertResponse(HttpStatusCode expectedResponse, RestClient client, RestRequest request)
     => await ExecuteAndAssertResponse(expectedResponse, string.Empty, client, request);
 
-    public async Task<RestResponse> ExecuteAndAssertResponse(HttpStatusCode expectedResponse, string responseContent, RestClient client, RestRequest request)
+    public async Task<RestResponse> ExecuteAndAssertResponse(HttpStatusCode? expectedResponse, string responseContent, RestClient client, RestRequest request)
     {
         RestResponse response = null;
         int maxRetries = 3;
@@ -16,6 +16,9 @@ public class ApiAssertHelper(ObjectContext objectContext)
         while (attempt < maxRetries)
         {
             response = await client.ExecuteAsync(request);
+
+            if (expectedResponse == null)
+                return response;
 
             if (response.StatusCode == expectedResponse)
                 break;

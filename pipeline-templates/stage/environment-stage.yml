@@ -10,8 +10,14 @@ parameters:
     default: ''
   - name: ResourceName
     type: string
+    default: ''  
+  - name: ResourceName2
+    type: string
     default: ''
   - name: RuleName
+    type: string
+    default: ''
+  - name: RuleName2
     type: string
     default: ''
   - name: WhiteListFunction
@@ -40,7 +46,9 @@ stages:
           Environment: TEST
           ServiceConnection: das-test-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
+          ResourceName2: ${{ parameters.ResourceName2 }}
           RuleName: ${{ parameters.RuleName }}
+          RuleName2: ${{ parameters.RuleName2 }}
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -55,7 +63,9 @@ stages:
           Environment: TEST2
           ServiceConnection: das-test2-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
+          ResourceName2: ${{ parameters.ResourceName2 }}
           RuleName: ${{ parameters.RuleName }}
+          RuleName2: ${{ parameters.RuleName2 }}
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -70,7 +80,9 @@ stages:
           Environment: DEMO
           ServiceConnection: das-demo-automation-test-suite-db-sc
           ResourceName: ${{ parameters.ResourceName }}
+          ResourceName2: ${{ parameters.ResourceName2 }}
           RuleName: ${{ parameters.RuleName }}
+          RuleName2: ${{ parameters.RuleName2 }}
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -89,7 +101,9 @@ stages:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: das-pp-automation-test-suite-db-sc
             RuleName: ${{ parameters.RuleName }}
+            RuleName2: ${{ parameters.RuleName2 }}
             ResourceName: ${{ parameters.ResourceName }}
+            ResourceName2: ${{ parameters.ResourceName2 }}
             WhiteListFunction: ${{ parameters.WhiteListFunction }}
 
       - ${{ else }}:
@@ -98,5 +112,7 @@ stages:
             Environment: 'PP'
             ServiceConnection: das-pp-automation-test-suite-db-sc
             ResourceName: ${{ parameters.ResourceName }}
+            ResourceName2: ${{ parameters.ResourceName2 }}
             RuleName: ${{ parameters.RuleName }}
+            RuleName2: ${{ parameters.RuleName2 }}
             WhiteListFunction: ${{ parameters.WhiteListFunction }}

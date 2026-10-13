@@ -9,7 +9,13 @@ parameters:
   - name: ResourceName
     type: string
     default: ''
+  - name: ResourceName2
+    type: string
+    default: ''
   - name: RuleName
+    type: string
+    default: ''
+  - name: RuleName2
     type: string
     default: ''
   - name: WhiteListFunction
@@ -99,6 +105,15 @@ jobs:
               ScriptArguments: '-ResourceName ${{ parameters.ResourceName }} -IPAddress $(IPAddress) -RuleName ${{ parameters.RuleName }}'
               azurePowerShellVersion: LatestVersion
               
+          - task: AzurePowerShell@5
+            displayName: "Whitelist agent's IP address on $(AppServiceName2)"
+            condition: ne('${{ parameters.ResourceName2 }}', '')
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
+              ScriptArguments: '-ResourceName ${{ parameters.ResourceName2 }} -IPAddress $(IPAddress) -RuleName ${{ parameters.RuleName2 }}'
+              azurePowerShellVersion: LatestVersion
+
           - task: AzurePowerShell@5
             displayName: "Whitelist agent's IP address on Function App"
             inputs:
