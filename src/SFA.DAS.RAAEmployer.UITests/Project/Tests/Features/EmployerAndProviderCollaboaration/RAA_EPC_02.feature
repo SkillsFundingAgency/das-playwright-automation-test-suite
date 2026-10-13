@@ -1,7 +1,7 @@
 ﻿Feature: RAA_EPC_02
 
 @raa
-@raa-epc
+@raaepc
 @regression
 @raaprovider
 @raaemployer
