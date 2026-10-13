@@ -65,6 +65,82 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
     }
 
 
+    public async Task<FAASignedInLandingBasePage> ViewAndUpdatePersonalDetailsInSettings()
+    {
+        var settingsPage = new SettingPage(context);
+
+        await settingsPage.VerifyPage();
+
+        await settingsPage.VerifyPersonalDetails();
+
+        var namePage = await settingsPage.ChangeName();
+
+        await namePage.TriggerLastNameValidationError();
+
+        settingsPage = await namePage.SaveNameChange();
+
+        var dobPage = await settingsPage.ChangeDateOfBirth();
+
+        settingsPage = await dobPage.SaveDateOfBirthChange();
+
+        var addressPage = await settingsPage.ChangeAddress();
+
+        settingsPage = await addressPage.SaveAddressChange();
+
+        var phonePage = await settingsPage.ChangeTelephoneNumber();
+
+        settingsPage = await phonePage.SaveTelephoneNumberChange();
+
+        var emailPage = await settingsPage.ViewEmailSettings();
+
+        settingsPage = await emailPage.GoBackToSettings();
+
+        var notificationPage = await settingsPage.ChangeNotificationPreferences();
+
+        settingsPage = await notificationPage.SelectNoAndSave();
+
+        var searchAlertsPage = await settingsPage.GoToSearchAlerts();
+
+        await searchAlertsPage.VerifyNoSearchAlertsCreated();
+
+        return await GoToFAAHomePage();
+    }
+
+    public async Task SaveAndRemoveARandomlySelectedVacancy()
+    {
+        var page = await GoToFAAHomePage();
+
+        var searchResultsPage = await page.SearchRandomVacancyAndGetVacancyTitle();
+
+        await searchResultsPage.SaveThenRemoveRandomlySelectedVacancy();
+    }
+
+    public async Task AnswerEqualityQuestionsAfterSubmittingApplication()
+    {
+        var page = new ApplicationSubmittedPage(context);
+
+        await page.VerifyPage();
+
+        var page1 = await page.AnswerEqualityQuestions();
+
+        var page2 = await page1.SubmitSexAndGenderIdentity();
+
+        var page3 = await page2.SubmitEthnicGroup();
+
+        await page3.SaveAndContinue();
+    }
+
+    public async Task ViewAndChangeEqualityQuestionAnswersInSettings()
+    {
+        var settingsPage = new SettingPage(context);
+
+        await settingsPage.VerifyPage();
+
+        var equalityPage = await settingsPage.ViewEqualityQuestionAnswers();
+
+        await equalityPage.Save();
+    }
+
     public async Task VerifyApplicationStatus(bool IsSucessful)
     {
         var user = context.GetUser<FAAApplyUser>();

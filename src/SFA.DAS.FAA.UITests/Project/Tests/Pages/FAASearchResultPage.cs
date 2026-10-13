@@ -51,6 +51,31 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
         return await VerifyPageAsync(() => new FAASearchResultPage(context));
     }
 
+    public async Task SaveThenRemoveRandomlySelectedVacancy()
+    {
+        var vacancyTitle = objectContext.Get<string>("vacancyTitle");
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save   to your favourites" }).First.ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Saved vacancies" }).ClickAsync();
+
+        var savedVacancyCount = await page.Locator("ol.das-search-results__list")
+            .GetByRole(AriaRole.Link, new() { Name = vacancyTitle }).CountAsync();
+
+        Assert.That(savedVacancyCount, Is.EqualTo(1));
+
+        var vacancyItem = page.Locator("li.das-search-results__list-item").Filter(new() { HasText = vacancyTitle });
+
+        await vacancyItem.GetByRole(AriaRole.Button, new() { Name = "Remove" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator(".govuk-notification-banner__heading")).ToContainTextAsync($"Removed {vacancyTitle}");
+
+        var remainingVacancyCount = await page.Locator("ol.das-search-results__list")
+            .GetByRole(AriaRole.Link, new() { Name = vacancyTitle }).CountAsync();
+
+        Assert.That(remainingVacancyCount, Is.EqualTo(0));
+    }
+
     public async Task<FAA_ApprenticeSummaryPage> ClickFirstApprenticeshipThatCanBeAppliedFor()
     {
         var contextVacancyTitle = objectContext.Get("vacancyTitle");
