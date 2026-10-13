@@ -120,4 +120,29 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
         await Assertions.Expect(selectedFilters).ToHaveCountAsync(0);
     }
     #endregion
+
+    public async Task EnterDate(string fullDate)
+    {
+        string[] parts = fullDate.Split('-', StringSplitOptions.RemoveEmptyEntries);
+        string day = parts[0];
+        string month = parts[1];
+        string year = parts[2];
+        await page.Locator("#last-date-starts-day").FillAsync(day);
+        await page.Locator("#Month").FillAsync(month);
+        await page.Locator("#Year").FillAsync(year);
+    }
+
+    public async Task AssertBanner(string keyWord, string bannerMessage)
+    {
+        var parent = page.Locator("li", new PageLocatorOptions { HasTextString = keyWord });
+        var listItem = parent;
+        string banner = bannerMessage switch
+        {
+            "Last start date added" => ".govuk-tag--orange",
+            "Closed to new starts"  => ".govuk-tag--grey",
+            "Open to new starts"   => ".govuk-tag--green",
+             _        => throw new ArgumentException($"Unknown message type: {bannerMessage}")
+        };
+        await Assertions.Expect(listItem.Locator(banner)).ToContainTextAsync(bannerMessage);   
+    }
 }

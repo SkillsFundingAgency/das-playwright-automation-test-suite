@@ -30,15 +30,4 @@ public class RestrictACoursesPage(ScenarioContext context) : AparAdminBasePage(c
     {
         await Assertions.Expect(page.Locator(".govuk-error-summary__title")).ToContainTextAsync("There is a problem");
     }
-
-    public async Task EnterDate(string fullDate)
-    {
-        string[] parts = fullDate.Split('-', StringSplitOptions.RemoveEmptyEntries);
-        string day = parts[0];
-        string month = parts[1];
-        string year = parts[2];
-        await page.Locator("#last-date-starts-day").FillAsync(day);
-        await page.Locator("#Month").FillAsync(month);
-        await page.Locator("#Year").FillAsync(year);
-    }
 }

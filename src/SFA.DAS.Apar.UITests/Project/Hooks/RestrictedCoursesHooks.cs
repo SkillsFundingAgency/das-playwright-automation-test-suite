@@ -10,6 +10,14 @@ public class RestrictedCoursesHooks(ScenarioContext context) : AparBaseHooks(con
     {
         if (_tags.Any(x => x == "rpadalup02")) await ClearProviderRestrictedCourses();
     }
+
+    [BeforeScenario(Order = 35)]
+    public async Task AddLastStartDateRestrictProvider()
+    {
+        if (_tags.Any(x => x == "rpadalup03")) await AddLastStartDate();
+    }
+
+
     [AfterScenario(Order = 34)]
     public async Task ClearProviderRestrictedCoursesDataAfter()
     {
