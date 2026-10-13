@@ -68,6 +68,8 @@ public class ProviderConfigurationSetup(ScenarioContext context) : ProviderConfi
 
         if (_tags.IsRaaTransfer())  providerConfig = SetProviderCreds<ProviderNoPermissionsConfig>();
 
+        if (_tags.IsRaaEpc())  providerConfig = SetProviderCreds<ProviderPermissionsConfig>();
+
         if (_tags.IsTestDataDeleteCohortViaProviderPortal()) _context.Set(SetProviderCreds<DeleteCohortProviderConfig>());
 
         _context.SetProviderConfig(providerConfig);

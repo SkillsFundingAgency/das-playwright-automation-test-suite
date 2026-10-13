@@ -95,7 +95,7 @@ public class EmployerStepsHelper(ScenarioContext context)
         
         try
         {
-            bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
+            bool isRaaEpc = context.ScenarioInfo.Tags.IsRaaEpc();
             string text = isRaaEpc ? "Adverts with shared applications" : "Recruitment dashboard";
             await Assertions.Expect(playwrightPage.Locator("h1")).ToContainTextAsync(text, new LocatorAssertionsToContainTextOptions { Timeout = 2000 });
             page = new YourApprenticeshipAdvertsHomePage(context, false); 
@@ -117,7 +117,7 @@ public class EmployerStepsHelper(ScenarioContext context)
 
         try
         {
-            bool isRaaEpc = context.ScenarioInfo.Tags.Contains("raa-epc");
+            bool isRaaEpc = context.ScenarioInfo.Tags.IsRaaEpc();
             string text = isRaaEpc ? "Adverts with shared applications" : "Recruitment dashboard";
             await Assertions.Expect(playwrightPage.Locator("h1")).ToContainTextAsync(text, new LocatorAssertionsToContainTextOptions { Timeout = 2000 });
             page = new YourApprenticeshipAdvertsHomePage(context, false);

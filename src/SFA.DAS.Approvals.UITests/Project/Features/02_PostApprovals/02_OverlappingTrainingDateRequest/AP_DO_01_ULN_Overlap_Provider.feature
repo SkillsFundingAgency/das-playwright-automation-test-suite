@@ -1,11 +1,9 @@
 ﻿@approvals
-@postapprovals
 Feature: AP_DO_01_ULN_Overlap_Provider
 
 
 @regression
 @liveapprentice
-@postapprovals
 Scenario: AP_DO_01_ULN Overlap_Provider
 	Given a live apprentice record exists with startdate of <-6> months and endDate of <+6> months from current date
 	When Provider tries to add a new apprentice using details from table below
