@@ -54,6 +54,8 @@ stages:
           RuleName2: ${{ parameters.RuleName2 }}
           ${{ if parameters.ApplyAppRoleAssignments }}:
             AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
+            AppRoleAssignmentsResourceName: das-dev-automated-tests-ar
+            AppRoleAssignmentsTargetEnvironment: test
 
   - stage: Deploy_TEST2
     dependsOn: Build
@@ -73,6 +75,8 @@ stages:
           RuleName2: ${{ parameters.RuleName2 }}
           ${{ if parameters.ApplyAppRoleAssignments }}:
             AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
+            AppRoleAssignmentsResourceName: das-dev-automated-tests-ar
+            AppRoleAssignmentsTargetEnvironment: test2
 
   - stage: Deploy_DEMO
     dependsOn: Build
@@ -92,6 +96,8 @@ stages:
           RuleName2: ${{ parameters.RuleName2 }}
           ${{ if parameters.ApplyAppRoleAssignments }}:
             AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
+            AppRoleAssignmentsResourceName: das-dev-automated-tests-ar
+            AppRoleAssignmentsTargetEnvironment: demo
 
   - stage: Deploy_PP
     dependsOn: Build
@@ -116,6 +122,8 @@ stages:
             WhiteListFunction: ${{ parameters.WhiteListFunction }}
             ${{ if parameters.ApplyAppRoleAssignments }}:
               AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
+              AppRoleAssignmentsResourceName: das-pp-automated-tests-ar
+              AppRoleAssignmentsTargetEnvironment: pp
 
       - ${{ else }}:
         - template: ../job/deploy.yml
@@ -129,3 +137,5 @@ stages:
             WhiteListFunction: ${{ parameters.WhiteListFunction }}
             ${{ if parameters.ApplyAppRoleAssignments }}:
               AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
+              AppRoleAssignmentsResourceName: das-pp-automated-tests-ar
+              AppRoleAssignmentsTargetEnvironment: pp

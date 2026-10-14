@@ -24,6 +24,12 @@ parameters:
   - name: AppRoleAssignmentsServiceConnection
     type: string
     default: ''
+  - name: AppRoleAssignmentsResourceName
+    type: string
+    default: ''
+  - name: AppRoleAssignmentsTargetEnvironment
+    type: string
+    default: ''
 
 jobs:
 - deployment: Deploy_AutomationTests
@@ -130,8 +136,9 @@ jobs:
             - template: azure-pipelines-templates/deploy/step/app-role-assignments.yml@das-platform-building-blocks
               parameters:
                 ServiceConnection: ${{ parameters.AppRoleAssignmentsServiceConnection }}
-                ResourceName: ${{ parameters.ServiceConnection }}
+                ResourceName: ${{ parameters.AppRoleAssignmentsResourceName }}
                 Tenant: $(Tenant)
+                TargetEnvironment: ${{ parameters.AppRoleAssignmentsTargetEnvironment }}
                 IsMultiRepoCheckout: true
 
 
