@@ -2,7 +2,7 @@ Feature: APAR_AL_03
 
 @providerrestrictedcourses
 @rpadalup02
-@rpadalup03hook
+@rpadalup03a
 @apar
 @regression
 Scenario: APAR_AL_03_Edit and remove last date on a restricted course for a provider
