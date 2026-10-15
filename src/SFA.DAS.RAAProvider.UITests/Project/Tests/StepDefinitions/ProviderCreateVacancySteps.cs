@@ -18,6 +18,9 @@ public class ProviderCreateVacancySteps(ScenarioContext context)
     public async Task GivenTheProviderCreatesAVacancyWithWorkLocationsAndWageTypeAndAdditionalQuestions(string locationType, string wageType)
             => await _providerStepsHelper.CreateVacancyForLocationAndWageTypes(locationType, wageType);
 
+    [Then(@"^the Provider sees a validation error when leaving the vacancy title blank$")]
+    public async Task ThenTheProviderSeesAValidationErrorWhenLeavingTheVacancyTitleBlank() => await _providerStepsHelper.TriggerVacancyTitleValidationErrorAndCancelAdvert();
+
     [Given(@"the Provider creates a vacancy by using a registered name")]
     public async Task GivenTheProviderCreatesAVacancyByUsingARegisteredName() => await _providerStepsHelper.CreateANewVacancyForRandomEmployer();
 

@@ -26,6 +26,28 @@ public class WhatIsYourNamePage(ScenarioContext context) : FAABasePage(context)
 
         return await VerifyPageAsync(() => new DateOfBirthPage(context));
     }
+
+    public async Task TriggerLastNameValidationError()
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Last name" }).FillAsync(string.Empty);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator(".govuk-error-summary")).ToContainTextAsync("There is a problem");
+
+        await Assertions.Expect(page.Locator(".govuk-error-summary")).ToContainTextAsync("Enter your last name");
+    }
+
+    public async Task<SettingPage> SaveNameChange()
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "First name" }).FillAsync(fAAUserNameDataHelper.FirstName);
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Last name" }).FillAsync(fAAUserNameDataHelper.LastName);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SettingPage(context));
+    }
 }
 
 public class DateOfBirthPage(ScenarioContext context) : FAABasePage(context)
@@ -45,6 +67,21 @@ public class DateOfBirthPage(ScenarioContext context) : FAABasePage(context)
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new WhatIsYourAddressPage(context));
+    }
+
+    public async Task<SettingPage> SaveDateOfBirthChange()
+    {
+        var dob = fAAUserNameDataHelper.FaaNewUserDob;
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Day" }).FillAsync($"{dob.Day}");
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Month" }).FillAsync($"{dob.Month}");
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Year" }).FillAsync($"{dob.Year}");
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SettingPage(context));
     }
 }
 
@@ -80,6 +117,27 @@ public class WhatIsYourAddressPage(ScenarioContext context) : FAABasePage(contex
 
         return await VerifyPageAsync(() => new WhatIsYourTelephoneNumberPage(context));
     }
+
+    public async Task<SettingPage> SaveAddressChange()
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "UK postcode" }).FillAsync(fAAUserNameDataHelper.FaaNewUserPostCode);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Find my address" }).ClickAsync();
+
+        var alloptionstexts = await AllTextAsync($"{Address} option");
+
+        alloptionstexts = [.. alloptionstexts.ToList().Select(x => x.RemoveMultipleSpace())];
+
+        var allOptions = alloptionstexts.Where(x => x != "Select address").ToList();
+
+        var option = RandomDataGenerator.GetRandomElementFromListOfElements(allOptions);
+
+        await page.GetByLabel("Select an address from the").SelectOptionAsync(option);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SettingPage(context));
+    }
 }
 
 public class WhatIsYourTelephoneNumberPage(ScenarioContext context) : FAABasePage(context)
@@ -97,6 +155,17 @@ public class WhatIsYourTelephoneNumberPage(ScenarioContext context) : FAABasePag
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new GetRemindersAboutYourUnfinishedApplicationsPage(context));
+    }
+
+    public async Task<SettingPage> SaveTelephoneNumberChange()
+    {
+        var number = fAAUserNameDataHelper.FaaNewUserMobilePhone;
+
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Telephone number" }).FillAsync($"{number}");
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SettingPage(context));
     }
 }
 
