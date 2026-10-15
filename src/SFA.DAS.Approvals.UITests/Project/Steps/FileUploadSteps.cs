@@ -7,6 +7,8 @@ using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
 using System;
+using System.Globalization;
+using System.IO;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -243,13 +245,101 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.NavToHomePage();
         }
 
+
+        [When(@"Provider add an apprentice uses details from below to create bulkupload")]
+        public Task WhenProviderAddAnApprenticeUsesDetailsFromBelowToCreateBulkupload(Table table) => ValidateApprenticeRecord(table);
+
+        public async Task ValidateApprenticeRecord(Table table)
+        {
+            var apprenticeRecords = table.CreateSet<MapApprenticeDetails>().ToList();
+            var validApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).First();
+
+            for (var index = 0; index < apprenticeRecords.Count; index++)
+            {
+                var record = apprenticeRecords[index];
+                var csvFilePath = fileUploadHelper.CsvFileLocation();
+                await CreateValidationCsvFile(record, validApprenticeship, csvFilePath);
+                await ProviderUploadsAnotherFile(csvFilePath, record.ErrorMessage, index == 0);
+            }
+        }
+
+        private async Task ProviderUploadsAnotherFile(string csvFilePath, string expectedErrorMessage, bool startUploadJourney)
+        {
+            UploadCsvFilePage page;
+            if (startUploadJourney)
+            {
+                await new ProviderHomePageStepsHelper(context).GoToProviderHomePage(false);
+                page = await StartBulkUploadJourney();
+            }
+            else
+            {
+                page = new UploadCsvFilePage(context);
+            }
+
+            var errorPage = await page.UploadFileErrorCase(csvFilePath);
+            await errorPage.ValidateErrorMessage(expectedErrorMessage);
+        }
+
+        private static async Task CreateValidationCsvFile(MapApprenticeDetails record, Apprenticeship validApprenticeship, string filePath)
+        {
+            const string csvHeader = "CohortRef,AgreementID,ULN,FamilyName,GivenNames,DateOfBirth,EmailAddress,StdCode,StartDate,EndDate,TotalPrice,EPAOrgID,ProviderRef,RecognisePriorLearning,TrainingTotalHours,TrainingHoursReduction,IsDurationReducedByRPL,DurationReducedBy,PriceReducedBy";
+
+            // var cohortRef = _object._objectContext.GetCohortReference();
+            // string agreementId = _context.Get<AccountsDbSqlHelper>().GetAgreementIdByCohortRef(cohortRef).Trim();
+            // validApprenticeship.Cohort.Reference = cohortRef;
+            // employer.AgreementId = agreementId;
+            var apprentice = validApprenticeship.ApprenticeDetails;
+            var training = validApprenticeship.TrainingDetails;
+            var rpl = validApprenticeship.RPLDetails;
+            var employer = validApprenticeship.EmployerDetails;
+            var values = new[]
+            {
+                UseTableValueOr(record.CohortRef, validApprenticeship.Cohort.Reference),
+                UseTableValueOr(record.AgreementId, employer.AgreementId),
+                UseTableValueOr(record.ULN, apprentice.ULN),
+                UseTableValueOr(record.FamilyName, apprentice.LastName),
+                UseTableValueOr(record.GivenNames, apprentice.FirstName),
+                UseTableValueOr(record.DateOfBirth, apprentice.DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)),
+                UseTableValueOr(record.EmailAddress, apprentice.Email),
+                UseTableValueOr(record.StdCode, training.LarsCode),
+                UseTableValueOr(record.StartDate, training.StartDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)),
+                UseTableValueOr(record.EndDate, training.EndDate.ToString("yyyy-MM", CultureInfo.InvariantCulture)),
+                UseTableValueOr(record.TotalPrice, training.TotalPrice.ToString(CultureInfo.InvariantCulture)),
+                UseTableValueOr(record.EPAOrgID, "EPA0001"),
+                UseTableValueOr(record.ProviderRef, RandomDataGenerator.GenerateRandomAlphabeticString(6)),
+                rpl.IsDurationReducedByRPL.ToString(),
+                rpl.TrainingTotalHours.ToString(CultureInfo.InvariantCulture),
+                rpl.TrainingHoursReduction.ToString(CultureInfo.InvariantCulture),
+                rpl.IsDurationReducedByRPL.ToString(),
+                rpl.DurationReducedBy.ToString(CultureInfo.InvariantCulture),
+                rpl.PriceReducedBy.ToString(CultureInfo.InvariantCulture)
+            };
+
+            var csvRow = string.Join(",", values.Select(EscapeCsvValue));
+            await File.WriteAllLinesAsync(filePath, new[] { csvHeader, csvRow });
+        }
+
+        private static string UseTableValueOr(string tableValue, string validValue) =>
+            tableValue == "valid" ? validValue : tableValue ?? string.Empty;
+
+        private static string EscapeCsvValue(string value)
+        {
+            value ??= string.Empty;
+            if (value.Length == 0)
+                return "\"\"";
+
+            if (value.IndexOfAny(new[] { ',', '"', '\r', '\n' }) < 0)
+                return value;
+
+            return $"\"{value.Replace("\"", "\"\"")}\"";
+        }
+
         private async Task<UploadCsvFilePage> StartBulkUploadJourney()
         {
             var page1 = await new ProviderHomePage(context).GotoSelectJourneyPage();
             var page2 = await new HowDoYouWantToAddLearner_EntryMothodPage(context).SelectOptionToUploadCsvFile();
             return await page2.ClickContinueButton();
         }
-
 
     }
 }

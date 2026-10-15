@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
+﻿using System;
+
+namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
     internal class UploadCsvFilePage(ScenarioContext context) : ApprovalsBasePage(context)
     {
@@ -27,6 +29,14 @@
             return await VerifyPageAsync(() => new ReviewApprenticeDetailsBulkUploadPage(context));
         }
 
+        internal async Task<ThereIsAProblemWithYourCsvFilePage> UploadFileErrorCase(string filePath)
+        {
+            await ChooseFileButton.SetInputFilesAsync(filePath);
+            await UploadFileButton.ClickAsync();
+            return await VerifyPageAsync(() => new ThereIsAProblemWithYourCsvFilePage(context));
+        }
 
     }
+
+      
 }
