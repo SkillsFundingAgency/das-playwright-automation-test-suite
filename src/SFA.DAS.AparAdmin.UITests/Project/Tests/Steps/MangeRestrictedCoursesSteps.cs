@@ -1,4 +1,5 @@
-﻿using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
+﻿using SFA.DAS.AparAdmin.UITests.Project.Helpers;
+using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ManageRestrictedCourses;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -11,10 +12,13 @@ public class MangeRestrictedCoursesSteps
     private readonly ScenarioContext _context;
     private readonly ViewMangeRestrictedCoursesPage _viewMangeRestrictedCoursesPage;
     private readonly AcademicProfessionalPage _academicProfessionalPage;
+    private readonly NavigateToNewPageHelper _navigateToNewPageHelper;
+  
 
     public MangeRestrictedCoursesSteps(ScenarioContext context)
     {
         _context = context;
+         _navigateToNewPageHelper = new NavigateToNewPageHelper(context);
         _viewMangeRestrictedCoursesPage =
             new ViewMangeRestrictedCoursesPage(context);
         _academicProfessionalPage = new AcademicProfessionalPage(context);
@@ -24,7 +28,7 @@ public class MangeRestrictedCoursesSteps
     [When(@"the user navigates to restricted courses")]
     public async Task WhenTheUserNavigatesToRestrictedCourses()
     {
-        var manageTrainingProviderPage = await OpenManageTrainingProviderPage();
+        var manageTrainingProviderPage = await _navigateToNewPageHelper.OpenManageTrainingProviderPage();
         await manageTrainingProviderPage.NavigateToRestrictedCourses();
         await _viewMangeRestrictedCoursesPage.VerifyPage();
     }
@@ -95,22 +99,7 @@ public class MangeRestrictedCoursesSteps
         await _viewMangeRestrictedCoursesPage.VerifyNoFiltersSelected();
     }
 
-    private async Task<ManageTrainingProviderInformationPage>OpenManageTrainingProviderPage()
-    {
-        var home = new AparAdminHomePage(_context);
-        await home.ClickManageTrainingProvidersAndRestrictedCourses();
-        return await new ManageTrainingProviderInformationPage(_context)
-            .VerifyPageAsync( () => new ManageTrainingProviderInformationPage(_context));
-    }
-
-    private async Task<AcademicProfessionalPage>OpenAcademicProfessionalPage(string larsCode)
-    {
-        var home = new ViewMangeRestrictedCoursesPage(_context);
-        await home.SelectRestrictedManageProviders(larsCode);
-        return await new AcademicProfessionalPage(_context)
-            .VerifyPageAsync( () => new AcademicProfessionalPage(_context));
-    }
-
+    
     [Then(@"the user verifies pagination links are working as expected")]
         public async Task ThenTheUserVerifiesPaginationLinksAreWorkingAsExpected()
         {
@@ -122,7 +111,7 @@ public class MangeRestrictedCoursesSteps
 
         public async Task WhenTheUserSelectsManageProvidersOnCourseWithLARSCode(string larsCode)
         {
-            await OpenAcademicProfessionalPage(larsCode);
+            await _navigateToNewPageHelper.OpenAcademicProfessionalPage(larsCode);
             await _academicProfessionalPage.VerifyPage();
         }
 

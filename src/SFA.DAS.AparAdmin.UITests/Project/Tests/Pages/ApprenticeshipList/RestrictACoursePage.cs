@@ -21,13 +21,8 @@ public class RestrictACoursesPage(ScenarioContext context) : AparAdminBasePage(c
         await page.Locator("#continue").ClickAsync();
     }
 
-    public async Task ConfirmSelection()
+    public async Task ConfirmRestriction()
     {
         await page.GetByRole(AriaRole.Button, new(){Name = "Confirm restriction",Exact = true}).ClickAsync();
-    }
-
-    public async Task ErrorMessage()
-    {
-        await Assertions.Expect(page.Locator(".govuk-error-summary__title")).ToContainTextAsync("There is a problem");
     }
 }

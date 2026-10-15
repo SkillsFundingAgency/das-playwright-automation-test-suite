@@ -145,4 +145,8 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
         };
         await Assertions.Expect(listItem.Locator(banner)).ToContainTextAsync(bannerMessage);   
     }
+     public async Task ErrorMessageForWrongInput()
+    {
+        await Assertions.Expect(page.Locator(".govuk-error-summary__title")).ToContainTextAsync("There is a problem");
+    }
 }

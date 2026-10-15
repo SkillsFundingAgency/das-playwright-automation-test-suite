@@ -9,8 +9,8 @@ public class SetLastStartDatePage(ScenarioContext context) : AparAdminBasePage(c
        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("The provider can deliver this course until the last start date");
     }
 
-    public async Task ConfirmChanges()
+    public async Task ConfirmLastStartDate()
     {
-        await page.GetByRole(AriaRole.Button, new() {Name = "Confirm changes", Exact = true}).ClickAsync();
+        await page.Locator(".govuk-button").ClickAsync();
     }
 }

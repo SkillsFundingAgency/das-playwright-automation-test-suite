@@ -1,6 +1,6 @@
+using SFA.DAS.AparAdmin.UITests.Project.Helpers;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ApprenticeshipList;
-using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Steps;
 
@@ -13,6 +13,7 @@ public class ApprenticeshipListSteps
     private readonly ChangeRestrictionPage _changeRestrictionPage;
     private readonly SetLastStartDatePage _setLastStartPage;
     private readonly RemoveRestrictionPage _removeRestrictionPage;
+    private readonly NavigateToNewPageHelper _navigateToNewPageHelper;
 
 
 public ApprenticeshipListSteps(ScenarioContext context)
@@ -23,53 +24,14 @@ public ApprenticeshipListSteps(ScenarioContext context)
     _changeRestrictionPage = new ChangeRestrictionPage(context);
     _setLastStartPage = new SetLastStartDatePage(context);
     _removeRestrictionPage = new RemoveRestrictionPage(context);
-}
-
-    private async Task<ProviderRestrictedCoursesPage>OpenManageProviderCoursePage()
-    {
-        var home = new SearchforATrainingProviderPage(_context);
-        await home.ClickManageRestrictedCourses();
-        return await new ProviderRestrictedCoursesPage(_context)
-            .VerifyPageAsync( () => new ProviderRestrictedCoursesPage(_context));
-    }
-
-    private async Task<RestrictACoursesPage>ClickRestrictACourse()
-    {
-        var home = new ProviderRestrictedCoursesPage(_context);
-        await home.ClickRestrictACourse();
-        return await new RestrictACoursesPage(_context)
-            .VerifyPageAsync( () => new RestrictACoursesPage(_context));
-    }
-
-    private async Task<ChangeRestrictionPage>ClickChange(string larsCode)
-    {
-        var home = new ProviderRestrictedCoursesPage(_context);
-        await home.ClickChange(larsCode);
-        return await new ChangeRestrictionPage(_context)
-            .VerifyPageAsync( () => new ChangeRestrictionPage(_context));
-    }
-
-    private async Task<SetLastStartDatePage>ConfirmEdit()
-    {
-        var home = new ChangeRestrictionPage(_context);
-        await home.Confirm();
-        return await new SetLastStartDatePage(_context)
-            .VerifyPageAsync( () => new SetLastStartDatePage(_context));
-    }
-
-    private async Task<RemoveRestrictionPage>ConfirmRemove()
-    {
-        var home = new ChangeRestrictionPage(_context);
-        await home.Confirm();
-        return await new RemoveRestrictionPage(_context)
-            .VerifyPageAsync( () => new RemoveRestrictionPage(_context));
-    }
+    _navigateToNewPageHelper = new NavigateToNewPageHelper(context);
+}    
 
     [When(@"the user clicks on manage restricted courses")]
 
     public async Task WhenTheUserClicksOnManageRestrictedCourses()
     {
-        var manageProviderCoursePage = await OpenManageProviderCoursePage();
+        await _navigateToNewPageHelper.OpenManageProviderCoursePage();
     }
 
     [Then(@"the user uses the search and filter functionality and results are displayed as expected")]
@@ -89,9 +51,9 @@ public ApprenticeshipListSteps(ScenarioContext context)
 
     public async Task ThenTheUserRestrictsACourseThatIsNotAvailableInTheDropDown()
     {
-        await ClickRestrictACourse();
+        await _navigateToNewPageHelper.ClickRestrictACourse();
         await _restrictACoursePage.SelectCourse("Singing");
-        await _restrictACoursePage.ErrorMessage();
+        await _restrictACoursePage.ErrorMessageForWrongInput();
     }
 
     [Then(@"^the user restricts for the provider course ""(.*)"" which they currently do not provide$")]
@@ -99,7 +61,7 @@ public ApprenticeshipListSteps(ScenarioContext context)
     public async Task ThenTheUserRestrictsForTheProviderCourseWhichTheyCurrentlyDoNotProvide(string courseName)
     {
         await _restrictACoursePage.SelectCourse(courseName);
-        await _restrictACoursePage.ConfirmSelection();
+        await _restrictACoursePage.ConfirmRestriction();
         await _providerRestrictedCoursesPage.SearchFunctionality(courseName);
         await _providerRestrictedCoursesPage.VerifyResults(courseName, "yes");
     }
@@ -108,13 +70,13 @@ public ApprenticeshipListSteps(ScenarioContext context)
 
     public async Task ThenTheUserRestrictsForTheProviderCourseWhichTheyCurrentlyProvide(string courseName)
     {
-        await ClickRestrictACourse();
+        await _navigateToNewPageHelper.ClickRestrictACourse();
         await _restrictACoursePage.SelectCourse(courseName);
-        await _restrictACoursePage.EnterDate("20-08-2027");
-        await _restrictACoursePage.ConfirmSelection();
-        await _restrictACoursePage.ErrorMessage();
-        await _restrictACoursePage.EnterDate("20-08-2020");
-        await _restrictACoursePage.ConfirmSelection();
+        await _setLastStartPage.EnterDate("20-08-2027");
+        await _setLastStartPage.ConfirmLastStartDate();
+        await _setLastStartPage.ErrorMessageForWrongInput();
+        await _setLastStartPage.EnterDate("20-08-2020");
+        await _setLastStartPage.ConfirmLastStartDate();
         await _providerRestrictedCoursesPage.SearchFunctionality(courseName);
         await _providerRestrictedCoursesPage.VerifyResults(courseName, "yes");
     }
@@ -125,11 +87,11 @@ public ApprenticeshipListSteps(ScenarioContext context)
 
     public async Task ThenTheUserEditsADateForARestrictedCourseToADateInTheFuture(string editType, string larsCode, string timeReference, string date)
     {
-        await ClickChange(larsCode);
+        await _navigateToNewPageHelper.ClickChangeCourseDateDetails(larsCode);
         await _changeRestrictionPage.SelectOption(editType);
-        await ConfirmEdit();
+        await _navigateToNewPageHelper.ConfirmEdit();
         await _setLastStartPage.EnterDate(date);
-        await _setLastStartPage.ConfirmChanges();
+        await _setLastStartPage.ConfirmLastStartDate();
         string bannerMessage = timeReference switch
         {
             "future" => "Last start date added",
@@ -143,9 +105,11 @@ public ApprenticeshipListSteps(ScenarioContext context)
 
     public async Task ThenTheUserRemovedRestrictionsForTheProviderOnTheCourse(string editType, string larsCode)
     {
-         await ClickChange(larsCode);
+         await _navigateToNewPageHelper.ClickChangeCourseDateDetails(larsCode);
         await _changeRestrictionPage.SelectOption(editType);
-        await ConfirmRemove();
+        await _navigateToNewPageHelper.ConfirmRemoveCourseRestriction();
         await _removeRestrictionPage.RemoveRestriction();
+        await _providerRestrictedCoursesPage.SearchFunctionality(larsCode);
+        await _providerRestrictedCoursesPage.VerifyResults(larsCode, "no");
     }
 }
