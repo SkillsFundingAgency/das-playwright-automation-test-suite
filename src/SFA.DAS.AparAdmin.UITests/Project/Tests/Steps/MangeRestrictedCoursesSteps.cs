@@ -12,13 +12,13 @@ public class MangeRestrictedCoursesSteps
     private readonly ScenarioContext _context;
     private readonly ViewMangeRestrictedCoursesPage _viewMangeRestrictedCoursesPage;
     private readonly AcademicProfessionalPage _academicProfessionalPage;
-    private readonly NavigateToNewPageHelper _navigateToNewPageHelper;
+    private readonly ApprenticeshipListHelper _apprenticeshipListHelper;
   
 
     public MangeRestrictedCoursesSteps(ScenarioContext context)
     {
         _context = context;
-         _navigateToNewPageHelper = new NavigateToNewPageHelper(context);
+         _apprenticeshipListHelper = new ApprenticeshipListHelper(context);
         _viewMangeRestrictedCoursesPage =
             new ViewMangeRestrictedCoursesPage(context);
         _academicProfessionalPage = new AcademicProfessionalPage(context);
@@ -28,7 +28,7 @@ public class MangeRestrictedCoursesSteps
     [When(@"the user navigates to restricted courses")]
     public async Task WhenTheUserNavigatesToRestrictedCourses()
     {
-        var manageTrainingProviderPage = await _navigateToNewPageHelper.OpenManageTrainingProviderPage();
+        var manageTrainingProviderPage = await _apprenticeshipListHelper.OpenManageTrainingProviderPage();
         await manageTrainingProviderPage.NavigateToRestrictedCourses();
         await _viewMangeRestrictedCoursesPage.VerifyPage();
     }
@@ -111,7 +111,7 @@ public class MangeRestrictedCoursesSteps
 
         public async Task WhenTheUserSelectsManageProvidersOnCourseWithLARSCode(string larsCode)
         {
-            await _navigateToNewPageHelper.OpenAcademicProfessionalPage(larsCode);
+            await _apprenticeshipListHelper.OpenAcademicProfessionalPage(larsCode);
             await _academicProfessionalPage.VerifyPage();
         }
 

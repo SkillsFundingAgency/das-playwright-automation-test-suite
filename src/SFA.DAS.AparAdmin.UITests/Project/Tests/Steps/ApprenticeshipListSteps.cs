@@ -13,7 +13,7 @@ public class ApprenticeshipListSteps
     private readonly ChangeRestrictionPage _changeRestrictionPage;
     private readonly SetLastStartDatePage _setLastStartPage;
     private readonly RemoveRestrictionPage _removeRestrictionPage;
-    private readonly NavigateToNewPageHelper _navigateToNewPageHelper;
+    private readonly ApprenticeshipListHelper _apprenticeshipListHelper;
 
 
 public ApprenticeshipListSteps(ScenarioContext context)
@@ -24,14 +24,14 @@ public ApprenticeshipListSteps(ScenarioContext context)
     _changeRestrictionPage = new ChangeRestrictionPage(context);
     _setLastStartPage = new SetLastStartDatePage(context);
     _removeRestrictionPage = new RemoveRestrictionPage(context);
-    _navigateToNewPageHelper = new NavigateToNewPageHelper(context);
+    _apprenticeshipListHelper = new ApprenticeshipListHelper(context);
 }    
 
     [When(@"the user clicks on manage restricted courses")]
 
     public async Task WhenTheUserClicksOnManageRestrictedCourses()
     {
-        await _navigateToNewPageHelper.OpenManageProviderCoursePage();
+        await _apprenticeshipListHelper.OpenManageProviderCoursePage();
     }
 
     [Then(@"the user uses the search and filter functionality and results are displayed as expected")]
@@ -51,7 +51,7 @@ public ApprenticeshipListSteps(ScenarioContext context)
 
     public async Task ThenTheUserRestrictsACourseThatIsNotAvailableInTheDropDown()
     {
-        await _navigateToNewPageHelper.ClickRestrictACourse();
+        await _apprenticeshipListHelper.ClickRestrictACourse();
         await _restrictACoursePage.SelectCourse("Singing");
         await _restrictACoursePage.ErrorMessageForWrongInput();
     }
@@ -70,7 +70,7 @@ public ApprenticeshipListSteps(ScenarioContext context)
 
     public async Task ThenTheUserRestrictsForTheProviderCourseWhichTheyCurrentlyProvide(string courseName)
     {
-        await _navigateToNewPageHelper.ClickRestrictACourse();
+        await _apprenticeshipListHelper.ClickRestrictACourse();
         await _restrictACoursePage.SelectCourse(courseName);
         await _setLastStartPage.EnterDate("20-08-2027");
         await _setLastStartPage.ConfirmLastStartDate();
@@ -87,9 +87,9 @@ public ApprenticeshipListSteps(ScenarioContext context)
 
     public async Task ThenTheUserEditsADateForARestrictedCourseToADateInTheFuture(string editType, string larsCode, string timeReference, string date)
     {
-        await _navigateToNewPageHelper.ClickChangeCourseDateDetails(larsCode);
+        await _apprenticeshipListHelper.ClickChangeCourseDateDetails(larsCode);
         await _changeRestrictionPage.SelectOption(editType);
-        await _navigateToNewPageHelper.ConfirmEdit();
+        await _apprenticeshipListHelper.ConfirmEdit();
         await _setLastStartPage.EnterDate(date);
         await _setLastStartPage.ConfirmLastStartDate();
         string bannerMessage = timeReference switch
@@ -105,9 +105,9 @@ public ApprenticeshipListSteps(ScenarioContext context)
 
     public async Task ThenTheUserRemovedRestrictionsForTheProviderOnTheCourse(string editType, string larsCode)
     {
-         await _navigateToNewPageHelper.ClickChangeCourseDateDetails(larsCode);
+         await _apprenticeshipListHelper.ClickChangeCourseDateDetails(larsCode);
         await _changeRestrictionPage.SelectOption(editType);
-        await _navigateToNewPageHelper.ConfirmRemoveCourseRestriction();
+        await _apprenticeshipListHelper.ConfirmRemoveCourseRestriction();
         await _removeRestrictionPage.RemoveRestriction();
         await _providerRestrictedCoursesPage.SearchFunctionality(larsCode);
         await _providerRestrictedCoursesPage.VerifyResults(larsCode, "no");

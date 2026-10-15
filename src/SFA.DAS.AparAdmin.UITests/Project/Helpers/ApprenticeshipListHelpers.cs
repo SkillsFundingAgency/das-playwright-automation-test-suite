@@ -6,11 +6,11 @@ using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Helpers;
 
-public class NavigateToNewPageHelper
+public class ApprenticeshipListHelper
 {
     private readonly ScenarioContext _context;
   
-    public NavigateToNewPageHelper(ScenarioContext context)
+    public ApprenticeshipListHelper(ScenarioContext context)
     {
         _context = context; 
     }
