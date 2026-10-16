@@ -30,6 +30,11 @@ resources:
       name: SkillsFundingAgency/das-platform-automation
       ref: refs/tags/5.1.26
       endpoint: SkillsFundingAgency
+  pipelines:
+    - pipeline: das-employer-config
+      project: Digital Apprenticeship Service
+      source: das-employer-config
+      branch: master
 
 pool:
   vmImage: 'windows-latest'
@@ -43,3 +48,4 @@ stages:
       RuleName: $(RuleName)
       ResourceName: $(ResourceName)
       WhiteListFunction: true
+      ApplyAppRoleAssignments: true
