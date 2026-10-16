@@ -14,4 +14,7 @@ public class ManagingStandardsSqlDbHelper(ObjectContext objectContext, DbConfig 
         $"DELETE FROM ProviderAllowedCourse WHERE UKPRN = '10001259' AND  larscode = '535';";
         await ExecuteSqlCommand(query);
     }
+
+    public async Task AddLastStartDateRestrictProvider() => await ExecuteSqlCommand
+        ($"UPDATE ProviderAllowedCourse set LastDateStarts = '2026-08-06' where larscode = '828' and ukprn = '10001259'");
 }

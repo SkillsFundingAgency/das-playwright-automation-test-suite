@@ -10,7 +10,7 @@ public abstract class AparBaseHooks : FrameworkBaseHooks
     private readonly AparApplyAndQnASqlDbHelper _roatpApplyAndQnASqlDbHelper;
     private readonly RoatpQnASqlDbHelper _roatpQnASqlDbHelper;
     private readonly AparAdminSqlDbHelper _adminClearDownDataHelpers;
-    private readonly ManagingStandardsSqlDbHelper _maanagingStandardsSqlDbHelper;
+    private readonly ManagingStandardsSqlDbHelper _managingStandardsSqlDbHelper;
     protected readonly DbConfig _dbConfig;
 
     private readonly AparApplyUkprnDataHelpers _roatpApplyUkprnDataHelpers;
@@ -33,7 +33,7 @@ public abstract class AparBaseHooks : FrameworkBaseHooks
         _roatpAdminUkprnDataHelpers = new NewAparAdminUkprnDataHelpers();
         _roatpOldAdminUkprnDataHelpers = new OldAparAdminUkprnDataHelpers();
         _roatpFullUkprnDataHelpers = new AparFullUkprnDataHelpers();
-        _maanagingStandardsSqlDbHelper = new ManagingStandardsSqlDbHelper(_objectContext, _dbConfig);
+        _managingStandardsSqlDbHelper = new ManagingStandardsSqlDbHelper(_objectContext, _dbConfig);
     }
 
     protected async Task GoToUrl(string url) => await Navigate(url);
@@ -67,16 +67,21 @@ public abstract class AparBaseHooks : FrameworkBaseHooks
     protected async Task DeleteTrainingProvider() => await _adminClearDownDataHelpers.DeleteTrainingProvider(GetUkprn());
     protected async Task ResetLastStartDate()
     {
-        await _maanagingStandardsSqlDbHelper.ResetLastStartDate();
+        await _managingStandardsSqlDbHelper.ResetLastStartDate();
     }
     protected async Task ResetTrainingProviderFromCourse()
     {
-        await _maanagingStandardsSqlDbHelper.ResetTrainingProviderFromCourse();
+        await _managingStandardsSqlDbHelper.ResetTrainingProviderFromCourse();
     }
 
     protected async Task ClearProviderRestrictedCourses()
     {
-        await _maanagingStandardsSqlDbHelper.ClearProviderRestrictedCourses();
+        await _managingStandardsSqlDbHelper.ClearProviderRestrictedCourses();
+    }
+
+     protected async Task AddLastStartDate()
+    {
+        await _managingStandardsSqlDbHelper.AddLastStartDateRestrictProvider();
     }
     
 

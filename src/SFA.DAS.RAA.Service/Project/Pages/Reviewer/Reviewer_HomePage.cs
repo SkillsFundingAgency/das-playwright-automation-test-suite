@@ -18,7 +18,7 @@ public class Reviewer_HomePage(ScenarioContext context) : BasePage(context)
     {
         var vacref = objectContext.GetVacancyReference();
 
-        var reviewlocator = page.GetByRole(AriaRole.Link, new() { Name = "Review" });
+        var reviewlocator = page.GetByRole(AriaRole.Link, new() { Name = "Review" , Exact = true});
 
         var reviewLocatorPresent = (await reviewlocator.CountAsync()) > 0 && await reviewlocator.IsEnabledAsync() && await reviewlocator.IsVisibleAsync();
 
