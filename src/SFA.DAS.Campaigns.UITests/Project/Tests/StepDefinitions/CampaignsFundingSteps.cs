@@ -19,7 +19,6 @@ public class CampaignsFundingSteps(ScenarioContext context)
     [When(@"the employer calculates funding selecting ""(.*)"" and standard ""(.*)""")]
     public async Task WhenTheEmployerCalculatesFundingSelecting(string payrollOption, string standard = null)
     {
-        // Ensure page object instance is initialized if previous step came from EmployerHubPage
         _fundingPage ??= new ExploreFundingOptionsPage(context);
 
         if (payrollOption.Equals("Over £3 million", StringComparison.OrdinalIgnoreCase))
