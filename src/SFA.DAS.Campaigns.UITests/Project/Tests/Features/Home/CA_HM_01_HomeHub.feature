@@ -8,30 +8,33 @@
     Then the links are not broken
 
     Examples:
-      # Header Branding & Links
-      | CardName                                         |
-      | Home                                             |
+      # Header Branding & Navigation
+      | CardName                                                 |
+      | Home                                                     |
+      | Apprentices                                              |
+      | Employers                                                |
 
-      # Main Navigation Bar (Header)
-      | Apprentices                                      |
-      | Employers                                        |
+      # Primary Callouts & Hero Cards
+      | Become an apprentice                                     |
+      | Hire an apprentice                                       |
+      | Find an apprenticeship                                   |
 
-      # Primary Hub Callouts & CTA
-      | Become an apprentice                             |
-      | Hire an apprentice                               |
-      | Find an apprenticeship                           |
+      # Lower Homepage Cards & Content Links
+      | Is an apprenticeship right for you?                      |
+      | Join the Apprenticeship Ambassador Network (AAN)         |
+      | Find out if an apprentice is right for your business     |
 
-      # Lower Homepage Cards & Panels
-      | What employers hire apprentices?                 |
-      | Connect with apprentices and employers           |
-      | Resources to inspire and help future apprentices |
+      # Regional Links (Outside England)
+      | Scotland                                                 |
+      | Northern Ireland                                         |
+      | Wales                                                    |
 
       # Footer Links & Policies
-      | Give us feedback                                 |
-      | Sitemap                                          |
-      | Cookies                                          |
-      | Privacy                                          |
-      | Accessibility                                    |
-      | Department for Education                         |
-      | Open Government Licence v3.0                     |
-      | © Crown copyright                                |
+      | Give us feedback                                         |
+      | Sitemap                                                  |
+      | Cookies                                                  |
+      | Privacy                                                  |
+      | Accessibility                                            |
+      | Department for Education                                 |
+      | Open Government Licence v3.0                             |
+      | © Crown copyright                                        |

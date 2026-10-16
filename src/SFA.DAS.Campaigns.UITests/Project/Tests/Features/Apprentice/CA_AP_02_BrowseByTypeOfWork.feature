@@ -1,9 +1,10 @@
-﻿Feature: CA_AP_BrowseByInterests
+﻿Feature: CA_AP_BrowseByTypeOfWork
+Verify navigation to sector pages from the Browse by type of work page.
 
 @campaigns
 @apprentice
-Scenario Outline: Verify navigation to sector pages from Browse by interests
-	Given the user is on the Browse by interests page
+Scenario Outline: Verify navigation to sector pages from Browse by type of work
+	Given the user is on the Browse by type of work page
 	When the user selects the "<SectorName>" sector
 	Then the user should be directed to the "<SectorName>" page
 
