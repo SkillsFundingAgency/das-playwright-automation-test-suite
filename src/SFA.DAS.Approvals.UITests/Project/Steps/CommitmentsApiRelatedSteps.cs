@@ -37,7 +37,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
             var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
             var learningType = apprenticeship.TrainingDetails.LearningType;
-            var learningKey = new Guid().ToString();
+            var learningKey = Guid.NewGuid().ToString();
             var uln = apprenticeship.ApprenticeDetails.ULN;
             var ukprn = apprenticeship.ProviderDetails.Ukprn;
             var effectiveFromDate = DateTime.Now.AddDays(int.Parse(effFromDateDiff)).ToString("yyyy-MM-dd");
