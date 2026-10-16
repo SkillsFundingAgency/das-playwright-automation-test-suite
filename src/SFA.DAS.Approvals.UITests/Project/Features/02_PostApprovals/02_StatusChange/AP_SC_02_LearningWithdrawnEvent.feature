@@ -1,6 +1,6 @@
 ﻿@postapprovals
 @linkedScenarios
-Feature: AP_CoC_02_LearningWithdrawnEvent
+Feature: AP_SC_02_LearningWithdrawnEvent
 
 Commitments receives LearningWithdrawnEvent from Learning domain for variety of reasons. This test validates that event is processed correctly and the apprentice record is updated (stopped) with correct reason code and stop date 
 
@@ -16,7 +16,7 @@ Data Requirements:
 
 
 @regression
-Scenario: AP_CoC_02_Verify Learning Withdrawal Event marks the apprenticeship as Stopped
+Scenario: AP_SC_02_Verify Learning Withdrawal Event marks the apprenticeship as Stopped
     Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "ChangeStatusApprentice"
 	When LearningWithdrawnEvent is received for the apprentice
 	Then Commitments db is updated with the correct reason code and stop date
@@ -27,7 +27,7 @@ Scenario: AP_CoC_02_Verify Learning Withdrawal Event marks the apprenticeship as
 
 
 @regression
-Scenario Outline: AP_CoC_02_WithdrawalEvent emails validation
+Scenario Outline: AP_SC_02_WithdrawalEvent emails validation
 	Given previous test has been completed successfully
 	Then Verify the "<Recipient>" receive "<NotificationType>" email
 
