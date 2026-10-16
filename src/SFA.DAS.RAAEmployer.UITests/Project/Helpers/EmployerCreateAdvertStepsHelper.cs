@@ -141,7 +141,7 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
 
     internal async Task CreateOfflineVacancy()
     {
-        await CreateANewAdvert(true);
+        await CreateANewAdvert(false);
 
         var page = await SearchVacancyByVacancyReference();
 
