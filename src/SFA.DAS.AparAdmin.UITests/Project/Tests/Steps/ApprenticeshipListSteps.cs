@@ -14,6 +14,7 @@ public class ApprenticeshipListSteps
     private readonly SetLastStartDatePage _setLastStartPage;
     private readonly RemoveRestrictionPage _removeRestrictionPage;
     private readonly ApprenticeshipListHelper _apprenticeshipListHelper;
+    private readonly RestrictProviderPage _restrictProviderPage;
 
 
 public ApprenticeshipListSteps(ScenarioContext context)
@@ -25,6 +26,7 @@ public ApprenticeshipListSteps(ScenarioContext context)
     _setLastStartPage = new SetLastStartDatePage(context);
     _removeRestrictionPage = new RemoveRestrictionPage(context);
     _apprenticeshipListHelper = new ApprenticeshipListHelper(context);
+    _restrictProviderPage = new RestrictProviderPage(context);
 }    
 
     [When(@"the user clicks on manage restricted courses")]
@@ -105,11 +107,20 @@ public ApprenticeshipListSteps(ScenarioContext context)
 
     public async Task ThenTheUserRemovedRestrictionsForTheProviderOnTheCourse(string editType, string larsCode)
     {
-         await _apprenticeshipListHelper.ClickChangeCourseDateDetails(larsCode);
+        await _apprenticeshipListHelper.ClickChangeCourseDateDetails(larsCode);
         await _changeRestrictionPage.SelectOption(editType);
         await _apprenticeshipListHelper.ConfirmRemoveCourseRestriction();
         await _removeRestrictionPage.RemoveRestriction();
         await _providerRestrictedCoursesPage.SearchFunctionality(larsCode);
         await _providerRestrictedCoursesPage.VerifyResults(larsCode, "no");
+    }
+
+    [Then(@"the user navigates to an unrestricted provider and changes them to a restricted provider")]
+
+    public async Task ThenTheUserNavigatesToAnUnrestrictedProviderAndChangesThemToARestrictedProvider()
+    {
+        await _apprenticeshipListHelper.ChangeHowWeManageProvider();
+        await _apprenticeshipListHelper.ControlProviderDelivery();
+        await _apprenticeshipListHelper.ConfirmControlProviderDelivery();
     }
 }

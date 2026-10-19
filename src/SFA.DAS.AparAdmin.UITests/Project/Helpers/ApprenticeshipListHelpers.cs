@@ -70,4 +70,30 @@ public class ApprenticeshipListHelper
         return await new AcademicProfessionalPage(_context)
             .VerifyPageAsync( () => new AcademicProfessionalPage(_context));
     }
+
+    public async Task<RestrictProviderPage>ChangeHowWeManageProvider()
+    {
+         var home = new ProviderRestrictedCoursesPage(_context);
+        await home.ChangeProviderDelivery();
+        return await new RestrictProviderPage(_context)
+            .VerifyPageAsync( () => new RestrictProviderPage(_context));
+    }
+
+    public async Task<ConfirmRestrictProviderPage>ControlProviderDelivery()
+    {
+       var home = new RestrictProviderPage(_context);
+       await home.NavigateToConfirmControlProviderDelivery();
+       return await new ConfirmRestrictProviderPage(_context)
+            .VerifyPageAsync( () => new ConfirmRestrictProviderPage(_context));
+
+    }
+    
+    public async Task<AllowedCoursesPage>ConfirmControlProviderDelivery()
+    {
+        var home = new ConfirmRestrictProviderPage(_context);
+        await home.ConfirmProviderRestricted();
+        return await new AllowedCoursesPage(_context)
+            .VerifyPageAsync( () => new AllowedCoursesPage(_context));
+
+    }
 }
