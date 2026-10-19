@@ -1,7 +1,4 @@
-﻿using Microsoft.Playwright;
-using SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Home;
-
-namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
+﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
 
 public class EmployerHubPage(ScenarioContext context) : EmployerBasePage(context)
 {
