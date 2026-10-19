@@ -2,6 +2,7 @@ Feature: APAR_AL_02
 
 @providerrestrictedcourses
 @rpadalup02
+@rpadalup02a
 @apar
 @regression
 Scenario: APAR_AL_02_Restrict a course for a provider
