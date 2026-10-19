@@ -139,5 +139,52 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             string query = $"UPDATE Apprenticeship SET StopDate = '{stopDate.ToString("yyyy-MM-dd")}', WithdrawnReasonCode = 29 WHERE Id = {apprenticeshipId}";
             await ExecuteSqlCommand(query);
         }
+
+                internal async Task<string> GetProviderCohortWhichIsWithEmployer(int ukprn, int EmployerAccountId)
+        {
+            string query = $@"SELECT top (1) Reference
+                                  FROM [dbo].[Commitment]
+                                  Where ProviderId = {ukprn}
+                                  And EmployerAccountId = {EmployerAccountId}
+                                  AND IsDeleted = 0
+                                  And WithParty = 1
+                                  AND ChangeOfPartyRequestId is null
+                                  Order by CreatedOn DESC";
+
+            var result = await GetData(query);
+            return result.FirstOrDefault() ?? string.Empty;
+        }
+
+        
+        internal async Task<string> GetProviderCohortWithChangeOfParty(int ukprn, int EmployerAccountId)
+        {
+            string query = $@"SELECT top (1) Reference
+                                  FROM [dbo].[Commitment]
+                                  Where ProviderId = {ukprn}
+                                  And EmployerAccountId = {EmployerAccountId}
+                                  AND IsDeleted = 0
+                                  And WithParty = 2
+                                  AND ChangeOfPartyRequestId is not null
+                                  Order by CreatedOn DESC";
+
+            var result = await GetData(query);
+            return result.FirstOrDefault() ?? string.Empty;
+        }
+
+       internal async Task<string> GetProviderCohortWithTransferSender(int ukprn)
+        {
+            string query = $@"SELECT top (1) Reference
+                                  FROM [dbo].[Commitment]
+                                  Where ProviderId = {ukprn}                                  
+                                  AND IsDeleted = 0
+                                  And WithParty = 4
+                                  AND ChangeOfPartyRequestId is null
+                                  AND TransferSenderId is not null
+                                  AND TransferApprovalStatus is not null
+                                  Order by CreatedOn DESC";
+
+            var result = await GetData(query);
+            return result.FirstOrDefault() ?? string.Empty;
+        }
     }
 }
