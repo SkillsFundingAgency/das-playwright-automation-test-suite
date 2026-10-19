@@ -13,4 +13,9 @@ public class ProviderRestrictedCoursesPage(ScenarioContext context) : AparAdminB
     {
         await page.GetByRole(AriaRole.Link, new() {Name = "Restrict a course", Exact = true}).ClickAsync();
     }
+
+    public async Task ClickChangeCourseDateDetails(string larsCode)
+    {
+        await page.Locator($"[href*='{larsCode}']").ClickAsync();
+    }
 }
