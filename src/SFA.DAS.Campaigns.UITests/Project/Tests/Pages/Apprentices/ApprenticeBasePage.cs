@@ -7,20 +7,8 @@ public abstract class ApprenticeBasePage(ScenarioContext context) : HubBasePage(
 {
     public virtual async Task<IPage> NavigateToApprenticeCard(string cardName)
     {
-        var cardLink = page.Locator(".fiu-stepper__link, .fiu-card, .fiu-cta-panel")
-                           .Filter(new() { HasText = cardName })
-                           .First;
-
-        if (await cardLink.CountAsync() == 0)
-        {
-            cardLink = page.GetByRole(AriaRole.Link, new() { Name = cardName, Exact = true }).First;
-        }
-
-        await Assertions.Expect(cardLink).ToBeVisibleAsync();
-        await cardLink.ScrollIntoViewIfNeededAsync();
+        var cardLink = page.GetByRole(AriaRole.Link, new() { Name = cardName, Exact = false }).First;
         await cardLink.ClickAsync();
-
-        await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
         return page;
     }
 }
