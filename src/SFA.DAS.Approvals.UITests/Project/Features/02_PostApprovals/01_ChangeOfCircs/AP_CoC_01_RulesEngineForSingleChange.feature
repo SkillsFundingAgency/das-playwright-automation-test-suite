@@ -2,6 +2,7 @@
 
 A short summary of the feature
 
+@api
 @postapprovals
 Scenario: AP_CoC_01_Rules Engine For Single Change
 	Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "CoCApprentice1"
