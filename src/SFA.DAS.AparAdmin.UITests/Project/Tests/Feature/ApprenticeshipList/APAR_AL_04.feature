@@ -7,5 +7,5 @@ Feature: APAR_AL_04
 Scenario: APAR_AL_04_Change a provider from unrestricted to restricted
     Given the provider logs into old apar admin portal
     And the user navigates to training providers page
-   Then the user navigates to an unrestricted provider and changes them to a restricted provider
+   Then the user changes the provider from unrestricted to restricted
     

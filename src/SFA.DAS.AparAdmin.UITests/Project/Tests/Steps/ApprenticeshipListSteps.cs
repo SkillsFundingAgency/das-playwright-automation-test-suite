@@ -115,7 +115,7 @@ public ApprenticeshipListSteps(ScenarioContext context)
         await _providerRestrictedCoursesPage.VerifyResults(larsCode, "no");
     }
 
-    [Then(@"the user navigates to an unrestricted provider and changes them to a restricted provider")]
+    [Then(@"the user changes the provider from unrestricted to restricted")]
 
     public async Task ThenTheUserNavigatesToAnUnrestrictedProviderAndChangesThemToARestrictedProvider()
     {
