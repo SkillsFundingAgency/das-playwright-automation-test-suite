@@ -16,6 +16,7 @@ Data Requirements:
 
 
 @regression
+@statusChange
 Scenario: AP_SC_05_Verify employer can pause/freeze provider payments for AU learner via UI    
 	Given a Live AU learner record exists with Firstname: "DoNotUse_TestData" and LastName: "EmployerDrivenPauseAuLearner"
 	Then employer cannot pause this AU record

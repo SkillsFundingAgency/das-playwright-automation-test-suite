@@ -16,6 +16,7 @@ Data Requirements:
 
 
 @regression
+@statusChange
 Scenario: AP_SC_02_Verify Learning Withdrawal Event marks the apprenticeship as Stopped
     Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "ChangeStatusApprentice"
 	When LearningWithdrawnEvent is received for the apprentice

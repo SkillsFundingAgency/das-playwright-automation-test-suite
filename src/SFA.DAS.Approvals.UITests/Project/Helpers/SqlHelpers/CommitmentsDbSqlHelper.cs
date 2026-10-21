@@ -174,6 +174,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return result.FirstOrDefault() ?? string.Empty;
         }
 
+        internal async Task RestNameInCommitmentsDb(int apprenticeshipId, string firstname, string lastname)
+        { 
+            string query = $@"UPDATE [dbo].[Apprenticeship]
+                            SET FirstName = '{firstname}', LastName = '{lastname}'
+                            WHERE Id = {apprenticeshipId}";
+
+            await ExecuteSqlCommand(query);
+        }
+
 
     }
 }

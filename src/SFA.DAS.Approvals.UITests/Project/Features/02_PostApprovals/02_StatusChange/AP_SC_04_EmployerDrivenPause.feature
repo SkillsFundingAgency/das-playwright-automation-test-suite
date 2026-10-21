@@ -17,6 +17,7 @@ Data Requirements:
 
 
 @regression
+@statusChange
 Scenario: AP_SC_04_Verify employer can pause/freeze provider payments via UI
     Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "EmployerDrivenPauseApprentice"
 	When employer "pause" payments status for the apprenticeship record

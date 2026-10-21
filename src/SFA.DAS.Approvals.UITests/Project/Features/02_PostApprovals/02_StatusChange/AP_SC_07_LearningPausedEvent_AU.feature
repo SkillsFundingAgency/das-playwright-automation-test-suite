@@ -15,6 +15,7 @@ Data Requirements:
 	- Training Course: Any GSO/short-course/AU
 
 #@regression
+@statusChange
 Scenario: AP_SC_07_Verify Learning Paused Event marks the apprenticeship as Paused
 	Given a Live AU learner record exists with Firstname: "DoNotUse_TestData" and LastName: "ChangeAuLearnerStatus_Paused"
 	When LearningPausedEvent is received for the apprentice

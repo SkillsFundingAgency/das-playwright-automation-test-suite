@@ -1,9 +1,40 @@
-﻿namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
+﻿using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
+
+namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
 {
     internal class LearningDbSqlHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.LearningDbConnectionString)
     {
         private readonly DbConfig _dbConfig = dbConfig;
 
+        internal async Task<string> GetLearningKey(int ApprenticeshipId, string ULN, int learningType = 0)
+        {
+            string query;
+
+            if(learningType == 2)
+            {
+                query = $@"  SELECT TOP(1) l.[Key] 
+                                  FROM [dbo].[Learner] l
+                                  INNER JOIN [dbo].[ShortCourseLearning] scl
+                                  ON l.[Key] = scl.[LearnerKey]
+                                  INNER JOIN [dbo].[ShortCourseEpisode] scp
+                                  ON scl.[Key] = scp.[LearningKey]
+                                  WHERE l.Uln = '{ULN}'
+                                  AND scp.ApprovalsApprenticeshipId = {ApprenticeshipId}
+                                  AND scp.IsApproved = 1";
+            }
+            else
+            {
+                query = $@"SELECT TOP(1) l.[Key] FROM [dbo].[Learner] l
+                     JOIN [dbo].[ApprenticeshipLearning] al ON l.[key] = al.LearnerKey
+                     JOIN [dbo].[ApprenticeshipEpisode] ae ON al.[Key] = ae.LearningKey
+                     WHERE l.uln = '{ULN}'
+                     AND ae.ApprovalsApprenticeshipId = {ApprenticeshipId}";
+            }
+            
+            var result = await GetData(query);
+            return result.FirstOrDefault() ?? string.Empty;
+        }
+        /*
         internal async Task<string> CheckIfApprenticeshipRecordCreatedInLearningDb(int ApprenticeshipId, string ULN)
         {
             string query = $@"SELECT TOP(1) l.[Key] FROM [dbo].[Learner] l
@@ -30,5 +61,6 @@
             var result = await GetData(query);
             return result.FirstOrDefault() ?? string.Empty;
         }
+        */
     }
 }

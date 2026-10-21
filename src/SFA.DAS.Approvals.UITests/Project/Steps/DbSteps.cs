@@ -1,6 +1,5 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Globalization;
+﻿using Mailosaur.Models;
+using Microsoft.VisualBasic;
 using Polly;
 using Reqnroll.CommonModels;
 using SFA.DAS.Approvals.UITests.Project.Helpers;
@@ -8,6 +7,8 @@ using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
 using SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers;
+using System;
+using System.Globalization;
 
 namespace SFA.DAS.Approvals.UITests.Project.Steps
 {
@@ -105,9 +106,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                 string result = string.Empty;
 
                 if (learningType == (int)LearningType.ShortCourses)
-                    result = await DbRetryPolicy(getValue: async () => await learningDbSqlHelper.CheckIfShortCourseLearnerRecordUpdatedInLearningDb(apprenticeshipId, uln), 0, "Learning db");
+                    result = await DbRetryPolicy(getValue: async () => await learningDbSqlHelper.GetLearningKey(apprenticeshipId, uln, learningType), 0, "Learning db");
                 else
-                    result = await DbRetryPolicy(getValue: async () => await learningDbSqlHelper.CheckIfApprenticeshipRecordCreatedInLearningDb(apprenticeshipId, uln), 0, "Learning db");
+                    result = await DbRetryPolicy(getValue: async () => await learningDbSqlHelper.GetLearningKey(apprenticeshipId, uln, learningType), 0, "Learning db");
 
                 Assert.IsNotEmpty(result, $"Apprenticeship record not found in Learning Db for ApprenticeshipId: {apprenticeshipId}");
                 apprenticeship.ApprenticeDetails.LearningIdKey = result;
@@ -179,14 +180,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         public async Task GivenALiveApprenticeshipRecordExistsForLearnerWithFirstnameAndLastName(string firstname, string lastname)
         {
             listOfApprenticeship = new List<Apprenticeship>();
-            var additionalWhereFilter = $"AND a.FirstName = '{firstname}' AND a.LastName = '{lastname}'";
+            var additionalWhereFilter = $"AND a.FirstName LIKE '{firstname}%' AND a.LastName LIKE '{lastname}%'";
             await FindApprenticeFromDbAndSaveItInTheContext(EmployerType.Levy, additionalWhereFilter);
 
+            var apprenticeshipId = listOfApprenticeship.FirstOrDefault().ApprenticeDetails.ApprenticeshipId;
+
             //reset the payment status to 1 (Live):
-            await commitmentsDbSqlHelper.ResetPaymentStatus(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.ApprenticeshipId);
+            if (context.ScenarioInfo.Tags.Contains("statusChange"))
+                await commitmentsDbSqlHelper.ResetPaymentStatus(apprenticeshipId);
 
             //clear CoC requests:
-            await commitmentsDbSqlHelper.ClearCocRequestInCommitmentsDb(listOfApprenticeship.FirstOrDefault().ApprenticeDetails.ApprenticeshipId);
+            if (context.ScenarioInfo.Tags.Contains("CocRequest"))
+                await commitmentsDbSqlHelper.ClearCocRequestInCommitmentsDb(apprenticeshipId);
+
+            //trim the first and last name to match the test data:
+            if(context.ScenarioInfo.Tags.Contains("nameChange"))
+                await commitmentsDbSqlHelper.RestNameInCommitmentsDb(apprenticeshipId, firstname, lastname);
         }
 
         [Given(@"a learner record stopped via ILR with startdate of <(.*)> months and endDate of <\+(.*)> months from current date$")]
@@ -402,6 +411,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var providerConfig = context.GetProviderConfig<ProviderConfig>();
             Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortObject(employerType, providerConfig);
             apprenticeship = await commitmentsDbSqlHelper.GetApprenticeDetailsFromCommitmentsDb(apprenticeship, additionalWhereFilter);
+            var learningKey = await learningDbSqlHelper.GetLearningKey(apprenticeship.ApprenticeDetails.ApprenticeshipId, apprenticeship.ApprenticeDetails.ULN, apprenticeship.TrainingDetails.LearningType);
+            learningKey = (learningKey == "") ? null : learningKey;
+            apprenticeship.ApprenticeDetails.LearningIdKey = learningKey
             listOfApprenticeship.Add(apprenticeship);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
         }

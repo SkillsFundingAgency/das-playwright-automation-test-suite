@@ -16,6 +16,7 @@ Data Requirements:
 
 
 @regression
+@statusChange
 Scenario: AP_SC_03a_Verify Learning Withdrawal Event marks the AU learner as Stopped
 	Given a Live AU learner record exists with Firstname: "DoNotUse_TestData" and LastName: "ChangeStatusAuLearner"
 	When LearningWithdrawnEvent is received for the apprentice

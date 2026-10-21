@@ -3,6 +3,8 @@
 A short summary of the feature
 
 @postapprovals
+@CocRequest
+@api
 Scenario: AP_CoC_01_Rules Engine For Single Change
 	Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "CoCApprentice1"
 	When Learning domain sends CoC request via approvals endpoint for below "<Category>": "<changeType>", "<old>", "<new>" and "<effFromDateDiff>"

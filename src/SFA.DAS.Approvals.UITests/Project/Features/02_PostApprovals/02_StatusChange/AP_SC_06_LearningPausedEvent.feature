@@ -16,6 +16,7 @@ Data Requirements:
 
 
 @regression
+@statusChange
 Scenario: AP_SC_06a_Verify Learning Paused Event marks the apprenticeship as Paused
     Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "ChangeApprenticeStatus_Paused"
 	When LearningPausedEvent is received for the apprentice
