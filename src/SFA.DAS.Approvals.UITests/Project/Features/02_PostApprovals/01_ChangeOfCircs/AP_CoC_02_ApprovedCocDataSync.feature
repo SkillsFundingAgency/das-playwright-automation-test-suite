@@ -8,7 +8,7 @@ A short summary of the feature
 Scenario: AP_CoC_02_Approved CoCs Data Sync
 	Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "CoCApprentice2"
 	When Learning domain sends ApprovedLearningUpdatedEvent for below "<Category>": "<changeType>", "<old>" and "<new>"
-	#Then Commitments db is updated immdiately
+	Then "<changeType>" field is updated in Commitments db with the "<new>" value
 
 	Examples: 
 	| Category		| changeType		| old					| new                   | 

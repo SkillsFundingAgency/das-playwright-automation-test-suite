@@ -364,6 +364,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
 
+        [Then(@"^""(.*)"" field is updated in Commitments db with the ""(.*)"" value")]
+        public async Task ThenFieldIsUpdatedInCommitmentsDbWithTheValue(string fieldName, string newValue)
+        {
+            //throw new PendingStepException();
+        }
+
+
+
 
         internal async Task FindAvailableLearner()
         {
@@ -412,8 +420,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             Apprenticeship apprenticeship = await apprenticeDataHelper.CreateEmptyCohortObject(employerType, providerConfig);
             apprenticeship = await commitmentsDbSqlHelper.GetApprenticeDetailsFromCommitmentsDb(apprenticeship, additionalWhereFilter);
             var learningKey = await learningDbSqlHelper.GetLearningKey(apprenticeship.ApprenticeDetails.ApprenticeshipId, apprenticeship.ApprenticeDetails.ULN, apprenticeship.TrainingDetails.LearningType);
-            learningKey = (learningKey == "") ? null : learningKey;
-            apprenticeship.ApprenticeDetails.LearningIdKey = learningKey
+            learningKey = (learningKey == "") ? Guid.NewGuid().ToString() : learningKey;
+            apprenticeship.ApprenticeDetails.LearningIdKey = learningKey;
             listOfApprenticeship.Add(apprenticeship);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
         }
