@@ -8,5 +8,8 @@ When the Provider creates a vacancy with "all location types" work locations and
 Then the Provider can navigate to Manage your recruitment emails page
 And the Provider views the recruitment API key
 
+@raa	
+@raaprovider
+@accessibility
 Scenario: RAA_P_AC_01_2 - Validation error on vacancy title field
 Given the Provider sees a validation error when leaving the vacancy title blank
