@@ -90,11 +90,36 @@ public class ManageTrainingProvidersLinkHomePage(ScenarioContext context) : Home
 
 public class ManageTrainingProvidersPage(ScenarioContext context) : EmployerPortalBasePage(context)
 {
+    string GetProviderName()
+    {
+        var providerConfig = context.GetProviderConfig<ProviderConfig>();
+        return providerConfig.Name;
+    }
+
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training providers");
 
     private static string ChangePermissionsLink(string ukprn) => $"a[href*='providers/{ukprn}/changePermissions?']";
 
     private static string NotificationBanner => ".govuk-notification-banner";
+
+    private ILocator RecruitApprenticesCell() => page.Locator($"tr:has(td:has-text('{GetProviderName()}'))")
+        .Locator("td[headers='recruit-apprentices']");
+    public async Task<bool> IsRecruitPermissionsSetToNo()
+    {
+        var text = await RecruitApprenticesCell().TextContentAsync();
+        return text?.Trim() == "No";
+    }
+
+    public async Task<bool> IsRecruitPermissionsSetToYes()
+    {
+        var text = await RecruitApprenticesCell().TextContentAsync();
+        return text?.Trim() == "Yes";
+    }
+    public async Task<bool> IsRecruitPermissionsSetToReview()
+    {
+        var text = await RecruitApprenticesCell().TextContentAsync();
+        return text?.Trim() == "Yes, employer will review adverts";
+    }
 
     public async Task VerifyYouHaveAddedNotification(string providerName)
     {

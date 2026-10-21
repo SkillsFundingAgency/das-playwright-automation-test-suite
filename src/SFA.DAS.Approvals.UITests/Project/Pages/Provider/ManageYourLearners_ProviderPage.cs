@@ -4,6 +4,10 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
     internal class ManageYourLearners_ProviderPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
+        #region locators
+        private ILocator cell(string label) => page.Locator($"td[data-label='{label}']").First;
+        #endregion
+
         public override async Task VerifyPage()
         {
             await Assertions.Expect(page.Locator("h1").First).ToContainTextAsync("Manage your learners");
@@ -36,7 +40,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         }
 
-        internal async Task SearchApprentice(string ULN)
+        internal async Task<ManageYourLearners_ProviderPage> SearchApprentice(string ULN)
         {
             var searchBox = page.Locator("input#searchTerm[name='searchTerm']");
             var searchButton = page.Locator("button.govuk-button.das-search-form__button", new() { HasTextString = "Search" });
@@ -44,6 +48,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await searchBox.FillAsync("");
             await searchBox.FillAsync(ULN);
             await searchButton.ClickAsync();
+            return this;
         }
 
         internal async Task<ApprenticeDetails_ProviderPage> OpenFirstItemFromTheList(string name)
@@ -58,6 +63,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new ManageYourLearners_ProviderPage(context));
         }
 
+        internal async Task<string> GetEmploymentStatus() => await cell("Employment status").InnerTextAsync();
 
     }
 }

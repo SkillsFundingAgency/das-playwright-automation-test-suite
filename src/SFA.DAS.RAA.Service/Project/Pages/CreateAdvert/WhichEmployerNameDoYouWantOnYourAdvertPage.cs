@@ -6,7 +6,7 @@ public class WhichEmployerNameDoYouWantOnYourAdvertPage(ScenarioContext context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEpc ? "What employer name do you want on the vacancy?" : 
+        string PageTitle = (isRaaEpc || isRaaTransfer) ? "What employer name do you want on the vacancy?" : 
             isRaaEmployer ? "What employer name do you want on your advert?" : "What employer name do you want on the vacancy?";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
@@ -166,7 +166,7 @@ public class ContactDetailsPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEpc ? "Do you want to add your contact details?" :
+        string PageTitle = (isRaaEpc || isRaaTransfer) ? "Do you want to add your contact details?" :
             isRaaEmployer ? $"Contact details for {objectContext.GetEmployerName()} (optional)" : "Do you want to add your contact details?";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);

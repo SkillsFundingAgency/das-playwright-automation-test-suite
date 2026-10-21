@@ -12,7 +12,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         #region Locators        
         private ILocator EditApprenticeDetailsLink => page.Locator("#edit-apprentice-link");
-        private ILocator ManageYourApprenticesLinks => page.GetByRole(AriaRole.Link, new() { Name = "Manage your apprentices" });
+        private ILocator ManageLearnersLinks => page.GetByRole(AriaRole.Link, new() { Name = "Manage learners" });
         private ILocator Banner(string Header, string Body) => page.GetByLabel(Header).Locator("div").Filter(new() { HasText = Body });
         private ILocator ReviewChangesLink => page.GetByRole(AriaRole.Link, new() { Name = "Review changes" });
         private ILocator ViewChangesLink => page.GetByRole(AriaRole.Link, new() { Name = "View changes" });
@@ -20,6 +20,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator ViewChangeHistoryLink => page.GetByRole(AriaRole.Link, new() { Name = "View change history for this learner." });
         private ILocator ChangeEmployerLink => page.Locator("#change-employer-link");
         private ILocator ChangeVersionLink => page.Locator("#change-version-link");
+        private ILocator EmploymentStatus => page.Locator("id=employment-status");
 
         #endregion
 
@@ -62,7 +63,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<ManageYourLearners_ProviderPage> ReturnBackToManageYourApprenticesPage()
         {
-            await ManageYourApprenticesLinks.ClickAsync();
+            await ManageLearnersLinks.ClickAsync();
             return await VerifyPageAsync(() => new ManageYourLearners_ProviderPage(context));
         }
 
@@ -100,6 +101,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task<bool> IsChangeOfEmployerLinkVisible() => await ChangeEmployerLink.IsVisibleAsync();
         internal async Task<bool> IsChangeOfVersionLinkVisible() => await ChangeVersionLink.IsVisibleAsync();
         internal async Task<bool> IsEditApprenticeDetailsLinkVisible() => await EditApprenticeDetailsLink.IsVisibleAsync();
+        internal async Task<bool> IsEmploymentStatusVisible() => await EmploymentStatus.IsVisibleAsync();
+        internal async Task<string> GetEmploymentStatus() => await EmploymentStatus.InnerTextAsync();
+        
 
     }
 }

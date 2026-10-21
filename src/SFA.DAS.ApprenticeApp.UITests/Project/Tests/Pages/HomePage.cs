@@ -12,7 +12,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 
         public async Task<StubSignInPage> AppSignInAsync()
         {
-            await page.Locator(SignInButton).ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = "Sign in" }).ClickAsync();
             return await VerifyPageAsync(() => new StubSignInPage(context));
         }
     }

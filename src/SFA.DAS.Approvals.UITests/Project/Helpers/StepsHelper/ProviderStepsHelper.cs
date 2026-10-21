@@ -1,9 +1,9 @@
-﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
+﻿using System;
+using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Pages.Provider;
 using SFA.DAS.Approvals.UITests.Project.Steps;
 using SFA.DAS.ProviderLogin.Service.Project.Helpers;
 using SFA.DAS.ProviderLogin.Service.Project.Pages;
-using System;
 
 namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 {
@@ -50,13 +50,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await page2.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<CheckApprenticeDetailsPage> TryAddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
+        internal async Task<CheckLearnerDetailsPage> TryAddFirstApprenticeFromILRList(SelectLearnerFromILRPage selectApprenticeFromILRPage)
         {
             listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var apprenticeship = listOfApprenticeship.FirstOrDefault();
             var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
             await page.ClickAddButton();
-            return await page.VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));
+            return await page.VerifyPageAsync(() => new CheckLearnerDetailsPage(context));
+        }
+
+        internal async Task<ConfirmDetailsPage> ConfirmDetailsAfterApprenticeAddFromIlRList(CheckLearnerDetailsPage checkLearnerDetailsPage)
+        {
+            await checkLearnerDetailsPage.ClickOnButton("Add");
+            return await checkLearnerDetailsPage.VerifyPageAsync(() => new ConfirmDetailsPage(context));
         }
 
         internal async Task<ApproveApprenticeDetailsPage> AddOtherApprenticesFromILRList(ApproveApprenticeDetailsPage approveApprenticeDetailsPage)
@@ -177,12 +183,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return await approveApprenticeDetailsPage.VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
-        internal async Task<CheckApprenticeDetailsPage> ProviderCreateACohortViaIlrRouteWithInvalidDoB()
+        internal async Task<CheckLearnerDetailsPage> ProviderCreateACohortViaIlrRouteWithInvalidDoB()
         {
             var page = await GoToSelectApprenticeFromILRPage();
             var page1 = await TryAddFirstApprenticeFromILRList(page);
 
-            return await page1.VerifyPageAsync(() => new CheckApprenticeDetailsPage(context));
+            return await page1.VerifyPageAsync(() => new CheckLearnerDetailsPage(context));
         }
 
         internal async Task<ApprenticeRequests_ProviderPage> ProviderCreateAndApproveACohortViaIlrRoute()
@@ -367,6 +373,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await learnerDataOuterApiSteps.SLDPushDataIntoAS();
         }
 
+        internal async Task<CheckLearnerDetailsPage> AddFirstApprenticeFromILRListForExistingWithdrawnApprentice(SelectLearnerFromILRPage selectApprenticeFromILRPage)
+        {
+            listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            var apprenticeship = listOfApprenticeship.FirstOrDefault();
+            var page = await selectApprenticeFromILRPage.SelectApprenticeFromILRList(apprenticeship);
+            return await page.VerifyPageAsync(() => new CheckLearnerDetailsPage(context));
+        }
 
     }
 

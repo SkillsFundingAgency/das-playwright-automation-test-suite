@@ -6,7 +6,7 @@ public class ManageApplicantPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        if(context.ScenarioInfo.Tags.Contains("raa-epc"))
+        if(context.ScenarioInfo.Tags.IsRaaEpc())
         {
             await Assertions.Expect(page.Locator(".govuk-caption-l")).ToContainTextAsync(rAADataHelper.VacancyTitle);
         }

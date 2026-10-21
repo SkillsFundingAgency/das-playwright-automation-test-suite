@@ -54,7 +54,8 @@ public class CloseVacancyPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "Are you sure you want to close this advert on Find an apprenticeship?" : "Are you sure you want to close this vacancy on Find an apprenticeship?";
+        string PageTitle = isRaaTransfer ? "Are you sure you want to close this vacancy on Find an apprenticeship?"
+            : isRaaEmployer ? "Are you sure you want to close this advert on Find an apprenticeship?" : "Are you sure you want to close this vacancy on Find an apprenticeship?";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
@@ -73,7 +74,7 @@ public class ArchiveVacancyPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? "Do you want to archive this advert?" : "Do you want to archive this vacancy?";
+        string PageTitle = isRaaTransfer ? "Do you want to archive this vacancy?" : isRaaEmployer ? "Do you want to archive this advert?" : "Do you want to archive this vacancy?";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
@@ -92,10 +93,15 @@ public class ManageCloseVacancyPage(ScenarioContext context) : RaaBasePage(conte
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = isRaaEmployer ? $"Advert VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed."
+        string PageTitle = isRaaTransfer ? $"Vacancy VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed."
+            : isRaaEmployer ? $"Advert VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed."
             : $"Vacancy VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed.";
 
+        var closingDateRow = page.Locator(".govuk-summary-list__row").Filter(new() { HasText = "Closing date" });
+
         await Assertions.Expect(page.Locator(".govuk-notification-banner--success").GetByRole(AriaRole.Heading, new() { Level = 3 })).ToContainTextAsync(PageTitle);
+
+        await Assertions.Expect(closingDateRow.Locator(".govuk-summary-list__value")).ToContainTextAsync(DateTime.Today.ToString("d MMM yyyy"));
     }
 }
 

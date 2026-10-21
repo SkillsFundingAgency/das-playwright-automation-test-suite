@@ -1,0 +1,28 @@
+﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
+
+public class ExploreFundingOptionsPage(ScenarioContext context) : EmployerBasePage(context)
+{
+    public override async Task VerifyPage() =>
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Explore funding options");
+
+    public async Task SelectUnder3Million() => await CalculateFunding(false);
+
+    public async Task SelectOver3Million() => await CalculateFunding(true);
+
+    private async Task CalculateFunding(bool isOver3Million)
+    {
+        await page.GetByLabel(isOver3Million ? "Over £3 million" : "Under £3 million").CheckAsync();
+
+        var autocompleteInput = page.Locator("#StandardUid");
+
+        await autocompleteInput.FillAsync("Software developer");
+
+        await page.GetByRole(AriaRole.Option, new() { Name = "Software developer (Level 4)", Exact = false }).First.ClickAsync();
+
+        await page.GetByLabel("How many roles do you have").FillAsync("2");
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Calculate funding" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator("#funding")).ToContainTextAsync("Your estimated funding");
+    }
+}

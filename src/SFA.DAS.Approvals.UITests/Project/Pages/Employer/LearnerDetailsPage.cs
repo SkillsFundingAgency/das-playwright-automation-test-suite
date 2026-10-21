@@ -24,6 +24,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         private ILocator ChangePaymentsStatusLink => page.Locator("#change-payments-link");
         private ILocator StatusDateTitle => page.Locator("table:nth-of-type(1) tr:nth-of-type(2) th").First;
         private ILocator StatusDateValue => page.Locator("table:nth-of-type(1) tr:nth-of-type(2) td").First;
+        private ILocator EmploymentStatus => page.Locator("id=employment-status");
         #endregion
 
 
@@ -102,6 +103,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
         internal async Task<bool> IsEditVersionLinkAvailable() => await ChangeVersionLink.IsVisibleAsync();
         internal async Task<bool> IsEditPlannedTrainingEndDateLinkAvailable() => await EditPlannedTrainingEndDateLink.IsVisibleAsync();
         internal async Task<bool> IsPymtStatusVisible() => await PaymentsStatusTag.IsVisibleAsync();
+        internal async Task<bool> IsEmploymentStatusVisible() => await EmploymentStatus.IsVisibleAsync();
+        internal async Task<string> GetEmploymentStatus() => await EmploymentStatus.InnerTextAsync();
     }
 
 }

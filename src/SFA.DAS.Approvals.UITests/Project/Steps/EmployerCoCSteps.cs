@@ -94,14 +94,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     await employerStepsHelper.EmployerPausePayments(page1, apprenticeship);
                     await page1.EmployerVerifyPaymentStatus(PaymentStatus.Paused);
                     var page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
-                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payments paused - Learner is on a break", "Manual update");
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payment changed from Active to Paused - Learner is on a break", "Manual update");
                     await page2.ClickViewLearnerDetailsLink();
                     break;
                 case "unpause":
                     await employerStepsHelper.EmployerResumePayments(page1, apprenticeship);
                     await page1.EmployerVerifyPaymentStatus(PaymentStatus.Active);
                     page2 = await page1.ClickOnViewChangeHistoryLink(fullName);
-                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payments resumed", "Manual update");
+                    await page2.AssertChangeHistoryRow(DateTime.Now, "Payment changed from Paused to Active", "Manual update");
                     await page2.ClickViewLearnerDetailsLink();
                     break;
                 default:
@@ -130,6 +130,40 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             Assert.False(await page1.IsChangeProviderLinkAvailable(), "IsChangeProviderLinkAvailable");
             Assert.True(await page1.IsEditApprenticeDetailsLinkAvailable(), "IsEditApprenticeDetailsLinkAvailable");
             Assert.False(await page1.IsEditPlannedTrainingEndDateLinkAvailable(), "IsEditPlannedTrainingEndDateLinkAvailable");
+        }
+
+
+        [Then(@"^employer verifies that Employment Status is ""(.*)""$")]
+        [Then(@"^employer verifies that Employment Verification section is ""(.*)""$")]
+        public async Task ThenEmployerVerifiesThatEmploymentVerificationSectionIs(string expectedEmploymentStatus)
+        {
+            var apprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var fullName = apprenticeship.ApprenticeDetails.FullName;
+
+            //verify employment status on manage your learners page:
+            var page = await employerStepsHelper.CheckLearnerOnManageYourLearnersPage(true);
+            var actualEmploymentStatus = await page.GetEmploymentStatus();            
+            
+            if (expectedEmploymentStatus == "blank")
+            {
+                Assert.IsTrue(await page.GetEmploymentStatus() == "", "Employment Verification status on 'Manage your learners' page");
+            }
+            else
+            {
+                Assert.IsTrue(await page.GetEmploymentStatus() == expectedEmploymentStatus, "Employment Verification status on 'Manage your learners' page");
+            }
+
+            //verify employment status on learner details page:
+            var page1 = await page.OpenFirstItemFromTheList(fullName);
+            if (expectedEmploymentStatus == "blank")
+            {
+                Assert.IsFalse(await page1.IsEmploymentStatusVisible(), "Employment Verification status is not visible on 'Learner details' page");
+            }
+            else
+            {
+                Assert.IsTrue(await page1.GetEmploymentStatus() == expectedEmploymentStatus, "Employment Verification status on 'Learner details' page");
+            }
+
         }
 
 
