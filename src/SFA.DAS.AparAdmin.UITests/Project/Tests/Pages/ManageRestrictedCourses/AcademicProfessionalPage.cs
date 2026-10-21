@@ -31,20 +31,6 @@ public class AcademicProfessionalPage(ScenarioContext context) : AparAdminBasePa
         await Assertions.Expect(dateDisplay.Locator(".das-definition-list__definition")).ToContainTextAsync(date);
     }
 
-    public async Task AssertBanner(string UKPRN, string bannerMessage)
-    {
-        var child = page.Locator("dd", new PageLocatorOptions { HasTextString = UKPRN });
-        var listItem = child.Locator("../..");
-        string banner = bannerMessage switch
-        {
-            "Last start date added" => ".govuk-tag--orange",
-            "Closed to new starts"  => ".govuk-tag--grey",
-            "Open to new starts"   => ".govuk-tag--green",
-             _        => throw new ArgumentException($"Unknown message type: {bannerMessage}")
-        };
-        await Assertions.Expect(listItem.Locator(banner)).ToContainTextAsync(bannerMessage);   
-    }
-
     public async Task AddTrainingProvider()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Add a training provider"}).ClickAsync();

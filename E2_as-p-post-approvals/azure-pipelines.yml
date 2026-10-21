@@ -14,8 +14,12 @@ variables:
     value: "SFA.DAS.Approvals.UITests"
   - name: RuleName
     value: "E2_as-post-approvals-test-suite"
+  - name: RuleName2
+    value: "E2_as-post-approvals-test-suite2"
   - name: ResourceName
     value: "$(EmployerAccountsAppWhitelistName)"
+  - name: ResourceName2
+    value: "$(CommitmentsAppWhitelistName)"
 
 resources:
   repositories:
@@ -28,8 +32,13 @@ resources:
     - repository: das-platform-automation
       type: github
       name: SkillsFundingAgency/das-platform-automation
-      ref: refs/tags/5.1.26
+      ref: refs/tags/5.1.27
       endpoint: SkillsFundingAgency
+  pipelines:
+    - pipeline: das-employer-config
+      project: Digital Apprenticeship Service
+      source: das-employer-config
+      branch: master
 
 pool:
   vmImage: 'windows-latest'
@@ -41,5 +50,8 @@ stages:
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
       RuleName: $(RuleName)
+      RuleName2: $(RuleName2)
       ResourceName: $(ResourceName)
+      ResourceName2: $(ResourceName2)
       WhiteListFunction: true
+      ApplyAppRoleAssignments: true
