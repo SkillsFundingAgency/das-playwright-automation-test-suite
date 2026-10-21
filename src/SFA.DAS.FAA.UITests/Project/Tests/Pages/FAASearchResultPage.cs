@@ -55,6 +55,10 @@ public class FAASearchResultPage(ScenarioContext context) : FAASignedInLandingBa
     {
         var vacancyTitle = objectContext.Get<string>("vacancyTitle");
 
+        await page.Locator("#SearchTerm").FillAsync(vacancyTitle);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Apply filters" }).First.ClickAsync();
+
         await page.GetByRole(AriaRole.Button, new() { Name = "Save   to your favourites" }).First.ClickAsync();
 
         await page.GetByRole(AriaRole.Link, new() { Name = "Saved vacancies" }).ClickAsync();

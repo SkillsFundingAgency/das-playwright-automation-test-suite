@@ -3,8 +3,10 @@ Feature: RAA_P_AC_01
 @raa	
 @raaprovider
 @accessibility
-Scenario: RAA_P_AC_01 - Create a vacancy navigating through all location types and wage types pages, including a validation error
+Scenario: RAA_P_AC_01_1 - Create a vacancy navigating through all location types and wage types pages
 When the Provider creates a vacancy with "all location types" work locations and "all wage types" wage type
 Then the Provider can navigate to Manage your recruitment emails page
 And the Provider views the recruitment API key
-And the Provider sees a validation error when leaving the vacancy title blank
+
+Scenario: RAA_P_AC_01_2 - Validation error on vacancy title field
+Given the Provider sees a validation error when leaving the vacancy title blank

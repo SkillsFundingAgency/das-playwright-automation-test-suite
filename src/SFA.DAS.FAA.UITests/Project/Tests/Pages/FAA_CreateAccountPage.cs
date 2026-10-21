@@ -38,6 +38,23 @@ public class WhatIsYourNamePage(ScenarioContext context) : FAABasePage(context)
         await Assertions.Expect(page.Locator(".govuk-error-summary")).ToContainTextAsync("Enter your last name");
     }
 
+}
+
+public class ChangeYourNamePage(ScenarioContext context) : FAABasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change your name");
+
+    public async Task TriggerLastNameValidationError()
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Last name" }).FillAsync(string.Empty);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator(".govuk-error-summary")).ToContainTextAsync("There is a problem");
+
+        await Assertions.Expect(page.Locator(".govuk-error-summary")).ToContainTextAsync("Enter your last name");
+    }
+
     public async Task<SettingPage> SaveNameChange()
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "First name" }).FillAsync(fAAUserNameDataHelper.FirstName);
@@ -50,7 +67,7 @@ public class WhatIsYourNamePage(ScenarioContext context) : FAABasePage(context)
     }
 }
 
-public class DateOfBirthPage(ScenarioContext context) : FAABasePage(context)
+    public class DateOfBirthPage(ScenarioContext context) : FAABasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Date of birth");
 
@@ -68,24 +85,29 @@ public class DateOfBirthPage(ScenarioContext context) : FAABasePage(context)
 
         return await VerifyPageAsync(() => new WhatIsYourAddressPage(context));
     }
-
-    public async Task<SettingPage> SaveDateOfBirthChange()
-    {
-        var dob = fAAUserNameDataHelper.FaaNewUserDob;
-
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Day" }).FillAsync($"{dob.Day}");
-
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Month" }).FillAsync($"{dob.Month}");
-
-        await page.GetByRole(AriaRole.Textbox, new() { Name = "Year" }).FillAsync($"{dob.Year}");
-
-        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
-
-        return await VerifyPageAsync(() => new SettingPage(context));
-    }
 }
 
-public class WhatIsYourAddressPage(ScenarioContext context) : FAABasePage(context)
+    public class ChangeDateOfBirthPage(ScenarioContext context) : FAABasePage(context)
+    {
+        public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change your date of birth");
+
+        public async Task<SettingPage> SaveDateOfBirthChange()
+        {
+            var dob = fAAUserNameDataHelper.FaaNewUserDob;
+
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Day" }).FillAsync($"{dob.Day}");
+
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Month" }).FillAsync($"{dob.Month}");
+
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Year" }).FillAsync($"{dob.Year}");
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new SettingPage(context));
+        }
+    }
+
+    public class WhatIsYourAddressPage(ScenarioContext context) : FAABasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What is your address?");
 
@@ -140,7 +162,34 @@ public class WhatIsYourAddressPage(ScenarioContext context) : FAABasePage(contex
     }
 }
 
-public class WhatIsYourTelephoneNumberPage(ScenarioContext context) : FAABasePage(context)
+public class ChangeYourAddressPage(ScenarioContext context) : FAABasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change your address?");
+
+    private static string Address => ("#SelectedAddress");
+    public async Task<SettingPage> SaveAddressChange()
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "UK postcode" }).FillAsync(fAAUserNameDataHelper.FaaNewUserPostCode);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Find my address" }).ClickAsync();
+
+        var alloptionstexts = await AllTextAsync($"{Address} option");
+
+        alloptionstexts = [.. alloptionstexts.ToList().Select(x => x.RemoveMultipleSpace())];
+
+        var allOptions = alloptionstexts.Where(x => x != "Select address").ToList();
+
+        var option = RandomDataGenerator.GetRandomElementFromListOfElements(allOptions);
+
+        await page.GetByLabel("Select an address from the").SelectOptionAsync(option);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+
+        return await VerifyPageAsync(() => new SettingPage(context));
+    }
+}
+
+    public class WhatIsYourTelephoneNumberPage(ScenarioContext context) : FAABasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What is your telephone number?");
 
@@ -157,6 +206,12 @@ public class WhatIsYourTelephoneNumberPage(ScenarioContext context) : FAABasePag
         return await VerifyPageAsync(() => new GetRemindersAboutYourUnfinishedApplicationsPage(context));
     }
 
+}
+
+public class ChangeYourTelephoneNumberPage(ScenarioContext context) : FAABasePage(context)
+{
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change your telephone number");
+
     public async Task<SettingPage> SaveTelephoneNumberChange()
     {
         var number = fAAUserNameDataHelper.FaaNewUserMobilePhone;
@@ -169,7 +224,7 @@ public class WhatIsYourTelephoneNumberPage(ScenarioContext context) : FAABasePag
     }
 }
 
-public class GetRemindersAboutYourUnfinishedApplicationsPage(ScenarioContext context) : FAABasePage(context)
+    public class GetRemindersAboutYourUnfinishedApplicationsPage(ScenarioContext context) : FAABasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync("Get reminders about your unfinished applications");
 

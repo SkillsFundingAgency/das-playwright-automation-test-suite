@@ -69,7 +69,7 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
     [Given(@"^the Employer creates a advert with ""(.*)"" work location and '(.*)' wage type$")]
     public async Task GivenTheEmployerCreatesAnAdvertWithWorkLocationAndWageType(string locationType, string wageType) => await _employerCreateVacancyStepsHelper.CreateANewAdvert_LocationAndWageType(locationType, wageType);
 
-    [Then(@"^the Employer sees a validation error when leaving the vacancy title blank$")]
+    [Given(@"^the Employer sees a validation error when leaving the vacancy title blank$")]
     public async Task ThenTheEmployerSeesAValidationErrorWhenLeavingTheVacancyTitleBlank() => await _employerCreateVacancyStepsHelper.TriggerVacancyTitleValidationErrorAndCancelAdvert();
 
 }

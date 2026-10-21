@@ -100,9 +100,16 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
 
     public async Task<FAASearchResultPage> SearchRandomVacancyAndGetVacancyTitle()
     {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Search" }).ClickAsync();
+
         await page.Locator(SearchFAA).ClickAsync();
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Apprenticeship type , Show" }).ClickAsync();
+        var apprenticeshipTypeButton = page.GetByRole(AriaRole.Button, new() { NameRegex = new Regex("Apprenticeship type") });
+
+        if (await apprenticeshipTypeButton.GetAttributeAsync("aria-expanded") == "false")
+        {
+            await apprenticeshipTypeButton.ClickAsync();
+        }
 
         await page.GetByRole(AriaRole.Checkbox, new() { Name = "Apprenticeship", Exact = true }).CheckAsync();
 
@@ -146,7 +153,10 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
 
         var vacancyTitle = RandomDataGenerator.GetRandom(allvacancy);
 
-        objectContext.Set("vacancyTitle", vacancyTitle);
+        if (!objectContext.KeyExists<string>("vacancyTitle") || string.IsNullOrEmpty(objectContext.Get("vacancyTitle")))
+        {
+            objectContext.Set("vacancyTitle", vacancyTitle);
+        }
 
         return await VerifyPageAsync(() => new FAASearchResultPage(context));
     }

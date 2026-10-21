@@ -25,32 +25,32 @@ public class SettingPage(ScenarioContext context) : FAASignedInLandingBasePage(c
         await Assertions.Expect(page.Locator("main")).ToContainTextAsync(fAAUserNameDataHelper.FaaNewUserMobilePhone);
     }
 
-    public async Task<WhatIsYourNamePage> ChangeName()
+    public async Task<ChangeYourNamePage> ChangeName()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Change name" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new WhatIsYourNamePage(context));
+        return await VerifyPageAsync(() => new ChangeYourNamePage(context));
     }
 
-    public async Task<DateOfBirthPage> ChangeDateOfBirth()
+    public async Task<ChangeDateOfBirthPage> ChangeDateOfBirth()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Change date of birth" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new DateOfBirthPage(context));
+        return await VerifyPageAsync(() => new ChangeDateOfBirthPage(context));
     }
 
-    public async Task<WhatIsYourAddressPage> ChangeAddress()
+    public async Task<ChangeYourAddressPage> ChangeAddress()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Change address" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new WhatIsYourAddressPage(context));
+        return await VerifyPageAsync(() => new ChangeYourAddressPage(context));
     }
 
-    public async Task<WhatIsYourTelephoneNumberPage> ChangeTelephoneNumber()
+    public async Task<ChangeYourTelephoneNumberPage> ChangeTelephoneNumber()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Change telephone number" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new WhatIsYourTelephoneNumberPage(context));
+        return await VerifyPageAsync(() => new ChangeYourTelephoneNumberPage(context));
     }
 
     public async Task<ChangeEmailPage> ViewEmailSettings()
@@ -100,7 +100,7 @@ public class ChangeEmailPage(ScenarioContext context) : FAABasePage(context)
 
     public async Task<SettingPage> GoBackToSettings()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Back" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back" , Exact = true}).ClickAsync();
 
         return await VerifyPageAsync(() => new SettingPage(context));
     }
@@ -108,7 +108,7 @@ public class ChangeEmailPage(ScenarioContext context) : FAABasePage(context)
 
 public class ChangeNotificationPreferencesPage(ScenarioContext context) : FAABasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change if you get reminders about your unfinished applications");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-l")).ToContainTextAsync("Change if you get reminders about your unfinished applications");
 
     public async Task<SettingPage> SelectNoAndSave()
     {
@@ -122,7 +122,7 @@ public class ChangeNotificationPreferencesPage(ScenarioContext context) : FAABas
 
 public class SearchAlertsPage(ScenarioContext context) : FAABasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Search alerts");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-l")).ToContainTextAsync("Search alerts");
 
     public async Task VerifyNoSearchAlertsCreated() =>
         await Assertions.Expect(page.Locator("main")).ToContainTextAsync("You have not created any search alerts.");

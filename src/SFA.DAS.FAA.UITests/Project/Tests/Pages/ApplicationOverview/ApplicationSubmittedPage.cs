@@ -22,7 +22,7 @@ public class ApplicationSubmittedPage(ScenarioContext context) : FAABasePage(con
 
 public class SexAndGenderIdentityPage(ScenarioContext context) : FAABasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Sex and gender identity");
+    public override async Task VerifyPage() => await Assertions.Expect(page.Locator(".govuk-heading-l")).ToContainTextAsync("Sex and gender identity");
 
     public async Task<EthnicGroupPage> SubmitSexAndGenderIdentity()
     {
