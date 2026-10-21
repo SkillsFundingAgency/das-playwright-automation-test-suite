@@ -27,7 +27,7 @@ namespace SFA.DAS.Campaigns.UITests.Project.Tests.StepDefinitions
         {
             var page = await GoToApprenticeshipHubPage();
 
-            await page.NavigateToApprenticeCard("Browse by interest");
+            await page.NavigateToApprenticeCard("Browse by interests");
         }
 
         [Given(@"^the user navigates to the Site Map page$")]

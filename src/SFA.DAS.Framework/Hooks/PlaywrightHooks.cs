@@ -31,6 +31,14 @@ public class PlaywrightHooks(ScenarioContext context)
     {
         _objectContext = _context.Get<ObjectContext>();
 
+        // If scenario is API-only → skip browser setup
+        if (_context.ScenarioInfo.Tags.Contains("api"))
+        {
+            _objectContext.SetConsoleAndDebugInformation("Entered Skipping SetupPlaywrightDriver setup| Order = 8 hook");
+            _context.Set<Driver>(new NullDriver(_objectContext));
+            return;
+        }
+
         _objectContext.SetConsoleAndDebugInformation("Entered SetupPlaywrightDriver Order = 8 hook");
 
         var browserType = await CreateDriver(_playwright, _browserType);
@@ -66,7 +74,7 @@ public class PlaywrightHooks(ScenarioContext context)
     {
         var x = _context.TryGetValue(out Driver driver);
 
-        if (!x) return;
+        if (!x || driver.Browser == null) return;
 
         _objectContext.SetConsoleAndDebugInformation("Entered TearDownPlaywrightDriver Order = 100 hook");
 

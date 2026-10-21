@@ -2,6 +2,7 @@
 
 A short summary of the feature
 
+@api
 @postapprovals
 @CocRequest
 @api

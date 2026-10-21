@@ -1,10 +1,9 @@
-﻿using Microsoft.Playwright;
+﻿namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
 
-namespace SFA.DAS.Campaigns.UITests.Project.Tests.Pages.Employer;
-
-public class UnderstandingApprenticeshipBenefitsFundingPage(ScenarioContext context) : EmployerBasePage(context)
+public class ExploreFundingOptionsPage(ScenarioContext context) : EmployerBasePage(context)
 {
-    public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Understanding apprenticeship benefits and funding");
+    public override async Task VerifyPage() =>
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Explore funding options");
 
     public async Task SelectUnder3Million() => await CalculateFunding(false);
 
