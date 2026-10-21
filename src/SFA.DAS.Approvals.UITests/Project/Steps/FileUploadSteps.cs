@@ -168,14 +168,11 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.VerifyCorrectInformationIsDisplayed(apprenticeships);
         }
 
-        // [Then(@"Provider approves the cohorts and send them to employer to approve")]
-        // public async Task WhenProviderApprovesTheCohortsAndSendThemToEmployerToApprove()
-        // {
-        //     var apprenticeList = GetBulkuploadData();
-        //     await new ReviewApprenticeDetailsBulkUploadPage(_context)
-        //         .SelectToApproveAllAndSendToEmployer()
-        //         .VerifyCorrectInformationIsDisplayed(apprenticeList);
-        // }
+        [Then(@"Provider approves the cohorts and send them to employer to approve")]
+        public async Task WhenProviderApprovesTheCohortsAndSendThemToEmployerToApprove()
+        {
+            await new ReviewApprenticeDetailsBulkUploadPage(context).SelectToApproveAllAndSendToEmployer();
+        }
 
         [When(@"User selects to upload an amended file")]
         public async Task UserSelectsToUploadAnAmendedFile()
@@ -401,11 +398,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
             listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.NonLevy, numberOfApprentices);
 
-            await employerStepsHelper.AddEmptyCohort();
-           
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+
+            var cohort = await employerStepsHelper.EmployerCreatesReservationAndAddsApprenticeForCurrentEmpployer(listOfApprenticeship[0]);
+            await commonStepsHelper.SetCohortDetails(cohort.Reference, "Ready for approval", "Ready for approval");
         }
-        
+
         private async Task ProviderUploadsAnotherFile(string csvFilePath, string expectedErrorMessage, bool startUploadJourney)
         {
             UploadCsvFilePage page;
