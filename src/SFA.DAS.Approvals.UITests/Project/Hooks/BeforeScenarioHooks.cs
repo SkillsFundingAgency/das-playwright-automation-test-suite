@@ -67,7 +67,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Hooks
             
             context.Set(new LearnerDataOuterApiClient(_context, _outer_ApiAuthTokenConfig));
 
+            if (_tags.Contains("postapprovals"))
+            {
+                context.Set(new CommitmentsInnerApiClient(_objectcontext, context.Get<Inner_ApiFrameworkConfig>()));
+            }
         }
+
+        
 
     }
 }
