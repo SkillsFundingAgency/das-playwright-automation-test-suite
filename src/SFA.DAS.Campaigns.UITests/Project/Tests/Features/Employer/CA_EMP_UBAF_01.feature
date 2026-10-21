@@ -1,18 +1,14 @@
 ﻿Feature: CA_EMP_UBAF_01
+  Verify funding calculation for estimating benefit funding via the Explore funding options card on the Employers page.
 
-As the apprenticeship service 
-I want to update the calculation for estimating benefit funding used by the Understanding apprenticeship funding and benefits screen (UBAF) 
-So that changes to policy are correctly reflected
+  @campaigns @employer @regression
+  Scenario Outline: Verify funding calculation for annual payroll options
+    Given the user navigates to the Hire An Apprentice page
+    When the user clicks on the employer card "Explore funding options"
+    And the employer calculates funding selecting "<PayrollOption>" and standard "<Standard>"
+    Then the estimated funding result should be calculated successfully
 
-@campaigns
-@employer
-@regression
-Scenario Outline: Verify funding calculation for annual payroll options
-	Given the employer is on the Understanding apprenticeship benefits and funding page
-	When the employer calculates funding selecting "<PayrollOption>"
-	Then the estimated funding result should be calculated successfully
-
-	Examples:
-		| PayrollOption      |
-		| Under £3 million   |
-		| Over £3 million    |
+    Examples:
+      | PayrollOption    | Standard                        |
+      | Under £3 million | Abattoir worker (Level 2)       |
+      | Over £3 million  | Academic professional (Level 7) |

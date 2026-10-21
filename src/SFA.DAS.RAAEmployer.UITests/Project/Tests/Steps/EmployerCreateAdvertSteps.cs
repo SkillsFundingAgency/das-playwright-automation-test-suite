@@ -72,4 +72,6 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
     [Given(@"^the Employer sees a validation error when leaving the vacancy title blank$")]
     public async Task ThenTheEmployerSeesAValidationErrorWhenLeavingTheVacancyTitleBlank() => await _employerCreateVacancyStepsHelper.TriggerVacancyTitleValidationErrorAndCancelAdvert();
 
+    [When(@"the Employer creates an Offline vacancy")]
+    public async Task WhenTheEmployerCreatesAnOfflineVacancy() => await _employerCreateVacancyStepsHelper.CreateOfflineVacancy();
 }
