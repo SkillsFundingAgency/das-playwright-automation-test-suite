@@ -6,6 +6,9 @@ parameters:
   - name: TestAssembly
     type: string
     default: '**\**\SFA.DAS*tests*.dll'
+  - name: TestFilterCriteria
+    type: string
+    default: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
   - name: ResourceName
     type: string
     default: ''
@@ -168,7 +171,7 @@ jobs:
               testAssemblyVer2: ${{ parameters.TestAssembly }}
               testRunTitle: 'Test Run - ${{ parameters.Environment }}'
               searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
-              testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
+              testFiltercriteria: ${{ parameters.TestFilterCriteria }}
               runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
               runInParallel: true
               otherConsoleOptions: '/logger:trx'
