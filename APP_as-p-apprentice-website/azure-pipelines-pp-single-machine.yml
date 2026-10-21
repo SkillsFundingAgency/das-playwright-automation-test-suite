@@ -58,12 +58,25 @@ stages:
 
     - powershell: |
         $projects = @('$(projectName)' -split "`r?`n" | ForEach-Object { $_.Trim().Replace('"','') } | Where-Object { $_ -ne "" })
-        $first = $projects[0]
-        $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
+        $paths = $projects | ForEach-Object { "$(Build.Repository.LocalPath)/src/$_/*.csproj" }
         $joined = @($paths -join "%0D%0A")
-        Write-Host $joined
         Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
       displayName: Build project file path
+    
+    - task: CmdLine@2
+      inputs:
+        script: |
+          echo "Tree Structure of Agent TempDirectory:"
+          tree $(Agent.TempDirectory) /f
+          echo "*************************************************"
+          echo "Tree Structure of System DefaultWorkingDirectory:"
+          tree $(System.DefaultWorkingDirectory) /f
+          echo "*************************************************"
+          echo "Tree Structure of Agent WorkFolder:"
+          tree $(Agent.WorkFolder) /f
+      displayName: 'Agent Folder Structure'
+      condition: always()
+      continueOnError: true
 
     - task: DotNetCoreCLI@2
       displayName: dotnet build
