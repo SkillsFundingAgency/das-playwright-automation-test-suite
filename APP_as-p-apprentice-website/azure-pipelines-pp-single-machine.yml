@@ -58,9 +58,12 @@ stages:
 
     - powershell: |
         $projects = @('$(projectName)' -split "`r?`n" | ForEach-Object { $_.Trim().Replace('"','') } | Where-Object { $_ -ne "" })
-        $paths = $projects | ForEach-Object { "$(Build.Repository.LocalPath)/src/$_/*.csproj" }
+        $first = $projects[0]
+        $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
         $joined = @($paths -join "%0D%0A")
+        Write-Host $joined
         Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
+        Write-Host "##vso[task.setvariable variable=projectName;isOutput=true]$first"
       displayName: Build project file path
 
     - task: DotNetCoreCLI@2
