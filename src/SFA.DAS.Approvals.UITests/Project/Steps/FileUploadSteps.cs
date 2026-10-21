@@ -23,12 +23,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         private readonly CommonStepsHelper commonStepsHelper;
         private readonly CommitmentsDbSqlHelper _commitmentsDbSqlHelper;
         private readonly AccountsDbSqlHelper _accountsDbSqlHelper;
+        private readonly EmployerStepsHelper employerStepsHelper;
 
 
         public FileUploadSteps(ScenarioContext _context)
         {
             context = _context;
             providerStepsHelper = new ProviderStepsHelper(context);
+            employerStepsHelper = new EmployerStepsHelper(context);
             apprenticeDataHelper = new ApprenticeDataHelper(context);
             commonStepsHelper = new CommonStepsHelper(context);
             fileUploadHelper = new FileUploadHelper(context);
@@ -340,7 +342,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
 
         [When(@"the provider tries a bulk upload file to add apprentices in that cohort")]
-        public async Task fWhenProviderAddAnApprenticeUsesDetailsFromBelowToCreateBulkupload() {
+        public async Task TheProviderTriesABulkUploadFileToAddApprenticesInThatCohort() {
             var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             ICsvFileFactory csvFileFactory = new CsvFileFactory();
             await csvFileFactory.CreateCsvFile(listOfApprenticeship, fileUploadHelper.CsvFileLocation());
@@ -372,7 +374,38 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             var errorPageMsg = "You cannot add apprentices to this cohort. You need to add this learner to a different or new cohort.";
             await new ThereIsAProblemWithYourCsvFilePage(context).ValidateErrorMessage(errorPageMsg);
         }
+        
 
+        [Given(@"Provider says No on Confirm cancel confirmation page")]
+        [When(@"Provider says No on Confirm cancel confirmation page")]
+        private async Task ProviderSelectsNoOnConfirmCancelConfirmationPage() => await new AreYouSureYouWantToDiscardThisFilePage(context).SelectNoAndContinue();
+
+
+        [Given(@"Provider says Yes on Confirm cancel confirmation page")]
+        [When(@"Provider says Yes on Confirm cancel confirmation page")]
+        private async Task ProviderSelectsYesOnConfirmCancelConfirmationPage() => await new AreYouSureYouWantToDiscardThisFilePage(context).SelectYesAndContinue();
+
+        [Given(@"Upload cancelled confirmation page is displayed")]
+        [When(@"Upload cancelled confirmation page is displayed")]
+        private async Task UploadCancelled() => await new FileUploadCancelledPage(context).VerifyPage();
+
+        [Given(@"Provider selects to Cancel bulk upload")]
+        [When(@"Provider selects to Cancel bulk upload")]
+        private async Task ProviderSelectsToCancelBulkUpload() => await new UploadCsvFilePage(context).CancelUpload();
+
+
+        [Given(@"Provider uses BulkUpload to add (.*) apprentice details for a non-levy employer into a non-existing cohort")]
+         private async Task GivenProviderUsesBulkUploadToAddApprenticeDetailsForANon_LevyEmployerIntoANon_ExistingCohort(int numberOfApprentices)
+        {
+
+            List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
+            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.NonLevy, numberOfApprentices);
+
+            await employerStepsHelper.AddEmptyCohort();
+           
+            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+        }
+        
         private async Task ProviderUploadsAnotherFile(string csvFilePath, string expectedErrorMessage, bool startUploadJourney)
         {
             UploadCsvFilePage page;
