@@ -55,13 +55,9 @@ public class certificateDetailsSteps(ScenarioContext context)
         var dbConfig = context.Get<DbConfig>();
         var sqlHelper = new AssessorSqlHelper(objectContext, dbConfig);
         var dataHelper = new DigiCertsDataHelper();
-        
-        Console.WriteLine($"Auth1");
-
+                
         var authorisationPage = await new DigiCertsAuthorisationStartPage(context).clickContinue();
-
-        Console.WriteLine($"Auth2");
-
+                
         DigitalCertUser digiCertUser = user switch
         {
             "StandardUser" => context.GetUser<DigiCertStandardUser>(),
@@ -75,15 +71,13 @@ public class certificateDetailsSteps(ScenarioContext context)
 
         await ClearCacheMatches(digiCertUser.Id);
 
-        Console.WriteLine($"Auth2.1");
-
+      
         switch (user)
         {
             case "StandardUser":
                 {
-                    Console.WriteLine($"Auth3");
+                   
                     var cert = await sqlHelper.SingleCertificateAuthorisationdetailsfromuser(firstName, lastName);
-                    Console.WriteLine($"Auth4");
                     var learner = await authorisationPage.enterLearner(cert.Uln);
                     var answers = await learner.selectCourse(cert.StandardName);
                     await answers.clickSubmitandViewStandard();
@@ -94,7 +88,6 @@ public class certificateDetailsSteps(ScenarioContext context)
                 {
                     var cert = await sqlHelper.SingleFrameworkAuthorisationdetailsfromuser(firstName, lastName);
                     var learner = await authorisationPage.SelectNoForLearner();
-                    Console.WriteLine($"Auth4");
                     var course = await learner.SelectCourseForLongAuthJourney(cert.FrameworkName);
                     var provider = await course.selectYear(cert.CertificationYear);
                     var answers = await provider.selectProvider(cert.ProviderName);
@@ -106,7 +99,6 @@ public class certificateDetailsSteps(ScenarioContext context)
             case "MultiFrameworkUser":
                 {
                     var cert = await sqlHelper.MultiCertificateAuthorisationdetailsfromuser(firstName, lastName);
-                    Console.WriteLine($"Auth4");
                     var learner = await authorisationPage.enterLearner(cert.Uln);
                     var answers = await learner.selectCourse(cert.StandardName);
                     await answers.clickSubmit();
