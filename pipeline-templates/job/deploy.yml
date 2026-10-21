@@ -9,12 +9,27 @@ parameters:
   - name: ResourceName
     type: string
     default: ''
+  - name: ResourceName2
+    type: string
+    default: ''
   - name: RuleName
+    type: string
+    default: ''
+  - name: RuleName2
     type: string
     default: ''
   - name: WhiteListFunction
     type: boolean
     default: false
+  - name: AppRoleAssignmentsServiceConnection
+    type: string
+    default: ''
+  - name: AppRoleAssignmentsResourceName
+    type: string
+    default: ''
+  - name: AppRoleAssignmentsTargetEnvironment
+    type: string
+    default: ''
 
 jobs:
 - deployment: Deploy_AutomationTests
@@ -100,6 +115,15 @@ jobs:
               azurePowerShellVersion: LatestVersion
               
           - task: AzurePowerShell@5
+            displayName: "Whitelist agent's IP address on $(AppServiceName2)"
+            condition: ne('${{ parameters.ResourceName2 }}', '')
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
+              ScriptArguments: '-ResourceName ${{ parameters.ResourceName2 }} -IPAddress $(IPAddress) -RuleName ${{ parameters.RuleName2 }}'
+              azurePowerShellVersion: LatestVersion
+
+          - task: AzurePowerShell@5
             displayName: "Whitelist agent's IP address on Function App"
             inputs:
               azureSubscription: ${{ parameters.ServiceConnection }}
@@ -107,6 +131,15 @@ jobs:
               ScriptArguments: '-IpAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa" -RuleName "${{ parameters.RuleName }}"'
               azurePowerShellVersion: LatestVersion
             condition: and(succeeded(), eq('${{ parameters.WhiteListFunction }}', 'true'))
+
+          - ${{ if ne(parameters.AppRoleAssignmentsServiceConnection, '') }}:
+            - template: azure-pipelines-templates/deploy/step/app-role-assignments.yml@das-platform-building-blocks
+              parameters:
+                ServiceConnection: ${{ parameters.AppRoleAssignmentsServiceConnection }}
+                ResourceName: ${{ parameters.AppRoleAssignmentsResourceName }}
+                Tenant: $(Tenant)
+                TargetEnvironment: ${{ parameters.AppRoleAssignmentsTargetEnvironment }}
+                IsMultiRepoCheckout: true
 
 
           # 1) Bootstrap: extract Service Connection creds to pipeline variables
