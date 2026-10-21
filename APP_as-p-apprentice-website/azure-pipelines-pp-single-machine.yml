@@ -48,9 +48,17 @@ stages:
     variables:
       headless: 'false'
     steps:
+    - checkout: self
+      path: s/das-playwright-automation-test-suite
+      displayName: Checkout current branch
+    - checkout: das-platform-automation
+      path: s/das-platform-automation
+      displayName: Checkout das-platform-automation
+    - download: none
+
     - powershell: |
         $projects = @('$(projectName)' -split "`r?`n" | ForEach-Object { $_.Trim().Replace('"','') } | Where-Object { $_ -ne "" })
-        $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
+        $paths = $projects | ForEach-Object { "$(Build.Repository.LocalPath)/src/$_/*.csproj" }
         $joined = @($paths -join "%0D%0A")
         Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
       displayName: Build project file path
@@ -59,14 +67,6 @@ stages:
       displayName: dotnet build
       inputs:
         arguments: '--configuration $(BuildConfiguration)'
-        projects: |
-          $(projectsToBuild)
-
-    - task: DotNetCoreCLI@2
-      displayName: dotnet unit test
-      inputs:
-        command: test
-        arguments: '--filter "TestCategory=Unittests" --logger trx;logfilename=UnittestResults.trx'
         projects: |
           $(projectsToBuild)
 
@@ -83,6 +83,7 @@ stages:
     - task: CopyFiles@2
       displayName: Copy test configuration files
       inputs:
+        SourceFolder: '$(Build.Repository.LocalPath)'
         Contents: |
           src/**/*.sql
           src/**/appsettings.Config.json
@@ -91,6 +92,7 @@ stages:
           src/**/appsettings.TimeOutConfig.json
           src/**/appsettings.TestExecution.json
           src/**/appsettings.NServiceBusConfig.json
+          src/**/appsettings.BrowserStack.json
           src/**/appsettings.ApiFramework.json
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/files'
         flattenFolders: true
@@ -99,6 +101,7 @@ stages:
     - task: CopyFiles@2
       displayName: Copy project configuration files
       inputs:
+        SourceFolder: '$(Build.Repository.LocalPath)'
         Contents: src/**/appsettings.Project.json
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
         flattenFolders: false
@@ -107,19 +110,29 @@ stages:
     - task: CopyFiles@2
       displayName: Copy runsettings
       inputs:
+        SourceFolder: '$(Build.Repository.LocalPath)'
         Contents: src/**/*.runsettings
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/runsettings/src'
+        flattenFolders: true
         OverWrite: true
 
     - task: CopyFiles@2
       displayName: Copy test result checker
       inputs:
+        SourceFolder: '$(Build.Repository.LocalPath)'
         Contents: src/**/Check-TestResults.ps1
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/src'
+        flattenFolders: true
         OverWrite: true
 
-    - checkout: das-platform-automation
-      displayName: Checkout das-platform-automation
+    - task: CopyFiles@2
+      displayName: Copy test worker updater
+      inputs:
+        SourceFolder: '$(Build.Repository.LocalPath)'
+        Contents: src/**/UpdateNoofTestWorkers.ps1
+        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/src'
+        flattenFolders: true
+        OverWrite: true
 
     - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
       displayName: 'Tokenization: Transform test JSON'
@@ -132,10 +145,10 @@ stages:
       inputs:
         SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
         TargetFileNames: '*.runsettings'
-    
+
     - task: BrowserStackConfig@0
       inputs:
-       browserstackServiceEndPoint: 'AS-Browserstack'
+        browserstackServiceEndPoint: 'AS-Browserstack'
 
     - task: PowerShell@2
       displayName: Install Playwright browsers
@@ -191,7 +204,7 @@ stages:
         testAssemblyVer2: '**\**\SFA.DAS.Campaigns.UITests.dll'
         testRunTitle: Test Run - PP
         searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
-        testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
+        testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp"'
         runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
         runInParallel: true
         otherConsoleOptions: /logger:trx
@@ -200,7 +213,6 @@ stages:
         rerunFailedTestsMaxPercent: 30
         rerunMaxAttempts: 1
       continueOnError: true
-        
 
     - task: AzurePowerShell@5
       displayName: Remove whitelisted agent IP address
@@ -221,5 +233,4 @@ stages:
 
     - task: BrowserStackResults@0
       inputs:
-       browserstackProduct: 'observability'
-
+        browserstackProduct: 'observability'
