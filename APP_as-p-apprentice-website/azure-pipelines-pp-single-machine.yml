@@ -63,7 +63,6 @@ stages:
         $joined = @($paths -join "%0D%0A")
         Write-Host $joined
         Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
-        Write-Host "##vso[task.setvariable variable=projectName;isOutput=true]$first"
       displayName: Build project file path
 
     - task: DotNetCoreCLI@2
