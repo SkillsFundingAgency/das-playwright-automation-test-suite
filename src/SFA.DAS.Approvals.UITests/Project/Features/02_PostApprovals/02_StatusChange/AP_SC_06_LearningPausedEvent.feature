@@ -1,6 +1,6 @@
 ﻿@postapprovals
 @linkedScenarios
-Feature: AP_CoC_06_LearningPausedEvent
+Feature: AP_SC_06_LearningPausedEvent
 
 Commitments receives LearningWithdrawnEvent from Learning domain for variety of reasons. This test validates that event is processed correctly and the apprentice record is updated (paused) with correct pause date 
 
@@ -16,7 +16,7 @@ Data Requirements:
 
 
 @regression
-Scenario: AP_CoC_06a_Verify Learning Paused Event marks the apprenticeship as Paused
+Scenario: AP_SC_06a_Verify Learning Paused Event marks the apprenticeship as Paused
     Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "ChangeApprenticeStatus_Paused"
 	When LearningPausedEvent is received for the apprentice
     Then provider verifies that record is set as "Paused" in Provider portal
@@ -24,7 +24,7 @@ Scenario: AP_CoC_06a_Verify Learning Paused Event marks the apprenticeship as Pa
 
 
 @regression
-Scenario Outline: AP_CoC_06b_LearningPausedEvent emails validation
+Scenario Outline: AP_SC_06b_LearningPausedEvent emails validation
 	Given previous test has been completed successfully
 	Then Verify the "<Recipient>" receive "<NotificationType>" email
 

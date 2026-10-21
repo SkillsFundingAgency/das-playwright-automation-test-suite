@@ -69,4 +69,6 @@ public class EmployerCreateAdvertSteps(ScenarioContext context)
     [Given(@"^the Employer creates a advert with ""(.*)"" work location and '(.*)' wage type$")]
     public async Task GivenTheEmployerCreatesAnAdvertWithWorkLocationAndWageType(string locationType, string wageType) => await _employerCreateVacancyStepsHelper.CreateANewAdvert_LocationAndWageType(locationType, wageType);
 
+    [When(@"the Employer creates an Offline vacancy")]
+    public async Task WhenTheEmployerCreatesAnOfflineVacancy() => await _employerCreateVacancyStepsHelper.CreateOfflineVacancy();
 }
