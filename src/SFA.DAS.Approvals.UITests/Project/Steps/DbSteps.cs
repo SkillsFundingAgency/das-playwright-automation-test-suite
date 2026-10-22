@@ -193,9 +193,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             if (context.ScenarioInfo.Tags.Contains("CocRequest"))
                 await commitmentsDbSqlHelper.ClearCocRequestInCommitmentsDb(apprenticeshipId);
 
-            //trim the first and last name to match the test data:
-            if(context.ScenarioInfo.Tags.Contains("nameChange"))
-                await commitmentsDbSqlHelper.RestNameInCommitmentsDb(apprenticeshipId, firstname, lastname);
         }
 
         [Given(@"a learner record stopped via ILR with startdate of <(.*)> months and endDate of <\+(.*)> months from current date$")]
@@ -363,11 +360,34 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             Assert.That(actualApprovalStatus, Is.EqualTo(expectedStatus), $"Expected ApprovalFieldRequest status '{expectedStatus}' but found '{actualApprovalStatus}'");
         }
 
+        [Given(@"^""(.*)"" field in Commitments db has ""(.*)"" value")]
+        public async Task GivenFieldInCommitmentsDbHasValue(string fieldName, string expectedValue)
+        {
+            var apprenticeshipId = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().ApprenticeDetails.ApprenticeshipId;
+            var columnName = await ApprenticeshipTableColumnMapper(fieldName);
+            await commitmentsDbSqlHelper.ResetApprenticeshipDataInCommitmentsDb(apprenticeshipId, columnName, expectedValue);
+        }
+
 
         [Then(@"^""(.*)"" field is updated in Commitments db with the ""(.*)"" value")]
-        public async Task ThenFieldIsUpdatedInCommitmentsDbWithTheValue(string fieldName, string newValue)
+        public async Task ThenFieldIsUpdatedInCommitmentsDbWithTheValue(string fieldName, string expectedValue)
         {
-            //throw new PendingStepException();
+            var apprenticeshipId = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault().ApprenticeDetails.ApprenticeshipId;
+            var columnName = await ApprenticeshipTableColumnMapper(fieldName);
+            var actualValue = await commitmentsDbSqlHelper.GetApprenticeshipDataFromCommitmentsDb(apprenticeshipId, columnName, expectedValue);
+            if (columnName.ToLower().Contains("date"))
+            {
+                expectedValue = DateTime.Parse(expectedValue).ToString("yyyy-MM-dd");
+                actualValue = DateTime.Parse(actualValue).ToString("yyyy-MM-dd");
+
+                if (columnName == "StartDate" || columnName == "EndDate")
+                {
+                    //normalise expected value to the first day of the month:
+                    expectedValue = new DateTime(DateTime.Parse(expectedValue).Year, DateTime.Parse(expectedValue).Month, 1).ToString("yyyy-MM-dd");
+                }
+            }
+                
+            Assert.That(actualValue, Is.EqualTo(expectedValue), $"Expected {columnName} '{expectedValue}' but found '{actualValue}'");
         }
 
 
@@ -445,6 +465,28 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                     });
 
             return await policy.ExecuteAsync(getValue);
+        }
+
+        private async Task<string> ApprenticeshipTableColumnMapper(string fieldName)
+        {
+            switch (fieldName)
+            {
+                case "Firstname":
+                    return "FirstName";
+                case "Surname":
+                    return "LastName";
+                case "DOB":
+                    return "DateOfBirth";
+                case "PlannedStartDate":
+                    return "StartDate";
+                case "PlannedEndDate":
+                    return "EndDate";
+                case "Email":
+                    return "Email";
+                default:
+                    return fieldName;
+            }
+
         }
 
     }

@@ -174,13 +174,20 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return result.FirstOrDefault() ?? string.Empty;
         }
 
-        internal async Task RestNameInCommitmentsDb(int apprenticeshipId, string firstname, string lastname)
-        { 
+        internal async Task ResetApprenticeshipDataInCommitmentsDb(int apprenticeshipId, string fieldName, string expectedValue)
+        {
             string query = $@"UPDATE [dbo].[Apprenticeship]
-                            SET FirstName = '{firstname}', LastName = '{lastname}'
+                            SET {fieldName} = '{expectedValue}'
                             WHERE Id = {apprenticeshipId}";
 
             await ExecuteSqlCommand(query);
+        }
+
+        internal async Task<string> GetApprenticeshipDataFromCommitmentsDb(int apprenticeshipId, string columnName, string expectedValue)
+        {
+            string query = $@"SELECT {columnName} FROM [dbo].[Apprenticeship] WHERE Id = {apprenticeshipId}";
+            var result = await GetData(query);
+            return result.FirstOrDefault() ?? string.Empty; 
         }
 
 
