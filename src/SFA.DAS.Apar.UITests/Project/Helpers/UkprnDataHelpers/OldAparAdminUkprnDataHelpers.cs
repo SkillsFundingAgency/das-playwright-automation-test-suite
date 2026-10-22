@@ -43,6 +43,10 @@ public class OldAparAdminUkprnDataHelpers : AparUkprnBaseDataHelpers
                    new(providernamekey, "CENTRAL TRAINING ACADEMY LIMITED"),
                new(ukprnkey, "10001259"),
            ]);
-    
+        _data.Add("rpadalup04",
+           [
+                   new(providernamekey, "8POINT8 TRAINING LIMITED"),
+               new(ukprnkey, "10057068"),
+           ]);
     }
 }

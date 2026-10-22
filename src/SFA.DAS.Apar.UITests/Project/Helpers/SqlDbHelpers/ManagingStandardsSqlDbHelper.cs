@@ -17,4 +17,14 @@ public class ManagingStandardsSqlDbHelper(ObjectContext objectContext, DbConfig 
 
     public async Task AddLastStartDateRestrictProvider() => await ExecuteSqlCommand
         ($"UPDATE ProviderAllowedCourse set LastDateStarts = '2026-08-06' where larscode = '828' and ukprn = '10001259'");
+
+    public async Task UnrestrictProvider()
+    {
+       var query = $" DECLARE @Ukprn VARCHAR(20) = '10057068';" +
+       $"DELETE pac FROM ProviderAllowedCourse pac WHERE pac.Ukprn = @Ukprn AND pac.LastDateStarts IS NULL AND EXISTS(SELECT 1 FROM ProviderCourse pc WHERE pc.Ukprn = pac.Ukprn AND pc.LarsCode = pac.LarsCode);" +
+       $"UPDATE ProviderCourseType SET IsRestrictedProvider = 0 WHERE Ukprn = @Ukprn;" +
+       $"DELETE FROM Audit WHERE Id = (SELECT TOP (1) Id FROM Audit WHERE EntityId = @Ukprn AND UserAction = 'UpdateProviderAllowedCourse' ORDER BY AuditDate DESC);" +
+       $"DELETE FROM Audit WHERE Id = (SELECT TOP (1) Id FROM Audit WHERE EntityId = @Ukprn AND UserAction = 'UpdateProviderCourseType' ORDER BY AuditDate DESC);";
+       await ExecuteSqlCommand(query);
+    }
 }
