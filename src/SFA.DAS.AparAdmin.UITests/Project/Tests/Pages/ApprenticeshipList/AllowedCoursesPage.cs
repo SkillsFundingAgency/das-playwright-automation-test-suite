@@ -8,4 +8,19 @@ public class AllowedCoursesPage(ScenarioContext context) : AparAdminBasePage(con
     {
        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage apprenticeships this provider is allowed to deliver");
     }
+
+    public async Task SuccessBannerVisible()
+    {
+        await Assertions.Expect(page.Locator("#govuk-notification-banner-title")).ToContainTextAsync("Success");
+    }
+
+    public async Task ClickAddAnAppreticeship()
+    {
+        await page.GetByRole(AriaRole.Link, new() {Name = "Add an apprenticeship"}).ClickAsync();
+    }
+
+    public async Task GoBackToProviderDetailsPage()
+    {
+        await page.Locator(".govuk-back-link").ClickAsync();
+    }
 }
