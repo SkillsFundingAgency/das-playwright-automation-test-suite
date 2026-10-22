@@ -157,7 +157,6 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
         if(valid)
         {
             await page.Locator("#SelectedLarsCode__option--0").ClickAsync();
-
         }
         await page.Locator(".govuk-button").ClickAsync();
     }

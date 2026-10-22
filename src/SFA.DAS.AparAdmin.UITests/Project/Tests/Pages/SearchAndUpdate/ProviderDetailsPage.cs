@@ -148,13 +148,11 @@ namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate
         public async Task ClickManageApprovedCourses()
         {
             await page.GetByRole(AriaRole.Link, new() {Name = "Manage approved courses"}).ClickAsync();
-
         }
 
         public async Task ClickManageApprovedUnits()
         {
             await page.GetByRole(AriaRole.Link, new() {Name = "Manage approved units"}).ClickAsync();
-
         }
     }
 }
