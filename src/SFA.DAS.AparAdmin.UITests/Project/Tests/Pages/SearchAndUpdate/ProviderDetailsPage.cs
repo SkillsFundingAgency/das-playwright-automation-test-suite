@@ -140,5 +140,21 @@ namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.SearchAndUpdate
 
             Console.WriteLine($"✅ Verified provider status: {actual}");
         }
+         public async Task ClickManageRestrictedCourses()
+        {
+            await page.GetByRole(AriaRole.Link, new() {Name = "Manage restricted courses"}).ClickAsync();
+        }
+
+        public async Task ClickManageApprovedCourses()
+        {
+            await page.GetByRole(AriaRole.Link, new() {Name = "Manage approved courses"}).ClickAsync();
+
+        }
+
+        public async Task ClickManageApprovedUnits()
+        {
+            await page.GetByRole(AriaRole.Link, new() {Name = "Manage approved units"}).ClickAsync();
+
+        }
     }
 }

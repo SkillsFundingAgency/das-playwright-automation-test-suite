@@ -17,7 +17,7 @@ public class ApprenticeshipListHelper
 
     public async Task<ProviderRestrictedCoursesPage>OpenManageProviderCoursePage()
     {
-        var home = new SearchforATrainingProviderPage(_context);
+        var home = new ProviderDetailsPage(_context);
         await home.ClickManageRestrictedCourses();
         return await new ProviderRestrictedCoursesPage(_context)
             .VerifyPageAsync( () => new ProviderRestrictedCoursesPage(_context));
@@ -95,5 +95,45 @@ public class ApprenticeshipListHelper
         return await new AllowedCoursesPage(_context)
             .VerifyPageAsync( () => new AllowedCoursesPage(_context));
 
+    }
+
+    public async Task<AllowedCoursesPage>OpenManageAllowedCoursePage()
+    {
+         var home = new ProviderDetailsPage(_context);
+        await home.ClickManageApprovedCourses();
+        return await new AllowedCoursesPage(_context)
+            .VerifyPageAsync( () => new AllowedCoursesPage(_context));
+    }
+
+    public async Task<ManageProviderAllowedUnitsPage>OpenManageApprenticeshipUnitsPage()
+    {
+        var home = new ProviderDetailsPage(_context);
+        await home.ClickManageApprovedUnits();
+        return await new ManageProviderAllowedUnitsPage(_context)
+            .VerifyPageAsync( () => new ManageProviderAllowedUnitsPage(_context));
+    }
+
+    public async Task<AddApprenticeshipToAllowedCoursePage>AddAnApprenticeship()
+    {
+        var home = new AllowedCoursesPage(_context);
+        await home.ClickAddAnAppreticeship();
+        return await new AddApprenticeshipToAllowedCoursePage(_context)
+            .VerifyPageAsync( () => new AddApprenticeshipToAllowedCoursePage(_context)); 
+    }
+
+    public async Task<AddApprenticeshipUnitToAllowedPage>AddAnApprenticeshipUnit()
+    {
+        var home = new ManageProviderAllowedUnitsPage(_context);
+        await home.ClickAddAnAppreticeshipUnit();
+        return await new AddApprenticeshipUnitToAllowedPage(_context)
+            .VerifyPageAsync( () => new AddApprenticeshipUnitToAllowedPage(_context));
+    }
+
+    public async Task<ProviderDetailsPage>GoBackToProviderDetailsPage()
+    {
+        var home = new AllowedCoursesPage(_context);
+        await home.GoBackToProviderDetailsPage();
+        return await new ProviderDetailsPage(_context)
+            .VerifyPageAsync( () => new ProviderDetailsPage(_context));
     }
 }

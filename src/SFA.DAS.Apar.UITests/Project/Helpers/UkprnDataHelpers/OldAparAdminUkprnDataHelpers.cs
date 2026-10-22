@@ -48,5 +48,10 @@ public class OldAparAdminUkprnDataHelpers : AparUkprnBaseDataHelpers
                    new(providernamekey, "8POINT8 TRAINING LIMITED"),
                new(ukprnkey, "10057068"),
            ]);
+        _data.Add("rpadalup05",
+           [
+                   new(providernamekey, "NORTH LANCS. TRAINING GROUP C.I.C."),
+               new(ukprnkey, "10004692"),
+           ]);
     }
 }
