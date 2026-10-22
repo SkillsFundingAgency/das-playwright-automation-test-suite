@@ -5,6 +5,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
 {
     internal class CommonStepsHelper
     {
+        private const string CohortReferenceList = "cohortReferenceList";
+
         private readonly ScenarioContext context;
         private readonly ObjectContext objectContext;
 
@@ -65,6 +67,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             });
         }
 
+        internal async Task<List<Cohort>> GetCohortReferenceList() => await Task.FromResult(objectContext.Get<List<Cohort>>(CohortReferenceList));
 
+        public async Task SetCohortReferenceList(Cohort cohort)
+        {
+            var list = await GetCohortReferenceList() ?? new List<Cohort>();
+
+            if (list.Any(x => x.Reference == cohort.Reference)) return;
+
+            list.Add(cohort);
+
+            objectContext.Replace(CohortReferenceList, list);
+        }
     }
 }
