@@ -32,7 +32,7 @@ public class RandomDataGenerator
         return startDate.AddDays(addDays);
     }
 
-    public static string RandomPostCode() => GetRandomElementFromListOfElements(["SW1H 9NA", "SW1A 2AA", "SE1 8UG", "E14 4PU", "SW1A 1AA", "SW1P 3BT"]);
+    public static string RandomPostCode() => GetRandomElementFromListOfElements(["SW1A 2AA", "SE1 8UG", "E14 4PU", "SW1A 1AA", "SW1P 3BT"]);
 
     public static string RandomTown() => GetRandomElementFromListOfElements(["London", "Coventry", "Harrow", "Manchester", "York", "Temple"]);
 
