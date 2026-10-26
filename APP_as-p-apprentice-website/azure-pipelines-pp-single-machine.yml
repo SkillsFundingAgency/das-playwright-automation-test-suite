@@ -48,11 +48,14 @@ stages:
     variables:
       headless: 'false'
     steps:
-    - checkout: self
+    - task: Checkout playwright
       displayName: Checkout current branch
-    - checkout: das-platform-automation
+      inputs:
+        repository: self
+    - task:
       displayName: Checkout das-platform-automation
-    - download: none
+      inputs:
+        repository: das-platform-automation
 
     - powershell: |
         $projects = @('$(projectName)' -split "`r?`n" | ForEach-Object { $_.Trim().Replace('"','') } | Where-Object { $_ -ne "" })
