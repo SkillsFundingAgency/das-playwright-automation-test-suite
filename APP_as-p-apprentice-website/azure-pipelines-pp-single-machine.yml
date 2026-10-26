@@ -48,15 +48,6 @@ stages:
     variables:
       headless: 'false'
     steps:
-    - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
-      displayName: Checkout current branch
-      inputs:
-        repository: self
-    - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
-      displayName: Checkout das-platform-automation
-      inputs:
-        repository: das-platform-automation
-
     - powershell: |
         $projects = @('$(projectName)' -split "`r?`n" | ForEach-Object { $_.Trim().Replace('"','') } | Where-Object { $_ -ne "" })
         $first = $projects[0]
@@ -141,6 +132,15 @@ stages:
         flattenFolders: true
         OverWrite: true
 
+    - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
+      displayName: Checkout current branch
+      inputs:
+        repository: self
+    - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
+      displayName: Checkout das-platform-automation
+      inputs:
+        repository: das-platform-automation
+        
     - task: CmdLine@2
       inputs:
         script: |
