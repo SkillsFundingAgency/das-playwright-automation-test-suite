@@ -1,8 +1,8 @@
-﻿Feature: CA_AP_01_ApprenticeHub
+﻿Feature: AW_AP_01_ApprenticeHub
 Verify navigation and ensure no broken links across all stepper cards and callouts on the "Become an apprentice" landing page.
 
 @campaigns @apprentice @regression
-Scenario Outline: Verify all navigation links on the Become an apprentice page - <CardName>
+Scenario Outline: AW_AP_01_Verify all navigation links on the Become an apprentice page - <CardName>
 	Given the user navigates to the Become An Apprentice page
 	When the user clicks on the apprentice card "<CardName>"
 	Then the links are not broken

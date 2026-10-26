@@ -1,8 +1,8 @@
-﻿Feature: CA_SU_EMP_01
+﻿Feature: AW_EM_03_SignUpToEmails
   Sign up to emails as an Employer
 
   @campaigns @signup @regression
-  Scenario Outline: Sign up to emails as an Employer with <CompanySize> employees
+  Scenario Outline: AW_EM_03_Sign up to emails as an Employer with <CompanySize> employees
     Given the employer navigates to Sign Up Page
     When the employer fills the Your Details section
     And selects company size "<CompanySize>"

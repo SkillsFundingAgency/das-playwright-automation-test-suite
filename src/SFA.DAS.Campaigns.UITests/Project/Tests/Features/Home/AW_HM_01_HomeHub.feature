@@ -1,8 +1,8 @@
-﻿Feature: CA_HM_01_HomeHub
+﻿Feature: AW_HM_01_HomeHub
   Verify navigation and ensure no broken links across all cards, panels, header, and footer links on the "Home" page.
 
   @campaigns @homepage @regression
-  Scenario Outline: Verify all navigation links on the Home page - <CardName>
+  Scenario Outline: AW_HM_01_Verify all navigation links on the Home page - <CardName>
     Given the user navigates to the Home page
     When the user clicks on the homepage card "<CardName>"
     Then the links are not broken

@@ -1,8 +1,8 @@
-﻿Feature: CA_EM_01_EmployerHub
+﻿Feature: AW_EM_01_EmployerHub
   Verify navigation across all stepper cards and callout panels on the Employers landing page ("Hire an apprentice").
 
   @campaigns @employer @regression
-  Scenario Outline: Verify card and panel navigation links
+  Scenario Outline: AW_EM_01_Verify card and panel navigation links
     Given the user navigates to the Hire An Apprentice page
     When the user clicks on the employer card "<CardName>"
     Then the links are not broken
