@@ -1,10 +1,5 @@
-trigger:
-  enabled: false
+trigger: none
 pr:
-  enabled: false
-schedules:
-- cron: '0 3 * * 1-5'
-  displayName: ScheduledRun
   branches:
     include:
     - master
