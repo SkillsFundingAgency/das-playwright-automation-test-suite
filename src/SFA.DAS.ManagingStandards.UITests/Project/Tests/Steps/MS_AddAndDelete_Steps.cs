@@ -16,28 +16,27 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
 
         var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
         
-        var page2 = await page1.AccessTrainingTypesPage();
-        var page3 = await page2.AccessStandards_Apprenticeships();
+        var page2 = await page1.AccessStandards_Apprenticeships();
 
-        var page4 = await page3.AccessAddStandard();
+        var page3 = await page2.AccessAddStandard();
 
-        var page5 = await page4.SelectAStandardAndContinue(StandardName);
+        var page4 = await page3.SelectAStandardAndContinue(StandardName);
 
-        var page6 = await page5.YesStandardIsCorrectAndContinue();
+        var page5 = await page4.YesStandardIsCorrectAndContinue();
 
-        var page7 = await page6.YesUseExistingContactDetails();
+        var page6 = await page5.YesUseExistingContactDetails();
 
-        var page8 = await page7.Add_ContactInformation();
+        var page7 = await page6.Add_ContactInformation();
 
-        var page9 = await page8.ConfirmAtOneofYourTrainingLocations_AddStandard();
+        var page8 = await page7.ConfirmAtOneofYourTrainingLocations_AddStandard();
 
-        var page10 = await page9.AccessSeeANewTrainingVenue_AddStandard();
+        var page9 = await page8.AccessSeeANewTrainingVenue_AddStandard();
 
-        var page11 = await page10.ChooseTheVenueDeliveryAndContinue();
+        var page10 = await page9.ChooseTheVenueDeliveryAndContinue();
 
-        var page12 = await page11.Save_NewTrainingVenue_Continue(StandardName);
+        var page11 = await page10.Save_NewTrainingVenue_Continue(StandardName);
 
-        await page12.Save_NewStandard_Continue();
+        await page11.Save_NewStandard_Continue();
     }
 
     [When("^the provider is able to add the standard using new contact details$")]
@@ -124,25 +123,23 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
 
         var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
 
-        var page2 = await page1.AccessTrainingTypesPage();
+        var page2 = await page1.AccessStandards_ApprenticeshipsUnits();
 
-        var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
+        var page3 = await page2.AccessAddApprenticeshipUnit();
 
-        var page4 = await page3.AccessAddApprenticeshipUnit();
+        var page4 = await page3.SelectAStandardAndContinue(StandardName);
 
-        var page5 = await page4.SelectAStandardAndContinue(StandardName);
+        var page5 = await page4.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
 
-        var page6 = await page5.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
+        var page6 = await page5.YesUseExistingContactDetails_ApprenticeshipUnit();
 
-        var page7 = await page6.YesUseExistingContactDetails_ApprenticeshipUnit();
+        var page7 = await page6.Add_ContactInformation_ApprenticeshipUnit();
 
-        var page8 = await page7.Add_ContactInformation_ApprenticeshipUnit();
+        var page8 = await page7.ConfirmAtOneofYourTrainingLocations_AddApprenticeshipUnit();
 
-        var page9 = await page8.ConfirmAtOneofYourTrainingLocations_AddApprenticeshipUnit();
+        var page9 = await page8.ChooseTheVenueDeliveryAndContinue_ApprenticeshipUnit(StandardName);
 
-        var page10 = await page9.ChooseTheVenueDeliveryAndContinue_ApprenticeshipUnit(StandardName);
-
-        await page10.Save_NewApprenticeshipUnit_Continue();
+        await page9.Save_NewApprenticeshipUnit_Continue();
     }
 
     [When(@"^the provider is able to add the ApprenticeshipUnit delivered in employers locations$")]
@@ -153,26 +150,24 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
         var page = new ManagingStandardsProviderHomePage(context);
 
         var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
-
-        var page2 = await page1.AccessTrainingTypesPage();
         
-        var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
+        var page2 = await page1.AccessStandards_ApprenticeshipsUnits();
 
-        var page4 = await page3.AccessAddApprenticeshipUnit();
+        var page3 = await page2.AccessAddApprenticeshipUnit();
 
-        var page5 = await page4.SelectAStandardAndContinue(StandardName);
+        var page4 = await page3.SelectAStandardAndContinue(StandardName);
 
-        var page6 = await page5.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
+        var page5 = await page4.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
 
-        var page7 = await page6.YesUseExistingContactDetails_ApprenticeshipUnit();
+        var page6 = await page5.YesUseExistingContactDetails_ApprenticeshipUnit();
 
-        var page8 = await page7.Add_ContactInformation_ApprenticeshipUnit();
+        var page7 = await page6.Add_ContactInformation_ApprenticeshipUnit();
 
-        var page9 = await page8.ConfirmAtEmployersLocations_AddApprenticeshipUnit();
+        var page8 = await page7.ConfirmAtEmployersLocations_AddApprenticeshipUnit();
 
-        var page10 = await page9.YesDeliverAnyWhereInEngland_AddApprenticeshipUnit(StandardName);
+        var page9 = await page8.YesDeliverAnyWhereInEngland_AddApprenticeshipUnit(StandardName);
 
-        await page10.Save_NewApprenticeshipUnit_Continue();
+        await page9.Save_NewApprenticeshipUnit_Continue();
     }
 
     [When(@"^the provider is able to add the ApprenticeshipUnit delivered online$")]
@@ -184,21 +179,20 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
 
         var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
 
-        var page2 = await page1.AccessTrainingTypesPage();
-        var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
+        var page2 = await page1.AccessStandards_ApprenticeshipsUnits();
 
-        var page4 = await page3.AccessAddApprenticeshipUnit();
+        var page3 = await page2.AccessAddApprenticeshipUnit();
 
-        var page5 = await page4.SelectAStandardAndContinue(StandardName);
+        var page4 = await page3.SelectAStandardAndContinue(StandardName);
 
-        var page6 = await page5.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
+        var page5 = await page4.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
 
-        var page7 = await page6.YesUseExistingContactDetails_ApprenticeshipUnit();
+        var page6 = await page5.YesUseExistingContactDetails_ApprenticeshipUnit();
 
-        var page8 = await page7.Add_ContactInformation_ApprenticeshipUnit();
+        var page7 = await page6.Add_ContactInformation_ApprenticeshipUnit();
 
-        var page9 = await page8.ConfirmOnline_AddApprenticeshipUnit(StandardName);
+        var page8 = await page7.ConfirmOnline_AddApprenticeshipUnit(StandardName);
 
-        await page9.Save_NewApprenticeshipUnit_Continue();
+        await page8.Save_NewApprenticeshipUnit_Continue();
     }
 }

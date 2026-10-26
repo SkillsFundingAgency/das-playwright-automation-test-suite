@@ -16,12 +16,6 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
 
-    public async Task<ChooseTrainingTypePage> ReturnToYourStandardsAndTrainingVenues()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
-
-        return await VerifyPageAsync(() => new ChooseTrainingTypePage(context));
-    }
     public async Task<ManageTheStandardsYouDeliverPage> VerifyStandardPresence(string standardName, bool shouldExist = true)
     {
         var locator = page.Locator($"//a[contains(@class, 'govuk-link') and normalize-space(text())='{standardName}']");
@@ -71,4 +65,12 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 
         return await VerifyPageAsync(() => new ManageAStandardPage(context, standardName));
     }
+
+    public async Task<YourStandardsAndTrainingVenuesPage> ReturnToYourStandardsAndTrainingVenues()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
+    }
+
 }

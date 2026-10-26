@@ -67,28 +67,26 @@ public class MS_AddAppUnit_Steps(ScenarioContext context)
         var page = new ManagingStandardsProviderHomePage(context);
 
         var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
-
-        var page2 = await page1.AccessTrainingTypesPage();
         
-        var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
+        var page2 = await page1.AccessStandards_ApprenticeshipsUnits();
 
-        var page4 = await page3.AccessAddApprenticeshipUnit();
+        var page3 = await page2.AccessAddApprenticeshipUnit();
 
-        var page5 = await page4.SelectAStandardAndContinue(standardName);
+        var page4 = await page3.SelectAStandardAndContinue(standardName);
 
-        var page6 = await page5.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
+        var page5 = await page4.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
 
-        var page7 = await page6.NoDontUseExistingContactDetails_ApprenticeshipUnit();
+        var page6 = await page5.NoDontUseExistingContactDetails_ApprenticeshipUnit();
 
-        var page8 = await page7.AddAll_ContactInformation_ApprenticeshipUnit();
+        var page7 = await page6.AddAll_ContactInformation_ApprenticeshipUnit();
 
-        var page9 = await page8.ConfirmAllLocations_AddApprenticeshipUnit();
+        var page8 = await page7.ConfirmAllLocations_AddApprenticeshipUnit();
 
-        var page10 = await page9.ChooseTheVenueDeliveryAndContinueToDeliver_ApprenticeshipUnit();
+        var page9 = await page8.ChooseTheVenueDeliveryAndContinueToDeliver_ApprenticeshipUnit();
 
-        var page11 = await page10.YesDeliverAnyWhereInEngland_AddApprenticeshipUnit(standardName);
+        var page10 = await page9.YesDeliverAnyWhereInEngland_AddApprenticeshipUnit(standardName);
 
-        await page11.Save_NewApprenticeshipUnit_Continue();
+        await page10.Save_NewApprenticeshipUnit_Continue();
     }
 
     [Then(@"^the provider can add delivery forecast$")]
@@ -116,28 +114,26 @@ public class MS_AddAppUnit_Steps(ScenarioContext context)
         var page = new ManagingStandardsProviderHomePage(context);
 
         var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
-
-        var page2 = await page1.AccessTrainingTypesPage();
         
-        var page3 = await page2.AccessStandards_ApprenticeshipsUnits();
+        var page2 = await page1.AccessStandards_ApprenticeshipsUnits();
 
-        var page4 = await page3.AccessAddApprenticeshipUnit();
+        var page3 = await page2.AccessAddApprenticeshipUnit();
 
-        var page5 = await page4.SelectAStandardAndContinue(standardName);
+        var page4 = await page3.SelectAStandardAndContinue(standardName);
 
-        var page6 = await page5.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
+        var page5 = await page4.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
 
-        var page7 = await page6.YesUseExistingContactDetails_ApprenticeshipUnit();
+        var page6 = await page5.YesUseExistingContactDetails_ApprenticeshipUnit();
 
-        var page8 = await page7.Add_ContactInformation_ApprenticeshipUnit();
+        var page7 = await page6.Add_ContactInformation_ApprenticeshipUnit();
 
-        var page9 = await page8.ConfirmAtEmployersLocations_AddApprenticeshipUnit();
+        var page8 = await page7.ConfirmAtEmployersLocations_AddApprenticeshipUnit();
 
-        var page10 = await page9.NoDeliverAnyWhereInEngland();
+        var page9 = await page8.NoDeliverAnyWhereInEngland();
 
-        var page11 = await page10.SelectRegionsAndContinue(["Derby", "Derbyshire", "Lincolnshire"], standardName);
+        var page10 = await page9.SelectRegionsAndContinue(["Derby", "Derbyshire", "Lincolnshire"], standardName);
 
-        await page11.Save_NewApprenticeshipUnit_Continue();
+        await page10.Save_NewApprenticeshipUnit_Continue();
     }
    
 }
