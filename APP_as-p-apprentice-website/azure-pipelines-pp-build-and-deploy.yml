@@ -1,9 +1,5 @@
 trigger: none
-pr:
-  branches:
-    include:
-    - master
-  always: true
+pr: none
 variables:
 - name: BuildConfiguration
   value: release
