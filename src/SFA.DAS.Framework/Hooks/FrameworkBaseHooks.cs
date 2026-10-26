@@ -19,6 +19,11 @@ public abstract class FrameworkBaseHooks(ScenarioContext context)
 
         context.Get<ObjectContext>().SetDebugInformation(url);
 
+        if (driver.Browser == null)     //its an api test, so no need to navigate to a page
+        {
+            return;
+        }
+
         await driver.Page.GotoAsync(url);
     }
 }

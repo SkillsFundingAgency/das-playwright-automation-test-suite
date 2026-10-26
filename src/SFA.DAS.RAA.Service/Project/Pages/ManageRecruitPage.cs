@@ -97,7 +97,11 @@ public class ManageCloseVacancyPage(ScenarioContext context) : RaaBasePage(conte
             : isRaaEmployer ? $"Advert VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed."
             : $"Vacancy VAC{objectContext.GetVacancyReference()} - '{rAADataHelper.VacancyTitle}' has been closed.";
 
+        var closingDateRow = page.Locator(".govuk-summary-list__row").Filter(new() { HasText = "Closing date" });
+
         await Assertions.Expect(page.Locator(".govuk-notification-banner--success").GetByRole(AriaRole.Heading, new() { Level = 3 })).ToContainTextAsync(PageTitle);
+
+        await Assertions.Expect(closingDateRow.Locator(".govuk-summary-list__value")).ToContainTextAsync(DateTime.Today.ToString("d MMM yyyy"));
     }
 }
 
