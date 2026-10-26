@@ -48,11 +48,11 @@ stages:
     variables:
       headless: 'false'
     steps:
-    - task: Checkout playwright
+    - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
       displayName: Checkout current branch
       inputs:
         repository: self
-    - task: Checkout das-platform-automation
+    - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
       displayName: Checkout das-platform-automation
       inputs:
         repository: das-platform-automation
