@@ -48,10 +48,18 @@ stages:
     variables:
       headless: 'false'
     steps:
+    - checkout: self
+      path: s/das-playwright-automation-test-suite
+      displayName: Checkout current branch
+    - checkout: das-platform-automation
+      path: s/das-platform-automation
+      displayName: Checkout das-platform-automation
+    - download: none
+
     - powershell: |
         $projects = @('$(projectName)' -split "`r?`n" | ForEach-Object { $_.Trim().Replace('"','') } | Where-Object { $_ -ne "" })
         $first = $projects[0]
-        $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
+        $paths = $projects | ForEach-Object { "das-playwright-automation-test-suite/src/$_/*.csproj" }
         $joined = @($paths -join "%0D%0A")
         Write-Host $joined
         Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
@@ -86,6 +94,7 @@ stages:
     - task: CopyFiles@2
       displayName: Copy test configuration files
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite/src'
         Contents: |
           src/**/*.sql
           src/**/appsettings.Config.json
@@ -103,6 +112,7 @@ stages:
     - task: CopyFiles@2
       displayName: Copy project configuration files
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite/src'
         Contents: src/**/appsettings.Project.json
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
         flattenFolders: false
@@ -111,6 +121,7 @@ stages:
     - task: CopyFiles@2
       displayName: Copy runsettings
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite/src'
         Contents: src/**/*.runsettings
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/runsettings'
         flattenFolders: true
@@ -119,6 +130,7 @@ stages:
     - task: CopyFiles@2
       displayName: Copy test result checker
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite/src'
         Contents: src/**/Check-TestResults.ps1
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop'
         flattenFolders: true
@@ -127,20 +139,12 @@ stages:
     - task: CopyFiles@2
       displayName: Copy test worker updater
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite/src'
         Contents: src/**/UpdateNoofTestWorkers.ps1
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop'
         flattenFolders: true
         OverWrite: true
 
-    - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
-      displayName: Checkout current branch
-      inputs:
-        repository: self
-    - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
-      displayName: Checkout das-platform-automation
-      inputs:
-        repository: das-platform-automation
-        
     - task: CmdLine@2
       inputs:
         script: |
