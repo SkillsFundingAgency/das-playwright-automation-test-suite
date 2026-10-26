@@ -2,7 +2,6 @@ Feature: FAA_AC_01
 
 @faa
 @regression
-@accessibility
 Scenario: FAA_AC_01_01 - Apprentice journeys through the key Find an apprenticeship pages and actions
 	Given appretince creates an account
 	Then the apprentice can view and update their personal details in settings, including a validation error
@@ -15,7 +14,6 @@ Scenario: FAA_AC_01_01 - Apprentice journeys through the key Find an apprentices
 
 @faa
 @regression
-@accessibility
 Scenario: FAA_AC_01_02 - Apprentice journeys through the application process and validation errors
 	Given appretince creates an account
 	When the apprentice has submitted their application with validation errors
