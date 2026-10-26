@@ -175,6 +175,15 @@ public class FAASignedInLandingBasePage(ScenarioContext context) : FAABasePage(c
         return await VerifyPageAsync(() => new FAABrowseByInterestsPage(context));
     }
 
+    public async Task<FAABrowseByInterestsPage> TriggerValidationErrorOnCategories()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Select at least one job category");
+
+        return await VerifyPageAsync(() => new FAABrowseByInterestsPage(context));
+    }
+
     public async Task ClickSignOut()
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Sign out" }).ClickAsync();

@@ -104,6 +104,10 @@ public class RandomDataGenerator
 
     private static string GenerateRandomString(string characters, int length) => new(Enumerable.Repeat(characters, length).Select(s => s[new Random().Next(s.Length)]).ToArray());
 
+    public static string GenerateRandomWords(int length)
+    {
+        return string.Join(" ", Enumerable.Range(0, length).Select(_ => GenerateRandomAlphabeticString(3)));
+    }
     public static string GenerateRandomPhoneNumber(int length)
     {
         return $"0{GenerateRandomString(Numbers, length - 1)}";

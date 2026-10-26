@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
+﻿using NUnit.Framework.Internal;
+
+namespace SFA.DAS.FAA.UITests.Project.Tests.Pages;
 
 public class JobsPage(ScenarioContext context) : FAABasePage(context)
 {
@@ -6,6 +8,12 @@ public class JobsPage(ScenarioContext context) : FAABasePage(context)
 
     protected override string SubmitSectionButton => ("button.govuk-button[type='submit']");
 
+    public async Task TriggerValidationErrorOnJobs()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Select if you want to add any jobs");
+    }
     public async Task<AddAJobPage> SelectYesAndContinue()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
@@ -38,6 +46,35 @@ public class AddAJobPage(ScenarioContext context) : FAABasePage(context)
     private static string StartDateMonth => ("#StartDateMonth");
     private static string StartDateYear => ("#StartDateYear");
 
+    public async Task TriggerValidationErrorsOnAddJob()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+        await CheckValidationErrors("Enter the job title for this job", 
+            "Enter the company you worked for", 
+            "Enter the responsibilities you had for this job",
+            "Enter the start date for this job", 
+            "Select if this is your current job");
+    }
+
+    public async Task ValidationOnResponsibilitiesWordCount()
+    {
+        await page.Locator(JobTitle).FillAsync(faaDataHelper.WorkExperienceJobTitle);
+
+        await page.Locator(EmployerName).FillAsync(faaDataHelper.WorkExperienceEmployer);
+
+        await page.Locator(JobDescription).FillAsync(RandomDataGenerator.GenerateRandomWords(102));
+
+        await page.Locator(StartDateMonth).FillAsync(faaDataHelper.WorkExperienceStarted.Month.ToString());
+
+        await page.Locator(StartDateYear).FillAsync(faaDataHelper.WorkExperienceStarted.Year.ToString());
+
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+        await CheckValidationErrors("Responsibilities must be 100 words or less");
+    }
     public async Task<JobsPage> SelectAJobAndContinue()
     {
         await page.Locator(JobTitle).FillAsync(faaDataHelper.WorkExperienceJobTitle);

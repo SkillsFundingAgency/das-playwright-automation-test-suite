@@ -81,6 +81,8 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
 
         var dobPage = await settingsPage.ChangeDateOfBirth();
 
+        await dobPage.TriggerDateOfBirthValidationError();
+
         settingsPage = await dobPage.SaveDateOfBirthChange();
 
         var addressPage = await settingsPage.ChangeAddress();
@@ -88,6 +90,8 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
         settingsPage = await addressPage.SaveAddressChange();
 
         var phonePage = await settingsPage.ChangeTelephoneNumber();
+
+        await phonePage.TriggerTelephoneNumberValidationError();
 
         settingsPage = await phonePage.SaveTelephoneNumberChange();
 
@@ -102,6 +106,16 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
         var searchAlertsPage = await settingsPage.GoToSearchAlerts();
 
         await searchAlertsPage.VerifyNoSearchAlertsCreated();
+
+        await searchAlertsPage.CreateASearchAlert();
+
+        await settingsPage.VerifyPage();
+
+        await settingsPage.GoToSearchAlerts();
+
+        await searchAlertsPage.VerifySearchAlertsAreCreated();
+
+        await searchAlertsPage.DeleteSearchAlert();
 
         return await GoToFAAHomePage();
     }
@@ -446,6 +460,127 @@ public class FAAStepsHelper(ScenarioContext context) : FrameworkBaseHooks(contex
             await applicationFormPage.VerifyDisabilityConfidence_1();
         }
 
+        return applicationFormPage;
+    }
+
+    public async Task<FAA_ApplicationOverviewPage> ApplyForAVacancyWithValidationErrors()
+    {
+        var applicationFormPage = await GoToFAASearchResultsPageToSelectAVacancyAndApply();
+
+        var page = await applicationFormPage.Access_Section1_1SchoolCollegeQualifications();
+
+        await page.TriggerValidationErrorOnQualifications();
+
+        var page1 = await page.SelectYesAndContinue();
+
+        await page1.TriggerValidationErrorOnQualificationsSelection();
+
+        var page2 = await page1.SelectAQualificationAndContinue();
+
+        var page3 = await page2.AddQualificationDetailsAndContinue();
+
+        applicationFormPage = await page3.SelectSectionCompleted();
+
+        await applicationFormPage.VerifyEducationHistory_1();
+
+        var page4 = await applicationFormPage.Access_Section1_2TrainingCourse();
+
+        await page4.TriggerValidationErrorOnTrainingCourses();
+
+        var page5 = await page4.SelectYesAndContinue();
+
+        await page5.TriggerValidationErrorsonAddTrainingCourse();
+
+        var page6 = await page5.SelectATrainingCourseAndContinue();
+
+        applicationFormPage = await page6.SelectSectionCompleted();
+
+        await applicationFormPage.VerifyEducationHistory_2();
+
+        var page7 = await applicationFormPage.Access_Section2_1Jobs();
+
+        await page7.TriggerValidationErrorOnJobs();
+
+        var page8 = await page7.SelectYesAndContinue();
+
+        await page8.TriggerValidationErrorsOnAddJob();
+
+        await page8.ValidationOnResponsibilitiesWordCount();
+
+        var page9 = await page8.SelectAJobAndContinue();
+
+        applicationFormPage = await page9.SelectSectionCompleted();
+
+        await applicationFormPage.VerifyWorkHistory_1();
+
+        var page10 = await applicationFormPage.Access_Section2_2VolunteeringAndWorkExperience();
+
+        await page10.CheckValidationErrorOnVolunteering();
+
+        var page11 = await page10.SelectYesAndContinue();
+
+        await page11.CheckValidationErrorsOnAddWorkExperience();
+
+        await page11.CheckValidationErrorOnExperienceWordCount();
+
+        var page12 = await page11.SelectAVolunteeringAndWorkExperience();
+
+        applicationFormPage = await page12.SelectSectionCompleted();
+
+        await applicationFormPage.VerifyWorkHistory_2();
+   
+        var page13 = await applicationFormPage.Access_Section3_1SkillsAndStrengths();
+
+        await page13.CheckValidationOnSkills();
+
+        applicationFormPage = await page13.SelectYesAndCompleteSection();
+
+        await applicationFormPage.VerifyApplicationsQuestions_1();
+
+        var page14 = await applicationFormPage.Access_Section3_2Interests();
+
+        await page14.CheckValiadtionOnInterests();
+
+        applicationFormPage = await page14.SelectYesAndCompleteSection();
+
+        await applicationFormPage.VerifyApplicationsQuestions_2();
+
+        var page15 = await applicationFormPage.RespondToAdditionalQuestion1();
+
+        applicationFormPage = await page15.SelectYesAndCompleteSection();
+
+        await applicationFormPage.VerifyApplicationsQuestions_3();
+
+        var page16 = await applicationFormPage.RespondToAdditionalQuestion2();
+
+        applicationFormPage = await page16.SelectYesAndCompleteSection();
+
+        await applicationFormPage.VerifyApplicationsQuestions_4();
+
+        var page17 = await applicationFormPage.Access_Section4_1Adjustment();
+
+        await page17.CheckValidationErrorsOnInterviewSupport();
+
+        await page17.CheckErrorOnEmptySupport();
+
+        await page17.CheckErrorOnSupportWordCount();
+
+        var page18 = await page17.SelectYesAndContinue();
+
+        applicationFormPage = await page18.SelectSectionCompleted();
+
+        await applicationFormPage.VerifyInterviewAadjustments_1();
+
+        var page19 = await applicationFormPage.Access_Section5_1DisabilityConfidence();
+
+        await page19.CheckValidationOnDisabilityConfident();
+
+        var page20 = await page19.SelectYesAndContinue();
+
+        applicationFormPage = await page20.SelectSectionCompleted();
+
+        await applicationFormPage.VerifyDisabilityConfidence_1();
+        
         return applicationFormPage;
     }
 

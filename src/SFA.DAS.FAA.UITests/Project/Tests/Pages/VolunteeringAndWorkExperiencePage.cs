@@ -6,6 +6,12 @@ public class VolunteeringAndWorkExperiencePage(ScenarioContext context) : FAABas
 
     protected override string SubmitSectionButton => "button.govuk-button[type='submit']";
 
+    public async Task CheckValidationErrorOnVolunteering()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Select if you want to add any volunteering or work experience");
+    }
     public async Task<AddVolunteeringOrWorkExperiencePage> SelectYesAndContinue()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
@@ -37,6 +43,32 @@ public class AddVolunteeringOrWorkExperiencePage(ScenarioContext context) : FAAB
 
     private static string StartDateYear => ("#StartDateYear");
 
+    public async Task CheckValidationErrorsOnAddWorkExperience()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+        await CheckValidationErrors("Enter the company or organisation for this volunteering or work experience",
+            "Enter what you did for this volunteering or work experience",
+            "Enter a real date for the start date",
+            "Select if you’re still doing this volunteering or work experience");
+    }
+
+    public async Task CheckValidationErrorOnExperienceWordCount()
+    {
+        await page.Locator(CompanyName).FillAsync(faaDataHelper.WorkExperienceEmployer);
+
+        await page.Locator(Description).FillAsync(RandomDataGenerator.GenerateRandomWords(102));
+
+        await page.Locator(StartDateMonth).FillAsync(faaDataHelper.WorkExperienceStarted.Month.ToString());
+
+        await page.Locator(StartDateYear).FillAsync(faaDataHelper.WorkExperienceStarted.Year.ToString());
+
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+        await CheckValidationErrors("What you did must be 100 words or less");
+    }
     public async Task<VolunteeringAndWorkExperiencePage> SelectAVolunteeringAndWorkExperience()
     {
         await page.Locator(CompanyName).FillAsync(faaDataHelper.WorkExperienceEmployer);

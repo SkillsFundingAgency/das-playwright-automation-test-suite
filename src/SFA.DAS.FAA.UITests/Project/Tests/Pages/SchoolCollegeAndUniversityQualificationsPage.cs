@@ -4,6 +4,12 @@ public class SchoolCollegeAndUniversityQualificationsPage(ScenarioContext contex
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("School, college and university qualifications");
 
+    public async Task TriggerValidationErrorOnQualifications()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Select if you want to add any qualifications");
+    }
     public async Task<WhatIsYourMostRecentQualificationPage> SelectYesAndContinue()
     {
         var locator = page.GetByRole(AriaRole.Link, new() { Name = "Delete   qualification" }).First;
@@ -41,6 +47,12 @@ public class WhatIsYourMostRecentQualificationPage(ScenarioContext context) : FA
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What is your most recent qualification?");
 
+    public async Task TriggerValidationErrorOnQualificationsSelection()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Select your most recent qualification");
+    }
     public async Task<AddQualificationSubjectPage> SelectAQualificationAndContinue()
     {
         var options = await AllTextAsync(".govuk-radios__label");

@@ -33,9 +33,7 @@ public class WhatIsYourNamePage(ScenarioContext context) : FAABasePage(context)
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
 
-        await Assertions.Expect(page.Locator(".govuk-error-summary")).ToContainTextAsync("There is a problem");
-
-        await Assertions.Expect(page.Locator(".govuk-error-summary")).ToContainTextAsync("Enter your last name");
+        await CheckValidationErrors("Enter your last name");
     }
 
 }
@@ -50,9 +48,7 @@ public class ChangeYourNamePage(ScenarioContext context) : FAABasePage(context)
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
 
-        await Assertions.Expect(page.Locator(".govuk-error-summary")).ToContainTextAsync("There is a problem");
-
-        await Assertions.Expect(page.Locator(".govuk-error-summary")).ToContainTextAsync("Enter your last name");
+        await CheckValidationErrors("Enter your last name");
     }
 
     public async Task<SettingPage> SaveNameChange()
@@ -91,7 +87,15 @@ public class ChangeYourNamePage(ScenarioContext context) : FAABasePage(context)
     {
         public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change your date of birth");
 
-        public async Task<SettingPage> SaveDateOfBirthChange()
+        public async Task TriggerDateOfBirthValidationError()
+        {
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "Day" }).FillAsync(string.Empty);
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+
+            await CheckValidationErrors("Date of birth must include a day, month and year");
+        }
+    public async Task<SettingPage> SaveDateOfBirthChange()
         {
             var dob = fAAUserNameDataHelper.FaaNewUserDob;
 
@@ -211,7 +215,14 @@ public class ChangeYourAddressPage(ScenarioContext context) : FAABasePage(contex
 public class ChangeYourTelephoneNumberPage(ScenarioContext context) : FAABasePage(context)
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Change your telephone number");
+    public async Task TriggerTelephoneNumberValidationError()
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Telephone number" }).FillAsync(string.Empty);
 
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+
+        await CheckValidationErrors("Enter your telephone number");
+    }
     public async Task<SettingPage> SaveTelephoneNumberChange()
     {
         var number = fAAUserNameDataHelper.FaaNewUserMobilePhone;

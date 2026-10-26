@@ -126,6 +126,27 @@ public class SearchAlertsPage(ScenarioContext context) : FAABasePage(context)
 
     public async Task VerifyNoSearchAlertsCreated() =>
         await Assertions.Expect(page.Locator("main")).ToContainTextAsync("You have not created any search alerts.");
+
+    public async Task VerifySearchAlertsAreCreated() => 
+        await Assertions.Expect(page.Locator(".govuk-summary-card").First).ToBeVisibleAsync();
+
+    public async Task CreateASearchAlert()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "search for an apprenticeship" }).ClickAsync();
+        await page.Locator("#WhereSearchTerm").FillAsync("London");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Create an alert for this search" }).ClickAsync();
+        await Assertions.Expect(page.Locator("h3.govuk-notification-banner__heading")).ToContainTextAsync("Search alert created.");
+    }
+
+    public async Task DeleteSearchAlert()
+    {
+        var card = page.Locator(".govuk-summary-card").First;
+        await card.GetByRole(AriaRole.Link, new() { Name = "Delete" }).ClickAsync();
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Do you want to delete this search alert?");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+        await Assertions.Expect(page.Locator("h3.govuk-notification-banner__heading")).ToContainTextAsync("Search alert for All apprenticeships in London Colney, Hertfordshire deleted.");
+    }
 }
 
 public class DeleteAccountPage(ScenarioContext context) : FAABasePage(context)
