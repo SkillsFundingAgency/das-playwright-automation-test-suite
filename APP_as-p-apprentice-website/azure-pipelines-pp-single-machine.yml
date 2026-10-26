@@ -88,6 +88,15 @@ stages:
           $(projectsToBuild)
 
     - task: DotNetCoreCLI@2
+      displayName: 'dotnet pack'
+      inputs:
+        command: 'pack'
+        projects: |
+          $(projectsToBuild)
+        packDirectory: '$(System.DefaultWorkingDirectory)/drop/tests/'
+        arguments: '--configuration $(BuildConfiguration) --no-restore'
+
+    - task: DotNetCoreCLI@2
       displayName: dotnet publish
       inputs:
         command: publish
@@ -115,19 +124,19 @@ stages:
         flattenFolders: true
         OverWrite: true
 
-    - task: CopyFiles@2
-      displayName: Copy project configuration files
-      inputs:
-        SourceFolder: '$(Build.Repository.LocalPath)'
-        Contents: src/**/appsettings.Project.json
-        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
-        flattenFolders: false
-        OverWrite: true
+    # - task: CopyFiles@2
+    #   displayName: Copy project configuration files
+    #   inputs:
+    #     SourceFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
+    #     Contents: src/**/appsettings.Project.json
+    #     TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
+    #     flattenFolders: false
+    #     OverWrite: true
 
     - task: CopyFiles@2
       displayName: Copy runsettings
       inputs:
-        SourceFolder: '$(Build.Repository.LocalPath)'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
         Contents: src/**/*.runsettings
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/runsettings/src'
         flattenFolders: true
@@ -136,7 +145,7 @@ stages:
     - task: CopyFiles@2
       displayName: Copy test result checker
       inputs:
-        SourceFolder: '$(Build.Repository.LocalPath)'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
         Contents: src/**/Check-TestResults.ps1
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/src'
         flattenFolders: true
@@ -145,7 +154,7 @@ stages:
     - task: CopyFiles@2
       displayName: Copy test worker updater
       inputs:
-        SourceFolder: '$(Build.Repository.LocalPath)'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
         Contents: src/**/UpdateNoofTestWorkers.ps1
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/src'
         flattenFolders: true
