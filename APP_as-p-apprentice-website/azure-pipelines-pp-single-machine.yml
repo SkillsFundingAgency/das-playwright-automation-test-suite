@@ -52,7 +52,7 @@ stages:
       displayName: Checkout current branch
       inputs:
         repository: self
-    - task:
+    - task: Checkout das-platform-automation
       displayName: Checkout das-platform-automation
       inputs:
         repository: das-platform-automation
