@@ -78,7 +78,7 @@ stages:
         command: 'pack'
         projects: |
           $(projectsToBuild)
-        packDirectory: '$(System.DefaultWorkingDirectory)/drop/tests/'
+        packDirectory: '$(System.DefaultWorkingDirectory)/drop'
         arguments: '--configuration $(BuildConfiguration) --no-restore'
 
     - task: DotNetCoreCLI@2
@@ -94,6 +94,7 @@ stages:
     - task: CopyFiles@2
       displayName: Copy test configuration files
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite/src'
         Contents: |
           src/**/*.sql
           src/**/appsettings.Config.json
@@ -108,36 +109,39 @@ stages:
         flattenFolders: true
         OverWrite: true
 
-    # - task: CopyFiles@2
-    #   displayName: Copy project configuration files
-    #   inputs:
-    #     SourceFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
-    #     Contents: src/**/appsettings.Project.json
-    #     TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
-    #     flattenFolders: false
-    #     OverWrite: true
+    - task: CopyFiles@2
+      displayName: Copy project configuration files
+      inputs:
+        SourceFolder: 'das-playwright-automation-test-suite/src'
+        Contents: src/**/appsettings.Project.json
+        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
+        flattenFolders: false
+        OverWrite: true
 
     - task: CopyFiles@2
       displayName: Copy runsettings
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite/src'
         Contents: src/**/*.runsettings
-        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/runsettings/src'
+        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/runsettings'
         flattenFolders: true
         OverWrite: true
 
     - task: CopyFiles@2
       displayName: Copy test result checker
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite/src'
         Contents: src/**/Check-TestResults.ps1
-        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/src'
+        TargetFolder: '$(System.DefaultWorkingDirectory)/drop'
         flattenFolders: true
         OverWrite: true
 
     - task: CopyFiles@2
       displayName: Copy test worker updater
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite/src'
         Contents: src/**/UpdateNoofTestWorkers.ps1
-        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/src'
+        TargetFolder: '$(System.DefaultWorkingDirectory)/drop'
         flattenFolders: true
         OverWrite: true
 
