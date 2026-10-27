@@ -18,4 +18,10 @@ public class ProviderRestrictedCoursesPage(ScenarioContext context) : AparAdminB
     {
         await page.Locator($"[href*='{larsCode}']").ClickAsync();
     }
+
+    public async Task ChangeProviderDelivery()
+    {
+        await page.GetByRole(AriaRole.Link, new() {Name = "Change how we manage this provider", Exact = true}).ClickAsync();
+    }
+
 }
