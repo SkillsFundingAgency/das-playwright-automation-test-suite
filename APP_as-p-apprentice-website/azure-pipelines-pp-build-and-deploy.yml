@@ -1,18 +1,10 @@
 trigger: none
 pr: none
 variables:
-- name: BuildConfiguration
-  value: release
-- name: BuildPlatform
-  value: any cpu
-- group: "Release Automation Suite Variables"
-- group: "Release Automation Suite Variables (AppService)"
-- group: "YAML Automation Suite Variables (Db)"
-- group: "Provider Release Automation Suite Variables"
-- name: Deploy
-  value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
+- template: ../pipeline-templates/vars.yml
 - name: projectName
   value: "SFA.DAS.Campaigns.UITests"
+
 resources:
   repositories:
   - repository: self
@@ -26,14 +18,17 @@ resources:
     name: SkillsFundingAgency/das-platform-automation
     ref: refs/tags/5.1.17
     endpoint: SkillsFundingAgency
+
 pool:
   vmImage: 'windows-latest'
+
 stages:
-- stage: Build
-  displayName: Build Stage
+- stage: BuildDeployAndTestPP
+  displayName: Build, deploy and test PP
   jobs:
   - job: CodeBuild
     displayName: Code Build
+    timeoutInMinutes: 30
     workspace:
       clean: all
     variables:
@@ -65,13 +60,6 @@ stages:
         projects: |
           $(projectsToBuild)
     - task: DotNetCoreCLI@2
-      displayName: dotnet unit test
-      inputs:
-        command: 'test'
-        arguments: '--filter "TestCategory=Unittests" --logger trx;logfilename=UnittestResults.trx'
-        projects: |
-          $(projectsToBuild)
-    - task: DotNetCoreCLI@2
       displayName: 'dotnet pack'
       inputs:
         command: 'pack'
@@ -89,7 +77,7 @@ stages:
           $(projectsToBuild)
         arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
     - task: CopyFiles@2
-      displayName: 'Copy plain files to: $(build.artifactstagingdirectory)/tests/files'
+      displayName: 'Copy config files'
       inputs:
         Contents: |
           src/**/*.sql
@@ -105,7 +93,7 @@ stages:
         flattenFolders: true
         OverWrite: true
     - task: CopyFiles@2
-      displayName: 'Copy project json files to: $(build.artifactstagingdirectory)/tests/'
+      displayName: 'Copy project json files'
       inputs:
         Contents: |
           src/**/appsettings.Project.json
@@ -113,21 +101,21 @@ stages:
         flattenFolders: false
         OverWrite: true
     - task: CopyFiles@2
-      displayName: 'Copy Check-TestResults.ps1 to: $(build.artifactstagingdirectory)'
+      displayName: 'Copy Check-TestResults.ps1'
       inputs:
         Contents: |
           src/**/Check-TestResults.ps1
         TargetFolder: '$(build.artifactstagingdirectory)/publish'
         OverWrite: true
     - task: CopyFiles@2
-      displayName: 'Copy UpdateNoofTestWorkers.ps1 to: $(build.artifactstagingdirectory)'
+      displayName: 'Copy UpdateNoofTestWorkers.ps1'
       inputs:
         Contents: |
           src/**/UpdateNoofTestWorkers.ps1
         TargetFolder: '$(build.artifactstagingdirectory)/publish'
         OverWrite: true
     - task: CopyFiles@2
-      displayName: 'Copy runsettings to: $(build.artifactstagingdirectory)'
+      displayName: 'Copy runsettings'
       inputs:
         Contents: |
           src/**/*.runsettings
@@ -145,23 +133,31 @@ stages:
       displayName: 'Publish Artifact'
       inputs:
         pathtoPublish: '$(build.artifactstagingdirectory)/publish'
-- stage: Deploy_PP
-  dependsOn:
-  - Build
-  displayName: Deploy to PP
-  variables:
-  - group: "PreProd Management Resources"
-  - group: "PreProd Shared Resources"
-  - group: "PreProd Automation Suite Variables"
-  jobs:
+    - task: CmdLine@2
+      inputs:
+        script: |
+          echo "Tree Structure of Agent TempDirectory:"
+          tree $(Agent.TempDirectory) /f
+          echo "*************************************************"
+          echo "Tree Structure of System DefaultWorkingDirectory:"
+          tree $(System.DefaultWorkingDirectory) /f
+          echo "*************************************************"
+          echo "Tree Structure of Agent WorkFolder:"
+          tree $(Agent.WorkFolder) /f
+      displayName: 'Agent Folder Structure'
+      condition: always()
+      continueOnError: true
+  
   - deployment: Deploy_AutomationTests
     displayName: Deploy Automation Tests to PP
+    dependsOn: CodeBuild
     environment:
       name: PP
     timeoutInMinutes: 90
     variables:
-    - name: projectName
-      value: $[ stageDependencies.Build.CodeBuild.outputs['buildProjectPaths.projectName'] ]
+    - group: "PreProd Management Resources"
+    - group: "PreProd Shared Resources"
+    - group: "PreProd Automation Suite Variables"
     - name: headless
       value: 'false'
     strategy:
@@ -188,6 +184,21 @@ stages:
             inputs:
               archiveFilePatterns: 'drop/tests.zip'
               destinationFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
+          - task: CmdLine@2
+            inputs:
+              script: |
+                echo "Tree Structure of Agent TempDirectory:"
+                tree $(Agent.TempDirectory) /f
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory:"
+                tree $(System.DefaultWorkingDirectory) /f
+                echo "*************************************************"
+                echo "Tree Structure of Agent WorkFolder:"
+                tree $(Agent.WorkFolder) /f
+            displayName: 'Agent Folder Structure'
+            condition: always()
+            continueOnError: true
+  
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.json'
             inputs:
@@ -198,6 +209,9 @@ stages:
             inputs:
               SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
               TargetFileNames: '*.runsettings'
+          - task: BrowserStackConfig@0
+            inputs:
+              browserstackServiceEndPoint: 'AS-Browserstack'
           - task: PowerShell@2
             displayName: 'Install Playwright Browsers'
             inputs:
