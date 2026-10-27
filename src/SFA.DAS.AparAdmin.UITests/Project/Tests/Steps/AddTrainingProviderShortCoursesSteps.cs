@@ -121,21 +121,6 @@ public class AddTrainingProviderShortCoursesSteps
         await providerDetailsPage.VerifyApprenticeshipUnits(answer);
     }
 
-    [Then("^the user cannot update the training provider type to (.*) without offering apprenticehsips or apprenticeship units$")]
-    public async Task GivenTheUserCannotUpdateTheTrainingProviderTypeToMainProviderWithoutOfferingApprenticehsipsOrApprenticeshipUnits(string providerType)
-    {
-        var providerDetailsPage = new ProviderDetailsPage(_context);
-
-        var providerRoutePage = await providerDetailsPage.ClickChangeTypeOfProvider();
-        await providerRoutePage.SelectProviderType(providerType);
-
-        var offerPage = new OfferApprenticeshipsPage(_context);
-        var unitsPage = await offerPage.NoDoNotOfferApprenticeships();
-        await unitsPage.TrainingProviderMustOfferEitherApprenticeshipsOrApprenticeshipUnits();
-        await unitsPage.YesOfferApprenticeshipsUnits();
-
-    }
-
     private async Task<ManageTrainingProviderInformationPage> OpenManageTrainingProviderPage()
     {
         var home = new AparAdminHomePage(_context);

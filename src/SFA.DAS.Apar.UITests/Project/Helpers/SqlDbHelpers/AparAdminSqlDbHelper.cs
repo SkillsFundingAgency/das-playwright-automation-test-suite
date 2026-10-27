@@ -26,7 +26,7 @@ public class AparAdminSqlDbHelper(ObjectContext objectContext, DbConfig dbConfig
 await ExecuteSqlCommand($@"
         UPDATE Organisations
         SET StatusId = 0,
-            ProviderTypeId = 3,
+            ProviderTypeId = 2,
             OrganisationTypeId = 0,
             RemovedReasonId = NULL
         WHERE ukprn = '{ukprn}';
