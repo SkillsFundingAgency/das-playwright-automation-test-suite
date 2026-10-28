@@ -13,7 +13,9 @@ Scenario: Apar_AD_02_UpdateProviderDetails
 	And the user updated the training provider route status to Removed
 	And the user updated the training provider route status to Active
 	And the user updated the training provider type to Main provider
+	And the user updated the training provider apprenticeship units to No
+	And the user updated the training provider apprenticeship units to Yes
 	And the user updated the training provider Organisation type to Police
 	And the user updated the training provider Organisation type to NHS Trust
 	And the user updated the training provider Organisation type to Local authority
-	And the user updated the training provider type to Supporting Provider	
+	And the user updated the training provider type to Employer Provider	
