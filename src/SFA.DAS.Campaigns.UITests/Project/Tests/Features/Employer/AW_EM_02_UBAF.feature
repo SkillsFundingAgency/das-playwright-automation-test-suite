@@ -1,7 +1,7 @@
 ﻿Feature: AW_EM_02_UBAF
   Verify funding calculation for estimating benefit funding via the Explore funding options card on the Employers page.
 
-  @campaigns @employer @regression
+  @campaigns @employer @regression @integration
   Scenario Outline: AW_EM_02_Verify funding calculation for annual payroll options
     Given the user navigates to the Hire An Apprentice page
     When the user clicks on the employer card "Explore funding options"

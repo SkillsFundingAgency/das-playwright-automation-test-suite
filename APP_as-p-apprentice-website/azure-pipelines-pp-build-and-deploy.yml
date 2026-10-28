@@ -34,10 +34,9 @@ stages:
     variables:
     - group: BUILD Management Resources
     steps:
-    - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
-      displayName: 'Checkout das-platform-automation'
-      inputs:
-        repository: das-platform-automation
+    - checkout: das-platform-automation
+      path: s/das-platform-automation
+      displayName: Checkout das-platform-automation
     # - task: PowerShell@2
     #   name: buildProjectPaths
     #   displayName: Build Project File Path
@@ -63,175 +62,175 @@ stages:
     #     arguments: '--configuration $(BuildConfiguration)'
     #     projects: |
     #       $(projectsToBuild)
-    - task: CmdLine@2
-      inputs:
-        script: |
-          echo "Tree Structure of Agent TempDirectory:"
-          tree $(Agent.TempDirectory) /f
-          echo "*************************************************"
-          echo "Tree Structure of System DefaultWorkingDirectory:"
-          tree $(System.DefaultWorkingDirectory) /f
-          echo "*************************************************"
-          echo "Tree Structure of Agent WorkFolder:"
-          tree $(Agent.WorkFolder) /f
-      displayName: 'Agent Folder Structure'
-      condition: always()
-      continueOnError: true
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       echo "Tree Structure of Agent TempDirectory:"
+    #       tree $(Agent.TempDirectory) /f
+    #       echo "*************************************************"
+    #       echo "Tree Structure of System DefaultWorkingDirectory:"
+    #       tree $(System.DefaultWorkingDirectory) /f
+    #       echo "*************************************************"
+    #       echo "Tree Structure of Agent WorkFolder:"
+    #       tree $(Agent.WorkFolder) /f
+    #   displayName: 'Agent Folder Structure'
+    #   condition: always()
+    #   continueOnError: true
   
-  #   - task: DotNetCoreCLI@2
-  #     displayName: 'dotnet pack'
-  #     inputs:
-  #       command: 'pack'
-  #       projects: |
-  #         $(projectsToBuild)
-  #       packDirectory: '$(build.artifactstagingdirectory)/publish'
-  #       arguments: '--configuration $(BuildConfiguration) --no-restore'
-  #   - task: CmdLine@2
-  #     inputs:
-  #       script: |
-  #         echo "Tree Structure of Artifacts Directory:"
-  #         tree $(build.artifactstagingdirectory) /f
-  #     displayName: 'Agent Folder Structure'
-  #     condition: always()
-  #     continueOnError: true
+    # - task: DotNetCoreCLI@2
+    #   displayName: 'dotnet pack'
+    #   inputs:
+    #     command: 'pack'
+    #     projects: |
+    #       $(projectsToBuild)
+    #     packDirectory: '$(build.artifactstagingdirectory)/publish'
+    #     arguments: '--configuration $(BuildConfiguration) --no-restore'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       echo "Tree Structure of Artifacts Directory:"
+    #       tree $(build.artifactstagingdirectory) /f
+    #   displayName: 'Agent Folder Structure'
+    #   condition: always()
+    #   continueOnError: true
 
-  #   - task: DotNetCoreCLI@2
-  #     displayName: 'dotnet publish'
-  #     inputs:
-  #       command: publish
-  #       publishWebProjects: false
-  #       zipAfterPublish: false
-  #       projects: |
-  #         $(projectsToBuild)
-  #       arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
-  #   - task: CmdLine@2
-  #     inputs:
-  #       script: |
-  #         echo "Tree Structure of Artifacts Directory:"
-  #         tree $(build.artifactstagingdirectory) /f
-  #     displayName: 'Agent Folder Structure'
-  #     condition: always()
-  #     continueOnError: true
+    # - task: DotNetCoreCLI@2
+    #   displayName: 'dotnet publish'
+    #   inputs:
+    #     command: publish
+    #     publishWebProjects: false
+    #     zipAfterPublish: false
+    #     projects: |
+    #       $(projectsToBuild)
+    #     arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       echo "Tree Structure of Artifacts Directory:"
+    #       tree $(build.artifactstagingdirectory) /f
+    #   displayName: 'Agent Folder Structure'
+    #   condition: always()
+    #   continueOnError: true
 
-  #   - task: CopyFiles@2
-  #     displayName: 'Copy config files'
-  #     inputs:
-  #       Contents: |
-  #         src/**/*.sql
-  #         src/**/appsettings.Config.json
-  #         src/**/appsettings.AdminConfig.json
-  #         src/**/appsettings.ProviderConfig.json
-  #         src/**/appsettings.TimeOutConfig.json
-  #         src/**/appsettings.TestExecution.json
-  #         src/**/appsettings.NServiceBusConfig.json
-  #         src/**/appsettings.BrowserStack.json
-  #         src/**/appsettings.ApiFramework.json
-  #       TargetFolder: '$(build.artifactstagingdirectory)/tests/files'
-  #       flattenFolders: true
-  #       OverWrite: true
-  #   - task: CmdLine@2
-  #     inputs:
-  #       script: |
-  #         echo "Tree Structure of Artifacts Directory:"
-  #         tree $(build.artifactstagingdirectory) /f
-  #     displayName: 'Agent Folder Structure'
-  #     condition: always()
-  #     continueOnError: true
+    # - task: CopyFiles@2
+    #   displayName: 'Copy config files'
+    #   inputs:
+    #     Contents: |
+    #       src/**/*.sql
+    #       src/**/appsettings.Config.json
+    #       src/**/appsettings.AdminConfig.json
+    #       src/**/appsettings.ProviderConfig.json
+    #       src/**/appsettings.TimeOutConfig.json
+    #       src/**/appsettings.TestExecution.json
+    #       src/**/appsettings.NServiceBusConfig.json
+    #       src/**/appsettings.BrowserStack.json
+    #       src/**/appsettings.ApiFramework.json
+    #     TargetFolder: '$(build.artifactstagingdirectory)/tests/files'
+    #     flattenFolders: true
+    #     OverWrite: true
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       echo "Tree Structure of Artifacts Directory:"
+    #       tree $(build.artifactstagingdirectory) /f
+    #   displayName: 'Agent Folder Structure'
+    #   condition: always()
+    #   continueOnError: true
       
-  #   - task: CopyFiles@2
-  #     displayName: 'Copy project json files'
-  #     inputs:
-  #       Contents: |
-  #         src/**/appsettings.Project.json
-  #       TargetFolder: '$(build.artifactstagingdirectory)/tests/'
-  #       flattenFolders: false
-  #       OverWrite: true
-  #   - task: CmdLine@2
-  #     inputs:
-  #       script: |
-  #         echo "Tree Structure of Artifacts Directory:"
-  #         tree $(build.artifactstagingdirectory) /f
-  #     displayName: 'Agent Folder Structure'
-  #     condition: always()
-  #     continueOnError: true
+    # - task: CopyFiles@2
+    #   displayName: 'Copy project json files'
+    #   inputs:
+    #     Contents: |
+    #       src/**/appsettings.Project.json
+    #     TargetFolder: '$(build.artifactstagingdirectory)/tests/'
+    #     flattenFolders: false
+    #     OverWrite: true
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       echo "Tree Structure of Artifacts Directory:"
+    #       tree $(build.artifactstagingdirectory) /f
+    #   displayName: 'Agent Folder Structure'
+    #   condition: always()
+    #   continueOnError: true
 
-  #   - task: CopyFiles@2
-  #     displayName: 'Copy Check-TestResults.ps1'
-  #     inputs:
-  #       Contents: |
-  #         src/**/Check-TestResults.ps1
-  #       TargetFolder: '$(build.artifactstagingdirectory)/publish'
-  #       OverWrite: true
-  #   - task: CmdLine@2
-  #     inputs:
-  #       script: |
-  #         echo "Tree Structure of Artifacts Directory:"
-  #         tree $(build.artifactstagingdirectory) /f
-  #     displayName: 'Agent Folder Structure'
-  #     condition: always()
-  #     continueOnError: true
+    # - task: CopyFiles@2
+    #   displayName: 'Copy Check-TestResults.ps1'
+    #   inputs:
+    #     Contents: |
+    #       src/**/Check-TestResults.ps1
+    #     TargetFolder: '$(build.artifactstagingdirectory)/publish'
+    #     OverWrite: true
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       echo "Tree Structure of Artifacts Directory:"
+    #       tree $(build.artifactstagingdirectory) /f
+    #   displayName: 'Agent Folder Structure'
+    #   condition: always()
+    #   continueOnError: true
 
-  #   - task: CopyFiles@2
-  #     displayName: 'Copy UpdateNoofTestWorkers.ps1'
-  #     inputs:
-  #       Contents: |
-  #         src/**/UpdateNoofTestWorkers.ps1
-  #       TargetFolder: '$(build.artifactstagingdirectory)/publish'
-  #       OverWrite: true
-  #   - task: CmdLine@2
-  #     inputs:
-  #       script: |
-  #         echo "Tree Structure of Artifacts Directory:"
-  #         tree $(build.artifactstagingdirectory) /f
-  #     displayName: 'Agent Folder Structure'
-  #     condition: always()
-  #     continueOnError: true
+    # - task: CopyFiles@2
+    #   displayName: 'Copy UpdateNoofTestWorkers.ps1'
+    #   inputs:
+    #     Contents: |
+    #       src/**/UpdateNoofTestWorkers.ps1
+    #     TargetFolder: '$(build.artifactstagingdirectory)/publish'
+    #     OverWrite: true
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       echo "Tree Structure of Artifacts Directory:"
+    #       tree $(build.artifactstagingdirectory) /f
+    #   displayName: 'Agent Folder Structure'
+    #   condition: always()
+    #   continueOnError: true
 
-  #   - task: CopyFiles@2
-  #     displayName: 'Copy runsettings'
-  #     inputs:
-  #       Contents: |
-  #         src/**/*.runsettings
-  #       TargetFolder: '$(build.artifactstagingdirectory)/publish/runsettings'
-  #       OverWrite: true
-  #   - task: CmdLine@2
-  #     inputs:
-  #       script: |
-  #         echo "Tree Structure of Artifacts Directory:"
-  #         tree $(build.artifactstagingdirectory) /f
-  #     displayName: 'Agent Folder Structure'
-  #     condition: always()
-  #     continueOnError: true
+    # - task: CopyFiles@2
+    #   displayName: 'Copy runsettings'
+    #   inputs:
+    #     Contents: |
+    #       src/**/*.runsettings
+    #     TargetFolder: '$(build.artifactstagingdirectory)/publish/runsettings'
+    #     OverWrite: true
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       echo "Tree Structure of Artifacts Directory:"
+    #       tree $(build.artifactstagingdirectory) /f
+    #   displayName: 'Agent Folder Structure'
+    #   condition: always()
+    #   continueOnError: true
 
-  #   - task: ArchiveFiles@2
-  #     displayName: 'Archive Test Files'
-  #     inputs:
-  #       rootFolderOrFile: '$(build.artifactstagingdirectory)/tests'
-  #       includeRootFolder: false
-  #       archiveType: 'zip'
-  #       archiveFile: '$(build.artifactstagingdirectory)/publish/tests.zip'
-  #       replaceExistingArchive: true
+    # - task: ArchiveFiles@2
+    #   displayName: 'Archive Test Files'
+    #   inputs:
+    #     rootFolderOrFile: '$(build.artifactstagingdirectory)/tests'
+    #     includeRootFolder: false
+    #     archiveType: 'zip'
+    #     archiveFile: '$(build.artifactstagingdirectory)/publish/tests.zip'
+    #     replaceExistingArchive: true
 
-  #   - task: CmdLine@2
-  #     inputs:
-  #       script: |
-  #         echo "Tree Structure of Artifacts Directory:"
-  #         tree $(build.artifactstagingdirectory) /f
-  #     displayName: 'Agent Folder Structure'
-  #     condition: always()
-  #     continueOnError: true
-  #   - task: PublishBuildArtifacts@1
-  #     displayName: 'Publish Artifact'
-  #     inputs:
-  #       pathtoPublish: '$(build.artifactstagingdirectory)/publish'
-  #   - task: CmdLine@2
-  #     inputs:
-  #       script: |
-  #         echo "Tree Structure of Artifacts Directory:"
-  #         tree $(build.artifactstagingdirectory) /f
-  #     displayName: 'Agent Folder Structure'
-  #     condition: always()
-  #     continueOnError: true
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       echo "Tree Structure of Artifacts Directory:"
+    #       tree $(build.artifactstagingdirectory) /f
+    #   displayName: 'Agent Folder Structure'
+    #   condition: always()
+    #   continueOnError: true
+    # - task: PublishBuildArtifacts@1
+    #   displayName: 'Publish Artifact'
+    #   inputs:
+    #     pathtoPublish: '$(build.artifactstagingdirectory)/publish'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       echo "Tree Structure of Artifacts Directory:"
+    #       tree $(build.artifactstagingdirectory) /f
+    #   displayName: 'Agent Folder Structure'
+    #   condition: always()
+    #   continueOnError: true
   
   # - deployment: Deploy_AutomationTests
   #   displayName: Deploy Automation Tests to PP
