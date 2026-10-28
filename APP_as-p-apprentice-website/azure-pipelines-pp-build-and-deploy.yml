@@ -229,56 +229,53 @@ stages:
       condition: always()
       continueOnError: true
   
-  # - deployment: Deploy_AutomationTests
-  #   displayName: Deploy Automation Tests to PP
-  #   dependsOn: CodeBuild
-  #   environment:
-  #     name: PP_AUTOMATION
-  #   timeoutInMinutes: 90
-  #   variables:
-  #   - group: "PreProd Management Resources"
-  #   - group: "PreProd Shared Resources"
-  #   - group: "PreProd Automation Suite Variables"
-  #   - name: headless
-  #     value: 'false'
-  #   strategy:
-  #     runOnce:
-  #       deploy:
-  #         steps:
-  #         - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
-  #           displayName: 'Checkout current branch'
-  #           inputs:
-  #             repository: self
-  #         - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
-  #           displayName: 'Checkout das-platform-automation'
-  #           inputs:
-  #             repository: das-platform-automation
-  #         - task: DownloadBuildArtifacts@0
-  #           displayName: 'Download build artifacts'
-  #           inputs:
-  #             buildType: 'current'
-  #             downloadType: 'single'
-  #             artifactName: 'drop'
-  #             downloadPath: '$(System.DefaultWorkingDirectory)'
-  #         - task: ExtractFiles@1
-  #           displayName: 'Extract files'
-  #           inputs:
-  #             archiveFilePatterns: 'drop/tests.zip'
-  #             destinationFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
-  #         - task: CmdLine@2
-  #           inputs:
-  #             script: |
-  #               echo "Tree Structure of Agent TempDirectory:"
-  #               tree $(Agent.TempDirectory) /f
-  #               echo "*************************************************"
-  #               echo "Tree Structure of System DefaultWorkingDirectory:"
-  #               tree $(System.DefaultWorkingDirectory) /f
-  #               echo "*************************************************"
-  #               echo "Tree Structure of Agent WorkFolder:"
-  #               tree $(Agent.WorkFolder) /f
-  #           displayName: 'Agent Folder Structure'
-  #           condition: always()
-  #           continueOnError: true
+  - deployment: Deploy_AutomationTests
+    displayName: Deploy Automation Tests to PP
+    dependsOn: CodeBuild
+    environment:
+      name: PP_AUTOMATION
+    timeoutInMinutes: 90
+    variables:
+    - group: "PreProd Management Resources"
+    - group: "PreProd Shared Resources"
+    - group: "PreProd Automation Suite Variables"
+    - name: headless
+      value: 'false'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
+            displayName: 'Checkout current branch'
+            inputs:
+              repository: self
+          - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
+            displayName: 'Checkout das-platform-automation'
+            inputs:
+              repository: das-platform-automation
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download build artifacts'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.DefaultWorkingDirectory)'
+          - task: ExtractFiles@1
+            displayName: 'Extract files'
+            inputs:
+              archiveFilePatterns: 'drop/tests.zip'
+              destinationFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
+          - task: CmdLine@2
+            inputs:
+              script: |
+                echo "Tree Structure of drop folder:"
+                tree $(System.DefaultWorkingDirectory)/drop /f
+                echo "*************************************************"
+                echo "Tree Structure of System DefaultWorkingDirectory:"
+                tree $(System.DefaultWorkingDirectory) /f
+            displayName: 'Agent Folder Structure'
+            condition: always()
+            continueOnError: true
   
   #         - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
   #           displayName: 'Tokenization: Transform file *.json'
