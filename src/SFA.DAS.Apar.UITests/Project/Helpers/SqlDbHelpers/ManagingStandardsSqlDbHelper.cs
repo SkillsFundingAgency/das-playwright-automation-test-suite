@@ -35,4 +35,9 @@ public class ManagingStandardsSqlDbHelper(ObjectContext objectContext, DbConfig 
        $"DELETE FROM Audit WHERE Id = (SELECT TOP (1) Id FROM Audit WHERE EntityId = @Ukprn AND UserAction = 'UpdateProviderCourseType' ORDER BY AuditDate DESC);";
        await ExecuteSqlCommand(query);
     }
+
+    public async Task ClearProviderCourseType(string ukprn)
+    {
+        await ExecuteSqlCommand($"DELETE FROM ProviderCourseType where ukprn = '{ukprn}';");
+    }
 }
