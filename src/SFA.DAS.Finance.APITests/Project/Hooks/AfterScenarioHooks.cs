@@ -12,48 +12,49 @@ public class AfterScenarioHooks(ScenarioContext context)
         var accountsHelper = context.Get<AccountsSqlDataHelper>();
         if (accountsHelper == null) return;
 
+        // PaymentsStag
         var paymentId = GetContextValue("paymentId");
         if (!string.IsNullOrWhiteSpace(paymentId))
         {
             var escapedPaymentId = paymentId.Replace("'", "''");
 
-            await accountsHelper.ExecuteSql($@"
-DELETE FROM [employer_financial].[PaymentMetaDataStaging]
-WHERE [PaymentId] = '{escapedPaymentId}';", useFinanceDb: true);
+            await accountsHelper.ExecuteSql($@"DELETE FROM [employer_financial].[PaymentMetaDataStaging] WHERE [PaymentId] = '{escapedPaymentId}';", useFinanceDb: true);
 
-            await accountsHelper.ExecuteSql($@"
-DELETE FROM [employer_financial].[PaymentStaging]
-WHERE [PaymentId] = '{escapedPaymentId}';", useFinanceDb: true);
+            await accountsHelper.ExecuteSql($@"DELETE FROM [employer_financial].[PaymentStaging]WHERE [PaymentId] = '{escapedPaymentId}';", useFinanceDb: true);
         }
 
+        // TransferStag
         var transferId = GetContextValue("transferId");
         if (!string.IsNullOrWhiteSpace(transferId))
         {
             var escapedTransferId = transferId.Replace("'", "''");
 
-            await accountsHelper.ExecuteSql($@"
-DELETE FROM [employer_financial].[TransferStaging]
-            WHERE [TransferId] = '{escapedTransferId}';", useFinanceDb: true);
+            await accountsHelper.ExecuteSql($@"DELETE FROM [employer_financial].[TransferStaging] WHERE [TransferId] = '{escapedTransferId}';", useFinanceDb: true);
         }
 
+        // TransactionLineStaging
+        var transactionLineId = GetContextValue("transactionLineId");
+        if (!string.IsNullOrWhiteSpace(transactionLineId))
+        {
+            await accountsHelper.ExecuteSql($@"DELETE FROM [employer_financial].[TransactionLineStaging] WHERE [accountId] = {transactionLineId};", useFinanceDb: true);
+        }
+
+        // PeriodEnd
         var empRef = GetContextValue("englishFractionsEmpRef");
         if (!string.IsNullOrWhiteSpace(empRef))
         {
             var escapedEmpRef = empRef.Replace("'", "''");
 
-            await accountsHelper.ExecuteSql($@"
-DELETE FROM [employer_financial].[EnglishFraction]
-WHERE EmpRef = '{escapedEmpRef}';", useFinanceDb: true);
+            await accountsHelper.ExecuteSql($@"DELETE FROM [employer_financial].[EnglishFraction] WHERE EmpRef = '{escapedEmpRef}';", useFinanceDb: true);
         }
 
+        // EngFraction
         var englishFractionCalculationDate = GetContextValue("englishFractionCalculationDate");
         if (!string.IsNullOrWhiteSpace(englishFractionCalculationDate))
         {
             var escapedDate = englishFractionCalculationDate.Replace("'", "''");
 
-            await accountsHelper.ExecuteSql($@"
-DELETE FROM [employer_financial].[EnglishFractionCalculationDate]
-WHERE CONVERT(varchar(10), [DateCalculated], 23) = '{escapedDate}';", useFinanceDb: true);
+            await accountsHelper.ExecuteSql($@"DELETE FROM [employer_financial].[EnglishFractionCalculationDate] WHERE CONVERT(varchar(10), [DateCalculated], 23) = '{escapedDate}';", useFinanceDb: true);
         }
     }
 

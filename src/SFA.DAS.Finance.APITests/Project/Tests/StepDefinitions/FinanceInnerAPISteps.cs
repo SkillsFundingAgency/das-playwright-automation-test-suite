@@ -157,6 +157,30 @@ public class FinanceInnerAPISteps
     [Then(@"Verify the record in TransferStaging table with the data posted via api")]
     public async Task ThenVerifyTheRecordInTransferStagingTableWithTheDataPostedViaApi() => await _stepHelper.CompareTransferStagingDataAgainstDb();
 
+    [Given(@"post new transaction lines to TransactionLineStaging table via api")]
+    public async Task GivenPostNewTransactionLinesToTransactionLineStagingTableViaApi()
+    {
+        var payloadContent = await _stepHelper.PrepareTransactionLineStagingPayload("TransactionLinesStagingTemplate.json");
+        await _innerApiRestClient.PostTransactionLinesStaging(payloadContent);
+    }
+
+    [When(@"find record in TransactionLineStaging table")]
+    public async Task WhenFindRecordInTransactionLineStagingTable()
+    {
+        var id = Convert.ToInt64(_scenarioContext["transactionLineId"], CultureInfo.InvariantCulture);
+        var accountId = id;
+        var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+
+        var sqlResult = await accountsHelper.ExecuteSqlFileWithReplacements(
+            "getTransactionLineStagingById.sql",
+            new Dictionary<string, string> { { "accountId", accountId.ToString(CultureInfo.InvariantCulture) } });
+
+        _scenarioContext["transactionLineStagingDbRecord"] = sqlResult;
+    }
+
+    [Then(@"Verify the record in TransactionLineStaging table with the data posted via api")]
+    public async Task ThenVerifyTheRecordInTransactionLineStagingTableWithTheDataPostedViaApi() => await _stepHelper.CompareTransactionLineStagingDataAgainstDb();
+
     [Given(@"post new payments to PaymentStaging table via api")]
     public async Task GivenPostNewPaymentsToPaymentStagingTableViaApi()
     {
