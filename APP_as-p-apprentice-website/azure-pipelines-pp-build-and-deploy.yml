@@ -34,6 +34,9 @@ stages:
     variables:
     - group: BUILD Management Resources
     steps:
+    - checkout: self
+      path: $(System.DefaultWorkingDirectory)
+      displayName: Checkout current branch
     - checkout: das-platform-automation
       path: s/das-platform-automation
       displayName: Checkout das-platform-automation
