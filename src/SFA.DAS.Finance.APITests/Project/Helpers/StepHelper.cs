@@ -1,10 +1,11 @@
-using System;
+using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using SFA.DAS.Finance.APITests.Project.Helpers.SqlHelpers;
 
 namespace SFA.DAS.Finance.APITests.Project.Helpers
 {
@@ -46,6 +47,85 @@ namespace SFA.DAS.Finance.APITests.Project.Helpers
             try { _scenarioContext.Set(transfer, "transferStagingExpectedPayload"); } catch { _scenarioContext["transferStagingExpectedPayload"] = transfer; }
 
             return payloadObject.ToString(Formatting.None);
+        }
+
+        public async Task<string> PrepareTransactionLineStagingPayload(string fileName)
+        {
+            var payloadObject = JObject.Parse(GetPayloadTemplate(fileName));
+            var line = payloadObject["transactionLines"]?[0] as JObject;
+            Assert.IsNotNull(line, "transactionLines[0] not found in payload template.");
+
+            var id = new Random().Next(1, 800000);
+            // line["id"] = id;
+            line["accountId"] = id;
+            //_scenarioContext["accountId"] = id;
+            _scenarioContext["transactionLineId"] = id;
+            _scenarioContext["transactionLineStagingExpectedPayload"] = line;
+
+            return payloadObject.ToString(Formatting.None);
+        }
+
+        public async Task CompareTransactionLineStagingDataAgainstDb()
+        {
+            var expected = _scenarioContext.Get<JObject>("transactionLineStagingExpectedPayload");
+            var sqlResult = _scenarioContext.Get<List<string>>("transactionLineStagingDbRecord");
+
+            Assert.IsNotNull(expected, "Expected transaction line payload was not found in ScenarioContext.");
+            Assert.IsTrue(sqlResult != null && sqlResult.Count > 0, "No TransactionLineStaging record found in DB for the posted id.");
+
+            var aliases = new List<string>
+            {
+                  "id", "accountId", "dateCreated","submissionId", "transactionDate", "transactionType", "levyDeclared",
+                "amount", "empRef", "periodEnd", "ukprn", "sfaCoInvestmentAmount", "employerCoInvestmentAmount",
+                "englishFraction", "transferSenderAccountId", "transferSenderAccountName",
+                "transferReceiverAccountId", "transferReceiverAccountName"
+            };
+
+            var actual = MapRowToDictionary(sqlResult, aliases);
+            var numericFields = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "transactionType", "levyDeclared", "amount", "ukprn",
+                "sfaCoInvestmentAmount", "employerCoInvestmentAmount", "englishFraction",
+                "transferSenderAccountId", "transferReceiverAccountId"
+            };
+
+            var ignoreFields = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "id", "submissionId"
+            };
+
+            foreach (var alias in aliases)
+            {
+                var expectedValue = expected[alias]?.Type == JTokenType.Date
+                    ? expected[alias].Value<DateTime>().ToUniversalTime().ToString("O", CultureInfo.InvariantCulture)
+                    : expected[alias]?.ToString() ?? string.Empty;
+                var actualValue = actual[alias];
+
+                if (numericFields.Contains(alias))
+                {
+                    Assert.AreEqual(
+                        decimal.Parse(expectedValue, CultureInfo.InvariantCulture),
+                        decimal.Parse(actualValue, NumberStyles.Any, CultureInfo.InvariantCulture),
+                        $"Mismatch for '{alias}'.");
+                }
+                else if (alias is "transactionDate" or "dateCreated")
+                {
+                    // DATETIME column rounds milliseconds, so compare to the second
+                    Assert.AreEqual(ParseDateTime(expectedValue)[..19], ParseDateTime(actualValue)[..19], $"Mismatch for '{alias}'.");
+                }
+                else if (alias == "periodEnd")
+                {
+                    Assert.AreEqual(ParseDate(expectedValue), ParseDate(actualValue), $"Mismatch for '{alias}'.");
+                }
+                else if (!ignoreFields.Contains(alias))
+                {
+                    Assert.AreEqual(expectedValue, actualValue, $"Mismatch for '{alias}'.");
+                }
+                else
+                {
+                    // 
+                }
+            }
         }
 
         public async Task<string> PreparePaymentStagingPayload(string fileName)

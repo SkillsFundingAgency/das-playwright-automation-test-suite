@@ -8,6 +8,7 @@
 *.sln.docstates
 Screenshots
 Tracefiles
+/src/*/log/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -258,3 +259,4 @@ src/.idea/.idea.SFA.DAS.TestAutomation/.idea/
 .vscode/settings.json
 src/.vscode/settings.json
 /allure*
+**/*/dotnet-tools.json

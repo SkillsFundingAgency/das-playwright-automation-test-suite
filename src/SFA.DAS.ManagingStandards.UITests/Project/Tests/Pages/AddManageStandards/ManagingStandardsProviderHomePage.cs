@@ -6,7 +6,7 @@ public class ManagingStandardsProviderHomePage(ScenarioContext context) : Provid
 {
     public new async Task<YourStandardsAndTrainingVenuesPage> NavigateToYourStandardsAndTrainingVenuesPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your training and venues"}).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage apprenticeships and apprenticeship units"}).ClickAsync();
 
         return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
     }

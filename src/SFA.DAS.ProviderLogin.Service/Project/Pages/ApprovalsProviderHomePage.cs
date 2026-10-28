@@ -122,14 +122,14 @@ public partial class ProviderHomePage : InterimProviderBasePage
 
     public async Task<ProviderYourStandardsAndTrainingVenuesPage> NavigateToYourStandardsAndTrainingVenuesPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your training and venues" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage apprenticeships and apprenticeship units" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderYourStandardsAndTrainingVenuesPage(context));
     }
 
     public async Task<ProviderInformationNotFoundPage> NavigateToShutterPage_EmployerTypeProviderPage()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your training and venues" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage apprenticeships and apprenticeship units" }).ClickAsync();
 
         return await VerifyPageAsync(() => new ProviderInformationNotFoundPage(context));
     }
