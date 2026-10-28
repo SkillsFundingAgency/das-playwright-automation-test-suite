@@ -246,10 +246,6 @@ stages:
         deploy:
           steps:
           - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
-            displayName: 'Checkout current branch'
-            inputs:
-              repository: self
-          - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
             displayName: 'Checkout das-platform-automation'
             inputs:
               repository: das-platform-automation
@@ -277,74 +273,95 @@ stages:
             condition: always()
             continueOnError: true
   
-  #         - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
-  #           displayName: 'Tokenization: Transform file *.json'
-  #           inputs:
-  #             SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests'
-  #             TargetFileNames: '*.json'
-  #         - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
-  #           displayName: 'Tokenization: Transform file *.runsettings'
-  #           inputs:
-  #             SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
-  #             TargetFileNames: '*.runsettings'
-  #         - task: BrowserStackConfig@0
-  #           inputs:
-  #             browserstackServiceEndPoint: 'AS-Browserstack'
-  #         - task: PowerShell@2
-  #           displayName: 'Install Playwright Browsers'
-  #           inputs:
-  #             targetType: 'filePath'
-  #             filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
-  #             arguments: install $(BROWSER_TYPE)
-  #         - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
-  #           displayName: 'Set Screen Resolution'
-  #           inputs:
-  #             displaySettings: specific
-  #             width: 1920
-  #             height: 1080
-  #         - task: AzurePowerShell@5
-  #           displayName: "Get Agent's IP Address"
-  #           inputs:
-  #             azureSubscription: das-pp-automation-test-suite-db-sc
-  #             ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Get-MyIpAddress.ps1'
-  #             ScriptArguments: '-WhatsMyIpUrl "https://ifconfig.me/ip"'
-  #             azurePowerShellVersion: LatestVersion
-  #         - task: AzurePowerShell@5
-  #           displayName: "Whitelist agent's IP address"
-  #           inputs:
-  #             azureSubscription: das-pp-automation-test-suite-db-sc
-  #             ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AzSqlIpException.ps1'
-  #             ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
-  #             azurePowerShellVersion: LatestVersion
-  #         - task: AzurePowerShell@5
-  #           displayName: "Whitelist agent's IP address on $(AppServiceName)"
-  #           condition: ne('', '')
-  #           inputs:
-  #             azureSubscription: das-pp-automation-test-suite-db-sc
-  #             ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
-  #             ScriptArguments: '-ResourceName  -IPAddress $(IPAddress) -RuleName '
-  #             azurePowerShellVersion: LatestVersion
-  #         - task: AzurePowerShell@5
-  #           displayName: "Whitelist agent's IP address on Function App"
-  #           inputs:
-  #             azureSubscription: das-pp-automation-test-suite-db-sc
-  #             ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
-  #             ScriptArguments: -IpAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa" -RuleName ""
-  #             azurePowerShellVersion: LatestVersion
-  #           condition: and(succeeded(), eq('False', 'true'))
-  #         - task: AzureCLI@2
-  #           displayName: 'Bootstrap Azure SP credentials'
-  #           inputs:
-  #             azureSubscription: das-pp-automation-test-suite-db-sc
-  #             addSpnToEnvironment: true
-  #             scriptType: ps
-  #             scriptLocation: inlineScript
-  #             inlineScript: |
-  #               # Promote SP credentials from the service connection to pipeline variables
-  #               Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID;issecret=false]$env:servicePrincipalId"
-  #               Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID;issecret=false]$env:tenantId"
-  #               Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
-  #         - task: VSTest@3
+          - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
+            displayName: 'Tokenization: Transform file *.json'
+            inputs:
+              SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests'
+              TargetFileNames: '*.json'
+          - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
+            displayName: 'Tokenization: Transform file *.runsettings'
+            inputs:
+              SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
+              TargetFileNames: '*.runsettings'
+          - task: BrowserStackConfig@0
+            inputs:
+              browserstackServiceEndPoint: 'AS-Browserstack'
+          - task: PowerShell@2
+            displayName: 'Install Playwright Browsers'
+            inputs:
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
+              arguments: install $(BROWSER_TYPE)
+          - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
+            displayName: 'Set Screen Resolution'
+            inputs:
+              displaySettings: specific
+              width: 1920
+              height: 1080
+          - task: AzurePowerShell@5
+            displayName: "Get Agent's IP Address"
+            inputs:
+              azureSubscription: das-pp-automation-test-suite-db-sc
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Get-MyIpAddress.ps1'
+              ScriptArguments: '-WhatsMyIpUrl "https://ifconfig.me/ip"'
+              azurePowerShellVersion: LatestVersion
+          - task: AzurePowerShell@5
+            displayName: "Whitelist agent's IP address"
+            inputs:
+              azureSubscription: das-pp-automation-test-suite-db-sc
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AzSqlIpException.ps1'
+              ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
+              azurePowerShellVersion: LatestVersion
+          - task: AzurePowerShell@5
+            displayName: "Whitelist agent's IP address on $(AppServiceName)"
+            condition: ne('', '')
+            inputs:
+              azureSubscription: das-pp-automation-test-suite-db-sc
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
+              ScriptArguments: '-ResourceName  -IPAddress $(IPAddress) -RuleName '
+              azurePowerShellVersion: LatestVersion
+          - task: AzurePowerShell@5
+            displayName: "Whitelist agent's IP address on Function App"
+            inputs:
+              azureSubscription: das-pp-automation-test-suite-db-sc
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
+              ScriptArguments: -IpAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa" -RuleName ""
+              azurePowerShellVersion: LatestVersion
+            condition: and(succeeded(), eq('False', 'true'))
+          - task: AzureCLI@2
+            displayName: 'Bootstrap Azure SP credentials'
+            inputs:
+              azureSubscription: das-pp-automation-test-suite-db-sc
+              addSpnToEnvironment: true
+              scriptType: ps
+              scriptLocation: inlineScript
+              inlineScript: |
+                # Promote SP credentials from the service connection to pipeline variables
+                Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID;issecret=false]$env:servicePrincipalId"
+                Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID;issecret=false]$env:tenantId"
+                Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
+          - task: CmdLine@2
+            displayName: 'BrowserStack SDK - PP test execution'
+            env:
+              AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+              AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+              AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+              BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
+              BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
+            inputs:
+              script: |
+                dotnet browserstack-sdk ^
+                  --configuration "$(BuildConfiguration)" ^
+                  --no-build ^
+                  --no-restore ^
+                  --logger "trx;LogFileName=TestResults.trx" ^
+                  --results-directory "$(Agent.TempDirectory)/TestResults" ^
+                  --settings "$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings" ^
+                  --filter "$(TestCategory)&TestCategory!=ignoreinpp"
+              workingDirectory: '$(System.DefaultWorkingDirectory)/drop/tests/'
+            continueOnError: true
+
+          # - task: VSTest@3
   #           displayName: 'VsTest - Test Execution'
   #           env:
   #             AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
@@ -363,39 +380,39 @@ stages:
   #             rerunFailedTestsMaxPercent: 30
   #             rerunMaxAttempts: 1
   #           continueOnError: true
-  #         - task: AzurePowerShell@5
-  #           displayName: "SQL - Remove Whitelisted Agent's IP Address"
-  #           inputs:
-  #             azureSubscription: das-pp-automation-test-suite-db-sc
-  #             ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AzSqlIpException.ps1'
-  #             ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
-  #             azurePowerShellVersion: LatestVersion
-  #           condition: succeededOrFailed()
-  #         - task: AzurePowerShell@5
-  #           displayName: "App Service - Remove Whitelisted Agent's IP Address"
-  #           inputs:
-  #             azureSubscription: das-pp-automation-test-suite-db-sc
-  #             ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
-  #             ScriptArguments: '-IPAddress $(IPAddress) -ResourceName '
-  #             azurePowerShellVersion: LatestVersion
-  #             pwsh: true
-  #           condition: and(succeededOrFailed(), ne('', ''))
-  #         - task: AzurePowerShell@5
-  #           displayName: "Function App- Remove Whitelisted Agent's IP Address"
-  #           inputs:
-  #             azureSubscription: das-pp-automation-test-suite-db-sc
-  #             ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
-  #             ScriptArguments: '-IPAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa"'
-  #             azurePowerShellVersion: LatestVersion
-  #             pwsh: true
-  #           condition: and(succeededOrFailed(), eq('False', 'true'))
-  #         - task: PowerShell@2
-  #           displayName: 'Check .trx File Exists'
-  #           inputs:
-  #             targetType: 'filePath'
-  #             filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
-  #             arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
-  #           condition: succeededOrFailed()
-  #         - task: BrowserStackResults@0
-  #           inputs:
-  #             browserstackProduct: 'observability'
+          - task: AzurePowerShell@5
+            displayName: "SQL - Remove Whitelisted Agent's IP Address"
+            inputs:
+              azureSubscription: das-pp-automation-test-suite-db-sc
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AzSqlIpException.ps1'
+              ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
+              azurePowerShellVersion: LatestVersion
+            condition: succeededOrFailed()
+          - task: AzurePowerShell@5
+            displayName: "App Service - Remove Whitelisted Agent's IP Address"
+            inputs:
+              azureSubscription: das-pp-automation-test-suite-db-sc
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
+              ScriptArguments: '-IPAddress $(IPAddress) -ResourceName '
+              azurePowerShellVersion: LatestVersion
+              pwsh: true
+            condition: and(succeededOrFailed(), ne('', ''))
+          - task: AzurePowerShell@5
+            displayName: "Function App- Remove Whitelisted Agent's IP Address"
+            inputs:
+              azureSubscription: das-pp-automation-test-suite-db-sc
+              ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Remove-AppServiceIpException.ps1'
+              ScriptArguments: '-IPAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa"'
+              azurePowerShellVersion: LatestVersion
+              pwsh: true
+            condition: and(succeededOrFailed(), eq('False', 'true'))
+          - task: PowerShell@2
+            displayName: 'Check .trx File Exists'
+            inputs:
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
+              arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
+            condition: succeededOrFailed()
+          - task: BrowserStackResults@0
+            inputs:
+              browserstackProduct: 'observability'
