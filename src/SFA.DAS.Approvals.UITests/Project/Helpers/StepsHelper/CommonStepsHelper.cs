@@ -67,6 +67,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             });
         }
 
+        public async Task<Cohort> GetCohortDetails()
+        {
+            var apprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship)
+                .FirstOrDefault();
+
+            return await Task.FromResult(apprenticeship?.Cohort
+                ?? throw new InvalidOperationException("No cohort details are available in the scenario context."));
+        }
+
         internal async Task<List<Cohort>> GetCohortReferenceList() => await Task.FromResult(objectContext.Get<List<Cohort>>(CohortReferenceList));
 
         public async Task SetCohortReferenceList(Cohort cohort)

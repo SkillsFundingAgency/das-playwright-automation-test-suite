@@ -57,6 +57,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
 
             var cohortReferences = await commonStepsHelper.GetCohortReferenceList();
+            var cohortReference = await commonStepsHelper.GetCohortDetails();
 
             // morethan one cohort
             if (cohortReferences?.Count > 1)
@@ -67,10 +68,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
                   context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
                 }
             }
+            else if (cohortReference != null)
+            {
+                  listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, numberOfApprentices, null, listOfApprenticeship, null,  null, null, cohortReference);              
+                  context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+            }
             else // single cohort
             {
-               listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
-               context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
+                listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+                context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
             }
 
         }
@@ -142,15 +148,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
             for (int i = 0; i < listOfApprenticeship.Count; i++)
             {
-              DateTime trainingStartDate = DateTime.Today.AddMonths(1);      
-              TrainingFactory trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
-              var apprenticeDetails = new ApprenticeFactory(24);
+                DateTime trainingStartDate = DateTime.Today.AddMonths(1);
+                TrainingFactory trainingDetails = new TrainingFactory(trainingStartDate, coursesDataHelper => coursesDataHelper.GetRandomFoundationCourse());
+                var apprenticeDetails = new ApprenticeFactory(24);
 
-              var newApprenticeships = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 2, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: trainingDetails);
+                var newApprenticeships = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 3, null, null, apprenticeFactory: apprenticeDetails, trainingFactory: trainingDetails);
 
 
                 newApprenticeships[0].EmployerDetails = listOfApprenticeship[i].EmployerDetails;
                 newApprenticeships[1].EmployerDetails = listOfApprenticeship[i].EmployerDetails;
+                newApprenticeships[2].EmployerDetails = listOfApprenticeship[i].EmployerDetails;
+
+                newApprenticeships[0].Cohort = listOfApprenticeship[i].Cohort;
+                newApprenticeships[1].Cohort = listOfApprenticeship[i].Cohort;
                 listOfApprenticeshipNew.AddRange(newApprenticeships);
             }
 
@@ -267,74 +277,35 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
         }
 
-        [Given(@"the provider has a cohort which is with employer")]
-       private async Task GivenTheProviderHasACohortWhichIsWithEmployert()
+       [Given(@"the provider has a cohort (.*)")]
+       public async Task GivenPickTheProviderHasACohortWhich(string filterby)
         {
 
-            var listOfApprenticeship = context.ContainsKey(ScenarioKeys.ListOfApprenticeship)
-                ? context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship) ?? new List<Apprenticeship>()
-                : new List<Apprenticeship>();
 
-            // List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
-            // listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship)  != null ? context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship) : await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship);
-            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1);
-
-            var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
-            var email = listOfApprenticeship.FirstOrDefault().EmployerDetails.Email;
-            var name = listOfApprenticeship.FirstOrDefault().EmployerDetails.EmployerName;
-            var employerAccountId = await  _accountsDbSqlHelper.GetEmployerAccountId(email, name);
-           
-            var cohortRef = await _commitmentsDbSqlHelper.GetProviderCohortWhichIsWithEmployer(ukprn, employerAccountId);    
-            
-            
-            listOfApprenticeship.FirstOrDefault().Cohort.Reference = cohortRef;
-            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
-
-            await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
-        }
-
-       [Given(@"the provider has a cohort which is with transfer-sender")]
-       private async Task GivenTheProviderHasACohortWhichIsWithTransferSender()
-        {
-            var listOfApprenticeship = context.ContainsKey(ScenarioKeys.ListOfApprenticeship)
-                ? context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship) ?? new List<Apprenticeship>()
-                : new List<Apprenticeship>();
-            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1);
-
-            // List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
-            
-            // listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship)  != null ? context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship) : await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship);
-            var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
-            var cohortRef = await _commitmentsDbSqlHelper.GetProviderCohortWithTransferSender(ukprn);    
-           
-            listOfApprenticeship.FirstOrDefault().Cohort.Reference = cohortRef;
-            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
-
-            await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
-        }
-
-       [Given(@"the provider has a cohort as a result of change of party")]
-       private async Task GivenTheProviderHasACohortAsAResultOfChangeOfParty()
-        {
-
-            var listOfApprenticeship = context.ContainsKey(ScenarioKeys.ListOfApprenticeship)
-                ? context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship) ?? new List<Apprenticeship>()
-                : new List<Apprenticeship>();
-            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1);
-
-            // List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
-            // listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship)  != null ? context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship) : await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship);
-           
+            var listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1);
 
             var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
             var employerAccountId = await  _accountsDbSqlHelper.GetEmployerAccountId(listOfApprenticeship.FirstOrDefault().EmployerDetails.Email, listOfApprenticeship.FirstOrDefault().EmployerDetails.EmployerName);
-            var cohortRef = await _commitmentsDbSqlHelper.GetProviderCohortWithChangeOfParty(ukprn, employerAccountId);    
+
+            var cohortRef = string.Empty;
+            if(filterby == "which is with employer")
+            {
+                cohortRef = await _commitmentsDbSqlHelper.GetProviderCohortWhichIsWithEmployer(ukprn, employerAccountId);
+            }else if(filterby == "which is with transfer-sender")
+            {
+                cohortRef = await _commitmentsDbSqlHelper.GetProviderCohortWithTransferSender(ukprn);
+            } else if(filterby == "as a result of change of party")
+            {
+                cohortRef = await _commitmentsDbSqlHelper.GetProviderCohortWithChangeOfParty(ukprn, employerAccountId);
+            } 
 
             listOfApprenticeship.FirstOrDefault().Cohort.Reference = cohortRef;
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
 
             await commonStepsHelper.SetCohortDetails(cohortRef, "Under review with Employer", "Ready for approval");
         }
+
+
 
 
 
@@ -349,16 +320,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await page.UploadFileErrorCase(fileUploadHelper.CsvFileLocation());
         }
 
-
         [Then(@"Non Editable Cohorts error message is displayed")]
-        private async Task ThenNonEditableCohortsErrorMessageIsDisplayed()
+        public async Task ThenNonEditableCohortsErrorMessageIsDisplayed()
         {
             var errorPageMsg = "You cannot add apprentices to this cohort, as it is with the employer. You need to add this learner to a different or new cohort.";
             await new ThereIsAProblemWithYourCsvFilePage(context).ValidateErrorMessage(errorPageMsg);
         }
 
         [Then(@"Transfer Sender Cohorts error message is displayed")]
-        private async Task ThenTransferSenderCohortsErrorMessageIsDisplayed()
+        public async Task ThenTransferSenderCohortsErrorMessageIsDisplayed()
         {
         
             var errorPageMsg = "You cannot add apprentices to this cohort, as it is with the transfer sending employer. You need to add this learner to a different or new cohort.";
@@ -366,7 +336,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         }
 
         [Then(@"an error message is displayed")]
-        private async Task ThenAnErrorMessageIsDisplayed()
+        public async Task ThenAnErrorMessageIsDisplayed()
         {
             var errorPageMsg = "You cannot add apprentices to this cohort. You need to add this learner to a different or new cohort.";
             await new ThereIsAProblemWithYourCsvFilePage(context).ValidateErrorMessage(errorPageMsg);
@@ -375,24 +345,24 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
 
         [Given(@"Provider says No on Confirm cancel confirmation page")]
         [When(@"Provider says No on Confirm cancel confirmation page")]
-        private async Task ProviderSelectsNoOnConfirmCancelConfirmationPage() => await new AreYouSureYouWantToDiscardThisFilePage(context).SelectNoAndContinue();
+        public async Task ProviderSelectsNoOnConfirmCancelConfirmationPage() => await new AreYouSureYouWantToDiscardThisFilePage(context).SelectNoAndContinue();
 
 
         [Given(@"Provider says Yes on Confirm cancel confirmation page")]
         [When(@"Provider says Yes on Confirm cancel confirmation page")]
-        private async Task ProviderSelectsYesOnConfirmCancelConfirmationPage() => await new AreYouSureYouWantToDiscardThisFilePage(context).SelectYesAndContinue();
+        public async Task ProviderSelectsYesOnConfirmCancelConfirmationPage() => await new AreYouSureYouWantToDiscardThisFilePage(context).SelectYesAndContinue();
 
         [Given(@"Upload cancelled confirmation page is displayed")]
         [When(@"Upload cancelled confirmation page is displayed")]
-        private async Task UploadCancelled() => await new FileUploadCancelledPage(context).VerifyPage();
+        public async Task UploadCancelled() => await new FileUploadCancelledPage(context).VerifyPage();
 
         [Given(@"Provider selects to Cancel bulk upload")]
         [When(@"Provider selects to Cancel bulk upload")]
-        private async Task ProviderSelectsToCancelBulkUpload() => await new UploadCsvFilePage(context).CancelUpload();
+        public async Task ProviderSelectsToCancelBulkUpload() => await new UploadCsvFilePage(context).CancelUpload();
 
 
         [Given(@"Provider uses BulkUpload to add (.*) apprentice details for a non-levy employer into a non-existing cohort")]
-         private async Task GivenProviderUsesBulkUploadToAddApprenticeDetailsForANon_LevyEmployerIntoANon_ExistingCohort(int numberOfApprentices)
+         public async Task GivenProviderUsesBulkUploadToAddApprenticeDetailsForANon_LevyEmployerIntoANon_ExistingCohort(int numberOfApprentices)
         {
 
             List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
@@ -404,7 +374,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await commonStepsHelper.SetCohortDetails(cohort.Reference, "Ready for approval", "Ready for approval");
         }
 
-        private async Task ProviderUploadsAnotherFile(string csvFilePath, string expectedErrorMessage, bool startUploadJourney)
+        public async Task ProviderUploadsAnotherFile(string csvFilePath, string expectedErrorMessage, bool startUploadJourney)
         {
             UploadCsvFilePage page;
             if (startUploadJourney)
@@ -421,7 +391,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await errorPage.ValidateErrorMessage(expectedErrorMessage);
         }
 
-        private static async Task CreateValidationCsvFile(MapApprenticeDetails record, Apprenticeship validApprenticeship, string filePath)
+        public static async Task CreateValidationCsvFile(MapApprenticeDetails record, Apprenticeship validApprenticeship, string filePath)
         {
             const string csvHeader = "CohortRef,AgreementID,ULN,FamilyName,GivenNames,DateOfBirth,EmailAddress,StdCode,StartDate,EndDate,TotalPrice,EPAOrgID,ProviderRef,RecognisePriorLearning,TrainingTotalHours,TrainingHoursReduction,IsDurationReducedByRPL,DurationReducedBy,PriceReducedBy";
 
