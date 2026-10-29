@@ -257,6 +257,8 @@ stages:
               AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
               AZURE_TENANT_ID: $(AZURE_TENANT_ID)
               AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+              BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
+              BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
             inputs:
               testAssemblyVer2: '**\**\SFA.DAS*tests*.dll'
               testRunTitle: Test Run - PP
