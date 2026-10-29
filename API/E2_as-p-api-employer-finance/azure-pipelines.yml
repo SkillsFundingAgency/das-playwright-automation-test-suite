@@ -31,10 +31,10 @@ resources:
       ref: refs/tags/5.1.17
       endpoint: SkillsFundingAgency
   pipelines:
-  - pipeline: das-employer-config
-    project: Digital Apprenticeship Service
-    source: das-employer-config
-    branch: master
+    - pipeline: das-employer-config
+      project: Digital Apprenticeship Service
+      source: das-employer-config
+      branch: master
 
 pool:
   vmImage: 'windows-latest'
