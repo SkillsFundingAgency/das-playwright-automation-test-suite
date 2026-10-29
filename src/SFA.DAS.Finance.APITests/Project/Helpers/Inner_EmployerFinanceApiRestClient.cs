@@ -34,6 +34,13 @@ public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inn
         return response;
     }
 
+    public async Task<RestResponse> PostTransactionLinesStaging(string payloadContent)
+    {
+        await CreateRestRequest(Method.Post, "/api/transaction-lines/staging", payloadContent);
+        var response = await Execute(HttpStatusCode.Created);
+        return response;
+    }
+
     public async Task<RestResponse> PostPaymentsStaging(string payloadContent)
     {
         await CreateRestRequest(Method.Post, "/api/payments/staging", payloadContent);
