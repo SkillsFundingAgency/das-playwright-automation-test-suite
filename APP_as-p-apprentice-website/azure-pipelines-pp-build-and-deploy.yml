@@ -230,26 +230,26 @@ stages:
                 Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID;issecret=false]$env:servicePrincipalId"
                 Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID;issecret=false]$env:tenantId"
                 Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
-          - task: CmdLine@2
-            displayName: 'BrowserStack SDK - PP test execution'
-            env:
-              AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
-              AZURE_TENANT_ID: $(AZURE_TENANT_ID)
-              AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
-              BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
-              BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
-            inputs:
-              script: |
-                dotnet browserstack-sdk ^
-                  --configuration "$(BuildConfiguration)" ^
-                  --no-build ^
-                  --no-restore ^
-                  --logger "trx;LogFileName=TestResults.trx" ^
-                  --results-directory "$(Agent.TempDirectory)/TestResults" ^
-                  --settings "$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings" ^
-                  --filter "$(TestCategory)&TestCategory!=ignoreinpp"
-              workingDirectory: '$(System.DefaultWorkingDirectory)/drop/tests/'
-            continueOnError: true
+          # - task: CmdLine@2
+          #   displayName: 'BrowserStack SDK - PP test execution'
+          #   env:
+          #     AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+          #     AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+          #     AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+          #     BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
+          #     BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
+          #   inputs:
+          #     script: |
+          #       dotnet browserstack-sdk ^
+          #         --configuration "$(BuildConfiguration)" ^
+          #         --no-build ^
+          #         --no-restore ^
+          #         --logger "trx;LogFileName=TestResults.trx" ^
+          #         --results-directory "$(Agent.TempDirectory)/TestResults" ^
+          #         --settings "$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings" ^
+          #         --filter "$(TestCategory)&TestCategory!=ignoreinpp"
+          #     workingDirectory: '$(System.DefaultWorkingDirectory)/drop/tests/'
+          #   continueOnError: true
 
           - task: VSTest@3
             displayName: 'VsTest - Test Execution'
