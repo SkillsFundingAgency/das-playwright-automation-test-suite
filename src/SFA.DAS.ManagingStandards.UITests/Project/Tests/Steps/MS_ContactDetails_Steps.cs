@@ -101,10 +101,8 @@ public class MS_ContactDetails_Steps(ScenarioContext context)
     {
 
         var page = new YourStandardsAndTrainingVenuesPage(context);
-
-        var page1 = await page.AccessTrainingTypesPage();
-        var page2 = await page1.AccessStandards_Apprenticeships();
-        var page3 = await page2.AccessTeacher();
-        await page3.VerifyUpdatedContactDetailsVisibleInStandard(managingStandardsDataHelpers.EmailAddress, managingStandardsDataHelpers.NewlyUpdatedContactNumber);
+        var page1 = await page.AccessStandards_Apprenticeships();
+        var page2 = await page1.AccessTeacher();
+        await page2.VerifyUpdatedContactDetailsVisibleInStandard(managingStandardsDataHelpers.EmailAddress, managingStandardsDataHelpers.NewlyUpdatedContactNumber);
     }
 }

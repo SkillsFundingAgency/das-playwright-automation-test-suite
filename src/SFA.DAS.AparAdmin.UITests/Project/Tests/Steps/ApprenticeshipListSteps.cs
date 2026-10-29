@@ -1,3 +1,4 @@
+using Azure;
 using SFA.DAS.AparAdmin.UITests.Project.Helpers;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages;
 using SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ApprenticeshipList;
@@ -14,6 +15,10 @@ public class ApprenticeshipListSteps
     private readonly SetLastStartDatePage _setLastStartPage;
     private readonly RemoveRestrictionPage _removeRestrictionPage;
     private readonly ApprenticeshipListHelper _apprenticeshipListHelper;
+    private readonly RestrictProviderPage _restrictProviderPage;
+    private readonly AddApprenticeshipToAllowedCoursePage _addApprenticeshipToAllowedCoursePage;
+    private readonly AllowedCoursesPage _allowedCoursesPage;
+    private readonly AddApprenticeshipUnitToAllowedPage _addApprenticeshipUnitToAllowedPage;
 
 
 public ApprenticeshipListSteps(ScenarioContext context)
@@ -25,6 +30,10 @@ public ApprenticeshipListSteps(ScenarioContext context)
     _setLastStartPage = new SetLastStartDatePage(context);
     _removeRestrictionPage = new RemoveRestrictionPage(context);
     _apprenticeshipListHelper = new ApprenticeshipListHelper(context);
+    _restrictProviderPage = new RestrictProviderPage(context);
+    _allowedCoursesPage = new AllowedCoursesPage(context);
+    _addApprenticeshipToAllowedCoursePage = new AddApprenticeshipToAllowedCoursePage(context);
+    _addApprenticeshipUnitToAllowedPage = new AddApprenticeshipUnitToAllowedPage(context);
 }    
 
     [When(@"the user clicks on manage restricted courses")]
@@ -32,6 +41,21 @@ public ApprenticeshipListSteps(ScenarioContext context)
     public async Task WhenTheUserClicksOnManageRestrictedCourses()
     {
         await _apprenticeshipListHelper.OpenManageProviderCoursePage();
+    }
+    
+    [When(@"the user navigates to manage approved courses")]
+
+    public async Task WhenTheUserClicksOnManageApprovedCourses()
+    {
+        await _apprenticeshipListHelper.OpenManageAllowedCoursePage();
+    }
+
+    [When(@"the user navigates to manage approved units")]
+
+    public async Task WhenTheUserClicksOnManageApprovedUnits()
+    {
+        await _apprenticeshipListHelper.GoBackToProviderDetailsPage();
+        await _apprenticeshipListHelper.OpenManageApprenticeshipUnitsPage();
     }
 
     [Then(@"the user uses the search and filter functionality and results are displayed as expected")]
@@ -105,11 +129,38 @@ public ApprenticeshipListSteps(ScenarioContext context)
 
     public async Task ThenTheUserRemovedRestrictionsForTheProviderOnTheCourse(string editType, string larsCode)
     {
-         await _apprenticeshipListHelper.ClickChangeCourseDateDetails(larsCode);
+        await _apprenticeshipListHelper.ClickChangeCourseDateDetails(larsCode);
         await _changeRestrictionPage.SelectOption(editType);
         await _apprenticeshipListHelper.ConfirmRemoveCourseRestriction();
         await _removeRestrictionPage.RemoveRestriction();
         await _providerRestrictedCoursesPage.SearchFunctionality(larsCode);
         await _providerRestrictedCoursesPage.VerifyResults(larsCode, "no");
     }
+
+    [Then(@"the user changes the provider from unrestricted to restricted")]
+
+    public async Task ThenTheUserNavigatesToAnUnrestrictedProviderAndChangesThemToARestrictedProvider()
+    {
+        await _apprenticeshipListHelper.ChangeHowWeManageProvider();
+        await _apprenticeshipListHelper.ControlProviderDelivery();
+        await _apprenticeshipListHelper.ConfirmControlProviderDelivery();
+    }
+
+    [Then(@"the user can add apprenticeships that the provider can deliver")]
+
+    public async Task ThenTheUserCanAddApprenticeshipsThatTheProviderCanDeliver()
+    {
+        await _apprenticeshipListHelper.AddAnApprenticeship();
+        await _addApprenticeshipToAllowedCoursePage.SelectCourse("Associate continuing healthcare practitioner (Level 5)");
+        await _allowedCoursesPage.SuccessBannerVisible();
+    }   
+
+    [Then(@"the user can add apprenticeship units that the provider can deliver")]
+
+    public async Task ThenTheUserCanAddApprenticeshipsUnitsThatTheProviderCanDeliver()
+    {
+        await _apprenticeshipListHelper.AddAnApprenticeshipUnit();
+        await _addApprenticeshipUnitToAllowedPage.SelectCourse("Permanent modular building assembly – Apprenticeship unit (Level 2)");
+        await _allowedCoursesPage.SuccessBannerVisible();
+    }   
 }
