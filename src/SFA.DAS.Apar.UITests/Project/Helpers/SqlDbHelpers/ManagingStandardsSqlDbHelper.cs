@@ -38,6 +38,26 @@ public class ManagingStandardsSqlDbHelper(ObjectContext objectContext, DbConfig 
 
     public async Task ClearProviderCourseType(string ukprn)
     {
+        await DeleteFromProviderAddress(ukprn);
         await ExecuteSqlCommand($"DELETE FROM ProviderCourseType where ukprn = '{ukprn}';");
+        await ExecuteSqlCommand($"DELETE FROM Provider where ukprn = '{ukprn}';");
+        await ExecuteSqlCommand($"UPDATE ProviderRegistrationDetail SET StatusId = 0, ProviderTypeId = '3' where ukprn = '{ukprn}';");
+    }
+
+    public async Task DeleteFromProviderAddress(string ukprn)
+    {
+        var query = $@" DECLARE @ProviderId int;
+
+            SELECT @ProviderId = Id
+            FROM Provider
+            WHERE UKPRN = '{ukprn}';
+
+            IF @ProviderId IS NOT NULL
+            BEGIN
+                DELETE FROM ProviderAddress
+                WHERE ProviderId = @ProviderId;
+            END
+        ";
+        await ExecuteSqlCommand(query);
     }
 }

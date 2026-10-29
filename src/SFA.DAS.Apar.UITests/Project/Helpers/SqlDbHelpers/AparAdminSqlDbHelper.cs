@@ -8,7 +8,7 @@ public class AparAdminSqlDbHelper(ObjectContext objectContext, DbConfig dbConfig
         await ExecuteSqlCommand($"DELETE FROM Organisations WHERE ukprn = '{ukprn}';");
     }
 
-    public async Task ResetProviderDetails(string ukprn)
+    public async Task ResetProviderDetailsToSupporting(string ukprn)
     {
         await DeleteFromOrganisationCourseTypes(ukprn);
         var query = $"UPDATE Organisations SET StatusId = 0, ProviderTypeId = 3, OrganisationTypeId = 0, RemovedReasonId = NULL WHERE ukprn = '{ukprn}';" ;
