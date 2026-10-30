@@ -84,15 +84,15 @@ stages:
       displayName: 'Copy config files'
       inputs:
         Contents: |
-          das-playwright-automation-test-suite/src/**/*.sql
-          das-playwright-automation-test-suite/src/**/appsettings.Config.json
-          das-playwright-automation-test-suite/src/**/appsettings.AdminConfig.json
-          das-playwright-automation-test-suite/src/**/appsettings.ProviderConfig.json
-          das-playwright-automation-test-suite/src/**/appsettings.TimeOutConfig.json
-          das-playwright-automation-test-suite/src/**/appsettings.TestExecution.json
-          das-playwright-automation-test-suite/src/**/appsettings.NServiceBusConfig.json
-          das-playwright-automation-test-suite/src/**/appsettings.BrowserStack.json
-          das-playwright-automation-test-suite/src/**/appsettings.ApiFramework.json
+          src/**/*.sql
+          src/**/appsettings.Config.json
+          src/**/appsettings.AdminConfig.json
+          src/**/appsettings.ProviderConfig.json
+          src/**/appsettings.TimeOutConfig.json
+          src/**/appsettings.TestExecution.json
+          src/**/appsettings.NServiceBusConfig.json
+          src/**/appsettings.BrowserStack.json
+          src/**/appsettings.ApiFramework.json
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/files'
         flattenFolders: true
         OverWrite: true
@@ -101,7 +101,7 @@ stages:
       displayName: 'Copy project json files'
       inputs:
         Contents: |
-          das-playwright-automation-test-suite/src/**/appsettings.Project.json
+          src/**/appsettings.Project.json
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
         flattenFolders: false
         OverWrite: true
@@ -110,7 +110,7 @@ stages:
       displayName: 'Copy Check-TestResults.ps1'
       inputs:
         Contents: |
-          das-playwright-automation-test-suite/src/**/Check-TestResults.ps1
+          src/**/Check-TestResults.ps1
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/src'
         OverWrite: true
 
@@ -118,7 +118,7 @@ stages:
       displayName: 'Copy UpdateNoofTestWorkers.ps1'
       inputs:
         Contents: |
-          das-playwright-automation-test-suite/src/**/UpdateNoofTestWorkers.ps1
+          src/**/UpdateNoofTestWorkers.ps1
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/src'
         OverWrite: true
 
@@ -126,7 +126,7 @@ stages:
       displayName: 'Copy runsettings'
       inputs:
         Contents: |
-          das-playwright-automation-test-suite/src/**/*.runsettings
+          src/**/*.runsettings
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/runsettings'
         OverWrite: true
 
