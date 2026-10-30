@@ -59,6 +59,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         public async Task CancelUpload() => await CancelUploadLink.ClickAsync();
 
+
+        public async Task<string> GetCohortReference()
+        {
+            var cohortReferences = page.Locator("[data-label=\"CohortReference\"]");
+            return await cohortReferences.InnerTextAsync();
+        }
+
         private async Task VerifyCohortDetails(List<FileUploadReviewCohortDetail> cohortDetails, ILocator employerDetails)
         {
             var cohortReferences = employerDetails.Locator(".bu-cohort-ref");

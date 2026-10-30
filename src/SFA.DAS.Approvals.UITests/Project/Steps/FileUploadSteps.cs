@@ -184,6 +184,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             await new ReviewApprenticeDetailsBulkUploadPage(context).SelectToApproveAllAndSendToEmployer();
         }
 
+        [Then(@"Save the cohort reference details to the learner")]
+        public async Task SaveTheCohortDetails()
+        {
+            var reference = await new ReviewApprenticeDetailsBulkUploadPage(context).GetCohortReference();
+            var listOfApprenticeship = context.Get<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
+            listOfApprenticeship.ForEach(a => a.Cohort.Reference = reference);
+            listOfApprenticeship.ForEach(a => a.Cohort.Status_Employer = "Ready for approval");
+            listOfApprenticeship.ForEach(a => a.Cohort.Status_Provider = "Ready for review");
+        }
+
         [When(@"User selects to upload an amended file")]
         public async Task UserSelectsToUploadAnAmendedFile()
         {
@@ -366,12 +376,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
 
             List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
-            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.NonLevy, numberOfApprentices);
-
+            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.NonLevy, numberOfApprentices, null, listOfApprenticeship, null, null, null);
             context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
-
-            var cohort = await employerStepsHelper.EmployerCreatesReservationAndAddsApprenticeForCurrentEmpployer(listOfApprenticeship[0]);
-            await commonStepsHelper.SetCohortDetails(cohort.Reference, "Ready for approval", "Ready for approval");
         }
 
         public async Task ProviderUploadsAnotherFile(string csvFilePath, string expectedErrorMessage, bool startUploadJourney)

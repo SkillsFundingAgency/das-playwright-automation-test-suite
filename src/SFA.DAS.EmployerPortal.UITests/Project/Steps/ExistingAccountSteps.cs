@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+﻿using Polly;
+using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
 using SFA.DAS.EmployerPortal.UITests.Project.Pages;
 using static SFA.DAS.EmployerPortal.UITests.Project.Helpers.EnumHelper;
 
@@ -11,12 +12,15 @@ public class ExistingAccountSteps
     private readonly EmployerPortalLoginHelper _employerPortalLoginHelper;
     private readonly CreateAccountEmployerPortalLoginHelper _createAccountEmployerPortalLoginHelper;
     private HomePage _homePage;
+    protected readonly EmployerHomePageStepsHelper employerHomePageHelper;
+
 
     public ExistingAccountSteps(ScenarioContext context)
     {
         _context = context;
         _employerPortalLoginHelper = new EmployerPortalLoginHelper(context);
         _createAccountEmployerPortalLoginHelper = new CreateAccountEmployerPortalLoginHelper(_context);
+        employerHomePageHelper = new EmployerHomePageStepsHelper(_context);
     }
 
     [Given(@"^the Employer logins using existing (Levy|NonLevy) Account$")]
@@ -27,6 +31,19 @@ public class ExistingAccountSteps
             _homePage = await _employerPortalLoginHelper.Login(_context.GetUser<LevyUser>());
         else
             _homePage = await _createAccountEmployerPortalLoginHelper.Login(_context.GetUser<NonLevyUser>());
+    }
+
+    [Given(@"^the Employer logins to (Levy|NonLevy) Account$")]
+    [When(@"^the Employer logins to (Levy|NonLevy) Account$")]
+    public async Task NewGivenTheEmployerLoginsUsingExistingAccount(string employerType = "NonLevy")
+    {
+        if (employerType == "Levy")
+            _homePage = await _employerPortalLoginHelper.Login(_context.GetUser<LevyUser>());
+        else
+        {
+            await employerHomePageHelper.NavigateToEmployerApprenticeshipService(true);
+            _homePage = await _employerPortalLoginHelper.Login(_context.GetUser<NonLevyUser>());
+        }
     }
 
     [Given(@"^the Employer logins using existing transactor user account$")]
