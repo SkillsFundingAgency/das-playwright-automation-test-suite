@@ -111,7 +111,7 @@ stages:
       inputs:
         Contents: |
           src/**/Check-TestResults.ps1
-        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/src'
+        TargetFolder: '$(System.DefaultWorkingDirectory)/drop'
         OverWrite: true
 
     - task: CopyFiles@2
@@ -119,7 +119,7 @@ stages:
       inputs:
         Contents: |
           src/**/UpdateNoofTestWorkers.ps1
-        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/src'
+        TargetFolder: '$(System.DefaultWorkingDirectory)/drop'
         OverWrite: true
 
     - task: CopyFiles@2
@@ -133,8 +133,12 @@ stages:
     - task: CmdLine@2
       inputs:
         script: |
+          echo "Tree Structure of Drop Directory:"
+          tree $(System.DefaultWorkingDirectory)/drop /f
+          echo **************************************************************
           echo "Tree Structure of Artifacts Directory:"
           tree $(System.DefaultWorkingDirectory) /f
+          
       displayName: 'Agent Folder Structure'
       condition: always()
       continueOnError: true
@@ -158,6 +162,10 @@ stages:
           - checkout: das-platform-automation
             path: s/das-platform-automation
             displayName: Checkout das-platform-automation
+
+          - checkout: self
+            path: s/das-playwright-automation-test-suite
+            displayName: Checkout current branch
 
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.json'
