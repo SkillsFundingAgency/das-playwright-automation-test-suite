@@ -4,6 +4,9 @@
   "language": { "feature": "en-GB" },
   "bindingAssemblies": [
     { "assembly": "SFA.DAS.Framework" },
+    { "assembly": "SFA.DAS.Approvals.UITests" },
+    { "assembly": "SFA.DAS.Approvals.APITests" },
+    { "assembly": "SFA.DAS.API.Framework" },
     { "assembly": "SFA.DAS.EmployerPortal.UITests" },
     { "assembly": "SFA.DAS.ProviderLogin.Service" },
     { "assembly": "SFA.DAS.TestDataCleanup" }

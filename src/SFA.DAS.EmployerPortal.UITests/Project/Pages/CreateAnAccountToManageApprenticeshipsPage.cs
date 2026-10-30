@@ -15,7 +15,7 @@ public class CreateAnAccountToManageApprenticeshipsPage(ScenarioContext context)
         await AcceptAllCookiesIfVisible();
     }
 
-    public async Task<StubSignInEmployerPage> GoToStubSignInPage() => await StubSignInPage(async () => await page.GetByRole(AriaRole.Link, new() { Name = "sign in" }).ClickAsync());
+    public async Task<StubSignInEmployerPage> GoToStubSignInPage() => await StubSignInPage(async () => await page.GetByRole(AriaRole.Link, new() { Name = "sign in" }).First.ClickAsync());
 
     public async Task<StubSignInEmployerPage> ClickOnCreateAccountLink() => await StubSignInPage(async () => await page.GetByRole(AriaRole.Button, new() { Name = "Create account" }).ClickAsync());
 

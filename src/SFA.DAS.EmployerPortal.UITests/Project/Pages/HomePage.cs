@@ -14,7 +14,8 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
     public override async Task VerifyPage()
     {
         await retryHelper.RetryOnEmpHomePage(
-            async () => await Assertions.Expect(page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Your organisations and" })).ToBeVisibleAsync(), ReloadPageAsync);
+            // "Home" is used because the menu is role dependent, e.g. view-only users do not get "Your organisations and agreements".
+            async () => await Assertions.Expect(page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Home", Exact = true })).ToBeVisibleAsync(), ReloadPageAsync);
         
         await Assertions.Expect(PageHeading).ToContainTextAsync(objectContext.GetOrganisationName());
     }

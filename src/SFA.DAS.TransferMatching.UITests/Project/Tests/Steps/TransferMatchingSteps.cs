@@ -14,6 +14,7 @@ public class TransferMatchingSteps(ScenarioContext context)
     private PledgeVerificationPage verification;
     private PledgeAndTransferYourLevyFundsPage createPledge;
     private TransferPledgePage transferPledge;
+    private ManageTransferMatchingPage manageTransferMatching;
     private EasAccountUser senderUser;
     private EasAccountUser receiverUser;
     private string sender;
@@ -200,7 +201,7 @@ public class TransferMatchingSteps(ScenarioContext context)
     [Then("the user can create transfer pledge")]
     public async Task CanCreate() => Assert.That(await (await NavigateToMatching()).CanCreateTransferPledge(), Is.True);
     [Then("the user can view transfer pledge")]
-    public async Task ViewPledges() => await (await NavigateToMatching()).GoToViewMyTransferPledgePage();
+    public async Task ViewPledges() => await (manageTransferMatching ?? await NavigateToMatching()).GoToViewMyTransferPledgePage();
     [Then("the levy employer currently receiving funds can create pledge")]
     public async Task ReceiverCreatePermission()
     {
@@ -328,7 +329,7 @@ public class TransferMatchingSteps(ScenarioContext context)
     private async Task<PledgeAmountPage> EnterPledgeAmount() =>
         await (await (await (await (await NavigateToMatching()).GotoCreateTransfersPledgePage()).StartCreatePledge()).GoToPledgeAmountPage()).CaptureAvailablePledgeAmount();
     private async Task<ManageTransferMatchingPage> NavigateToMatching() =>
-        await new HomePageFinancesSection_YourTransfers(context).NavigateToTransferMatchingPage();
+        manageTransferMatching = await new HomePageFinancesSection_YourTransfers(context).NavigateToTransferMatchingPage();
     private async Task<TransferPledgePage> SenderPledge()
     {
         await LoginSenderAgain();

@@ -8,7 +8,7 @@ public abstract class TransferMatchingBasePage(ScenarioContext context) : BasePa
 {
     protected TMDataHelper tMDataHelper => context.Get<TMDataHelper>();
     protected abstract string PageTitle { get; }
-    protected virtual ILocator PageHeader => page.Locator("h1");
+    protected virtual ILocator PageHeader => page.Locator("h1").First;
     protected virtual ILocator ContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue", Exact = true });
 
     public override async Task VerifyPage() =>

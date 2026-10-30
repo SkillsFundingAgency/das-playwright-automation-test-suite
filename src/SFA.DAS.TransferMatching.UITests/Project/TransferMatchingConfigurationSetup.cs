@@ -49,7 +49,8 @@ public class TransferMatchingConfigurationSetup(ScenarioContext context)
     [BeforeScenario(Order = 42)]
     public async Task SetUpDataHelpers()
     {
-        var course = await new SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers.CoursesDataHelper().GetRandomStandardCourse();
+        // Funding estimates depend on each course's funding band and typical duration, so use a course with known 24-month data.
+        var course = await new SFA.DAS.Approvals.UITests.Project.Helpers.TestDataHelpers.CoursesDataHelper().GetCourse("2");
         context.Set(new TMDataHelper(course));
         var objectContext = context.Get<ObjectContext>();
         objectContext.SetPledgeDetailList();

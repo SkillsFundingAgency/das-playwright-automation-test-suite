@@ -7,7 +7,7 @@ public class ApplicationsDetailsPage(ScenarioContext context, string application
 
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("#main-content > div > div:nth-child(1) > div:nth-child(1) > div > div > strong"))
+        await Assertions.Expect(page.Locator("#main-content strong.govuk-tag").First)
             .ToContainTextAsync(applicationStatus);
         // Accepted applications have a different heading but still identify their pledge.
         await Assertions.Expect(PageHeader).ToContainTextAsync(
