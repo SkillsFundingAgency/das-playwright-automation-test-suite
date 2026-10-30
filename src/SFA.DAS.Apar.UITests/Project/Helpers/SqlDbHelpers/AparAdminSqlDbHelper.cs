@@ -3,9 +3,21 @@
 public class AparAdminSqlDbHelper(ObjectContext objectContext, DbConfig dbConfig) : SqlDbHelper(objectContext, dbConfig.RoatpDatabaseConnectionString)
 {
     public async Task DeleteTrainingProvider(string ukprn)
+    {   
+        await DeleteFromOrganisationCourseTypes(ukprn);
+        await ExecuteSqlCommand($"DELETE FROM Organisations WHERE ukprn = '{ukprn}';");
+    }
+
+    public async Task ResetProviderDetailsToSupporting(string ukprn)
     {
-        await ExecuteSqlCommand($@"
-            DECLARE @OrganisationId UNIQUEIDENTIFIER;
+        await DeleteFromOrganisationCourseTypes(ukprn);
+        var query = $"UPDATE Organisations SET StatusId = 0, ProviderTypeId = 3, OrganisationTypeId = 0, RemovedReasonId = NULL WHERE ukprn = '{ukprn}';" ;
+            await ExecuteSqlCommand(query);       
+    }
+
+    public async Task DeleteFromOrganisationCourseTypes(string ukprn)
+    {
+        var query = $@" DECLARE @OrganisationId UNIQUEIDENTIFIER;
 
             SELECT @OrganisationId = Id
             FROM Organisations
@@ -15,20 +27,8 @@ public class AparAdminSqlDbHelper(ObjectContext objectContext, DbConfig dbConfig
             BEGIN
                 DELETE FROM OrganisationCourseTypes
                 WHERE OrganisationId = @OrganisationId;
-
-                DELETE FROM Organisations
-                WHERE Id = @OrganisationId;
             END
-        ");
+        ";
+        await ExecuteSqlCommand(query);
     }
-
-    public async Task ResetProviderDetails(string ukprn) =>
-await ExecuteSqlCommand($@"
-        UPDATE Organisations
-        SET StatusId = 0,
-            ProviderTypeId = 3,
-            OrganisationTypeId = 0,
-            RemovedReasonId = NULL
-        WHERE ukprn = '{ukprn}';
-    ");
 }
