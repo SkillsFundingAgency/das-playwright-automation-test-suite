@@ -79,6 +79,26 @@ namespace SFA.DAS.Login.Service.Project
             }
         }
 
+        public static async Task SetDigiCertUser(this ScenarioContext context, List<DigitalCertUser> users)
+        {
+            var notNullUsers = users.Where(x => x != null).ToList();
+
+            if (notNullUsers.Count == 0) return;
+
+            var signInIds = await new DigiCertSqlDataHelper(context.Get<ObjectContext>(), context.Get<DbConfig>()).GetDigiCertUserDetails(users.Select(x => x.Id).ToList());
+
+            for (int i = 0; i < notNullUsers.Count; i++)
+            {
+                users[i].Id = signInIds[i].id;
+
+                users[i].Email = signInIds[i].email;
+
+                users[i].Phone = signInIds[i].phoneNo;
+
+                SetUser(context, notNullUsers[i]);
+            }
+        }
+
         public static T GetUser<T>(this ScenarioContext context) => context.Get<T>(Key<T>());
 
         public static async Task<List<UserCreds>> GetAccountLegalEntities(this ScenarioContext context, List<string> username)

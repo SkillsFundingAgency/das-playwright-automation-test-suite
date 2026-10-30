@@ -44,5 +44,9 @@ public static class UrlConfig
     public static string EarlyConnect_BaseUrl => $"https://{EnvironmentConfig.EnvironmentName}-earlyconnect.apprenticeships.education.gov.uk/";
     public static string QFAST_BaseUrl => $"https://{EnvironmentConfig.EnvironmentName}-qualification-funding.apprenticeships.education.gov.uk";
     public static string ApprenticeApp_BaseUrl => $"https://{EnvironmentConfig.EnvironmentName}-apprentice-app.apprenticeships.education.gov.uk/";
+
+    public static string DigiCerts_BaseUrl => $"https://{EnvironmentConfig.EnvironmentName}-certificates.apprenticeships.education.gov.uk/start-page";
+
+
 }
 
