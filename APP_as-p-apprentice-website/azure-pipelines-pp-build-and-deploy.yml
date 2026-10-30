@@ -34,6 +34,14 @@ stages:
     variables:
     - group: BUILD Management Resources
     steps:
+    - checkout: das-platform-automation
+      path: s/das-platform-automation
+      displayName: Checkout das-platform-automation
+
+    - checkout: self
+      path: s/das-playwright-automation-test-suite
+      displayName: Checkout current branch
+
     - task: PowerShell@2
       name: buildProjectPaths
       displayName: Build Project File Path
@@ -44,7 +52,7 @@ stages:
 
           $first = $projects[0]
 
-          $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
+          $paths = $projects | ForEach-Object { "das-playwright-automation-test-suite/src/$_/*.csproj" }
 
           $joined = @($paths -join "%0D%0A")
 
@@ -83,6 +91,7 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy config files'
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite'
         Contents: |
           src/**/*.sql
           src/**/appsettings.Config.json
@@ -100,6 +109,7 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy project json files'
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite'
         Contents: |
           src/**/appsettings.Project.json
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
@@ -109,6 +119,7 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy Check-TestResults.ps1'
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite'
         Contents: |
           src/**/Check-TestResults.ps1
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop'
@@ -117,6 +128,7 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy UpdateNoofTestWorkers.ps1'
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite'
         Contents: |
           src/**/UpdateNoofTestWorkers.ps1
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop'
@@ -125,6 +137,7 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy runsettings'
       inputs:
+        SourceFolder: 'das-playwright-automation-test-suite'
         Contents: |
           src/**/*.runsettings
         TargetFolder: '$(System.DefaultWorkingDirectory)/drop/runsettings'
@@ -159,24 +172,16 @@ stages:
       runOnce:
         deploy:
           steps:
-          - checkout: das-platform-automation
-            path: s/das-platform-automation
-            displayName: Checkout das-platform-automation
-
-          # - checkout: self
-          #   path: s/das-playwright-automation-test-suite
-          #   displayName: Checkout current branch
-
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.json'
             inputs:
-              SourcePath: 'D:/a/1/s/drop/tests'
+              SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests'
               TargetFileNames: '*.json'
 
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.runsettings'
             inputs:
-              SourcePath: 'D:/a/1/s/drop/runsettings/src/'
+              SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
               TargetFileNames: '*.runsettings'
 
           - task: BrowserStackConfig@0
@@ -187,7 +192,7 @@ stages:
             displayName: 'Install Playwright Browsers'
             inputs:
               targetType: 'filePath'
-              filePath: 'D:/a/1/s/drop/tests/$(projectName)/playwright.ps1'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
               arguments: install $(BROWSER_TYPE)
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
@@ -260,9 +265,9 @@ stages:
           #         --no-restore ^
           #         --logger "trx;LogFileName=TestResults.trx" ^
           #         --results-directory "$(Agent.TempDirectory)/TestResults" ^
-          #         --settings "D:/a/1/s/drop/runsettings/src/Parellel.runsettings" ^
+          #         --settings "$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings" ^
           #         --filter "$(TestCategory)&TestCategory!=ignoreinpp"
-          #     workingDirectory: 'D:/a/1/s/drop/tests/'
+          #     workingDirectory: '$(System.DefaultWorkingDirectory)/drop/tests/'
           #   continueOnError: true
 
           - task: VSTest@3
@@ -276,9 +281,9 @@ stages:
             inputs:
               testAssemblyVer2: '**\**\SFA.DAS*tests*.dll'
               testRunTitle: Test Run - PP
-              searchFolder: 'D:/a/1/s/drop/tests/'
+              searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
               testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
-              runSettingsFile: 'D:/a/1/s/drop/runsettings/src/Parellel.runsettings'
+              runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
               runInParallel: true
               otherConsoleOptions: '/logger:trx'
               rerunFailedTests: true
@@ -320,7 +325,7 @@ stages:
             displayName: 'Check .trx File Exists'
             inputs:
               targetType: 'filePath'
-              filePath: 'D:/a/1/s/drop/src/Check-TestResults.ps1'
+              filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
               arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
             condition: succeededOrFailed()
 
