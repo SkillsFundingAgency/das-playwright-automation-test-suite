@@ -11,7 +11,7 @@ schedules:
 variables:
   - template: ../pipeline-templates/vars.yml
   - name: projectName
-    value: "SFA.DAS.Approvals.UITests"
+    value: "SFA.DAS.Transfers.UITests"
   - name: RuleName
     value: "E2_as-post-approvals-test-suite"
   - name: RuleName2
