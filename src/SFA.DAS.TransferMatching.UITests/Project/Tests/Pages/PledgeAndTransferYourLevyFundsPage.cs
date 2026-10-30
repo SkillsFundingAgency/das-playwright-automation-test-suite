@@ -16,7 +16,8 @@ public class PledgeAndTransferYourLevyFundsPage(ScenarioContext context) : Trans
     public async Task<PledgeAndTransferYourLevyFundsPage> ValidateFooter()
     {
         foreach (var name in new[] { "Help", "Feedback", "Privacy", "Accessibility statement", "Cookies", "Department for Education", "© Crown copyright" })
-            await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = name, Exact = true })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Contentinfo)
+                .GetByRole(AriaRole.Link, new() { Name = name, Exact = true })).ToBeVisibleAsync();
         return this;
     }
 

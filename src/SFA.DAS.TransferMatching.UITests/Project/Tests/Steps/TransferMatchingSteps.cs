@@ -102,7 +102,7 @@ public class TransferMatchingSteps(ScenarioContext context)
     [Then("the levy employer can auto approve the application")]
     public async Task AutoApprove() => await (await ApprovalDetails()).AutoApproveApplication();
     [Then("the levy employer can reject the application")]
-    public async Task Reject() => await (await (await SenderPledge()).GoToApproveAppliationPage()).RejectApplication();
+    public async Task Reject() => await (await ApplicationToReview()).RejectApplication();
     [Then("the levy employer can view the approved application")]
     public async Task ViewAutoApproved()
     {
@@ -337,7 +337,14 @@ public class TransferMatchingSteps(ScenarioContext context)
         return transferPledge;
     }
     private async Task<ApprovingTheApprenticeshipDetailsPage> ApprovalDetails() =>
-        await (await (await SenderPledge()).GoToApproveAppliationPage()).GoToApprovingTheApprenticeshipDetailsPage();
+        await (await ApplicationToReview()).GoToApprovingTheApprenticeshipDetailsPage();
+    private async Task<ApproveAppliationPage> ApplicationToReview()
+    {
+        var pledge = await SenderPledge();
+        objectContext.SetOrganisationName(receiver
+            ?? throw new InvalidOperationException("A receiving employer must apply before its application can be reviewed."));
+        return await pledge.GoToApproveAppliationPage();
+    }
     private async Task<ApplicationsDetailsPage> OpenApplication(string status) =>
         await (await (await NavigateToMatching()).ViewApplicationsIhaveSubmitted()).OpenPledgeApplication(status);
     private async Task OpenReceiverApplication(ApplicationStatus status)

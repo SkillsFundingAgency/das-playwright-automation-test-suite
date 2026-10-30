@@ -9,8 +9,9 @@ public class ApproveAppliationPage(ScenarioContext context) : TransferMatchingBa
 
     public async Task<ApprovingTheApprenticeshipDetailsPage> GoToApprovingTheApprenticeshipDetailsPage()
     {
-        await Assertions.Expect(page.Locator("#main-content > div:nth-child(3) > p:nth-child(7)")).ToBeVisibleAsync();
-        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Date applied", Exact = true })).ToBeVisibleAsync();
+        await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Estimated cost of training and assessment", Exact = true }))
+            .ToBeVisibleAsync();
+        await Assertions.Expect(page.Locator("dt").Filter(new() { HasText = "Date applied" })).ToBeVisibleAsync();
         await SelectRadioOptionByText("Approve the application");
         await Assertions.Expect(page.Locator("#approval-content")).ToBeVisibleAsync();
         await Continue();

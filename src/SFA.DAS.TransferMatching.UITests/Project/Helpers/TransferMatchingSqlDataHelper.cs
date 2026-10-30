@@ -19,6 +19,7 @@ public class TransferMatchingSqlDataHelper(ObjectContext objectContext, DbConfig
                     DELETE FROM ApplicationEmailAddress WHERE ApplicationId IN (SELECT Id FROM Application WHERE PledgeId = @pledgeId);
                     DELETE FROM ApplicationStatusHistory WHERE ApplicationId IN (SELECT Id FROM Application WHERE PledgeId = @pledgeId);
                     DELETE FROM ApplicationLocation WHERE ApplicationId IN (SELECT Id FROM Application WHERE PledgeId = @pledgeId);
+                    DELETE FROM ApplicationCostProjection WHERE ApplicationId IN (SELECT Id FROM Application WHERE PledgeId = @pledgeId);
                     DELETE FROM Application WHERE PledgeId = @pledgeId;
                     DELETE FROM PledgeLocation WHERE PledgeId = @pledgeId;
                     DELETE FROM Pledge WHERE Id = @pledgeId;

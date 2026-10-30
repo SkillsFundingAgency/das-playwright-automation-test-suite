@@ -7,14 +7,14 @@ public class ApprovingTheApprenticeshipDetailsPage(ScenarioContext context) : Tr
 
     public async Task<AppliationApprovedPage> ManuallyApproveApplication()
     {
-        await SelectRadioOptionByText("Check and review apprenticeship details");
+        await page.GetByRole(AriaRole.Radio, new() { NameRegex = new("^Check and review apprenticeship details\\b") }).CheckAsync();
         await Continue();
         return await VerifyPageAsync(() => new AppliationApprovedPage(context));
     }
 
     public async Task<AppliationApprovedPage> AutoApproveApplication()
     {
-        await SelectRadioOptionByText("Automatically approve the apprenticeship details");
+        await page.GetByRole(AriaRole.Radio, new() { NameRegex = new("^Automatically approve the apprenticeship details\\b") }).CheckAsync();
         await Continue();
         return await VerifyPageAsync(() => new AppliationApprovedPage(context));
     }
