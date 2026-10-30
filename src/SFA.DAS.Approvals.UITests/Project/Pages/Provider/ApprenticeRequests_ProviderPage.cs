@@ -46,6 +46,14 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             return await VerifyPageAsync(() => new ApproveApprenticeDetailsPage(context));
         }
 
+        internal async Task<ApproveApprenticeDetailsPage> OpenManualEntryCohort(string cohortReference)
+        {
+            await ClickDetailsLinkAsync(cohortReference);
+            var review = new ApproveApprenticeDetailsPage(context);
+            await review.VerifyManualEntryPage();
+            return review;
+        }
+
         internal async Task<ViewLearnerDetails_ProviderPage> OpenNonEditableCohortAsync(string? cohortRef)
         {
             await ClickDetailsLinkAsync(cohortRef);

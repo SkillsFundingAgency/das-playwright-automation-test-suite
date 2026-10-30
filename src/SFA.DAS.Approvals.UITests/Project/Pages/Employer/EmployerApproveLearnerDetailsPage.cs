@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal class EmployerApproveLearnerDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal partial class EmployerApproveLearnerDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator organisation => page.Locator("dt:has-text('Organisation') + dd");

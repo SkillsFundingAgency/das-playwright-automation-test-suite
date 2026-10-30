@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 {
-    internal class ApproveApprenticeDetailsPage(ScenarioContext context) : ApprovalsBasePage(context), IPageWithABackLink
+    internal partial class ApproveApprenticeDetailsPage(ScenarioContext context) : ApprovalsBasePage(context), IPageWithABackLink
 
     {
         #region locators
