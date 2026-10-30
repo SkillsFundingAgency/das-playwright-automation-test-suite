@@ -4,8 +4,9 @@
     {
 
         #region locators
-        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=Choose details from ILR (individual learner record)"); 
-        private ILocator optionToUploadACsvFile => page.Locator("text=Upload a CSV file");
+        private ILocator optionToSelectApprenticesFromILR => page.Locator("text=Choose details from ILR (individual learner record)");
+        private ILocator optionToSelectApprenticesFromILR2 => page.Locator("text=Add 1 or more learners from ILR (individual learner record)");
+                private ILocator optionToUploadACsvFile => page.Locator("text=Upload a CSV file");
         private ILocator ContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         #endregion
 
@@ -17,7 +18,8 @@
         internal async Task<DoYouWantToCreateANewCohortPage> SelectOptionToApprenticesFromILR()
         {
             var page = await SelectOptionToAddApprenticeFromILRAndContinue();
-            await page.ClickOnContinueButton();
+            var page1 = await page.SelectOptionToAddOneLearnerAtATime();
+            await page1.ClickOnContinueButton();
             return await VerifyPageAsync(() => new DoYouWantToCreateANewCohortPage(context));
         }
 
@@ -31,7 +33,8 @@
         internal async Task<ProviderChooseAReservationPage> SelectOptionToAddApprenticesFromILRList_SelectReservationRoute()
         {
             var page = await SelectOptionToAddApprenticeFromILRAndContinue();
-            await page.ClickOnContinueButton();
+            var page1 = await page.SelectOptionToAddOneLearnerAtATime();
+            await page1.ClickOnContinueButton();
             return await VerifyPageAsync(() => new ProviderChooseAReservationPage(context));
         }
 
@@ -41,11 +44,11 @@
             await ContinueButton.ClickAsync();
         }
 
-        internal async Task<ILRAddLearnersPage> SelectOptionToAddApprenticeFromILRAndContinue()
+        internal async Task<HowManyLearnersWouldYouLikeToAddPage> SelectOptionToAddApprenticeFromILRAndContinue()
         {
-            await optionToSelectApprenticesFromILR.CheckAsync();
+            await optionToSelectApprenticesFromILR2.CheckAsync();
             await ContinueButton.ClickAsync();
-            return await VerifyPageAsync(() => new ILRAddLearnersPage(context));
+            return await VerifyPageAsync(() => new HowManyLearnersWouldYouLikeToAddPage(context));
         }
 
         internal async Task<FundingRestrictionsPage> SelectOptionToAddApprenticesFromILRList_FundingRestrictionsRoute()
