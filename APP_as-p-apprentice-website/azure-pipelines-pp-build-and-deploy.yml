@@ -170,13 +170,13 @@ stages:
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.json'
             inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests'
+              SourcePath: 'D:/a/1/s/drop/tests'
               TargetFileNames: '*.json'
 
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.runsettings'
             inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
+              SourcePath: 'D:/a/1/s/drop/runsettings/src/'
               TargetFileNames: '*.runsettings'
 
           - task: BrowserStackConfig@0
@@ -187,7 +187,7 @@ stages:
             displayName: 'Install Playwright Browsers'
             inputs:
               targetType: 'filePath'
-              filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
+              filePath: 'D:/a/1/s/drop/tests/$(projectName)/playwright.ps1'
               arguments: install $(BROWSER_TYPE)
 
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
@@ -260,9 +260,9 @@ stages:
           #         --no-restore ^
           #         --logger "trx;LogFileName=TestResults.trx" ^
           #         --results-directory "$(Agent.TempDirectory)/TestResults" ^
-          #         --settings "$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings" ^
+          #         --settings "D:/a/1/s/drop/runsettings/src/Parellel.runsettings" ^
           #         --filter "$(TestCategory)&TestCategory!=ignoreinpp"
-          #     workingDirectory: '$(System.DefaultWorkingDirectory)/drop/tests/'
+          #     workingDirectory: 'D:/a/1/s/drop/tests/'
           #   continueOnError: true
 
           - task: VSTest@3
@@ -276,9 +276,9 @@ stages:
             inputs:
               testAssemblyVer2: '**\**\SFA.DAS*tests*.dll'
               testRunTitle: Test Run - PP
-              searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
+              searchFolder: 'D:/a/1/s/drop/tests/'
               testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
-              runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
+              runSettingsFile: 'D:/a/1/s/drop/runsettings/src/Parellel.runsettings'
               runInParallel: true
               otherConsoleOptions: '/logger:trx'
               rerunFailedTests: true
@@ -320,7 +320,7 @@ stages:
             displayName: 'Check .trx File Exists'
             inputs:
               targetType: 'filePath'
-              filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
+              filePath: 'D:/a/1/s/drop/src/Check-TestResults.ps1'
               arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
             condition: succeededOrFailed()
 
