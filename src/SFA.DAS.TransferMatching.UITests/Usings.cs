@@ -1,0 +1,16 @@
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Threading.Tasks;
+global using Microsoft.Playwright;
+global using NUnit.Framework;
+global using Reqnroll;
+global using SFA.DAS.ConfigurationBuilder;
+global using SFA.DAS.Framework;
+global using SFA.DAS.FrameworkHelpers;
+global using SFA.DAS.Login.Service.Project;
+global using SFA.DAS.Login.Service.Project.Helpers;
+global using SFA.DAS.EmployerPortal.UITests.Project;
+global using SFA.DAS.EmployerPortal.UITests.Project.Helpers;
+global using SFA.DAS.TransferMatching.UITests.Project;
+global using SFA.DAS.TransferMatching.UITests.Project.Helpers;

@@ -28,6 +28,13 @@
             return await VerifyPageAsync(() => new ChooseReservationPage(context));
         }
 
+        internal async Task<ChooseTransferFundsPage> SelectTransferFunds()
+        {
+            await page.Locator("#FundingType-5").CheckAsync();
+            await ClickContinueButton();
+            return await VerifyPageAsync(() => new ChooseTransferFundsPage(context));
+        }
+
         internal async Task<ChooseFundingPage> SelectReserveNewFunds()
         {
             await page.Locator("#FundingType-3").ClickAsync();
