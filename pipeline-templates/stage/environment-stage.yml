@@ -26,6 +26,9 @@ parameters:
   - name: ApplyAppRoleAssignments
     type: boolean
     default: false
+  - name: TestFilterCriteria
+    type: string
+    default: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
 
 stages:
   - stage: Build
@@ -48,6 +51,7 @@ stages:
         parameters:
           Environment: TEST
           ServiceConnection: das-test-automation-test-suite-db-sc
+          TestFilterCriteria: ${{ parameters.TestFilterCriteria }}
           ResourceName: ${{ parameters.ResourceName }}
           ResourceName2: ${{ parameters.ResourceName2 }}
           RuleName: ${{ parameters.RuleName }}
@@ -69,6 +73,7 @@ stages:
         parameters:
           Environment: TEST2
           ServiceConnection: das-test2-automation-test-suite-db-sc
+          TestFilterCriteria: ${{ parameters.TestFilterCriteria }}
           ResourceName: ${{ parameters.ResourceName }}
           ResourceName2: ${{ parameters.ResourceName2 }}
           RuleName: ${{ parameters.RuleName }}
@@ -90,6 +95,7 @@ stages:
         parameters:
           Environment: DEMO
           ServiceConnection: das-demo-automation-test-suite-db-sc
+          TestFilterCriteria: ${{ parameters.TestFilterCriteria }}
           ResourceName: ${{ parameters.ResourceName }}
           ResourceName2: ${{ parameters.ResourceName2 }}
           RuleName: ${{ parameters.RuleName }}
@@ -115,6 +121,7 @@ stages:
           parameters:
             Environment: 'PP_AUTOMATION'
             ServiceConnection: das-pp-automation-test-suite-db-sc
+            TestFilterCriteria: ${{ parameters.TestFilterCriteria }}
             RuleName: ${{ parameters.RuleName }}
             RuleName2: ${{ parameters.RuleName2 }}
             ResourceName: ${{ parameters.ResourceName }}
@@ -130,6 +137,7 @@ stages:
           parameters:
             Environment: 'PP'
             ServiceConnection: das-pp-automation-test-suite-db-sc
+            TestFilterCriteria: ${{ parameters.TestFilterCriteria }}
             ResourceName: ${{ parameters.ResourceName }}
             ResourceName2: ${{ parameters.ResourceName2 }}
             RuleName: ${{ parameters.RuleName }}
