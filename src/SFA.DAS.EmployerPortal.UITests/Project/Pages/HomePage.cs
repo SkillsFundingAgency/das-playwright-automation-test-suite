@@ -219,4 +219,11 @@ public class HomePage(ScenarioContext context, bool navigate) : InterimHomeBaseP
             await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("My transfer pledges");
         }
     }
+    public class YouHaveSignedInPage(ScenarioContext context) : EmployerPortalBasePage(context)
+    {
+        public override async Task VerifyPage()
+        {
+            await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("You've signed in");
+        }
+    }
 }

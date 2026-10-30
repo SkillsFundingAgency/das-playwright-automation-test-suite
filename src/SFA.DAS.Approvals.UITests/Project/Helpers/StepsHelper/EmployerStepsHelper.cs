@@ -124,7 +124,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             await page.ClickUpdateDetailsButton();            
         }
 
-        internal async Task AddEmptyCohort()
+        internal async Task<Cohort> AddEmptyCohort()
         {
             var listOfApprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship);
             var ukprn = listOfApprenticeship.FirstOrDefault().ProviderDetails.Ukprn;
@@ -137,7 +137,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             var page3 =   await page2.ConfirmTrainingProviderDetails();
             var page4 = await page3.SelectProviderAddApprencticesAndSend();
             var cohortRef = await page4.GetCohortId();
+
+            var cohortDetails = new Cohort
+            {
+                Reference = cohortRef,
+                Status_Provider = "Ready for review",
+                Status_Employer = "Under review with Provider"
+            };
             await commonStepsHelper.SetCohortDetails(cohortRef, "Ready for review", "Under review with Provider");
+            return cohortDetails;
         }
 
         internal async Task AddEmptyCohortFromNonLevyReserveFundsAddApprenticePage()
@@ -263,6 +271,92 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper
             return learnerDetailsPage;
         }
 
+        internal async Task<Cohort> AddEmptyCohortForCurrentEmployer(Apprenticeship apprenticeship)
+        {
+            await new InterimLearnersHomePage(context, false).VerifyPage();
+            var page = await new LearnersHomePage(context).GoToAddALearner();
+            var page1 =  await page.ClickStartNowButton();
+            var page2 =   await page1.SubmitValidUkprn(apprenticeship.ProviderDetails.Ukprn);
+            var page3 =   await page2.ConfirmTrainingProviderDetails();
+            var page4 = await page3.SelectProviderAddApprencticesAndSend();
+            var cohortRef = await page4.GetCohortId();
+
+            var cohortDetails = new Cohort
+            {
+                Reference = cohortRef,
+                Status_Provider = "Ready for review",
+                Status_Employer = "Under review with Provider"
+            };
+            return cohortDetails;
+        }
+
+        internal async Task<Cohort> AddEmptyCohortViaDirectTransferAddApprenticePage(Apprenticeship apprenticeship, string connectionName)
+        {
+            await new InterimLearnersHomePage(context, false).VerifyPage();
+            var page = await new LearnersHomePage(context).GoToAddALearner();
+            var page1 = await page.ClickStartNowButtonNonLevyFlow();
+            var page2 =  await page1.SelectTransferFundsFromConnection();
+            var page3 = await page2.SelectConnection(connectionName);
+            var page4 = await page3.SubmitValidUkprn(apprenticeship.ProviderDetails.Ukprn);
+            var page5 = await page4.ConfirmTrainingProviderDetails();
+            var page6 = await page5.SelectProviderAddApprencticesAndSend();
+                
+            var cohortRef = await page6.GetCohortId();
+
+            var cohortDetails = new Cohort
+            {
+                Reference = cohortRef,
+                Status_Provider = "Ready for review",
+                Status_Employer = "Under review with Provider"
+            };
+            return cohortDetails;
+        }
+
+        internal async Task<Cohort> EmployerCreatesReservationAndAddsApprenticeForCurrentEmpployer(Apprenticeship apprenticeship)
+        {
+
+            await new InterimLearnersHomePage(context, false).VerifyPage();
+            await new LearnersHomePage(context).GoToAddALearner();
+            var page1 = await new AddLearnerPage(context).ClickStartNowButtonNonLevyFlow();
+            var page2 =  await page1.SelectNonLevyReserveNewFunds();
+            var page4 = await page2.SubmitValidUkprn(apprenticeship.ProviderDetails.Ukprn);
+            var page5 = await page4.ConfirmTrainingProviderDetails();
+            var page6 = await page5.SelectProviderAddApprencticesAndSend();
+
+            
+            var cohortRef = await page6.GetCohortId();
+
+            var cohortDetails = new Cohort
+            {
+                Reference = cohortRef,
+                Status_Provider = "Ready for review",
+                Status_Employer = "Under review with Provider"
+            };
+
+            await new HomePage(context).GoToHomePage();
+            return cohortDetails;
+        }
+
+        public async Task<Cohort> EmployerCreateMultipleCohortsViaLevyFundsAndSendsToProvider(Apprenticeship apprenticeship)
+        {
+            var cohort = await AddEmptyCohortForCurrentEmployer(apprenticeship);
+            await commonStepsHelper.SetCohortReferenceList(cohort);
+            return cohort;
+        }
+
+        public async Task<Cohort> EmployerCreateCohortsViaDirectTransferAndSendsToProvider(Apprenticeship apprenticeship, string connectionName)
+        {
+            var cohort = await AddEmptyCohortViaDirectTransferAddApprenticePage(apprenticeship, connectionName);
+            await commonStepsHelper.SetCohortReferenceList(cohort);
+            return cohort;
+        }
+ 
+        public async Task<Cohort> EmployerCreateCohortsViaReserveNewFundsOptionAndSendsToProvider(Apprenticeship apprenticeship)
+        {
+            var cohort = await EmployerCreatesReservationAndAddsApprenticeForCurrentEmpployer(apprenticeship);
+            await commonStepsHelper.SetCohortReferenceList(cohort);
+            return cohort;
+        }
 
     }
 }
