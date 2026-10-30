@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
-    internal partial class EmployerApproveLearnerDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
+    internal class EmployerApproveLearnerDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
         private ILocator organisation => page.Locator("dt:has-text('Organisation') + dd");
@@ -40,6 +40,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await approveRadioOption.ClickAsync();
             await SubmitButton.ClickAsync();
             return await VerifyPageAsync(() => new ApprenticeDetailsApproved(context));
+        }
+
+        internal async Task RequestChangesFromProvider()
+        {
+            await doNotApproveRadioOption.ClickAsync();
+            await messageToEmployerTextBox.FillAsync("Please review and resubmit the ILR learner details.");
+            await SubmitButton.ClickAsync();
         }
 
         internal async Task ValidateWarningMessageForFoundationCourses(string warningMsg) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(warningMsg);

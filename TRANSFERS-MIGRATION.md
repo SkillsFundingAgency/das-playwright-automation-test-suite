@@ -7,11 +7,11 @@ Branch: `gpeterthomas-selenium-to-playwright-migration`.
 Source revision inspected: `c49f86c03dab93ea49d0e8c016e365c319acaff2`.
 Target starting revision: `146f5061da64f21f2868d80b117d3d71b84a2eda`.
 
-This delivery implements the user's narrowed scope: **SFA.DAS.Transfers.UITests**, including the shared manual-entry approval capabilities necessary to preserve its source journeys. It is not a completed migration of the entire enterprise repository.
+This delivery implements the Transfers slice of the enterprise migration. The user explicitly limited this migration to **SFA.DAS.Transfers.UITests**; it does not migrate the rest of the enterprise repository.
 
 All 12 source Transfers feature files are represented in the target. Eleven previously missing files have been added; the existing target transfer-status feature and target-only provider-login feature have been retained. The result is 13 feature files containing 14 discoverable Reqnroll scenarios: 13 source scenarios and the existing provider-login scenario.
 
-Compilation and offline binding checks pass. No account-creation, transfer, apprenticeship approval, database-connectivity, or other environment-connected scenario was executed. Compatibility of the source manual-entry approval UI with the deployed application remains an acceptance gate, not a confirmed application incompatibility. See [the file-specific review checklist](TRANSFERS-MANUAL-REVIEW.md). The code does not replace these journeys with an ILR upload or silently skip unavailable controls.
+The three Transfers apprentice-approval journeys now use the target's ILR-based flow: learner events are generated against the actual receiver account, published through the existing learner-data integration, added by the provider from ILR to a transfer-funded empty cohort, and reviewed through the existing employer/provider approval pages. The connection journeys are unchanged. Compilation and offline binding checks pass; no environment-connected scenario was executed. See [the file-specific review checklist](TRANSFERS-MANUAL-REVIEW.md) for runtime acceptance gates and the TR_03 adaptation.
 
 The source checkout and the target main checkout were inspected read-only. All restores, builds, tests and edits were performed in the isolated target worktree. No pull request was requested or opened.
 
@@ -26,7 +26,7 @@ The source checkout and the target main checkout were inspected read-only. All r
 | Finance navigation | Existing `InterimFinanceHomePage` is constructed with navigation disabled; its menu navigation is explicitly awaited. No new constructor-driven async navigation. |
 | Accounts | Existing `AccountCreationStepsHelper`, employer portal data, account/legal-entity lookup, account selector and cleanup hooks. First/Second/Third accounts are matched by organisation, not database row order. |
 | Provider login | Existing `ProviderHomePageStepsHelper`, provider configuration and shared new-tab handling. |
-| Apprentice data | Existing `Apprenticeship`, `ApprenticeFactory`, `TrainingFactory`, course catalog, Mailosaur tracking and cleanup registration. |
+| Apprentice data | Existing `ApprenticeDataHelper`, `Apprenticeship`, `ApprenticeFactory`, `TrainingFactory`, course catalog and ILR event publishing. A narrow explicit-employer overload uses the Transfers receiver's agreement and legal entity; no parallel data or event pipeline is introduced. |
 | Bindings | Existing Transfers `reqnroll.json` binding assemblies: Framework, Approvals, EmployerPortal and ProviderLogin. New Transfers bindings remain in the Transfers assembly. |
 | Packages | Existing target `net10.0`, Reqnroll 3.3.4, NUnit adapter 6.1.0 and test SDK 18.6.0. No new package, Selenium, SpecFlow, BrowserStack or browser-management dependency. |
 
@@ -40,9 +40,9 @@ The migration replaces element enumeration and synchronous interaction with Play
 
 | Source feature under `Project\Tests\Features` | Target coverage |
 |---|---|
-| `TR_01_TransfersApprovalJourney.feature` | Added: empty cohort, provider adds apprentice/approves, receiver approves, sender approves, task transitions and live record. |
-| `TR_02_TransfersApprovalJourney.feature` | Added: receiver adds two apprentices, provider supplies missing ULNs/approves, sender approves, task transitions and both live records. |
-| `TR_03_TransfersApprovalJourney.feature` | Added: two sender rejections, status assertions, receiver edits/resubmits, provider/receiver approvals, final sender approval and live record. |
+| `TR_01_TransfersApprovalJourney.feature` | Added: receiver has one eligible ILR learner; provider adds it to the transfer-funded empty cohort; receiver and sender approve; task transitions and live record. |
+| `TR_02_TransfersApprovalJourney.feature` | Added: receiver has two eligible ILR learners; provider adds both to the transfer-funded empty cohort; receiver and sender approve; task transitions and both live records. |
+| `TR_03_TransfersApprovalJourney.feature` | Added: one receiver ILR learner, two sender rejections, exact status/task checks, receiver requests provider review without changing the ILR record, then the required provider/receiver/sender approvals and live record. |
 | `TR_04_01_TransfersConnectionJourney.feature` | Added: basic sender/receiver connection. |
 | `TR_04_02_TransfersConnectionJourney.feature` | Added: existing receiver becomes sender to existing sender. |
 | `TR_04_03_TransfersConnectionJourney.feature` | Added: existing receiver connects to a third account. |
@@ -50,7 +50,7 @@ The migration replaces element enumeration and synchronous interaction with Play
 | `TR_04_05_TransfersConnectionJourney.feature` | Added: connection from another account to an existing receiver. |
 | `TR_04_06_TransfersConnectionJourney.feature` | Added: two senders, one receiver and connection-request task counts. |
 | `TR_05_TransfersStatusJourney.feature` | Existing target two-scenario implementation retained, including signed/unsigned agreement status checks. |
-| `Accessibility\TR_Accessibility.feature` | Added: original tagged approval journey and older cohort-task wording. The tag is not evidence that an accessibility analyzer ran. |
+| `Accessibility\TR_Accessibility.feature` | Added: tagged ILR-based approval journey and older cohort-task wording. The tag is not evidence that an accessibility analyzer ran. |
 | `TestDataPreparation\VerifyDbConnection.feature` | Added: existing helper-based catalog checks for the same 21 source databases; not executed. |
 
 The target-only `TR_01_ProviderLogin.feature` is unchanged. Scenario names, steps and tags have been retained, including the source's `recevier` spelling. The older accessibility task phrases have explicit bindings rather than being left undefined.
@@ -67,15 +67,17 @@ They are `FinancePage`, `TransfersPage`, `ConnectWithReceivingEmployerPage`, `Wh
 
 `src\SFA.DAS.Transfers.UITests\Project\Tests\Steps\CreateAccountTransfersSteps.cs` binds account/connection, approval, rejection/resubmission, status, task and live-record steps. Unsupported account ordinals and mismatched accepting accounts fail explicitly.
 
-`src\SFA.DAS.Approvals.UITests\Project\Helpers\StepsHelper\TransferCohortStepsHelper.cs` provides only the shared manual-entry orchestration needed by Transfers. It selects the specified sender, retains all apprentice models across role changes, supplies missing ULNs, follows both rejection cycles, and checks every resulting apprenticeship has status `Live`.
+`src\SFA.DAS.Approvals.UITests\Project\Helpers\StepsHelper\TransferCohortStepsHelper.cs` prepares ILR apprentices for the actual receiver, publishes them through `LearnerDataOuterApiSteps`, creates the empty transfer-funded cohort, and delegates learner selection and cohort approval to the existing ILR helpers/pages. It preserves the models, expected statuses, sender/receiver task assertions and live-record checks across role changes.
 
-### Shared approval capabilities, without an ILR rewrite
+### ILR approval integration
 
-Four small manual-entry page classes were added: `SelectTransferConnectionPage`, `ManualApprenticeshipCoursePage`, `ManualApprenticeDetailsPage`, and `ManualCohortConfirmationPage`.
+The three apprentice journeys use the existing ILR model/data/event path (`ApprenticeDataHelper`, `ApprenticeFactory`, `TrainingFactory`, `LearnerDataOuterApiSteps.SLDPushDataIntoAS` and the existing service-bus consumer hooks). The generated `Employer` model is scoped to the Transfers receiver's actual organisation, agreement ID, legal-entity ID and registered email so the provider's ILR list and the transfer-funded cohort refer to the same employer. Training is generated as `WaitingToStart`.
 
-Employer/provider review pages have separate `.ManualEntry.cs` partials. Existing default ILR verification/actions are not replaced. Existing funding, learner-choice, request, edit and prior-learning pages have additional manual-entry methods rather than alternate DI or browser infrastructure.
+The provider adds the first learner through the existing ILR/RPL selection helper and any remaining learners through the existing ILR helper; it then uses the standard provider approval page. Employer review and approval use the standard ILR employer page. Since provider-added learners are returned to the employer for approval, TR_02 and TR_03 now perform that standard receiver approval explicitly before the sender approval task; the source manual-entry route had embedded that employer-approved state in cohort creation. The shared `LearnerRequestsPage` has a cohort-specific opener for the existing Ready to review/With transfer sender lists; no manual-entry page API remains.
 
-The manual route retains source-backed course selection, personal/training fields, employer maximum-funding/course assertions, the provider-request message assertion, apprentice count/price checks, missing-ULN completion, No-RPL submission, cohort status, approve/reject confirmations, and a six-character cohort-reference guard. It uses the approved target course/data factory instead of restoring the legacy course SQL/data layer.
+The transfer-specific `SelectTransferConnectionPage` and direct-transfer funding selection remain because the ILR journeys still need a transfer-funded cohort. The manual-entry-only pages, partials and methods have been removed. The target's default ILR approval path is not replaced or forked.
+
+TR_03's source receiver-edit step cannot be reproduced by editing the submitted ILR learner in the target approval UI. It is adapted to the target-supported action: the receiver requests provider review of the rejected cohort; the ILR record remains authoritative and unchanged. The journey retains both sender rejection cycles and the final provider, receiver and sender approvals, but does not claim that apprentice data was edited.
 
 Two tightly coupled shared fixes were necessary:
 
@@ -92,11 +94,11 @@ Commands were run from the isolated target worktree with .NET SDK 10.0.403. Nonz
 |---|---|
 | Restored baseline solution build | Succeeded: 85 warnings, 0 errors. |
 | Transfers build with migrated bindings/pages | Succeeded: 38 warnings, 0 errors at that validation point. |
-| Final full target solution build after shared changes | Succeeded: 64 warnings, 0 errors. Warning totals vary with incremental compilation; this is not a claimed warning reduction. |
-| Offline `TestCategory=Unittests` run | 14/14 passed: one binding-coverage case per target feature plus async-return contract. |
+| Final full target solution build after the ILR revision | Succeeded: 64 warnings, 0 errors. Warnings are primarily pre-existing; warning totals vary with incremental compilation. |
+| Offline `TestCategory=Unittests` run after the ILR revision | 14/14 passed: one binding-coverage case per target feature plus async-return contract. |
 | NUnit/Reqnroll discovery | 14 scenario tests plus 14 offline contract tests; no scenarios missing from discovery. |
 | Static legacy/dependency scan | No Selenium, WebDriverWait, DriverFactory or SpecFlow references in changed/new code/project configuration. |
-| Async/wait review | No new async-void, `.Result`, `.Wait`, fixed UI delays or blocking waits. Existing waits in untouched default provider methods remain; the new manual route does not call those methods. |
+| Async/wait review | No new async-void, `.Result`, `.Wait`, fixed UI delays or blocking waits. Existing waits in untouched target helpers remain. |
 | `git diff --check` | Passed. |
 | External UI, SQL and service-bus acceptance | Not run: no verified safe environment configuration/authorization for these environment-connected journeys. |
 

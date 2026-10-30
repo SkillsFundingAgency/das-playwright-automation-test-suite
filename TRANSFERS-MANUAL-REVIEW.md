@@ -5,33 +5,31 @@ Branch: `gpeterthomas-selenium-to-playwright-migration`.
 
 The source scenarios, their bindings and needed page interactions have been implemented and compile. The following files still require review against a known-safe deployed environment. No live transfer, account creation, database catalog query, approval or service-bus flow was executed. A build or binding-discovery pass must not be interpreted as end-to-end acceptance.
 
-## Required manual-entry compatibility decision
+## ILR journey acceptance gates
 
-The target Approvals project is ILR-oriented; source Transfers relies on manual entry. The user explicitly included the necessary shared capabilities. Those capabilities have been added separately, using source-backed controls and existing target navigation/data/lifecycle.
+The three approval journeys and the tagged accessibility journey now use the target's existing ILR approval flow. The receiver-specific `Employer` data, including its agreement and legal-entity IDs, is used to generate and publish learners before the empty transfer-funded cohort is created. The provider then selects those learners from ILR and uses the existing approval pages. This migration does not add another ILR event pipeline or replace the target's default approval behavior.
 
-It has **not** been established that the current application removed manual entry. Check the actual deployed application before accepting the three approval journeys and the tagged accessibility journey. If it no longer exposes the source-backed direct-transfer/manual-entry controls, record the exact missing route/control and affected scenarios as an incompatibility. Do not invent selectors, skip the action, return success, or quietly replace the journey with an ILR upload.
+The source TR_03 receiver-edit action is not available for ILR-backed learner data in the target approval UI. It is adapted to the supported action of requesting provider review of the rejected cohort; the ILR learner itself is not edited. Confirm this distinction is acceptable in the deployed workflow. Do not report the source learner edit as preserved.
+
+The ILR provider-add route returns the cohort to the receiver for approval before it becomes ready for sender approval. TR_02 and the TR_03 cycles therefore include explicit receiver approval steps that were implicit in the source manual-entry creation route. Verify those task/status transitions in the deployed application.
 
 ## Shared approval files requiring review
 
 | Exact repository-relative path | Concrete review reason |
 |---|---|
-| `src\SFA.DAS.Approvals.UITests\Project\Helpers\StepsHelper\TransferCohortStepsHelper.cs` | Verify employer/provider page restoration, sender/receiver selection, cohort references and all three approval/rejection flows. The target's generated training data replaces the legacy data helpers; confirm the selected course, start date and prices are valid for this environment. |
+| `src\SFA.DAS.Approvals.UITests\Project\Helpers\StepsHelper\TransferCohortStepsHelper.cs` | Verify receiver/provider role switching, cohort references, task/status transitions, both sender rejection cycles and the final live-record checks. Check that the actual receiver account stays paired to the ILR learner and transfer cohort. |
+| `src\SFA.DAS.Approvals.UITests\Project\Helpers\TestDataHelpers\ApprenticeshipModel\ApprenticeDataHelper.cs` | Review the explicit-employer overload and `WaitingToStart` status parameter; existing employer-type overloads remain in use by other tests. |
+| `src\SFA.DAS.Approvals.UITests\Project\Steps\LearnerDataOuterApiSteps.cs` | Confirm generated receiver learners are published through the existing standard ILR event path and consumed by the configured service-bus hooks. |
+| `src\SFA.DAS.Approvals.UITests\Project\Helpers\StepsHelper\ProviderStepsHelper.cs` | Confirm existing first-learner/RPL handling and subsequent ILR learner selection operate for an employer-created empty cohort. |
 | `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\ChooseFundingPage.cs` | Confirm direct-transfer option `#FundingType-1` still leads to connection selection. Existing ILR/reservation methods are unchanged. |
 | `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\SelectTransferConnectionPage.cs` | Confirm the sender's organisation is the radio's accessible name and the specified sender, rather than an arbitrary first connection, is selected. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\HowWouldYouLikeToAddLearnersPage.cs` | Confirm employer manual entry and provider-added request still exist, including source `message` input and the confirmation's sent-message value. Default ILR actions are retained. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\ManualApprenticeshipCoursePage.cs` | Confirm employer autocomplete and provider standard dropdown are available on manual routes, and select the intended course. Target catalog courses below level 7 without options are used, so no course-option journey is silently skipped. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\ManualApprenticeDetailsPage.cs` | Confirm source personal/training field names, Save/Add transitions, and employer funding-band summary. Check current funding metadata against the existing target catalog; the assertion deliberately fails on a mismatch. Email cleanup is registered with the existing framework. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\ManualCohortConfirmationPage.cs` | Confirm source confirmation headings and reference rows. Missing/malformed references throw rather than returning success-shaped text. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\EmployerApproveLearnerDetailsPage.cs` | Declaration is made partial only; review that existing ILR behavior remains untouched. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\EmployerApproveLearnerDetailsPage.ManualEntry.cs` | Confirm source approval/send radios, message fields, counts, row prices, edit links, cohort status and confirmations. Both manual and known target heading forms are verified in this separate path. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\EditLearnerDetailsPage.cs` | Confirm source pre-approval name/DOB/reference controls and submit IDs still apply after rejection. Check edits persist through provider review and final live records. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\LearnerRequestsPage.cs` | Confirm Ready to review/With transfer sender tab IDs and cohort-specific Details links. Selection is by the created cohort, not the first row. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\ManageYourLearnersPage.cs` | New method verifies the matching learner row has status `Live`, not just that some learner is present. Verify behavior with and without the conditional search box and with both apprentices in TR_02. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\Provider\ApproveApprenticeDetailsPage.cs` | Declaration is made partial only; default ILR actions/verification are unchanged. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\Provider\ApproveApprenticeDetailsPage.ManualEntry.cs` | Confirm manual Add path, missing-ULN cells, row-specific editing and approve confirmation. The historical source binding labelled "edits the apprentice Name" actually invokes missing-ULN completion; no unsupported provider name edit is invented. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\Provider\EditLearnerDetails_ProviderPage.cs` | Confirm source `#Uln` and Save controls are available for employer-created apprentices. Existing ILR DOB/editability methods are unchanged. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\Provider\RecognitionOfPriorLearningPage.cs` | Confirm No-RPL submission returns to manual review, not an ILR-only route. Existing ILR return behavior is kept separate. |
-| `src\SFA.DAS.Approvals.UITests\Project\Pages\Provider\ApprenticeRequests_ProviderPage.cs` | Confirm cohort-specific link appears under Ready for review. New orchestration reuses existing bingo-box navigation without the default fixed-delay cohort-existence method. |
+| `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\HowWouldYouLikeToAddLearnersPage.cs` | Confirm the existing provider-add route still creates an empty request after direct transfer funding. Manual-entry-only methods were removed. |
+| `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\EmployerApproveLearnerDetailsPage.cs` | Confirm standard ILR verification/final approval remains intact and the receiver's request-changes action submits correctly. |
+| `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\LearnerRequestsPage.cs` | Confirm Ready to review/With transfer sender tabs and the new cohort-specific Details opener for ILR review. |
+| `src\SFA.DAS.Approvals.UITests\Project\Pages\Employer\ManageYourLearnersPage.cs` | Verify the matching ILR learner row has status `Live`, including both apprentices in TR_02. |
+| `src\SFA.DAS.Approvals.UITests\Project\Pages\Provider\ApproveApprenticeDetailsPage.cs` | Confirm the unchanged default ILR selection, RPL and provider-approval controls work on transfer-funded cohorts. |
+| `src\SFA.DAS.Approvals.UITests\Project\Pages\Provider\RecognitionOfPriorLearningPage.cs` | Confirm the existing ILR RPL path is reached for the first selected learner when needed. |
+| `src\SFA.DAS.Approvals.UITests\Project\Pages\Provider\ApprenticeRequests_ProviderPage.cs` | Confirm the cohort-specific link is available to the existing `ProviderOpenTheCohort` helper after creation and after a receiver requests review. |
 
 ## Transfers and shared employer files requiring review
 
@@ -62,9 +60,9 @@ The exact feature directory is `src\SFA.DAS.Transfers.UITests\Project\Tests\Feat
 
 | Feature | Required acceptance evidence |
 |---|---|
-| `TR_01_TransfersApprovalJourney.feature` | Empty request includes sent message; provider adds/approves; receiver task appears then disappears; sender task appears then disappears; resulting apprentice is Live. |
-| `TR_02_TransfersApprovalJourney.feature` | Two employer-created apprentices retain the selected course/prices; provider supplies both missing ULNs; sender approves; both records are Live. |
-| `TR_03_TransfersApprovalJourney.feature` | Exact pending/rejected statuses; first edit persists; both rejection cycles remove sender tasks; final provider/receiver/sender approvals produce the Live record. |
+| `TR_01_TransfersApprovalJourney.feature` | Receiver ILR data is selected into a transfer-funded empty cohort; receiver task appears then disappears; sender task appears then disappears; learner is Live. |
+| `TR_02_TransfersApprovalJourney.feature` | Both receiver ILR learners are selected into the empty cohort; receiver approves before sender approval; both records are Live. |
+| `TR_03_TransfersApprovalJourney.feature` | Exact pending/rejected statuses; receiver requests provider review without editing the authoritative ILR learner; both rejection cycles remove sender tasks; receiver re-approvals precede sender approval; final live record is present. |
 | `TR_04_01_TransfersConnectionJourney.feature` through `TR_04_06_TransfersConnectionJourney.feature` | All original connection topologies, two-sided Approved checks, and task counts remain correct in a three-account test where applicable. |
 | `Accessibility\TR_Accessibility.feature` | Same business journey, including legacy cohort-task wording. Source base-page behavior inspected did not establish an analyzer invocation; this migration does not claim Axe/WCAG coverage or add an analyzer package. |
 | `TestDataPreparation\VerifyDbConnection.feature` | Run only with approved SQL/environment configuration. Although its step only queries catalogs, shared scenario hooks can also connect to UI/APIs/service bus. |
@@ -76,6 +74,6 @@ Use the repository's existing configuration injection and secret handling. Check
 
 Before any environment-connected run, confirm that account/PAYE creation, levy setup, provider/receiver/sender approvals, database access, cleanup and the existing Approvals service-bus hooks are safe and authorized. Start with one connection scenario, then each approval journey, then remaining connections/status/provider-login and the separately approved DB scenario. Capture actual page/control incompatibilities rather than suppressing failures.
 
-Existing framework async-void navigation constructors, default provider fixed waits, compiler warnings and the NuGet advisory are pre-existing limitations, not broad refactors in this branch. New Transfers navigation is awaited and the new manual review path avoids those default provider wait methods. Existing target data factories still contain their own pre-existing short delays.
+Existing framework async-void navigation constructors, default provider fixed waits, compiler warnings and the NuGet advisory are pre-existing limitations, not broad refactors in this branch. The ILR revision uses existing target navigation and selection helpers and does not add fixed UI sleeps.
 
 Until that environment acceptance is recorded, the delivery is an implemented and offline-validated Transfers migration with explicit runtime review gates, not a claim that the deployed application or the whole enterprise suite has passed.

@@ -8,8 +8,9 @@ Feature: TR_01_TransfersApprovalJourney
 Scenario: TR_01 Transfers - Creating a Cohort and Approve by all 3 parties
 	Given We have two Employer accounts
 	And First is a Sender connected to Second as a Receiver
+	And Receiver Second has 1 apprentice ready to start training in ILR
 	When Receiver Second sends empty cohort using transfer funds from Sender First to the provider for review and approval
-	And Provider adds an apprentice and approves the cohort
+	And Provider adds the ILR apprentice from the receiver's ILR and approves the cohort
 	Then Receiver Second has '1 apprentice request ready for review' task link
 	When Receiver Second approves the cohort
 	Then Receiver Second has no '... apprentice request(s) ready for review' task link

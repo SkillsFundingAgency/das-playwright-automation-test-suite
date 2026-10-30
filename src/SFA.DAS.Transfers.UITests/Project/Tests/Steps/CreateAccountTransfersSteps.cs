@@ -39,29 +39,23 @@ public class CreateAccountTransfersSteps(ScenarioContext context)
     [Then(@"^(First|Second|Third) account has no '\.\.\. connection'$")]
     public async Task VerifyNoTasks(string account) => await connections.VerifyConnectionRequestTaskCount(account, 0);
 
+    [Given(@"^Receiver (First|Second|Third) has (\d+) apprentices? ready to start training in ILR$")]
+    public async Task PrepareIlrApprentices(string receiver, int count) =>
+        await cohorts.PrepareIlrApprentices(connections.GetAccount(receiver), count);
+
     [When(@"^Receiver (First|Second|Third) sends empty cohort using transfer funds from Sender (First|Second|Third) to the provider for review and approval$")]
     public async Task SendEmptyCohort(string receiver, string sender)
     {
         await SwitchAccount(receiver);
-        await cohorts.CreateCohort(connections.GetAccount(sender).OrgName, connections.GetAccount(receiver), 1, false);
+        await cohorts.CreateEmptyCohort(connections.GetAccount(sender).OrgName);
     }
 
-    [When(@"^Receiver (First|Second|Third) sends approved cohort using transfer funds from Sender (First|Second|Third) with (\d+) apprentices to the provider for review and approval$")]
-    public async Task SendApprovedCohort(string receiver, string sender, int count)
-    {
-        await SwitchAccount(receiver);
-        await cohorts.CreateCohort(connections.GetAccount(sender).OrgName, connections.GetAccount(receiver), count, true);
-    }
-
-    [When(@"^Provider adds an apprentice and approves the cohort$")]
+    [When(@"^Provider adds the ILR apprentices? from the receiver's ILR and approves the cohort$")]
     public async Task ProviderAddsAndApproves() => await cohorts.ProviderAddsAndApproves();
 
     [When(@"^Provider approves the cohort$")]
-    [When(@"^Provider approves the cohort and sends to recevier for approval$")]
+    [When(@"^Provider approves the cohort and sends to receiver for approval$")]
     public async Task ProviderApproves() => await cohorts.ProviderApproves();
-
-    [When(@"^Provider edits the apprentice Name$")]
-    public async Task ProviderEditsApprentice() => await cohorts.ProviderEditsApprentice();
 
     [When(@"^Receiver (First|Second|Third) approves the cohort$")]
     public async Task ReceiverApproves(string receiver)
@@ -102,18 +96,11 @@ public class CreateAccountTransfersSteps(ScenarioContext context)
         await cohorts.VerifyCohortStatus(status, false);
     }
 
-    [When(@"^Receiver (First|Second|Third) edits and sends an approved cohort to the provider$")]
-    public async Task EditAndSendCohort(string receiver)
+    [When(@"^Receiver (First|Second|Third) requests provider review of the rejected ILR cohort$")]
+    public async Task RequestProviderReview(string receiver)
     {
         await SwitchAccount(receiver);
-        await cohorts.EmployerEditsAndSends();
-    }
-
-    [When(@"^Receiver (First|Second|Third) sends a cohort to the provider for review and approval$")]
-    public async Task SendCohortForReview(string receiver)
-    {
-        await SwitchAccount(receiver);
-        await cohorts.EmployerSendsForReview();
+        await cohorts.EmployerRequestsProviderReview();
     }
 
     [Then(@"^Receiver (First|Second|Third) has a new live apprenticeship record created$")]
