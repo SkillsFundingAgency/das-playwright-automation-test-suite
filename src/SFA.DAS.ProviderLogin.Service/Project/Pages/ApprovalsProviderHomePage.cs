@@ -194,7 +194,7 @@ public class ProviderYourStandardsAndTrainingVenuesPage(ScenarioContext context)
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training and venues");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprenticeships and apprenticeship units");
     }
 }
 
