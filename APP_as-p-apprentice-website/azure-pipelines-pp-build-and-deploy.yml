@@ -44,7 +44,7 @@ stages:
 
           $first = $projects[0]
 
-          $paths = $projects | ForEach-Object { "das-playwright-automation-test-suite/src/$_/*.csproj" }
+          $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
 
           $joined = @($paths -join "%0D%0A")
 
@@ -315,7 +315,7 @@ stages:
               filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
               arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
             condition: succeededOrFailed()
-            
+
           - task: BrowserStackResults@0
             inputs:
               browserstackProduct: 'observability'
