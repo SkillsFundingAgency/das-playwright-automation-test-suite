@@ -30,6 +30,17 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await page.GetByRole(AriaRole.Button, new() { Name = "Update details" }).ClickAsync();
         }
 
+        internal async Task EditManualEntryDetails(Apprenticeship apprenticeship)
+        {
+            await page.Locator("[name='FirstName']").FillAsync(apprenticeship.ApprenticeDetails.FirstName);
+            await page.Locator("[name='LastName']").FillAsync(apprenticeship.ApprenticeDetails.LastName);
+            await page.Locator("[name='BirthDay']").FillAsync(apprenticeship.ApprenticeDetails.DateOfBirth.Day.ToString());
+            await page.Locator("[name='BirthMonth']").FillAsync(apprenticeship.ApprenticeDetails.DateOfBirth.Month.ToString());
+            await page.Locator("[name='BirthYear']").FillAsync(apprenticeship.ApprenticeDetails.DateOfBirth.Year.ToString());
+            await page.Locator("#Reference").FillAsync(apprenticeship.TrainingDetails.ConsumerReference);
+            await page.Locator("#submit-edit-app, #submit-edit-details, #continue-button").ClickAsync();
+        }
+
         internal async Task ValidateErrorMessage(string errorMsg, string locatorId)
         {
             await Assertions.Expect(page.GetByLabel("There is a problem")).ToContainTextAsync("There is a problem " + errorMsg);

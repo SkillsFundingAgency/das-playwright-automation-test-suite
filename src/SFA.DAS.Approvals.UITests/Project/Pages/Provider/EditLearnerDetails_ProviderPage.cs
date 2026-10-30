@@ -22,6 +22,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await page.GetByRole(AriaRole.Button, new() { Name = "Update details" }).ClickAsync();
         }
 
+        internal async Task AddManualEntryUln(string uln)
+        {
+            await page.Locator("#Uln").FillAsync(uln);
+            await page.GetByRole(AriaRole.Button, new() { Name = "Save", Exact = true }).ClickAsync();
+        }
+
         internal async Task ValidateErrorMessage(string errorMsg, string locatorId)
         {
             await Assertions.Expect(page.GetByLabel("There is a problem")).ToContainTextAsync("There is a problem " + errorMsg);
