@@ -6,6 +6,12 @@ public class TrainingCoursePage(ScenarioContext context) : FAABasePage(context)
 
     protected override string SubmitSectionButton => "button.govuk-button[type='submit']";
 
+    public async Task TriggerValidationErrorOnTrainingCourses()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Select if you want to add any training courses");
+    }
     public async Task<AddATrainingCoursePage> SelectYesAndContinue()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
@@ -34,6 +40,12 @@ public class AddATrainingCoursePage(ScenarioContext context) : FAABasePage(conte
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a training course");
 
+    public async Task TriggerValidationErrorsonAddTrainingCourse()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+        await CheckValidationErrors("Enter the name of this training course", "Enter the year you finished this training course");
+    }
     public async Task<TrainingCoursePage> SelectATrainingCourseAndContinue()
     {
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Course name" }).FillAsync(faaDataHelper.TrainingCoursesCourseTitle);
