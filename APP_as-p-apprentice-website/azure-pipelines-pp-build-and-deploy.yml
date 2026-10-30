@@ -158,31 +158,37 @@ stages:
           - checkout: das-platform-automation
             path: s/das-platform-automation
             displayName: Checkout das-platform-automation
+
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.json'
             inputs:
               SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests'
               TargetFileNames: '*.json'
+
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.runsettings'
             inputs:
               SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
               TargetFileNames: '*.runsettings'
+
           - task: BrowserStackConfig@0
             inputs:
               browserstackServiceEndPoint: 'AS-Browserstack'
+
           - task: PowerShell@2
             displayName: 'Install Playwright Browsers'
             inputs:
               targetType: 'filePath'
               filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
               arguments: install $(BROWSER_TYPE)
+
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
             displayName: 'Set Screen Resolution'
             inputs:
               displaySettings: specific
               width: 1920
               height: 1080
+
           - task: AzurePowerShell@5
             displayName: "Get Agent's IP Address"
             inputs:
@@ -190,6 +196,7 @@ stages:
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Get-MyIpAddress.ps1'
               ScriptArguments: '-WhatsMyIpUrl "https://ifconfig.me/ip"'
               azurePowerShellVersion: LatestVersion
+
           - task: AzurePowerShell@5
             displayName: "Whitelist agent's IP address"
             inputs:
@@ -197,6 +204,7 @@ stages:
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AzSqlIpException.ps1'
               ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
               azurePowerShellVersion: LatestVersion
+
           - task: AzurePowerShell@5
             displayName: "Whitelist agent's IP address on $(AppServiceName)"
             condition: ne('', '')
@@ -205,6 +213,7 @@ stages:
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
               ScriptArguments: '-ResourceName  -IPAddress $(IPAddress) -RuleName '
               azurePowerShellVersion: LatestVersion
+
           - task: AzurePowerShell@5
             displayName: "Whitelist agent's IP address on Function App"
             inputs:
@@ -213,6 +222,7 @@ stages:
               ScriptArguments: -IpAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa" -RuleName ""
               azurePowerShellVersion: LatestVersion
             condition: and(succeeded(), eq('False', 'true'))
+
           - task: AzureCLI@2
             displayName: 'Bootstrap Azure SP credentials'
             inputs:
@@ -225,6 +235,7 @@ stages:
                 Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID;issecret=false]$env:servicePrincipalId"
                 Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID;issecret=false]$env:tenantId"
                 Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
+
           # - task: CmdLine@2
           #   displayName: 'BrowserStack SDK - PP test execution'
           #   env:
@@ -267,6 +278,7 @@ stages:
               rerunFailedTestsMaxPercent: 30
               rerunMaxAttempts: 1
             continueOnError: true
+
           - task: AzurePowerShell@5
             displayName: "SQL - Remove Whitelisted Agent's IP Address"
             inputs:
@@ -275,6 +287,7 @@ stages:
               ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
               azurePowerShellVersion: LatestVersion
             condition: succeededOrFailed()
+
           - task: AzurePowerShell@5
             displayName: "App Service - Remove Whitelisted Agent's IP Address"
             inputs:
@@ -284,6 +297,7 @@ stages:
               azurePowerShellVersion: LatestVersion
               pwsh: true
             condition: and(succeededOrFailed(), ne('', ''))
+
           - task: AzurePowerShell@5
             displayName: "Function App- Remove Whitelisted Agent's IP Address"
             inputs:
@@ -293,6 +307,7 @@ stages:
               azurePowerShellVersion: LatestVersion
               pwsh: true
             condition: and(succeededOrFailed(), eq('False', 'true'))
+
           - task: PowerShell@2
             displayName: 'Check .trx File Exists'
             inputs:
@@ -300,6 +315,7 @@ stages:
               filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
               arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
             condition: succeededOrFailed()
+            
           - task: BrowserStackResults@0
             inputs:
               browserstackProduct: 'observability'
