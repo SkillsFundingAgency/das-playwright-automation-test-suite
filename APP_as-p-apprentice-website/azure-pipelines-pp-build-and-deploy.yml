@@ -163,9 +163,9 @@ stages:
             path: s/das-platform-automation
             displayName: Checkout das-platform-automation
 
-          - checkout: self
-            path: s/das-playwright-automation-test-suite
-            displayName: Checkout current branch
+          # - checkout: self
+          #   path: s/das-playwright-automation-test-suite
+          #   displayName: Checkout current branch
 
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.json'
