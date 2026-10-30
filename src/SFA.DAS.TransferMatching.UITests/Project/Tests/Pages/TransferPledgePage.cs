@@ -8,13 +8,22 @@ namespace SFA.DAS.TransferMatching.UITests.Project.Tests.Pages;
 public class TransferPledgePage(ScenarioContext context) : TransferMatchingBasePage(context)
 {
     protected override string PageTitle => $"Transfer pledge {GetPledgeId()}";
-    private ILocator PledgedFunds => page.Locator("#main-content > div.govuk-width-container > div:nth-child(3) > div:nth-child(1) > div > p.govuk-heading-l.app-data__figure");
-    private ILocator EstimatedRemainingFunds => page.Locator("#main-content > div.govuk-width-container > div:nth-child(3) > div:nth-child(2) > div > p.govuk-heading-l.app-data__figure");
+    private ILocator PledgedFundsLabel => page.Locator("main p").GetByText("Pledged funds", new() { Exact = true });
+    private ILocator RemainingFundsLabel => page.Locator("main p").GetByText("Pledged funds remaining", new() { Exact = true });
+    private ILocator PledgedFunds => PledgedFundsLabel.Locator("xpath=following-sibling::p[1]");
+    private ILocator EstimatedRemainingFunds => RemainingFundsLabel.Locator("xpath=following-sibling::p[1]");
 
     public async Task<TransferPledgePage> VerifyPledgeAmount()
     {
-        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Pledged funds", Exact = true })).ToBeVisibleAsync();
-        await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Remaining funds", Exact = true })).ToBeVisibleAsync();
+        await Assertions.Expect(PledgedFundsLabel).ToBeVisibleAsync();
+        await Assertions.Expect(RemainingFundsLabel).ToBeVisibleAsync();
+        await Assertions.Expect(PledgedFunds).ToBeVisibleAsync();
+        await Assertions.Expect(EstimatedRemainingFunds).ToBeVisibleAsync();
+
+        var pledged = await GetTotalPledgeFunds();
+        var remaining = await GetEstimatedRemainingFunds();
+        NUnit.Framework.Assert.That(pledged, NUnit.Framework.Is.EqualTo(objectContext.GetPledgeDetail().Amount), "Pledged funds do not match the created pledge amount");
+        NUnit.Framework.Assert.That(remaining, NUnit.Framework.Is.InRange(0, pledged), "Pledged funds remaining must be between zero and the pledged funds");
         return this;
     }
 
