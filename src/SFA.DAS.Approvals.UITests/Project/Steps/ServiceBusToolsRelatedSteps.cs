@@ -91,6 +91,41 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
             }
         }
 
+       
+        [When(@"LearningResumedEvent is received for the apprentice")]
+        public async Task WhenLearningResumedEventIsReceivedForTheApprentice()
+        {
+            UpdateStopDateAndWithdrawalReasonCodeInTheContext();
+            var apprenticeship = context.GetValue<List<Apprenticeship>>(ScenarioKeys.ListOfApprenticeship).FirstOrDefault();
+            var apprenticeshipId = apprenticeship.ApprenticeDetails.ApprenticeshipId;
+            var learningResumedEvent
+                = new LearningResumedEvent
+                {
+                    LearningKey = Guid.NewGuid(),
+                    ApprenticeshipId = apprenticeshipId,
+                    Created = DateTime.Now.ToString("yyyy-MM-dd"),
+                    ResumeDate = apprenticeship.TrainingDetails.StopDate.AddMonths(3).ToString("yyyy-MM-dd")
+                };
+
+            ServiceBusToolsApiClient serviceBusToolsApiClient = new ServiceBusToolsApiClient(context);
+            var response = await serviceBusToolsApiClient.PostLearningResumedEvent(learningResumedEvent);
+            objectContext.SetDebugInformation($"Publishing learningResumedEvent to N-Service Bus (via sbus-tools) for ApprenticeshipId:[{apprenticeshipId}]");
+
+            switch (response.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    objectContext.SetDebugInformation($"Successfully published learningPausedEvent event to N-Service Bus (via sbus-tools) for ApprenticeshipId:[{apprenticeshipId}]");
+                    break;
+                case System.Net.HttpStatusCode.Forbidden:
+                    objectContext.SetDebugInformation($"Failed to publish the event due to error : {response.StatusCode} + {response.ReasonPhrase}");
+                    objectContext.SetDebugInformation("please run following command after replacing initials and ip address: az webapp config access-restriction add -g das-pp-sbus-tools-rg -n das-pp-sbus-tools-fa --rule-name NM --action Allow --ip-address 86.131.225.87 --priority 500");
+                    throw new Exception($"Failed to publish the event due to error : {response.StatusCode} + {response.ReasonPhrase}");
+                default:
+                    objectContext.SetDebugInformation($"Failed to publish the event due to error : {response.StatusCode} + {response.ReasonPhrase}");
+                    throw new Exception($"Failed to publish the event due to error : {response.StatusCode} + {response.ReasonPhrase}");
+            }
+        }
+
 
 
         private void UpdateStopDateAndWithdrawalReasonCodeInTheContext()
