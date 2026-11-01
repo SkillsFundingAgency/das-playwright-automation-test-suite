@@ -96,7 +96,8 @@ public abstract class AparBaseHooks : FrameworkBaseHooks
 
     
 
-    protected async Task ResetTrainingProvider() => await _adminClearDownDataHelpers.ResetProviderDetails(GetUkprn());
+    protected async Task ResetTrainingProvider() => await _adminClearDownDataHelpers.ResetProviderDetailsToSupporting(GetUkprn());
+    protected async Task DeleteProviderCourseType() => await _managingStandardsSqlDbHelper.ClearProviderCourseType(GetUkprn());
 
     protected async Task GetRoatpAppplyData() => await SetDetails(_roatpApplyUkprnDataHelpers.GetRoatpAppplyData(GetTag("rp")));
 
