@@ -260,8 +260,10 @@ public class TransferMatchingSteps(ScenarioContext context)
     [Then("the status of the application will change from 'Auto approval' to 'Auto approval due on XXX'")]
     public async Task VerifyAutoApprovalDate() =>
         await (await SenderPledge()).ConfirmApplicationStatus("Auto approval on " + DateTime.Now.AddDays(7).ToString("dd MMM yyyy").ToUpper());
+    
     [Then("It is 7 days before an application reaches 3 months without any action")]
     public async Task AgeBeforeRejection() => await sql.UpdateCreatedDateForApplicationToAWeekLessThan3MonthsAgo(PledgeId);
+
     [Then("the levy employer will be able to view auto rejected date of application under status tag 'Application expires on dd/mm/yy'")]
     public async Task VerifyAutoRejectionDate() =>
         await (await SenderPledge()).ConfirmApplicationStatus("Application expires on " + DateTime.Now.AddDays(7).ToString("dd MMM yyyy").ToUpper());
@@ -411,6 +413,9 @@ public class TransferMatchingSteps(ScenarioContext context)
         await employerHome.NavigateToEmployerApprenticeshipService();
         var link = Page.GetByRole(AriaRole.Link, new() { Name = "Sign out", Exact = true });
         if (await link.CountAsync() > 0) await link.ClickAsync();
+
+        var singInlink = Page.GetByRole(AriaRole.Link, new() { Name = "sign in", Exact = true });
+        if (await singInlink.CountAsync() > 0) await singInlink.ClickAsync();
     }
     private async Task NewTab(string url)
     {
