@@ -12,7 +12,7 @@ schedules:
 variables:
   - template: ../pipeline-templates/vars.yml
   - name: projectName
-    value: "SFA.DAS.EmployerFinance.UITests"
+    value: "SFA.DAS.TransferMatching.UITests"
 
 resources:
   repositories:
