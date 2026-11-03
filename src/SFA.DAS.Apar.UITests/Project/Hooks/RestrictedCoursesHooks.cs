@@ -26,7 +26,14 @@ public class RestrictedCoursesHooks(ScenarioContext context) : AparBaseHooks(con
     [BeforeScenario(Order = 36)]
     public async Task ClearProviderAllowedCourseData()
     {
-        if (_tags.Any(x => x == "rpadalup05")) await ClearProviderAllowedCourse();
+        if (_tags.Any(x => x == "rpadalup05a")) await ClearProviderAllowedCourse();
+    }
+
+    [BeforeScenario(Order = 37)]
+    public async Task ClearProviderAllowedCourseEndDateData()
+    {
+        if (_tags.Any(x => x == "allowedCourseClearEndDate")) await ClearProviderAllowedCourseEndDate("10004692", "128");
+        if (_tags.Any(x => x == "allowedCourseClearEndDate")) await ClearProviderAllowedCourseEndDate("10004692", "ZSC00007");
     }
 
 
@@ -41,4 +48,5 @@ public class RestrictedCoursesHooks(ScenarioContext context) : AparBaseHooks(con
     {
         if (_tags.Any(x => x == "rpadalup04")) await UnrestrictProvider();
     }
+
 }

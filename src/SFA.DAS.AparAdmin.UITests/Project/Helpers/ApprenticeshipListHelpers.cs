@@ -136,4 +136,28 @@ public class ApprenticeshipListHelper
         return await new ProviderDetailsPage(_context)
             .VerifyPageAsync( () => new ProviderDetailsPage(_context));
     }
+
+    public async Task<SetLastStartDatePage>AllowedCourseAddLastDate(string larsCode)
+    {
+        var home = new AllowedCoursesPage(_context);
+        await home.ClickChangeCourseDateDetails(larsCode);
+        return await new SetLastStartDatePage(_context)
+            .VerifyPageAsync( () => new SetLastStartDatePage(_context));
+    }
+
+    public async Task<AllowedCourseEditPage>EditAllowedCourseDetails(string larsCode)
+    {
+        var home = new AllowedCoursesPage(_context);
+        await home.ClickChangeCourseDateDetails(larsCode);
+        return await new AllowedCourseEditPage(_context)
+            .VerifyPageAsync( () => new AllowedCourseEditPage(_context));
+    }
+
+    public async Task<SetLastStartDatePage>EditApprenticeshipUnit(string larsCode)
+    {
+        var home = new AllowedCoursesPage(_context);
+        await home.ClickChangeCourseDateDetails(larsCode);
+        return await new SetLastStartDatePage(_context)
+            .VerifyPageAsync( () => new SetLastStartDatePage(_context));
+    }
 }
