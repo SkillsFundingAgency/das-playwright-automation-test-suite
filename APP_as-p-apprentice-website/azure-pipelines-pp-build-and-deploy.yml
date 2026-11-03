@@ -272,7 +272,7 @@ stages:
               testAssemblyVer2: '**\**\SFA.DAS*tests*.dll'
               testRunTitle: Test Run - PP
               searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
-              testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp&TestCategory!=accessibility"'
+              testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp"'
               runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
               runInParallel: true
               otherConsoleOptions: '/logger:trx'
