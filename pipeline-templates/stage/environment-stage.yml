@@ -20,9 +20,9 @@ parameters:
   - name: RuleName2
     type: string
     default: ''
-  - name: WhiteListFunction
-    type: boolean
-    default: false
+  - name: WhiteListFunctionName
+    type: string
+    default: ''
   - name: ApplyAppRoleAssignments
     type: boolean
     default: false
@@ -119,7 +119,7 @@ stages:
             RuleName2: ${{ parameters.RuleName2 }}
             ResourceName: ${{ parameters.ResourceName }}
             ResourceName2: ${{ parameters.ResourceName2 }}
-            WhiteListFunction: ${{ parameters.WhiteListFunction }}
+            WhiteListFunctionName: ${{ parameters.WhiteListFunctionName }}
             ${{ if parameters.ApplyAppRoleAssignments }}:
               AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
               AppRoleAssignmentsResourceName: das-pp-automated-tests-ar
@@ -134,7 +134,7 @@ stages:
             ResourceName2: ${{ parameters.ResourceName2 }}
             RuleName: ${{ parameters.RuleName }}
             RuleName2: ${{ parameters.RuleName2 }}
-            WhiteListFunction: ${{ parameters.WhiteListFunction }}
+            WhiteListFunctionName: ${{ parameters.WhiteListFunctionName }}
             ${{ if parameters.ApplyAppRoleAssignments }}:
               AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
               AppRoleAssignmentsResourceName: das-pp-automated-tests-ar

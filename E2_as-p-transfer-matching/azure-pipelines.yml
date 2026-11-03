@@ -13,6 +13,10 @@ variables:
   - template: ../pipeline-templates/vars.yml
   - name: projectName
     value: "SFA.DAS.TransferMatching.UITests"
+  - name: RuleName
+    value: "E2_as-p-transfer-matching-test-suite"
+  - name: WhiteListFunctionName
+    value: "$(LtmFunctionAppName)"
 
 resources:
   repositories:
@@ -37,3 +41,5 @@ stages:
       projectName: $(projectName)
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
+      RuleName: $(RuleName)
+      WhiteListFunctionName: $(WhiteListFunctionName)
