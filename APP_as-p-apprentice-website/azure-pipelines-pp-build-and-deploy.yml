@@ -34,14 +34,6 @@ stages:
     variables:
     - group: BUILD Management Resources
     steps:
-    - checkout: das-platform-automation
-      path: s/das-platform-automation
-      displayName: Checkout das-platform-automation
-
-    - checkout: self
-      path: s/das-playwright-automation-test-suite
-      displayName: Checkout current branch
-
     - task: PowerShell@2
       name: buildProjectPaths
       displayName: Build Project File Path
@@ -52,7 +44,7 @@ stages:
 
           $first = $projects[0]
 
-          $paths = $projects | ForEach-Object { "das-playwright-automation-test-suite/src/$_/*.csproj" }
+          $paths = $projects | ForEach-Object { "src/$_/*.csproj" }
 
           $joined = @($paths -join "%0D%0A")
 
@@ -61,23 +53,20 @@ stages:
           Write-Host "##vso[task.setvariable variable=projectsToBuild;]$joined"
 
           Write-Host "##vso[task.setvariable variable=projectName;isOutput=true]$first"
-
     - task: DotNetCoreCLI@2
       displayName: dotnet build
       inputs:
         arguments: '--configuration $(BuildConfiguration)'
         projects: |
           $(projectsToBuild)
-  
     - task: DotNetCoreCLI@2
       displayName: 'dotnet pack'
       inputs:
         command: 'pack'
         projects: |
           $(projectsToBuild)
-        packDirectory: '$(System.DefaultWorkingDirectory)/drop'
+        packDirectory: '$(build.artifactstagingdirectory)/publish'
         arguments: '--configuration $(BuildConfiguration) --no-restore'
-
     - task: DotNetCoreCLI@2
       displayName: 'dotnet publish'
       inputs:
@@ -86,12 +75,10 @@ stages:
         zipAfterPublish: false
         projects: |
           $(projectsToBuild)
-        arguments: '--configuration $(BuildConfiguration) --output $(System.DefaultWorkingDirectory)/drop/tests --no-restore --no-build'
-
+        arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/tests --no-restore --no-build'
     - task: CopyFiles@2
       displayName: 'Copy config files'
       inputs:
-        SourceFolder: 'das-playwright-automation-test-suite'
         Contents: |
           src/**/*.sql
           src/**/appsettings.Config.json
@@ -102,56 +89,58 @@ stages:
           src/**/appsettings.NServiceBusConfig.json
           src/**/appsettings.BrowserStack.json
           src/**/appsettings.ApiFramework.json
-        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/files'
+        TargetFolder: '$(build.artifactstagingdirectory)/tests/files'
         flattenFolders: true
         OverWrite: true
-      
     - task: CopyFiles@2
       displayName: 'Copy project json files'
       inputs:
-        SourceFolder: 'das-playwright-automation-test-suite'
         Contents: |
           src/**/appsettings.Project.json
-        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
+        TargetFolder: '$(build.artifactstagingdirectory)/tests/'
         flattenFolders: false
         OverWrite: true
-
     - task: CopyFiles@2
       displayName: 'Copy Check-TestResults.ps1'
       inputs:
-        SourceFolder: 'das-playwright-automation-test-suite'
         Contents: |
           src/**/Check-TestResults.ps1
-        TargetFolder: '$(System.DefaultWorkingDirectory)/drop'
+        TargetFolder: '$(build.artifactstagingdirectory)/publish'
         OverWrite: true
-
     - task: CopyFiles@2
       displayName: 'Copy UpdateNoofTestWorkers.ps1'
       inputs:
-        SourceFolder: 'das-playwright-automation-test-suite'
         Contents: |
           src/**/UpdateNoofTestWorkers.ps1
-        TargetFolder: '$(System.DefaultWorkingDirectory)/drop'
+        TargetFolder: '$(build.artifactstagingdirectory)/publish'
         OverWrite: true
-
     - task: CopyFiles@2
       displayName: 'Copy runsettings'
       inputs:
-        SourceFolder: 'das-playwright-automation-test-suite'
         Contents: |
           src/**/*.runsettings
-        TargetFolder: '$(System.DefaultWorkingDirectory)/drop/runsettings'
+        TargetFolder: '$(build.artifactstagingdirectory)/publish/runsettings'
         OverWrite: true
-
+    - task: ArchiveFiles@2
+      displayName: 'Archive Test Files'
+      inputs:
+        rootFolderOrFile: '$(build.artifactstagingdirectory)/tests'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(build.artifactstagingdirectory)/publish/tests.zip'
+        replaceExistingArchive: true
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+        pathtoPublish: '$(build.artifactstagingdirectory)/publish'
     - task: CmdLine@2
       inputs:
         script: |
-          echo "Tree Structure of Drop Directory:"
-          tree $(System.DefaultWorkingDirectory)/drop /f
-          echo **************************************************************
-          echo "Tree Structure of Artifacts Directory:"
+          echo "Tree Structure of System DefaultWorkingDirectory:"
           tree $(System.DefaultWorkingDirectory) /f
-          
+          echo "*************************************************"
+          echo "Tree Structure of Artifacts Directory:"
+          tree $(build.artifactstagingdirectory) /f
       displayName: 'Agent Folder Structure'
       condition: always()
       continueOnError: true
@@ -172,36 +161,63 @@ stages:
       runOnce:
         deploy:
           steps:
+          - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
+            displayName: 'Checkout current branch'
+            inputs:
+              repository: self
+          - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
+            displayName: 'Checkout das-platform-automation'
+            inputs:
+              repository: das-platform-automation
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download build artifacts'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.DefaultWorkingDirectory)'
+          - task: ExtractFiles@1
+            displayName: 'Extract files'
+            inputs:
+              archiveFilePatterns: 'drop/tests.zip'
+              destinationFolder: '$(System.DefaultWorkingDirectory)/drop/tests'
+          - task: CmdLine@2
+            inputs:
+              script: |
+                echo "Tree Structure of System DefaultWorkingDirectory:"
+                tree $(System.DefaultWorkingDirectory) /f
+                echo "*************************************************"
+                echo "Tree Structure of Agent WorkFolder:"
+                tree $(Agent.WorkFolder) /f
+            displayName: 'Agent Folder Structure'
+            condition: always()
+            continueOnError: true
+  
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.json'
             inputs:
               SourcePath: '$(System.DefaultWorkingDirectory)/drop/tests'
               TargetFileNames: '*.json'
-
           - task: TotalALM.totalalm-tokenization.tokenization-build-task.Tokenization@2
             displayName: 'Tokenization: Transform file *.runsettings'
             inputs:
               SourcePath: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/'
               TargetFileNames: '*.runsettings'
-
           - task: BrowserStackConfig@0
             inputs:
               browserstackServiceEndPoint: 'AS-Browserstack'
-
           - task: PowerShell@2
             displayName: 'Install Playwright Browsers'
             inputs:
               targetType: 'filePath'
               filePath: '$(System.DefaultWorkingDirectory)/drop/tests/$(projectName)/playwright.ps1'
               arguments: install $(BROWSER_TYPE)
-
           - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
             displayName: 'Set Screen Resolution'
             inputs:
               displaySettings: specific
               width: 1920
               height: 1080
-
           - task: AzurePowerShell@5
             displayName: "Get Agent's IP Address"
             inputs:
@@ -209,7 +225,6 @@ stages:
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Get-MyIpAddress.ps1'
               ScriptArguments: '-WhatsMyIpUrl "https://ifconfig.me/ip"'
               azurePowerShellVersion: LatestVersion
-
           - task: AzurePowerShell@5
             displayName: "Whitelist agent's IP address"
             inputs:
@@ -217,7 +232,6 @@ stages:
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AzSqlIpException.ps1'
               ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
               azurePowerShellVersion: LatestVersion
-
           - task: AzurePowerShell@5
             displayName: "Whitelist agent's IP address on $(AppServiceName)"
             condition: ne('', '')
@@ -226,7 +240,6 @@ stages:
               ScriptPath: '$(System.DefaultWorkingDirectory)/das-platform-automation/Infrastructure-Scripts/Add-AppServiceIpException.ps1'
               ScriptArguments: '-ResourceName  -IPAddress $(IPAddress) -RuleName '
               azurePowerShellVersion: LatestVersion
-
           - task: AzurePowerShell@5
             displayName: "Whitelist agent's IP address on Function App"
             inputs:
@@ -235,7 +248,6 @@ stages:
               ScriptArguments: -IpAddress $(IPAddress) -ResourceNames "das-pp-sbus-tools-fa" -RuleName ""
               azurePowerShellVersion: LatestVersion
             condition: and(succeeded(), eq('False', 'true'))
-
           - task: AzureCLI@2
             displayName: 'Bootstrap Azure SP credentials'
             inputs:
@@ -248,28 +260,6 @@ stages:
                 Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID;issecret=false]$env:servicePrincipalId"
                 Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID;issecret=false]$env:tenantId"
                 Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
-
-          # - task: CmdLine@2
-          #   displayName: 'BrowserStack SDK - PP test execution'
-          #   env:
-          #     AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
-          #     AZURE_TENANT_ID: $(AZURE_TENANT_ID)
-          #     AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
-          #     BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
-          #     BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
-          #   inputs:
-          #     script: |
-          #       dotnet browserstack-sdk ^
-          #         --configuration "$(BuildConfiguration)" ^
-          #         --no-build ^
-          #         --no-restore ^
-          #         --logger "trx;LogFileName=TestResults.trx" ^
-          #         --results-directory "$(Agent.TempDirectory)/TestResults" ^
-          #         --settings "$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings" ^
-          #         --filter "$(TestCategory)&TestCategory!=ignoreinpp"
-          #     workingDirectory: '$(System.DefaultWorkingDirectory)/drop/tests/'
-          #   continueOnError: true
-
           - task: VSTest@3
             displayName: 'VsTest - Test Execution'
             env:
@@ -291,7 +281,6 @@ stages:
               rerunFailedTestsMaxPercent: 30
               rerunMaxAttempts: 1
             continueOnError: true
-
           - task: AzurePowerShell@5
             displayName: "SQL - Remove Whitelisted Agent's IP Address"
             inputs:
@@ -300,7 +289,6 @@ stages:
               ScriptArguments: '-Name $(Build.DefinitionName) -IPAddress $(IPAddress) -ResourceNamePattern $(SharedSQLServerName)'
               azurePowerShellVersion: LatestVersion
             condition: succeededOrFailed()
-
           - task: AzurePowerShell@5
             displayName: "App Service - Remove Whitelisted Agent's IP Address"
             inputs:
@@ -310,7 +298,6 @@ stages:
               azurePowerShellVersion: LatestVersion
               pwsh: true
             condition: and(succeededOrFailed(), ne('', ''))
-
           - task: AzurePowerShell@5
             displayName: "Function App- Remove Whitelisted Agent's IP Address"
             inputs:
@@ -320,7 +307,6 @@ stages:
               azurePowerShellVersion: LatestVersion
               pwsh: true
             condition: and(succeededOrFailed(), eq('False', 'true'))
-
           - task: PowerShell@2
             displayName: 'Check .trx File Exists'
             inputs:
@@ -328,7 +314,6 @@ stages:
               filePath: '$(System.DefaultWorkingDirectory)/drop/src/Check-TestResults.ps1'
               arguments: '-SourcePath "$(Agent.TempDirectory)/TestResults"'
             condition: succeededOrFailed()
-
           - task: BrowserStackResults@0
             inputs:
               browserstackProduct: 'observability'
