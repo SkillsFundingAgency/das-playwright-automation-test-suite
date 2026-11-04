@@ -25,15 +25,12 @@ public class ApplicationsDetailsPage(ScenarioContext context, string application
     public async Task<AcceptedTransferPage> VerifyAgreeToTermsIsMandatoryAndAcceptFunding()
     {
         await SelectRadioOptionByText("Yes, accept the funding");
-        await Continue();
-        await VerifyTermsError();
+        await ContinueAndVerifyTermsError();
         await page.Locator("#TruthfulInformation").ClickAsync();
-        await Continue();
-        await VerifyTermsError();
+        await ContinueAndVerifyTermsError();
         await page.Locator("#TruthfulInformation").ClickAsync();
         await page.Locator("#ComplyWithRules").ClickAsync();
-        await Continue();
-        await VerifyTermsError();
+        await ContinueAndVerifyTermsError();
         await page.Locator("#TruthfulInformation").ClickAsync();
         await Continue();
         return await VerifyPageAsync(() => new AcceptedTransferPage(context));
@@ -58,7 +55,14 @@ public class ApplicationsDetailsPage(ScenarioContext context, string application
         return await VerifyPageAsync(() => new SuccessfullyWithdrawnYourApplicationPage(context));
     }
 
-    private async Task VerifyTermsError() =>
+    // The form posts back to the same URL (POST -> 302 -> GET), so the previous error summary is still on screen
+    // until the new document loads; wait for that document before asserting or interacting with the form again.
+    private async Task ContinueAndVerifyTermsError()
+    {
+        await page.RunAndWaitForResponseAsync(Continue,
+            r => r.Request.IsNavigationRequest && r.Request.Method == "GET" && r.Url == page.Url);
+        await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
         await Assertions.Expect(page.Locator(".govuk-error-summary"))
             .ToContainTextAsync("You must agree to the terms and conditions before accepting funding for this application");
+    }
 }

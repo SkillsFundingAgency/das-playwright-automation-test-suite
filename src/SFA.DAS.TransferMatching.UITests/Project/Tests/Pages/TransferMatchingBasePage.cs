@@ -44,16 +44,48 @@ public abstract class TransferMatchingBasePage(ScenarioContext context) : BasePa
         await choices.Nth(count > 1 ? Random.Shared.Next(1, count) : 0).CheckAsync();
     }
 
-    protected async Task FindOnPaginatedList(ILocator item)
+    /// <param name="newestLast">Set when the list is sorted oldest first, so a newly created item is searched for from the last page backwards.</param>
+    protected async Task FindOnPaginatedList(ILocator item, bool newestLast = false)
     {
-        while (!await item.IsVisibleAsync())
+        if (!await item.IsVisibleAsync())
         {
-            var next = page.GetByRole(AriaRole.Link, new() { Name = "Next" });
-            if (!await next.IsVisibleAsync()) break;
-            await next.ClickAsync();
-            await VerifyPage();
+            var direction = newestLast && await GoToLastPage() ? "Previous page" : "Next page";
+            var pageLink = page.GetByRole(AriaRole.Link, new() { Name = direction, Exact = true });
+
+            while (!await item.IsVisibleAsync() && await pageLink.IsVisibleAsync())
+                await GoToPage(await pageLink.GetAttributeAsync("href"), () => pageLink.ClickAsync());
         }
         await Assertions.Expect(item).ToBeVisibleAsync();
+    }
+
+    private async Task<bool> GoToLastPage()
+    {
+        var next = page.GetByRole(AriaRole.Link, new() { Name = "Next page", Exact = true });
+        var summary = page.Locator(".das-pagination__summary");
+        if (!await next.IsVisibleAsync() || await summary.CountAsync() == 0) return false;
+
+        // Summary is either "Showing 50 of 2149 ..." or "Showing 1 to 50 of 2149 ...", possibly split across lines.
+        var match = Regex.Match(await summary.InnerTextAsync(), @"Showing\s+(?:(\d+)\s+to\s+)?(\d+)\s+of\s+(\d+)");
+        var href = await next.GetAttributeAsync("href");
+        if (!match.Success || href is null) return false;
+
+        var endRow = int.Parse(match.Groups[2].Value, CultureInfo.InvariantCulture);
+        var startRow = match.Groups[1].Success ? int.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture) : 1;
+        var totalItems = int.Parse(match.Groups[3].Value, CultureInfo.InvariantCulture);
+        var lastPage = (int)Math.Ceiling(totalItems / (double)(endRow - startRow + 1));
+        if (lastPage <= 1) return false;
+
+        var lastPageHref = Regex.Replace(href, @"page=\d+", $"page={lastPage}");
+        await GoToPage(lastPageHref, () => page.GotoAsync(new Uri(new Uri(page.Url), lastPageHref).ToString()));
+        return true;
+    }
+
+    private async Task GoToPage(string href, Func<Task> navigate)
+    {
+        var target = href is null ? null : new Uri(new Uri(page.Url), href).ToString();
+        await navigate();
+        if (target is not null) await page.WaitForURLAsync(target);
+        await VerifyPageAsync(() => this);
     }
 
     protected static int ReadAmount(string text) =>

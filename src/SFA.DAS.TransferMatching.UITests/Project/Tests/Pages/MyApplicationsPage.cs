@@ -7,7 +7,7 @@ public class MyApplicationsPage(ScenarioContext context) : TransferMatchingBaseP
     public async Task<ApplicationsDetailsPage> OpenPledgeApplication(string expectedStatus)
     {
         var pledge = page.GetByRole(AriaRole.Link, new() { Name = $"({GetPledgeId()})" });
-        await FindOnPaginatedList(pledge);
+        await FindOnPaginatedList(pledge, newestLast: true);
         await pledge.ClickAsync();
         return await VerifyPageAsync(() => new ApplicationsDetailsPage(context, expectedStatus));
     }

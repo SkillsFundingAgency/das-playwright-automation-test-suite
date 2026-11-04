@@ -1,6 +1,7 @@
 using SFA.DAS.TransferMatching.UITests.Project.Tests.Pages;
 using EmployerHomePage = SFA.DAS.EmployerPortal.UITests.Project.Pages.HomePage;
 using StubSignInEmployerPage = SFA.DAS.EmployerPortal.UITests.Project.Pages.StubPages.StubSignInEmployerPage;
+using YouHaveBeenSignedOutPage = SFA.DAS.EmployerPortal.UITests.Project.Pages.YouHaveBeenSignedOutPage;
 
 namespace SFA.DAS.TransferMatching.UITests.Project.Tests.Steps;
 
@@ -371,7 +372,7 @@ public class TransferMatchingSteps(ScenarioContext context)
         objectContext.SetOrganisationName(receiver);
         var signedIn = await signIn.Login(user.Username, user.IdOrUserRef);
         await signedIn.Continue();
-        await new CreateATransfersApplicationPage(context).VerifyPage();
+        await VerifyPageHelper.VerifyPageAsync(context, () => new CreateATransfersApplicationPage(context));
     }
     private async Task<StubSignInEmployerPage> ApplyForTransferFunds()
     {
@@ -410,7 +411,12 @@ public class TransferMatchingSteps(ScenarioContext context)
     {
         await employerHome.NavigateToEmployerApprenticeshipService();
         var link = Page.GetByRole(AriaRole.Link, new() { Name = "Sign out", Exact = true });
-        if (await link.CountAsync() > 0) await link.ClickAsync();
+        if (await link.CountAsync() == 0) return;
+
+        await link.ClickAsync();
+        await VerifyPageHelper.VerifyPageAsync(context, () => new YouHaveBeenSignedOutPage(context));
+        // Return to the unauthenticated landing page so the login helpers can start from a known state.
+        await employerHome.NavigateToEmployerApprenticeshipService();
     }
     private async Task NewTab(string url)
     {
