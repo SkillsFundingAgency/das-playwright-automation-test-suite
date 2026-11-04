@@ -263,7 +263,8 @@ public class TransferMatchingSteps(ScenarioContext context)
         await (await SenderPledge()).ConfirmApplicationStatus("Auto approval on " + DateTime.Now.AddDays(7).ToString("dd MMM yyyy").ToUpper());
     [Then("It is 7 days before an application reaches 3 months without any action")]
     public async Task AgeBeforeRejection() => await sql.UpdateCreatedDateForApplicationToAWeekLessThan3MonthsAgo(PledgeId);
-    [Then("the levy employer will be able to view auto rejected date of application under status tag 'Application expires on dd/mm/yy'")]
+    // "/" is alternation in Cucumber Expressions, so it must be escaped to match the literal "dd/mm/yy".
+    [Then(@"the levy employer will be able to view auto rejected date of application under status tag 'Application expires on dd\/mm\/yy'")]
     public async Task VerifyAutoRejectionDate() =>
         await (await SenderPledge()).ConfirmApplicationStatus("Application expires on " + DateTime.Now.AddDays(7).ToString("dd MMM yyyy").ToUpper());
     [Then("Application has not been actioned for 3 months")]

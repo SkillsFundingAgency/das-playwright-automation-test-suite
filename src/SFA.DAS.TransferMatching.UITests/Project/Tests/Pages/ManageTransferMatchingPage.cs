@@ -12,8 +12,12 @@ public class ManageTransferMatchingPage(ScenarioContext context) : TransferMatch
         return this;
     }
 
-    public async Task<AccountHomePage> GoToAccountHomePage() =>
-        await FollowLink("Home", () => new AccountHomePage(context));
+    // "Home" appears in both the service navigation and the breadcrumbs.
+    public async Task<AccountHomePage> GoToAccountHomePage()
+    {
+        await page.GetByLabel("Service information").GetByRole(AriaRole.Link, new() { Name = "Home", Exact = true }).ClickAsync();
+        return await VerifyPageAsync(() => new AccountHomePage(context));
+    }
 
     public async Task<PledgeAndTransferYourLevyFundsPage> GotoCreateTransfersPledgePage()
     {

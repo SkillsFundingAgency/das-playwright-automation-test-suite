@@ -5,7 +5,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer;
 internal class TransferLearnerDetailsPage(ScenarioContext context) : ApprovalsBasePage(context)
 {
     public override async Task VerifyPage() =>
-        await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Level = 1 })).ToContainTextAsync("Add learner details");
+        await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Add learner details", Level = 1 })).ToBeVisibleAsync();
 
     internal async Task<EmployerApproveLearnerDetailsPage> Submit(Apprenticeship apprenticeship)
     {
@@ -31,7 +31,7 @@ internal class TransferLearnerDetailsPage(ScenarioContext context) : ApprovalsBa
 internal class TransferLearnerCoursePage(ScenarioContext context) : ApprovalsBasePage(context)
 {
     public override async Task VerifyPage() =>
-        await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Level = 1 })).ToContainTextAsync("What is the training course?");
+        await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "What is the training course?", Level = 1 })).ToBeVisibleAsync();
 
     internal async Task<TransferLearnerDetailsPage> SelectCourse(string title)
     {
@@ -45,7 +45,7 @@ internal class TransferLearnerCoursePage(ScenarioContext context) : ApprovalsBas
 internal class ChooseTransferFundsPage(ScenarioContext context) : ApprovalsBasePage(context)
 {
     public override async Task VerifyPage() =>
-        await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Level = 1 })).ToContainTextAsync("Choose transfer funds");
+        await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Choose transfer funds", Level = 1 })).ToBeVisibleAsync();
 
     internal async Task<ChooseYourMainTrainingProviderPage> SelectTransfer(string applicationId, string senderAccountId)
     {
