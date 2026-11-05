@@ -336,6 +336,19 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
         return await page.EnterAdvertTitleMultiOrg();
     }
 
+    internal async Task<YourApprenticeshipAdvertsHomePage> TriggerVacancyTitleValidationErrorAndCancelAdvert()
+    {
+        var page = await CreateAnApprenticeshipAdvertOrVacancy();
+
+        var titlePage = await NavigateToAdvertTitle(page);
+
+        await titlePage.TriggerVacancyTitleValidationError();
+
+        await titlePage.EmployerCancelAdvert();
+
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new YourApprenticeshipAdvertsHomePage(context));
+    }
+
 
     private static async Task<CreateAnApprenticeshipAdvertOrVacancyPage> AdvertSummary(ApprenticeshipTrainingPage page, bool isFoundationAdvert)
     {

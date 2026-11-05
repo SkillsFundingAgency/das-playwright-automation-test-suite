@@ -12,6 +12,8 @@ public class FAABrowseByInterestsSteps(ScenarioContext context)
 
         var page1 = await page.ClickBrowseByYourInterests();
 
+        await page1.TriggerValidationErrorOnCategories();
+
         var page2 = await page1.SelectCategoriesCheckBoxes();
 
         await page2.EnterLocationDetails(locationOption);
