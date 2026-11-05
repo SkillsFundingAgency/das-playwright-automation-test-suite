@@ -19,6 +19,8 @@ public class ApprenticeshipListSteps
     private readonly AllowedCoursesPage _allowedCoursesPage;
     private readonly AddApprenticeshipUnitToAllowedPage _addApprenticeshipUnitToAllowedPage;
     private readonly AllowedCourseEditPage _allowedCourseEditPage;
+    private readonly AllowedCourseAddLastDatePage _allowedCourseAddLastDatePage;
+    private readonly AllowedCourseEditLastDatePage _allowedCourseEditLastDatePage;
 
 
 public ApprenticeshipListSteps(ScenarioContext context)
@@ -34,7 +36,9 @@ public ApprenticeshipListSteps(ScenarioContext context)
     _allowedCoursesPage = new AllowedCoursesPage(context);
     _addApprenticeshipToAllowedCoursePage = new AddApprenticeshipToAllowedCoursePage(context);
     _addApprenticeshipUnitToAllowedPage = new AddApprenticeshipUnitToAllowedPage(context);
+    _allowedCourseAddLastDatePage = new AllowedCourseAddLastDatePage(context);
     _allowedCourseEditPage = new AllowedCourseEditPage(context);
+    _allowedCourseEditLastDatePage = new AllowedCourseEditLastDatePage(context);
 }    
 
     [When(@"the user clicks on manage restricted courses")]
@@ -170,18 +174,18 @@ public ApprenticeshipListSteps(ScenarioContext context)
     public async Task ThenTheUserCanEditDatesForAllowlistedApprenticeshipsThatTheProviderCanDeliver()
     {
         await _apprenticeshipListHelper.AllowedCourseAddLastDate("128"); // Course Open to new starts
-        await _setLastStartDatePage.EnterDate("20-08-2054");
-        await _setLastStartDatePage.ConfirmLastStartDate();
+        await _allowedCourseAddLastDatePage.EnterDate("20-08-2054");
+        await _allowedCourseAddLastDatePage.ConfirmLastStartDate();
         await _allowedCoursesPage.SuccessBannerVisible();
         await _allowedCoursesPage.AssertBanner("128", "Last start date added");
         await _apprenticeshipListHelper.EditAllowedCourseDetails("128");
         await _allowedCourseEditPage.SelectOptionEditRemove("Edits");
-        await _allowedCourseEditPage.ContinueToEditDate();
-        await _setLastStartDatePage.EnterDate("20-08-2014");
-        await _setLastStartDatePage.ConfirmLastStartDate();
-        await _setLastStartDatePage.ErrorMessageForWrongInput();
-        await _setLastStartDatePage.EnterDate("20-08-2016");
-        await _setLastStartDatePage.ConfirmLastStartDate();
+        await _apprenticeshipListHelper.ContinueToEditDate();
+        await _allowedCourseEditLastDatePage.EnterDate("20-08-2014");
+        await _allowedCourseEditLastDatePage.ConfirmLastStartDate();
+        await _allowedCourseEditLastDatePage.ErrorMessageForWrongInput();
+        await _allowedCourseEditLastDatePage.EnterDate("20-08-2016");
+        await _allowedCourseEditLastDatePage.ConfirmLastStartDate();
         await _allowedCoursesPage.AssertBanner("128", "Closed to new starts");
     }
 
@@ -190,18 +194,18 @@ public ApprenticeshipListSteps(ScenarioContext context)
     public async Task ThenTheUserCanEditDatesForAllowlistedApprenticeshipUnitsThatTheProviderCanDeliver()
     {
         await _apprenticeshipListHelper.EditApprenticeshipUnit("ZSC00007");
-        await _setLastStartDatePage.EnterDate("20-08-2054");
-        await _setLastStartDatePage.ConfirmLastStartDate();
+        await _allowedCourseAddLastDatePage.EnterDate("20-08-2054");
+        await _allowedCourseAddLastDatePage.ConfirmLastStartDate();
         await _allowedCoursesPage.SuccessBannerVisible();
         await _allowedCoursesPage.AssertBanner("ZSC00007", "Last start date added");
         await _apprenticeshipListHelper.EditAllowedCourseDetails("ZSC00007"); 
         await _allowedCourseEditPage.SelectOptionEditRemove("Edits");
-        await _allowedCourseEditPage.ContinueToEditDate();
-        await _setLastStartDatePage.EnterDate("20-08-2014");
-        await _setLastStartDatePage.ConfirmLastStartDate();
-        await _setLastStartDatePage.ErrorMessageForWrongInput();
-        await _setLastStartDatePage.EnterDate("20-08-2016");
-        await _setLastStartDatePage.ConfirmLastStartDate();
+        await _apprenticeshipListHelper.ContinueToEditDate();
+        await _allowedCourseEditLastDatePage.EnterDate("20-08-2014");
+        await _allowedCourseEditLastDatePage.ConfirmLastStartDate();
+        await _allowedCourseEditLastDatePage.ErrorMessageForWrongInput();
+        await _allowedCourseEditLastDatePage.EnterDate("20-08-2016");
+        await _allowedCourseEditLastDatePage.ConfirmLastStartDate();
         await _allowedCoursesPage.AssertBanner("ZSC00007", "Closed to new starts");
     }
  

@@ -43,6 +43,11 @@ public abstract class AparAdminEditBasePage(ScenarioContext context) : AparAdmin
         await  page.Locator($"#{radioId}").ClickAsync();
     }
 
+    public async Task ConfirmLastStartDate()
+    {
+        await page.Locator(".govuk-button").ClickAsync();
+    }
+
     public async Task ErrorMessageForWrongInput()
     {
         await Assertions.Expect(page.Locator(".govuk-error-summary__title")).ToContainTextAsync("There is a problem");

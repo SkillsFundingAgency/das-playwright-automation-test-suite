@@ -137,12 +137,12 @@ public class ApprenticeshipListHelper
             .VerifyPageAsync( () => new ProviderDetailsPage(_context));
     }
 
-    public async Task<SetLastStartDatePage>AllowedCourseAddLastDate(string larsCode)
+    public async Task<AllowedCourseAddLastDatePage>AllowedCourseAddLastDate(string larsCode)
     {
         var home = new AllowedCoursesPage(_context);
         await home.ClickChangeCourseDateDetails(larsCode);
-        return await new SetLastStartDatePage(_context)
-            .VerifyPageAsync( () => new SetLastStartDatePage(_context));
+        return await new AllowedCourseAddLastDatePage(_context)
+            .VerifyPageAsync( () => new AllowedCourseAddLastDatePage(_context));
     }
 
     public async Task<AllowedCourseEditPage>EditAllowedCourseDetails(string larsCode)
@@ -153,11 +153,19 @@ public class ApprenticeshipListHelper
             .VerifyPageAsync( () => new AllowedCourseEditPage(_context));
     }
 
-    public async Task<SetLastStartDatePage>EditApprenticeshipUnit(string larsCode)
+    public async Task<AllowedCourseAddLastDatePage>EditApprenticeshipUnit(string larsCode)
     {
         var home = new AllowedCoursesPage(_context);
         await home.ClickChangeCourseDateDetails(larsCode);
-        return await new SetLastStartDatePage(_context)
-            .VerifyPageAsync( () => new SetLastStartDatePage(_context));
+        return await new AllowedCourseAddLastDatePage(_context)
+            .VerifyPageAsync( () => new AllowedCourseAddLastDatePage(_context));
+    }
+
+    public async Task<AllowedCourseEditLastDatePage> ContinueToEditDate()
+    {
+        var home = new AllowedCourseEditPage(_context);
+        await home.ContinueToEditDate();
+        return await new AllowedCourseEditLastDatePage(_context)
+            .VerifyPageAsync( () => new AllowedCourseEditLastDatePage(_context));
     }
 }
