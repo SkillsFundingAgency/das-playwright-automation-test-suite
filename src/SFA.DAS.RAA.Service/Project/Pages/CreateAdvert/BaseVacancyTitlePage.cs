@@ -48,6 +48,6 @@ public abstract class BaseVacancyTitlePage(ScenarioContext context) : RaaBasePag
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
 
-        await Assertions.Expect(page.Locator(".govuk-error-summary")).ToContainTextAsync("There is a problem");
+        await CheckValidationErrors("Enter a title for this apprenticeship");
     }
 }

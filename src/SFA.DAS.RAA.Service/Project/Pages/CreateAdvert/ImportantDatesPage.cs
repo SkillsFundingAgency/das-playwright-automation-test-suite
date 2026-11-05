@@ -16,6 +16,40 @@ public class ImportantDatesPage(ScenarioContext context) : RaaBasePage(context)
         return await VerifyPageAsync(() => new DurationPage(context));
     }
 
+    public async Task TriggerValidationErrorsOnDates()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Enter an application closing date", "Enter when you expect the apprentice to start", "The start date must have a value");
+
+        var date = rAADataHelper.VacancyClosing;
+
+        string day = date.Day.ToString();
+        string month = date.Month.ToString();
+        string year = date.Year.ToString();
+
+        await page.GetByRole(AriaRole.Group, new() { Name = "Application closing date" }).GetByLabel("Day").FillAsync(day);
+
+        await page.GetByRole(AriaRole.Group, new() { Name = "Application closing date" }).GetByLabel("Month").FillAsync(month);
+
+        await page.GetByRole(AriaRole.Group, new() { Name = "Application closing date" }).GetByLabel("Year").FillAsync(year);
+
+        date = rAADataHelper.VacancyStartValidationError;
+
+        day = date.Day.ToString();
+        month = date.Month.ToString();
+        year = date.Year.ToString();
+
+        await page.GetByRole(AriaRole.Group, new() { Name = "Apprenticeship start date" }).GetByLabel("Day").FillAsync(day);
+
+        await page.GetByRole(AriaRole.Group, new() { Name = "Apprenticeship start date" }).GetByLabel("Month").FillAsync(month);
+
+        await page.GetByRole(AriaRole.Group, new() { Name = "Apprenticeship start date" }).GetByLabel("Year").FillAsync(year);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+        await CheckValidationErrors("Start date cannot be before the closing date. We advise using a date more than 14 days from now.");
+    }
+
     private async Task EnterDates()
     {
         var date = rAADataHelper.VacancyClosing;
@@ -53,6 +87,21 @@ public class DurationPage(ScenarioContext context) : RaaBasePage(context)
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Duration and working hours");
     }
 
+    public async Task TriggerValidationErrorsOnDuration()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Enter how long the whole apprenticeship is, including work and training",
+            "Enter details about the working week", 
+            "Enter how many hours the apprentice will work each week, including training");
+
+        await page.GetByRole(AriaRole.Spinbutton, new() { Name = "How long is the whole" }).FillAsync(RAADataHelper.ErrorDuration);
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "Details of working week" }).FillAsync(RAADataHelper.RandomAlphabeticString(260));
+        await page.GetByRole(AriaRole.Spinbutton, new() { Name = "How many hours will the" }).FillAsync(RAADataHelper.WeeklyHoursError);
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+        await CheckValidationErrors("Details about the working week must not exceed 250 characters", 
+            "The total hours a week must be at least 16");
+    }
     public async Task<WageTypePage> EnterDuration()
     {
         await page.GetByRole(AriaRole.Spinbutton, new() { Name = "How long is the whole" }).FillAsync(RAADataHelper.Duration);
