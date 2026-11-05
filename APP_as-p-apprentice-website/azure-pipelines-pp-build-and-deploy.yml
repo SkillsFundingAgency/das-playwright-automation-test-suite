@@ -260,8 +260,9 @@ stages:
                 Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_ID;issecret=false]$env:servicePrincipalId"
                 Write-Host "##vso[task.setvariable variable=AZURE_TENANT_ID;issecret=false]$env:tenantId"
                 Write-Host "##vso[task.setvariable variable=AZURE_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
-          - task: VSTest@3
-            displayName: 'VsTest - Test Execution'
+
+          - task: CmdLine@2
+            displayName: 'BrowserStack SDK - PP test execution'
             env:
               AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
               AZURE_TENANT_ID: $(AZURE_TENANT_ID)
@@ -269,18 +270,40 @@ stages:
               BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
               BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
             inputs:
-              testAssemblyVer2: '**\**\SFA.DAS*tests*.dll'
-              testRunTitle: Test Run - PP
-              searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
-              testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp"'
-              runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
-              runInParallel: true
-              otherConsoleOptions: '/logger:trx'
-              rerunFailedTests: true
-              rerunType: basedontestfailurepercentage
-              rerunFailedTestsMaxPercent: 30
-              rerunMaxAttempts: 1
+              script: |
+                dotnet browserstack-sdk ^
+                  --configuration "$(BuildConfiguration)" ^
+                  --no-build ^
+                  --no-restore ^
+                  --logger "trx;LogFileName=TestResults.trx" ^
+                  --results-directory "$(Agent.TempDirectory)/TestResults" ^
+                  --settings "$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings" ^
+                  --filter "$(TestCategory)&TestCategory!=ignoreinpp"
+              workingDirectory: '$(System.DefaultWorkingDirectory)/drop/tests/'
             continueOnError: true
+
+          # - task: VSTest@3
+          #   displayName: 'VsTest - Test Execution'
+          #   env:
+          #     AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+          #     AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+          #     AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+          #     BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
+          #     BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
+          #   inputs:
+          #     testAssemblyVer2: '**\**\SFA.DAS*tests*.dll'
+          #     testRunTitle: Test Run - PP
+          #     searchFolder: '$(System.DefaultWorkingDirectory)/drop/tests/'
+          #     testFiltercriteria: '"$(TestCategory)&TestCategory!=ignoreinpp"'
+          #     runSettingsFile: '$(System.DefaultWorkingDirectory)/drop/runsettings/src/Parellel.runsettings'
+          #     runInParallel: true
+          #     otherConsoleOptions: '/logger:trx'
+          #     rerunFailedTests: true
+          #     rerunType: basedontestfailurepercentage
+          #     rerunFailedTestsMaxPercent: 30
+          #     rerunMaxAttempts: 1
+          #   continueOnError: true
+
           - task: AzurePowerShell@5
             displayName: "SQL - Remove Whitelisted Agent's IP Address"
             inputs:
