@@ -236,6 +236,19 @@ public class ProviderCreateVacancyStepsHelper(ScenarioContext context, bool newT
         return await VerifyPageHelper.VerifyPageAsync(context, () => new RecruitmentHomePage(context));
     }
 
+    internal async Task<RecruitmentHomePage> TriggerVacancyTitleValidationErrorAndCancelAdvert()
+    {
+        var page = await CreateAnApprenticeshipAdvertOrVacancy();
+
+        var titlePage = await NavigateToAdvertTitle(page);
+
+        await titlePage.TriggerVacancyTitleValidationError();
+
+        await titlePage.EmployerCancelAdvert();
+
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new RecruitmentHomePage(context));
+    }
+
     //internal CreateAnApprenticeshipAdvertOrVacancyPage CreateDraftAdvert() => CreateDraftAdvert(CreateAnApprenticeshipAdvertOrVacancy(), false);
 
     //internal CreateAnApprenticeshipAdvertOrVacancyPage CreateDraftAdvert(CreateAnApprenticeshipAdvertOrVacancyPage createAdvertPage, bool createFirstDraftAdvert)

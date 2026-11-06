@@ -1,5 +1,5 @@
 ﻿namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
-public class SelectAStandardPage(ScenarioContext context, string pageTitle = "Select a standard") : ManagingStandardsBasePage(context)
+public class SelectAStandardPage(ScenarioContext context, string pageTitle = "Add an apprenticeship") : ManagingStandardsBasePage(context)
 {
     private readonly string _pageTitle = pageTitle;
     public override async Task VerifyPage()
