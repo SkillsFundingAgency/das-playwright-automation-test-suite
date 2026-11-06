@@ -41,4 +41,13 @@ public abstract class BaseVacancyTitlePage(ScenarioContext context) : RaaBasePag
 
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
     }
+
+    public async Task TriggerVacancyTitleValidationError()
+    {
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "What do you want to call this" }).FillAsync(string.Empty);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator(".govuk-error-summary")).ToContainTextAsync("There is a problem");
+    }
 }

@@ -4,6 +4,12 @@ public class CheckYourApplicationBeforeSubmittingPage(ScenarioContext context) :
 {
     public override async Task VerifyPage() => await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Check your application before submitting");
 
+    public async Task CheckValidationErrorOnReviewPage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Submit" }).ClickAsync();
+
+        await CheckValidationErrors("Select that you understand you won’t be able to make changes after submitting your application");
+    }
     public async Task<ApplicationSubmittedPage> SubmitApplication()
     {
         await page.GetByRole(AriaRole.Checkbox, new() { Name = "I understand that I won't be" }).CheckAsync();
