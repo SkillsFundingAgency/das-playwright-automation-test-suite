@@ -24,7 +24,7 @@ public class ProvideFeedbackConfigurationSetup(ScenarioContext context)
 
         await context.SetApprenticeAccountsPortalUser(
         [
-           configSection.GetConfigSection<ApprenticeFeedbackUser>(),
+           configSection.GetConfigSection<ApprenticeFeedbackUser>()
         ]);
     }
 }
