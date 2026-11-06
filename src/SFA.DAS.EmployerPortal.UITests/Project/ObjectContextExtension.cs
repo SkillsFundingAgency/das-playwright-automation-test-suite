@@ -55,6 +55,7 @@ public static class ObjectContextExtension
     public static string GetDBAccountId(this ObjectContext objectContext) => objectContext.GetAllUserCreds()[0].AccountDetails[0].AccountId;
     public static string GetAleAgreementId(this ObjectContext objectContext) => objectContext.GetAllUserCreds()[0].AccountDetails[0].AleAgreementid;
     public static string GetOrganisationName(this ObjectContext objectContext) => objectContext.Get(OrganisationNameKey);
+    public static void UpdateOrganisationName(this ObjectContext objectContext, string organisationName) => objectContext.Update(OrganisationNameKey, organisationName);
     public static string GetTransferSenderOrganisationName(this ObjectContext objectContext) => objectContext.Get(TransferSenderOrganisationNameKey);
     public static string GetTransferReceiverOrganisationName(this ObjectContext objectContext) => objectContext.Get(TransferReceiverOrganisationNameKey);
     public static string GetRecentlyAddedOrganisationName(this ObjectContext objectContext) => objectContext.Get(RecentlyAddedOrganisationName);

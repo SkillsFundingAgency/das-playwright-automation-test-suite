@@ -21,6 +21,20 @@
             await ClickContinueButton();
         }
 
+        internal async Task<ChooseConnection> SelectTransferFundsFromConnection()
+        {
+            await page.Locator("#radio-item-funding-type-transfer-connection input").ClickAsync();
+            await ClickContinueButton();
+            return await VerifyPageAsync(() => new ChooseConnection(context));
+        }
+
+        internal async Task<ChooseYourMainTrainingProviderPage> SelectNonLevyReserveNewFunds()
+        {
+            await page.Locator("#radio-item-funding-type-new-reservation input").ClickAsync();
+            await ClickContinueButton();
+            return await VerifyPageAsync(() => new ChooseYourMainTrainingProviderPage(context));
+        }
+
         internal async Task<ChooseReservationPage> SelectReservedFunds()
         {
             await page.Locator("#FundingType-2").ClickAsync();
