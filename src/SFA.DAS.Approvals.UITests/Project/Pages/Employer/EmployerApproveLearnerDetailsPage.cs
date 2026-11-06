@@ -42,6 +42,13 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             return await VerifyPageAsync(() => new ApprenticeDetailsApproved(context));
         }
 
+        internal async Task RequestChangesFromProvider()
+        {
+            await doNotApproveRadioOption.ClickAsync();
+            await messageToEmployerTextBox.FillAsync("Please review and resubmit the ILR learner details.");
+            await SubmitButton.ClickAsync();
+        }
+
         internal async Task ValidateWarningMessageForFoundationCourses(string warningMsg) => await Assertions.Expect(page.Locator("#main-content")).ToContainTextAsync(warningMsg);
 
         internal async Task ValidateCohortStatus(string cohortStatus)

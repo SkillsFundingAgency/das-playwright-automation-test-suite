@@ -26,13 +26,38 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
 
             providerConfig = (providerConfig == null) ? context.GetProviderConfig<ProviderConfig>() : providerConfig;
             var providerDetails = await GetProviderDetails(providerConfig);
-            
 
-            for (int i = 0; i < NumberOfApprenticeships; i++)
+            return await CreateApprenticeshipObjects(employerDetails, NumberOfApprenticeships, providerDetails,
+                apprenticeships, apprenticeFactory, trainingFactory, rplFactory);
+        }
+
+        internal async Task<List<Apprenticeship>> CreateApprenticeshipObject(
+            Employer employerDetails,
+            int NumberOfApprenticeships,
+            ProviderConfig providerConfig = null,
+            ApprenticeshipStatus? apprenticeshipStatus = null)
+        {
+            var provider = providerConfig ?? context.GetProviderConfig<ProviderConfig>();
+            return await CreateApprenticeshipObjects(employerDetails, NumberOfApprenticeships,
+                await GetProviderDetails(provider), new List<Apprenticeship>(), new ApprenticeFactory(),
+                new TrainingFactory(), new RPLFactory(), apprenticeshipStatus);
+        }
+
+        private static async Task<List<Apprenticeship>> CreateApprenticeshipObjects(
+            Employer employerDetails,
+            int numberOfApprenticeships,
+            Provider providerDetails,
+            List<Apprenticeship> apprenticeships,
+            IApprenticeFactory apprenticeFactory,
+            ITrainingFactory trainingFactory,
+            IRPLFactory rplFactory,
+            ApprenticeshipStatus? apprenticeshipStatus = null)
+        {
+            for (int i = 0; i < numberOfApprenticeships; i++)
             {
                 // Create random apprentice, training, and RPL details
                 var apprenticeDetails = await apprenticeFactory.CreateApprenticeAsync();
-                var training = await trainingFactory.CreateTrainingAsync(EmployerType);
+                var training = await trainingFactory.CreateTrainingAsync(employerDetails.EmployerType, apprenticeshipStatus);
                 var rpl = await rplFactory.CreateRPLAsync();
 
 

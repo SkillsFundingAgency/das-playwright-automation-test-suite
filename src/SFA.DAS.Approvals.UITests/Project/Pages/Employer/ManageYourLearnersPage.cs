@@ -33,6 +33,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             {
                 await SearchApprentice(ULN);
             }
+
                       
 
             if (await apprenticeLink.CountAsync() > 0)
@@ -45,6 +46,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
                 throw new Exception($"Apprentice with ULN {ULN} and name {name} not found.");
             }
 
+        }
+
+        internal async Task VerifyLiveApprentice(string uln, string name)
+        {
+            if (await searchBox.CountAsync() > 0)
+                await SearchApprentice(uln);
+            var row = page.GetByRole(AriaRole.Row).Filter(new() { Has = apprenticeLink(name) });
+            await Assertions.Expect(row).ToHaveCountAsync(1);
+            await Assertions.Expect(row.Locator("td[data-label='Status'] strong")).ToHaveTextAsync("Live");
         }
 
         internal async Task<LearnerDetailsPage> OpenFirstItemFromTheList(string apprenticeName)
