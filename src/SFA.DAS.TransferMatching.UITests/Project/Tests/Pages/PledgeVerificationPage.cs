@@ -4,7 +4,7 @@ namespace SFA.DAS.TransferMatching.UITests.Project.Tests.Pages;
 
 public class PledgeVerificationPage(ScenarioContext context) : TransferMatchingBasePage(context)
 {
-    protected override string PageTitle => "Your pledge has been created as pledge";
+    protected override string PageTitle => "Your pledge has been created with reference";
     protected override ILocator PageHeader => page.Locator(".govuk-panel__title");
 
     public async Task<PledgeVerificationPage> SetPledgeDetail()

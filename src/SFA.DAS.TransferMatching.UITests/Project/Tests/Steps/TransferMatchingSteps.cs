@@ -321,7 +321,7 @@ public class TransferMatchingSteps(ScenarioContext context)
         {
             Assert.That(await pledge.GetCriteriaValue(CreateATransferPledgePage.LocationLink), Is.EqualTo("All of England").IgnoreCase);
             Assert.That(await pledge.GetCriteriaValue(CreateATransferPledgePage.SectorLink), Is.EqualTo("All sectors and industries").IgnoreCase);
-            Assert.That(await pledge.GetCriteriaValue(CreateATransferPledgePage.TypeOfJobRoleLink), Is.EqualTo("All apprenticeship job roles").IgnoreCase);
+            Assert.That(await pledge.GetCriteriaValue(CreateATransferPledgePage.TypeOfJobRoleLink), Is.EqualTo("All job roles").IgnoreCase);
             Assert.That(await pledge.GetCriteriaValue(CreateATransferPledgePage.LevelLink), Is.EqualTo("All qualification levels").IgnoreCase);
         }
         verification = await pledge.ContinueToPledgeVerificationPage();

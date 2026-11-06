@@ -2,7 +2,7 @@ namespace SFA.DAS.TransferMatching.UITests.Project.Tests.Pages;
 
 public class PledgeOrganisationNameOptionPage(ScenarioContext context) : TransferMatchingBasePage(context)
 {
-    protected override string PageTitle => "Show organisation name";
+    protected override string PageTitle => "Would you like your pledge to show your organisation’s name publicly?";
     protected override ILocator ContinueButton => page.Locator("#pledge-criteria-continue");
 
     public async Task<CreateATransferPledgePage> EnterValidOrgNameChoice(bool showOrg)
