@@ -60,4 +60,8 @@ public class ManagingStandardsSqlDbHelper(ObjectContext objectContext, DbConfig 
         ";
         await ExecuteSqlCommand(query);
     }
+
+    public async Task ClearProviderAllowedCourseEndDate(string ukprn, string larscode) => await ExecuteSqlCommand
+    ($"UPDATE ProviderAllowedCourse SET LastDateStarts = NULL WHERE UKPRN = '{ukprn}' AND LarsCode = '{larscode}';");
+ 
 }

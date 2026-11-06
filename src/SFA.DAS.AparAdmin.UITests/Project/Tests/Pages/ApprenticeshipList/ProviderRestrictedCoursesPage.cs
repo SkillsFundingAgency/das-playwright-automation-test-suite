@@ -2,7 +2,7 @@ using System;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ApprenticeshipList;
 
-public class ProviderRestrictedCoursesPage(ScenarioContext context) : AparAdminBasePage(context)
+public class ProviderRestrictedCoursesPage(ScenarioContext context) : AparAdminEditBasePage(context)
 {
     public override async Task VerifyPage()
     {
@@ -12,11 +12,6 @@ public class ProviderRestrictedCoursesPage(ScenarioContext context) : AparAdminB
     public async Task ClickRestrictACourse()
     {
         await page.GetByRole(AriaRole.Link, new() {Name = "Restrict a course", Exact = true}).ClickAsync();
-    }
-
-    public async Task ClickChangeCourseDateDetails(string larsCode)
-    {
-        await page.Locator($"[href*='{larsCode}']").ClickAsync();
     }
 
     public async Task ChangeProviderDelivery()
