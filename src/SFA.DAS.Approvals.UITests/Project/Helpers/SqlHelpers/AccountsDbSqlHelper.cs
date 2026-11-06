@@ -28,7 +28,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             return Convert.ToInt32(GetDataAsObject(query));
         }
 
-        public string GetPublicHashedAccountIdByHashedId(string hashedId)
+        public async Task<string> GetPublicHashedAccountIdByHashedId(string hashedId)
         {
             string query = @$"SELECT 
 	                            PublicHashedId 
@@ -37,7 +37,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
                             where 
 	                            HashedId = '{hashedId}';";
 
-            return GetDataAsObject(query).ToString();
+            return (await GetDataAsObject(query)).ToString();
         }
 
         public async Task<string> GetAccountLegalEntityId(string email, string name)

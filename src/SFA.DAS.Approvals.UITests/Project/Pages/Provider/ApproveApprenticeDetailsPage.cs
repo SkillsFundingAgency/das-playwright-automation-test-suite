@@ -83,7 +83,9 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             await page.Locator(".edit-apprentice").First.ClickAsync();
             await page.Locator("#Uln").FillAsync(uln);
             await page.GetByRole(AriaRole.Button, new() { Name = "Save", Exact = true }).ClickAsync();
-            await VerifyPage();
+            // Providers must answer the RPL question before returning to the cohort.
+            var rpl = await VerifyPageAsync(() => new RecognitionOfPriorLearningPage(context));
+            await rpl.SelectNoForRPL();
         }
 
         internal async Task<ViewDetails_ProviderPage> ClickOnViewApprenticeLink(string name)

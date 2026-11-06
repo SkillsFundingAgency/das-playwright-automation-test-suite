@@ -35,7 +35,8 @@ internal class TransferLearnerCoursePage(ScenarioContext context) : ApprovalsBas
 
     internal async Task<TransferLearnerDetailsPage> SelectCourse(string title)
     {
-        await page.Locator("#CourseCode").FillAsync(title);
+        // accessible-autocomplete replaces the <select id="CourseCode"> with an <input id="CourseCode"> once its script runs.
+        await page.Locator("input#CourseCode").FillAsync(title);
         await page.GetByRole(AriaRole.Option).Filter(new() { HasText = title }).First.ClickAsync();
         await page.Locator("#main-content .govuk-button").ClickAsync();
         return await VerifyPageAsync(() => new TransferLearnerDetailsPage(context));

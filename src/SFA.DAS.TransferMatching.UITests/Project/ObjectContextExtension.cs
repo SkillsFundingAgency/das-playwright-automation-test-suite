@@ -20,7 +20,8 @@ public static class ObjectContextExtension
             Amount = context.Get<int>("pledgeamount"),
             CreatedOn = context.Get<DateTime>("pledgecreatedon"),
             EmployerAccountId = account.AccountId,
-            SenderHashedAccountId = account.HashedId
+            // Approvals identifies the transfer sender by its public hashed account id.
+            SenderHashedAccountId = senderHashedAccountId ?? account.HashedId
         });
     }
     internal static string GetPledgeApplication(this ObjectContext context, string pledgeId) =>

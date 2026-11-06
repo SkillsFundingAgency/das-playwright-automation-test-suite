@@ -10,7 +10,7 @@ public class PledgeVerificationPage(ScenarioContext context) : TransferMatchingB
     public async Task<PledgeVerificationPage> SetPledgeDetail()
     {
         var accountId = page.Url.Split("/accounts/")[1].Split("/pledges")[0];
-        var publicAccountId = context.Get<AccountsDbSqlHelper>().GetPublicHashedAccountIdByHashedId(accountId);
+        var publicAccountId = await context.Get<AccountsDbSqlHelper>().GetPublicHashedAccountIdByHashedId(accountId);
         var pledgeId = (await PageHeader.InnerTextAsync()).Replace(PageTitle, "").Trim();
         objectContext.SetPledgeDetail(pledgeId, publicAccountId);
         return this;
