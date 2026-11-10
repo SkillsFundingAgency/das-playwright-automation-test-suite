@@ -78,6 +78,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
             context.Set(apprenticeship, "Apprenticeship");
         }
 
+        internal async Task AddUlnToEmployerCreatedLearner(string uln)
+        {
+            await page.Locator(".edit-apprentice").First.ClickAsync();
+            await page.Locator("#Uln").FillAsync(uln);
+            await page.GetByRole(AriaRole.Button, new() { Name = "Save", Exact = true }).ClickAsync();
+            // Providers must answer the RPL question before returning to the cohort.
+            var rpl = await VerifyPageAsync(() => new RecognitionOfPriorLearningPage(context));
+            await rpl.SelectNoForRPL();
+        }
+
         internal async Task<ViewDetails_ProviderPage> ClickOnViewApprenticeLink(string name)
         {
             await viewLink("  " + name).ClickAsync();
