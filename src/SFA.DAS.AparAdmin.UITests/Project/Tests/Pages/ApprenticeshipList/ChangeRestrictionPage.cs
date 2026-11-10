@@ -2,22 +2,11 @@ using System;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ApprenticeshipList;
 
-public class ChangeRestrictionPage(ScenarioContext context) : AparAdminBasePage(context)
+public class ChangeRestrictionPage(ScenarioContext context) : AparAdminEditBasePage(context)
 {
     public override async Task VerifyPage()
     {
        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What would you like to change?");
-    }
-
-    public async Task SelectOption(string editType)
-    {
-        string radioId = editType switch
-        {
-            "Edits" => "selected-option-add-or-change",
-            "Removes"  => "selected-option-remove",
-             _        => throw new ArgumentException($"Unknown message type: {editType}")
-        };
-        await  page.Locator($"#{radioId}").ClickAsync();
     }
 
     public async Task Confirm()
@@ -29,5 +18,16 @@ public class ChangeRestrictionPage(ScenarioContext context) : AparAdminBasePage(
                 Exact = true
             })
            .ClickAsync();
+    }
+
+    public async Task SelectOptionAddEditRemove(string editType)
+    {
+        string radioId = editType switch
+        {
+            "Edits" => "selected-option-add-or-change",
+            "Removes"  => "selected-option-remove",
+            _        => throw new System.ArgumentException($"Unknown edit type: {editType}")
+        };
+        await page.Locator($"#{radioId}").ClickAsync();
     }
 }
