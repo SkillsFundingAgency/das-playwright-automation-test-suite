@@ -10,6 +10,17 @@ public class WhatAreYourSkillsAndStrengthsPage(ScenarioContext context) : FAABas
 
     private static string SkillsAndStrengths => "#SkillsAndStrengths";
 
+    public async Task<WhatAreYourSkillsAndStrengthsPage> CheckValidationOnSkills()
+    {
+        await page.Locator("#SkillsAndStrengths").FillAsync(RandomDataGenerator.GenerateRandomWords(302));
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Your skills and strengths must be 300 words or less",
+            "Select if you have finished this section");
+
+        return await VerifyPageAsync(() => new WhatAreYourSkillsAndStrengthsPage(context));
+    }
     public async Task<FAA_ApplicationOverviewPage> SelectYesAndCompleteSection()
     {
         await page.Locator(SkillsAndStrengths).FillAsync(faaDataHelper.Strengths);
@@ -24,6 +35,17 @@ public class WhatInterestsYouAboutTThisApprenticeshipPage(ScenarioContext contex
 
     private static string AnswerText => ("#AnswerText");
 
+    public async Task<WhatInterestsYouAboutTThisApprenticeshipPage> CheckValiadtionOnInterests()
+    {
+        await page.Locator(AnswerText).FillAsync(RandomDataGenerator.GenerateRandomWords(302));
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Your interest in this apprenticeship must be 300 words or less",
+            "Select if you have finished this section");
+
+        return await VerifyPageAsync(() => new WhatInterestsYouAboutTThisApprenticeshipPage(context));
+    }
     public async Task<FAA_ApplicationOverviewPage> SelectYesAndCompleteSection()
     {
         await page.Locator(AnswerText).FillAsync(faaDataHelper.HobbiesAndInterests);
@@ -74,6 +96,32 @@ public class AskForSupportAtAnInterviewPage(ScenarioContext context) : FAABasePa
 
     private static string InterviewAdjustmentsDescription => ("#InterviewAdjustmentsDescription");
 
+    public async Task CheckValidationErrorsOnInterviewSupport()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Select if you want to request interview support");
+    }
+
+    public async Task CheckErrorOnEmptySupport()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Enter your interview support request");
+    }
+
+    public async Task CheckErrorOnSupportWordCount()
+    {
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
+
+        await page.Locator(InterviewAdjustmentsDescription).FillAsync(RandomDataGenerator.GenerateRandomWords(502));
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Your answer must be 500 words or less");
+    }
     public async Task<GetSupportAtAnInterviewPage> SelectYesAndContinue()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
@@ -108,6 +156,12 @@ public class DisabilityConfidentSchemePage(ScenarioContext context) : FAABasePag
 
     protected override string SubmitSectionButton => ("button.govuk-button[type='submit']");
 
+    public async Task CheckValidationOnDisabilityConfident()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await CheckValidationErrors("Select if you want to apply under the Disability Confident scheme");
+    }
     public async Task<DisabilityConfidentSchemePage> SelectYesAndContinue()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
