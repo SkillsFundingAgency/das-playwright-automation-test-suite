@@ -195,4 +195,15 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
 
         await page8.Save_NewApprenticeshipUnit_Continue();
     }
+
+    [Then(@"^the provider navigates to the standards page and applies the search and filter functionality$")]
+    public async Task GivenTheProviderNavigatesToTheStandardsPage()
+    {
+        var page = new ManagingStandardsProviderHomePage(context);
+        var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
+        var page2 = await page1.AccessStandards_Apprenticeships();
+        await page2.SearchStandards("finance");
+        await page2.ClearSearch();
+        await page2.ApplyFilterStandards("Funding closed for new starts");
+    }
 }
