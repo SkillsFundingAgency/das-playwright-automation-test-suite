@@ -33,11 +33,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             {
                 await SearchApprentice(ULN);
             }
-<<<<<<< HEAD
-
-                      
-=======
->>>>>>> master
 
             // Searching reloads the page, so auto-wait for the result rather than counting links on the current page.
             await Assertions.Expect(apprenticeLink.First).ToBeVisibleAsync();
