@@ -188,6 +188,47 @@ public class FinanceInnerAPISteps
         await _innerApiRestClient.PostPaymentsStaging(payloadContent);
     }
 
+    [Given(@"post a new job via api")]
+    public async Task GivenPostANewJobViaApi()
+    {
+        var jobId = Guid.NewGuid().ToString();
+        _scenarioContext.Set(jobId, "jobId");
+
+        var payloadContent = JsonConvert.SerializeObject(new
+        {
+            id = jobId,
+            description = "This is for testing purposes",
+            dateStarted = "2026-11-10T15:16:44.658Z",
+            numRecords = 4
+        });
+
+        await _innerApiRestClient.PostJob(payloadContent);
+    }
+
+    [When(@"find the job in JobRun table")]
+    public async Task WhenFindTheJobInJobRunTable()
+    {
+        var jobId = _scenarioContext.Get<string>("jobId");
+        var accountsHelper = _scenarioContext.Get<AccountsSqlDataHelper>();
+        var sql = $@"SELECT Description, NumRecords
+FROM [employer_financial].[JobRun]
+WHERE JOBID = '{jobId}'";
+
+        var sqlResult = await accountsHelper.ExecuteMultipleSql(sql, useFinanceDb: true);
+        _scenarioContext.Set(sqlResult, "jobRunDbRecord");
+    }
+
+    [Then(@"verify the job in JobRun table with the data posted via api")]
+    public void ThenVerifyTheJobInJobRunTableWithTheDataPostedViaApi()
+    {
+        var sqlResult = _scenarioContext.Get<List<string[]>>("jobRunDbRecord");
+
+        Assert.That(sqlResult, Is.Not.Null.And.Not.Empty, "No JobRun record was found for the posted job.");
+        Assert.That(sqlResult[0], Has.Length.EqualTo(2), "The JobRun query did not return Description and NumRecords.");
+        Assert.That(sqlResult[0][0], Is.EqualTo("This is for testing purposes"));
+        Assert.That(sqlResult[0][1], Is.EqualTo("4"));
+    }
+
     [When(@"find record in PaymentStaging table")]
     public async Task WhenFindRecordInPaymentStagingTable()
     {

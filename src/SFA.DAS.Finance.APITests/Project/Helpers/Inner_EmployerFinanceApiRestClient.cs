@@ -27,6 +27,12 @@ public class Inner_EmployerFinanceApiRestClient(ObjectContext objectContext, Inn
         return response;
     }
 
+    public async Task<RestResponse> PostJob(string payloadContent)
+    {
+        await CreateRestRequest(Method.Post, "/jobs", payloadContent);
+        return await Execute(HttpStatusCode.Created);
+    }
+
     public async Task<RestResponse> PostTransferStaging(string payloadContent)
     {
         await CreateRestRequest(Method.Post, "/api/transfers/staging", payloadContent);

@@ -12,6 +12,14 @@ public class AfterScenarioHooks(ScenarioContext context)
         var accountsHelper = context.Get<AccountsSqlDataHelper>();
         if (accountsHelper == null) return;
 
+        var jobId = GetContextValue("jobId");
+        if (!string.IsNullOrWhiteSpace(jobId))
+        {
+            await accountsHelper.ExecuteSql(
+                $@"DELETE FROM [employer_financial].[JobRun] WHERE [JOBID] = '{jobId}';",
+                useFinanceDb: true);
+        }
+
         // PaymentsStag
         var paymentId = GetContextValue("paymentId");
         if (!string.IsNullOrWhiteSpace(paymentId))
