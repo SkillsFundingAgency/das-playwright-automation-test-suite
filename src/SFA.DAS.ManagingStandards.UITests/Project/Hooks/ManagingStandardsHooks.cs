@@ -42,6 +42,8 @@ namespace SFA.DAS.ManagingStandards.UITests.Project.Hooks
         {
             if (_tags.Any(x => x == "managingstandardsadddeleteaiapprenticeshipunit")) await _managingStandardsSqlDataHelper.ClearStandard(_config.Ukprn, 
                 _managingStandardsDataHelpers.Apprenticeshipunit_AILarsCode);
+            if (_tags.Any(x => x == "managingstandardsadddeleteOralHealthapprenticeship")) await _managingStandardsSqlDataHelper.ClearStandard(_config.Ukprn, 
+                _managingStandardsDataHelpers.OralHealthPractitionerLarsCode);
         }
 
         [BeforeScenario(Order = 33)]
