@@ -13,10 +13,6 @@ variables:
   - template: ../pipeline-templates/vars.yml
   - name: projectName
     value: "SFA.DAS.Transfers.UITests"
-  - name: RuleName
-    value: "E2_as-transfers-test-suite"
-  - name: ResourceName
-    value: "$(EmployerAccountsAppWhitelistName)"
 
 resources:
   repositories:
