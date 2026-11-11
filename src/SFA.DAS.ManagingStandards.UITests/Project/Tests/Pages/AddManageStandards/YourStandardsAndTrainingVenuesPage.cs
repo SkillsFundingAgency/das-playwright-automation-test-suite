@@ -6,7 +6,7 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage training and venues");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprenticeships and apprenticeship units");
     }
 
     public async Task<TrainingVenuesPage> AccessTrainingLocations()
@@ -16,11 +16,17 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
         return await VerifyPageAsync(() => new TrainingVenuesPage(context));
     }
 
-    public async Task<ChooseTrainingTypePage> AccessTrainingTypesPage()
+    public async Task<ManageTheStandardsYouDeliverPage> AccessStandards_Apprenticeships()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Training", Exact = true }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Apprenticeships", Exact = true }).ClickAsync();
 
-        return await VerifyPageAsync(() => new ChooseTrainingTypePage(context));
+        return await VerifyPageAsync(() => new ManageTheStandardsYouDeliverPage(context));
+    }
+    public async Task<ManageYourAppUnitPage> AccessStandards_ApprenticeshipsUnits()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Apprenticeship units", Exact = true }).ClickAsync();
+
+        return await VerifyPageAsync(() => new ManageYourAppUnitPage(context));
     }
 
     public async Task<ContactDetailsPage> AccessContactDetails()

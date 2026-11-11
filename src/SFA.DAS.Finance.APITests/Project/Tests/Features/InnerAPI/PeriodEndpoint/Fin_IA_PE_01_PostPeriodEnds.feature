@@ -4,7 +4,6 @@ Feature: Fin_IA_PE_01_PostPeriodEnds
 @employerfinanceapi
 @regression
 @innerapi
-@ignore
 Scenario: Fin_IA_PE_01 Post period end and validate DB data
 	Given a new period end is submitted
 	When the saved period end details are checked
@@ -14,7 +13,6 @@ Scenario: Fin_IA_PE_01 Post period end and validate DB data
 @employerfinanceapi
 @regression
 @innerapi
-@ignore
 Scenario: Fin_IA_PE_02 Get period-ends list contains posted period end id
 	Given a new period end is submitted
 	When the period end list is requested
@@ -24,7 +22,6 @@ Scenario: Fin_IA_PE_02 Get period-ends list contains posted period end id
 @employerfinanceapi
 @regression
 @innerapi
-@ignore
 Scenario: Fin_IA_PE_03 Get period end by id and validate DB data
 	Given a new period end is submitted
 	When the period end is requested by its id

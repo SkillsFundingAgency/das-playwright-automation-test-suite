@@ -31,6 +31,18 @@ public abstract class FAABasePage(ScenarioContext context) : BasePage(context)
         return await VerifyPageAsync(() => new FAA_ApplicationOverviewPage(context));
     }
 
+    public async Task CheckValidationErrors(params string[] errorMessages)
+    {
+        var errorSummary = page.Locator(".govuk-error-summary");
+
+        await Assertions.Expect(errorSummary).ToContainTextAsync("There is a problem");
+
+        foreach (var errorMessage in errorMessages)
+        {
+            await Assertions.Expect(errorSummary).ToContainTextAsync(errorMessage);
+        }
+    }
+
     protected async Task GoToVacancyInFAA()
     {
         var vacancyRef = objectContext.GetVacancyReference();

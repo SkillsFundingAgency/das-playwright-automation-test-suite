@@ -1,0 +1,24 @@
+{
+  "transactionLines": [
+    {
+      "id": 1233,
+      "accountId": 44552,
+      "dateCreated": "2026-10-22T12:25:11.982Z",
+      "submissionId": 0,
+      "transactionDate": "2026-10-22T12:25:11.982Z",
+      "transactionType": 0,
+      "levyDeclared": 0,
+      "amount": 2355,
+      "empRef": "YDEUEE",
+      "periodEnd": "2026-02-28",
+      "ukprn": 10012345,
+      "sfaCoInvestmentAmount": 34,
+      "employerCoInvestmentAmount": 45,
+      "englishFraction": 24,
+      "transferSenderAccountId": 23,
+      "transferSenderAccountName": "ABC",
+      "transferReceiverAccountId": 23,
+      "transferReceiverAccountName": "XYZ"
+    }
+  ]
+}

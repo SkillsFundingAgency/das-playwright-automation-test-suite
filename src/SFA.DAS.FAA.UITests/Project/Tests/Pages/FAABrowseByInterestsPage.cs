@@ -23,10 +23,18 @@ public class FAAWhatIsYourLocationPage(ScenarioContext context) : FAASignedInLan
 
     public async Task<FAASearchResultPage> EnterLocationDetails(string locationOptionText)
     {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+        await CheckValidationErrors("Select a search location");
+
         await page.GetByRole(AriaRole.Radio, new() { Name = locationOptionText }).CheckAsync();
 
         if (locationOptionText == "Enter a city or postcode")
         {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Search" }).ClickAsync();
+
+            await CheckValidationErrors("Enter a valid city or postcode");
+
             await page.GetByRole(AriaRole.Combobox, new() { Name = "City or postcode" }).FillAsync("SW1A 1AA");
 
             await page.GetByLabel("Within").SelectOptionAsync(["40"]);

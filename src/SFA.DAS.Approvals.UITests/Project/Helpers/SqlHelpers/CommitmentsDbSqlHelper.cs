@@ -24,28 +24,36 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
         internal async Task<List<string>> GetCohortRefAndLearnerDataIdFromCommitmentsDb(int ukprn, int accountLegalEntityId, int withParty, int isDraft, int approvals)
         {
             string query =
-                @$"SELECT TOP(1) c.Reference, a.LearnerDataId, a.FirstName, a.LastName
-                    FROM [dbo].[Commitment] c
-                    INNER JOIN [dbo].[Apprenticeship] a
-                    ON c.id = a.CommitmentId
-                    Where ProviderId = {ukprn}
-                    AND c.AccountLegalEntityId = {accountLegalEntityId}
-                    --and count(a.id) <2
-                    And a.LearnerDataId is not null
-                    --And c.TransferSenderId is not null
-                    And c.IsDraft = {isDraft}
-                    And c.IsFullApprovalProcessed = 0
-                    And c.IsDeleted = 0
-                    And c.Approvals = {approvals}
-                    And c.WithParty = {withParty}
-                    AND c.CreatedOn < DATEADD(DAY, -1, GETDATE())
-                    AND c.ChangeOfPartyRequestId is null
-                    AND c.PledgeApplicationId is null
-                    AND a.PaymentStatus = 0
-                    AND a.CloneOf is null
-                    AND a.ContinuationOfId is null
-                    AND a.DeliveryModel = 0
-                    Order by c.CreatedOn DESC";
+                @$"SELECT TOP (1)
+                        c.Reference,
+                        a.LearnerDataId,
+                        a.FirstName,
+                        a.LastName
+                    FROM dbo.Commitment c
+                    INNER JOIN dbo.Apprenticeship a
+                        ON c.Id = a.CommitmentId
+                    WHERE c.ProviderId = {ukprn}
+                        AND c.AccountLegalEntityId = {accountLegalEntityId}
+                        AND a.LearnerDataId IS NOT NULL
+                        -- AND c.TransferSenderId IS NOT NULL
+                        AND c.IsDraft = {isDraft}
+                        AND c.IsFullApprovalProcessed = 0
+                        AND c.IsDeleted = 0
+                        AND c.Approvals = {approvals}
+                        AND c.WithParty = {withParty}
+                        AND c.CreatedOn < DATEADD(DAY, -1, GETDATE())
+                        AND c.ChangeOfPartyRequestId IS NULL
+                        AND c.PledgeApplicationId IS NULL
+                        AND a.PaymentStatus = 0
+                        AND a.CloneOf IS NULL
+                        AND a.ContinuationOfId IS NULL
+                        AND a.DeliveryModel = 0
+                        AND (
+                            SELECT COUNT(*)
+                            FROM dbo.Apprenticeship a2
+                            WHERE a2.ULN = a.ULN
+                        ) = 1
+                    ORDER BY c.CreatedOn DESC";
 
             return await GetData(query);
         }

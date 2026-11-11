@@ -6,7 +6,7 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("#header-standards")).ToContainTextAsync("Manage your standards");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprenticeships");
     }
 
     public async Task<ManageAStandard_TeacherPage> AccessTeacher()
@@ -16,12 +16,6 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
         return await VerifyPageAsync(() => new ManageAStandard_TeacherPage(context));
     }
 
-    public async Task<ChooseTrainingTypePage> ReturnToYourStandardsAndTrainingVenues()
-    {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
-
-        return await VerifyPageAsync(() => new ChooseTrainingTypePage(context));
-    }
     public async Task<ManageTheStandardsYouDeliverPage> VerifyStandardPresence(string standardName, bool shouldExist = true)
     {
         var locator = page.Locator($"//a[contains(@class, 'govuk-link') and normalize-space(text())='{standardName}']");
@@ -39,12 +33,10 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 
     public async Task<ManageTheStandardsYouDeliverPage> VerifyOrangeMoreDetailsNeededTagForStandardAsync(string standardName, bool shouldExist = true)
     {
-        var locator = page.Locator($@"
-        //td[
-            .//strong[contains(@class, 'govuk-tag--orange') and normalize-space(text())='More details needed']
-            and .//a[normalize-space(text())='{standardName}']
-        ]");
-
+        var child = page.Locator(".govuk-link", new PageLocatorOptions { HasTextString = standardName });
+        var listItem = child.Locator("../..");
+        var locator = listItem.Locator(".govuk-warning-text__text");
+        
         var count = await locator.CountAsync();
 
         if (shouldExist && count == 0)
@@ -59,7 +51,7 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 
     public async Task<SelectAStandardPage> AccessAddStandard()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Add a standard" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Add apprenticeship" }).ClickAsync();
 
         return await VerifyPageAsync(() => new SelectAStandardPage(context));
 
@@ -71,4 +63,12 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 
         return await VerifyPageAsync(() => new ManageAStandardPage(context, standardName));
     }
+
+    public async Task<YourStandardsAndTrainingVenuesPage> ReturnToYourStandardsAndTrainingVenues()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your training courses", Exact = true }).ClickAsync();
+
+        return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
+    }
+
 }
