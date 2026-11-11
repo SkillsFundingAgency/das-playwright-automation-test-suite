@@ -5,6 +5,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
 {
     internal class ChooseYourMainTrainingProviderPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
+        // accessible-autocomplete replaces the <select id="Ukprn"> with an <input id="Ukprn"> once its script runs.
         private ILocator ukprnInputBox => page.Locator("input#Ukprn, input.autocomplete__input");
         public override async Task VerifyPage()
         {

@@ -16,6 +16,8 @@ variables:
     value: "E2_as-post-approvals-test-suite"
   - name: ResourceName
     value: "$(EmployerAccountsAppWhitelistName)"
+  - name: WhiteListFunctionName
+    value: "$(SBusToolsFunctionAppName)"
 
 resources:
   repositories:
@@ -42,4 +44,4 @@ stages:
       deploy: $(Deploy)
       RuleName: $(RuleName)
       ResourceName: $(ResourceName)
-      WhiteListFunction: true
+      WhiteListFunctionName: $(WhiteListFunctionName)

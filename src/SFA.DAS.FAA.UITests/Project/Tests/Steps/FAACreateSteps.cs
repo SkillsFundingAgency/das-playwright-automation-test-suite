@@ -68,4 +68,16 @@ public class FAACreateSteps(ScenarioContext context)
 
         await page1.SubmitApplication();
     }
+
+    [When("^the apprentice has submitted their application with validation errors$")]
+    public async Task GivenTheApprenticeHasSubmittedTheirApplicationWithValidationErrors()
+    {
+        var page = await _faaStepsHelper.ApplyForAVacancyWithValidationErrors();
+
+        var page1 = await page.PreviewApplication();
+
+        await page1.CheckValidationErrorOnReviewPage();
+
+        await page1.SubmitApplication();
+    }
 }
