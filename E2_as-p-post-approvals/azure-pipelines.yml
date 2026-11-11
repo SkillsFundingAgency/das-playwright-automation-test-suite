@@ -1,7 +1,8 @@
+
 trigger: none
 pr: none
 schedules:
-- cron: '0 3 * * 1-5'
+- cron: '0 7 * * 1-5'
   displayName: ScheduledRun
   branches:
     include:
@@ -13,15 +14,9 @@ variables:
   - name: projectName
     value: "SFA.DAS.Transfers.UITests"
   - name: RuleName
-    value: "E2_as-post-approvals-test-suite"
-  - name: RuleName2
-    value: "E2_as-post-approvals-test-suite2"
+    value: "E2_as-transfers-test-suite"
   - name: ResourceName
     value: "$(EmployerAccountsAppWhitelistName)"
-  - name: ResourceName2
-    value: "$(CommitmentsAppWhitelistName)"
-  - name: WhiteListFunctionName
-    value: "$(SBusToolsFunctionAppName)"
 
 resources:
   repositories:
@@ -52,8 +47,4 @@ stages:
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
       RuleName: $(RuleName)
-      RuleName2: $(RuleName2)
       ResourceName: $(ResourceName)
-      ResourceName2: $(ResourceName2)
-      WhiteListFunctionName: $(WhiteListFunctionName)
-      ApplyAppRoleAssignments: true
