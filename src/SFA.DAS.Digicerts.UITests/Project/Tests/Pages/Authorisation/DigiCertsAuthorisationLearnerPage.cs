@@ -9,6 +9,7 @@ using SFA.DAS.Login.Service.Project;
 using SFA.DAS.Login.Service.Project.Helpers;
 using SFA.DAS.ProvideFeedback.UITests.Project.Helpers;
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -18,7 +19,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Authorisation
     public class DigiCertsAuthorisationLearnerPage(Reqnroll.ScenarioContext context) : BasePage(context)
     {
 
-        public override async Task VerifyPage() => await Assertions.Expect(page).ToHaveTitleAsync("Do you know your unique learner number?");
+        public override async Task VerifyPage() => await Assertions.Expect(page).ToHaveTitleAsync(new Regex("Do you know your unique learner number?|What is your unique learner number?"));
 
 
 
@@ -37,6 +38,15 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Authorisation
         public async Task<DigiCertsAuthorisationCoursePage> SelectNoForLearner()
         {
             await page.GetByRole(AriaRole.Radio, new() { Name = "No" }).CheckAsync();
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new DigiCertsAuthorisationCoursePage(context));
+        }
+
+        public async Task<DigiCertsAuthorisationCoursePage> enterMandatoryLearner(string uln)
+        {
+            await page.GetByRole(AriaRole.Textbox, new() { Name = "What is your unique learner" }).FillAsync(uln);
 
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 

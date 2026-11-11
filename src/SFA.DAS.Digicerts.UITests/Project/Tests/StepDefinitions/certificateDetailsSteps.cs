@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.Extensions.Caching.Distributed;
 using Reqnroll;
+using Reqnroll.Formatters.PayloadProcessing.Cucumber;
 using SFA.DAS.ConfigurationBuilder;
 using SFA.DAS.Digicerts.UITests.Project.Helpers;
 using SFA.DAS.Digicerts.UITests.Project.Tests.Pages;
@@ -11,6 +10,8 @@ using SFA.DAS.FrameworkHelpers;
 using SFA.DAS.Login.Service.Project;
 using SFA.DAS.Login.Service.Project.Helpers;
 using SFA.DAS.ProvideFeedback.UITests.Project.Helpers;
+using System;
+using System.Threading.Tasks;
 
 
 [Binding]
@@ -30,22 +31,33 @@ public class certificateDetailsSteps(ScenarioContext context)
             "FrameworkUser" => context.GetUser<DigiCertFrameworkUser>(),
             "MultiStandardUser" => context.GetUser<DigiCertMultiStandardUser>(),
             "MultiFrameworkUser" => context.GetUser<DigiCertMultiFrameworkUser>(),
+            "TwinCertUser" => context.GetUser<DigiCertTwinCertUser>(),
             _ => throw new ArgumentException($"Invalid user type: {user}")
         };
 
-        await homePage.RemoveAuthenticationAsync(digiCertUser);
+        // TwinCert-specific authentication cleanup
+        if (digiCertUser is DigiCertTwinCertUser)
+        {
+            const string twinCertUserId = "test-govuk-Kate-Keller-001";
 
+            var sqlHelper = new DigiCertsSqlHelper(
+                context.Get<ObjectContext>(),
+                context.Get<DbConfig>());
+
+            await sqlHelper.RemoveAuthentication(twinCertUserId);
+            await ClearCacheMatches(twinCertUserId);
+        }
+
+        // Common authentication cleanup
+        await homePage.RemoveAuthenticationAsync(digiCertUser);
         await ClearCacheMatches(digiCertUser.Id);
 
+        // Sign-in and authorisation journey
         var signedInPage = await homePage.enterLogin(digiCertUser);
 
-        Console.WriteLine($"Signed IN:");
-       
         var authorisationStartPage = await signedInPage.clickContinue();
 
-        Console.WriteLine($"Continue:");
-
-        await authorisationStartPage.verifyAuthorisationJourney();
+        await authorisationStartPage.verifyAuthorisationJourney();              
     }
 
     [When(@"^(.*) answers the correct questions related to apprenticeship$")]
@@ -64,6 +76,7 @@ public class certificateDetailsSteps(ScenarioContext context)
             "FrameworkUser" => context.GetUser<DigiCertFrameworkUser>(),
             "MultiStandardUser" => context.GetUser<DigiCertMultiStandardUser>(),
             "MultiFrameworkUser" => context.GetUser<DigiCertMultiFrameworkUser>(),
+            "TwinCertUser" => context.GetUser<DigiCertTwinCertUser>(),
             _ => throw new ArgumentException($"Invalid user type: {user}")
         };
 
@@ -104,6 +117,14 @@ public class certificateDetailsSteps(ScenarioContext context)
                     await answers.clickSubmit();
                     break;
                 }
+            case "TwinCertUser":
+                {
+                    var cert = await sqlHelper.SingleFrameworkAuthorisationdetailsfromuser(firstName, lastName);
+                    var learner = await authorisationPage.enterMandatoryLearner(cert.Uln);
+                    var answers = await learner.selectCourse(cert.FrameworkName);
+                    await answers.clickSubmit();
+                    break;
+                }
         }
 
         (string FirstName, string LastName) GetUserName(string email)
@@ -136,6 +157,12 @@ public class certificateDetailsSteps(ScenarioContext context)
         await certificateDetailsPage.verifyMultiStandardCertificateDetails();
     }
 
+    [Then(@"User is able to view the correct Twin Learner certificate details")]
+    public async Task ThenUserIsAbleToViewTheCorrectTwinLearnerCertificateDetails()
+    {
+        await new DigiCertsFrameworkDetailsPage(context).verifyTwinCertificateDetails();
+    }
+
     [Then(@"User is able to view the correct multiple Framework learner certificate details")]
     public async Task ThenUserIsAbleToViewTheCorrectMultipleFrameworkLearnerCertificateDetails()
     {
@@ -161,6 +188,7 @@ public class certificateDetailsSteps(ScenarioContext context)
             "MultiFrameworkUser" => context.GetUser<DigiCertMultiFrameworkUser>(),
             "FrameworkUser" => context.GetUser<DigiCertFrameworkUser>(),
             "StandardUser" => context.GetUser<DigiCertStandardUser>(),
+            "TwinCertUser" => context.GetUser<DigiCertTwinCertUser>(),
             _ => throw new ArgumentException($"Invalid user type: {user}")
         };
 
@@ -183,6 +211,10 @@ public class certificateDetailsSteps(ScenarioContext context)
 
             case "StandardUser":
                 await authorisationStartPage.verifyStandardDetailsPage();
+                break;
+
+            case "TwinCertUser":
+                await authorisationStartPage.verifyTwinCertificateDetailsPage();
                 break;
 
             default:

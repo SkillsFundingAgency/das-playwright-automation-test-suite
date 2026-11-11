@@ -62,6 +62,10 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
             {
                 jsonFileName = "JamesBennettVerify.json";
             }
+            else if (user is DigiCertTwinCertUser)
+            {
+                jsonFileName = "AmeliaKellerVerify.json";
+            }
             else
             {
                 throw new ArgumentException($"Unsupported user type: {user.GetType().Name}");

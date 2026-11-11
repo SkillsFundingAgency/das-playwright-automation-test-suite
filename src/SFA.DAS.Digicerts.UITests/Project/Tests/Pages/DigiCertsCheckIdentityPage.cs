@@ -40,5 +40,13 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages
 
             return await VerifyPageAsync(() => new DigiCertsFrameworkDetailsPage(context));
         }
+
+        public async Task<DigiCertsFrameworkDetailsPage> verifyTwinCertificateDetailsPage()
+        {
+            await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+            return await VerifyPageAsync(() => new DigiCertsFrameworkDetailsPage(context));
+        }
+
     }
 }

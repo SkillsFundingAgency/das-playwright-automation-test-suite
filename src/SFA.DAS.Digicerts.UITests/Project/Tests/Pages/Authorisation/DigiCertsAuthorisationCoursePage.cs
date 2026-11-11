@@ -24,7 +24,7 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Authorisation
 
         public async Task<DigiCertsAuthorisationAnswersPage> selectCourse(string courseName)
         {
-            await page.GetByRole(AriaRole.Radio, new() { Name = courseName }).CheckAsync();
+            await page.GetByRole(AriaRole.Radio, new() { Name = courseName }).First.CheckAsync();
 
             await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 

@@ -70,6 +70,30 @@ namespace SFA.DAS.Digicerts.UITests.Project.Tests.Pages.Dashboard
             return await VerifyPageAsync(() => new DigiCertsFrameworkDetailsPage(context));
         }
 
+        public async Task<DigiCertsFrameworkDetailsPage> verifyTwinCertificateDetails()
+        {
+            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Success" })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "We've matched your" })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Hospitality" })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByText("You have passed your")).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByText("Amelia", new() { Exact = true })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByText("Keller", new() { Exact = true })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByText("5737698797")).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Definition).Filter(new() { HasTextRegex = new Regex("^Hospitality$") })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByText("Hospitality Retail Outlet")).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByText("Advanced")).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByText("Lancaster and Morecambe")).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByText("January 2019")).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByText("If these details are wrong,")).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "contact us to correct your" })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Create a sharing link" })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByText("You can create a secure link")).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Create link" })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Download your certificate" })).ToBeVisibleAsync();
+            await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Download printable certificate (PDF)" })).ToBeVisibleAsync();
+
+            return await VerifyPageAsync(() => new DigiCertsFrameworkDetailsPage(context));
+        }
 
         public async Task<DigiCertsFrameworkDetailsPage> verifyFrameworkCertificatePDF()
         {

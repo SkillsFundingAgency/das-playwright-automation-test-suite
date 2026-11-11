@@ -250,6 +250,8 @@ public class DigiCertMultiFrameworkUser : DigitalCertUser { }
 
 public class DigiCertFrameworkUser : DigitalCertUser { }
 
+public class DigiCertTwinCertUser : DigitalCertUser { }
+
 #endregion
 
 #endregion

@@ -35,5 +35,9 @@ public class DigiCertConfigurationSetup(ScenarioContext context)
         [
             configSection.GetConfigSection<DigiCertMultiFrameworkUser>()
         ]);
+        await context.SetDigiCertUser(
+        [
+            configSection.GetConfigSection<DigiCertTwinCertUser>()
+        ]);
     }
 }
