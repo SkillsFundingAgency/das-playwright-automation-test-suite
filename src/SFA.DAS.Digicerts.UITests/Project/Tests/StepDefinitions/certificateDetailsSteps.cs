@@ -122,7 +122,7 @@ public class certificateDetailsSteps(ScenarioContext context)
                     var cert = await sqlHelper.SingleFrameworkAuthorisationdetailsfromuser(firstName, lastName);
                     var learner = await authorisationPage.enterMandatoryLearner(cert.Uln);
                     var answers = await learner.selectCourse(cert.FrameworkName);
-                    await answers.clickSubmit();
+                    await answers.clickSubmitandViewFramework(); 
                     break;
                 }
         }
