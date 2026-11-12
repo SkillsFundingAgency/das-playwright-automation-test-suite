@@ -71,4 +71,41 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
         return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
     }
 
+    public async Task SearchStandards(string searchTerm)
+    {
+        await page.Locator("#search-term-input").FillAsync(searchTerm);
+        await page.Locator("#filters-submit").ClickAsync();
+        await VerifyResults(searchTerm);
+    }
+
+    public async Task ApplyFilterStandards(string searchTerm)
+    {
+        await page.Locator("#filteritem-funding-status-filter-FundingClosed").CheckAsync();
+        await page.Locator("#filters-submit").ClickAsync();
+        await page.Locator("#filters-submit").ClickAsync();
+        await VerifyResults(searchTerm);
+    }
+
+    public async Task ClearSearch()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Clear" }).ClickAsync();
+    }
+
+    public async Task VerifyResults(string searchTerm)
+    {
+        var results = page.Locator(".app-results-list__item");
+        var resultCount = await results.CountAsync();
+        if (resultCount == 0)
+            throw new Exception($"No results found for the search term '{searchTerm}'.");
+        else
+        {
+            for (var i = 0; i < resultCount; i++)
+            {
+                var resultText = await results.Nth(i).InnerTextAsync();
+                if (!resultText.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    throw new Exception($"Result '{resultText}' does not match the search term '{searchTerm}'.");
+            }
+        }
+    }
+
 }
