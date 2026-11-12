@@ -149,4 +149,16 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
     {
         await Assertions.Expect(page.Locator(".govuk-error-summary__title")).ToContainTextAsync("There is a problem");
     }
+
+    public async Task SelectCourse(string courseName)
+    {
+        await page.Locator("#SelectedLarsCode").FillAsync(courseName);
+        bool valid = await page.Locator("#SelectedLarsCode__option--0").IsVisibleAsync();
+        if(valid)
+        {
+            await page.Locator("#SelectedLarsCode__option--0").ClickAsync();
+        }
+        await page.Locator(".govuk-button").ClickAsync();
+    }
+
 }

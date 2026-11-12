@@ -65,7 +65,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             apprenticeship.TrainingDetails.ConsumerReference = details[16];
 
             var courseTitle = await new CoursesDataHelper().GetCourse(apprenticeship.TrainingDetails.LarsCode);
-            apprenticeship.TrainingDetails.CourseTitle = courseTitle.Title;
+            apprenticeship.TrainingDetails.CourseTitle = (courseTitle != null) ? courseTitle.Title : null;
 
             return apprenticeship;
         }

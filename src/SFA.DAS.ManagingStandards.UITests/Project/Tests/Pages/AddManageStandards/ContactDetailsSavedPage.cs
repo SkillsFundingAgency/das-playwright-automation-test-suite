@@ -14,8 +14,6 @@ public partial class VenueAndDelivery_ApprenticeshipUnitPage
         public async Task<YourStandardsAndTrainingVenuesPage> ReturnToManagingStandardsDashboard()
         {
             await page.GetByRole(AriaRole.Link, new() { Name = "Manage your courses" }).ClickAsync();
-            await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
-
             return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
         }
 

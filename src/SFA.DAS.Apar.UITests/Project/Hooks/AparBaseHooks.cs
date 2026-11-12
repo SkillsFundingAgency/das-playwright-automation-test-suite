@@ -79,13 +79,25 @@ public abstract class AparBaseHooks : FrameworkBaseHooks
         await _managingStandardsSqlDbHelper.ClearProviderRestrictedCourses();
     }
 
-     protected async Task AddLastStartDate()
+    protected async Task AddLastStartDate()
     {
         await _managingStandardsSqlDbHelper.AddLastStartDateRestrictProvider();
     }
+
+    protected async Task UnrestrictProvider()
+    {
+        await _managingStandardsSqlDbHelper.UnrestrictProvider();
+    }
+
+     protected async Task ClearProviderAllowedCourse()
+    {
+        await _managingStandardsSqlDbHelper.ClearProviderAllowedCourse();
+    }
+
     
 
-    protected async Task ResetTrainingProvider() => await _adminClearDownDataHelpers.ResetProviderDetails(GetUkprn());
+    protected async Task ResetTrainingProvider() => await _adminClearDownDataHelpers.ResetProviderDetailsToSupporting(GetUkprn());
+    protected async Task DeleteProviderCourseType() => await _managingStandardsSqlDbHelper.ClearProviderCourseType(GetUkprn());
 
     protected async Task GetRoatpAppplyData() => await SetDetails(_roatpApplyUkprnDataHelpers.GetRoatpAppplyData(GetTag("rp")));
 

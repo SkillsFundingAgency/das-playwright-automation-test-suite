@@ -17,7 +17,7 @@ public class ApprenticeshipListHelper
 
     public async Task<ProviderRestrictedCoursesPage>OpenManageProviderCoursePage()
     {
-        var home = new SearchforATrainingProviderPage(_context);
+        var home = new ProviderDetailsPage(_context);
         await home.ClickManageRestrictedCourses();
         return await new ProviderRestrictedCoursesPage(_context)
             .VerifyPageAsync( () => new ProviderRestrictedCoursesPage(_context));
@@ -69,5 +69,71 @@ public class ApprenticeshipListHelper
         await home.SelectRestrictedManageProviders(larsCode);
         return await new AcademicProfessionalPage(_context)
             .VerifyPageAsync( () => new AcademicProfessionalPage(_context));
+    }
+
+    public async Task<RestrictProviderPage>ChangeHowWeManageProvider()
+    {
+         var home = new ProviderRestrictedCoursesPage(_context);
+        await home.ChangeProviderDelivery();
+        return await new RestrictProviderPage(_context)
+            .VerifyPageAsync( () => new RestrictProviderPage(_context));
+    }
+
+    public async Task<ConfirmRestrictProviderPage>ControlProviderDelivery()
+    {
+       var home = new RestrictProviderPage(_context);
+       await home.NavigateToConfirmControlProviderDelivery();
+       return await new ConfirmRestrictProviderPage(_context)
+            .VerifyPageAsync( () => new ConfirmRestrictProviderPage(_context));
+
+    }
+    
+    public async Task<AllowedCoursesPage>ConfirmControlProviderDelivery()
+    {
+        var home = new ConfirmRestrictProviderPage(_context);
+        await home.ConfirmProviderRestricted();
+        return await new AllowedCoursesPage(_context)
+            .VerifyPageAsync( () => new AllowedCoursesPage(_context));
+
+    }
+
+    public async Task<AllowedCoursesPage>OpenManageAllowedCoursePage()
+    {
+         var home = new ProviderDetailsPage(_context);
+        await home.ClickManageApprovedCourses();
+        return await new AllowedCoursesPage(_context)
+            .VerifyPageAsync( () => new AllowedCoursesPage(_context));
+    }
+
+    public async Task<ManageProviderAllowedUnitsPage>OpenManageApprenticeshipUnitsPage()
+    {
+        var home = new ProviderDetailsPage(_context);
+        await home.ClickManageApprovedUnits();
+        return await new ManageProviderAllowedUnitsPage(_context)
+            .VerifyPageAsync( () => new ManageProviderAllowedUnitsPage(_context));
+    }
+
+    public async Task<AddApprenticeshipToAllowedCoursePage>AddAnApprenticeship()
+    {
+        var home = new AllowedCoursesPage(_context);
+        await home.ClickAddAnAppreticeship();
+        return await new AddApprenticeshipToAllowedCoursePage(_context)
+            .VerifyPageAsync( () => new AddApprenticeshipToAllowedCoursePage(_context)); 
+    }
+
+    public async Task<AddApprenticeshipUnitToAllowedPage>AddAnApprenticeshipUnit()
+    {
+        var home = new ManageProviderAllowedUnitsPage(_context);
+        await home.ClickAddAnAppreticeshipUnit();
+        return await new AddApprenticeshipUnitToAllowedPage(_context)
+            .VerifyPageAsync( () => new AddApprenticeshipUnitToAllowedPage(_context));
+    }
+
+    public async Task<ProviderDetailsPage>GoBackToProviderDetailsPage()
+    {
+        var home = new AllowedCoursesPage(_context);
+        await home.GoBackToProviderDetailsPage();
+        return await new ProviderDetailsPage(_context)
+            .VerifyPageAsync( () => new ProviderDetailsPage(_context));
     }
 }

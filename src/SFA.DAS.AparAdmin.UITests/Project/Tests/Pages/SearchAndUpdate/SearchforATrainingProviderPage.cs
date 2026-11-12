@@ -36,8 +36,5 @@
         await autocompleteOption.ClickAsync();
     }
 
-    public async Task ClickManageRestrictedCourses()
-    {
-        await page.GetByRole(AriaRole.Link, new() {Name = "Manage restricted courses"}).ClickAsync();
-    }
+   
 }

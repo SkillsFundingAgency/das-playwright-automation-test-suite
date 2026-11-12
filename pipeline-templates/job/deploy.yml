@@ -140,6 +140,12 @@ jobs:
                 Tenant: $(Tenant)
                 TargetEnvironment: ${{ parameters.AppRoleAssignmentsTargetEnvironment }}
                 IsMultiRepoCheckout: true
+            - template: azure-pipelines-templates/deploy/step/app-role-assignments.yml@das-platform-building-blocks
+              parameters:
+                ServiceConnection: ${{ parameters.AppRoleAssignmentsServiceConnection }}
+                ResourceName: ${{ parameters.ServiceConnection }}
+                Tenant: $(Tenant)
+                IsMultiRepoCheckout: true                
 
 
           # 1) Bootstrap: extract Service Connection creds to pipeline variables

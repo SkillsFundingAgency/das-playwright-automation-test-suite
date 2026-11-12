@@ -4,7 +4,7 @@ User searches for a vacancy using Browse Your Interest
 
 @faa
 @regression
-Scenario: FAA_USFV_01 User searches for a vacancy by Broswse Your Interests - city or postcode option
+Scenario: FAA_USFV_01 User searches for a vacancy by Broswse Your Interests - city or postcode option, validation errors
 	Given the candidate can login in to faa
 	When the user searches for vacancies by 'Enter a city or postcode' option in the Browse Your Interests route
 	Then the user is presented with search results
