@@ -81,6 +81,18 @@ public abstract class BasePage : FrameworkBaseHooks
         return nextPage;
     }
 
+    public async Task CheckValidationErrors(params string[] errorMessages)
+    {
+        var errorSummary = page.Locator(".govuk-error-summary");
+
+        await Assertions.Expect(errorSummary).ToContainTextAsync("There is a problem");
+
+        foreach (var errorMessage in errorMessages)
+        {
+            await Assertions.Expect(errorSummary).ToContainTextAsync(errorMessage);
+        }
+    }
+
     protected async Task AcceptAllCookiesIfVisible()
     {
         var cookieLocator = page.GetByRole(AriaRole.Button, new() { Name = "Accept all cookies" });
