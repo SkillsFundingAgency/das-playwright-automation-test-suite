@@ -8,6 +8,11 @@ public class DesiredSkillsPage(ScenarioContext context) : RaaBasePage(context)
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What skills and personal qualities do applicants need to have?");
     }
 
+    public async Task TriggerValidationOnSkillsSelection()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Select the skills and personal qualities you'd like the applicant to have");
+    }
     public async Task<QualificationsPage> SelectSkillAndGoToQualificationsPage()
     {
         await SelectSkillsAndContinue();
@@ -39,6 +44,12 @@ public class QualificationsPage(ScenarioContext context) : RaaBasePage(context)
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Qualifications");
     }
 
+    public async Task TriggerValidationErrorsOnQualifications()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Select if you want to add any qualification requirements");
+    }
+
     public async Task<AddAQualificationPage> SelectYesToAddQualification()
     {
         await page.GetByRole(AriaRole.Radio, new() { Name = "Yes" }).CheckAsync();
@@ -56,6 +67,14 @@ public class AddAQualificationPage(ScenarioContext context) : RaaBasePage(contex
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Add a qualification");
     }
 
+    public async Task TriggerValidationOnAddQualification()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Select a qualification", 
+            "Enter the subject", 
+            "Enter the grade",
+            "Select if this qualification is essential or desirable");
+    }
     public async Task<ConfirmQualificationsPage> EnterQualifications()
     {
         await page.GetByRole(AriaRole.Combobox).SelectOptionAsync(new[] { "A Level" });
@@ -92,6 +111,12 @@ public class FutureProspectsPage(ScenarioContext context) : RaaBasePage(context)
     public override async Task VerifyPage()
     {
         await Assertions.Expect(page.Locator("label")).ToContainTextAsync("What is the expected career progression after this apprenticeship?");
+    }
+
+    public async Task TriggerValidationErrorOnFutureProspect()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Enter the expected career progression after this apprenticeship");
     }
 
     public async Task<ThingsToConsiderPage> EnterFutureProspect()

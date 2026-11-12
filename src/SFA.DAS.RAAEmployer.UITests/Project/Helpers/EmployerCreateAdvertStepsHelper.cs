@@ -1,3 +1,4 @@
+using Azure;
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages;
 using SFA.DAS.RAAEmployer.UITests.Project.Tests.Pages.DynamicHomePageEmployer;
 
@@ -336,17 +337,80 @@ public class EmployerCreateAdvertStepsHelper(ScenarioContext context) : CreateAd
         return await page.EnterAdvertTitleMultiOrg();
     }
 
-    internal async Task<YourApprenticeshipAdvertsHomePage> TriggerVacancyTitleValidationErrorAndCancelAdvert()
+    internal async Task<VacancyReferencePage> TriggerValidationErrorsOnCreateAdvertPages()
     {
         var page = await CreateAnApprenticeshipAdvertOrVacancy();
-
         var titlePage = await NavigateToAdvertTitle(page);
-
         await titlePage.TriggerVacancyTitleValidationError();
 
-        await titlePage.EmployerCancelAdvert();
+        var trainingCoursepage = await titlePage.EnterAdvertTitleMultiOrg();
+        await trainingCoursepage.TriggerValidationErrorOnOrganisationPage();
 
-        return await VerifyPageHelper.VerifyPageAsync(context, () => new YourApprenticeshipAdvertsHomePage(context));
+        var orgPage = await trainingCoursepage.SelectOrganisationMultiOrg();
+        await orgPage.TriggerValidationErrorOnTrainingTitle();
+
+        var page2 = await orgPage.EnterTrainingTitle();
+        var page3 = await page2.ConfirmTrainingproviderAndContinue(false);
+        await page3.TriggerValidationErrorOnProviderSelection();
+
+        var page4 = await page3.SelectTrainingProvider();
+        var page5 = await page4.ConfirmProviderAndContinueToSummaryPage();
+        await page5.TriggerValidationErrorsOnShortDescription();
+
+        var page6 = await page5.EnterShortDescription();
+        await page6.TriggerValidationErrorOnWhatApprenticeWillDo();
+
+        var page7 = await page6.EnterShortDescriptionOfWhatApprenticeWillDo();
+        var page8 = await page7.EnterAllDescription();
+        var page9 = await page8.ImportantDates();
+        await page9.TriggerValidationErrorsOnDates();
+
+        var page10 = await page9.EnterImportantDates();
+        await page10.TriggerValidationErrorsOnDuration();
+
+        var page11 = await page10.EnterDuration();
+        await page11.TriggerValidationErrorsOnWageTypes();
+
+        var page12 = await page11.ChooseWage_Employer(RAAConst.NationalMinWagesForApprentices);
+        await page12.TriggerValidationErrorOnPayInformation();
+
+        var page13 = await page12.SubmitExtraInformationAboutPay();
+        await page13.TriggerValidationErrorOnNumberOfPositions();
+
+        var page14 = await page13.SubmitNoOfPositionsAndNavigateToChooseLocationPage();
+        await page14.TriggerValidationErrorsOnLocations();
+
+        var page15 = await page14.ChooseAddressAndGoToCreateApprenticeshipPage("employer");
+        var page16 = await page15.Skills();
+        await page16.TriggerValidationOnSkillsSelection();
+
+        var page17 = await page16.SelectSkillAndGoToQualificationsPage();
+        await page17.TriggerValidationErrorsOnQualifications();
+
+        var page18 = await page17.SelectYesToAddQualification();
+        await page18.TriggerValidationOnAddQualification();
+
+        var page19 = await page18.EnterQualifications();
+        var page20 = await page19.ConfirmQualificationsAndGoToFutureProspectsPage();
+        await page20.TriggerValidationErrorOnFutureProspect();
+
+        var page21 = await page20.EnterFutureProspect();
+        var page22 = await page21.EnterThingsToConsiderAndReturnToCreateAdvert(optionalFields);
+        var page23 = await page22.EmployerName();
+        await page23.TriggerValidationErrorOnEmployName();
+
+        var page24 = await page23.ChooseEmployerNameForEmployerJourney(RAAConst.ExistingTradingName);
+        await page24.TriggerValidationOnEmployerDescription();
+
+        var page25 = await page24.EnterEmployerDescriptionAndGoToContactDetailsPage(false, optionalFields);
+        var page26 = await page25.EnterContactDetailsAndGoToApplicationProcessPage(optionalFields);
+        var page27 = await page26.SelectApplicationMethod_Employer(true);
+        var page28 = await page27.EnterAdditionalQuestionsForApplicants();
+        var page29 = await page28.CompleteAllAdditionalQuestionsForApplicants(IsFoundationAdvert, false, false);
+
+        await CheckAndSubmitAdvert(page29);
+
+        return await VerifyPageHelper.VerifyPageAsync(context, () => new VacancyReferencePage(context));
     }
 
 

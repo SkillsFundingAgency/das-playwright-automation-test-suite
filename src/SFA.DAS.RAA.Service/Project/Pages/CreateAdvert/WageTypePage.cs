@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
+﻿using System.Security.AccessControl;
+
+namespace SFA.DAS.RAA.Service.Project.Pages.CreateAdvert;
 
 public class WageTypePage(ScenarioContext context) : RaaBasePage(context)
 {
@@ -7,6 +9,31 @@ public class WageTypePage(ScenarioContext context) : RaaBasePage(context)
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("How much will the apprentice be paid?");
     }
 
+    public async Task TriggerValidationErrorsOnWageTypes()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Select how much the apprentice will be paid");
+
+        await EnterNationalMinWages();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Set wage yourself" }).CheckAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Yearly wage must be at least £16,640");
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+        await EnterSetAsCompetitive();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        var errorMessage = isRaaEmployer
+            ? "Select if the salary is above National Minimum Wage"
+            : "Select whether the salary will be competitive or not.";
+        await CheckValidationErrors(errorMessage);
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+    }
     public async Task<ExtraInformationAboutPayPage> ChooseWage_Employer(string wageType)
     {
         await ChooseWage(wageType);
@@ -118,6 +145,13 @@ public class ExtraInformationAboutPayPage(ScenarioContext context) : RaaBasePage
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Extra information about pay");
     }
 
+    public async Task TriggerValidationErrorOnPayInformation()
+    {
+        await IFrameFillAsync("WageAdditionalInformation_ifr", RAADataHelper.RandomAlphabeticString(510));
+        await IFrameFillAsync("CompanyBenefitsInformation_ifr", RAADataHelper.RandomAlphabeticString(510));
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Information about pay must be 500 characters or less", "Company benefits must be 500 characters or less");
+    }
     public async Task<SubmitNoOfPositionsPage> SubmitExtraInformationAboutPay()
     {
         await IFrameFillAsync("WageAdditionalInformation_ifr", rAADataHelper.OptionalMessage);
@@ -139,6 +173,11 @@ public class SubmitNoOfPositionsPage(ScenarioContext context) : RaaBasePage(cont
         await Assertions.Expect(page.Locator("label")).ToContainTextAsync(PageTitle);
     }
 
+    public async Task TriggerValidationErrorOnNumberOfPositions()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Enter the number of positions for this apprenticeship");
+    }
     public async Task<ChooseApprenticeshipLocationPage> SubmitNoOfPositionsAndNavigateToChooseLocationPage()
     {
         await EnterNumberOfPositionsAndContinue();
