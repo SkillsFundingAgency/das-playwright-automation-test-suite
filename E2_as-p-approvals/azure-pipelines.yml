@@ -5,7 +5,7 @@ schedules:
   displayName: ScheduledRun
   branches:
     include:
-    - master
+    - Approvals/MultiSelect
   always: true
 
 variables:
