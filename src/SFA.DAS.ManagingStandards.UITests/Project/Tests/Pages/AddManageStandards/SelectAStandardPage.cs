@@ -17,4 +17,13 @@ public class SelectAStandardPage(ScenarioContext context, string pageTitle = "Ad
 
         return await VerifyPageAsync(() => new AddAstandardPage(context, standardName));
     }
+    public async Task SelectAStandardAndFail(string standardName)
+    {
+        await page.Locator("#SelectedLarsCode").FillAsync(standardName);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator(".govuk-error-summary__title")).
+        ToContainTextAsync("There is a problem");      
+    }
 }

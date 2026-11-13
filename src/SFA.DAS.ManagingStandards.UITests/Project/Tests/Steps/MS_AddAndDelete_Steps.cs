@@ -195,4 +195,40 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
 
         await page8.Save_NewApprenticeshipUnit_Continue();
     }
+
+    [Then(@"^the provider cannot add a standard that is restricted for the provider$")]
+    public async Task WhenTheProviderTriedToAddAStandardThatIsRestrictedForTheProvider()
+    {
+        StandardName = context.Get<ManagingStandardsDataHelpers>().VFXArtistOrTechnicalDirector;
+        var page = new ManageTheStandardsYouDeliverPage(context);
+
+        var page1 = await page.AccessAddStandard();
+
+       await page1.SelectAStandardAndFail(StandardName);
+    }
+
+    [Then(@"^the provider can add a standard that it restricted but with a date in the future$")]
+    public async Task ThenTheProviderCanAddAStandardThatItRestrictedButWithADateInTheFuture()
+    {
+        StandardName = context.Get<ManagingStandardsDataHelpers>().OralHealthPractitioner;
+        var page = new SelectAStandardPage(context);
+
+        var page1 = await page.SelectAStandardAndContinue(StandardName);
+
+        var page2 = await page1.YesStandardIsCorrectAndContinue();
+
+        var page3 = await page2.YesUseExistingContactDetails();
+
+        var page4 = await page3.Add_ContactInformation();
+
+        var page5 = await page4.ConfirmAtOneofYourTrainingLocations_AddStandard();
+
+        var page6 = await page5.AccessSeeANewTrainingVenue_AddStandard();
+
+        var page7 = await page6.ChooseTheVenueDeliveryAndContinue();
+
+        var page8 = await page7.Save_NewTrainingVenue_Continue(StandardName);
+
+        await page8.Save_NewStandard_Continue();
+    }
 }

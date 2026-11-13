@@ -17,6 +17,12 @@ public class ChooseTrainingProviderPage(ScenarioContext context) : RaaBasePage(c
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Have you found a training provider?");
     }
 
+    public async Task TriggerValidationErrorOnProviderSelection()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Enter the name or UKPRN of a training provider who delivers the training course you’ve selected");
+    }
+
     public async Task<ConfirmTrainingProviderPage> SelectTrainingProvider()
     {
         await page.GetByRole(AriaRole.Combobox, new() { Name = "Training provider name or" }).ClickAsync();
@@ -53,6 +59,16 @@ public class SummaryOfTheApprenticeshipPage(ScenarioContext context) : RaaBasePa
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Summary of the apprenticeship");
     }
 
+    public async Task TriggerValidationErrorsOnShortDescription()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Enter a short description of the apprenticeship");
+
+        await IFrameFillAsync("ShortDescription_ifr", RAADataHelper.RandomAlphabeticString(355));
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Summary of the apprenticeship must not exceed 350 characters");
+    }
+
     public async Task<WhatWillTheApprenticeDoAtWorkPage> EnterShortDescription()
     {
         await IFrameFillAsync("ShortDescription_ifr", RAADataHelper.RandomAlphabeticString(60));
@@ -69,6 +85,12 @@ public class WhatWillTheApprenticeDoAtWorkPage(ScenarioContext context) : RaaBas
     {
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("What will the apprentice do at work?");
     }    
+
+    public async Task TriggerValidationErrorOnWhatApprenticeWillDo()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Enter what the apprentice will do at work");
+    }
 
     public async Task<DescriptionPage> EnterShortDescriptionOfWhatApprenticeWillDo()
     {
