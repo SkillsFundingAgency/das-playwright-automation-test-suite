@@ -29,7 +29,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             var providerDetails = await GetProviderDetails(providerConfig);
 
             return await CreateApprenticeshipObjects(employerDetails, NumberOfApprenticeships, providerDetails,
-                apprenticeships, apprenticeFactory, trainingFactory, rplFactory);
+                apprenticeships, apprenticeFactory, trainingFactory, rplFactory, cohort: cohort);
         }
 
         internal async Task<List<Apprenticeship>> CreateApprenticeshipObject(
@@ -52,7 +52,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
             IApprenticeFactory apprenticeFactory,
             ITrainingFactory trainingFactory,
             IRPLFactory rplFactory,
-            ApprenticeshipStatus? apprenticeshipStatus = null)
+            ApprenticeshipStatus? apprenticeshipStatus = null,
+            Cohort? cohort = null)
         {
             for (int i = 0; i < numberOfApprenticeships; i++)
             {
