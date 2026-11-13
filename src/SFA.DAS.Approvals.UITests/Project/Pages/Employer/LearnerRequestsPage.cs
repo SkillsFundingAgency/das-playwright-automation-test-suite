@@ -21,9 +21,11 @@
             return await VerifyPageAsync(() => new EmployerApproveLearnerDetailsPage(context));
         }
 
-
-
-
-
+        internal async Task<EmployerApproveLearnerDetailsPage> OpenTransferCohort(string cohortReference, bool withTransferSender)
+        {
+            await page.Locator(withTransferSender ? "#WithTransferSender" : "#Review").ClickAsync();
+            await page.Locator($"tr[data-cohort='{cohortReference}']").GetByRole(AriaRole.Link, new() { Name = "Details" }).ClickAsync();
+            return await VerifyPageAsync(() => new EmployerApproveLearnerDetailsPage(context));
         }
+    }
 }

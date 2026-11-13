@@ -14,7 +14,7 @@ public class AccountCreationStepsHelper(ScenarioContext context)
 
     public async Task<HomePage> AddNewAccount(HomePage homePage, int index, OrgType orgType = OrgType.Default)
     {
-        _objectContext.SetAdditionalOrganisationName(GetOrgName(orgType), index);
+        _objectContext.SetAdditionalOrganisationName(orgType == OrgType.Default ? _objectContext.GetOrganisationName() : GetOrgName(orgType), index);
 
         var page = await homePage.GoToYourAccountsPage();
 

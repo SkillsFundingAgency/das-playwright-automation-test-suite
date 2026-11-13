@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
+﻿using System.Text.RegularExpressions;
+
+namespace SFA.DAS.EmployerPortal.UITests.Project.Pages;
 
 public partial class TasksHomePage(ScenarioContext context) : HomePage(context)
 {
@@ -14,49 +16,39 @@ public partial class TasksHomePage(ScenarioContext context) : HomePage(context)
 
     public async Task VerifyStartAddingApprenticesNowTaskLink() => await Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Start adding learners now" })).ToBeVisibleAsync();
 
-    //public void AssertTaskCount(string taskType, int expectedNumberOfTasks)
-    //{
-    //    context.Get<RetryAssertHelper>().RetryOnTasksHomePage(() =>
-    //    {
-    //        Assert.That(pageInteractionHelper.FindElements(TaskSelector).Count > 0, "No Task list element found");
+    public async Task AssertTaskCount(string taskType, int expectedNumberOfTasks)
+    {
+        if (expectedNumberOfTasks < 0)
+            throw new ArgumentOutOfRangeException(nameof(expectedNumberOfTasks));
 
-    //        int currentNumberOfTasks = GetTaskCount(taskType);
+        var (taskPattern, hasCount) = taskType switch
+        {
+            ApprenticeChangeToReview => (@"(?:apprentice|learner)\s+changes?\s+to review", true),
+            CohortReadyForApproval => (@"(?:apprentice|learner|cohort)\s+requests?\s+ready for (?:review|approval)", true),
+            ReviewConnectionRequest => (@"connection requests?\s+to review", true),
+            TransferRequestReceived => ("Transfer request received", false),
+            _ => throw new ArgumentException($"Unknown task type '{taskType}'.", nameof(taskType))
+        };
 
-    //        Assert.That(currentNumberOfTasks == expectedNumberOfTasks, $"The task type '{taskType}' was expected to have '{expectedNumberOfTasks}' tasks but currently has '{currentNumberOfTasks}' task");
-    //    }, () => { RefreshPage(); VerifyTasksHomePage(); });
-    //}
+        var tasks = page.GetByLabel("Tasks");
+        await Assertions.Expect(tasks).ToBeVisibleAsync();
+        var matchingTasks = tasks.GetByRole(AriaRole.Listitem)
+            .Filter(new() { HasTextRegex = new Regex(taskPattern, RegexOptions.IgnoreCase) });
 
-    //private bool VerifyTasksHomePage() => VerifyPageAfterRefresh(PageHeader, PageTitle);
+        if (expectedNumberOfTasks == 0)
+        {
+            await Assertions.Expect(matchingTasks).ToHaveCountAsync(0);
+            return;
+        }
 
-    //private int GetTaskCount(string taskType)
-    //{
-    //    return taskType switch
-    //    {
-    //        ApprenticeChangeToReview => GetCurrentNumberOfTasks("apprentice change", true),
-    //        CohortReadyForApproval => GetCurrentNumberOfTasks("ready for approval", true),
-    //        ReviewConnectionRequest => GetCurrentNumberOfTasks("connection request", true),
-    //        TransferRequestReceived => GetCurrentNumberOfTasks("Transfer request received", false),
-    //        _ => 0,
-    //    }; ;
-    //}
+        if (!hasCount && expectedNumberOfTasks != 1)
+            throw new ArgumentOutOfRangeException(nameof(expectedNumberOfTasks), "This task does not display a numeric count.");
 
-    //private int GetCurrentNumberOfTasks(string taskText, bool hasItemsDueCount)
-    //{
-    //    var taskLink = pageInteractionHelper.FindElement(TaskSelector).FindElements(TaskListSelector).FirstOrDefault(x => x.Text.ContainsCompareCaseInsensitive(taskText));
-
-    //    if (taskLink != null && hasItemsDueCount)
-    //    {
-    //        var match = NoOfTasksRegex().Match(taskLink.Text);
-    //        return match.Success && match.Groups.Count > 0 ? int.Parse(match.Groups[1].Value) : 0;
-    //    }
-    //    else if (taskLink != null)
-    //    {
-    //        return 1;
-    //    }
-
-    //    return 0;
-    //}
-
-    //[GeneratedRegex("^(\\d+).*\r?$", RegexOptions.Multiline)]
-    //private static partial Regex NoOfTasksRegex();
+        await Assertions.Expect(matchingTasks).ToHaveCountAsync(1);
+        if (hasCount)
+        {
+            await Assertions.Expect(matchingTasks).ToContainTextAsync(
+                new Regex($@"^\s*{expectedNumberOfTasks}\s+{taskPattern}", RegexOptions.IgnoreCase));
+        }
+    }
 }
