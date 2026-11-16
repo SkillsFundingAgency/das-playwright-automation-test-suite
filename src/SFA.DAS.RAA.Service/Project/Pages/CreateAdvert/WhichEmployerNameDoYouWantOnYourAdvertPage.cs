@@ -62,6 +62,13 @@ public abstract class EmployerNameBasePage : RaaBasePage
         return await VerifyPageAsync(() => new ChooseApprenticeshipLocationPage(context));
     }
 
+    public async Task TriggerValidationErrorOnEmployName()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        var errorMessage = isRaaEmployer ? "Select the employer name you want on your advert"
+            : "Select the employer name you want on your vacancy";
+        await CheckValidationErrors(errorMessage);
+    }
     public async Task<EmployerDescriptionPage> ChooseEmployerNameForEmployerJourney(string employername)
     {
         return employername switch
@@ -135,6 +142,13 @@ public class EmployerDescriptionPage(ScenarioContext context) : RaaBasePage(cont
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
 
+    public async Task TriggerValidationOnEmployerDescription()
+    {
+        await IFrameFillAsync("EmployerDescription_ifr", "");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Enter details about the employer");
+    }
+
     public async Task<ContactDetailsPage> EnterEmployerDescriptionAndGoToContactDetailsPage(bool _, bool optionalFields)
     {
         await IFrameFillAsync("EmployerDescription_ifr", rAADataHelper.EmployerDescription);
@@ -170,6 +184,16 @@ public class ContactDetailsPage(ScenarioContext context) : RaaBasePage(context)
             isRaaEmployer ? $"Contact details for {objectContext.GetEmployerName()} (optional)" : "Do you want to add your contact details?";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
+    }
+
+    public async Task TriggerValidationErrorsOnContactDetails()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Select if you want to add contact details");
+
+        await SelectRadioOptionByForAttribute("contact-details-yes");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Enter contact details");
     }
 
     public async Task<ApplicationProcessPage> EnterProviderContactDetails(bool optionalFields)

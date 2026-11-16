@@ -23,6 +23,7 @@ public class RAADataHelper
         WorkkingWeek = RandomAlphabeticString(15);
         VacancyClosing = DateTime.Today.AddMonths(2).AddDays(3);
         VacancyStart = VacancyClosing.AddMonths(1).AddDays(1);
+        VacancyStartValidationError = VacancyClosing.AddDays(-1);
         EditedVacancyClosing = VacancyStart.AddDays(14);
         EditedVacancyStart = EditedVacancyClosing.AddDays(14);
         DesiredQualificationsSubject = RandomAlphabeticString(8);
@@ -67,11 +68,13 @@ public class RAADataHelper
     public string TrainingDetails { get; }
 
     public static string Duration => "52";
+    public static string ErrorDuration => "52";
     public static string TraineeshipDuration => "12";
 
     public string WorkkingWeek { get; }
 
     public static string WeeklyHours => "40";
+    public static string WeeklyHoursError => "10";
 
     public static string FixedWageYearlyAmount => "17000";
 
@@ -88,6 +91,8 @@ public class RAADataHelper
     public DateTime EditedVacancyStart { get; }
 
     public DateTime VacancyClosing { get; }
+
+    public DateTime VacancyStartValidationError { get; }
 
     public DateTime VacancyStart { get; }
 
