@@ -48,7 +48,7 @@ public abstract class AparAdminBasePage(ScenarioContext context) : BasePage(cont
 
         var selectedFilter = selectedFilters.GetByText(
             trainingType,
-            new());
+            new() { Exact = true });
 
         await Assertions.Expect(selectedFilter).ToBeVisibleAsync();
     }
