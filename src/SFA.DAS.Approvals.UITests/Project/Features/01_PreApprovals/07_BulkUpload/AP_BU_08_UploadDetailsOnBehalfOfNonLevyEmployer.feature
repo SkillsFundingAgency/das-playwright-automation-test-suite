@@ -1,4 +1,4 @@
-﻿#@approvals
+﻿@approvals
 Feature: AP_BU_08_UploadDetailsOnBehalfOfNonLevyEmployer
 
 @regression
