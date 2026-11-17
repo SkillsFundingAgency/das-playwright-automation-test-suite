@@ -10,8 +10,10 @@ Scenario: APAR_AL_05A_Add apprenticeship and apprenticeship units to a restricte
     And the user navigates to training providers page
     When the user navigates to manage approved courses
     Then the user can add apprenticeships that the provider can deliver
+    And the user uses the search and filter functionality and results are displayed as expected for a restricted provider
     When the user navigates to manage approved units
     Then the user can add apprenticeship units that the provider can deliver
+    And the user uses the search and filter functionality and results are displayed as expected for a restricted provider
 
 @rpadalup05
 @providerrestrictedcourses
@@ -23,5 +25,7 @@ Scenario: APAR_AL_05B_Add and edit dates for allowlisted apprenticeships and app
     And the user navigates to training providers page
     When the user navigates to manage approved courses
     Then the user can edit dates for allowlisted apprenticeships that the provider can deliver
+    And the user can clear the end date for allowlisted apprenticeships that the provider can deliver
     When the user navigates to manage approved units
     Then the user can edit dates for allowlisted apprenticeship units that the provider can deliver
+    And the user can clear the end date for allowlisted apprenticeship units that the provider can deliver

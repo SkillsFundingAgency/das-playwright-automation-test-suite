@@ -21,6 +21,7 @@ public class ApprenticeshipListSteps
     private readonly AllowedCourseEditPage _allowedCourseEditPage;
     private readonly AllowedCourseAddLastDatePage _allowedCourseAddLastDatePage;
     private readonly AllowedCourseEditLastDatePage _allowedCourseEditLastDatePage;
+    private readonly RemoveLastStartDatePage _removeLastStartDatePage;
 
 
 public ApprenticeshipListSteps(ScenarioContext context)
@@ -39,6 +40,7 @@ public ApprenticeshipListSteps(ScenarioContext context)
     _allowedCourseAddLastDatePage = new AllowedCourseAddLastDatePage(context);
     _allowedCourseEditPage = new AllowedCourseEditPage(context);
     _allowedCourseEditLastDatePage = new AllowedCourseEditLastDatePage(context);
+    _removeLastStartDatePage = new RemoveLastStartDatePage(context);
 }    
 
     [When(@"the user clicks on manage restricted courses")]
@@ -207,6 +209,39 @@ public ApprenticeshipListSteps(ScenarioContext context)
         await _allowedCourseEditLastDatePage.EnterDate("20-08-2016");
         await _allowedCourseEditLastDatePage.ConfirmLastStartDate();
         await _allowedCoursesPage.AssertBanner("ZSC00007", "Closed to new starts");
+    }
+
+    [Then(@"the user can clear the end date for allowlisted apprenticeships that the provider can deliver")]
+    
+    public async Task ThenTheUserCanClearTheEndDateForAllowlistedApprenticeshipsThatTheProviderCanDeliver()
+    {
+        await _apprenticeshipListHelper.EditAllowedCourseDetails("128");
+        await _allowedCourseEditPage.SelectOptionEditRemove("Removes");
+        await _apprenticeshipListHelper.ContinueToRemoveDate();
+        await _removeLastStartDatePage.ConfirmRemoveDate();
+        await _allowedCoursesPage.AssertBanner("128", "Open to new starts");
+    }
+
+    [Then(@"the user can clear the end date for allowlisted apprenticeship units that the provider can deliver")]
+    public async Task ThenTheUserCanClearTheEndDateForAllowlistedApprenticeshipUnitsThatTheProviderCanDeliver()
+    {
+        await _apprenticeshipListHelper.EditAllowedCourseDetails("ZSC00007");
+        await _allowedCourseEditPage.SelectOptionEditRemove("Removes");
+        await _apprenticeshipListHelper.ContinueToRemoveDate();
+        await _removeLastStartDatePage.ConfirmRemoveDate();
+        await _allowedCoursesPage.AssertBanner("ZSC00007", "Open to new starts");
+    }
+
+    [Then(@"the user uses the search and filter functionality and results are displayed as expected for a restricted provider")]
+    public async Task ThenTheUserUsesTheSearchAndFilterFunctionalityAndResultsAreDisplayedAsExpectedForARestrictedProvider()
+    {
+        await _allowedCoursesPage.SearchFunctionality("ai");
+        await _allowedCoursesPage.VerifyResults("ai", "yes");
+        await _allowedCoursesPage.SelectFilter("Open to new starts");
+        await _allowedCoursesPage.ApplyFilter();
+        await _allowedCoursesPage.VerifySelectedFilter("Open to new starts");
+        await _allowedCoursesPage.ClearAllFilters();
+        await _allowedCoursesPage.VerifyNoFiltersSelected();
     }
  
 }
