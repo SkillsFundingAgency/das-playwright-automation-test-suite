@@ -1,4 +1,4 @@
-﻿#@approvals
+﻿@approvals
 Feature: AP_BU_07_UploadDetailsAndCancel
 	
 
