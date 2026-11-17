@@ -22,7 +22,7 @@ Scenario: AP_E2E_LE_EUA_01a Provider creates cohort from ILR data Employer appro
 	And apprentice/learner record is no longer available on SelectLearnerFromILR page
 	#And apprentice/learner record is available on Learning endpoint for SLD (so they do not resubmit it)  <--- commented this step as its covered by Payments-2 team. 
 
-
+@api
 @regression
 @e2escenarios
 Scenario Outline: AP_E2E_LE_EUA_01b emails validation
