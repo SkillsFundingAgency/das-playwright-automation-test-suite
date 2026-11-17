@@ -42,5 +42,3 @@ stages:
       projectName: $(projectName)
       BuildConfiguration: $(BuildConfiguration)
       deploy: $(Deploy)
-      RuleName: $(RuleName)
-      ResourceName: $(ResourceName)
