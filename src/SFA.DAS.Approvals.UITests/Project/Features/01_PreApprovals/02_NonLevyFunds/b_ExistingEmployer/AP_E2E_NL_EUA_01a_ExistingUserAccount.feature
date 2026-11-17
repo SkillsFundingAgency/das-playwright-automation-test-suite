@@ -22,7 +22,7 @@ Scenario Outline: AP_E2E_NL_EUA_01b emails validation
 	Then Verify the "<Recipient>" receive "<NotificationType>" email
 
 Examples:
-		| Recipient		| NotificationType								|
-		| Employer      | Reservation made on your behalf 				|
-		| Employer      | Apprentice details ready to approve 			|
-		| Apprentice	| Welcome to your apprenticeship                |
+		| Recipient		| NotificationType					|
+		| Employer      | Reservation made on your behalf	|
+		| Employer      | Learner details ready to approve	|
+		| Apprentice	| Welcome to your apprenticeship	|

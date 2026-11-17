@@ -30,6 +30,6 @@ Scenario Outline: AP_E2E_LE_EUA_01b emails validation
 	Then Verify the "<Recipient>" receive "<NotificationType>" email
 
 Examples:
-		| Recipient		| NotificationType								|
-		| Employer      | Apprentice details ready to approve 			|
-		| Apprentice	| Welcome to your apprenticeship                |
+		| Recipient		| NotificationType					|
+		| Employer      | Learner details ready to approve	|
+		| Apprentice	| Welcome to your apprenticeship	|
