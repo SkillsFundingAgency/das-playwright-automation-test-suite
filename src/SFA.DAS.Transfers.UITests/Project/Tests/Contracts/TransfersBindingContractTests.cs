@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 namespace SFA.DAS.Transfers.UITests.Project.Tests.Contracts;
 
 [TestFixture]
-[Category("Unittests")]
+[Category("TransfersBindingContractTests")]
 public class TransfersBindingContractTests
 {
     private static readonly Assembly Assembly = typeof(TransfersBindingContractTests).Assembly;
