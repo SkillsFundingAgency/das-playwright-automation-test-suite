@@ -168,4 +168,13 @@ public class ApprenticeshipListHelper
         return await new AllowedCourseEditLastDatePage(_context)
             .VerifyPageAsync( () => new AllowedCourseEditLastDatePage(_context));
     }
+
+    public async Task<RemoveLastStartDatePage> ContinueToRemoveDate()
+    {
+        var home = new AllowedCourseEditPage(_context);
+        await home.ContinueToEditDate();
+        return await new RemoveLastStartDatePage(_context)
+            .VerifyPageAsync( () => new RemoveLastStartDatePage(_context));
+    }
+
 }
