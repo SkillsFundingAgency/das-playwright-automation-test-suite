@@ -132,7 +132,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         {
             var employerType = context.ScenarioInfo.Title.Contains("nonlevy", StringComparison.CurrentCultureIgnoreCase) ? EmployerType.NonLevy : EmployerType.Levy;
             await ProviderSubmitsAnILRRecord(NoOfApprentices, employerType.ToString());
-            await SLDPushDataIntoAS();
+            //await SLDPushDataIntoAS();
         }
 
         [Then(@"^apprentice\/learner record is available on Learning endpoint for SLD \(so they do not resubmit it\)$")]

@@ -40,6 +40,6 @@ public class GgSignInPage(ScenarioContext context) : EmployerPortalBasePage(cont
 
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Password" }).FillAsync(password);
 
-        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync(new LocatorClickOptions { Timeout = 30000 });
     }
 }
