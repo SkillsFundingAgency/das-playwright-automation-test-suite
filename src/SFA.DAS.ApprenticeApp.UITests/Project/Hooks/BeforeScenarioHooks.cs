@@ -17,25 +17,25 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Hooks
         {
             try
             {
-                var tasksBasePage = new TasksBasePage(context);
+                var notesBasePage = new NotesBasePage(context);
                 var appStepsHelper = new AppStepsHelper(context);
 
-                await appStepsHelper.NavigateToTasksPageAsync();
+                await appStepsHelper.NavigateToNotesPageAsync();
 
-                string taskToDelete = null;
+                string noteToDelete = null;
 
-                if (context.ContainsKey("UpdatedTaskName"))
-                    taskToDelete = context["UpdatedTaskName"].ToString();
-                else if (context.ContainsKey("CurrentTaskName"))
-                    taskToDelete = context["CurrentTaskName"].ToString();
+                if (context.ContainsKey("UpdatedNoteName"))
+                    noteToDelete = context["UpdatedNoteName"].ToString();
+                else if (context.ContainsKey("CurrentNoteName"))
+                    noteToDelete = context["CurrentNoteName"].ToString();
 
-                if (!string.IsNullOrEmpty(taskToDelete))
+                if (!string.IsNullOrEmpty(noteToDelete))
                 {
-                    Console.WriteLine($"[CleanUp] Targeting main scenario task: '{taskToDelete}'");
-                    await tasksBasePage.CleanUpTaskByTitleAsync(taskToDelete);
+                    Console.WriteLine($"[CleanUp] Targeting main scenario note: '{noteToDelete}'");
+                    await notesBasePage.CleanupNoteByTitleAsync(noteToDelete);
                 }
 
-                await tasksBasePage.SweepOrphanedTasksAsync();
+                await notesBasePage.SweepOrphanedNotesAsync();
             }
             catch (Exception ex)
             {
