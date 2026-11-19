@@ -120,10 +120,6 @@ namespace SFA.DAS.Approvals.UITests.Project.Steps
         [When(@"^the employer create and send an empty cohort to the training provider to add learner details$")]
         public async Task GivenEmployerCreatesEmptyRequestCohort()
         {
-            List<Apprenticeship> listOfApprenticeship = new List<Apprenticeship>();
-            listOfApprenticeship = await apprenticeDataHelper.CreateApprenticeshipObject(EmployerType.Levy, 1, null, listOfApprenticeship);
-            context.Set(listOfApprenticeship, ScenarioKeys.ListOfApprenticeship);
-
             await employerStepsHelper.AddEmptyCohort();
         }
 

@@ -7,6 +7,7 @@ Feature: AP_BU_01_UploadDetailsOnSingleCohort
 Scenario: AP_BU_01_Upload Details On Single Cohort
 
 	Given the Employer logins using existing Levy Account
+	And the employer has 2 apprentice ready to start training
 	When the employer create and send an empty cohort to the training provider to add learner details
     When Provider add 2 apprentice details using bulkupload
 	When Provider uploads the updated csv file

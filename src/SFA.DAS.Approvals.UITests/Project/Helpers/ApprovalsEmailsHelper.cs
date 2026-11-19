@@ -31,16 +31,16 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers
             switch (notificationType, recipient.ToLower())
             {
                 //employer emails below this area
-                case ("Apprentice details ready to approve", "employer"):
+                case ("Learner details ready to approve", "employer"):
                     rcvrEmail = employerEmail;
-                    subject = "Apprentice details ready to approve";
-                    body = $" sent you apprentice details to approve (reference {cohortReference}).";
+                    subject = "Learner details ready to approve";
+                    body = $" sent you learner details to approve (reference {cohortReference}).";
                     break;
 
                 case ("Reservation made on your behalf", "employer"):
                     rcvrEmail = employerEmail;
-                    subject = "funding reservation made on your behalf";
-                    body = $" reserved apprenticeship funding on your behalf for the following:";
+                    subject = "funding reservation made on your behalf"; 
+                    body = $" reserved funding for training on your behalf for the following:";
                     break;
 
                 case ("Learner record stopped", "employer"):
