@@ -29,6 +29,8 @@ public class ManagingStandardsDataHelpers
     public string OralHealthPractitionerLarsCode { get; init; } = "422";
     public string VFXArtistOrTechnicalDirector { get; init; } = "VFX artist or technical director";
     public string VFXArtistOrTechnicalDirectorLarsCode { get; init; } = "648";
+    public string Apprenticeshipunit_AIdelivery { get; init; } = "AI leadership – AI delivery and organisational transformation";
+    public string Apprenticeshipunit_AIdeliveryLarsCode { get; init; } = "ZSC00011";
     public string Standard_CraftPlastererlevel { get; init; } = "Craft plasterer (level 3)";
     public string PostCode { get; init; } = "Tw14 9py";
     public string FullAddressDetails { get; init; } = "160 Hatton Road, Feltham, TW14 9PY";

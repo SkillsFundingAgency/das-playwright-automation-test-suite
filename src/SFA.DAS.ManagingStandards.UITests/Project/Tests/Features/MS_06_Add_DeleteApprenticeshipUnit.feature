@@ -29,4 +29,12 @@ Scenario: MS_06C_Add_Delete_ApprenticeshipUnit_Online
 
 	Given the provider logs into portal
 	When the provider is able to add the ApprenticeshipUnit delivered online
-	
+
+@managingstandards
+@managingstandardsregulatedapprenticeshipunit
+@managingstandards08
+@regression
+Scenario: MS_06D_Add_Delete_RegulatedApprenticeshipUnit
+	Given the provider logs into portal
+	Then the provider is able to add a regulated ApprenticeshipUnit
+	And the provider is able to delete the regulated ApprenticeshipUnit

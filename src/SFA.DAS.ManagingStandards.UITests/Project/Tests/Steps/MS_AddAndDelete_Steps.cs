@@ -1,5 +1,7 @@
 ﻿using SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
 
+using static SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.VenueAndDelivery_ApprenticeshipUnitPage;
+
 namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Steps;
 
 [Binding]
@@ -230,5 +232,53 @@ public class MS_AddAndDelete_Steps(ScenarioContext context)
         var page8 = await page7.Save_NewTrainingVenue_Continue(StandardName);
 
         await page8.Save_NewStandard_Continue();
+    }
+
+    [Then(@"^the provider is able to add a regulated ApprenticeshipUnit$")]
+    public async Task ThenTheProviderIsAbleToAddTheRegulatedApprenticeshipUnit()
+    {
+        StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_AIdelivery;
+
+        var page = new ManagingStandardsProviderHomePage(context);
+
+        var page1 = await page.NavigateToYourStandardsAndTrainingVenuesPage();
+
+        var page2 = await page1.AccessStandards_ApprenticeshipsUnits();
+
+        var page3 = await page2.AccessAddApprenticeshipUnit();
+
+        var page4 = await page3.SelectAStandardAndContinue(StandardName);
+
+        var page5 = await page4.YesStandardIsCorrectAndContinue_ApprenticeshipUnit();
+
+        var page6 = await page5.YesUseExistingContactDetails_ApprenticeshipUnit();
+
+        var page7 = await page6.Add_ContactInformation_ApprenticeshipUnit();
+
+        var page8 = await page7.ConfirmOnline_AddApprenticeshipUnit(StandardName);
+
+        var page9 = await page8.Save_NewApprenticeshipUnit_Continue();
+
+        await page9.GoToTrainingAndVenues();
+
+        await page1.VerifyHasBanner(StandardName, "Funding closing for new starts");
+
+    }
+
+    [Then(@"^the provider is able to delete the regulated ApprenticeshipUnit$")]
+    public async Task ThenTheProviderIsAbleToDeleteTheRegulatedApprenticeshipUnit()
+    {
+        StandardName = context.Get<ManagingStandardsDataHelpers>().Apprenticeshipunit_AIdelivery;
+
+        var page = new ManageYourAppUnitPage(context);
+
+        var page2 = await page.ManageAnAppUnitPage(StandardName);
+
+        var page3 = await page2.ClickDeleteAnApprenticeshipUnit();
+
+        var page4 = await page3.DeleteAppUnit();
+
+        await page4.VerifyAppUnitIsDeleted();
+
     }
 }

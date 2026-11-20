@@ -66,5 +66,17 @@ namespace SFA.DAS.ManagingStandards.UITests.Project.Hooks
             if (_tags.Any(x => x == "managingstandardsadddeleteefapprenticeshipunit")) await _managingStandardsSqlDataHelper.ClearStandard(_config.Ukprn, 
                 _managingStandardsDataHelpers.Apprenticeshipunit_EFLarsCode);
         }
+
+        [BeforeScenario(Order = 33)]
+        public async Task CreateRegulatedApprenticeshipUnit()
+        {
+            if (_tags.Any(x => x == "managingstandardsregulatedapprenticeshipunit")) await _managingStandardsSqlDataHelper.CreateRegulatedApprenticeshipUnit(_managingStandardsDataHelpers.Apprenticeshipunit_AIdeliveryLarsCode);
+        }
+
+        [AfterScenario(Order = 33)]
+        public async Task ClearRegulatedApprenticeshipUnit()
+        {
+            if (_tags.Any(x => x == "managingstandardsregulatedapprenticeshipunit")) await _managingStandardsSqlDataHelper.ClearRegulatedApprenticeshipUnit(_managingStandardsDataHelpers.Apprenticeshipunit_AIdeliveryLarsCode);
+        }
     }
 }

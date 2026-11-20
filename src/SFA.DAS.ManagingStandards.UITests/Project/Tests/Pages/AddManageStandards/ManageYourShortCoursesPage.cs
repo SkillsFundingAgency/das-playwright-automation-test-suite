@@ -15,7 +15,7 @@ public class ManageYourAppUnitPage(ScenarioContext context) : ManagingStandardsB
     {
         await page.GetByRole(AriaRole.Link, new() { Name = "Add an apprenticeship unit" }).ClickAsync();
 
-        return await VerifyPageAsync(() => new SelectAStandardPage(context, "Select an apprenticeship unit"));
+        return await VerifyPageAsync(() => new SelectAStandardPage(context, "Add an apprenticeship unit"));
     }
 
     public async Task<ManageAnAppUnitPage> ManageAnAppUnitPage(string standardName)
