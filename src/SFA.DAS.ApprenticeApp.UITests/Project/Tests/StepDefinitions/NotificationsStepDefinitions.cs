@@ -15,6 +15,12 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
             _notificationsPage = await _stepsHelper.NavigateToNotificationsPageAsync();
         }
 
+        [When("the apprentice navigates to notifications via the account tab")]
+        public async Task WhenTheApprenticeNavigatesToNotificationsViaTheAccountTab()
+        {
+            _notificationsPage = await _stepsHelper.NavigateToNotificationsPageAsync();
+        }
+
         [Then("the notifications are displayed")]
         public async Task ThenTheNotificationsAreDisplayed()
         {

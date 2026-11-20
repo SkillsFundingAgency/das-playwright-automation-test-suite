@@ -7,20 +7,112 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
     public class SupportGuidanceStepDefinitions(ScenarioContext context)
     {
         private readonly AppStepsHelper _stepsHelper = new(context);
-        private SupportGuidancePage _supportGuidancePage;
+        private ApprenticeHomePage _apprenticeHomePage;
+        private IPage Page => context.Get<Driver>().Page;
 
-        [When("the apprentice clicks on the support and guidance tab")]
-        public async Task WhenTheApprenticeClicksOnTheSupportAndGuidanceTab()
+        [When(@"the apprentice is on the Home tab")]
+        public async Task WhenTheApprenticeIsOnTheHomeTab()
         {
-            _supportGuidancePage = await _stepsHelper.NavigateToSupportGuidancePageAsync();
+            _apprenticeHomePage = await _stepsHelper.NavigateToHomeTabAsync();
         }
 
-        [Then("the support and guidance articles are displayed")]
-        public async Task ThenTheSupportAndGuidanceArticlesAreDisplayed()
+        [Then(@"all support and guidance article links are displayed")]
+        public async Task ThenAllSupportAndGuidanceArticleLinksAreDisplayed()
         {
-            Assert.AreEqual(
-                "Support and guidance",
-                await _supportGuidancePage.SupportGuidancePageTitleAsync());
+            await _apprenticeHomePage.VerifyAllSupportAndGuidanceLinksAsync();
+        }
+
+        [When(@"the apprentice opens the ""(.*)"" support category")]
+        public async Task WhenTheApprenticeOpensTheSupportCategory(string categoryName)
+        {
+            var categoryLink = Page.Locator($"a.app-stack__link:has-text('{categoryName}')").First;
+            await categoryLink.ClickAsync();
+        }
+
+        [When(@"the apprentice opens an article and saves it if not already saved")]
+        public async Task WhenTheApprenticeOpensAnArticleAndSavesItIfNotAlreadySaved()
+        {
+            var showAllButton = Page.Locator("button:has-text('Show all sections'), button.govuk-accordion__show-all").First;
+            if (await showAllButton.IsVisibleAsync())
+            {
+                await showAllButton.ClickAsync();
+            }
+
+            var firstArticleLink = Page.Locator(".govuk-accordion__section-header button, .govuk-accordion__section-heading-text, a.app-stack__link").First;
+            await firstArticleLink.ClickAsync();
+
+            var saveButton = Page.Locator("form.app-article-actions__form button.app-article-actions__button")
+                                 .Filter(new() { Visible = true })
+                                 .First;
+            await saveButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
+
+            await Task.WhenAll(
+                Page.WaitForResponseAsync(resp => resp.Url.Contains("/Support/UpdateSavedArticle") && resp.Status == 200),
+                saveButton.ClickAsync()
+            );
+        }
+
+        [Then(@"the article appears under ""Your saved articles""")]
+        public async Task ThenTheArticleAppearsUnderYourSavedArticles()
+        {
+            await _stepsHelper.NavigateToHomeTabAsync();
+
+            var savedArticlesLink = Page.Locator("a[href*='/Support/SavedArticles']").First;
+            await savedArticlesLink.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
+            await savedArticlesLink.ClickAsync();
+
+            var savedArticleItem = Page.Locator("main h2, main h3, .govuk-accordion__section-heading, .app-stack__link").First;
+            await savedArticleItem.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
+
+            Assert.That(await savedArticleItem.IsVisibleAsync(), Is.True, "Expected saved article to be visible under 'Your saved articles'.");
+        }
+
+        [When(@"the apprentice removes the article from the saved list")]
+        public async Task WhenTheApprenticeRemovesTheArticleFromTheSavedList()
+        {
+            await _stepsHelper.NavigateToHomeTabAsync();
+
+            var savedArticlesLink = Page.Locator("a[href*='/Support/SavedArticles']").First;
+            await savedArticlesLink.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
+            await savedArticlesLink.ClickAsync();
+
+            var showAllButton = Page.Locator("button.govuk-accordion__show-all").First;
+            if (await showAllButton.IsVisibleAsync())
+            {
+                var expanded = await showAllButton.GetAttributeAsync("aria-expanded");
+                if (expanded != "true")
+                {
+                    await showAllButton.ClickAsync();
+                }
+            }
+
+            var removeButtons = Page.Locator("button:has-text('Remove'), a:has-text('Remove'), button.app-article-actions__button.unsave")
+                                    .Filter(new() { Visible = true });
+
+            while (await removeButtons.CountAsync() > 0)
+            {
+                await Task.WhenAll(
+                    Page.WaitForResponseAsync(resp => resp.Url.Contains("/Support/UpdateSavedArticle") && resp.Status == 200),
+                    removeButtons.First.ClickAsync()
+                );
+
+                await Page.WaitForTimeoutAsync(500);
+            }
+        }
+
+        [Then(@"the saved articles section should be empty")]
+        public async Task ThenTheSavedArticlesSectionShouldBeEmpty()
+        {
+            await _stepsHelper.NavigateToHomeTabAsync();
+
+            var savedArticlesLink = Page.Locator("a[href*='/Support/SavedArticles']").First;
+            await savedArticlesLink.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
+            await savedArticlesLink.ClickAsync();
+
+            var emptyStateMessage = Page.Locator("text=You have no saved articles");
+            await emptyStateMessage.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
+
+            Assert.That(await emptyStateMessage.IsVisibleAsync(), Is.True, "Expected saved articles section to be empty.");
         }
     }
 }

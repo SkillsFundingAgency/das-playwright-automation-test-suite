@@ -21,10 +21,10 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
             await stepsHelper.HandleOnboardingTourIfPresentAsync();
         }
 
-        [Then(@"the apprentice is taken to the KSBs tab")]
-        public async Task ThenTheApprenticeIsTakenToTheKSBsTab()
+        [Then(@"the apprentice is taken to the Home tab")]
+        public async Task ThenTheApprenticeIsTakenToTheHomeTab()
         {
-            await stepsHelper.VerifyOnKsbsTabAsync();
+            await stepsHelper.VerifyOnHomeTabAsync();
         }
     }
 }
