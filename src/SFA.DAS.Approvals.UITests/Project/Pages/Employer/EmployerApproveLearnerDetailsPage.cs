@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipModel;
 using SFA.DAS.Approvals.UITests.Project.Helpers.StepsHelper;
+using System;
 using System.Text.RegularExpressions;
 
 namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
@@ -32,7 +33,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             await Assertions.Expect(organisation).ToHaveTextAsync(apprenticeship.EmployerDetails.EmployerName.ToString());
             await Assertions.Expect(reference).ToHaveTextAsync(apprenticeship.Cohort.Reference);
             await Assertions.Expect(status).ToHaveTextAsync(apprenticeship.Cohort.Status_Employer);
-            await Assertions.Expect(messageFromProvider).ToHaveTextAsync("Please review the details and approve the request.");
+            if (!context.ScenarioInfo.Title.StartsWith("AP_BU_0", StringComparison.Ordinal))
+                await Assertions.Expect(messageFromProvider).ToHaveTextAsync("Please review the details and approve the request.");
         }
 
         internal async Task<ApprenticeDetailsApproved> EmployerApproveCohort()

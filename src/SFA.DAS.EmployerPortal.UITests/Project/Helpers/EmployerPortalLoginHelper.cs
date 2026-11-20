@@ -76,6 +76,17 @@ public class EmployerPortalLoginHelper(ScenarioContext context) : IReLoginHelper
         return await VerifyPageHelper.VerifyPageAsync(context, () => new CreateAnAccountToManageApprenticeshipsPage(context));
     }
 
+    public async Task Login(EmployerWithMultipleAccountsUser loginUser)
+    {
+        var landingPage = await GetLandingPage();
+
+        var page = await landingPage.GoToStubSignInPage();
+
+        var page1 = await page.Login(loginUser);
+
+        objectContext.UpdateOrganisationName(loginUser.OrganisationName);
+    }
+    
     protected virtual async Task<HomePage> Login(EasAccountUser loginUser)
     {
         var landingPage = await GetLandingPage();

@@ -2,7 +2,7 @@ using System;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ManageRestrictedCourses;
 
-public class AcademicProfessionalPage(ScenarioContext context) : AparAdminBasePage(context)
+public class AcademicProfessionalPage(ScenarioContext context) : AparAdminEditBasePage(context)
 {
     public override async Task VerifyPage()
     {

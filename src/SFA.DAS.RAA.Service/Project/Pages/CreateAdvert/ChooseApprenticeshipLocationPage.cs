@@ -8,6 +8,34 @@ public class ChooseApprenticeshipLocationPage(ScenarioContext context) : RaaBase
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Where is this apprenticeship available?");
     }
 
+    public async Task TriggerValidationErrorsOnLocations()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Select where this apprenticeship is available");
+
+        await page.GetByRole(AriaRole.Radio, new() { Name = "At one location", Exact = true }).CheckAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Select a location");
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Radio, new() { Name = "At more than one location" }).CheckAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Select between 2 and 10 locations");
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Radio, new() { Name = "Across all of England" }).CheckAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Add more information about where the apprentice will work");
+
+        await IFrameFillAsync("AdditionalInformation_ifr", RandomDataGenerator.GenerateRandomAlphabeticString(510));
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Information about where the apprentice will work must be 500 characters or less");
+        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+    }
+
     public async Task<CreateAnApprenticeshipAdvertOrVacancyPage> ChooseAddressAndGoToCreateApprenticeshipPage(string locationType)
     {
         locationType = locationType.Trim().ToLower();

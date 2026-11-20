@@ -8,6 +8,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<InternalsVisibleTo Include="SFA.DAS.TransferMatching.UITests" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Remove="Project\Features\PublicSectorReporting\**" />
 	  <EmbeddedResource Remove="Project\Features\PublicSectorReporting\**" />
 	  <None Remove="Project\Features\PublicSectorReporting\**" />

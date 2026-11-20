@@ -1,6 +1,6 @@
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ApprenticeshipList;
 
-    public class AddApprenticeshipUnitToAllowedPage(ScenarioContext context) :  AparAdminBasePage(context)
+    public class AddApprenticeshipUnitToAllowedPage(ScenarioContext context) :  AparAdminEditBasePage(context)
     {
     public override async Task VerifyPage()
     {

@@ -33,18 +33,12 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             {
                 await SearchApprentice(ULN);
             }
-                      
 
-            if (await apprenticeLink.CountAsync() > 0)
-            {
-                string status = await statusLocator.InnerTextAsync();
-                context.Get<ObjectContext>().SetDebugInformation($"A '{status.ToUpper()}' Apprenticeship record found for ULN: {ULN} and Name: {name} in Employer Portal");
-            }
-            else
-            {
-                throw new Exception($"Apprentice with ULN {ULN} and name {name} not found.");
-            }
+            // Searching reloads the page, so auto-wait for the result rather than counting links on the current page.
+            await Assertions.Expect(apprenticeLink.First).ToBeVisibleAsync();
 
+            string status = await statusLocator.InnerTextAsync();
+            context.Get<ObjectContext>().SetDebugInformation($"A '{status.ToUpper()}' Apprenticeship record found for ULN: {ULN} and Name: {name} in Employer Portal");
         }
 
         internal async Task<LearnerDetailsPage> OpenFirstItemFromTheList(string apprenticeName)

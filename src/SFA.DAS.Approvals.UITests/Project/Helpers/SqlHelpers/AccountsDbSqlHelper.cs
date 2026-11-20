@@ -15,20 +15,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
 
         public async Task<string> GetIsLevyByAgreementId(string agreementId) => await ReadDataFromCommtDataBase($"Select Ac.LevyStatus from AccountLegalEntities ale inner join Accounts Ac on ale.AccountId = ac.Id where ale.PublicHashedId = '{agreementId}'");
 
-        public int GetEmployerAccountId(string email, string organisationName)
-        {
-            string query = @$"SELECT TOP 1 acc.Id FROM[employer_account].[Membership] msp 
-                                INNER JOIN[employer_account].[User] usr
-                                ON msp.UserId = usr.Id
-                                INNER JOIN[employer_account].[Account] acc
-                                ON acc.Id = msp.AccountId
-                                WHERE usr.Email = '{email}'
-                                AND Name Like '{organisationName}%'";
-
-            return Convert.ToInt32(GetDataAsObject(query));
-        }
-
-        public string GetPublicHashedAccountIdByHashedId(string hashedId)
+        public async Task<string> GetPublicHashedAccountIdByHashedId(string hashedId)
         {
             string query = @$"SELECT 
 	                            PublicHashedId 
@@ -37,7 +24,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
                             where 
 	                            HashedId = '{hashedId}';";
 
-            return GetDataAsObject(query).ToString();
+            return (await GetDataAsObject(query)).ToString();
         }
 
         public async Task<string> GetAccountLegalEntityId(string email, string name)
@@ -75,5 +62,22 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.SqlHelpers
             else
                 return data[0][0].ToString();
         }
+
+
+        public async Task<int> GetEmployerAccountId(string email, string organisationName)
+        {
+            string query = @$"SELECT TOP 1 acc.Id FROM[employer_account].[Membership] msp 
+                                 INNER JOIN[employer_account].[User] usr
+                                 ON msp.UserId = usr.Id
+                                 INNER JOIN[employer_account].[Account] acc
+                                 ON acc.Id = msp.AccountId
+                                 WHERE usr.Email = '{email}'
+                                 AND Name Like '{organisationName}%'";
+
+
+            var result = await GetData(query);
+            return Convert.ToInt32(result.FirstOrDefault() ?? "0");
+        }
+
     }
 }

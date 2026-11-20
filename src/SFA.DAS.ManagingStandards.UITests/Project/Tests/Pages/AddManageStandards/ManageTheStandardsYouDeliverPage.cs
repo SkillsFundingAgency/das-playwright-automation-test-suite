@@ -6,7 +6,7 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 {
     public override async Task VerifyPage()
     {
-        await Assertions.Expect(page.Locator("#header-standards")).ToContainTextAsync("Manage your standards");
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Manage your apprenticeships");
     }
 
     public async Task<ManageAStandard_TeacherPage> AccessTeacher()
@@ -33,12 +33,10 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 
     public async Task<ManageTheStandardsYouDeliverPage> VerifyOrangeMoreDetailsNeededTagForStandardAsync(string standardName, bool shouldExist = true)
     {
-        var locator = page.Locator($@"
-        //td[
-            .//strong[contains(@class, 'govuk-tag--orange') and normalize-space(text())='More details needed']
-            and .//a[normalize-space(text())='{standardName}']
-        ]");
-
+        var child = page.Locator(".govuk-link", new PageLocatorOptions { HasTextString = standardName });
+        var listItem = child.Locator("../..");
+        var locator = listItem.Locator(".govuk-warning-text__text");
+        
         var count = await locator.CountAsync();
 
         if (shouldExist && count == 0)
@@ -53,7 +51,7 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 
     public async Task<SelectAStandardPage> AccessAddStandard()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Add a standard" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Add apprenticeship" }).ClickAsync();
 
         return await VerifyPageAsync(() => new SelectAStandardPage(context));
 
@@ -68,9 +66,46 @@ public class ManageTheStandardsYouDeliverPage(ScenarioContext context) : Managin
 
     public async Task<YourStandardsAndTrainingVenuesPage> ReturnToYourStandardsAndTrainingVenues()
     {
-        await page.GetByRole(AriaRole.Link, new() { Name = "Back", Exact = true }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Manage your training courses", Exact = true }).ClickAsync();
 
         return await VerifyPageAsync(() => new YourStandardsAndTrainingVenuesPage(context));
+    }
+
+    public async Task SearchStandards(string searchTerm)
+    {
+        await page.Locator("#search-term-input").FillAsync(searchTerm);
+        await page.Locator("#filters-submit").ClickAsync();
+        await VerifyResults(searchTerm);
+    }
+
+    public async Task ApplyFilterStandards(string searchTerm)
+    {
+        await page.Locator("#filteritem-funding-status-filter-FundingClosed").CheckAsync();
+        await page.Locator("#filters-submit").ClickAsync();
+        await page.Locator("#filters-submit").ClickAsync();
+        await VerifyResults(searchTerm);
+    }
+
+    public async Task ClearSearch()
+    {
+        await page.GetByRole(AriaRole.Link, new() { Name = "Clear" }).ClickAsync();
+    }
+
+    public async Task VerifyResults(string searchTerm)
+    {
+        var results = page.Locator(".app-results-list__item");
+        var resultCount = await results.CountAsync();
+        if (resultCount == 0)
+            throw new Exception($"No results found for the search term '{searchTerm}'.");
+        else
+        {
+            for (var i = 0; i < resultCount; i++)
+            {
+                var resultText = await results.Nth(i).InnerTextAsync();
+                if (!resultText.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    throw new Exception($"Result '{resultText}' does not match the search term '{searchTerm}'.");
+            }
+        }
     }
 
 }

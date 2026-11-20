@@ -1,5 +1,5 @@
 ﻿namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
-public class SelectAStandardPage(ScenarioContext context, string pageTitle = "Select a standard") : ManagingStandardsBasePage(context)
+public class SelectAStandardPage(ScenarioContext context, string pageTitle = "Add an apprenticeship") : ManagingStandardsBasePage(context)
 {
     private readonly string _pageTitle = pageTitle;
     public override async Task VerifyPage()
@@ -16,5 +16,14 @@ public class SelectAStandardPage(ScenarioContext context, string pageTitle = "Se
         await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
 
         return await VerifyPageAsync(() => new AddAstandardPage(context, standardName));
+    }
+    public async Task SelectAStandardAndFail(string standardName)
+    {
+        await page.Locator("#SelectedLarsCode").FillAsync(standardName);
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+
+        await Assertions.Expect(page.Locator(".govuk-error-summary__title")).
+        ToContainTextAsync("There is a problem");      
     }
 }

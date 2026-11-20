@@ -20,6 +20,8 @@ variables:
     value: "$(EmployerAccountsAppWhitelistName)"
   - name: ResourceName2
     value: "$(CommitmentsAppWhitelistName)"
+  - name: WhiteListFunctionName
+    value: "$(SBusToolsFunctionAppName)"
 
 resources:
   repositories:
@@ -53,5 +55,5 @@ stages:
       RuleName2: $(RuleName2)
       ResourceName: $(ResourceName)
       ResourceName2: $(ResourceName2)
-      WhiteListFunction: true
+      WhiteListFunctionName: $(WhiteListFunctionName)
       ApplyAppRoleAssignments: true

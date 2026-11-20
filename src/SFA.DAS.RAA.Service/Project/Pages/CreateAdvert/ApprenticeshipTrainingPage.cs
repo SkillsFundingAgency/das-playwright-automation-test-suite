@@ -16,6 +16,13 @@ public class ApprenticeshipTrainingPage(ScenarioContext context) : RaaBasePage(c
         return await VerifyPageAsync(() => new ConfirmApprenticeshipTrainingPage(context));
     }
 
+    public async Task TriggerValidationErrorOnTrainingTitle()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+
+        await CheckValidationErrors("Enter a valid training course");
+    }
+
     private async Task EnterTrainingTitleAction(string trainingTitle)
     {
         await page.GetByRole(AriaRole.Combobox, new() { Name = "Enter apprenticeship training" }).FillAsync(trainingTitle);

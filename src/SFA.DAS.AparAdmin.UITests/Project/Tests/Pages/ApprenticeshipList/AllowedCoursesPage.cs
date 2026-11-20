@@ -2,7 +2,7 @@ using System;
 
 namespace SFA.DAS.AparAdmin.UITests.Project.Tests.Pages.ApprenticeshipList;
 
-public class AllowedCoursesPage(ScenarioContext context) : AparAdminBasePage(context)
+public class AllowedCoursesPage(ScenarioContext context) : AparAdminEditBasePage(context)
 {
     public override async Task VerifyPage()
     {

@@ -9,6 +9,12 @@ public class SelectOrganisationPage(ScenarioContext context) : RaaBasePage(conte
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
 
+    public async Task TriggerValidationErrorOnOrganisationPage()
+    {
+        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
+        await CheckValidationErrors("Select the organisation this advert is for");
+    }
+
     public async Task<WhichEmployerNameDoYouWantOnYourAdvertPage> SelectOrganisation()
     {
         await SelectRandomOption();
