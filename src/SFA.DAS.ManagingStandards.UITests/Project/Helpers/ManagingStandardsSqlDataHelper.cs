@@ -51,4 +51,10 @@ public class ManagingStandardsSqlDataHelper(ObjectContext objectContext, DbConfi
         $"WHERE p.Ukprn = {ukprn} " +
         $"AND pc.LarsCode = '{larsCode}';"
     );
+
+    public async Task CreateRegulatedApprenticeshipUnit(string larsCode) => await ExecuteSqlCommand(
+        $"UPDATE Standard SET ApprovalBody = 'Test', IsRegulatedForProvider = 1 WHERE LarsCode = '{larsCode}';");
+
+    public async Task ClearRegulatedApprenticeshipUnit(string larsCode) => await ExecuteSqlCommand(
+        $"UPDATE Standard SET ApprovalBody = NULL, IsRegulatedForProvider = 0 WHERE LarsCode = '{larsCode}';");
 }
