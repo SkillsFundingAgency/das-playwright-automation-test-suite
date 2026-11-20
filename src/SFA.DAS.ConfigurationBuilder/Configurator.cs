@@ -73,9 +73,6 @@ namespace SFA.DAS.ConfigurationBuilder
 
             return builder;
         }
-
-
-
         private static IConfigurationBuilder AddProjectJsonFiles(this IConfigurationBuilder builder, List<string> files)
         {
             foreach (var file in files)
