@@ -123,11 +123,19 @@ public class EmployerFinanceSteps(ScenarioContext context)
     [Then(@"^Funds data information is diplayed$")]
     public async Task ThenFundsDataInformationIsDiplayed()
     {
-        await _financePage.GetCurrentFundsLabel();
+        await _financePage.VerifyLevySummarySectionStructure();
 
-        await _financePage.GetFundsSpentLabel();
+        await _financePage.VerifyCurrentLevyFundsIsDisplayed();
 
-        await _financePage.GetEstimatedPlannedSpendingText();
+        await _financePage.VerifyCurrentLevyFundsIsNotZero();
+
+        await _financePage.VerifyLevyInIsDisplayed();
+
+        await _financePage.VerifyLevyInIsNotZero();
+
+        await _financePage.VerifyLevySpentIsDisplayed();
+
+        await _financePage.VerifyExpiredLevyIsDisplayed();
     }
 
 }
