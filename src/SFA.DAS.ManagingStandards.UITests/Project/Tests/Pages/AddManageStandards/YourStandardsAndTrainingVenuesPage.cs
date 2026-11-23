@@ -1,4 +1,5 @@
-﻿using static SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.VenueAndDelivery_ApprenticeshipUnitPage;
+﻿using System;
+using static SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.VenueAndDelivery_ApprenticeshipUnitPage;
 
 namespace SFA.DAS.ManagingStandards.UITests.Project.Tests.Pages.AddManageStandards;
 
@@ -49,6 +50,19 @@ public class YourStandardsAndTrainingVenuesPage(ScenarioContext context) : Manag
         await page.GetByRole(AriaRole.Link, new() { Name = "Add your delivery forecast" }).ClickAsync();
 
         return await VerifyPageAsync(() => new AddYourDeliveryForecastPage(context));
+    }
+
+    public async Task VerifyHasBanner(string standardName, string bannerMessage)
+    {
+        var parent = page.Locator("li", new PageLocatorOptions { HasTextString = standardName });
+        var listItem = parent;
+        string banner = bannerMessage switch
+        {
+            "Funding closing for new starts" => ".govuk-tag--orange",
+            "Funding closed for new starts"  => ".govuk-tag--grey",
+             _        => throw new ArgumentException($"Unknown message type: {bannerMessage}")
+        };
+        await Assertions.Expect(listItem.Locator(banner)).ToContainTextAsync(bannerMessage);   
     }
 }
 
