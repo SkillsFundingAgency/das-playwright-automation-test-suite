@@ -54,3 +54,11 @@ internal enum LearningType
     FoundationApprenticeship = 1,
     ShortCourses = 2
 }
+
+internal enum RequestResponse 
+{
+    Created = 200,
+    BadRequest = 400,
+    NotFound = 404,
+    InternalServerError = 500
+}

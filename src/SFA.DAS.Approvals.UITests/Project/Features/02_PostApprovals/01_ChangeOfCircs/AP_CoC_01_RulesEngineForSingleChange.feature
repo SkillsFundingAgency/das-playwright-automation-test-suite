@@ -2,24 +2,17 @@
 
 A short summary of the feature
 
+#Note:	This test is only to validate the rules engine for single change of circumstance request.
+#		db and UI validation are not in scope of this test. 
+
 @api
-#@postapprovals
+@postapprovals
 Scenario: AP_CoC_01_Rules Engine For Single Change
 	Given a Live apprenticeship record exists for learner with Firstname: "DoNotUse_TestData" and LastName: "CoCApprentice1"
-	When Learning domain sends CoC request via approvals endpoint for below "<Category>": "<changeType>", "<old>", "<new>" and "<effFromDateDiff>"
-	Then Commitments responds with "<responseCode>" and "<responseBody>"
-	And ApprovalRequest is created in commitments db with "<ApprovalRequestStatus>"
-	And ApprovalFieldRequest is created in commitments db with "<ApprovalFieldRequestStatus>"
-
-
-Examples: 
-	| Category          | changeType | old               | new                   | effFromDateDiff | responseCode | responseBody                                         | ApprovalRequestStatus | ApprovalFieldRequestStatus |
-	| price increase    | TNP1       |              5000 |                  5500 |               0 |          201 | EmployerApprovalRequested                            |                     1 |                          3 |
-	| price decrease    | TNP1       |              5000 |                  2500 |             -30 |          201 | EmployerApprovalRequested                            |                     1 |                          3 |
-	| invalid TNP1      | TNP1       |              5000 |                     0 |             -30 |          201 | AutoRejected                                         |                     2 |                          2 |
-	| price increase    | TNP2       |              1000 |                  1100 |             +30 |          201 | EmployerApprovalRequested                            |                     1 |                          3 |
-	| price decrease    | TNP2       |              1000 |                  1100 |              -1 |          201 | EmployerApprovalRequested                            |                     1 |                          3 |
-	| invalid TNP2      | TNP2       |              1000 |                       |               0 |          400 | String could not be converted to an integer          |                       |                            |
-	| firstName         | Firstname  | DoNotUse_TestData | DoNotUse_TestData_New |             +10 |          201 | AutoApproved                                         |                     2 |                          1 |
-	| invalid firstName | Firstname  | DoNotUse_TestData |                       |               0 |          400 | String value cannot be null or allow only whitespace |                       |                            |
-#   | lastName          | Lastname   | CoCApprentice1    | CoCApprentice1_New    |             -50 |          201 | AutoApproved                                         |                     1 |                          3 |	
+	When a CoC request is made with below payload
+	Then the response is as per table below
+		| changeType | old        | new        | responseCode | responseBody																			|
+		| StartDate  | 2026-09-09 | 2027-09-09 |          200 | EmployerApprovalRequested																|
+		| StartDate  | 2026-09-09 | 2026-08-08 |          200 | EmployerApprovalRequested																|
+		| StartDate  | 2026-09-09 | 2026-09-09 |          400 | New and Old values cannot be the same													|
+		| StartDate  | 2026-09-09 | 2028-08-01 |          400 | The start date must be no later than one year after the end of the current teaching		|	

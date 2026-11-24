@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.Approvals.UITests.Project.Models
+﻿using System;
+
+namespace SFA.DAS.Approvals.UITests.Project.Models
 {
     internal class CoCApprovalRequest
     {
@@ -9,6 +11,7 @@
         public string uln { get; set; }
         public string approvedUri { get; set; }
         public List<CoCApprovalFieldRequest> changes { get; set; }
+        public List<PriceRecord> newPrices { get; set; }
     }
 
     internal class CoCApprovalFieldRequest
@@ -21,6 +24,13 @@
     {
         public string old { get; set; }
         public string @new { get; set; }
-        public string effectiveFromDate { get; set; }
+    }
+
+    internal class PriceRecord 
+    {
+        public double trainingPrice { get; set; }
+        public double assessmentPrice { get; set; }
+        public string effectiveFrom { get; set; }
+
     }
 }
