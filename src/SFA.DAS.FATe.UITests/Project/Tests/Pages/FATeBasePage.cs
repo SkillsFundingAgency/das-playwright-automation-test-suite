@@ -84,7 +84,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
 
         if (!await checkbox.IsVisibleAsync())
         {
-            var expandButton = page.GetByRole(AriaRole.Button, new() { Name = "Training level , Show" });
+            var expandButton = page.GetByRole(AriaRole.Button, new() { Name = "Training level" });
             if (await expandButton.IsVisibleAsync())
             {
                 await expandButton.ClickAsync();
@@ -261,7 +261,7 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
     }
     public async Task VerifyAllResultsHaveFoundationTag()
     {
-        var foundationTags = page.Locator("li.das-search-results__list-item strong.govuk-tag");
+        var foundationTags = page.Locator("strong.govuk-\\!-margin-bottom-4");
 
         int count = await foundationTags.CountAsync();
         Assert.True(count > 0, "No search results found with a Foundation tag.");
