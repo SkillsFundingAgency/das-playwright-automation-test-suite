@@ -190,6 +190,20 @@ public abstract class FATeBasePage(ScenarioContext context) : BasePage(context)
         var filterLocator = page.GetByRole(AriaRole.Link, new() { NameRegex = new Regex($"^{Regex.Escape(filterText)}$", RegexOptions.IgnoreCase) });
         await Assertions.Expect(filterLocator).ToBeVisibleAsync();
     }
+
+    public async Task VerifyTags(string Standard, string bannerMessage)
+    {
+        var parent = page.Locator("li", new PageLocatorOptions { HasTextString = Standard });
+        var listItem = parent;
+        string banner = bannerMessage switch
+        {
+            "Closing to new learners soon" => ".govuk-tag--orange",
+            "Closed to new learners"  => ".govuk-tag--grey",
+            "New course"   => ".govuk-tag--yellow",
+             _        => throw new ArgumentException($"Unknown message type: {bannerMessage}")
+        };
+        await Assertions.Expect(listItem.Locator(banner)).ToContainTextAsync(bannerMessage);   
+    }
     public async Task VerifyCourseSearchResults(string resultsword)
     {
         var resultsLinks = page.Locator("li.das-search-results__list-item");
