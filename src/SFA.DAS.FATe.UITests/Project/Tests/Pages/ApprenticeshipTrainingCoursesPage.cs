@@ -207,4 +207,17 @@ public class ApprenticeshipTrainingCoursesPage(ScenarioContext context) : FATeBa
 
         return await VerifyPageAsync(() => new ApprenticeshipTrainingCourseDetailsPage(context));
     }
+
+    public async Task VerifyTag( string bannerMessage)
+    {
+        var parent1 = page.Locator(".govuk-summary-list");
+        string banner = bannerMessage switch
+        {
+            "Closing to new learners soon" => ".govuk-tag--orange",
+            "Closed to new learners"  => ".govuk-tag--grey",
+            "New course"   => ".govuk-tag--yellow",
+             _        => throw new ArgumentException($"Unknown message type: {bannerMessage}")
+        };
+        await Assertions.Expect(parent1.Locator(banner)).ToContainTextAsync(bannerMessage);   
+    }
 }
