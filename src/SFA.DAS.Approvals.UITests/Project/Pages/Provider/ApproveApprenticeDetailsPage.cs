@@ -27,6 +27,8 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         private ILocator saveAndSubmitButton => page.Locator("button:has-text('Save and continue')");
         private ILocator ContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Continue" });
         private ILocator rplVerifiedCheckBox => page.Locator("#rplVerified");
+        private ILocator courseHeadings => page.Locator("h3.govuk-heading-m");
+        private ILocator apprenticeshipUnitCourseHeadings => page.Locator("h3.govuk-heading-m:has-text('Apprenticeship unit')");
         private ILocator AddRplLink => page.GetByRole(AriaRole.Link, new() { Name = "Add RPL" }).First;
         private ILocator saveAndexitLink => page.Locator("a:has-text('Save and exit')");
         private ILocator Name(ILocator apprenticeRow) => apprenticeRow.Locator("td:nth-child(1)");
@@ -123,7 +125,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         
         internal async Task<CohortApprovedAndSentToEmployerPage> ProviderApproveCohort()
         {
-            await rplVerifiedCheckBox.ClickAsync();
+            await ClickRplVerifiedIfApplicableAsync();
             await approveRadioOption.ClickAsync();
             await messageToEmployerTextBox.FillAsync("Please review the details and approve the request.");
             await saveAndSubmitButton.ClickAsync();
@@ -132,7 +134,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<CohortSentToEmployerForReview> ProviderSendCohortForEmployerReview()
         {
-            await rplVerifiedCheckBox.ClickAsync();
+            await ClickRplVerifiedIfApplicableAsync();
             await sendToEmployerRadioOption.ClickAsync();
             await messageToEmployerToReviewTextBox.FillAsync("Please review the details and approve the request.");
             await saveAndSubmitButton.ClickAsync();
@@ -143,7 +145,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
         internal async Task<CohortApproved> ProviderApprovesCohortAfterEmployerApproval()
         {
-            await rplVerifiedCheckBox.ClickAsync();
+            await ClickRplVerifiedIfApplicableAsync();
             await approveRadioOption.ClickAsync();
             await saveAndSubmitButton.ClickAsync();
             return await VerifyPageAsync(() => new CohortApproved(context));
@@ -195,8 +197,19 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
         internal async Task SelectFirstRadioButtonAndSubmit(string optionalMsg=null)
         {
             await firstRadioOption.CheckAsync();
-            await rplVerifiedCheckBox.ClickAsync();
+            await ClickRplVerifiedIfApplicableAsync();
             await saveAndSubmitButton.ClickAsync();
+        }
+
+        private async Task ClickRplVerifiedIfApplicableAsync()
+        {
+            var courseHeadingCount = await courseHeadings.CountAsync();
+            var apprenticeshipUnitHeadingCount = await apprenticeshipUnitCourseHeadings.CountAsync();
+
+            if (courseHeadingCount > apprenticeshipUnitHeadingCount)
+            {
+                await rplVerifiedCheckBox.ClickAsync();
+            }
         }
 
        internal async Task<ProviderAccessDeniedPage> TryOpenLink(string linkName)
