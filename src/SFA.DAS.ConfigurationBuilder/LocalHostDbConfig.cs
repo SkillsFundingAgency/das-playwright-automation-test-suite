@@ -42,7 +42,8 @@ public class LocalHostDbConfig(DbDevConfig dbDevConfig, bool useSqlLogin)
             TMDbConnectionString = GetConnectionString(dbDevConfig.TMDbName),
             TPRDbConnectionString = GetConnectionString(dbDevConfig.TPRDbName),
             UsersDbConnectionString = GetConnectionString(dbDevConfig.UsersDbName),
-            QfastDbConnectionString = GetConnectionString(dbDevConfig.QfastDbName)
+            QfastDbConnectionString = GetConnectionString(dbDevConfig.QfastDbName),
+            DigiCertDbConnectionString = GetConnectionString(dbDevConfig.DigiCertDbName)
         };
     }
 
