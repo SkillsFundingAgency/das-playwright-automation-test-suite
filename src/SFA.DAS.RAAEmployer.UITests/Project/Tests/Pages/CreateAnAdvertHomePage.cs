@@ -9,7 +9,7 @@ public class CreateAnAdvertHomePage(ScenarioContext context) : RaaBasePage(conte
 
     public async Task<CreateAnApprenticeshipAdvertOrVacancyPage> GoToCreateAnApprenticeshipAdvertPage()
     {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Create advert" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Start now" }).ClickAsync();
 
         return await VerifyPageAsync(() => new CreateAnApprenticeshipAdvertOrVacancyPage(context));
     }

@@ -146,7 +146,7 @@ public class EmployerDescriptionPage(ScenarioContext context) : RaaBasePage(cont
     {
         await IFrameFillAsync("EmployerDescription_ifr", "");
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
-        await CheckValidationErrors("Enter details about the employer");
+        await CheckValidationErrors("Enter information about the organisation");
     }
 
     public async Task<ContactDetailsPage> EnterEmployerDescriptionAndGoToContactDetailsPage(bool _, bool optionalFields)
@@ -180,20 +180,10 @@ public class ContactDetailsPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = (isRaaEpc || isRaaTransfer) ? "Do you want to add your contact details?" :
-            isRaaEmployer ? $"Contact details for {objectContext.GetEmployerName()} (optional)" : "Do you want to add your contact details?";
+        string PageTitle = (isRaaEpc || isRaaTransfer) ? "Your contact details?" :
+            isRaaEmployer ? $"Contact details for {objectContext.GetEmployerName()}" : "Your contact details?";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
-    }
-
-    public async Task TriggerValidationErrorsOnContactDetails()
-    {
-        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
-        await CheckValidationErrors("Select if you want to add contact details");
-
-        await SelectRadioOptionByForAttribute("contact-details-yes");
-        await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
-        await CheckValidationErrors("Enter contact details");
     }
 
     public async Task<ApplicationProcessPage> EnterProviderContactDetails(bool optionalFields)
@@ -214,13 +204,7 @@ public class ContactDetailsPage(ScenarioContext context) : RaaBasePage(context)
     {
         if (optionalFields)
         {
-            await SelectRadioOptionByForAttribute("contact-details-yes");
-
             await EnterContactDetails();
-        }
-        else
-        {
-            await SelectRadioOptionByForAttribute("contact-details-no");
         }
     }
 

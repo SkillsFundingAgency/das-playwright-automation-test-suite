@@ -296,7 +296,6 @@ public class ProviderCreateVacancyStepsHelper(ScenarioContext context, bool newT
         await page22.TriggerValidationOnEmployerDescription();
 
         var page23 = await page22.EnterEmployerDescriptionAndGoToContactDetailsPage(false, optionalFields);
-        await page23.TriggerValidationErrorsOnContactDetails();
 
         var page24 = await page23.EnterProviderContactDetails(optionalFields);
         var page25 = await page24.SelectApplicationMethod_Employer(true);

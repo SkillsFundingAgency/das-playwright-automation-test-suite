@@ -90,9 +90,9 @@ public class DurationPage(ScenarioContext context) : RaaBasePage(context)
     public async Task TriggerValidationErrorsOnDuration()
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
-        await CheckValidationErrors("Enter how long the whole apprenticeship is, including work and training",
+        await CheckValidationErrors("Enter the apprenticeship length",
             "Enter details about the working week", 
-            "Enter how many hours the apprentice will work each week, including training");
+            "Enter how many hours the apprentice will work each week");
 
         await page.GetByRole(AriaRole.Spinbutton, new() { Name = "How long is the whole" }).FillAsync(RAADataHelper.ErrorDuration);
         await page.GetByRole(AriaRole.Textbox, new() { Name = "Details of working week" }).FillAsync(RAADataHelper.RandomAlphabeticString(260));

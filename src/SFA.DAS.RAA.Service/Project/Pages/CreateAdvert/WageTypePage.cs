@@ -168,7 +168,7 @@ public class SubmitNoOfPositionsPage(ScenarioContext context) : RaaBasePage(cont
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = (isRaaEpc || isRaaTransfer) ? "How many positions are available?" : isRaaEmployer ? "How many positions are there for this apprenticeship?" : "How many positions are available?";
+        string PageTitle = "How many positions are available?";
 
         await Assertions.Expect(page.Locator("label")).ToContainTextAsync(PageTitle);
     }
@@ -176,7 +176,7 @@ public class SubmitNoOfPositionsPage(ScenarioContext context) : RaaBasePage(cont
     public async Task TriggerValidationErrorOnNumberOfPositions()
     {
         await page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" }).ClickAsync();
-        await CheckValidationErrors("Enter the number of positions for this apprenticeship");
+        await CheckValidationErrors("Enter the number of positions available");
     }
     public async Task<ChooseApprenticeshipLocationPage> SubmitNoOfPositionsAndNavigateToChooseLocationPage()
     {
@@ -194,8 +194,7 @@ public class SubmitNoOfPositionsPage(ScenarioContext context) : RaaBasePage(cont
 
     public async Task EnterNumberOfPositionsAndContinue()
     {
-        string labelText = (isRaaEpc || isRaaTransfer) ? "How many positions are available?" :
-            isRaaEmployer ? "How many positions are there for this apprenticeship?" : "How many positions are available?";
+        string labelText = "How many positions are available?";
 
         await page.GetByRole(AriaRole.Spinbutton, new() { Name = labelText }).FillAsync(RAADataHelper.NumberOfVacancy);
 
