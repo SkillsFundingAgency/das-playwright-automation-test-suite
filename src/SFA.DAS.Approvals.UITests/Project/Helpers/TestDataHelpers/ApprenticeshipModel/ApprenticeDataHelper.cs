@@ -76,13 +76,31 @@ namespace SFA.DAS.Approvals.UITests.Project.Helpers.DataHelpers.ApprenticeshipMo
         {
             var accountsDbSqlHelper = context.Get<AccountsDbSqlHelper>();
             Employer employer = new Employer();
+            EasAccountUser employerUser;
+            var isPostApprovals = context.ScenarioInfo.Tags.Contains("postapprovals");
 
-            EasAccountUser employerUser = employerType switch
+            switch (employerType)
             {
-                EmployerType.NonLevy => context.GetUser<NonLevyUser>(),
-                EmployerType.NonLevyUserAtMaxReservationLimit => context.GetUser<NonLevyUserAtMaxReservationLimit>(),
-                _ => context.GetUser<LevyUser>()
-            };                      
+                case EmployerType.Levy when isPostApprovals:
+                    employerUser =context.GetUser<PostApprovalsLevyUser>();
+                    break;
+
+                case EmployerType.NonLevy when isPostApprovals:
+                    employerUser = context.GetUser<PostApprovalsNonLevyUser>();
+                    break;
+
+                case EmployerType.NonLevy:
+                    employerUser = context.GetUser<NonLevyUser>();
+                    break;
+
+                case EmployerType.NonLevyUserAtMaxReservationLimit:
+                    employerUser = context.GetUser<NonLevyUserAtMaxReservationLimit>();
+                    break;
+
+                default:
+                    employerUser = context.GetUser<LevyUser>();
+                    break;
+            }
 
             employer.EmployerName = employerUser.OrganisationName;
 

@@ -18,7 +18,9 @@
                 _configSection.GetConfigSection<EmployerWithMultipleAccountsUser>(),
                 _configSection.GetConfigSection<FlexiJobUser>(),
                 _configSection.GetConfigSection<NonLevyUserAtMaxReservationLimit>(),
-                _configSection.GetConfigSection<EmployerConnectedToPortableFlexiJobProvider>()
+                _configSection.GetConfigSection<EmployerConnectedToPortableFlexiJobProvider>(),
+                _configSection.GetConfigSection<PostApprovalsLevyUser>(),
+                _configSection.GetConfigSection<PostApprovalsNonLevyUser>(),
             ]);
 
             context.Set(_configSection.GetConfigSection<NServiceBusConfig>());

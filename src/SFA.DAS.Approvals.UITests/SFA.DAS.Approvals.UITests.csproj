@@ -73,7 +73,6 @@
 	  <Folder Include="Project\Features\01_PreApprovals\08_AgeChecks\" />
 	  <Folder Include="Project\Features\02_PostApprovals\03_OverlappingTrainingDateRequest\" />
 	  <Folder Include="Project\Features\02_PostApprovals\04_EmploymentChecks\" />
-	  <Folder Include="Project\Features\02_PostApprovals\01_ChangeOfCircs\" />
 	  <Folder Include="Project\Features\03_EmployerRoles\" />
 	  <Folder Include="Project\Features\01_PreApprovals\07_PortableFlexiJob\" />
 	  <Folder Include="Project\Features\04_ProviderRoles\AccountOwner\" />

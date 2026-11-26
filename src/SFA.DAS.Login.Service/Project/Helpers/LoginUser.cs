@@ -58,7 +58,11 @@ public class NewUser : EasAccountUser { }
 
 public class LevyUser : EasAccountUser { }
 
+public class PostApprovalsLevyUser : EasAccountUser { }
+
 public class NonLevyUser : EasAccountUser { }
+
+public class PostApprovalsNonLevyUser : EasAccountUser { }
 
 public class NonLevyUserAtMaxReservationLimit : EasAccountUser { }
 
