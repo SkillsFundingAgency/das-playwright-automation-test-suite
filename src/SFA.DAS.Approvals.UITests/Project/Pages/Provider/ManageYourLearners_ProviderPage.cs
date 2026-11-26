@@ -28,7 +28,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Provider
 
             if (await apprenticeLink.CountAsync() > 0)
             {
-                var statusLocator = page.Locator("tbody.govuk-table__body tr.govuk-table__row:first-of-type td[data-label='Status'] strong");
+                var statusLocator = page.Locator("tbody.govuk-table__body tr.govuk-table__row:first-of-type td[data-label='Learner status'] strong");
                 string status = await statusLocator.InnerTextAsync();
 
                 context.Get<ObjectContext>().SetDebugInformation($"A '{status.ToUpper()}' Apprenticeship record found for ULN: {ULN} and Name: {name} in Provider Portal");

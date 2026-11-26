@@ -6,7 +6,7 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
     internal class ManageYourLearnersPage(ScenarioContext context) : ApprovalsBasePage(context)
     {
         #region locators
-        private ILocator statusLocator => page.Locator("tbody.govuk-table__body tr.govuk-table__row:first-of-type td[data-label='Status'] strong");
+        private ILocator statusLocator => page.Locator("tbody.govuk-table__body tr.govuk-table__row:first-of-type td[data-label='Learner status'] strong");
         private ILocator searchBox => page.Locator("input#searchTerm[name='searchTerm']");
         private ILocator searchButton => page.Locator("button.govuk-button.das-search-form__button", new() { HasTextString = "Search" });
         private ILocator cell(string label) => page.Locator($"td[data-label='{label}']").First;
