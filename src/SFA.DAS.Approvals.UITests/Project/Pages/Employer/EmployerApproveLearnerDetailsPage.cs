@@ -71,13 +71,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             }           
         }
 
-        internal async Task<LearnerRequestsPage> TryClickAddAnotherApprenticeLink()
+        internal async Task<EmployerHomePage> TryClickAddAnotherApprenticeLink()
         {
             await Assertions.Expect(addAnotherApprenticeLink).ToBeVisibleAsync();
             await addAnotherApprenticeLink.ClickAsync();
             var page = await VerifyPageAsync(() => new YouCannotCreateAnotherFundingReservationPage(context));
             await page.ClickOnApprenticeRequestsLink();
-            return await VerifyPageAsync(() => new LearnerRequestsPage(context));
+            await VerifyPageAsync(() => new LearnerRequestsPage(context));
+            await NavToHomePage();
+            return await VerifyPageAsync(() => new EmployerHomePage(context));
         }
     }
 }

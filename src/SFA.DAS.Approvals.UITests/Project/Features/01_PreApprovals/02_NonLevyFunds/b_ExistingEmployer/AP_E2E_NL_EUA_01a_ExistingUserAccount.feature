@@ -14,7 +14,7 @@ Scenario: AP_E2E_NL_EUA_01a Provider creates cohort from ILR data Employer appro
 	Then the Employer can access live apprentice records under Manager Your Apprentices section
 	#And Apprentice records are available on Apprenticeships endpoint for SLD
 
-
+@api
 @regression
 @e2escenarios
 Scenario Outline: AP_E2E_NL_EUA_01b emails validation
@@ -22,7 +22,7 @@ Scenario Outline: AP_E2E_NL_EUA_01b emails validation
 	Then Verify the "<Recipient>" receive "<NotificationType>" email
 
 Examples:
-		| Recipient		| NotificationType								|
-		| Employer      | Reservation made on your behalf 				|
-		| Employer      | Apprentice details ready to approve 			|
-		| Apprentice	| Welcome to your apprenticeship                |
+		| Recipient		| NotificationType					|
+		| Employer      | Reservation made on your behalf	|
+		| Employer      | Learner details ready to approve	|
+		| Apprentice	| Welcome to your apprenticeship	|

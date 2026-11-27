@@ -6,6 +6,7 @@ Feature: AP_BU_07_UploadDetailsAndCancel
 @newBUJourney
 Scenario: AP_BU_07_Upload Details then Cancel
 	Given the Employer logins using existing Levy Account
+	And the employer has 2 apprentice ready to start training
 	When the employer create and send an empty cohort to the training provider to add learner details
 	When Provider add 2 apprentice details using bulkupload 
 	When Provider uploads the updated csv file

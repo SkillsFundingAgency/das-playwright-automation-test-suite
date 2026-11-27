@@ -5,6 +5,7 @@ Feature: AP_BU_06_ValidationRules
 @newBUJourney
 Scenario: AP_BU_06_Validation Rules
 	Given the Employer logins using existing Levy Account
+	And the employer has 1 apprentice ready to start training
 	When the employer create and send an empty cohort to the training provider to add learner details
 	When Provider add an apprentice uses details from below to create bulkupload 
  | Category					| CohortRef	| AgreementId	| ULN		| FamilyName | GivenNames | DateOfBirth | EmailAddress	| StdCode | StartDate	| EndDate	| TotalPrice | EPAOrgID | ProviderRef			| ErrorMessage |
