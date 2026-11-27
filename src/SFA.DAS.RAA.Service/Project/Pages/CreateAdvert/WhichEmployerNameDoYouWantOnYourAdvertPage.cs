@@ -180,8 +180,8 @@ public class ContactDetailsPage(ScenarioContext context) : RaaBasePage(context)
 {
     public override async Task VerifyPage()
     {
-        string PageTitle = (isRaaEpc || isRaaTransfer) ? "Your contact details?" :
-            isRaaEmployer ? $"Contact details for {objectContext.GetEmployerName()}" : "Your contact details?";
+        string PageTitle = (isRaaEpc || isRaaTransfer) ? "Your contact details" :
+            isRaaEmployer ? $"Contact details for {objectContext.GetEmployerName()}" : "Your contact details";
 
         await Assertions.Expect(page.Locator("h1")).ToContainTextAsync(PageTitle);
     }
