@@ -5,6 +5,8 @@ Branch: `gpeterthomas-selenium-to-playwright-migration`.
 
 The source scenarios, their bindings and needed page interactions have been implemented and compile. The following files still require review against a known-safe deployed environment. No live transfer, account creation, database catalog query, approval or service-bus flow was executed. A build or binding-discovery pass must not be interpreted as end-to-end acceptance.
 
+On 18 November 2026, the migrated TR_04_01 connection scenario was attempted using headless Chromium and the local PP configuration. Browser setup completed, but the shared Approvals Order 32 service-bus hook failed with a malformed-connection-string `FormatException`; all scenario steps were skipped. Configure `NServiceBusConfig:ServiceBusConnectionString` through the existing local user-secret mechanism before rerunning. Do not bypass the hook or count the passing offline binding/widget checks as UI acceptance. The shared Azure deploy template also allows VSTest failures with `continueOnError: true`, so green pipeline checks are not sufficient acceptance evidence.
+
 ## ILR journey acceptance gates
 
 The three approval journeys and the tagged accessibility journey now use the target's existing ILR approval flow. The receiver-specific `Employer` data, including its agreement and legal-entity IDs, is used to generate and publish learners before the empty transfer-funded cohort is created. The provider then selects those learners from ILR and uses the existing approval pages. This migration does not add another ILR event pipeline or replace the target's default approval behavior.
@@ -52,7 +54,8 @@ The ILR provider-add route returns the cohort to the receiver for approval befor
 | `src\SFA.DAS.Transfers.UITests\Project\Tests\Pages\TransferRequestRejectedPage.cs` | Confirm the rejected request page heading. |
 | `src\SFA.DAS.Transfers.UITests\Project\Tests\Steps\VerifyDbConnectionSteps.cs` | In a separately approved environment, check the same 21 database helpers/catalog-prefix assertions as source. Existing environment exclusions are honored, failures are aggregated and logged, and no new authentication mechanism is introduced. |
 | `src\SFA.DAS.Transfers.UITests\SFA.DAS.Transfers.UITests.csproj` | Review direct TestDataCleanup reference and embedded feature resources for offline contracts. Existing Reqnroll binding-assembly configuration already supplies UI framework bindings. |
-| `src\SFA.DAS.Transfers.UITests\Project\Tests\Contracts\TransfersBindingContractTests.cs` | These are offline regex-binding and async-return checks, not browser/Reqnroll-runtime acceptance tests. Update the contract if introducing scenario outlines or more complex scope rules later. |
+| `src\SFA.DAS.Transfers.UITests\Project\Tests\Contracts\TransfersBindingContractTests.cs` | These are offline regex-binding, async-return and shared cleanup-hook discovery checks, included by the pipeline's `Unittests` filter, not browser/Reqnroll-runtime acceptance tests. Update the contract if introducing scenario outlines or more complex scope rules later. |
+| `src\SFA.DAS.Transfers.UITests\reqnroll.json` | Explicitly registers TestDataCleanup, matching EmployerPortal, so successful regression scenarios discover the existing Order 98 database-cleanup hook. Confirm environment-connected cleanup when UI acceptance can proceed. |
 
 ## Feature acceptance checklist
 

@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SFA.DAS.TestDataCleanup.Project;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
@@ -7,6 +8,7 @@ using System.Text.RegularExpressions;
 namespace SFA.DAS.Transfers.UITests.Project.Tests.Contracts;
 
 [TestFixture]
+[Category("Unittests")]
 [Category("TransfersBindingContractTests")]
 public class TransfersBindingContractTests
 {
@@ -50,6 +52,17 @@ public class TransfersBindingContractTests
             checkedSteps++;
         }
         Assert.That(checkedSteps, Is.GreaterThan(0), $"No steps checked in {resourceName}.");
+    }
+
+    [Test]
+    public void SharedEmployerCleanupHookIsDiscoverable()
+    {
+        var hooks = BindingAssemblies().SelectMany(assembly => assembly.GetTypes())
+            .Where(type => type == typeof(TestDataCleanUp) && type.IsDefined(typeof(BindingAttribute)))
+            .SelectMany(type => type.GetMethods())
+            .Where(method => method.IsDefined(typeof(AfterScenarioAttribute))).ToList();
+
+        Assert.That(hooks, Has.Count.EqualTo(1), "Transfers must discover the shared successful-regression cleanup hook.");
     }
 
     [Test]

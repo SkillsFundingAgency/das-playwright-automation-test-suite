@@ -11,7 +11,7 @@ This delivery implements the Transfers slice of the enterprise migration. The us
 
 All 12 source Transfers feature files are represented in the target. Eleven previously missing files have been added; the existing target transfer-status feature and target-only provider-login feature have been retained. The result is 13 feature files containing 14 discoverable Reqnroll scenarios: 13 source scenarios and the existing provider-login scenario.
 
-The three Transfers apprentice-approval journeys now use the target's ILR-based flow: learner events are generated against the actual receiver account, published through the existing learner-data integration, added by the provider from ILR to a transfer-funded empty cohort, and reviewed through the existing employer/provider approval pages. The connection journeys are unchanged. Compilation and offline binding checks pass; no environment-connected scenario was executed. See [the file-specific review checklist](TRANSFERS-MANUAL-REVIEW.md) for runtime acceptance gates and the TR_03 adaptation.
+The three Transfers apprentice-approval journeys now use the target's ILR-based flow: learner events are generated against the actual receiver account, published through the existing learner-data integration, added by the provider from ILR to a transfer-funded empty cohort, and reviewed through the existing employer/provider approval pages. The connection journeys are unchanged. Compilation and offline binding checks pass. A subsequent TR_04_01 environment-connected run launched Playwright but failed in service-bus setup before its scenario steps; runtime acceptance remains outstanding. See [the file-specific review checklist](TRANSFERS-MANUAL-REVIEW.md) for runtime acceptance gates and the TR_03 adaptation.
 
 The source checkout and the target main checkout were inspected read-only. All restores, builds, tests and edits were performed in the isolated target worktree. No pull request was requested or opened.
 
@@ -27,7 +27,7 @@ The source checkout and the target main checkout were inspected read-only. All r
 | Accounts | Existing `AccountCreationStepsHelper`, employer portal data, account/legal-entity lookup, account selector and cleanup hooks. First/Second/Third accounts are matched by organisation, not database row order. |
 | Provider login | Existing `ProviderHomePageStepsHelper`, provider configuration and shared new-tab handling. |
 | Apprentice data | Existing `ApprenticeDataHelper`, `Apprenticeship`, `ApprenticeFactory`, `TrainingFactory`, course catalog and ILR event publishing. A narrow explicit-employer overload uses the Transfers receiver's agreement and legal entity; no parallel data or event pipeline is introduced. |
-| Bindings | Existing Transfers `reqnroll.json` binding assemblies: Framework, Approvals, EmployerPortal and ProviderLogin. New Transfers bindings remain in the Transfers assembly. |
+| Bindings | Transfers `reqnroll.json` binding assemblies: Framework, Approvals, EmployerPortal, TestDataCleanup, ProviderLogin and API.Framework. Transfers bindings remain in the Transfers assembly. TestDataCleanup is registered explicitly, matching EmployerPortal, to discover successful-regression database cleanup. |
 | Packages | Existing target `net10.0`, Reqnroll 3.3.4, NUnit adapter 6.1.0 and test SDK 18.6.0. No new package, Selenium, SpecFlow, BrowserStack or browser-management dependency. |
 
 Relevant existing scenario-hook ordering is ObjectContext 0, configuration 1, framework helpers 2, Playwright setup 8, Transfers login configuration 12, Approvals configuration 20, employer navigation/data 22/23, levy-funding setup 24/27, and Approvals additional setup 30-34. Browser teardown remains order 100. These hooks were not replaced.
@@ -87,6 +87,30 @@ Two tightly coupled shared fixes were necessary:
 The source database step was implemented locally in Transfers as `VerifyDbConnectionSteps`, reusing the existing target cleanup SQL helpers, exclusions, authentication and logging. Transfers now has a direct TestDataCleanup project reference. No new SQL/authentication abstraction or wholesale TestDataExport project was introduced.
 
 ## Validation evidence and limits
+
+### Branch re-verification, 18 November 2026
+
+The active branch was verified as `gpeterthomas-selenium-to-playwright-migration`, at `c3b77603`, associated with existing open PR #367. The 46-file branch diff is committed migration work, not uncommitted changes. A pre-existing untracked `TransfersWidgetIsolationTests.cs` was preserved.
+
+- The Transfers project and its dependencies built successfully with `--no-restore`.
+- The existing binding contracts passed 14/14; the pre-existing widget-isolation tests passed 4/4 using headless Chromium and routed test pages. Those four tests are not deployed-application acceptance.
+- The pipeline's exact `TestCategory=Unittests` filter initially selected no Transfers tests. The binding-contract fixture now also has the standard `Unittests` category so these 14 offline checks run in the existing code-build job.
+- Source cleanup parity exposed another configuration gap: Transfers referenced TestDataCleanup but did not register its binding assembly. Added the existing shared assembly to `reqnroll.json`, matching EmployerPortal, plus a focused discovery contract. The final offline contract count is 15. Shared PAYE cleanup remains unchanged; the newly registered database hook only cleans successful regression scenarios, matching the source policy.
+- Final build-and-test run passed all 19 selected checks: 15 offline migration contracts and the four pre-existing Chromium widget-isolation tests. No deployed-application scenario passed in this verification.
+- `TR_04_01Transfers_SucessfullyCreateTransferConnectionBetweenEmployerAccounts` was executed using headless Chromium against the local PP configuration. It failed after approximately 28 seconds in `BeforeScenarioHooks.StartAzureServiceBusHelper` (Order 32), with `System.FormatException: The connection string could not be parsed; either it was malformed or contains no well-known tokens.` All six scenario steps were skipped. The substring filter also selected one passing binding contract; that is not a passing UI scenario.
+- A second run with the UI-only filter below selected exactly one scenario: Failed 1, Passed 0, after approximately 14 seconds, with the same service-bus setup error.
+- The existing Approvals binding assembly starts service bus even for connection-only Transfers scenarios. Supply a valid `NServiceBusConfig:ServiceBusConnectionString` through the repository's existing PP/user-secret configuration before rerunning. The hook was not bypassed, no credentials were changed, and no UI journey passed.
+- Azure build checks reported success, but the shared deploy template sets `continueOnError: true` on VSTest. Pipeline status alone therefore cannot establish that the Transfers scenarios passed; inspect the Azure test-run results separately.
+
+Re-run just the representative UI scenario (excluding its binding-contract test):
+
+```powershell
+$env:headless = 'true'
+$env:BROWSER_TYPE = 'Chromium'
+dotnet test .\src\SFA.DAS.Transfers.UITests\SFA.DAS.Transfers.UITests.csproj --no-build --no-restore --filter "FullyQualifiedName~TR_04_01&TestCategory=transfers"
+```
+
+### Original migration validation
 
 Commands were run from the isolated target worktree with .NET SDK 10.0.403. Nonzero build/test exit codes were preserved.
 
