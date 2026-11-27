@@ -1,31 +1,20 @@
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 {
-    public class NotesBasePage : AppBasePage
+    public class NotesBasePage(ScenarioContext context) : AppBasePage(context)
     {
-        private const string PageHeader = "h1.govuk-heading-xl";
-
-        private readonly ILocator _titleInput;
-        private readonly ILocator _dayInput;
-        private readonly ILocator _monthInput;
-        private readonly ILocator _yearInput;
-        private readonly ILocator _noteTextArea;
-        private readonly ILocator _linkKsbsButton;
-        private readonly ILocator _saveAndContinueButton;
-
-        public NotesBasePage(ScenarioContext context) : base(context)
-        {
-            _titleInput = page.Locator("#Task_Title");
-            _dayInput = page.Locator("#duedate-day");
-            _monthInput = page.Locator("#duedate-month");
-            _yearInput = page.Locator("#duedate-year");
-            _noteTextArea = page.Locator("#note");
-            _linkKsbsButton = page.Locator("button[formaction*='/Tasks/SaveTaskAndRedirectToLinkKsbs']");
-            _saveAndContinueButton = page.Locator("button[type='submit']", new() { HasText = "Save and continue" });
-        }
+        private ILocator PageHeader => page.Locator("h1.govuk-heading-xl");
+        private ILocator TitleInput => page.GetByLabel("Title");
+        private ILocator DayInput => page.Locator("#duedate-day");
+        private ILocator MonthInput => page.Locator("#duedate-month");
+        private ILocator YearInput => page.Locator("#duedate-year");
+        private ILocator NoteTextArea => page.GetByLabel("Note");
+        private ILocator SaveAndContinueButton => page.GetByRole(AriaRole.Button, new() { Name = "Save and continue" });
+        private ILocator AddNoteLink => page.GetByRole(AriaRole.Link, new() { Name = "Add note" });
+        private ILocator AllNotes => page.Locator("a[href*='/Tasks/Edit/']");
 
         public override async Task VerifyPage()
         {
-            await Assertions.Expect(page.Locator(PageHeader)).ToContainTextAsync("Notes and evidence");
+            await Assertions.Expect(PageHeader).ToContainTextAsync("Notes and evidence");
         }
 
         public async Task RefreshAsync()
@@ -40,79 +29,76 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 
         public async Task ClickAddNoteButtonAsync()
         {
-            await page.Locator("a[href='/Tasks/Add']").ClickAsync();
+            await AddNoteLink.ClickAsync();
         }
 
         public async Task AddNoteAsync(string title, string day, string month, string year, string noteText)
         {
-            await _titleInput.FillAsync(title);
-            await _dayInput.FillAsync(day);
-            await _monthInput.FillAsync(month);
-            await _yearInput.FillAsync(year);
+            await TitleInput.FillAsync(title);
+            await DayInput.FillAsync(day);
+            await MonthInput.FillAsync(month);
+            await YearInput.FillAsync(year);
 
             if (!string.IsNullOrEmpty(noteText))
             {
-                await _noteTextArea.FillAsync(noteText);
+                await NoteTextArea.FillAsync(noteText);
             }
 
-            await _saveAndContinueButton.ClickAsync();
+            await SaveAndContinueButton.ClickAsync();
         }
 
         public async Task ClickOnNoteAsync(string noteTitle)
         {
-            await page.Locator($"a:has-text('{noteTitle}')").First.ClickAsync();
+            await page.GetByRole(AriaRole.Link, new() { Name = noteTitle, Exact = true }).ClickAsync();
         }
 
-        public async Task<bool> IsNoteAddedAsync(string noteTitle)
+        public async Task VerifyNoteRemovedAsync(string noteTitle)
         {
-            return await page.Locator($"//h2[text()='{noteTitle}'] | //a[contains(text(), '{noteTitle}')]").IsVisibleAsync();
+            await Assertions.Expect(page.GetByText(noteTitle, new() { Exact = true })).ToBeHiddenAsync();
         }
 
-        public async Task EditNoteAndConfirmAsync(string originalTitle)
+        public async Task<string> EditNoteAndConfirmAsync(string originalTitle)
         {
-            string updatedTitle = $"{originalTitle}_Edited";
-            context["UpdatedNoteName"] = updatedTitle;
+            var updatedTitle = $"{originalTitle}_Edited";
 
-            await _titleInput.ClearAsync();
-            await _titleInput.FillAsync(updatedTitle);
-            await _saveAndContinueButton.ClickAsync();
+            await TitleInput.ClearAsync();
+            await TitleInput.FillAsync(updatedTitle);
+            await SaveAndContinueButton.ClickAsync();
+
+            return updatedTitle;
         }
 
         public async Task DeleteNoteAndConfirmAsync()
         {
-            var deleteButton = page.Locator("a:has-text('Delete this note'), button:has-text('Delete this note')").First;
+            var deleteButton = page.GetByRole(AriaRole.Link, new() { Name = "Delete this note" });
 
-            if (await deleteButton.IsVisibleAsync())
-            {
-                await deleteButton.ScrollIntoViewIfNeededAsync();
-                await deleteButton.ClickAsync();
+            await Assertions.Expect(deleteButton).ToBeVisibleAsync();
+            await deleteButton.ClickAsync();
 
-                var confirmDeleteButton = page.Locator("button.govuk-button--warning:has-text('Delete this note'), button:has-text('Delete this note')").First;
+            var confirmDeleteButton = page.GetByRole(AriaRole.Button, new() { Name = "Delete this note", Exact = true });
 
-                await confirmDeleteButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 5_000 });
-                await confirmDeleteButton.ScrollIntoViewIfNeededAsync();
-                await confirmDeleteButton.ClickAsync();
-            }
-            else
-            {
-                throw new Exception("The initial 'Delete this note' link/button was not visible on the page.");
-            }
+            await Assertions.Expect(confirmDeleteButton).ToBeVisibleAsync();
+            await confirmDeleteButton.ClickAsync();
         }
 
         public async Task CleanupNoteByTitleAsync(string title)
         {
-            if (string.IsNullOrEmpty(title)) return;
+            if (string.IsNullOrEmpty(title))
+            {
+                return;
+            }
 
             try
             {
-                var noteLink = page.Locator($"a:has-text('{title}')").First;
+                var noteLink = page.GetByRole(AriaRole.Link, new() { Name = title, Exact = true });
+
                 if (await noteLink.IsVisibleAsync())
                 {
                     await noteLink.ClickAsync();
                     await DeleteNoteAndConfirmAsync();
                 }
             }
-            catch (Exception ex)
+            catch (TimeoutException ex)
             {
                 Console.WriteLine($"[Cleanup Warning] Could not delete note '{title}': {ex.Message}");
             }
@@ -121,56 +107,26 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         {
             try
             {
-                await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+                await VerifyPage();
 
-                var allNotes = page.Locator("a[href*='/Tasks/Edit/']");
-
-                while (await allNotes.CountAsync() > 0)
+                while (await AllNotes.CountAsync() > 0)
                 {
-                    var note = allNotes.First;
-                    if (await note.IsVisibleAsync())
-                    {
-                        await note.ClickAsync();
-                        await DeleteNoteAndConfirmAsync();
-                        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-                    }
-                    else
+                    var note = AllNotes.First;
+
+                    if (!await note.IsVisibleAsync())
                     {
                         break;
                     }
+
+                    await note.ClickAsync();
+                    await DeleteNoteAndConfirmAsync();
+                    await VerifyPage();
                 }
             }
-            catch (Exception ex)
+            catch (TimeoutException ex)
             {
                 Console.WriteLine($"[Cleanup Warning] Note sweep encountered an issue: {ex.Message}");
             }
         }
-
-        //public async Task SweepOrphanedNotesAsync()
-        //{
-        //    try
-        //    {
-        //        var allNotes = page.Locator("a[href*='/Tasks/Edit/']");
-
-        //        while (await allNotes.CountAsync() > 0)
-        //        {
-        //            var note = allNotes.First;
-        //            if (await note.IsVisibleAsync())
-        //            {
-        //                await note.ClickAsync();
-        //                await DeleteNoteAndConfirmAsync();
-        //                await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
-        //            }
-        //            else
-        //            {
-        //                break;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"[Cleanup Warning] Note sweep encountered an issue: {ex.Message}");
-        //    }
-        //}
     }
 }

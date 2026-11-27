@@ -10,16 +10,22 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Hooks
     {
 
         [BeforeScenario(Order = 10)]
-        public async Task AppSetupHelpers() => await context.SetApprenticeAccountsPortalUser([ context.Get<ConfigSection>().GetConfigSection<ApprenticeAppUser>()]);
+        public async Task AppSetupHelpers() => await context.SetApprenticeAccountsPortalUser([context.Get<ConfigSection>().GetConfigSection<ApprenticeAppUser>()]);
 
         [AfterScenario(Order = 10)]
         public async Task CleanUpTestData()
         {
+            if (!context.TryGetValue(out Driver driver) || driver.Browser is null)
+            {
+                return;
+            }
+
             try
             {
                 var notesBasePage = new NotesBasePage(context);
                 var appStepsHelper = new AppStepsHelper(context);
 
+                await appStepsHelper.HandlePushNotificationPromptIfPresentAsync();
                 await appStepsHelper.NavigateToNotesPageAsync();
 
                 string noteToDelete = null;
@@ -39,7 +45,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Hooks
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[CleanUp Warning] Automated sweeper encountered an issue: {ex.Message}");
+                Console.WriteLine($"[Cleanup Warning] Note cleanup failed: {ex}");
             }
         }
     }

@@ -10,6 +10,8 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         private const string NotesNavLink = "a[href='/Tasks/Index']";
         private const string SkipTourNavLink = ".app-onboarding__screen:not([hidden]) .app-onboarding__skip, a.app-onboarding__skip";
+        private const string PushNotificationPrompt = "#push-notification-prompt.app-modal--visible";
+        private const string PushNotificationContinueButton = "#push-notification-prompt.app-modal--visible button[data-modal-close], #push-notification-prompt.app-modal--visible button:has-text('Continue')";
         private const string HomeNavLink = "a.govuk-service-navigation__link[href='/Support/Index']";
         private const string AccountNavLink = "a[href*='/Account/YourAccount']";
         private const string AccountNotificationsLink = "a[href*='/Notifications']";
@@ -25,6 +27,24 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
         #endregion
 
         #region Authentication & Setup
+
+        public async Task SeedPushNotificationCookieAsync()
+        {
+            var appUri = new Uri(UrlConfig.ApprenticeApp_BaseUrl);
+
+            await context.Get<Driver>().BrowserContext.AddCookiesAsync(
+            [
+                new Cookie
+                {
+                    Name = "SFA.ApprenticeApp.PushNotificationPrompt",
+                    Value = "true",
+                    Domain = appUri.Host,
+                    Path = "/",
+                    Secure = true,
+                    SameSite = SameSiteAttribute.Lax
+                }
+            ]);
+        }
 
         public async Task GoToHomePageAsync() => await new CookiePage(context).AccessHomePageAsync();
 
@@ -43,27 +63,51 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         public async Task HandleOnboardingTourIfPresentAsync()
         {
-            await Page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
+            var skipTourButton = Page.Locator(SkipTourNavLink).First;
 
             try
             {
-                var skipTourButton = Page.Locator(SkipTourNavLink).First;
-
                 await skipTourButton.WaitForAsync(new LocatorWaitForOptions
                 {
                     State = WaitForSelectorState.Visible,
                     Timeout = 3_000
                 });
-
-                await skipTourButton.ClickAsync();
-                Console.WriteLine("Tour overlay successfully bypassed via centralized locator.");
-
-                await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
             }
-            catch (Exception ex) when (ex is PlaywrightException || ex is TimeoutException)
+            catch (TimeoutException)
             {
-                Console.WriteLine("Skip tour button not visible or removed from app journey. Continuing test execution...");
+                Console.WriteLine("Skip tour button not visible. Continuing test execution...");
+                return;
             }
+
+            await skipTourButton.ClickAsync();
+            Console.WriteLine("Tour overlay successfully bypassed via centralized locator.");
+        }
+
+        public async Task HandlePushNotificationPromptIfPresentAsync()
+        {
+            var continueButton = Page.Locator(PushNotificationContinueButton).First;
+
+            try
+            {
+                await continueButton.WaitForAsync(new LocatorWaitForOptions
+                {
+                    State = WaitForSelectorState.Visible,
+                    Timeout = 3_000
+                });
+            }
+            catch (TimeoutException)
+            {
+                Console.WriteLine("Push notification prompt not visible. Continuing test execution...");
+                return;
+            }
+
+            await continueButton.ClickAsync();
+            await Page.Locator(PushNotificationPrompt).WaitForAsync(new LocatorWaitForOptions
+            {
+                State = WaitForSelectorState.Hidden,
+                Timeout = 3_000
+            });
+            Console.WriteLine("Push notification prompt dismissed via centralized locator.");
         }
 
         #endregion
@@ -73,11 +117,6 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
         public async Task VerifyOnHomeTabAsync()
         {
             await Page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
-
-            string currentUrl = Page.Url;
-            Console.WriteLine($"Current active browser URL is: {currentUrl}");
-
-            await HandleOnboardingTourIfPresentAsync();
 
             if (!Page.Url.Contains("/Support/Index") && !Page.Url.EndsWith("/Support"))
             {
@@ -98,9 +137,6 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
             await Page.Locator(HomeNavLink).ClickAsync();
 
-            //await Page.WaitForURLAsync(url => url.Contains("/Support/Index") || url.EndsWith("/Support"),
-            //    new PageWaitForURLOptions { Timeout = 15_000 });
-
             return new ApprenticeHomePage(context);
         }
 
@@ -115,44 +151,11 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
             return new NotesBasePage(context);
         }
 
-        public bool IsOnKsbPage()
-        {
-            return Page.Url.Contains("/Ksb/Index") || Page.Url.EndsWith("/Ksb");
-        }
-
         public async Task<KsbPage> NavigateToKsbPageAsync()
         {
             var ksbNavLink = Page.Locator("a[href='/Ksb/Index'], a:has-text('Your KSBs')").First;
             await ksbNavLink.ClickAsync();
             return new KsbPage(context);
-        }
-
-        public async Task ClickKsbSubTabAsync(string tabName)
-        {
-            var tabSelector = tabName switch
-            {
-                "Knowledge" => "a.tab-knowledge",
-                "Skills" => "a.tab-skills",
-                "Behaviours" => "a.tab-behaviours",
-                _ => throw new ArgumentException($"Unknown KSB tab: {tabName}")
-            };
-
-            var tabLink = Page.Locator(tabSelector).First;
-            await tabLink.ClickAsync();
-        }
-
-        public async Task<bool> IsKsbPanelVisibleAsync(string tabName)
-        {
-            var panelId = tabName switch
-            {
-                "Knowledge" => "#knowledge",
-                "Skills" => "#skill",
-                "Behaviours" => "#behaviour",
-                _ => throw new ArgumentException($"Unknown KSB tab panel: {tabName}")
-            };
-
-            var panel = Page.Locator(panelId).First;
-            return await panel.IsVisibleAsync();
         }
 
         #endregion

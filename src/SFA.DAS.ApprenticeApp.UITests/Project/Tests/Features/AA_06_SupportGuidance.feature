@@ -17,10 +17,10 @@ Scenario Outline: AA_06B_Apprentice can view and save articles across different 
 	When the apprentice skips the onboarding tour if present
 	And the apprentice is on the Home tab
 	And the apprentice opens the "<CategoryName>" support category
-	And the apprentice opens an article and saves it if not already saved
+	And the apprentice opens an article and saves it
 	Then the article appears under "Your saved articles"
 	When the apprentice removes the article from the saved list
-	Then the saved articles section should be empty
+	Then the article is removed from the saved articles
 
 	Examples:
 		| CategoryName                              |

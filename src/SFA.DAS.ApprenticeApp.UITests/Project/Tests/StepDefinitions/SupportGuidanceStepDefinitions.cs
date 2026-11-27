@@ -6,8 +6,12 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
     [Binding]
     public class SupportGuidanceStepDefinitions(ScenarioContext context)
     {
+        private const string SavedArticlesHref = "a[href*='/Support/SavedArticles']";
+        private const string SavedArticleUpdatePath = "/Support/UpdateSavedArticle";
+
         private readonly AppStepsHelper _stepsHelper = new(context);
         private ApprenticeHomePage _apprenticeHomePage;
+        private string _articleTitle;
         private IPage Page => context.Get<Driver>().Page;
 
         [When(@"the apprentice is on the Home tab")]
@@ -25,94 +29,137 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
         [When(@"the apprentice opens the ""(.*)"" support category")]
         public async Task WhenTheApprenticeOpensTheSupportCategory(string categoryName)
         {
-            var categoryLink = Page.Locator($"a.app-stack__link:has-text('{categoryName}')").First;
-            await categoryLink.ClickAsync();
+            await Page.GetByRole(AriaRole.Link, new() { Name = categoryName }).First.ClickAsync();
         }
 
-        [When(@"the apprentice opens an article and saves it if not already saved")]
-        public async Task WhenTheApprenticeOpensAnArticleAndSavesItIfNotAlreadySaved()
+        [When(@"the apprentice opens an article and saves it")]
+        public async Task WhenTheApprenticeOpensAnArticleAndSavesIt()
         {
-            var showAllButton = Page.Locator("button:has-text('Show all sections'), button.govuk-accordion__show-all").First;
-            if (await showAllButton.IsVisibleAsync())
+            await ExpandArticleSectionsAsync();
+
+            var articleForms = Page.Locator("form.app-article-actions__form");
+            if (await articleForms.CountAsync() == 0)
             {
-                await showAllButton.ClickAsync();
+                var articleLink = Page.Locator("a.app-stack__link").First;
+                await articleLink.ClickAsync();
+                await ExpandArticleSectionsAsync();
+                articleForms = Page.Locator("form.app-article-actions__form");
             }
 
-            var firstArticleLink = Page.Locator(".govuk-accordion__section-header button, .govuk-accordion__section-heading-text, a.app-stack__link").First;
-            await firstArticleLink.ClickAsync();
+            await Assertions.Expect(articleForms.First).ToBeVisibleAsync();
 
-            var saveButton = Page.Locator("form.app-article-actions__form button.app-article-actions__button")
-                                 .Filter(new() { Visible = true })
-                                 .First;
-            await saveButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
+            var articleForm = articleForms.First;
+            _articleTitle = await articleForm.Locator("input[name='entryTitle']").InputValueAsync();
+            if (string.IsNullOrWhiteSpace(_articleTitle))
+            {
+                throw new InvalidOperationException("The selected support article has no title.");
+            }
 
-            await Task.WhenAll(
-                Page.WaitForResponseAsync(resp => resp.Url.Contains("/Support/UpdateSavedArticle") && resp.Status == 200),
-                saveButton.ClickAsync()
-            );
+            var actionButton = articleForm.Locator("button.app-article-actions__button");
+            var buttonClass = await actionButton.GetAttributeAsync("class") ?? string.Empty;
+
+            if (buttonClass.Contains("unsave", StringComparison.OrdinalIgnoreCase))
+            {
+                await SubmitArticleActionAsync(actionButton, "resetting");
+                await Assertions.Expect(articleForm.Locator("button.app-article-actions__button.save")).ToBeVisibleAsync();
+                actionButton = articleForm.Locator("button.app-article-actions__button.save");
+            }
+            else if (!buttonClass.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Contains("save", StringComparer.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException($"Could not determine whether article '{_articleTitle}' is saved.");
+            }
+
+            await SubmitArticleActionAsync(actionButton, "saving");
+            await Assertions.Expect(articleForm.Locator("button.app-article-actions__button.unsave")).ToBeVisibleAsync();
         }
 
         [Then(@"the article appears under ""Your saved articles""")]
         public async Task ThenTheArticleAppearsUnderYourSavedArticles()
         {
-            await _stepsHelper.NavigateToHomeTabAsync();
+            await OpenSavedArticlesAsync();
 
-            var savedArticlesLink = Page.Locator("a[href*='/Support/SavedArticles']").First;
-            await savedArticlesLink.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
-            await savedArticlesLink.ClickAsync();
-
-            var savedArticleItem = Page.Locator("main h2, main h3, .govuk-accordion__section-heading, .app-stack__link").First;
-            await savedArticleItem.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
-
-            Assert.That(await savedArticleItem.IsVisibleAsync(), Is.True, "Expected saved article to be visible under 'Your saved articles'.");
+            await Assertions.Expect(Page.GetByText(_articleTitle, new() { Exact = true }).First).ToBeVisibleAsync();
         }
 
         [When(@"the apprentice removes the article from the saved list")]
         public async Task WhenTheApprenticeRemovesTheArticleFromTheSavedList()
         {
+            await OpenSavedArticlesAsync();
+
+            var articleForm = await FindArticleFormAsync(_articleTitle);
+            var removeButton = articleForm.Locator("button.app-article-actions__button.unsave");
+            await Assertions.Expect(removeButton).ToBeVisibleAsync();
+
+            await SubmitArticleActionAsync(removeButton, "removing");
+        }
+
+        [Then(@"the article is removed from the saved articles")]
+        public async Task ThenTheArticleIsRemovedFromTheSavedArticles()
+        {
+            await OpenSavedArticlesAsync();
+
+            await Assertions.Expect(Page.GetByText(_articleTitle, new() { Exact = true }).First).ToBeHiddenAsync();
+        }
+
+        private async Task OpenSavedArticlesAsync()
+        {
             await _stepsHelper.NavigateToHomeTabAsync();
+            await Page.Locator(SavedArticlesHref).ClickAsync();
+            await Assertions.Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Your saved articles" })).ToBeVisibleAsync();
+            await ExpandArticleSectionsAsync();
+        }
 
-            var savedArticlesLink = Page.Locator("a[href*='/Support/SavedArticles']").First;
-            await savedArticlesLink.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
-            await savedArticlesLink.ClickAsync();
-
-            var showAllButton = Page.Locator("button.govuk-accordion__show-all").First;
+        private async Task ExpandArticleSectionsAsync()
+        {
+            var showAllButton = Page.GetByRole(AriaRole.Button, new() { Name = "Show all sections" });
             if (await showAllButton.IsVisibleAsync())
             {
-                var expanded = await showAllButton.GetAttributeAsync("aria-expanded");
-                if (expanded != "true")
+                if (await showAllButton.GetAttributeAsync("aria-expanded") != "true")
                 {
                     await showAllButton.ClickAsync();
                 }
+
+                return;
             }
 
-            var removeButtons = Page.Locator("button:has-text('Remove'), a:has-text('Remove'), button.app-article-actions__button.unsave")
-                                    .Filter(new() { Visible = true });
-
-            while (await removeButtons.CountAsync() > 0)
+            var sectionHeadings = Page.Locator(".govuk-accordion__section-button");
+            for (var index = 0; index < await sectionHeadings.CountAsync(); index++)
             {
-                await Task.WhenAll(
-                    Page.WaitForResponseAsync(resp => resp.Url.Contains("/Support/UpdateSavedArticle") && resp.Status == 200),
-                    removeButtons.First.ClickAsync()
-                );
-
-                await Page.WaitForTimeoutAsync(500);
+                var sectionHeading = sectionHeadings.Nth(index);
+                if (await sectionHeading.GetAttributeAsync("aria-expanded") != "true")
+                {
+                    await sectionHeading.ClickAsync();
+                }
             }
         }
 
-        [Then(@"the saved articles section should be empty")]
-        public async Task ThenTheSavedArticlesSectionShouldBeEmpty()
+        private async Task<ILocator> FindArticleFormAsync(string articleTitle)
         {
-            await _stepsHelper.NavigateToHomeTabAsync();
+            var articleForms = Page.Locator("form.app-article-actions__form");
+            for (var index = 0; index < await articleForms.CountAsync(); index++)
+            {
+                var articleForm = articleForms.Nth(index);
+                var titleInput = articleForm.Locator("input[name='entryTitle']");
+                if (await titleInput.InputValueAsync() == articleTitle)
+                {
+                    return articleForm;
+                }
+            }
 
-            var savedArticlesLink = Page.Locator("a[href*='/Support/SavedArticles']").First;
-            await savedArticlesLink.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
-            await savedArticlesLink.ClickAsync();
+            throw new InvalidOperationException($"Could not find saved article '{articleTitle}' on the current page.");
+        }
 
-            var emptyStateMessage = Page.Locator("text=You have no saved articles");
-            await emptyStateMessage.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 10_000 });
+        private async Task SubmitArticleActionAsync(ILocator actionButton, string action)
+        {
+            var responseTask = Page.WaitForResponseAsync(response => response.Url.Contains(SavedArticleUpdatePath));
+            await Task.WhenAll(responseTask, actionButton.ClickAsync());
 
-            Assert.That(await emptyStateMessage.IsVisibleAsync(), Is.True, "Expected saved articles section to be empty.");
+            var response = await responseTask;
+            if (!response.Ok)
+            {
+                throw new InvalidOperationException($"Request for {action} article '{_articleTitle}' failed with HTTP status {response.Status}.");
+            }
         }
     }
 }
