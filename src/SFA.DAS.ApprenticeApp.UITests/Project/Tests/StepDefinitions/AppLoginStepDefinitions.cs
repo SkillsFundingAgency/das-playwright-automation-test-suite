@@ -10,21 +10,28 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.StepDefinitions
         [Given(@"the apprentice has logged into the app")]
         public async Task GivenTheApprenticeHasLoggedIntoTheApp()
         {
-            await stepsHelper.GoToHomePageAsync();
+            var appOrigin = new Uri(UrlConfig.ApprenticeApp_BaseUrl).GetLeftPart(UriPartial.Authority);
+            await context.Get<Driver>().BrowserContext.GrantPermissionsAsync(
+                ["notifications"],
+                new() { Origin = appOrigin });
 
+            await stepsHelper.SeedPushNotificationCookieAsync();
+
+            await stepsHelper.GoToHomePageAsync();
             await stepsHelper.SignInViaStubAsync();
         }
 
         [When(@"the apprentice skips the onboarding tour if present")]
         public async Task WhenTheApprenticeSkipsTheOnboardingTourIfPresent()
         {
+            await stepsHelper.HandlePushNotificationPromptIfPresentAsync();
             await stepsHelper.HandleOnboardingTourIfPresentAsync();
         }
 
-        [Then(@"the apprentice is taken to the KSBs tab")]
-        public async Task ThenTheApprenticeIsTakenToTheKSBsTab()
+        [Then(@"the apprentice is taken to the Home tab")]
+        public async Task ThenTheApprenticeIsTakenToTheHomeTab()
         {
-            await stepsHelper.VerifyOnKsbsTabAsync();
+            await stepsHelper.VerifyOnHomeTabAsync();
         }
     }
 }

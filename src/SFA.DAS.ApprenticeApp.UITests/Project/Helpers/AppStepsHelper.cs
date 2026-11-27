@@ -6,18 +6,45 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 {
     public class AppStepsHelper(ScenarioContext context) : FrameworkBaseHooks(context)
     {
-        private const string TasksNavLink = "a.govuk-service-navigation__link[href='/Tasks/Index']";
-        private const string ToDoTabNavLink = "a.app-tabs__tab.todo[href='#tasks-todo'][role='tab']";
-        private const string DoneTabNavLink = "a.app-tabs__tab.done[href='#tasks-done'][role='tab']";
-        private const string KsbNavLink = "nav.govuk-service-navigation a[href='/Ksb/Index']";
+        #region Constants & Locators
+
+        private const string NotesNavLink = "a[href='/Tasks/Index']";
         private const string SkipTourNavLink = ".app-onboarding__screen:not([hidden]) .app-onboarding__skip, a.app-onboarding__skip";
-        private const string SupportNavLink = "a[href='/Support/Index']";
-        private const string NotificationsNavLink = "a[href='/Notifications/Index']";
+        private const string PushNotificationPrompt = "#push-notification-prompt.app-modal--visible";
+        private const string PushNotificationContinueButton = "#push-notification-prompt.app-modal--visible button[data-modal-close], #push-notification-prompt.app-modal--visible button:has-text('Continue')";
+        private const string HomeNavLink = "a.govuk-service-navigation__link[href='/Support/Index']";
         private const string AccountNavLink = "a[href*='/Account/YourAccount']";
-        private const string YourProfileLink = "a.app-stack__link[href='/Profile/Index']";
-        private const string SettingsLink = "a.app-stack__link[href='/Settings/Index']";
+        private const string AccountNotificationsLink = "a[href*='/Notifications']";
+        private const string AccountSettingsLink = "a[href*='/Settings']";
+        private const string AccountDetailsLink = "a:has-text('Your apprenticeship details')";
+
+        #endregion
+
+        #region Driver Property
 
         private IPage Page => context.Get<Driver>().Page;
+
+        #endregion
+
+        #region Authentication & Setup
+
+        public async Task SeedPushNotificationCookieAsync()
+        {
+            var appUri = new Uri(UrlConfig.ApprenticeApp_BaseUrl);
+
+            await context.Get<Driver>().BrowserContext.AddCookiesAsync(
+            [
+                new Cookie
+                {
+                    Name = "SFA.ApprenticeApp.PushNotificationPrompt",
+                    Value = "true",
+                    Domain = appUri.Host,
+                    Path = "/",
+                    Secure = true,
+                    SameSite = SameSiteAttribute.Lax
+                }
+            ]);
+        }
 
         public async Task GoToHomePageAsync() => await new CookiePage(context).AccessHomePageAsync();
 
@@ -36,101 +63,104 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
 
         public async Task HandleOnboardingTourIfPresentAsync()
         {
-            await Page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
+            var skipTourButton = Page.Locator(SkipTourNavLink).First;
 
             try
             {
-                var skipTourButton = Page.Locator(SkipTourNavLink).First;
-
                 await skipTourButton.WaitForAsync(new LocatorWaitForOptions
                 {
                     State = WaitForSelectorState.Visible,
                     Timeout = 3_000
                 });
-
-                await skipTourButton.ClickAsync();
-                Console.WriteLine("Tour overlay successfully bypassed via centralized locator.");
-
-                await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
             }
-            catch (Exception ex) when (ex is PlaywrightException || ex is TimeoutException)
+            catch (TimeoutException)
             {
-                Console.WriteLine("Skip tour button not visible or removed from app journey. Continuing test execution...");
+                Console.WriteLine("Skip tour button not visible. Continuing test execution...");
+                return;
             }
+
+            await skipTourButton.ClickAsync();
+            Console.WriteLine("Tour overlay successfully bypassed via centralized locator.");
         }
 
-        public async Task VerifyOnKsbsTabAsync()
+        public async Task HandlePushNotificationPromptIfPresentAsync()
+        {
+            var continueButton = Page.Locator(PushNotificationContinueButton).First;
+
+            try
+            {
+                await continueButton.WaitForAsync(new LocatorWaitForOptions
+                {
+                    State = WaitForSelectorState.Visible,
+                    Timeout = 3_000
+                });
+            }
+            catch (TimeoutException)
+            {
+                Console.WriteLine("Push notification prompt not visible. Continuing test execution...");
+                return;
+            }
+
+            await continueButton.ClickAsync();
+            await Page.Locator(PushNotificationPrompt).WaitForAsync(new LocatorWaitForOptions
+            {
+                State = WaitForSelectorState.Hidden,
+                Timeout = 3_000
+            });
+            Console.WriteLine("Push notification prompt dismissed via centralized locator.");
+        }
+
+        #endregion
+
+        #region Home Navigation
+
+        public async Task VerifyOnHomeTabAsync()
         {
             await Page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
 
-            string currentUrl = Page.Url;
-            Console.WriteLine($"Current active browser URL is: {currentUrl}");
-
-            await HandleOnboardingTourIfPresentAsync();
-
-            if (!Page.Url.Contains("/Ksb/Index") && !Page.Url.EndsWith("/Ksb"))
+            if (!Page.Url.Contains("/Support/Index") && !Page.Url.EndsWith("/Support"))
             {
-                throw new Exception($"Verification Failed: Expected to land on the KSB view, but stranded on layout: {Page.Url}");
+                throw new Exception($"Verification Failed: Expected to land on the Home view, but stranded on layout: {Page.Url}");
             }
 
-            var ksbPage = new KsbPage(context);
-            await ksbPage.VerifyPage();
+            var homePage = new ApprenticeHomePage(context);
+            await homePage.VerifyPage();
         }
-        public async Task<TasksBasePage> NavigateToTasksPageAsync()
+
+        public async Task<ApprenticeHomePage> NavigateToHomeTabAsync()
         {
-            await Page.Locator(TasksNavLink).WaitForAsync(new LocatorWaitForOptions
+            if (Page.Url.Contains("/Support/Index") || Page.Url.EndsWith("/Support"))
             {
-                State = WaitForSelectorState.Visible,
-                Timeout = 15_000
-            });
-            await Page.Locator(TasksNavLink).ClickAsync();
+                Console.WriteLine("Already present on the Home layout. Skipping navigation click interaction.");
+                return new ApprenticeHomePage(context);
+            }
 
-            await Page.WaitForURLAsync(
-                url => url.Contains("/Tasks/Index") || url.EndsWith("/Tasks"),
-                new PageWaitForURLOptions { Timeout = 15_000 });
+            await Page.Locator(HomeNavLink).ClickAsync();
 
-            return new TasksBasePage(context);
+            return new ApprenticeHomePage(context);
         }
 
-        public async Task<TasksBasePage> NavigateToToDoTabAsync()
-        {
-            await Page.Locator(ToDoTabNavLink).ClickAsync();
-            return new TasksBasePage(context);
-        }
+        #endregion
 
-        public async Task<DoneTasksPage> NavigateToDoneTabAsync()
+        #region Notes & KSB Navigation
+
+        public async Task<NotesBasePage> NavigateToNotesPageAsync()
         {
-            await Page.Locator(DoneTabNavLink).ClickAsync();
-            return new DoneTasksPage(context);
+            var navLink = Page.Locator(NotesNavLink).First;
+            await navLink.ClickAsync();
+            return new NotesBasePage(context);
         }
 
         public async Task<KsbPage> NavigateToKsbPageAsync()
         {
-            if (Page.Url.Contains("/Ksb/Index") || Page.Url.EndsWith("/Ksb"))
-            {
-                Console.WriteLine("Already present on the KSB layout. Skipping navigation click interaction.");
-                return new KsbPage(context);
-            }
-
-            await Page.Locator(KsbNavLink).ClickAsync();
-
-            await Page.WaitForURLAsync(url => url.Contains("/Ksb/Index") || url.EndsWith("/Ksb"),
-                new PageWaitForURLOptions { Timeout = 15_000 });
-
+            var ksbNavLink = Page.Locator("a[href='/Ksb/Index'], a:has-text('Your KSBs')").First;
+            await ksbNavLink.ClickAsync();
             return new KsbPage(context);
         }
 
-        public async Task<SupportGuidancePage> NavigateToSupportGuidancePageAsync()
-        {
-            await Page.Locator(SupportNavLink).ClickAsync();
-            return new SupportGuidancePage(context);
-        }
+        #endregion
 
-        public async Task<NotificationsPage> NavigateToNotificationsPageAsync()
-        {
-            await Page.Locator(NotificationsNavLink).ClickAsync();
-            return new NotificationsPage(context);
-        }
+        #region Account & Sub-Menu Navigation
 
         public async Task<AccountPage> NavigateToAccountPageAsync()
         {
@@ -138,16 +168,27 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Helpers
             return new AccountPage(context);
         }
 
-        public async Task<YourProfilePage> NavigateToYourProfilePageAsync()
+        public async Task<YourApprenticeshipDetailsPage> NavigateToYourApprenticeshipDetailsPageAsync()
         {
-            await Page.Locator(YourProfileLink).ClickAsync();
-            return new YourProfilePage(context);
+            await NavigateToAccountPageAsync();
+            await Page.Locator(AccountDetailsLink).First.ClickAsync();
+            return new YourApprenticeshipDetailsPage(context);
+        }
+
+        public async Task<NotificationsPage> NavigateToNotificationsPageAsync()
+        {
+            await NavigateToAccountPageAsync();
+            await Page.Locator(AccountNotificationsLink).First.ClickAsync();
+            return new NotificationsPage(context);
         }
 
         public async Task<SettingsPage> NavigateToSettingsPageAsync()
         {
-            await Page.Locator(SettingsLink).ClickAsync();
+            await NavigateToAccountPageAsync();
+            await Page.Locator(AccountSettingsLink).First.ClickAsync();
             return new SettingsPage(context);
         }
+
+        #endregion
     }
 }

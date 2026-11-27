@@ -10,36 +10,42 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Hooks
     {
 
         [BeforeScenario(Order = 10)]
-        public async Task AppSetupHelpers() => await context.SetApprenticeAccountsPortalUser([ context.Get<ConfigSection>().GetConfigSection<ApprenticeAppUser>()]);
+        public async Task AppSetupHelpers() => await context.SetApprenticeAccountsPortalUser([context.Get<ConfigSection>().GetConfigSection<ApprenticeAppUser>()]);
 
         [AfterScenario(Order = 10)]
         public async Task CleanUpTestData()
         {
+            if (!context.TryGetValue(out Driver driver) || driver.Browser is null)
+            {
+                return;
+            }
+
             try
             {
-                var tasksBasePage = new TasksBasePage(context);
+                var notesBasePage = new NotesBasePage(context);
                 var appStepsHelper = new AppStepsHelper(context);
 
-                await appStepsHelper.NavigateToTasksPageAsync();
+                await appStepsHelper.HandlePushNotificationPromptIfPresentAsync();
+                await appStepsHelper.NavigateToNotesPageAsync();
 
-                string taskToDelete = null;
+                string noteToDelete = null;
 
-                if (context.ContainsKey("UpdatedTaskName"))
-                    taskToDelete = context["UpdatedTaskName"].ToString();
-                else if (context.ContainsKey("CurrentTaskName"))
-                    taskToDelete = context["CurrentTaskName"].ToString();
+                if (context.ContainsKey("UpdatedNoteName"))
+                    noteToDelete = context["UpdatedNoteName"].ToString();
+                else if (context.ContainsKey("CurrentNoteName"))
+                    noteToDelete = context["CurrentNoteName"].ToString();
 
-                if (!string.IsNullOrEmpty(taskToDelete))
+                if (!string.IsNullOrEmpty(noteToDelete))
                 {
-                    Console.WriteLine($"[CleanUp] Targeting main scenario task: '{taskToDelete}'");
-                    await tasksBasePage.CleanUpTaskByTitleAsync(taskToDelete);
+                    Console.WriteLine($"[CleanUp] Targeting main scenario note: '{noteToDelete}'");
+                    await notesBasePage.CleanupNoteByTitleAsync(noteToDelete);
                 }
 
-                await tasksBasePage.SweepOrphanedTasksAsync();
+                await notesBasePage.SweepOrphanedNotesAsync();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[CleanUp Warning] Automated sweeper encountered an issue: {ex.Message}");
+                Console.WriteLine($"[Cleanup Warning] Note cleanup failed: {ex}");
             }
         }
     }

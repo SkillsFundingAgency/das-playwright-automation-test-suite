@@ -1,7 +1,7 @@
 
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 {
-    public class YourProfilePage(ScenarioContext context) : AppBasePage(context)
+    public class YourApprenticeshipDetailsPage(ScenarioContext context) : AppBasePage(context)
     {
         private const string YourProfileHeader = "h1.govuk-heading-xl";
 
@@ -11,7 +11,7 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
                 .ToContainTextAsync("Your apprenticeship details");
         }
 
-        public async Task<string> YourProfilePageTitleAsync()
+        public async Task<string> YourApprenticeshipDetailsPageTitleAsync()
             => await page.Locator(YourProfileHeader).InnerTextAsync();
     }
 }

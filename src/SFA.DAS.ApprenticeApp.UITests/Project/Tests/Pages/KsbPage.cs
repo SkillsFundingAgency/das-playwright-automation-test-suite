@@ -1,4 +1,6 @@
 
+using System.Text.RegularExpressions;
+
 namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
 {
     public class KsbPage(ScenarioContext context) : AppBasePage(context)
@@ -12,9 +14,9 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         private ILocator BehavioursTab => page.GetByRole(AriaRole.Tab, new() { Name = "Behaviours" });
 
         // Tab Panels
-        private ILocator KnowledgePanel => page.GetByRole(AriaRole.Tabpanel, new() { Name = "Knowledge" });
-        private ILocator SkillsPanel => page.GetByRole(AriaRole.Tabpanel, new() { Name = "Skills" });
-        private ILocator BehavioursPanel => page.GetByRole(AriaRole.Tabpanel, new() { Name = "Behaviours" });
+        private ILocator KnowledgePanel => page.Locator("#knowledge");
+        private ILocator SkillsPanel => page.Locator("#skill");
+        private ILocator BehavioursPanel => page.Locator("#behaviour");
 
         // --- Filter Panel Components ---
         private ILocator FilterAccordionToggle => page.GetByText("Show search and filters");
@@ -45,6 +47,39 @@ namespace SFA.DAS.ApprenticeApp.UITests.Project.Tests.Pages
         {
             await BehavioursTab.ClickAsync();
             await Assertions.Expect(BehavioursPanel).ToBeVisibleAsync();
+        }
+
+        public async Task SelectTabAsync(string tabName)
+        {
+            switch (tabName)
+            {
+                case "Knowledge":
+                    await SelectKnowledgeTabAsync();
+                    break;
+                case "Skills":
+                    await SelectSkillsTabAsync();
+                    break;
+                case "Behaviours":
+                    await SelectBehavioursTabAsync();
+                    break;
+                default:
+                    throw new ArgumentException($"Unknown KSB tab: {tabName}", nameof(tabName));
+            }
+        }
+
+        public async Task VerifyTabHasItemsAsync(string tabName)
+        {
+            await SelectTabAsync(tabName);
+
+            var panel = tabName switch
+            {
+                "Knowledge" => KnowledgePanel,
+                "Skills" => SkillsPanel,
+                "Behaviours" => BehavioursPanel,
+                _ => throw new ArgumentException($"Unknown KSB tab panel: {tabName}", nameof(tabName))
+            };
+
+            await Assertions.Expect(panel).ToContainTextAsync(new Regex(@"\S"));
         }
 
         #endregion
