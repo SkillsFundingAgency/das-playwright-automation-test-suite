@@ -20,5 +20,7 @@ public class YouVeSuccessfullyAddedUserDetailsPage(ScenarioContext context, bool
         return new InvitationsPage(context);
     }
 
-    public async Task Continue() => await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync();
+    // Cross-service hand-off (employerprofiles -> accounts /service/index -> 302 -> tasklist); the click waits for that
+    // navigation to commit within its own timeout, and the accounts response alone has taken >16s in PP.
+    public async Task Continue() => await page.GetByRole(AriaRole.Button, new() { Name = "Continue" }).ClickAsync(new() { Timeout = LandingPageTimeout });
 }

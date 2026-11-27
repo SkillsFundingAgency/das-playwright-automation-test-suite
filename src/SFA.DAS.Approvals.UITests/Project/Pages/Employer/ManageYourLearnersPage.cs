@@ -41,6 +41,15 @@ namespace SFA.DAS.Approvals.UITests.Project.Pages.Employer
             context.Get<ObjectContext>().SetDebugInformation($"A '{status.ToUpper()}' Apprenticeship record found for ULN: {ULN} and Name: {name} in Employer Portal");
         }
 
+        internal async Task VerifyLiveApprentice(string uln, string name)
+        {
+            if (await searchBox.CountAsync() > 0)
+                await SearchApprentice(uln);
+            var row = page.GetByRole(AriaRole.Row).Filter(new() { Has = apprenticeLink(name) });
+            await Assertions.Expect(row).ToHaveCountAsync(1);
+            await Assertions.Expect(row.Locator("td[data-label='Status'] strong")).ToHaveTextAsync("Live");
+        }
+
         internal async Task<LearnerDetailsPage> OpenFirstItemFromTheList(string apprenticeName)
         {
             await apprenticeLink(apprenticeName).ClickAsync();

@@ -21,6 +21,14 @@
             await ClickContinueButton();
         }
 
+        internal async Task<ChooseYourMainTrainingProviderPage> SelectDirectTransferFunds(string sender)
+        {
+            await page.Locator("#FundingType-1").CheckAsync();
+            await ClickContinueButton();
+            var connection = await VerifyPageAsync(() => new SelectTransferConnectionPage(context));
+            return await connection.SelectSender(sender);
+        }
+
         internal async Task<ChooseConnection> SelectTransferFundsFromConnection()
         {
             await page.Locator("#radio-item-funding-type-transfer-connection input").ClickAsync();
